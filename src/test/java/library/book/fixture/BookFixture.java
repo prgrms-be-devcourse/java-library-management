@@ -1,5 +1,6 @@
 package library.book.fixture;
 
+import library.book.application.dto.request.RegisterBookRequest;
 import library.book.domain.Book;
 
 public enum BookFixture {
@@ -49,5 +50,9 @@ public enum BookFixture {
 			authorName,
 			pages
 		);
+	}
+
+	public RegisterBookRequest toRegisterRequest() {
+		return new RegisterBookRequest(title, authorName, pages);
 	}
 }
