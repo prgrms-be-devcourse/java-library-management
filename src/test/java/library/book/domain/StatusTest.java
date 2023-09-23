@@ -1,5 +1,6 @@
 package library.book.domain;
 
+import static library.book.domain.Status.BookStatus.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,7 @@ class StatusTest {
 
 		//then
 		assertAll(
-			() -> assertThat(status.getStatus()).isEqualTo(Status.BookStatus.AVAILABLE_RENT),
+			() -> assertThat(status.getBookStatus()).isEqualTo(AVAILABLE_RENT),
 			() -> assertThat(status.getCleaningStartTime()).isNull()
 		);
 	}
