@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("[NumberConverter Test] - Presentation")
-public class NumberConverterTest {
+@DisplayName("[InputConverter Test] - Presentation")
+public class InputConverterTest {
 
-	private final NumberConverter numberConverter = new NumberConverter();
+	private final InputConverter inputConverter = new InputConverter();
 
 	@Test
 	@DisplayName("[convert 테스트]")
@@ -17,7 +17,7 @@ public class NumberConverterTest {
 		final int number = 2;
 
 		//when
-		String result = numberConverter.convert(number);
+		String result = inputConverter.convertNumberToString(number);
 
 		//then
 		assertThat(result).isEqualTo("TWO");
