@@ -4,7 +4,10 @@ import library.book.domain.Book;
 
 public enum BookFixture {
 
-	A(1L, "titleA", "authorA", 100);
+	A(1L, "titleA", "authorA", 100),
+	B(2L, "titleB", "authorB", 200),
+	C(3L, "titleC", "authorC", 300),
+	;
 
 	private final long id;
 	private final String title;
