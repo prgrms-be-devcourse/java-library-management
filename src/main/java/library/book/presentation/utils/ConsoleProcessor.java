@@ -62,6 +62,6 @@ public class ConsoleProcessor {
 	}
 
 	private void appendDelimiter(StringBuilder stringBuilder) {
-		stringBuilder.append("/");
+		stringBuilder.append("|||");
 	}
 }
