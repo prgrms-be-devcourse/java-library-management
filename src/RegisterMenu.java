@@ -5,7 +5,7 @@ public class RegisterMenu implements Menu {
     Book book = new Book();
     public void run() throws IOException {
         bw.write("Q. 등록할 도서 제목을 입력하세요.");
-        book.setName(bf.readLine());
+        book.setTitle(bf.readLine());
 
         bw.write("Q. 작가 이름을 입력하세요.");
         book.setWriter(bf.readLine());

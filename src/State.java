@@ -1,0 +1,3 @@
+public enum State {
+    RENTAL_AVAILABLE, RENTING, ORGANIZING_BOOKS, LOST;
+}
