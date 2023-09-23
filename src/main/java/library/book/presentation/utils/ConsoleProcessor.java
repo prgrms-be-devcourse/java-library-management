@@ -2,6 +2,7 @@ package library.book.presentation.utils;
 
 import static library.book.presentation.constant.Message.*;
 
+import library.book.application.dto.request.RegisterBookRequest;
 import library.book.infra.console.input.InputConsole;
 import library.book.infra.console.output.OutputConsole;
 import library.book.presentation.converter.InputConverter;
@@ -28,7 +29,7 @@ public class ConsoleProcessor {
 		return converter.convertNumberToString(inputConsole.inputNumber());
 	}
 
-	public String inputBookInfo() {
+	public RegisterBookRequest inputBookInfo() {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		outputConsole.showSystemMessage(ENTRY_REGISTER_MENU.getValue());
@@ -47,8 +48,8 @@ public class ConsoleProcessor {
 
 		outputConsole.showSystemMessage(COMPLETE_REGISTER.getValue());
 
-		String result = stringBuilder.toString();
-		return result.substring(0, result.length() - 1); //마지막 delimiter 제거
+		String input = stringBuilder.toString();
+		return converter.convertStringToRegisterRequest(input);
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {
@@ -57,7 +58,7 @@ public class ConsoleProcessor {
 	}
 
 	private void appendIntegerInput(StringBuilder stringBuilder) {
-		stringBuilder.append(converter.convertNumberToString(inputConsole.inputNumber()));
+		stringBuilder.append(inputConsole.inputNumber());
 		appendDelimiter(stringBuilder);
 	}
 

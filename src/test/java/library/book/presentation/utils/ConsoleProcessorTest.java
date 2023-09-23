@@ -1,10 +1,12 @@
 package library.book.presentation.utils;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import library.book.application.dto.request.RegisterBookRequest;
 import library.book.infra.console.output.OutputConsole;
 import library.book.mock.MockInputConsole;
 import library.book.presentation.converter.InputConverter;
@@ -30,9 +32,13 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputBookInfo 테스트]")
 	void inputBookInfoTest() {
 		//when
-		String result = consoleProcessor.inputBookInfo();
+		RegisterBookRequest result = consoleProcessor.inputBookInfo();
 
 		//then
-		assertThat(result).isEqualTo("hello/hello/ONE");
+		assertAll(
+			() -> assertThat(result.title()).isEqualTo("hello"),
+			() -> assertThat(result.authorName()).isEqualTo("hello"),
+			() -> assertThat(result.pages()).isEqualTo(1)
+		);
 	}
 }
