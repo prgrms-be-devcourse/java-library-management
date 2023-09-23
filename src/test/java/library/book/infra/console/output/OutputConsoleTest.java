@@ -33,4 +33,14 @@ public class OutputConsoleTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[showSelectFunction 테스트]")
+	void showSelectFunctionTest() {
+		//when
+		Executable when = outputConsole::showSelectFunction;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
