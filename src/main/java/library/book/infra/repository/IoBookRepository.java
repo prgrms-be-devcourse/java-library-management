@@ -33,6 +33,19 @@ public class IoBookRepository implements BookRepository {
 
 	@Override
 	public void save(Book book) {
+		bookStorage.put(book.getId(), book);
 
+		updateJsonFile();
+	}
+
+	private void updateJsonFile() {
+		try (FileWriter fileWriter = new FileWriter(filePath)) {
+			String stringJson = objectMapper.writeValueAsString(bookStorage);
+
+			fileWriter.write(stringJson);
+			fileWriter.flush();
+		} catch (IOException e) {
+			throw LibraryException.of(FILE_WRITE_FAIL);
+		}
 	}
 }
