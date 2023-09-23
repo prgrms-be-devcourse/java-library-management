@@ -15,4 +15,8 @@ public class OutputConsole {
 
 		out.println(message);
 	}
+
+	public void showSystemMessage(final String message) {
+		out.println(message);
+	}
 }
