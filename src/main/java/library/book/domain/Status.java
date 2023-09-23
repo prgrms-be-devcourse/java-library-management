@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class Status {
 
-	private BookStatus status;
+	private BookStatus bookStatus;
 
 	private LocalDateTime cleaningStartTime;
 
@@ -20,13 +20,13 @@ public class Status {
 
 	//== Factory 메소드 ==//
 	public Status() {
-		this.status = AVAILABLE_RENT;
+		this.bookStatus = AVAILABLE_RENT;
 		this.cleaningStartTime = null;
 	}
 
 	//== Utility 메소드 ==//
-	public BookStatus getStatus() {
-		return status;
+	public BookStatus getBookStatus() {
+		return bookStatus;
 	}
 
 	public LocalDateTime getCleaningStartTime() {
