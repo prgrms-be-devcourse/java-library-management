@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.Book;
 import library.book.exception.LibraryException;
+import library.book.fixture.BookFixture;
 
 @DisplayName("[IoBookRepository Test] - Infra")
 class IoBookRepositoryTest {
@@ -80,5 +82,23 @@ class IoBookRepositoryTest {
 			//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
 			assertDoesNotThrow(when);
 		}
+	}
+
+	@Test
+	@DisplayName("[generateNewId 테스트]")
+	void generateNewIdTest() {
+		//given
+		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+
+		BookFixture[] fixtures = BookFixture.values();
+		Arrays.stream(fixtures)
+			.forEach(fixture -> bookRepository.save(fixture.toEntity()));
+
+		//when
+		long result = bookRepository.generateNewId();
+
+		//then
+		long expectedId = fixtures.length + 1L;
+		assertThat(result).isEqualTo(expectedId);
 	}
 }
