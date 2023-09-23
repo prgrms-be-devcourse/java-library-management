@@ -1,8 +1,6 @@
-package Menu;
+package repository;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public interface Repository {
 

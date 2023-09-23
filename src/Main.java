@@ -1,5 +1,3 @@
-import Mode.*;
-
 import java.io.*;
 
 public class Main {
@@ -7,14 +5,13 @@ public class Main {
 
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
         Mode mode = null;
         if(selectMode(bf, bw) == ModeType.NORMAL) {
             bw.write("[System] 일반 모드로 애플리케이션을 실행합니다.");
-            mode = new NormalMode();
+            mode = new Mode("normal");
         } else if(selectMode(bf, bw) == ModeType.TEST) {
             bw.write("[System] 테스트 모드로 애플리케이션을 실행합니다.");
-            mode = new TestMode();
+            mode = new Mode("test");
         }
         mode.run();
 

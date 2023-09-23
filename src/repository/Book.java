@@ -1,5 +1,3 @@
-package Menu;
-
 public class Book {
     int id;
     String title;

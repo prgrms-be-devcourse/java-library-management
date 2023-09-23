@@ -1,4 +1,6 @@
-package Menu;
+package repository;
+
+import Book;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -6,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class testRepository implements Repository {
+public class TestRepository implements Repository {
     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     List<Book> books = new ArrayList<>();
 
@@ -64,4 +66,6 @@ public class testRepository implements Repository {
             }
         });
     }
+
+    public void returnBook() {}
 }
