@@ -16,4 +16,10 @@ public class InputConsole {
 			throw LibraryException.of(ONLY_NUMBER);
 		}
 	}
+
+	public String inputString() {
+		try (Scanner scanner = new Scanner(System.in)) {
+			return scanner.next();
+		}
+	}
 }
