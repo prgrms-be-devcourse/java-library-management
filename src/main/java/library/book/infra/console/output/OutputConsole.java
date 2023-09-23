@@ -14,10 +14,30 @@ public class OutputConsole {
 		message.append("2. 테스트 모드\n");
 		appendInputPrefix(message);
 
-		out.println(message);
+		printMessage(message);
 	}
 
 	public void showSystemMessage(final String message) {
+		out.println(message);
+	}
+
+	public void showSelectFunction() {
+		StringBuilder message = new StringBuilder();
+
+		message.append("Q. 사용할 기능을 선택해주세요.\n");
+		message.append("1. 도서 등록\n");
+		message.append("2. 전체 도서 목록 조회\n");
+		message.append("3. 제목으로 도서 검색\n");
+		message.append("4. 도서 대여\n");
+		message.append("5. 도서 반납\n");
+		message.append("6. 도서 분실\n");
+		message.append("7. 도서 삭제\n");
+		appendInputPrefix(message);
+
+		printMessage(message);
+	}
+
+	private void printMessage(StringBuilder message) {
 		out.println(message);
 	}
 
