@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -82,6 +83,25 @@ class IoBookRepositoryTest {
 			//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
 			assertDoesNotThrow(when);
 		}
+
+		@Test
+		@DisplayName("[Fail] filePath 에 파일이 존재하지 않아 실패한다")
+		void failWhenNotExistFile() throws Exception {
+			//given
+			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+
+			setWrongFilePath(bookRepository);
+
+			Book book = A.toEntity();
+
+			//when
+			ThrowingCallable when = () -> bookRepository.save(book);
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(LibraryException.class)
+				.hasMessageContaining(FILE_WRITE_FAIL.getMessage());
+		}
 	}
 
 	@Test
@@ -100,5 +120,11 @@ class IoBookRepositoryTest {
 		//then
 		long expectedId = fixtures.length + 1L;
 		assertThat(result).isEqualTo(expectedId);
+	}
+
+	private void setWrongFilePath(BookRepository bookRepository) throws NoSuchFieldException, IllegalAccessException {
+		Field field = bookRepository.getClass().getDeclaredField("filePath");
+		field.setAccessible(true);
+		field.set(bookRepository, "/hello/hello.json");
 	}
 }
