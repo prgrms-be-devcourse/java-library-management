@@ -1,3 +1,5 @@
+package Menu;
+
 import java.io.IOException;
 
 public class RegisterMenu implements Menu {

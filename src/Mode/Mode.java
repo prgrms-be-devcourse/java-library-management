@@ -1,3 +1,7 @@
+package Mode;
+
+import Menu.*;
+
 import java.io.*;
 
 public class Mode {

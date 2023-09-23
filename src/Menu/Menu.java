@@ -1,3 +1,5 @@
+package Menu;
+
 import java.io.*;
 
 public interface Menu {

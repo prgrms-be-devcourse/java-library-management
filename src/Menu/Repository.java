@@ -1,3 +1,5 @@
+package Menu;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,5 +30,18 @@ public class Repository {
                     + "\n페이지 수: " + String.valueOf(book.getPage()) + "페이지"
                     + "\n상태 : " + book.getState()
                     + "\n\n------------------------------");
+    }
+
+    public void search(String titleWord) {
+        books.stream().forEach(book -> {
+            String title = book.getTitle();
+            if(title.contains(titleWord)) {
+                try {
+                    printBookInfo(book);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 }

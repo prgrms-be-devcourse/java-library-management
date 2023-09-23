@@ -1,9 +1,11 @@
+package Menu;
+
 public class Book {
     int id;
     String title;
     String writer;
     int page;
-    State state;
+    String state;
 
     public int getId() {
         return id;
