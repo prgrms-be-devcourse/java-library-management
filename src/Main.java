@@ -1,17 +1,28 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.Buffer;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+        Mode mode;
+        if(selectMode(bf, bw) == ModeType.NORMAL) {
+            bw.write("[System] 일반 모드로 애플리케이션을 실행합니다.");
+            mode = new NormalMode();
+        } else if(selectMode(bf, bw) == ModeType.TEST) {
+            bw.write("[System] 테스트 모드로 애플리케이션을 실행합니다.");
+            mode = new TestMode();
+        }
+    }
 
-        if(selectMode() == ModeType.NORMAL) {
+    public static ModeType selectMode(BufferedReader bf, BufferedWriter bw) throws IOException {
+        bw.write("Q. 모드를 선택해주세요.\n" +
+                "1. 일반 모드\n" +
+                "2. 테스트 모드");
 
-        };
+        String num = bf.readLine();
+        if(num.equals("1")) return ModeType.NORMAL;
+        return ModeType.TEST;
     }
 }
