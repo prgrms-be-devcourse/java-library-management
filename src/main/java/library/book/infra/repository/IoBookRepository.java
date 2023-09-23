@@ -38,6 +38,13 @@ public class IoBookRepository implements BookRepository {
 		updateJsonFile();
 	}
 
+	@Override
+	public long generateNewId() {
+		return bookStorage.keySet().stream()
+			.max(Long::compare)
+			.orElse(0L) + 1L;
+	}
+
 	private void updateJsonFile() {
 		try (FileWriter fileWriter = new FileWriter(filePath)) {
 			String stringJson = objectMapper.writeValueAsString(bookStorage);
