@@ -13,7 +13,15 @@ public class Status {
 		AVAILABLE_RENT,
 		RENTED,
 		CLEANING,
-		LOST,
-		;
+		LOST
+	}
+
+	//== Utility 메소드 ==//
+	public BookStatus getStatus() {
+		return status;
+	}
+
+	public LocalDateTime getCleaningStartTime() {
+		return cleaningStartTime;
 	}
 }
