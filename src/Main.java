@@ -6,7 +6,8 @@ public class Main {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        Mode mode;
+
+        Mode mode = null;
         if(selectMode(bf, bw) == ModeType.NORMAL) {
             bw.write("[System] 일반 모드로 애플리케이션을 실행합니다.");
             mode = new NormalMode();
@@ -14,6 +15,9 @@ public class Main {
             bw.write("[System] 테스트 모드로 애플리케이션을 실행합니다.");
             mode = new TestMode();
         }
+        mode.run();
+
+        bw.close();
     }
 
     public static ModeType selectMode(BufferedReader bf, BufferedWriter bw) throws IOException {
