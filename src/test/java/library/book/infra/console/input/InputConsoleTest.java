@@ -51,4 +51,18 @@ class InputConsoleTest {
 				.hasMessageContaining(ONLY_NUMBER.getMessage());
 		}
 	}
+
+	@Test
+	@DisplayName("[inputString 테스트]")
+	void inputStringTest() {
+		//given
+		final String input = "hello";
+		System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+		//when
+		String result = inputConsole.inputString();
+
+		//then
+		assertThat(result).isEqualTo("hello");
+	}
 }
