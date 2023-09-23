@@ -20,4 +20,17 @@ public class OutputConsoleTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[showSystemMessage 테스트]")
+	void showSystemMessageTest() {
+		//given
+		final String message = "hello";
+
+		//when
+		Executable when = () -> outputConsole.showSystemMessage(message);
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
