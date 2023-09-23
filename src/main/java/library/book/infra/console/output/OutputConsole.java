@@ -12,7 +12,6 @@ public class OutputConsole {
 		message.append("Q. 모드를 선택해주세요.\n");
 		message.append("1. 일반 모드\n");
 		message.append("2. 테스트 모드\n");
-		appendInputPrefix(message);
 
 		printMessage(message);
 	}
@@ -31,8 +30,7 @@ public class OutputConsole {
 		message.append("4. 도서 대여\n");
 		message.append("5. 도서 반납\n");
 		message.append("6. 도서 분실\n");
-		message.append("7. 도서 삭제\n");
-		appendInputPrefix(message);
+		message.append("7. 도서 삭제\n\n");
 
 		printMessage(message);
 	}
@@ -41,7 +39,7 @@ public class OutputConsole {
 		out.println(message);
 	}
 
-	private void appendInputPrefix(StringBuilder message) {
-		message.append("\n> ");
+	public void showInputPrefix() {
+		out.print("> ");
 	}
 }

@@ -43,4 +43,14 @@ public class OutputConsoleTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[showInputPrefix 테스트]")
+	void showInputPrefixTest() {
+		//when
+		Executable when = outputConsole::showInputPrefix;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
