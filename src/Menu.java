@@ -1,3 +1,4 @@
+import repository.Book;
 import repository.Repository;
 
 import java.io.*;
@@ -56,6 +57,10 @@ public class Menu {
         repository.lostBook(id);
     }
 
-    public void deleteBook() throws IOException {}
+    public void deleteBook() throws IOException {
+        bw.write("Q. 삭제 처리할 도서번호를 입력하세요");
+        int id = Integer.parseInt(bf.readLine());
+        repository.deleteBook(id);
+    }
 
 }

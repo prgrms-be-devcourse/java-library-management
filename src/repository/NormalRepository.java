@@ -1,7 +1,5 @@
 package repository;
 
-import Book;
-
 import java.io.IOException;
 
 public class NormalRepository implements Repository {
@@ -22,6 +20,21 @@ public class NormalRepository implements Repository {
 
     @Override
     public void rental(int id) {
+
+    }
+
+    @Override
+    public void returnBook(int id) {
+
+    }
+
+    @Override
+    public void lostBook(int id) {
+
+    }
+
+    @Override
+    public void deleteBook(int id) {
 
     }
 }
