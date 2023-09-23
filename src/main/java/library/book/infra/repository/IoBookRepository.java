@@ -16,12 +16,12 @@ public class IoBookRepository implements BookRepository {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private final Map<String, Book> bookStore;
+	private final Map<String, Book> bookStorage;
 
 	public IoBookRepository(final String filePath) {
 		try {
 			FileInputStream inputStream = new FileInputStream(filePath);
-			this.bookStore = objectMapper.readValue(inputStream, ConcurrentHashMap.class);
+			this.bookStorage = objectMapper.readValue(inputStream, ConcurrentHashMap.class);
 		} catch (IOException e) {
 			throw LibraryException.of(FILE_READ);
 		}
