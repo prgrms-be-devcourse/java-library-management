@@ -10,7 +10,7 @@ import library.book.mock.MockInputConsole;
 import library.book.presentation.converter.NumberConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
-public class ConsoleProcessorTest {
+class ConsoleProcessorTest {
 
 	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
 		new MockInputConsole(), new OutputConsole(), new NumberConverter()
@@ -24,5 +24,15 @@ public class ConsoleProcessorTest {
 
 		//then
 		assertThat(result).isEqualTo("ONE");
+	}
+
+	@Test
+	@DisplayName("[inputBookInfo 테스트]")
+	void inputBookInfoTest() {
+		//when
+		String result = consoleProcessor.inputBookInfo();
+
+		//then
+		assertThat(result).isEqualTo("hello/hello/ONE");
 	}
 }
