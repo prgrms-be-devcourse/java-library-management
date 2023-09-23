@@ -44,7 +44,7 @@ class IoBookRepositoryTest {
 			//then
 			assertThatThrownBy(when)
 				.isInstanceOf(LibraryException.class)
-				.hasMessageContaining(FILE_READ.getMessage());
+				.hasMessageContaining(FILE_READ_FAIL.getMessage());
 		}
 	}
 }
