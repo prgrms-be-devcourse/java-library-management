@@ -1,5 +1,7 @@
 package library.book.domain;
 
+import static library.book.domain.Status.BookStatus.*;
+
 import java.time.LocalDateTime;
 
 public class Status {
@@ -14,6 +16,12 @@ public class Status {
 		RENTED,
 		CLEANING,
 		LOST
+	}
+
+	//== Factory 메소드 ==//
+	public Status() {
+		this.status = AVAILABLE_RENT;
+		this.cleaningStartTime = null;
 	}
 
 	//== Utility 메소드 ==//
