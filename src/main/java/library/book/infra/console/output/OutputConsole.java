@@ -12,11 +12,16 @@ public class OutputConsole {
 		message.append("Q. 모드를 선택해주세요.\n");
 		message.append("1. 일반 모드\n");
 		message.append("2. 테스트 모드\n");
+		appendInputPrefix(message);
 
 		out.println(message);
 	}
 
 	public void showSystemMessage(final String message) {
 		out.println(message);
+	}
+
+	private void appendInputPrefix(StringBuilder message) {
+		message.append("\n> ");
 	}
 }

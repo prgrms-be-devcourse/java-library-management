@@ -11,7 +11,6 @@ public class InputConsole {
 
 	public int inputNumber() {
 		try (Scanner scanner = new Scanner(System.in)) {
-			System.out.print("> ");
 			return scanner.nextInt();
 		} catch (InputMismatchException e) {
 			throw LibraryException.of(ONLY_NUMBER);
