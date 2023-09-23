@@ -11,6 +11,22 @@ public enum BookFixture {
 	private final String authorName;
 	private final int pages;
 
+	public long getId() {
+		return id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public int getPages() {
+		return pages;
+	}
+
 	BookFixture(
 		final long id,
 		final String title,
