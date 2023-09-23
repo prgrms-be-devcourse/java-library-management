@@ -8,4 +8,9 @@ public class MockInputConsole extends InputConsole {
 	public int inputNumber() {
 		return 1;
 	}
+
+	@Override
+	public String inputString() {
+		return "hello";
+	}
 }
