@@ -4,18 +4,18 @@ import static library.book.presentation.constant.Message.*;
 
 import library.book.infra.console.input.InputConsole;
 import library.book.infra.console.output.OutputConsole;
-import library.book.presentation.converter.NumberConverter;
+import library.book.presentation.converter.InputConverter;
 
 public class ConsoleProcessor {
 
 	private final InputConsole inputConsole;
 	private final OutputConsole outputConsole;
-	private final NumberConverter converter;
+	private final InputConverter converter;
 
 	public ConsoleProcessor(
 		final InputConsole inputConsole,
 		final OutputConsole outputConsole,
-		final NumberConverter converter
+		final InputConverter converter
 	) {
 		this.inputConsole = inputConsole;
 		this.outputConsole = outputConsole;
@@ -25,7 +25,7 @@ public class ConsoleProcessor {
 	public String inputFunctionNumber() {
 		outputConsole.showSelectFunction();
 
-		return converter.convert(inputConsole.inputNumber());
+		return converter.convertNumberToString(inputConsole.inputNumber());
 	}
 
 	public String inputBookInfo() {
@@ -57,7 +57,7 @@ public class ConsoleProcessor {
 	}
 
 	private void appendIntegerInput(StringBuilder stringBuilder) {
-		stringBuilder.append(converter.convert(inputConsole.inputNumber()));
+		stringBuilder.append(converter.convertNumberToString(inputConsole.inputNumber()));
 		appendDelimiter(stringBuilder);
 	}
 

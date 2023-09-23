@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import library.book.infra.console.output.OutputConsole;
 import library.book.mock.MockInputConsole;
-import library.book.presentation.converter.NumberConverter;
+import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
 class ConsoleProcessorTest {
 
 	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
-		new MockInputConsole(), new OutputConsole(), new NumberConverter()
+		new MockInputConsole(), new OutputConsole(), new InputConverter()
 	);
 
 	@Test
