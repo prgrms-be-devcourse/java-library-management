@@ -3,62 +3,62 @@ package library.book.presentation.utils;
 import static library.book.presentation.constant.Message.*;
 
 import library.book.application.dto.request.RegisterBookRequest;
-import library.book.infra.console.input.ConsoleInputHandler;
-import library.book.infra.console.output.ConsoleOutputHandler;
+import library.book.infra.console.input.InputHandler;
+import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
 
 public class ConsoleProcessor {
 
-	private final ConsoleInputHandler inputConsole;
-	private final ConsoleOutputHandler consoleOutputHandler;
+	private final InputHandler inputHandler;
+	private final OutputHandler outputHandler;
 	private final InputConverter converter;
 
 	public ConsoleProcessor(
-		final ConsoleInputHandler inputConsole,
-		final ConsoleOutputHandler consoleOutputHandler,
+		final InputHandler inputHandler,
+		final OutputHandler outputHandler,
 		final InputConverter converter
 	) {
-		this.inputConsole = inputConsole;
-		this.consoleOutputHandler = consoleOutputHandler;
+		this.inputHandler = inputHandler;
+		this.outputHandler = outputHandler;
 		this.converter = converter;
 	}
 
 	public String inputFunctionNumber() {
-		consoleOutputHandler.showSelectFunction();
+		outputHandler.showSelectFunction();
 
-		return converter.convertNumberToString(inputConsole.inputNumber());
+		return converter.convertNumberToString(inputHandler.inputNumber());
 	}
 
 	public RegisterBookRequest inputBookInfo() {
 		StringBuilder stringBuilder = new StringBuilder();
 
-		consoleOutputHandler.showSystemMessage(ENTRY_REGISTER_MENU.getValue());
+		outputHandler.showSystemMessage(ENTRY_REGISTER_MENU.getValue());
 
-		consoleOutputHandler.showSystemMessage(INPUT_BOOK_NAME.getValue());
-		consoleOutputHandler.showInputPrefix();
+		outputHandler.showSystemMessage(INPUT_BOOK_NAME.getValue());
+		outputHandler.showInputPrefix();
 		appendStringInput(stringBuilder);
 
-		consoleOutputHandler.showSystemMessage(INPUT_AUTHOR_NAME.getValue());
-		consoleOutputHandler.showInputPrefix();
+		outputHandler.showSystemMessage(INPUT_AUTHOR_NAME.getValue());
+		outputHandler.showInputPrefix();
 		appendStringInput(stringBuilder);
 
-		consoleOutputHandler.showSystemMessage(INPUT_PAGES.getValue());
-		consoleOutputHandler.showInputPrefix();
+		outputHandler.showSystemMessage(INPUT_PAGES.getValue());
+		outputHandler.showInputPrefix();
 		appendIntegerInput(stringBuilder);
 
-		consoleOutputHandler.showSystemMessage(COMPLETE_REGISTER.getValue());
+		outputHandler.showSystemMessage(COMPLETE_REGISTER.getValue());
 
 		String input = stringBuilder.toString();
 		return converter.convertStringToRegisterRequest(input);
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {
-		stringBuilder.append(inputConsole.inputString());
+		stringBuilder.append(inputHandler.inputString());
 		appendDelimiter(stringBuilder);
 	}
 
 	private void appendIntegerInput(StringBuilder stringBuilder) {
-		stringBuilder.append(inputConsole.inputNumber());
+		stringBuilder.append(inputHandler.inputNumber());
 		appendDelimiter(stringBuilder);
 	}
 
