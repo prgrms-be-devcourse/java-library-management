@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.infra.console.output.ConsoleOutputHandler;
-import library.book.mock.MockInputConsole;
+import library.book.mock.MockInputHandler;
 import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
 class ConsoleProcessorTest {
 
 	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
-		new MockInputConsole(), new ConsoleOutputHandler(), new InputConverter()
+		new MockInputHandler(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
 	@Test

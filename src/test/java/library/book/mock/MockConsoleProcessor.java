@@ -1,19 +1,19 @@
 package library.book.mock;
 
 import library.book.application.dto.request.RegisterBookRequest;
-import library.book.infra.console.input.ConsoleInputHandler;
-import library.book.infra.console.output.ConsoleOutputHandler;
+import library.book.infra.console.input.InputHandler;
+import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
 import library.book.presentation.utils.ConsoleProcessor;
 
 public class MockConsoleProcessor extends ConsoleProcessor {
 
 	public MockConsoleProcessor(
-		ConsoleInputHandler inputConsole,
-		ConsoleOutputHandler consoleOutputHandler,
+		InputHandler inputHandler,
+		OutputHandler outputHandler,
 		InputConverter converter
 	) {
-		super(inputConsole, consoleOutputHandler, converter);
+		super(inputHandler, outputHandler, converter);
 	}
 
 	@Override
