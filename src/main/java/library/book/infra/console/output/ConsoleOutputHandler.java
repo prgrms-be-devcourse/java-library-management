@@ -2,7 +2,7 @@ package library.book.infra.console.output;
 
 import java.io.PrintStream;
 
-public class OutputConsole {
+public class ConsoleOutputHandler implements OutputHandler {
 
 	private static final PrintStream out = System.out;
 

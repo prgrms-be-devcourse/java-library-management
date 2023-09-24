@@ -6,16 +6,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-@DisplayName("[InputConsole Test] - Infra")
-public class OutputConsoleTest {
+@DisplayName("[ConsoleInputHandler Test] - Infra")
+public class ConsoleOutputHandlerTest {
 
-	private final OutputConsole outputConsole = new OutputConsole();
+	private final ConsoleOutputHandler consoleOutputHandler = new ConsoleOutputHandler();
 
 	@Test
 	@DisplayName("[showSelectMode 테스트]")
 	void showSelectModeTest() {
 		//when
-		Executable when = outputConsole::showSelectMode;
+		Executable when = consoleOutputHandler::showSelectMode;
 
 		//then
 		assertDoesNotThrow(when);
@@ -28,7 +28,7 @@ public class OutputConsoleTest {
 		final String message = "hello";
 
 		//when
-		Executable when = () -> outputConsole.showSystemMessage(message);
+		Executable when = () -> consoleOutputHandler.showSystemMessage(message);
 
 		//then
 		assertDoesNotThrow(when);
@@ -38,7 +38,7 @@ public class OutputConsoleTest {
 	@DisplayName("[showSelectFunction 테스트]")
 	void showSelectFunctionTest() {
 		//when
-		Executable when = outputConsole::showSelectFunction;
+		Executable when = consoleOutputHandler::showSelectFunction;
 
 		//then
 		assertDoesNotThrow(when);
@@ -48,7 +48,7 @@ public class OutputConsoleTest {
 	@DisplayName("[showInputPrefix 테스트]")
 	void showInputPrefixTest() {
 		//when
-		Executable when = outputConsole::showInputPrefix;
+		Executable when = consoleOutputHandler::showInputPrefix;
 
 		//then
 		assertDoesNotThrow(when);
