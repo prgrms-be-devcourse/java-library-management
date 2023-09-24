@@ -24,18 +24,31 @@ public class MemoryRepository implements Repository{
 	@Override
 	public List<Book> findAll() {
 		List<Book> list = new ArrayList<>();
-		bookMap.forEach((key,value) -> list.add(value));
+		bookMap.forEach((key,value) -> {
+			value.organize();
+			save(value);
+			list.add(value);
+		});
 		return list;
 	}
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
+		Optional<Book> bookById = bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
+		bookById.ifPresent(Book::organize);
+		save(bookById.get());
+		return bookById;
 	}
 
 	@Override
 	public List<Book> findByTitleLike(String title) {
-		return bookMap.values().stream().filter(book -> book.getTitle().contains(title)).toList();
+		List<Book> bookList = new ArrayList<>();
+		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(book -> {
+			book.organize();
+			save(book);
+			bookList.add(book);
+		});
+		return bookList;
 	}
 
 	@Override

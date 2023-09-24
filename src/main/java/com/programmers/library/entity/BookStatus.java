@@ -16,6 +16,4 @@ public enum BookStatus {
 		return value;
 	}
 
-
-
 }

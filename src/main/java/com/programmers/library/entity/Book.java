@@ -61,4 +61,9 @@ public class Book {
 	public void lost() {
 		status = BookStatus.LOST;
 	}
+	public void organize() {
+		if(status == BookStatus.ORGANIZING && returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+			status = BookStatus.AVAILABLE;
+		}
+	}
 }
