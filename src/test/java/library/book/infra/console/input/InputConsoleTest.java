@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 
 import library.book.exception.LibraryException;
 
-@DisplayName("[InputConsole Test] - Infra")
+@DisplayName("[ConsoleInputHandler Test] - Infra")
 class InputConsoleTest {
 
-	private final InputConsole inputConsole = new InputConsole();
+	private final ConsoleInputHandler inputConsole = new ConsoleInputHandler();
 
 	@Nested
 	@DisplayName("[inputNumber 테스트]")
