@@ -5,13 +5,22 @@ import java.util.Scanner;
 
 public class ConsoleInput implements Input{
 	private static final Scanner scanner = new Scanner(System.in);
+	private static final String MODE_MESSAGE = "Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n";
+	private static final String MENU_MESSAGE = "Q. 사용할 기능을 선택해주세요.\n1. 도서 등록\n2. 전체 도서 목록 조회\n3. 제목으로 도서 검색\n4. 도서 대여\n5. 도서 반납\n6. 도서 분실\n7. 도서 삭제";
+
 	@Override
 	public int inputMode() {
+		System.out.println(MODE_MESSAGE);
+		System.out.println();
+		System.out.print("> ");
 		return scanner.nextInt();
 	}
 
 	@Override
 	public int inputMenu() {
+		System.out.println(MENU_MESSAGE);
+		System.out.println();
+		System.out.print("> ");
 		return scanner.nextInt();
 	}
 

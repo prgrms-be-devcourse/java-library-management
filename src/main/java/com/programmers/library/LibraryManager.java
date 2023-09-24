@@ -21,7 +21,6 @@ public class LibraryManager implements Runnable {
 	public void run() {
 		// TODO select mode
 		while(true) {
-			output.printMenu();
 			int menu = input.inputMenu();
 
 			switch(menu) {
@@ -67,7 +66,7 @@ public class LibraryManager implements Runnable {
 	private void deleteBook() {
 		long bookId = input.inputBookIdDelete();
 		try {
-			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
 			repository.deleteById(book.getId());
 			output.printResultMessage("도서가 삭제 처리 되었습니다.");
 		} catch (IllegalArgumentException e) {
@@ -78,7 +77,7 @@ public class LibraryManager implements Runnable {
 	private void lostBook() {
 		long bookId = input.inputBookIdLost();
 		try {
-			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
 			if(book.isLost()) {
 				output.printResultMessage("이미 분실 처리된 도서입니다.");
 			} else {
@@ -94,7 +93,7 @@ public class LibraryManager implements Runnable {
 	private void returnBook() {
 		long bookId = input.inputBookIdReturn();
 		try {
-			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
 			if(book.isBorrowed() || book.isLost()) {
 				book.returned();
 				repository.save(book);
@@ -112,7 +111,7 @@ public class LibraryManager implements Runnable {
 	private void borrowBook() {
 		long bookId = input.inputBookId();
 		try {
-			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
 			if(book.isAvailable()) {
 				book.borrow();
 				repository.save(book);
