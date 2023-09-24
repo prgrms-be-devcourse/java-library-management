@@ -2,7 +2,7 @@ package library.book.application;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.domain.Book;
-import library.book.infra.repository.BookRepository;
+import library.book.domain.BookRepository;
 
 public class IoBookManageService implements BookManageService {
 

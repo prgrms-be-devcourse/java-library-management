@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
+import library.book.domain.BookRepository;
 import library.book.exception.LibraryException;
 
 public class IoBookRepository implements BookRepository {

@@ -1,7 +1,7 @@
 package library.book.mock;
 
 import library.book.domain.Book;
-import library.book.infra.repository.BookRepository;
+import library.book.domain.BookRepository;
 
 public class MockBookRepository implements BookRepository {
 

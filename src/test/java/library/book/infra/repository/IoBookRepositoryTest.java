@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.Book;
+import library.book.domain.BookRepository;
 import library.book.exception.LibraryException;
 import library.book.fixture.BookFixture;
 
