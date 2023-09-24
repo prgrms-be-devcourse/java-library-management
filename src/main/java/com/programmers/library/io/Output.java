@@ -10,4 +10,8 @@ public interface Output {
 	void printBookList(List<Book> bookList);
 	void printBookListByName(List<Book> bookList);
 	void printResultMessage(String message);
+
+	void printHeader(String s);
+
+	void printFooter(String s);
 }

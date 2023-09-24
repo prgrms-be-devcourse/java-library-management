@@ -1,42 +1,58 @@
 package com.programmers.library.io;
 
 import java.util.List;
-
-import com.programmers.library.entity.Book;
+import java.util.Scanner;
 
 public class ConsoleInput implements Input{
+	private static final Scanner scanner = new Scanner(System.in);
 	@Override
 	public int inputMode() {
-		return 0;
+		return scanner.nextInt();
 	}
 
 	@Override
 	public int inputMenu() {
-		return 0;
+		return scanner.nextInt();
 	}
 
 	@Override
 	public int inputBookId() {
-		return 0;
+		return scanner.nextInt();
 	}
 
-	@Override
-	public String inputBookName() {
-		return null;
+	private String promptInput(String question) {
+		System.out.println();
+		System.out.println(question);
+		System.out.println();
+		System.out.print("> ");
+		return scanner.nextLine();
 	}
 
 	@Override
 	public String inputBookAuthor() {
-		return null;
+		return promptInput("Q. 작가 이름을 입력하세요.");
 	}
 
 	@Override
-	public String inputBookPages() {
-		return null;
+	public long inputBookPages() {
+		String result = promptInput("Q. 페이지 수를 입력하세요.");
+		try {
+			return Long.parseLong(result);
+		} catch (NumberFormatException e) {
+			System.out.println("[Error] 올바른 숫자를 입력해주세요.");
+			return inputBookPages();
+		}
+	}
+
+	@Override
+	public String inputBookTitleSearch() {
+		scanner.nextLine();
+		return promptInput("Q. 검색할 도서 제목 일부를 입력하세요.");
 	}
 
 	@Override
 	public String inputBookTitle() {
-		return null;
+		scanner.nextLine();
+		return promptInput("Q. 등록할 도서 제목을 입력하세요.");
 	}
 }
