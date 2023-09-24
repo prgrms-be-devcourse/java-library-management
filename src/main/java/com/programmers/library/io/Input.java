@@ -3,7 +3,7 @@ package com.programmers.library.io;
 public interface Input {
 	int inputMode();
 	int inputMenu();
-	int inputBookId();
+	long inputBookId();
 	String inputBookTitle();
 	String inputBookAuthor();
 	long inputBookPages();

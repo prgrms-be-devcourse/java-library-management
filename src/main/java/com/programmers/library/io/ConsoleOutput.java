@@ -38,14 +38,15 @@ public class ConsoleOutput implements Output{
 
 	@Override
 	public void printResultMessage(String message) {
-
+		System.out.println();
+		System.out.println("[System] " + message);
+		System.out.println();
 	}
 
 	@Override
 	public void printHeader(String message) {
 		System.out.println();
 		System.out.println("[System] " + message);
-		System.out.println();
 	}
 
 	@Override

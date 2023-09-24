@@ -16,8 +16,10 @@ public class ConsoleInput implements Input{
 	}
 
 	@Override
-	public int inputBookId() {
-		return scanner.nextInt();
+	public long inputBookId() {
+		scanner.nextLine();
+		String result = promptInput("Q. 대여할 도서번호를 입력하세요");
+		return Long.parseLong(result);
 	}
 
 	private String promptInput(String question) {

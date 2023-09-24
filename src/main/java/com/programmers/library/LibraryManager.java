@@ -47,23 +47,42 @@ public class LibraryManager implements Runnable {
 					break;
 				//도서 대여
 				case 4:
+					output.printHeader("도서 대여 메뉴로 넘어갑니다.");
+					long bookId = input.inputBookId();
+					try {
+						Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+						if(book.isAvailable()) {
+							book.borrow();
+							repository.save(book);
+							output.printResultMessage("도서가 대여 처리 되었습니다.");
+						} else if(book.isBorrowed()) {
+							output.printResultMessage("이미 대여중인 도서입니다.");
+						} else if(book.isLost()) {
+							output.printResultMessage("분실된 도서입니다.");
+						} else if(book.isOrganizing()) {
+							output.printResultMessage("정리 중인 도서입니다.");
+						}
+					} catch (IllegalArgumentException e) {
+						output.printResultMessage(e.getMessage());
+					}
 					break;
 				//도서 반납
 				case 5:
+					output.printHeader("도서 반납 메뉴로 넘어갑니다.");
 					break;
 				//도서 분실
 				case 6:
+					output.printHeader("도서 분실 처리 메뉴로 넘어갑니다.");
 					break;
 				//도서 삭제
 				case 7:
+					output.printHeader("도서 삭제 처리 메뉴로 넘어갑니다.");
 					break;
 			}
 
 		}
 
 	}
-
-
 
 
 }

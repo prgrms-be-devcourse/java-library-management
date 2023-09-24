@@ -14,8 +14,10 @@ public class MemoryRepository implements Repository{
 
 	@Override
 	public Book save(Book book) {
-		book.setId(++sequence);
-		bookMap.put(sequence, book);
+		if(book.getId() == null) {
+			book.setId(++sequence);
+		}
+		bookMap.put(book.getId(), book);
 		return book;
 	}
 
@@ -28,7 +30,7 @@ public class MemoryRepository implements Repository{
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.empty();
+		return bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
 	}
 
 	@Override
