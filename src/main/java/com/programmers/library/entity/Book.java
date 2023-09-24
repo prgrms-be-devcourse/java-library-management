@@ -57,4 +57,8 @@ public class Book {
 		status = BookStatus.ORGANIZING;
 		returnedAt = LocalDateTime.now();
 	}
+
+	public void lost() {
+		status = BookStatus.LOST;
+	}
 }

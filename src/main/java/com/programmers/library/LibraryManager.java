@@ -50,18 +50,45 @@ public class LibraryManager implements Runnable {
 					output.printHeader("도서 반납 메뉴로 넘어갑니다.");
 					returnBook();
 					break;
-				//도서 분실
 				case 6:
 					output.printHeader("도서 분실 처리 메뉴로 넘어갑니다.");
+					lostBook();
 					break;
-				//도서 삭제
 				case 7:
 					output.printHeader("도서 삭제 처리 메뉴로 넘어갑니다.");
+					deleteBook();
 					break;
 			}
 
 		}
 
+	}
+
+	private void deleteBook() {
+		long bookId = input.inputBookIdDelete();
+		try {
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			repository.deleteById(book.getId());
+			output.printResultMessage("도서가 삭제 처리 되었습니다.");
+		} catch (IllegalArgumentException e) {
+			output.printResultMessage(e.getMessage());
+		}
+	}
+
+	private void lostBook() {
+		long bookId = input.inputBookIdLost();
+		try {
+			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("해당 ID의 도서가 존재하지 않습니다."));
+			if(book.isLost()) {
+				output.printResultMessage("이미 분실 처리된 도서입니다.");
+			} else {
+				book.lost();
+				repository.save(book);
+				output.printResultMessage("도서가 분실 처리 되었습니다.");
+			}
+		} catch (IllegalArgumentException e) {
+			output.printResultMessage(e.getMessage());
+		}
 	}
 
 	private void returnBook() {

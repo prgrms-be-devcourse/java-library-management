@@ -7,8 +7,10 @@ public interface Input {
 	String inputBookTitle();
 	String inputBookAuthor();
 	long inputBookPages();
-
 	String inputBookTitleSearch();
-
 	long inputBookIdReturn();
+
+	long inputBookIdLost();
+
+	long inputBookIdDelete();
 }

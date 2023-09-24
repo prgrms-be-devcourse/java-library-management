@@ -60,6 +60,20 @@ public class ConsoleInput implements Input{
 	}
 
 	@Override
+	public long inputBookIdLost() {
+		scanner.nextLine();
+		String result = promptInput("Q. 분실 처리할 도서번호를 입력하세요");
+		return Long.parseLong(result);
+	}
+
+	@Override
+	public long inputBookIdDelete() {
+		scanner.nextLine();
+		String result = promptInput("Q. 삭제 처리할 도서번호를 입력하세요");
+		return Long.parseLong(result);
+	}
+
+	@Override
 	public String inputBookTitle() {
 		scanner.nextLine();
 		return promptInput("Q. 등록할 도서 제목을 입력하세요.");

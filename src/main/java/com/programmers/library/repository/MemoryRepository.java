@@ -37,4 +37,9 @@ public class MemoryRepository implements Repository{
 	public List<Book> findByTitleLike(String title) {
 		return bookMap.values().stream().filter(book -> book.getTitle().contains(title)).toList();
 	}
+
+	@Override
+	public void deleteById(Long id) {
+		bookMap.remove(id);
+	}
 }
