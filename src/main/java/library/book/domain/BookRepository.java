@@ -1,6 +1,4 @@
-package library.book.infra.repository;
-
-import library.book.domain.Book;
+package library.book.domain;
 
 public interface BookRepository {
 
