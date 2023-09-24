@@ -9,4 +9,6 @@ public interface Input {
 	long inputBookPages();
 
 	String inputBookTitleSearch();
+
+	long inputBookIdReturn();
 }

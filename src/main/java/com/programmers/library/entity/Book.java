@@ -1,11 +1,14 @@
 package com.programmers.library.entity;
 
+import java.time.LocalDateTime;
+
 public class Book {
 	private Long id;
 	private String title;
 	private String author;
 	private Long pages;
 	private BookStatus status = BookStatus.AVAILABLE;
+	private LocalDateTime returnedAt;
 
 	public Book(String title, String author, Long pages) {
 		this.title = title;
@@ -50,4 +53,8 @@ public class Book {
 		return id;
 	}
 
+	public void returned() {
+		status = BookStatus.ORGANIZING;
+		returnedAt = LocalDateTime.now();
+	}
 }
