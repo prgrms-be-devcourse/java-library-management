@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import library.book.application.dto.request.RegisterBookRequest;
-import library.book.infra.console.output.OutputConsole;
+import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.mock.MockInputConsole;
 import library.book.presentation.converter.InputConverter;
 
@@ -15,7 +15,7 @@ import library.book.presentation.converter.InputConverter;
 class ConsoleProcessorTest {
 
 	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
-		new MockInputConsole(), new OutputConsole(), new InputConverter()
+		new MockInputConsole(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
 	@Test
