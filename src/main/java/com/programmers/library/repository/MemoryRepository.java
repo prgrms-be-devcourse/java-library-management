@@ -30,4 +30,9 @@ public class MemoryRepository implements Repository{
 	public Optional<Book> findById(Long id) {
 		return Optional.empty();
 	}
+
+	@Override
+	public List<Book> findByTitleLike(String title) {
+		return bookMap.values().stream().filter(book -> book.getTitle().contains(title)).toList();
+	}
 }

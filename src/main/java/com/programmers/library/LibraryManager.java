@@ -33,9 +33,17 @@ public class LibraryManager implements Runnable {
 					break;
 				//전체 도서 목록 조회
 				case 2:
+					output.printHeader("전체 도서 목록입니다.");
+					List<Book> bookList = repository.findAll();
+					output.printBookList(bookList);
+					output.printFooter("도서 목록 끝");
 					break;
 				//제목으로 도서 검색
 				case 3:
+					output.printHeader("제목으로 도서 검색 메뉴로 넘어갑니다.");
+					List<Book> bookResult = repository.findByTitleLike(input.inputBookTitleSearch());
+					output.printBookList(bookResult);
+					output.printFooter("검색된 도서 끝");
 					break;
 				//도서 대여
 				case 4:
