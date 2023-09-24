@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import library.book.exception.LibraryException;
 
-public class InputConsole {
+public class ConsoleInputHandler implements InputHandler{
 
 	public int inputNumber() {
 		try (Scanner scanner = new Scanner(System.in)) {

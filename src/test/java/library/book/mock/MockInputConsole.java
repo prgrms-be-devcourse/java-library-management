@@ -1,8 +1,8 @@
 package library.book.mock;
 
-import library.book.infra.console.input.InputConsole;
+import library.book.infra.console.input.ConsoleInputHandler;
 
-public class MockInputConsole extends InputConsole {
+public class MockInputConsole extends ConsoleInputHandler {
 
 	@Override
 	public int inputNumber() {
