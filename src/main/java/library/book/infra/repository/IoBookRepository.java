@@ -20,7 +20,7 @@ public class IoBookRepository implements BookRepository {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private final Map<Long, Book> bookStorage;
+	private final Map<String, Book> bookStorage;
 
 	public IoBookRepository(final String filePath) {
 		this.filePath = filePath;
@@ -34,16 +34,20 @@ public class IoBookRepository implements BookRepository {
 
 	@Override
 	public void save(Book book) {
-		bookStorage.put(book.getId(), book);
+		bookStorage.put(String.valueOf(book.getId()), book);
 
 		updateJsonFile();
 	}
 
 	@Override
 	public long generateNewId() {
+		return Long.parseLong(fetchMaxId()) + 1L;
+	}
+
+	private String fetchMaxId() {
 		return bookStorage.keySet().stream()
-			.max(Long::compare)
-			.orElse(0L) + 1L;
+			.max(String::compareTo)
+			.orElse("0");
 	}
 
 	private void updateJsonFile() {
