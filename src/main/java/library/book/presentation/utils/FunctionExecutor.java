@@ -5,6 +5,7 @@ import java.util.List;
 import library.book.application.BookService;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
+import library.book.presentation.constant.Message;
 
 public class FunctionExecutor {
 
@@ -27,6 +28,6 @@ public class FunctionExecutor {
 
 	public void executeSearchAllBooks() {
 		List<BookSearchResponse> responses = bookService.searchBooks();
-		consoleProcessor.outputBookInfo(responses);
+		consoleProcessor.outputBookInfo(responses, Message.ENTRY_SEARCH_ALL_BOOKS);
 	}
 }
