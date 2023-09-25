@@ -23,8 +23,16 @@ public class ConsoleProcessor {
 		this.converter = converter;
 	}
 
+	public String inputModeNumber() {
+		outputHandler.showSelectMode();
+		outputHandler.showInputPrefix();
+
+		return converter.convertNumberToString(inputHandler.inputNumber());
+	}
+
 	public String inputFunctionNumber() {
 		outputHandler.showSelectFunction();
+		outputHandler.showInputPrefix();
 
 		return converter.convertNumberToString(inputHandler.inputNumber());
 	}

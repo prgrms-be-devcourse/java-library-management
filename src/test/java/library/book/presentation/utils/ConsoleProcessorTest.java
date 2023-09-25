@@ -19,6 +19,16 @@ class ConsoleProcessorTest {
 	);
 
 	@Test
+	@DisplayName("[inputModeNumber 테스트]")
+	void inputModeNumberTest() {
+		//when
+		String result = consoleProcessor.inputModeNumber();
+
+		//then
+		assertThat(result).isEqualTo("ONE");
+	}
+
+	@Test
 	@DisplayName("[inputNumber 테스트]")
 	void inputNumberTest() {
 		//when
