@@ -74,17 +74,37 @@ class TestBookRepositoryTest {
 				Book actual = result.get(i);
 				Book expected = expectedBooks.get(i);
 
-				assertAll(
-					() -> assertThat(actual.getId()).isEqualTo(expected.getId()),
-					() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
-					() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
-					() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
-					() -> assertThat(actual.getStatus().getBookStatus())
-						.isEqualTo(expected.getStatus().getBookStatus()),
-					() -> assertThat(actual.getStatus().getCleaningStartTime())
-						.isEqualTo(expected.getStatus().getCleaningStartTime())
-				);
+				assertBook(actual, expected);
 			});
+	}
+
+	@Test
+	@DisplayName("[findByTitle 테스트]")
+	void findByTitleTest() {
+		//given
+		BookRepository bookRepository = new TestBookRepository();
+
+		saveFixtures(bookRepository);
+
+		//when
+		List<Book> result = bookRepository.findByTitle("titleB");
+
+		//then
+		assertThat(result).hasSize(1);
+		assertBook(result.get(0), B.toEntity());
+	}
+
+	private void assertBook(Book actual, Book expected) {
+		assertAll(
+			() -> assertThat(actual.getId()).isEqualTo(expected.getId()),
+			() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
+			() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
+			() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
+			() -> assertThat(actual.getStatus().getBookStatus())
+				.isEqualTo(expected.getStatus().getBookStatus()),
+			() -> assertThat(actual.getStatus().getCleaningStartTime())
+				.isEqualTo(expected.getStatus().getCleaningStartTime())
+		);
 	}
 
 	private void saveFixtures(BookRepository bookRepository) {

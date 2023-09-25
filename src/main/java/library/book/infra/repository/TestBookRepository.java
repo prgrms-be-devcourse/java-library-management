@@ -13,7 +13,7 @@ public class TestBookRepository implements BookRepository {
 	private static final Map<Long, Book> bookStorage = new ConcurrentHashMap<>();
 
 	@Override
-	public void save(Book book) {
+	public void save(final Book book) {
 		bookStorage.put(book.getId(), book);
 	}
 
@@ -28,6 +28,15 @@ public class TestBookRepository implements BookRepository {
 	public List<Book> findAll() {
 		return bookStorage.values()
 			.stream()
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
+	}
+
+	@Override
+	public List<Book> findByTitle(final String title) {
+		return bookStorage.values()
+			.stream()
+			.filter(book -> book.getTitle().contains(title))
 			.sorted(Comparator.comparingLong(Book::getId))
 			.toList();
 	}

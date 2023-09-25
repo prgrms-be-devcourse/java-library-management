@@ -35,7 +35,7 @@ public class IoBookRepository implements BookRepository {
 	}
 
 	@Override
-	public void save(Book book) {
+	public void save(final Book book) {
 		bookStorage.put(String.valueOf(book.getId()), book);
 
 		updateJsonFile();
@@ -50,6 +50,15 @@ public class IoBookRepository implements BookRepository {
 	public List<Book> findAll() {
 		return bookStorage.values()
 			.stream()
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
+	}
+
+	@Override
+	public List<Book> findByTitle(final String title) {
+		return bookStorage.values()
+			.stream()
+			.filter(book -> book.getTitle().contains(title))
 			.sorted(Comparator.comparingLong(Book::getId))
 			.toList();
 	}
