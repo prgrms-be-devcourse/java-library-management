@@ -1,8 +1,11 @@
 package library.book.domain;
 
 import static library.book.domain.Status.BookStatus.*;
+import static library.book.exception.ErrorCode.*;
 
 import java.time.LocalDateTime;
+
+import library.book.exception.BookException;
 
 public class Status {
 
@@ -41,6 +44,20 @@ public class Status {
 
 		public String getDescription() {
 			return description;
+		}
+	}
+
+	//== Business 메소드 ==//
+	public void updateBookStatusToRented() {
+		validateIsAbleToRent();
+		this.bookStatus = RENTED;
+	}
+
+	private void validateIsAbleToRent() {
+		switch (this.bookStatus) {
+			case RENTED -> throw BookException.of(ALREADY_RENTED);
+			case LOST -> throw BookException.of(NOW_LOST);
+			case CLEANING -> throw BookException.of(NOW_CLEANING);
 		}
 	}
 }

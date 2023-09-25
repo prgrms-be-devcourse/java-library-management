@@ -57,4 +57,9 @@ public class Book {
 	public BookStatus getBookStatus() {
 		return this.status.getBookStatus();
 	}
+
+	//== Business 메소드 ==//
+	public void rent() {
+		this.status.updateBookStatusToRented();
+	}
 }

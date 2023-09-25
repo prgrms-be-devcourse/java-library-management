@@ -1,11 +1,13 @@
 package library.book.domain;
 
 import static library.book.domain.Status.BookStatus.*;
+import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 @DisplayName("[Book Test] - Domain")
 class BookTest {
@@ -35,5 +37,18 @@ class BookTest {
 			() -> assertThat(result.getPages()).isEqualTo(pages),
 			() -> assertThat(result.getBookStatus()).isEqualTo(AVAILABLE_RENT)
 		);
+	}
+
+	@Test
+	@DisplayName("[rent 테스트]")
+	void rentTest() {
+		//given
+		Book book = A.toEntity();
+
+		//when
+		Executable when = () -> book.rent();
+
+		//then
+		assertDoesNotThrow(when);
 	}
 }
