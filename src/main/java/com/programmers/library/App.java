@@ -1,4 +1,4 @@
-package com.programmers;
+package com.programmers.library;
 
 import com.programmers.library.LibraryManager;
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.programmers.library.entity.Book;
 
 public class MemoryRepository implements Repository{
-	Map<Long,Book> bookMap = new LinkedHashMap<>();
+	Map<Long, Book> bookMap = new LinkedHashMap<>();
 	Long sequence = 0L;
 
 	@Override
@@ -24,30 +24,19 @@ public class MemoryRepository implements Repository{
 	@Override
 	public List<Book> findAll() {
 		List<Book> list = new ArrayList<>();
-		bookMap.forEach((key,value) -> {
-			value.organize();
-			save(value);
-			list.add(value);
-		});
+		bookMap.forEach((key,value) -> list.add(value));
 		return list;
 	}
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		Optional<Book> bookById = bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
-		bookById.ifPresent(Book::organize);
-		save(bookById.get());
-		return bookById;
+		return bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
 	}
 
 	@Override
 	public List<Book> findByTitleLike(String title) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(book -> {
-			book.organize();
-			save(book);
-			bookList.add(book);
-		});
+		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(book -> bookList.add(book));
 		return bookList;
 	}
 

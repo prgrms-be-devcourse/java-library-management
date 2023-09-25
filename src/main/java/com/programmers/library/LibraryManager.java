@@ -1,15 +1,14 @@
 package com.programmers.library;
 
 import java.util.List;
-import java.util.Scanner;
 
 import com.programmers.library.entity.Book;
 import com.programmers.library.io.ConsoleInput;
 import com.programmers.library.io.ConsoleOutput;
-import com.programmers.library.io.Input;
-import com.programmers.library.io.Output;
 import com.programmers.library.repository.MemoryRepository;
 import com.programmers.library.repository.Repository;
+import com.programmers.library.io.Input;
+import com.programmers.library.io.Output;
 
 public class LibraryManager implements Runnable {
 
@@ -32,12 +31,20 @@ public class LibraryManager implements Runnable {
 				case 2:
 					output.printHeader("전체 도서 목록입니다.");
 					List<Book> bookList = repository.findAll();
+					bookList.forEach(book -> {
+						book.organize();
+						repository.save(book);
+					});
 					output.printBookList(bookList);
 					output.printFooter("도서 목록 끝");
 					break;
 				case 3:
 					output.printHeader("제목으로 도서 검색 메뉴로 넘어갑니다.");
 					List<Book> bookResult = repository.findByTitleLike(input.inputBookTitleSearch());
+					bookResult.forEach(book -> {
+						book.organize();
+						repository.save(book);
+					});
 					output.printBookList(bookResult);
 					output.printFooter("검색된 도서 끝");
 					break;
@@ -94,6 +101,8 @@ public class LibraryManager implements Runnable {
 		long bookId = input.inputBookIdReturn();
 		try {
 			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
+			book.organize();
+			repository.save(book);
 			if(book.isBorrowed() || book.isLost()) {
 				book.returned();
 				repository.save(book);
@@ -112,6 +121,8 @@ public class LibraryManager implements Runnable {
 		long bookId = input.inputBookId();
 		try {
 			Book book = repository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
+			book.organize();
+			repository.save(book);
 			if(book.isAvailable()) {
 				book.borrow();
 				repository.save(book);

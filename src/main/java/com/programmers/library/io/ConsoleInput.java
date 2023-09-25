@@ -1,6 +1,5 @@
 package com.programmers.library.io;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleInput implements Input{
