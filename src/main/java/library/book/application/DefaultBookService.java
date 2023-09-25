@@ -16,7 +16,7 @@ public class DefaultBookService implements BookService {
 	}
 
 	@Override
-	public void registerBook(RegisterBookRequest request) {
+	public void registerBook(final RegisterBookRequest request) {
 		long newId = bookRepository.generateNewId();
 
 		Book book = Book.createBook(
@@ -32,6 +32,20 @@ public class DefaultBookService implements BookService {
 	@Override
 	public List<BookSearchResponse> searchBooks() {
 		return bookRepository.findAll()
+			.stream()
+			.map(book ->
+				new BookSearchResponse(
+					book.getId(),
+					book.getTitle(),
+					book.getAuthorName(),
+					book.getPages(),
+					book.getBookStatus().getDescription()
+				)).toList();
+	}
+
+	@Override
+	public List<BookSearchResponse> searchBooks(final String title) {
+		return bookRepository.findByTitle(title)
 			.stream()
 			.map(book ->
 				new BookSearchResponse(

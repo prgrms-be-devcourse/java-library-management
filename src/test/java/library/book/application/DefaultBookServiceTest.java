@@ -58,13 +58,31 @@ class DefaultBookServiceTest {
 				BookSearchResponse actual = result.get(i);
 				Book expected = expectedBooks.get(i);
 
-				assertAll(
-					() -> assertThat(actual.id()).isEqualTo(expected.getId()),
-					() -> assertThat(actual.title()).isEqualTo(expected.getTitle()),
-					() -> assertThat(actual.authorName()).isEqualTo(expected.getAuthorName()),
-					() -> assertThat(actual.pages()).isEqualTo(expected.getPages()),
-					() -> assertThat(actual.bookStatus()).isEqualTo(expected.getBookStatus().getDescription())
-				);
+				assertBookSearchResponse(actual, expected);
 			});
+	}
+
+	@Test
+	@DisplayName("[searchBooks(title) 테스트]")
+	void searchBooksByTitleTest() {
+		//when
+		List<BookSearchResponse> result = bookService.searchBooks("titleB");
+
+		//then
+		assertThat(result).hasSize(1);
+		assertBookSearchResponse(result.get(0), B.toEntity());
+	}
+
+	private void assertBookSearchResponse(
+		final BookSearchResponse actual,
+		final Book expected
+	) {
+		assertAll(
+			() -> assertThat(actual.id()).isEqualTo(expected.getId()),
+			() -> assertThat(actual.title()).isEqualTo(expected.getTitle()),
+			() -> assertThat(actual.authorName()).isEqualTo(expected.getAuthorName()),
+			() -> assertThat(actual.pages()).isEqualTo(expected.getPages()),
+			() -> assertThat(actual.bookStatus()).isEqualTo(expected.getBookStatus().getDescription())
+		);
 	}
 }
