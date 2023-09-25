@@ -90,7 +90,7 @@ public class Book {
     public boolean isOrganized(){
         if (status.equals(Status.Organized)){
             int ORGANIZE_TIME = 5;
-            return returnDateTime.withMinute(ORGANIZE_TIME).isBefore(LocalDateTime.now());
+            return returnDateTime.plusMinutes(ORGANIZE_TIME).isBefore(LocalDateTime.now());
         }
         return false;
     }
