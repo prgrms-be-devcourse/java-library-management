@@ -14,16 +14,17 @@ public class ConsoleIOManager {
 
     public String getInput() throws IOException{
         print("> ");
-        return Buffered_Reader.readLine();
+        String input = Buffered_Reader.readLine();
+        print("\n");
+        return input;
     }
 
     public void printModeMenu(){
         String mode_Menu = """
                 Q. 모드를 선택해주세요.
                 1. 일반 모드
-                2. 테스트 모드
-                """;
-        print(mode_Menu);
+                2. 테스트 모드""";
+        println(mode_Menu);
     }
 
     public void printFuncMenu(){
@@ -37,13 +38,12 @@ public class ConsoleIOManager {
                 6. 도서 분실
                 7. 도서 삭제
                 
-                0. 종료
-                """;
-        print(func_Menu);
+                0. 종료""";
+        println(func_Menu);
     }
 
     public void printSystemMsg(String s){
-        System.out.println("[System] " + s);
+        println("[System] " + s);
     }
 
     public void printIOExceptionMsg(){
@@ -59,7 +59,7 @@ public class ConsoleIOManager {
     }
 
     public void println(String s){
-        System.out.println(s);
+        System.out.println(s+"\n");
     }
 
 
