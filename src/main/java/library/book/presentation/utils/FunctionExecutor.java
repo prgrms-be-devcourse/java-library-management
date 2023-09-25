@@ -1,7 +1,10 @@
 package library.book.presentation.utils;
 
+import java.util.List;
+
 import library.book.application.BookService;
 import library.book.application.dto.request.RegisterBookRequest;
+import library.book.application.dto.response.BookSearchResponse;
 
 public class FunctionExecutor {
 
@@ -20,5 +23,10 @@ public class FunctionExecutor {
 		RegisterBookRequest request = consoleProcessor.inputBookInfo();
 
 		bookService.registerBook(request);
+	}
+
+	public void executeSearchAllBooks() {
+		List<BookSearchResponse> responses = bookService.searchBooks();
+		consoleProcessor.outputBookInfo(responses);
 	}
 }
