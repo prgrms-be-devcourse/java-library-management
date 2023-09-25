@@ -31,6 +31,15 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public List<BookSearchResponse> searchBooks() {
-		return null;
+		return bookRepository.findAll()
+			.stream()
+			.map(book ->
+				new BookSearchResponse(
+					book.getId(),
+					book.getTitle(),
+					book.getAuthorName(),
+					book.getPages(),
+					book.getBookStatus().getDescription()
+				)).toList();
 	}
 }
