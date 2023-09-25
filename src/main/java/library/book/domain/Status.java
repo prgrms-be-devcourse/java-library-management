@@ -10,14 +10,6 @@ public class Status {
 
 	private LocalDateTime cleaningStartTime;
 
-	public enum BookStatus {
-
-		AVAILABLE_RENT,
-		RENTED,
-		CLEANING,
-		LOST
-	}
-
 	//== Factory 메소드 ==//
 	public Status() {
 		this.bookStatus = AVAILABLE_RENT;
@@ -31,5 +23,24 @@ public class Status {
 
 	public LocalDateTime getCleaningStartTime() {
 		return cleaningStartTime;
+	}
+
+	public enum BookStatus {
+
+		AVAILABLE_RENT("대여 가능"),
+		RENTED("대여중"),
+		CLEANING("정리중"),
+		LOST("분실")
+		;
+
+		private final String description;
+
+		BookStatus(String description) {
+			this.description = description;
+		}
+
+		public String getDescription() {
+			return description;
+		}
 	}
 }
