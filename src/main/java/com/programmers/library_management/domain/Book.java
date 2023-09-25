@@ -59,6 +59,10 @@ public class Book {
                 "상태: " + status.toString();
     }
 
+    public String toCsvString(){
+        return bookNumber+","+title+","+writer+","+pageNumber+","+status+","+returnDateTime+"\n";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,5 +74,13 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(title, writer, pageNumber);
+    }
+
+    public int getBookNumber() {
+        return bookNumber;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
