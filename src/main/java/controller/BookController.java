@@ -22,6 +22,8 @@ public class BookController {
             case 1 :
                 bookService.saveBookToCsv();
                 break;
+            case 2 :
+                bookService.findAllBooksFromCsv();
         }
     }
 }

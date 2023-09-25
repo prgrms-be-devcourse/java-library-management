@@ -8,6 +8,8 @@ import model.Status;
 import repository.Repository;
 import util.CsvFileUtil;
 
+import java.util.List;
+
 public class BookService {
     private final Repository repository;
 
@@ -33,5 +35,14 @@ public class BookService {
         Long id = CsvFileUtil.findLastId("book.csv") + 1;
         Book book = new Book(id, title, author, pageNum, Status.AVAILABLE);
         repository.saveBook(book);
+    }
+
+    // 도서 전체 목록 조회
+    public void findAllBooksFromCsv() {
+        List<Book> books = repository.findAllBook();
+        Output.printGuide(Guide.FIND_ALL_START);
+        for (Book book : books) {
+            System.out.println(book.toString());
+        }
     }
 }

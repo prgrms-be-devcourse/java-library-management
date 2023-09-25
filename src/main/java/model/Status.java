@@ -15,4 +15,13 @@ public enum Status {
     public String getStatus() {
         return status;
     }
+
+    public static Status findStatusByString(String statusString) {
+        for (Status status : Status.values()) {
+            if (status.getStatus().equals(statusString)) {
+                return status;
+            }
+        }
+        return null;
+    }
 }
