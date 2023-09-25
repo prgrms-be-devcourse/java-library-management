@@ -1,6 +1,9 @@
 package library.book.mock;
 
+import java.util.List;
+
 import library.book.application.dto.request.RegisterBookRequest;
+import library.book.application.dto.response.BookSearchResponse;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
@@ -24,5 +27,10 @@ public class MockConsoleProcessor extends ConsoleProcessor {
 	@Override
 	public RegisterBookRequest inputBookInfo() {
 		return new RegisterBookRequest("hello", "hello", 100);
+	}
+
+	@Override
+	public void outputBookInfo(List<BookSearchResponse> responses) {
+		System.out.println("[call outputBookInfo]");
 	}
 }
