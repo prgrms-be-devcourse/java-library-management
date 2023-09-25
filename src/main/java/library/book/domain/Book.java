@@ -54,10 +54,6 @@ public class Book {
 		return pages;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
-
 	public BookStatus getBookStatus() {
 		return this.status.getBookStatus();
 	}

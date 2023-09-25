@@ -100,10 +100,7 @@ class TestBookRepositoryTest {
 			() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
 			() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
 			() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
-			() -> assertThat(actual.getStatus().getBookStatus())
-				.isEqualTo(expected.getStatus().getBookStatus()),
-			() -> assertThat(actual.getStatus().getCleaningStartTime())
-				.isEqualTo(expected.getStatus().getCleaningStartTime())
+			() -> assertThat(actual.getBookStatus()).isEqualTo(expected.getBookStatus())
 		);
 	}
 
