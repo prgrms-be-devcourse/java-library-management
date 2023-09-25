@@ -3,6 +3,7 @@ package library.book.infra.repository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import library.book.domain.Book;
@@ -39,5 +40,10 @@ public class TestBookRepository implements BookRepository {
 			.filter(book -> book.getTitle().contains(title))
 			.sorted(Comparator.comparingLong(Book::getId))
 			.toList();
+	}
+
+	@Override
+	public Optional<Book> findById(Long id) {
+		return Optional.empty();
 	}
 }

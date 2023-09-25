@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +62,11 @@ public class IoBookRepository implements BookRepository {
 			.filter(book -> book.getTitle().contains(title))
 			.sorted(Comparator.comparingLong(Book::getId))
 			.toList();
+	}
+
+	@Override
+	public Optional<Book> findById(Long id) {
+		return Optional.empty();
 	}
 
 	private String fetchMaxId() {

@@ -1,6 +1,7 @@
 package library.book.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository {
 
@@ -11,4 +12,6 @@ public interface BookRepository {
 	List<Book> findAll();
 
 	List<Book> findByTitle(final String title);
+
+	Optional<Book> findById(final Long id);
 }
