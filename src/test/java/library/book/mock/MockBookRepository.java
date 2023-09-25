@@ -5,6 +5,7 @@ import static library.book.fixture.BookFixture.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
@@ -33,5 +34,10 @@ public class MockBookRepository implements BookRepository {
 	@Override
 	public List<Book> findByTitle(final String title) {
 		return List.of(B.toEntity());
+	}
+
+	@Override
+	public Optional<Book> findById(Long id) {
+		return Optional.empty();
 	}
 }
