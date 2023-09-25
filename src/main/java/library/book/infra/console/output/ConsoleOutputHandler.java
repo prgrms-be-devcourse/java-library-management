@@ -30,7 +30,7 @@ public class ConsoleOutputHandler implements OutputHandler {
 		message.append("4. 도서 대여\n");
 		message.append("5. 도서 반납\n");
 		message.append("6. 도서 분실\n");
-		message.append("7. 도서 삭제\n\n");
+		message.append("7. 도서 삭제\n");
 
 		printMessage(message);
 	}
