@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import library.book.application.dto.request.RegisterBookRequest;
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 
 @DisplayName("[InputConverter Test] - Presentation")
 public class InputConverterTest {
@@ -62,7 +62,7 @@ public class InputConverterTest {
 
 			//then
 			assertThatThrownBy(when)
-				.isInstanceOf(LibraryException.class)
+				.isInstanceOf(BookException.class)
 				.hasMessageContaining(INVALID_BOOK_INFO_FORMAT.getMessage());
 		}
 	}

@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("[LibraryException Test] - Exception")
-class LibraryExceptionTest {
+@DisplayName("[BookException Test] - Exception")
+class BookExceptionTest {
 
 	@Test
 	@DisplayName("생성자 테스트")
@@ -15,7 +15,7 @@ class LibraryExceptionTest {
 		ErrorCode errorCode = ErrorCode.ONLY_NUMBER;
 
 		//when
-		LibraryException result = LibraryException.of(errorCode);
+		BookException result = BookException.of(errorCode);
 
 		//then
 		assertThat(result.getMessage()).isEqualTo(errorCode.getMessage());

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 
 public class IoBookRepository implements BookRepository {
 
@@ -28,7 +28,7 @@ public class IoBookRepository implements BookRepository {
 		try (FileInputStream inputStream = new FileInputStream(filePath)) {
 			this.bookStorage = objectMapper.readValue(inputStream, ConcurrentHashMap.class);
 		} catch (IOException e) {
-			throw LibraryException.of(FILE_READ_FAIL);
+			throw BookException.of(FILE_READ_FAIL);
 		}
 	}
 
@@ -57,7 +57,7 @@ public class IoBookRepository implements BookRepository {
 			fileWriter.write(stringJson);
 			fileWriter.flush();
 		} catch (IOException e) {
-			throw LibraryException.of(FILE_WRITE_FAIL);
+			throw BookException.of(FILE_WRITE_FAIL);
 		}
 	}
 }

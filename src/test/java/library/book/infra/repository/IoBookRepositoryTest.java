@@ -19,7 +19,7 @@ import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 import library.book.fixture.BookFixture;
 
 @DisplayName("[IoBookRepository Test] - Infra")
@@ -61,7 +61,7 @@ class IoBookRepositoryTest {
 
 			//then
 			assertThatThrownBy(when)
-				.isInstanceOf(LibraryException.class)
+				.isInstanceOf(BookException.class)
 				.hasMessageContaining(FILE_READ_FAIL.getMessage());
 		}
 	}
@@ -100,7 +100,7 @@ class IoBookRepositoryTest {
 
 			//then
 			assertThatThrownBy(when)
-				.isInstanceOf(LibraryException.class)
+				.isInstanceOf(BookException.class)
 				.hasMessageContaining(FILE_WRITE_FAIL.getMessage());
 		}
 	}

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 
 @DisplayName("[ConsoleInputHandler Test] - Infra")
 class InputConsoleTest {
@@ -47,7 +47,7 @@ class InputConsoleTest {
 
 			//then
 			assertThatThrownBy(when)
-				.isInstanceOf(LibraryException.class)
+				.isInstanceOf(BookException.class)
 				.hasMessageContaining(ONLY_NUMBER.getMessage());
 		}
 	}

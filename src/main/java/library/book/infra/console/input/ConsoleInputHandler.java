@@ -5,7 +5,7 @@ import static library.book.exception.ErrorCode.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 
 public class ConsoleInputHandler implements InputHandler{
 
@@ -14,7 +14,7 @@ public class ConsoleInputHandler implements InputHandler{
 			Scanner scanner = new Scanner(System.in);
 			return scanner.nextInt();
 		} catch (InputMismatchException e) {
-			throw LibraryException.of(ONLY_NUMBER);
+			throw BookException.of(ONLY_NUMBER);
 		}
 	}
 
