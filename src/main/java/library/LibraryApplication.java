@@ -1,8 +1,15 @@
 package library;
 
+import library.book.presentation.BookController;
+
 public class LibraryApplication {
 
 	public static void main(String[] args) {
-		System.out.println("Hello Library");
+
+		BookController controller = LibraryLoader.assembleBookController();
+
+		while (true) {
+			controller.run();
+		}
 	}
 }
