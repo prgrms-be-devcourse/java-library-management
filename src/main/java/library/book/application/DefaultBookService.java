@@ -1,6 +1,9 @@
 package library.book.application;
 
+import java.util.List;
+
 import library.book.application.dto.request.RegisterBookRequest;
+import library.book.application.dto.response.BookSearchResponse;
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
 
@@ -24,5 +27,10 @@ public class DefaultBookService implements BookService {
 		);
 
 		bookRepository.save(book);
+	}
+
+	@Override
+	public List<BookSearchResponse> searchBooks() {
+		return null;
 	}
 }
