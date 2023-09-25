@@ -1,6 +1,6 @@
 package library.book.presentation.proxy;
 
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.BookController;
 
@@ -22,7 +22,7 @@ public class BookExceptionHandler extends BookController {
 	public void run() {
 		try {
 			target.run();
-		} catch (LibraryException e) {
+		} catch (BookException e) {
 			outputHandler.showSystemMessage("\n" + e.getMessage() + "\n");
 		}
 	}

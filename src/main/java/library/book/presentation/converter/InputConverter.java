@@ -3,7 +3,7 @@ package library.book.presentation.converter;
 import static library.book.exception.ErrorCode.*;
 
 import library.book.application.dto.request.RegisterBookRequest;
-import library.book.exception.LibraryException;
+import library.book.exception.BookException;
 
 public class InputConverter {
 
@@ -29,7 +29,7 @@ public class InputConverter {
 
 	private void validateBookInfoFormat(int size) {
 		if (size != 3) {
-			throw LibraryException.of(INVALID_BOOK_INFO_FORMAT);
+			throw BookException.of(INVALID_BOOK_INFO_FORMAT);
 		}
 	}
 }
