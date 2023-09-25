@@ -6,14 +6,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import library.book.mock.MockBookManageService;
+import library.book.mock.MockBookService;
 import library.book.mock.MockConsoleProcessor;
 
 @DisplayName("[FunctionExecutor Test] - Presentation")
 class FunctionExecutorTest {
 
 	private final FunctionExecutor functionExecutor = new FunctionExecutor(
-		new MockBookManageService(), new MockConsoleProcessor(null, null, null)
+		new MockBookService(), new MockConsoleProcessor(null, null, null)
 	);
 
 	@Test
