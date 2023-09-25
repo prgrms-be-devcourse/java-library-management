@@ -1,11 +1,20 @@
 package library.book.domain;
 
 import static library.book.domain.Status.BookStatus.*;
+import static library.book.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Field;
+
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import library.book.domain.Status.BookStatus;
+import library.book.exception.BookException;
 
 @DisplayName("[Status Test] - Domain")
 class StatusTest {
@@ -21,5 +30,77 @@ class StatusTest {
 			() -> assertThat(status.getBookStatus()).isEqualTo(AVAILABLE_RENT),
 			() -> assertThat(status.getCleaningStartTime()).isNull()
 		);
+	}
+
+	@Nested
+	@DisplayName("[updateBookStatusToRented 테스트]")
+	class updateBookStatusToRentedTest {
+
+		@Test
+		@DisplayName("[Success]")
+		void success() {
+			//given
+			Status status = new Status();
+
+			//when
+			Executable when = status::updateBookStatusToRented;
+
+			//then
+			assertDoesNotThrow(when);
+		}
+
+		@Test
+		@DisplayName("[Fail] 상태가 대여중 이어서 실패한다.")
+		void failWhenStatusIsRented() throws Exception {
+			//given
+			Status status = new Status();
+			setStatus(status, RENTED);
+
+			//when
+			ThrowingCallable when = status::updateBookStatusToRented;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(ALREADY_RENTED.getMessage());
+		}
+
+		@Test
+		@DisplayName("[Fail] 상태가 분실됨 이어서 실패한다.")
+		void failWhenStatusIsLost() throws Exception {
+			//given
+			Status status = new Status();
+			setStatus(status, LOST);
+
+			//when
+			ThrowingCallable when = status::updateBookStatusToRented;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(NOW_LOST.getMessage());
+		}
+
+		@Test
+		@DisplayName("[Fail] 상태가 정리중 이어서 실패한다.")
+		void failWhenStatusIsCleaning() throws Exception {
+			//given
+			Status status = new Status();
+			setStatus(status, CLEANING);
+
+			//when
+			ThrowingCallable when = status::updateBookStatusToRented;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(NOW_CLEANING.getMessage());
+		}
+	}
+
+	private void setStatus(final Status status, final BookStatus bookStatus) throws Exception {
+		Field field = status.getClass().getDeclaredField("bookStatus");
+		field.setAccessible(true);
+		field.set(status, bookStatus);
 	}
 }
