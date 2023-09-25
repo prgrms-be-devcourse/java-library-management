@@ -9,7 +9,6 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
-import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
 public class ConsoleProcessor {
@@ -29,6 +28,9 @@ public class ConsoleProcessor {
 	}
 
 	public String inputString() {
+		outputHandler.showSystemMessage(ENTRY_SEARCH_BOOKS_BY_TITLE.getValue());
+		outputHandler.showSystemMessage(INPUT_TITLE.getValue());
+		outputHandler.showInputPrefix();
 		return inputHandler.inputString();
 	}
 
@@ -66,9 +68,10 @@ public class ConsoleProcessor {
 
 	public void outputBookInfo(
 		final List<BookSearchResponse> responses,
-		final Message entryMessage
+		final String entryMessage,
+		final String completeMessage
 	) {
-		outputHandler.showSystemMessage(entryMessage.getValue());
+		outputHandler.showSystemMessage(entryMessage);
 
 		responses.forEach(response ->{
 			outputHandler.showSystemMessage("도서번호 : " + response.id());
@@ -80,7 +83,7 @@ public class ConsoleProcessor {
 			outputHandler.showHorizontalLine();
 		});
 
-		outputHandler.showSystemMessage(COMPLETE_SEARCH_ALL_BOOKS.getValue());
+		outputHandler.showSystemMessage(completeMessage);
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {

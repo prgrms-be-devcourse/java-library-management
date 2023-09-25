@@ -1,11 +1,12 @@
 package library.book.presentation.utils;
 
+import static library.book.presentation.constant.Message.*;
+
 import java.util.List;
 
 import library.book.application.BookService;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
-import library.book.presentation.constant.Message;
 
 public class FunctionExecutor {
 
@@ -28,13 +29,10 @@ public class FunctionExecutor {
 
 	public void executeSearchAllBooks() {
 		List<BookSearchResponse> responses = bookService.searchBooks();
-		consoleProcessor.outputBookInfo(responses, Message.ENTRY_SEARCH_ALL_BOOKS);
-	}
-
-	public void executeSearchBooksByTitle() {
-		String title = consoleProcessor.inputString();
-
-		List<BookSearchResponse> responses = bookService.searchBooks(title);
-		consoleProcessor.outputBookInfo(responses, Message.ENTRY_SEARCH_ALL_BOOKS);
+		consoleProcessor.outputBookInfo(
+			responses,
+			ENTRY_SEARCH_ALL_BOOKS.getValue(),
+			COMPLETE_SEARCH_ALL_BOOKS.getValue()
+		);
 	}
 }
