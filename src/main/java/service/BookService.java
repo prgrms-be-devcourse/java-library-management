@@ -18,7 +18,7 @@ public class BookService {
     }
 
     // 도서 등록
-    public void saveBookToCsv() {
+    public void saveBook() {
         Output.printGuide(Guide.REGISTER_START);
 
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
@@ -38,7 +38,7 @@ public class BookService {
     }
 
     // 도서 전체 목록 조회
-    public void findAllBooksFromCsv() {
+    public void findAllBook() {
         List<Book> books = repository.findAllBook();
         Output.printGuide(Guide.FIND_ALL_START);
         for (Book book : books) {

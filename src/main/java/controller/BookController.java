@@ -20,10 +20,10 @@ public class BookController {
         // 도서 등록
         switch (function) {
             case 1 :
-                bookService.saveBookToCsv();
+                bookService.saveBook();
                 break;
             case 2 :
-                bookService.findAllBooksFromCsv();
+                bookService.findAllBook();
         }
     }
 }
