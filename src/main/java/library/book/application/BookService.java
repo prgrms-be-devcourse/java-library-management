@@ -12,4 +12,6 @@ public interface BookService {
 	List<BookSearchResponse> searchBooks();
 
 	List<BookSearchResponse> searchBooks(final String title);
+
+	void rentBook(final long id);
 }
