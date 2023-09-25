@@ -28,6 +28,10 @@ public class ConsoleProcessor {
 		this.converter = converter;
 	}
 
+	public String inputString() {
+		return inputHandler.inputString();
+	}
+
 	public String inputNumber(
 		final Consumer<OutputHandler> selectConsole
 	) {

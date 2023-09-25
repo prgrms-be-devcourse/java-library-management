@@ -27,6 +27,16 @@ class ConsoleProcessorTest {
 	);
 
 	@Test
+	@DisplayName("[inputString 테스트]")
+	void inputStringTest() {
+		//when
+		String result = consoleProcessor.inputString();
+
+		//then
+		assertThat(result).isEqualTo("hello");
+	}
+
+	@Test
 	@DisplayName("[inputNumber 테스트]")
 	void inputModeNumberTest() {
 		//when
