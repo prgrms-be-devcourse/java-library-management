@@ -4,11 +4,11 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
 
-public class IoBookManageService implements BookManageService {
+public class DefaultBookManageService implements BookManageService {
 
 	private final BookRepository bookRepository;
 
-	public IoBookManageService(final BookRepository bookRepository) {
+	public DefaultBookManageService(final BookRepository bookRepository) {
 		this.bookRepository = bookRepository;
 	}
 
