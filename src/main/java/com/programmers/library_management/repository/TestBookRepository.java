@@ -2,10 +2,7 @@ package com.programmers.library_management.repository;
 
 import com.programmers.library_management.domain.Book;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class TestBookRepository implements BookRepository{
 
@@ -42,5 +39,16 @@ public class TestBookRepository implements BookRepository{
     @Override
     public void delete(Book book) {
         bookMemory.remove(book.getBookNumber());
+    }
+
+    @Override
+    public int generateBookNumber() {
+        int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
+        for(int i=1;i<=max;i++){
+            if (!bookMemory.containsKey(i)){
+                return i;
+            }
+        }
+        return max+1;
     }
 }

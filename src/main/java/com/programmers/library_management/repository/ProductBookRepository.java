@@ -6,6 +6,7 @@ import com.programmers.library_management.utils.CsvFileManager;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ProductBookRepository implements BookRepository{
     private final Map<Integer, Book> bookMemory;
@@ -46,5 +47,16 @@ public class ProductBookRepository implements BookRepository{
     public void delete(Book book) {
         bookMemory.remove(book.getBookNumber());
         csvFileManager.saveMemoryToCsv(bookMemory);
+    }
+
+    @Override
+    public int generateBookNumber() {
+        int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
+        for(int i=1;i<=max;i++){
+            if (!bookMemory.containsKey(i)){
+                return i;
+            }
+        }
+        return max+1;
     }
 }

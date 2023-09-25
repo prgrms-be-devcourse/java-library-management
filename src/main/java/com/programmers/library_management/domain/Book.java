@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Book {
-    private static int LastBookNumber = 0;
     private final int bookNumber;
     private final String title;
     private final String writer;
@@ -22,8 +21,8 @@ public class Book {
      * @param writer 작가
      * @param pageNumber 책 쪽수
      */
-    public Book(String title, String writer, int pageNumber) {
-        this.bookNumber = ++LastBookNumber;
+    public Book(int bookNumber, String title, String writer, int pageNumber) {
+        this.bookNumber = bookNumber;
         this.title = title;
         this.writer = writer;
         this.pageNumber = pageNumber;
@@ -42,7 +41,6 @@ public class Book {
      */
     public Book(int bookNumber, String title, String writer, int pageNumber, Status status, String returnDateTime) {
         this.bookNumber = bookNumber;
-        LastBookNumber = this.bookNumber;
         this.title = title;
         this.writer = writer;
         this.pageNumber = pageNumber;
@@ -82,5 +80,27 @@ public class Book {
 
     public String getTitle() {
         return title;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public boolean isOrganized(){
+        int ORGANIZE_TIME = 5;
+        return returnDateTime.withMinute(ORGANIZE_TIME).isBefore(LocalDateTime.now());
+    }
+
+    public void rant(){
+        this.status = Status.Ranted;
+    }
+
+    public void lost(){
+        this.status = Status.Lost;
+    }
+
+    public void returned(){
+        this.status = Status.Organized;
+        this.returnDateTime = LocalDateTime.now();
     }
 }

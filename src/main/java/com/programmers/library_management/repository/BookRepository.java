@@ -4,11 +4,13 @@ import com.programmers.library_management.domain.Book;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.Set;
 
 public interface BookRepository {
     void save(Book book);
     Optional<Book> findByBookNumber(int bookNumber);
     List<Book> findByTitle(String searchText);
     List<Book> findAll();
+    int generateBookNumber();
     void delete(Book book);
 }
