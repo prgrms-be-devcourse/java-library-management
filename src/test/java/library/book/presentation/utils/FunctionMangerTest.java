@@ -17,7 +17,17 @@ public class FunctionMangerTest {
 	@DisplayName("[ONE Test]")
 	void ONETest() {
 		//when
-		Executable when = functionExecutor::executeRegisterBook;
+		Executable when = () -> FunctionManger.ONE.call(functionExecutor);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[TWO Test]")
+	void TWOTest() {
+		//when
+		Executable when = () -> FunctionManger.TWO.call(functionExecutor);
 
 		//then
 		assertDoesNotThrow(when);

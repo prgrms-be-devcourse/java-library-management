@@ -23,7 +23,7 @@ public class ConsoleOutputHandler implements OutputHandler {
 	public void showSelectFunction() {
 		StringBuilder message = new StringBuilder();
 
-		message.append("Q. 사용할 기능을 선택해주세요.\n");
+		message.append("\nQ. 사용할 기능을 선택해주세요.\n");
 		message.append("1. 도서 등록\n");
 		message.append("2. 전체 도서 목록 조회\n");
 		message.append("3. 제목으로 도서 검색\n");
