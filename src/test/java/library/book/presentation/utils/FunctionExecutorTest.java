@@ -25,4 +25,14 @@ class FunctionExecutorTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[executeSearchAllBooks 테스트]")
+	void executeSearchAllBooksTest() {
+		//when
+		Executable when = functionExecutor::executeSearchAllBooks;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
