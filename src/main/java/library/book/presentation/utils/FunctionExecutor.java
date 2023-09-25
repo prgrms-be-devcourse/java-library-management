@@ -35,4 +35,15 @@ public class FunctionExecutor {
 			COMPLETE_SEARCH_ALL_BOOKS.getValue()
 		);
 	}
+
+	public void executeSearchBooksByTitle() {
+		String title = consoleProcessor.inputString();
+
+		List<BookSearchResponse> responses = bookService.searchBooks(title);
+		consoleProcessor.outputBookInfo(
+			responses,
+			ENTRY_SEARCH_BOOKS_BY_TITLE.getValue(),
+			""
+		);
+	}
 }
