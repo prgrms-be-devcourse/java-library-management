@@ -1,9 +1,12 @@
 package library.book.mock;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
+import library.book.fixture.BookFixture;
 
 public class MockBookRepository implements BookRepository {
 
@@ -19,6 +22,9 @@ public class MockBookRepository implements BookRepository {
 
 	@Override
 	public List<Book> findAll() {
-		return null;
+		return Arrays.stream(BookFixture.values())
+			.map(BookFixture::toEntity)
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
 	}
 }
