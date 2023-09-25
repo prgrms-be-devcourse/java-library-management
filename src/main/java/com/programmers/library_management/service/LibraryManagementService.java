@@ -15,8 +15,8 @@ public class LibraryManagementService {
         this.bookRepository = isTest ? new TestBookRepository() : new ProductBookRepository();
     }
 
-    public void addBook(String title, String writer, String pageNumber){
-        Book newBook = new Book(bookRepository.generateBookNumber(), title, writer, Integer.parseInt(pageNumber));
+    public void addBook(String title, String writer, int pageNumber){
+        Book newBook = new Book(bookRepository.generateBookNumber(), title, writer, pageNumber);
         for(Book book:bookRepository.findByTitle(title)){
             if(book.equals(newBook)){
                 throw new CBookAlreadyExistException();
@@ -31,7 +31,7 @@ public class LibraryManagementService {
             case Ranted -> throw new CBookAlreadyRantedException();
             case Lost -> throw new CBookAlreadyLostException();
             case Organized -> {
-                if (!book.isOrganized()){
+                if (book.isOrganized()){
                     throw new CBookInOrganizeException();
                 }
             }
@@ -64,10 +64,12 @@ public class LibraryManagementService {
     }
 
     public List<Book> showAllBooks(){
+        bookRepository.updateAllBookStatus();
         return bookRepository.findAll();
     }
 
     public List<Book> searchBook(String text){
+        bookRepository.updateAllBookStatus();
         return bookRepository.findByTitle(text);
     }
 
