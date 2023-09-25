@@ -30,4 +30,11 @@ public class FunctionExecutor {
 		List<BookSearchResponse> responses = bookService.searchBooks();
 		consoleProcessor.outputBookInfo(responses, Message.ENTRY_SEARCH_ALL_BOOKS);
 	}
+
+	public void executeSearchBooksByTitle() {
+		String title = consoleProcessor.inputString();
+
+		List<BookSearchResponse> responses = bookService.searchBooks(title);
+		consoleProcessor.outputBookInfo(responses, Message.ENTRY_SEARCH_ALL_BOOKS);
+	}
 }
