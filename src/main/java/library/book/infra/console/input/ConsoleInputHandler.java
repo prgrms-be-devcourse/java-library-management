@@ -10,7 +10,8 @@ import library.book.exception.LibraryException;
 public class ConsoleInputHandler implements InputHandler{
 
 	public int inputNumber() {
-		try (Scanner scanner = new Scanner(System.in)) {
+		try {
+			Scanner scanner = new Scanner(System.in);
 			return scanner.nextInt();
 		} catch (InputMismatchException e) {
 			throw LibraryException.of(ONLY_NUMBER);
@@ -18,8 +19,7 @@ public class ConsoleInputHandler implements InputHandler{
 	}
 
 	public String inputString() {
-		try (Scanner scanner = new Scanner(System.in)) {
-			return scanner.next();
-		}
+		Scanner scanner = new Scanner(System.in);
+		return scanner.next();
 	}
 }
