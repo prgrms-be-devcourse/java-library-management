@@ -19,11 +19,9 @@ public class BookController {
 
         // 도서 등록
         switch (function) {
-            case 1 :
-                bookService.saveBook();
-                break;
-            case 2 :
-                bookService.findAllBook();
+            case 1 -> bookService.saveBook();
+            case 2 -> bookService.findAllBook();
+            case 3 -> bookService.findBooksByTitle();
         }
     }
 }

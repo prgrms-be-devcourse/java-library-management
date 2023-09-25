@@ -44,5 +44,19 @@ public class BookService {
         for (Book book : books) {
             System.out.println(book.toString());
         }
+        Output.printGuide(Guide.FIND_ALL_END);
+    }
+
+    // 특정 도서 제목으로 조회
+    public void findBooksByTitle() {
+        Output.printGuide(Guide.FIND_BY_TITLE_START);
+        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
+        String title = Input.inputString();
+        List<Book> books = repository.findBookByTitle(title);
+
+        for (Book book : books) {
+            System.out.println(book.toString());
+        }
+        Output.printGuide(Guide.FIND_BY_TITLE_END);
     }
 }
