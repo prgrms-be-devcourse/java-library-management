@@ -33,8 +33,7 @@ class BookTest {
 			() -> assertThat(result.getTitle()).isEqualTo(title),
 			() -> assertThat(result.getAuthorName()).isEqualTo(authorName),
 			() -> assertThat(result.getPages()).isEqualTo(pages),
-			() -> assertThat(result.getStatus().getBookStatus()).isEqualTo(AVAILABLE_RENT),
-			() -> assertThat(result.getStatus().getCleaningStartTime()).isNull()
+			() -> assertThat(result.getBookStatus()).isEqualTo(AVAILABLE_RENT)
 		);
 	}
 }
