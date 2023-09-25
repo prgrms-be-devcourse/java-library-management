@@ -2,7 +2,10 @@ package library.book.presentation.utils;
 
 import static library.book.presentation.constant.Message.*;
 
+import java.util.List;
+
 import library.book.application.dto.request.RegisterBookRequest;
+import library.book.application.dto.response.BookSearchResponse;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
@@ -58,6 +61,22 @@ public class ConsoleProcessor {
 
 		String input = stringBuilder.toString();
 		return converter.convertStringToRegisterRequest(input);
+	}
+
+	public void outputBookInfo(final List<BookSearchResponse> responses) {
+		outputHandler.showSystemMessage(ENTRY_SEARCH_ALL_BOOKS.getValue());
+
+		responses.forEach(response ->{
+			outputHandler.showSystemMessage("도서번호 : " + response.id());
+			outputHandler.showSystemMessage("제목 : " + response.title());
+			outputHandler.showSystemMessage("작가 이름 : " + response.authorName());
+			outputHandler.showSystemMessage("페이지 수 : " + response.pages() + " 페이지");
+			outputHandler.showSystemMessage("상태 : " + response.bookStatus());
+
+			outputHandler.showHorizontalLine();
+		});
+
+		outputHandler.showSystemMessage(COMPLETE_SEARCH_ALL_BOOKS.getValue());
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {
