@@ -4,6 +4,7 @@ public record BookSearchResponse(
 	long id,
 	String title,
 	String authorName,
+	int pages,
 	String bookStatus
 ) {
 }
