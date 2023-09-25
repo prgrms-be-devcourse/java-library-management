@@ -9,4 +9,6 @@ public interface OutputHandler {
 	void showSelectFunction();
 
 	void showInputPrefix();
+
+	void showHorizontalLine();
 }

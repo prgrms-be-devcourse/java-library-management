@@ -42,4 +42,8 @@ public class ConsoleOutputHandler implements OutputHandler {
 	public void showInputPrefix() {
 		out.print("> ");
 	}
+
+	public void showHorizontalLine() {
+		out.println("\n------------------------------\n");
+	}
 }

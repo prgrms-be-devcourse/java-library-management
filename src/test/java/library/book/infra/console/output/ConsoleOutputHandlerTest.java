@@ -53,4 +53,14 @@ public class ConsoleOutputHandlerTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[showHorizontalLine 테스트]")
+	void showHorizontalLineTest() {
+		//when
+		Executable when = consoleOutputHandler::showHorizontalLine;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
