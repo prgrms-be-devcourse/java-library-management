@@ -7,7 +7,9 @@ import library.book.application.dto.response.BookSearchResponse;
 
 public interface BookService {
 
-	void registerBook(RegisterBookRequest request);
+	void registerBook(final RegisterBookRequest request);
 
 	List<BookSearchResponse> searchBooks();
+
+	List<BookSearchResponse> searchBooks(final String title);
 }
