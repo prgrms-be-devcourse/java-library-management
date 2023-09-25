@@ -30,4 +30,9 @@ public class MockBookService implements BookService {
 		System.out.println("[call searchBooks(title)]");
 		return List.of(B.toSearchResponse());
 	}
+
+	@Override
+	public void rentBook(long id) {
+
+	}
 }

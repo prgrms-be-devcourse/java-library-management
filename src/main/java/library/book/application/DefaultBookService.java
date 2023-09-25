@@ -56,4 +56,9 @@ public class DefaultBookService implements BookService {
 					book.getBookStatus().getDescription()
 				)).toList();
 	}
+
+	@Override
+	public void rentBook(long id) {
+
+	}
 }
