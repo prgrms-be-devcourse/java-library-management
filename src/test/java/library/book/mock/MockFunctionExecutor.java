@@ -17,4 +17,9 @@ public class MockFunctionExecutor extends FunctionExecutor {
 	public void executeRegisterBook() {
 
 	}
+
+	@Override
+	public void executeSearchAllBooks() {
+
+	}
 }
