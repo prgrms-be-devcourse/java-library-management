@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -165,6 +166,21 @@ class IoBookRepositoryTest {
 		//then
 		assertThat(result).hasSize(1);
 		assertBook(result.get(0), B.toEntity());
+	}
+
+	@Test
+	@DisplayName("[findById 테스트]")
+	void findByIdTest() {
+		//given
+		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+		Book book = A.toEntity();
+		bookRepository.save(book);
+
+		//when
+		Optional<Book> result = bookRepository.findById(A.getId());
+
+		//then
+		assertThat(result).contains(book);
 	}
 
 	private void assertBook(Book actual, Book expected) {

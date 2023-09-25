@@ -66,7 +66,7 @@ public class IoBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.empty();
+		return Optional.ofNullable(bookStorage.get(String.valueOf(id)));
 	}
 
 	private String fetchMaxId() {
