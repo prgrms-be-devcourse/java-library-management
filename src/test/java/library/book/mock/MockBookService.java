@@ -14,11 +14,12 @@ public class MockBookService implements BookService {
 
 	@Override
 	public void registerBook(final RegisterBookRequest request) {
-
+		System.out.println("[call registerBook()]");
 	}
 
 	@Override
 	public List<BookSearchResponse> searchBooks() {
+		System.out.println("[call searchBooks()]");
 		return Arrays.stream(BookFixture.values())
 			.map(BookFixture::toSearchResponse)
 			.toList();
@@ -26,6 +27,7 @@ public class MockBookService implements BookService {
 
 	@Override
 	public List<BookSearchResponse> searchBooks(final String title) {
+		System.out.println("[call searchBooks(title)]");
 		return List.of(B.toSearchResponse());
 	}
 }
