@@ -10,6 +10,7 @@ public enum ErrorCode {
 	ALREADY_RENTED("이미 대여중인 도서입니다."),
 	NOW_LOST("분실된 도서입니다."),
 	NOW_CLEANING("정리중인 도서입니다. 잠시후 다시 시도해주세요."),
+	NOT_FOUND("존재하지 않는 도서입니다."),
 	;
 
 	private final String message;
