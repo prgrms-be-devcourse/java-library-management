@@ -10,10 +10,10 @@ import org.junit.jupiter.api.function.Executable;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.mock.MockBookRepository;
 
-@DisplayName("[IoBookManageService Test] - Application")
-class IoBookManageServiceTest {
+@DisplayName("[DefaultBookManageService Test] - Application")
+class DefaultBookManageServiceTest {
 
-	private final BookManageService bookManageService = new IoBookManageService(new MockBookRepository());
+	private final BookManageService bookManageService = new DefaultBookManageService(new MockBookRepository());
 
 	@Test
 	@DisplayName("[registerBook 테스트]")
