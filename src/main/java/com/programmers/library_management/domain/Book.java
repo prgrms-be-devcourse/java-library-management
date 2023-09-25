@@ -26,6 +26,7 @@ public class Book {
         this.title = title;
         this.writer = writer;
         this.pageNumber = pageNumber;
+        this.status = Status.Available;
     }
 
     /**

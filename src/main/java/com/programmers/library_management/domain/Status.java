@@ -7,8 +7,7 @@ public enum Status {
         this.statusMessage = statusMessage;
     }
 
-    @Override
-    public String toString() {
-        return this.statusMessage;
+    public String getStatusMessage() {
+        return statusMessage;
     }
 }
