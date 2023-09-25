@@ -1,5 +1,7 @@
 package library.book.mock;
 
+import static library.book.fixture.BookFixture.*;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -26,5 +28,10 @@ public class MockBookRepository implements BookRepository {
 			.map(BookFixture::toEntity)
 			.sorted(Comparator.comparingLong(Book::getId))
 			.toList();
+	}
+
+	@Override
+	public List<Book> findByTitle(final String title) {
+		return List.of(B.toEntity());
 	}
 }

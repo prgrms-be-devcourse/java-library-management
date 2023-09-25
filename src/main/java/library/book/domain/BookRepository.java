@@ -9,4 +9,6 @@ public interface BookRepository {
 	long generateNewId();
 
 	List<Book> findAll();
+
+	List<Book> findByTitle(final String title);
 }
