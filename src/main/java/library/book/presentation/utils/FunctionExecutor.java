@@ -1,24 +1,24 @@
 package library.book.presentation.utils;
 
-import library.book.application.BookManageService;
+import library.book.application.BookService;
 import library.book.application.dto.request.RegisterBookRequest;
 
 public class FunctionExecutor {
 
-	private final BookManageService bookManageService;
+	private final BookService bookService;
 	private final ConsoleProcessor consoleProcessor;
 
 	public FunctionExecutor(
-		final BookManageService bookManageService,
+		final BookService bookService,
 		final ConsoleProcessor consoleProcessor
 	) {
-		this.bookManageService = bookManageService;
+		this.bookService = bookService;
 		this.consoleProcessor = consoleProcessor;
 	}
 
 	public void executeRegisterBook() {
 		RegisterBookRequest request = consoleProcessor.inputBookInfo();
 
-		bookManageService.registerBook(request);
+		bookService.registerBook(request);
 	}
 }

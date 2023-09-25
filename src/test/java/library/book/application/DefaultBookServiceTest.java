@@ -10,10 +10,10 @@ import org.junit.jupiter.api.function.Executable;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.mock.MockBookRepository;
 
-@DisplayName("[DefaultBookManageService Test] - Application")
-class DefaultBookManageServiceTest {
+@DisplayName("[DefaultBookService Test] - Application")
+class DefaultBookServiceTest {
 
-	private final BookManageService bookManageService = new DefaultBookManageService(new MockBookRepository());
+	private final BookService bookService = new DefaultBookService(new MockBookRepository());
 
 	@Test
 	@DisplayName("[registerBook 테스트]")
@@ -22,7 +22,7 @@ class DefaultBookManageServiceTest {
 		RegisterBookRequest request = A.toRegisterRequest();
 
 		//when
-		Executable when = () -> bookManageService.registerBook(request);
+		Executable when = () -> bookService.registerBook(request);
 
 		//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
 		assertDoesNotThrow(when);
