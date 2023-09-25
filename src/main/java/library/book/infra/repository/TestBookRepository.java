@@ -44,6 +44,6 @@ public class TestBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.empty();
+		return Optional.ofNullable(bookStorage.get(id));
 	}
 }
