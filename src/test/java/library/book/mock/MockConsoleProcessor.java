@@ -1,6 +1,7 @@
 package library.book.mock;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
@@ -26,10 +27,22 @@ public class MockConsoleProcessor extends ConsoleProcessor {
 	}
 
 	@Override
+	public String inputString() {
+		System.out.println("[call inputString()]");
+		return "hello";
+	}
+
+	@Override
+	public String inputNumber(Consumer<OutputHandler> selectConsole) {
+		System.out.println("[call inputNumber()]");
+		return "ONE";
+	}
+
+	@Override
 	public void outputBookInfo(
 		final List<BookSearchResponse> responses,
 		final Message entryMessage
 	) {
-		System.out.println("[call outputBookInfo]");
+		System.out.println("[call outputBookInfo()]");
 	}
 }
