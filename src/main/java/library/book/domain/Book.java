@@ -1,8 +1,10 @@
 package library.book.domain;
 
+import library.book.domain.Status.BookStatus;
+
 public class Book {
 
-	private long id;
+	private final long id;
 
 	private String title;
 
@@ -54,5 +56,9 @@ public class Book {
 
 	public Status getStatus() {
 		return status;
+	}
+
+	public BookStatus getBookStatus() {
+		return this.status.getBookStatus();
 	}
 }
