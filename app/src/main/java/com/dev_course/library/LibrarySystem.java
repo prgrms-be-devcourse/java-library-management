@@ -1,12 +1,11 @@
 package com.dev_course.library;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import com.dev_course.io_module.LibraryReader;
 
 public class LibrarySystem {
-    BufferedReader reader;
+    LibraryReader reader;
 
-    public LibrarySystem(BufferedReader reader) {
+    public LibrarySystem(LibraryReader reader) {
         this.reader = reader;
     }
 
@@ -20,10 +19,10 @@ public class LibrarySystem {
 
     private void setMode() {
         System.out.println("""
-                Q. 모드를 선택해주세요.
-                1. 일반 모드
-                2. 테스트 모드
-              """);
+                  Q. 모드를 선택해주세요.
+                  1. 일반 모드
+                  2. 테스트 모드
+                """);
 
         // TODO : SystemMode 따른 도서관 클래스의 Strategy 변경이 필요
     }
@@ -44,19 +43,15 @@ public class LibrarySystem {
                 7. 도서 삭제
                 """);
 
-        int number = -1;
+        String input = reader.readOrElse("-1");
 
-        try {
-            number = Integer.parseInt(reader.readLine());
-        } catch (IOException ignored) {}
-
-        switch (number) {
-            case 0 -> {
+        switch (input) {
+            case "0" -> {
                 return;
             }
-            case 1 -> createBook();
-            case 2 -> listBooks();
-            case 3 -> findBookByTitle();
+            case "1" -> createBook();
+            case "2" -> listBooks();
+            case "3" -> findBookByTitle();
             default -> {
                 System.out.println("[System] 사용할 수 없는 기능입니다.");
             }
