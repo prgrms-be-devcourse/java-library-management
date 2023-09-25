@@ -12,4 +12,6 @@ public interface BookRepository {
     List<Book> findAll();
     int generateBookNumber();
     void delete(Book book);
+
+    void updateAllBookStatus();
 }

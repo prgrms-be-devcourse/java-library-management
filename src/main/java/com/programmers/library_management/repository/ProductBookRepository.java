@@ -1,6 +1,7 @@
 package com.programmers.library_management.repository;
 
 import com.programmers.library_management.domain.Book;
+import com.programmers.library_management.domain.Status;
 import com.programmers.library_management.utils.CsvFileManager;
 
 import java.util.List;
@@ -45,6 +46,16 @@ public class ProductBookRepository implements BookRepository{
     @Override
     public void delete(Book book) {
         bookMemory.remove(book.getBookNumber());
+        csvFileManager.saveMemoryToCsv(bookMemory);
+    }
+
+    @Override
+    public void updateAllBookStatus() {
+        for(Book book:bookMemory.values()){
+            if(book.isOrganized()){
+                book.available();
+            }
+        }
         csvFileManager.saveMemoryToCsv(bookMemory);
     }
 

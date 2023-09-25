@@ -42,6 +42,15 @@ public class TestBookRepository implements BookRepository{
     }
 
     @Override
+    public void updateAllBookStatus() {
+        for(Book book: bookMemory.values()){
+            if (book.isOrganized()){
+                book.available();
+            }
+        }
+    }
+
+    @Override
     public int generateBookNumber() {
         int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
         for(int i=1;i<=max;i++){
