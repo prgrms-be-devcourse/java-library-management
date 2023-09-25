@@ -9,6 +9,7 @@ public class Main {
     private static int modeNum;
     private static int fun;
     private static BookService bookService;
+    private static FileService fileService;
 
     public static void main(String[] args) throws IOException {
 
@@ -21,9 +22,13 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         modeNum = Integer.parseInt(br.readLine());
         bookService = new BookService();
+        fileService = new FileService();
 
-        if(modeNum == 2) {
+        if(modeNum == 1) {
             System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
+
+            bookService.updateBooks(fileService.readFile());
+
             while(true) {
                 System.out.println("0. 사용할 기능을 선택해 주세요.");
                 System.out.println("1. 도서 등록");
@@ -40,7 +45,8 @@ public class Main {
                 switch (fun) {
                     case 1:
                         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
-                        bookService.createBook();
+                        Book book = bookService.createBook();
+                        fileService.writeFile(book);
                         break;
                     case 2:
                         System.out.println("[System] 전체 도서 목록입니다.\n");

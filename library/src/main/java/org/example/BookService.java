@@ -9,7 +9,11 @@ import java.util.List;
 public class BookService {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private List<Book> books = new ArrayList<>();
-    void createBook() throws IOException {
+
+    void updateBooks(List<Book> bookList) {
+        this.books = bookList;
+    }
+    Book createBook() throws IOException {
         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
 
         Book book = new Book();
@@ -34,6 +38,8 @@ public class BookService {
 
         book.setId(books.size()+1);
         books.add(book);
+
+        return book;
     }
 
     void printAllBooks(List<Book> bookList) {

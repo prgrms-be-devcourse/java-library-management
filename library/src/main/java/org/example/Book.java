@@ -18,6 +18,11 @@ public class Book {
         this.state = state;
     }
 
+    @Override
+    public String toString() {
+        return this.id+","+this.title+","+this.author+","+this.pageNum+","+this.state;
+    }
+
     public Integer getId() {
         return id;
     }
