@@ -1,4 +1,4 @@
-package com.programmers.library_management;
+package com.programmers.library_management.business;
 
 import com.programmers.library_management.domain.Book;
 import com.programmers.library_management.exception.*;
@@ -62,13 +62,6 @@ public class LibraryManagement {
                 break;
             }
         } while(!input.equals("0"));
-    }
-
-    public static void main(String[] args) {
-        LibraryManagement libraryManagement = new LibraryManagement();
-        if(libraryManagement.selectManagementMode()){
-            libraryManagement.run();
-        }
     }
 
     private void addBook() throws IOException {
