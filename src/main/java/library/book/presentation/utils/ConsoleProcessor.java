@@ -3,6 +3,7 @@ package library.book.presentation.utils;
 import static library.book.presentation.constant.Message.*;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
@@ -27,15 +28,10 @@ public class ConsoleProcessor {
 		this.converter = converter;
 	}
 
-	public String inputModeNumber() {
-		outputHandler.showSelectMode();
-		outputHandler.showInputPrefix();
-
-		return converter.convertNumberToString(inputHandler.inputNumber());
-	}
-
-	public String inputFunctionNumber() {
-		outputHandler.showSelectFunction();
+	public String inputNumber(
+		final Consumer<OutputHandler> selectConsole
+	) {
+		selectConsole.accept(outputHandler);
 		outputHandler.showInputPrefix();
 
 		return converter.convertNumberToString(inputHandler.inputNumber());
