@@ -46,16 +46,16 @@ public class Book {
         this.writer = writer;
         this.pageNumber = pageNumber;
         this.status = status;
-        this.returnDateTime = returnDateTime.equals("null") ? null : LocalDateTime.parse(returnDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.returnDateTime = returnDateTime.equals("null") ? null : LocalDateTime.parse(returnDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"));
     }
 
     @Override
     public String toString() {
         return "도서번호: " + bookNumber + '\n'+
-                "제목: '" + title + '\n' +
+                "제목: " + title + '\n' +
                 "작가 이름: " + writer + '\n' +
                 "페이지 수: " + pageNumber + " 페이지\n" +
-                "상태: " + status.toString();
+                "상태: " + status.getStatusMessage();
     }
 
     public String toCsvString(){
@@ -88,8 +88,11 @@ public class Book {
     }
 
     public boolean isOrganized(){
-        int ORGANIZE_TIME = 5;
-        return returnDateTime.withMinute(ORGANIZE_TIME).isBefore(LocalDateTime.now());
+        if (status.equals(Status.Organized)){
+            int ORGANIZE_TIME = 5;
+            return returnDateTime.withMinute(ORGANIZE_TIME).isBefore(LocalDateTime.now());
+        }
+        return false;
     }
 
     public void rant(){
@@ -99,6 +102,8 @@ public class Book {
     public void lost(){
         this.status = Status.Lost;
     }
+
+    public void available(){this.status = Status.Available;}
 
     public void returned(){
         this.status = Status.Organized;
