@@ -15,8 +15,8 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 import library.book.infra.console.output.ConsoleOutputHandler;
+import library.book.infra.console.output.OutputHandler;
 import library.book.mock.MockInputHandler;
-import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
@@ -27,20 +27,10 @@ class ConsoleProcessorTest {
 	);
 
 	@Test
-	@DisplayName("[inputModeNumber 테스트]")
+	@DisplayName("[inputNumber 테스트]")
 	void inputModeNumberTest() {
 		//when
-		String result = consoleProcessor.inputModeNumber();
-
-		//then
-		assertThat(result).isEqualTo("ONE");
-	}
-
-	@Test
-	@DisplayName("[inputNumber 테스트]")
-	void inputNumberTest() {
-		//when
-		String result = consoleProcessor.inputFunctionNumber();
+		String result = consoleProcessor.inputNumber(OutputHandler::showSelectFunction);
 
 		//then
 		assertThat(result).isEqualTo("ONE");

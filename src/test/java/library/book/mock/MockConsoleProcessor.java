@@ -21,11 +21,6 @@ public class MockConsoleProcessor extends ConsoleProcessor {
 	}
 
 	@Override
-	public String inputFunctionNumber() {
-		return "ONE";
-	}
-
-	@Override
 	public RegisterBookRequest inputBookInfo() {
 		return new RegisterBookRequest("hello", "hello", 100);
 	}

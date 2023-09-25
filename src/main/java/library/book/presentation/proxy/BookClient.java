@@ -20,7 +20,7 @@ public class BookClient extends BookController {
 	) {
 		super(null, null);
 		ConsoleProcessor consoleProcessor = new ConsoleProcessor(inputHandler, outputHandler, converter);
-		String mode = consoleProcessor.inputModeNumber();
+		String mode = consoleProcessor.inputNumber(OutputHandler::showSelectMode);
 
 		BookRepository bookRepository = ModeManager.valueOf(mode).getRepository();
 		DefaultBookService bookManageService = new DefaultBookService(bookRepository);

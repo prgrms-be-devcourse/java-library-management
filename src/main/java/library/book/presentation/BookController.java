@@ -1,5 +1,6 @@
 package library.book.presentation;
 
+import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.utils.ConsoleProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 import library.book.presentation.utils.FunctionManger;
@@ -18,7 +19,9 @@ public class BookController {
 	}
 
 	public void run() {
-		FunctionManger functionType = FunctionManger.valueOf(consoleProcessor.inputFunctionNumber());
+		FunctionManger functionType = FunctionManger.valueOf(
+			consoleProcessor.inputNumber(OutputHandler::showSelectFunction)
+		);
 
 		functionType.call(executor);
 	}
