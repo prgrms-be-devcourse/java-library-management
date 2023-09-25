@@ -9,4 +9,5 @@ public interface Repository {
     public BookInfo findByTitle(String title);
     public void deleteById(int book_id);
     public void registerBook(String title, String author, int pafeSize);
+    public int getListSize();
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.library.java_library_management.repository.DatabaseRepositoryTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-09-25T14:42:13" hostname="DLSWNS" time="1.094">
+  <properties/>
+  <testcase name="registerBook()" classname="com.library.java_library_management.repository.DatabaseRepositoryTest" time="1.081"/>
+  <testcase name="rentBook()" classname="com.library.java_library_management.repository.DatabaseRepositoryTest" time="0.007"/>
+  <testcase name="deleteById()" classname="com.library.java_library_management.repository.DatabaseRepositoryTest" time="0.003"/>
+  <system-out><![CDATA[23:42:12.520 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.library.java_library_management.repository.DatabaseRepositoryTest]: DatabaseRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:42:12.667 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.library.java_library_management.JavaLibraryManagementApplication for test class com.library.java_library_management.repository.DatabaseRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.4)
+
+2023-09-25T23:42:13.262+09:00  INFO 1356 --- [    Test worker] c.l.j.repository.DatabaseRepositoryTest  : Starting DatabaseRepositoryTest using Java 17.0.6 with PID 1356 (started by dlswn in D:\Users\java_library_management)
+2023-09-25T23:42:13.264+09:00  INFO 1356 --- [    Test worker] c.l.j.repository.DatabaseRepositoryTest  : No active profile set, falling back to 1 default profile: "default"
+2023-09-25T23:42:13.888+09:00  INFO 1356 --- [    Test worker] c.l.j.repository.DatabaseRepositoryTest  : Started DatabaseRepositoryTest in 0.974 seconds (process running for 2.668)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

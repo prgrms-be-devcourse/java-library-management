@@ -10,30 +10,13 @@ import java.util.Optional;
 public class DatabaseRepository implements Repository{
 
     public List<BookInfo> bookList = new ArrayList<>();
+    public int getListSize(){
+        return bookList.size();
+    }
     @Override
     public String rentBook(int book_id){
-        String message = "";
-        for(BookInfo book : bookList){
-            if(book.getBook_id() == book_id) {
-                BookStatus status = book.getStatus();
-
-                switch (status) {
-                    case RENT:
-                        message = "이미 대여중인 도서입니다.";
-                        break;
-                    case CLEANING:
-                        message = "정리중인 도서입니다.";
-                        break;
-                    case LOST:
-                        message = "분실된 도서입니다.";
-                        break;
-                    case AVAILABLE:
-                        book.setStatus(BookStatus.RENT);
-                        break;
-                }
-            }
-        }
-        return message;
+        Optional<BookInfo> book = bookList.stream().filter(bookinfo -> bookinfo.getBook_id() == book_id).findAny();
+        return book.get().getStatus().rentBook(book.get());
     }
 
     @Override
@@ -58,7 +41,7 @@ public class DatabaseRepository implements Repository{
         Optional<BookInfo> book = bookList.stream()
                 .filter(bookinfo -> bookinfo.getBook_id() == book_id)
                 .findAny();
-        bookList.remove(book);
+        bookList.remove(book.get());
     }
 
     @Override

@@ -22,6 +22,23 @@ class DatabaseRepositoryTest {
         Assertions.assertEquals(book1.getPage_size(), 100);
     }
 
+    @Test
+    public void rentBook(){
+        repository.registerBook("제목1", "Injun Choi", 100);
+        BookInfo book1 = repository.findByTitle("제목1");
+
+        Assertions.assertEquals(repository.rentBook(1), "");
+        Assertions.assertEquals(repository.rentBook(1), "이미 대여중인 도서입니다.");
+    }
+
+    @Test
+    public void deleteById(){
+        repository.registerBook("제목1", "Injun Choi", 100);
+        BookInfo book1 = repository.findByTitle("제목1");
+        repository.deleteById(1);
+        Assertions.assertEquals(0, repository.getListSize());
+    }
+
 
 
 }
