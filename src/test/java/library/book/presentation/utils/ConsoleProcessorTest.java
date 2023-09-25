@@ -69,7 +69,9 @@ class ConsoleProcessorTest {
 			.toList();
 
 		//when
-		Executable when = () -> consoleProcessor.outputBookInfo(responses, ENTRY_SEARCH_ALL_BOOKS);
+		Executable when = () -> consoleProcessor.outputBookInfo(
+			responses, ENTRY_SEARCH_ALL_BOOKS.getValue(), COMPLETE_SEARCH_ALL_BOOKS.getValue()
+		);
 
 		//
 		assertDoesNotThrow(when);
