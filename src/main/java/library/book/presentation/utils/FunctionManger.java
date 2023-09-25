@@ -6,6 +6,7 @@ public enum FunctionManger {
 
 	ONE(FunctionExecutor::executeRegisterBook),
 	TWO(FunctionExecutor::executeSearchAllBooks),
+	THREE(FunctionExecutor::executeSearchBooksByTitle),
 	;
 
 	private final Consumer<FunctionExecutor> callback;
