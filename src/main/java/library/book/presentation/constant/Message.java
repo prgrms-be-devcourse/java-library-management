@@ -7,6 +7,9 @@ public enum Message {
 	INPUT_AUTHOR_NAME("\n\nQ. 작가 이름을 입력하세요.\n"),
 	INPUT_PAGES("\n\nQ. 페이지 수를 입력하세요.\n"),
 	COMPLETE_REGISTER("\n\n[System] 도서 등록이 완료되었습니다.\n"),
+
+	ENTRY_SEARCH_ALL_BOOKS("[System] 전체 조서 목록입니다.\n"),
+	COMPLETE_SEARCH_ALL_BOOKS("[System] 도서 목록 끝"),
 	;
 
 	private final String value;
