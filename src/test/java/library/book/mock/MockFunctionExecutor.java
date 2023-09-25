@@ -22,4 +22,9 @@ public class MockFunctionExecutor extends FunctionExecutor {
 	public void executeSearchAllBooks() {
 		System.out.println("[call executeSearchAllBooks]");
 	}
+
+	@Override
+	public void executeSearchBooksByTitle() {
+		System.out.println("[call executeSearchBooksByTitle]");
+	}
 }

@@ -14,7 +14,7 @@ public class FunctionMangerTest {
 	private final FunctionExecutor functionExecutor = new MockFunctionExecutor(null, null);
 
 	@Test
-	@DisplayName("[ONE Test]")
+	@DisplayName("[ONE 테스트]")
 	void ONETest() {
 		//when
 		Executable when = () -> FunctionManger.ONE.call(functionExecutor);
@@ -24,10 +24,20 @@ public class FunctionMangerTest {
 	}
 
 	@Test
-	@DisplayName("[TWO Test]")
+	@DisplayName("[TWO 테스트]")
 	void TWOTest() {
 		//when
 		Executable when = () -> FunctionManger.TWO.call(functionExecutor);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[THREE 테스트]")
+	void THREETest() {
+		//when
+		Executable when = () -> FunctionManger.THREE.call(functionExecutor);
 
 		//then
 		assertDoesNotThrow(when);
