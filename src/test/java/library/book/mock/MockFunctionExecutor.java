@@ -15,11 +15,11 @@ public class MockFunctionExecutor extends FunctionExecutor {
 
 	@Override
 	public void executeRegisterBook() {
-
+		System.out.println("[call executeRegisterBook]");
 	}
 
 	@Override
 	public void executeSearchAllBooks() {
-
+		System.out.println("[call executeSearchAllBooks]");
 	}
 }

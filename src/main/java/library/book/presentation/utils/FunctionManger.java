@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 public enum FunctionManger {
 
 	ONE(FunctionExecutor::executeRegisterBook),
+	TWO(FunctionExecutor::executeSearchAllBooks),
 	;
 
 	private final Consumer<FunctionExecutor> callback;
