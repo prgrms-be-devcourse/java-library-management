@@ -22,11 +22,11 @@ public class Book {
      * @param writer 작가
      * @param pageNumber 책 쪽수
      */
-    public Book(String title, String writer, String pageNumber) {
+    public Book(String title, String writer, int pageNumber) {
         this.bookNumber = ++LastBookNumber;
         this.title = title;
         this.writer = writer;
-        this.pageNumber = Integer.parseInt(pageNumber);
+        this.pageNumber = pageNumber;
     }
 
     /**
@@ -40,13 +40,13 @@ public class Book {
      * @param status 도서 대여 상태
      * @param returnDateTime 최근 반납 일자
      */
-    public Book(String bookNumber, String title, String writer, String pageNumber, String status, String returnDateTime) {
-        this.bookNumber = Integer.parseInt(bookNumber);
+    public Book(int bookNumber, String title, String writer, int pageNumber, Status status, String returnDateTime) {
+        this.bookNumber = bookNumber;
         LastBookNumber = this.bookNumber;
         this.title = title;
         this.writer = writer;
-        this.pageNumber = Integer.parseInt(pageNumber);
-        this.status = Status.valueOf(status);
+        this.pageNumber = pageNumber;
+        this.status = status;
         this.returnDateTime = returnDateTime.equals("null") ? null : LocalDateTime.parse(returnDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 

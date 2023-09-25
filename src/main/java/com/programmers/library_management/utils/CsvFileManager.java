@@ -1,6 +1,7 @@
 package com.programmers.library_management.utils;
 
 import com.programmers.library_management.domain.Book;
+import com.programmers.library_management.domain.Status;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -34,11 +35,11 @@ public class CsvFileManager {
                 while((tempData = bufferedReader.readLine()) != null){
                     String[] bookRawData = tempData.split(",");
                     Book book = new Book(
-                            bookRawData[0],
+                            Integer.parseInt(bookRawData[0]),
                             bookRawData[1],
                             bookRawData[2],
-                            bookRawData[3],
-                            bookRawData[4],
+                            Integer.parseInt(bookRawData[3]),
+                            Status.valueOf(bookRawData[4]),
                             bookRawData[5]
                     );
                     bookMemory.put(Integer.parseInt(bookRawData[0]), book);
