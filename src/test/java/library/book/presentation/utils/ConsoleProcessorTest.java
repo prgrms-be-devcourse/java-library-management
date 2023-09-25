@@ -1,5 +1,6 @@
 package library.book.presentation.utils;
 
+import static library.book.presentation.constant.Message.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +16,7 @@ import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.mock.MockInputHandler;
+import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
@@ -67,7 +69,7 @@ class ConsoleProcessorTest {
 			.toList();
 
 		//when
-		Executable when = () -> consoleProcessor.outputBookInfo(responses);
+		Executable when = () -> consoleProcessor.outputBookInfo(responses, ENTRY_SEARCH_ALL_BOOKS);
 
 		//
 		assertDoesNotThrow(when);
