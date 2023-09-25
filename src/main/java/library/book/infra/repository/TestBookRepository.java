@@ -1,5 +1,7 @@
 package library.book.infra.repository;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,5 +22,13 @@ public class TestBookRepository implements BookRepository {
 		return bookStorage.keySet().stream()
 			.max(Long::compare)
 			.orElse(0L) + 1L;
+	}
+
+	@Override
+	public List<Book> findAll() {
+		return bookStorage.values()
+			.stream()
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
 	}
 }

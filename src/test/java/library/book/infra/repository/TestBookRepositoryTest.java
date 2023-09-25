@@ -5,6 +5,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,15 +41,54 @@ class TestBookRepositoryTest {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
 
-		BookFixture[] fixtures = BookFixture.values();
-		Arrays.stream(fixtures)
-			.forEach(fixture -> bookRepository.save(fixture.toEntity()));
+		saveFixtures(bookRepository);
 
 		//when
 		long result = bookRepository.generateNewId();
 
 		//then
-		long expectedId = fixtures.length + 1L;
+		long expectedId = BookFixture.values().length + 1L;
 		assertThat(result).isEqualTo(expectedId);
+	}
+
+	@Test
+	@DisplayName("[findAll 테스트]")
+	void findAllTest() {
+		//given
+		BookRepository bookRepository = new TestBookRepository();
+
+		saveFixtures(bookRepository);
+
+		//when
+		List<Book> result = bookRepository.findAll();
+
+		List<Book> expectedBooks = Arrays.stream(BookFixture.values())
+			.map(BookFixture::toEntity)
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
+
+		assertThat(result).hasSameSizeAs(expectedBooks);
+
+		IntStream.range(0, result.size())
+			.forEach(i -> {
+				Book actual = result.get(i);
+				Book expected = expectedBooks.get(i);
+
+				assertAll(
+					() -> assertThat(actual.getId()).isEqualTo(expected.getId()),
+					() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
+					() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
+					() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
+					() -> assertThat(actual.getStatus().getBookStatus())
+						.isEqualTo(expected.getStatus().getBookStatus()),
+					() -> assertThat(actual.getStatus().getCleaningStartTime())
+						.isEqualTo(expected.getStatus().getCleaningStartTime())
+				);
+			});
+	}
+
+	private void saveFixtures(BookRepository bookRepository) {
+		Arrays.stream(BookFixture.values())
+			.forEach(fixture -> bookRepository.save(fixture.toEntity()));
 	}
 }

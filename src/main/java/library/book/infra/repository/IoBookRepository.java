@@ -5,6 +5,8 @@ import static library.book.exception.ErrorCode.*;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,6 +44,14 @@ public class IoBookRepository implements BookRepository {
 	@Override
 	public long generateNewId() {
 		return Long.parseLong(fetchMaxId()) + 1L;
+	}
+
+	@Override
+	public List<Book> findAll() {
+		return bookStorage.values()
+			.stream()
+			.sorted(Comparator.comparingLong(Book::getId))
+			.toList();
 	}
 
 	private String fetchMaxId() {
