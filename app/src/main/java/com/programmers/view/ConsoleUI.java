@@ -1,7 +1,6 @@
 package com.programmers.view;
 
 import com.programmers.common.Messages;
-import com.programmers.repository.BookRepository;
 import com.programmers.repository.FileBookRepository;
 import com.programmers.repository.MemBookRepository;
 import com.programmers.service.BookService;
@@ -12,11 +11,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleUI {
-    private BookRepository bookRepository;
     private Map<Integer, BookCommand> functionMap = new HashMap<>();
-    private final BookService bookService = BookService.getInstance();
+    private final BookService bookService;
 
     public ConsoleUI() {
+        setMode();
+        bookService = BookService.getInstance();
         functionMap.put(1, bookService::registerBook);
         functionMap.put(2, bookService::getAllBooks);
         functionMap.put(3, bookService::searchBookByTitle);
@@ -27,7 +27,6 @@ public class ConsoleUI {
     }
 
     public void run() {
-        setMode();
         getCommand();
     }
 
