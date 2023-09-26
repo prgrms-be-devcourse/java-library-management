@@ -23,7 +23,7 @@ public class BookExceptionHandler extends BookController {
 		try {
 			target.run();
 		} catch (BookException e) {
-			outputHandler.showSystemMessage("\n" + e.getMessage() + "\n");
+			outputHandler.showSystemMessage("\n[System] " + e.getMessage() + "\n");
 		}
 	}
 }
