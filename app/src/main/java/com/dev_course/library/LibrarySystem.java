@@ -101,7 +101,7 @@ public class LibrarySystem {
         try {
             int id = writeAndReadInt(READ_RENT_BOOK_BY_ID.msg());
 
-            bookManager.rentById(id);
+            writer.append(bookManager.rentById(id));
         } catch (RuntimeException e) {
             writer.append(e);
         }

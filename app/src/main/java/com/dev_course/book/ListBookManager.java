@@ -46,8 +46,6 @@ public class ListBookManager implements BookManager {
 
     @Override
     public String rentById(int id) {
-        System.out.println(id);
-
         if (hasNotId(id)) {
             return NOT_EXIST_ID.msg();
         }
