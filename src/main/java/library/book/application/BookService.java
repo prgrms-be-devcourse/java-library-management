@@ -18,4 +18,6 @@ public interface BookService {
 	void returnBook(final long id);
 
 	void registerAsLost(final long id);
+
+	void deleteBook(final Long id);
 }

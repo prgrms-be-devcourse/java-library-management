@@ -107,6 +107,16 @@ class DefaultBookServiceTest {
 		assertDoesNotThrow(when);
 	}
 
+	@Test
+	@DisplayName("[deleteBook 테스트]")
+	void deleteBookTest() {
+		//when
+		Executable when = () -> bookService.deleteBook(1L);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
 	private void assertBookSearchResponse(
 		final BookSearchResponse actual,
 		final Book expected
