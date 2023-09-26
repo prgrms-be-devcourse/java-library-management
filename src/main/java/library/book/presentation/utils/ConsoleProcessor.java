@@ -86,6 +86,14 @@ public class ConsoleProcessor {
 		outputHandler.showSystemMessage(completeMessage);
 	}
 
+	public long inputBookId() {
+		outputHandler.showSystemMessage(ENTRY_RENT_BOOK.getValue());
+		outputHandler.showSystemMessage(INPUT_BOOK_ID.getValue());
+
+		outputHandler.showInputPrefix();
+		return inputHandler.inputNumber();
+	}
+
 	private void appendStringInput(StringBuilder stringBuilder) {
 		stringBuilder.append(inputHandler.inputString());
 		appendDelimiter(stringBuilder);
