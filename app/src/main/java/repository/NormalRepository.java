@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NormalRepository implements Repository {
-    File file = new File("C:/Users/skylim/IdeaProjects/lecture/mission1/src/도서.csv");
+    File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
     List<Book> books = new ArrayList<>();
 
     public NormalRepository() throws IOException {
