@@ -1,23 +1,29 @@
 package com.dev_course.library;
 
+import com.dev_course.book.BookManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
+
+import java.io.IOException;
 
 import static com.dev_course.library.LibraryMessage.*;
 
 public class LibrarySystem {
     LibraryReader reader;
     LibraryWriter writer;
+    BookManager bookManager;
 
-    public LibrarySystem(LibraryReader reader, LibraryWriter writer) {
+
+    public LibrarySystem(LibraryReader reader, LibraryWriter writer, BookManager bookManager) {
         this.reader = reader;
         this.writer = writer;
+        this.bookManager = bookManager;
     }
 
     public void run() {
         setMode();
 
-        selectScreen();
+        selectFunction();
 
         exit();
     }
@@ -25,13 +31,11 @@ public class LibrarySystem {
     private void setMode() {
         writer.println(MOD_SCREEN.msg());
 
-        // TODO : SystemMode 따른 도서관 클래스의 Strategy 변경이 필요
+        // TODO : SystemMode 따른 도서관 앱의 로드, 저장 기능 변경
     }
 
-    private void selectScreen() {
+    private void selectFunction() {
         writer.println(FUNCTION_SCREEN.msg());
-
-        // TODO : 선택 화면에서 세부 기능으로 넘어가는 부분을 어떻게 리팩토링할지 고민
 
         String input = reader.readOrElse("-1");
 
@@ -42,10 +46,10 @@ public class LibrarySystem {
             case "1" -> createBook();
             case "2" -> listBooks();
             case "3" -> findBookByTitle();
-            default -> writer.println(INVALID_NUMBER.msg());
+            default -> writer.println(INVALID_FUNCTION.msg());
         }
 
-        selectScreen();
+        selectFunction();
     }
 
     private void exit() {
@@ -54,6 +58,20 @@ public class LibrarySystem {
 
     private void createBook() {
         writer.println(CREATE_BOOK.msg());
+
+        String resMsg;
+
+        try {
+            String title = reader.read();
+            String author = reader.read();
+            int pages = Integer.parseInt(reader.read());
+
+            resMsg = bookManager.create(title, author, pages);
+        } catch (IOException | NumberFormatException e) {
+            resMsg = INVALID_INPUT.msg();
+        }
+
+        writer.println(resMsg);
     }
 
     private void listBooks() {
