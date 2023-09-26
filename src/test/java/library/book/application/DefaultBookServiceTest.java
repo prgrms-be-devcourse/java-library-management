@@ -16,6 +16,8 @@ import org.junit.jupiter.api.function.Executable;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.domain.Book;
+import library.book.domain.BookRepository;
+import library.book.domain.Status.BookStatus;
 import library.book.fixture.BookFixture;
 import library.book.mock.MockBookRepository;
 
@@ -23,9 +25,11 @@ import library.book.mock.MockBookRepository;
 class DefaultBookServiceTest {
 
 	private final BookService bookService;
+	private final BookRepository bookRepository;
 
 	public DefaultBookServiceTest() {
-		this.bookService = new DefaultBookService(new MockBookRepository());
+		this.bookRepository = new MockBookRepository();
+		this.bookService = new DefaultBookService(bookRepository);
 	}
 
 	@Test
@@ -71,6 +75,17 @@ class DefaultBookServiceTest {
 		//then
 		assertThat(result).hasSize(1);
 		assertBookSearchResponse(result.get(0), B.toEntity());
+	}
+
+	@Test
+	@DisplayName("[rentBook 테스트]")
+	void rentBookTest() {
+		//when
+		bookService.rentBook(1L);
+
+		//then
+		Book book = bookRepository.getById(1L);
+		assertThat(book.getBookStatus()).isEqualTo(BookStatus.RENTED);
 	}
 
 	private void assertBookSearchResponse(
