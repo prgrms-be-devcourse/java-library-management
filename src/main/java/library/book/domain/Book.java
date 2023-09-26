@@ -60,6 +60,6 @@ public class Book {
 
 	//== Business 메소드 ==//
 	public void rent() {
-		this.status.updateBookStatusToRented();
+		this.status.rent();
 	}
 }
