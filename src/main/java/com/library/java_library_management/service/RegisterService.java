@@ -1,22 +1,20 @@
-package com.library.java_library_management.io;
+package com.library.java_library_management.service;
 
 import com.library.java_library_management.dto.BookInfo;
-import com.library.java_library_management.repository.DatabaseRepository;
-import com.library.java_library_management.repository.DatabaseRepository;
 import com.library.java_library_management.repository.Repository;
+import com.library.java_library_management.response.ApiResponse;
 import com.library.java_library_management.status.BookStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 
-public class RegisterInput {
+public class RegisterService {
     private Repository repository;
-    public RegisterInput(Repository repository) {
+
+    public RegisterService(Repository repository) {
         this.repository = repository;
     }
-
 
 
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,6 +22,7 @@ public class RegisterInput {
     private String author;
     private int pageSize;
 
+    //도서 등록
     public void register() throws IOException {
         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n등록할 도서 제목을 입력하세요.");
         title = br.readLine();
@@ -32,7 +31,24 @@ public class RegisterInput {
         System.out.println("페이지 수를 입력하세요");
         pageSize = Integer.parseInt(br.readLine());
         BookInfo bookInfo = new BookInfo(0, author, title, pageSize, BookStatus.AVAILABLE);
-        repository.registerBook(title, author,pageSize);
+        repository.registerBook(title, author, pageSize);
     }
 
+    //도서 대여
+    public String rent() throws IOException {
+        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n" +
+                "\n" +
+                "Q. 대여할 도서번호를 입력하세요");
+        int book_id = Integer.parseInt(br.readLine());
+        return repository.rentBook(book_id);
+    }
+
+    public String returnBook() throws IOException {
+        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n" +
+                "\n" +
+                "Q. 반납할 도서번호를 입력하세요");
+        int book_id = Integer.parseInt(br.readLine());
+        ApiResponse apiResponse = repository.returnBook(book_id);
+        return apiResponse.message();
+    }
 }
