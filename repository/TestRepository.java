@@ -36,7 +36,7 @@ public class TestRepository implements Repository{
 
     @Override
     public void delete(Book book) {
-
+        bookList.remove(book);
     }
 
     public boolean exists(Book book){
