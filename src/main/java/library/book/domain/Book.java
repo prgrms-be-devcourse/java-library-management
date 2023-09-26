@@ -66,4 +66,8 @@ public class Book {
 	public void returnBook() {
 		this.status.returnBook();
 	}
+
+	public void registerAsLost() {
+		this.status.registerAsLost();
+	}
 }

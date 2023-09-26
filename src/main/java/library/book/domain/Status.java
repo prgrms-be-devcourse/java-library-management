@@ -6,7 +6,6 @@ import static library.book.exception.ErrorCode.*;
 import java.time.LocalDateTime;
 
 import library.book.exception.BookException;
-import library.book.exception.ErrorCode;
 
 public class Status {
 
@@ -14,33 +13,31 @@ public class Status {
 
 	private LocalDateTime cleaningEndTime;
 
-	//== Factory 메소드 ==//
-	public Status() {
-		this.bookStatus = AVAILABLE_RENT;
-		this.cleaningEndTime = null;
-	}
-
 	public enum BookStatus {
 
-		AVAILABLE_RENT("대여 가능", ALREADY_AVAILABLE_RENT),
-		RENTED("대여중", ALREADY_RENTED),
-		CLEANING("정리중", NOW_CLEANING),
-		LOST("분실", NOW_LOST);
+		AVAILABLE_RENT("대여 가능"),
+		RENTED("대여중"),
+		CLEANING("정리중"),
+		LOST("분실");
 
 		private final String description;
-		private final ErrorCode errorCode;
 
 		BookStatus(
-			final String description,
-			final ErrorCode errorCode
+			final String description
 		) {
 			this.description = description;
-			this.errorCode = errorCode;
 		}
 
 		public String getDescription() {
 			return description;
 		}
+
+	}
+
+	//== Factory 메소드 ==//
+	public Status() {
+		this.bookStatus = AVAILABLE_RENT;
+		this.cleaningEndTime = null;
 	}
 
 	//== Utility 메소드 ==//
@@ -58,6 +55,7 @@ public class Status {
 		checkCleaningComplete();
 		validateIsAbleToRent();
 		this.bookStatus = RENTED;
+		this.cleaningEndTime = null;
 	}
 
 	public void returnBook() {
@@ -66,15 +64,29 @@ public class Status {
 		this.cleaningEndTime = LocalDateTime.now().plusMinutes(5);
 	}
 
+	public void registerAsLost() {
+		validateIsAbleToLost();
+		this.bookStatus = LOST;
+		this.cleaningEndTime = null;
+	}
+
+	private void validateIsAbleToLost() {
+		if (bookStatus.equals(LOST)) {
+			throw BookException.of(ALREADY_LOST);
+		}
+	}
+
 	private void validateIsAbleToReturn() {
 		if (bookStatus.equals(AVAILABLE_RENT)) {
-			throw BookException.of(bookStatus.errorCode);
+			throw BookException.of(ALREADY_AVAILABLE_RENT);
 		}
 	}
 
 	private void validateIsAbleToRent() {
-		if (!bookStatus.equals(AVAILABLE_RENT)) {
-			throw BookException.of(bookStatus.errorCode);
+		switch (bookStatus) {
+			case RENTED -> throw BookException.of(ALREADY_RENTED);
+			case CLEANING -> throw BookException.of(NOW_CLEANING);
+			case LOST -> throw BookException.of(NOW_LOST);
 		}
 	}
 

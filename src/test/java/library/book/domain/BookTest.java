@@ -46,7 +46,34 @@ class BookTest {
 		Book book = A.toEntity();
 
 		//when
-		Executable when = () -> book.rent();
+		Executable when = book::rent;
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[returnBook 테스트]")
+	void returnBookTest() {
+		//given
+		Book book = A.toEntity();
+		book.rent();
+
+		//when
+		Executable when = book::returnBook;
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[registerAsLost 테스트]")
+	void registerAsLostTest() {
+		//given
+		Book book = A.toEntity();
+
+		//when
+		Executable when = book::registerAsLost;
 
 		//then
 		assertDoesNotThrow(when);
