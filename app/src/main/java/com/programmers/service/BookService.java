@@ -64,7 +64,8 @@ public class BookService {
         System.out.print(Messages.BOOK_RETURN_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isReturnable()) {
-            bookRepository.updateBookState(book.getId(), BookState.AVAILABLE);
+            bookRepository.updateBookState(book.getId(), BookState.ORGANIZING);
+            book.startOrganizing();
         }
     }
 

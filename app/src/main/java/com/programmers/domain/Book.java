@@ -4,6 +4,8 @@ import com.programmers.common.Messages;
 
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 도서번호(중복되지 않아야합니다. ISBN을 사용하라는 의미가 아닙니다.)
@@ -84,6 +86,16 @@ public class Book {
 
     public void setState(BookState state) {
         this.state = state;
+    }
+
+    public void startOrganizing() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                state = BookState.AVAILABLE;
+            }
+        }, 10 * 1000);
     }
 
     public boolean isRentable() {
