@@ -46,4 +46,10 @@ public class FunctionExecutor {
 			""
 		);
 	}
+
+	public void executeRentBook() {
+		long id = consoleProcessor.inputBookId();
+
+		bookService.rentBook(id);
+	}
 }
