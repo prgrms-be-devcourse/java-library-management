@@ -1,8 +1,8 @@
-package factory;
+package com.programmers.factory;
 
-import repository.BookRepository;
-import repository.FileBookRepository;
-import repository.MemBookRepository;
+import com.programmers.repository.BookRepository;
+import com.programmers.repository.FileBookRepository;
+import com.programmers.repository.MemBookRepository;
 
 import java.util.HashMap;
 import java.util.Map;

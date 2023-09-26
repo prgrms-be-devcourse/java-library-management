@@ -1,8 +1,8 @@
-package view;
+package com.programmers.view;
 
-import common.Messages;
-import factory.BookServiceFactory;
-import service.BookService;
+import com.programmers.common.Messages;
+import com.programmers.factory.BookServiceFactory;
+import com.programmers.service.BookService;
 
 import java.util.Scanner;
 

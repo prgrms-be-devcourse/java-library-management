@@ -1,4 +1,4 @@
-package domain;
+package com.programmers.domain;
 
 public enum BookState {
     AVAILABLE("대여 가능"),
@@ -7,11 +7,12 @@ public enum BookState {
     LOST("분실됨");
 
     private final String message;
-    BookState(String message){
+
+    BookState(String message) {
         this.message = message;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return this.message;
     }
 }

@@ -1,6 +1,6 @@
-package factory;
+package com.programmers.factory;
 
-import service.BookService;
+import com.programmers.service.BookService;
 
 import java.util.Optional;
 

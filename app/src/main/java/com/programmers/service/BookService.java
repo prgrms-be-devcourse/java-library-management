@@ -1,8 +1,8 @@
-package service;
+package com.programmers.service;
 
-import common.Messages;
-import repository.BookRepository;
-import service.command.BookCommand;
+import com.programmers.common.Messages;
+import com.programmers.repository.BookRepository;
+import com.programmers.service.command.BookCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +14,13 @@ public class BookService {
 
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        functionMap.put(1, () -> registerBook());
-        functionMap.put(2, () -> getAllBooks());
-        functionMap.put(3, () -> searchBookByTitle());
-        functionMap.put(4, () -> rentBook());
-        functionMap.put(5, () -> returnBook());
-        functionMap.put(6, () -> lostBook());
-        functionMap.put(7, () -> deleteBook());
+        functionMap.put(1, this::registerBook);
+        functionMap.put(2, this::getAllBooks);
+        functionMap.put(3, this::searchBookByTitle);
+        functionMap.put(4, this::rentBook);
+        functionMap.put(5, this::returnBook);
+        functionMap.put(6, this::lostBook);
+        functionMap.put(7, this::deleteBook);
     }
 
     public void getCommand() {

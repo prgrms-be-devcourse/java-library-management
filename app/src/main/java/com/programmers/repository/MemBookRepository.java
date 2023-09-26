@@ -1,11 +1,12 @@
-package repository;
+package com.programmers.repository;
 
-import domain.Book;
-import domain.BookState;
+import com.programmers.domain.Book;
+import com.programmers.domain.BookState;
 
 import java.util.List;
 
-public class FileBookRepository implements BookRepository {
+public class MemBookRepository implements BookRepository {
+
     @Override
     public List<Book> getAllBooks() {
         return null;
@@ -28,6 +29,6 @@ public class FileBookRepository implements BookRepository {
 
     @Override
     public void deleteBook(int id) {
-        
+
     }
 }

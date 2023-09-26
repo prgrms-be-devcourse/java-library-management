@@ -1,4 +1,4 @@
-package domain;
+package com.programmers.domain;
 
 /*
 도서번호(중복되지 않아야합니다. ISBN을 사용하라는 의미가 아닙니다.)
@@ -13,11 +13,11 @@ package domain;
  */
 public class Book {
 
-    private int id;
-    private String title;
-    private String author;
-    private int pages;
-    private BookState state;
+    private final int id;
+    private final String title;
+    private final String author;
+    private final int pages;
+    private final BookState state;
 
     @Override
     public String toString() {

@@ -1,7 +1,7 @@
-package repository;
+package com.programmers.repository;
 
-import domain.Book;
-import domain.BookState;
+import com.programmers.domain.Book;
+import com.programmers.domain.BookState;
 
 import java.util.List;
 

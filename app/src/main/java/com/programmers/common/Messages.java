@@ -1,4 +1,4 @@
-package common;
+package com.programmers.common;
 
 public enum Messages {
     MODE_CHOICE_MESSAGE("""
@@ -19,7 +19,7 @@ public enum Messages {
             7. 도서 삭제
                         
             >\s""");
-    private String message;
+    private final String message;
 
     Messages(String message) {
         this.message = message;
