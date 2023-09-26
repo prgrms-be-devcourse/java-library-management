@@ -21,7 +21,7 @@ public class DataSaver implements BookService {
 	}
 
 	@Override
-	public void registerBook(RegisterBookRequest request) {
+	public void registerBook(final RegisterBookRequest request) {
 		target.registerBook(request);
 		bookRepository.updateData();
 	}
@@ -34,27 +34,33 @@ public class DataSaver implements BookService {
 	}
 
 	@Override
-	public List<BookSearchResponse> searchBooks(String title) {
+	public List<BookSearchResponse> searchBooks(final String title) {
 		List<BookSearchResponse> result = target.searchBooks(title);
 		bookRepository.updateData();
 		return result;
 	}
 
 	@Override
-	public void rentBook(long id) {
+	public void rentBook(final long id) {
 		target.rentBook(id);
 		bookRepository.updateData();
 	}
 
 	@Override
-	public void returnBook(long id) {
+	public void returnBook(final long id) {
 		target.returnBook(id);
 		bookRepository.updateData();
 	}
 
 	@Override
-	public void registerAsLost(long id) {
+	public void registerAsLost(final long id) {
 		target.registerAsLost(id);
+		bookRepository.updateData();
+	}
+
+	@Override
+	public void deleteBook(final Long id) {
+		target.deleteBook(id);
 		bookRepository.updateData();
 	}
 }

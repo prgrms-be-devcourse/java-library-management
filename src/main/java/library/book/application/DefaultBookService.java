@@ -77,4 +77,9 @@ public class DefaultBookService implements BookService {
 
 		book.registerAsLost();
 	}
+
+	@Override
+	public void deleteBook(Long id) {
+		bookRepository.deleteById(id);
+	}
 }

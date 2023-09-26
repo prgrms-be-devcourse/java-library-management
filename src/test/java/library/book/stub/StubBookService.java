@@ -45,4 +45,9 @@ public class StubBookService implements BookService {
 	public void registerAsLost(long id) {
 		System.out.println("[call registerAsLost(id)]");
 	}
+
+	@Override
+	public void deleteBook(Long id) {
+		System.out.println("[call deleteById(id)]");
+	}
 }
