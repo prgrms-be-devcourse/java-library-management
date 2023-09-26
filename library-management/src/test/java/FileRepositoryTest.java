@@ -12,10 +12,9 @@ import java.util.List;
 
 public class FileRepositoryTest {
     String path = "src/test/resources/도서 목록.csv";
-    FileRepository repository = new FileRepository(path);
 
     @Test
-    void 파일로부터_도서_정보_등록 () throws IOException {
+    void 파일로부터_도서_등록 () throws IOException {
         //given
         String firstLine = "도서 번호;도서명;작가;총 페이지 수;상태";
         List<Book> books = Arrays.asList(
@@ -39,11 +38,17 @@ public class FileRepositoryTest {
         } catch (IOException e) {}
 
         //when
-        List<Book> loadedBooks = repository.loadBooks();
+        FileRepository repository = new FileRepository(path);
 
         //then
+        List<Book> loadedBooks = repository.findAll();
         Assertions.assertEquals(loadedBooks.size(), books.size());
         for(int i = 0; i < books.size(); ++i)
             Assertions.assertEquals(books.get(i), loadedBooks.get(i));
+
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write(firstLine);
+            writer.newLine();
+        } catch (IOException e) {}
     }
 }

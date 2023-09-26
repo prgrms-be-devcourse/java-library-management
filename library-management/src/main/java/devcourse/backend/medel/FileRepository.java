@@ -1,5 +1,7 @@
 package devcourse.backend.medel;
 
+import devcourse.backend.medel.Book;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,28 +11,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Repository가 model 레이어에 들어가는 것이 맞는가?
+ */
 public class FileRepository {
+    private List<Book> books;
     private final Path FILEPATH;
     private String firstLine;
 
     public FileRepository(String path) {
         this.FILEPATH = Paths.get(Objects.requireNonNull(path));
+        this.books = loadBooks();
     }
 
-    public List<Book> loadBooks() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(FILEPATH.toFile()));
+    public List<Book> findAll() {
+        // TODO : 깊은 복사를 하도록 코드 수정 필요! (일단 테스트 때문에)
+        return books;
+    }
 
+    public List<Book> findByTitle(String title) {
+        return books.stream()
+                .filter(b -> b.getTitle().equals(title))
+                .toList();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    private List<Book> loadBooks() {
         List<Book> books = new ArrayList<>();
-        firstLine = reader.readLine();
-        reader.lines()
-                .map(s -> s.split("[;,]"))
-                .forEach(data -> {
-                    Book.Builder builder = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]));
-                    if(data[0].equals("")) books.add(builder.build());
-                    else books.add(builder.id(Long.valueOf(data[0]))
-                            .bookStatus(data[4])
-                            .build());
-                });
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILEPATH.toFile()))) {
+            firstLine = reader.readLine();
+            reader.lines()
+                    .map(s -> s.split("[;,]"))
+                    .forEach(data -> {
+                        Book.Builder builder = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]));
+                        if(data[0].equals("")) books.add(builder.build());
+                        else books.add(builder.id(Long.valueOf(data[0]))
+                                .bookStatus(data[4])
+                                .build());
+                    });
+        } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
 
         return books;
     }
