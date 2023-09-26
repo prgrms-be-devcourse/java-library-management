@@ -1,5 +1,8 @@
 package entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Book {
 
     private Long id;
@@ -7,11 +10,12 @@ public class Book {
     private String author;
     private int page;
     private State state = State.AVAILABLE;
+    private LocalDateTime editDateTime;
 
     private static Long baseId = 0L;
-    private static final String successRentString = "도서가 대여 처리되었습니다.";
-
-
+    private static final String successRentString = "도서가 대여 처리 되었습니다.";
+    private static final String successLostString = "도서가 분실 처리 되었습니다.";
+    private static final String failLostString = "이미 분실 처리된 도서입니다.";
     public Book(String name, String author, int page) {
         this.name = name;
         this.author = author;
@@ -24,6 +28,14 @@ public class Book {
         }
         state = State.RENT;
         return successRentString;
+    }
+
+    public String doReportLost(){
+        if(state.equals(State.LOST)){
+            return failLostString;
+        }
+        this.state = State.LOST;
+        return successLostString;
     }
 
     private String getReason(){
