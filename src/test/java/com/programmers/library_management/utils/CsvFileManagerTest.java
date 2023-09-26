@@ -15,7 +15,7 @@ class CsvFileManagerTest {
 
     @BeforeEach
     void init(){
-        csvFileManager = new CsvFileManager();
+        csvFileManager = new CsvFileManager("book_list_test");
     }
 
     @DisplayName("Test saveMemoryToCsv")

@@ -11,9 +11,13 @@ import java.util.Map;
 public class CsvFileManager {
     private String RESOURCES = System.getProperty("user.dir") + "/data";
 
-    public CsvFileManager() {
+    public CsvFileManager(){
         createDataFolder();
         RESOURCES += "/book_list.csv";
+    }
+    public CsvFileManager(String file_name) {
+        createDataFolder();
+        RESOURCES += "/"+file_name+".csv";
     }
 
     private void createDataFolder() {
