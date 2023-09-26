@@ -1,19 +1,20 @@
 package io;
 
 import constant.Guide;
-import constant.Selection;
+import constant.Question;
+import model.Book;
 
-public class Output {
+import java.util.List;
 
-    public static void printModeOptions() {
-        Selection.printModeOptions();
-    }
+public interface Output {
 
-    public static void printFunctionOptions() {
-        Selection.printFunctionOptions();
-    }
+    void printModeOptions();
 
-    public static void printGuide(Guide guide) {
-        System.out.println(guide.getGuide());
-    }
+    void printFunctionOptions();
+
+    void printGuide(Guide guide);
+
+    void printQuestion(Question question);
+
+    void printBookList(List<Book> books);
 }
