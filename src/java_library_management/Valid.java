@@ -1,0 +1,1256 @@
+package java_library_management;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
+
+import static org.assertj.core.api.Assertions.*;
+
+public class Valid {
+
+    LibraryManagement library = new LibraryManagement();
+    Map<Integer, Book> bookMap = new TreeMap<>();
+    Mode mode;
+    String filePath;
+    FileWriter writer;
+    FileOutputStream fileOutputStream;
+
+    @BeforeEach
+    public void init() {
+        try {
+            bookMap.clear();
+            filePath = "src/java_library_management/TestBook.json";
+            writer = new FileWriter(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @AfterEach
+    public void after() {
+        try {
+            fileOutputStream = new FileOutputStream(filePath, false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @DisplayName("일반 모드에서 파일의 자동 등록 검증")
+    @Test
+    public void validGeneralAutoRegister() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        Book book1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        Book book2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
+        library.add(bookMap, book1);
+        library.add(bookMap, book2);
+
+        assertThat(bookMap.size()).isEqualTo(2);
+        assertThat(getJSONFile(filePath)).isNull(); // Unexpected token END OF FILE at position 0.
+
+        library.setCallback(
+                (map, filePath) -> {
+            mode.load(bookMap, "src/java_library_management/TestBook.json");
+        },
+                (map, path) -> {
+            mode.update(bookMap, filePath);
+        });
+        library.update(bookMap, filePath); // JSON 파일에 등록함
+
+        bookMap.clear();
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        assertThat(getJSONFile(filePath)).isNotNull();
+
+        library.load(bookMap, filePath); // JSON 파일에서 읽어옴. bookMap 저장함
+
+        assertThat(bookMap.size()).isEqualTo(2);
+
+        JSONArray jsonArray = getJSONFile(filePath);
+
+        JSONObject object1 = getJSONObject(jsonArray, 0);
+        compareBookObject(object1, book1);
+
+        JSONObject object2 = getJSONObject(jsonArray, 1);
+        compareBookObject(object2, book2);
+    }
+
+    @DisplayName("일반 모드에서 도서 등록, 조회 검증")
+    @Test
+    public void validGeneralAddNGet() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        Book obj1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        assertThat(bookMap).doesNotContainKey(obj1.getBook_id());
+        assertThat(bookMap).doesNotContainValue(obj1);
+
+        library.add(bookMap, obj1);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(obj1.getBook_id());
+        assertThat(bookMap).containsValue(obj1);
+
+
+        Book obj2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
+        assertThat(bookMap).doesNotContainKey(obj2.getBook_id());
+        assertThat(bookMap).doesNotContainValue(obj2);
+
+        library.add(bookMap, obj2);
+
+        assertThat(bookMap.size()).isEqualTo(2);
+        assertThat(bookMap).containsKey(obj2.getBook_id());
+        assertThat(bookMap).containsValue(obj2);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, "src/java_library_management/TestBook.json");
+                },
+                (map, path) -> {
+                    mode.update(bookMap, filePath);
+                });
+        library.update(bookMap, filePath); // JSON 파일에 등록함
+
+        JSONArray jsonArray = getJSONFile(filePath);
+        // JSON 파일에 작성되었는지 검증?
+        JSONObject object1 = getJSONObject(jsonArray, 0);
+        compareBookObject(object1, obj1);
+
+        JSONObject object2 = getJSONObject(jsonArray, 1);
+        compareBookObject(object2, obj2);
+    }
+
+    public JSONObject getJSONObject(JSONArray jsonArray, int idx) {
+
+        return (JSONObject) jsonArray.get(idx);
+    }
+
+    public JSONArray getJSONFile(String filePath) {
+
+        try {
+            JSONParser parser = new JSONParser();
+            FileReader reader = new FileReader(filePath);
+            JSONObject jsonObject = (JSONObject) parser.parse(reader); // Unexpected token END OF FILE at position 0.
+            if (jsonObject == null) return null;
+            JSONArray jsonArray = (JSONArray) jsonObject.get("book");
+            if (jsonArray == null) return null;
+            return jsonArray;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {}
+        return null;
+    }
+
+    public void compareBookObject(JSONObject object, Book book) {
+
+        assertThat(Integer.parseInt(String.valueOf(object.get("book_id")))).isEqualTo(book.getBook_id());
+        assertThat(String.valueOf(object.get("title"))).isEqualTo(book.getTitle());
+        assertThat(String.valueOf(object.get("author"))).isEqualTo(book.getAuthor());
+        assertThat(Integer.valueOf(String.valueOf(object.get("page_num")))).isEqualTo(book.getPage_num());
+        assertThat(BookState.valueOfState(String.valueOf(object.get("state")))).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @DisplayName("테스트 모드에서 도서 등록, 조회 검증")
+    @Test
+    public void validTestAddNGet() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        Book obj1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        assertThat(bookMap).doesNotContainKey(obj1.getBook_id());
+        assertThat(bookMap).doesNotContainValue(obj1);
+
+        library.add(bookMap, obj1);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(obj1.getBook_id());
+        assertThat(bookMap).containsValue(obj1);
+
+        Book obj2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
+        assertThat(bookMap).doesNotContainKey(obj2.getBook_id());
+        assertThat(bookMap).doesNotContainValue(obj2);
+
+        library.add(bookMap, obj2);
+
+        assertThat(bookMap.size()).isEqualTo(2);
+        assertThat(bookMap).containsKey(obj2.getBook_id());
+        assertThat(bookMap).containsValue(obj2);
+    }
+
+    @DisplayName("일반 모드에서 도서 대여 성공 검증")
+    @Test
+    public void validGeneralBorrowSuccess1() throws FuncFailureException {
+
+        mode = new General();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        library.borrow(bookMap, book.getBook_id());
+        assertThat(obj.getState()).isEqualTo(BookState.LOAN);
+    }
+
+    @DisplayName("일반 모드에서 존재하지 않는 도서 대여 실패 검증")
+    @Test
+    public void validGeneralBorrowFailure1() throws FuncFailureException {
+
+        mode = new General();
+        library.setMode(mode);
+
+        assertThatThrownBy(() -> library.borrow(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("일반 모드에서 대여중인 도서 대여 실패 검증")
+    @Test
+    public void validGeneralBorrowFailure2() throws FuncFailureException {
+
+        mode = new General();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.LOAN);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 이미 대여중인 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.LOAN);
+    }
+
+    @DisplayName("일반 모드에서 분실된 도서 대여 실패 검증")
+    @Test
+    public void validGeneralBorrowFailure3() throws FuncFailureException {
+
+        mode = new General();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.LOST);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 분실된 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.LOST);
+    }
+
+    @DisplayName("일반 모드에서 정리중인 도서 대여 실패 검증")
+    @Test
+    public void validGeneralBorrowFailure4() throws FuncFailureException {
+
+        mode = new General();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 정리중인 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.ARRANGEMENT);
+    }
+
+    @DisplayName("일반 모드에서 정리중인 도서 대여 5분 뒤 성공 검증")
+    @Test
+    public void validGeneralBorrowSuccess2() throws FuncFailureException {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new General();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        Book elem = bookMap.get(book.getBook_id());
+
+        Timer m = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                book.setState(BookState.AVAILABLE);
+                mode.update(bookMap, filePath);
+                library.borrow(bookMap, book.getBook_id());
+                assertThat(elem.getState()).isEqualTo(BookState.LOAN);
+            }
+        };
+        m.schedule(task, 10000);
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DisplayName("테스트 모드에서 대여 가능한 도서 대여 성공 검증")
+    @Test
+    public void validTestBorrowSuccess() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        library.borrow(bookMap, book.getBook_id());
+        assertThat(obj.getState()).isEqualTo(BookState.LOAN);
+    }
+
+    @DisplayName("테스트 모드에서 존재하지 않는 도서 대여 실패 검증")
+    @Test
+    public void validTestBorrowFailure1() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        assertThatThrownBy(() -> library.borrow(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("테스트 모드에서 대여중인 도서 대여 실패 검증")
+    @Test
+    public void validTestBorrowFailure2() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.LOAN);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 이미 대여중인 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.LOAN);
+    }
+
+    @DisplayName("테스트 모드에서 분실된 도서 대여 실패 검증")
+    @Test
+    public void validTestBorrowFailure3() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.LOST);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 분실된 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.LOST);
+    }
+
+    @DisplayName("테스트 모드에서 정리중인 도서 대여 실패 검증")
+    @Test
+    public void validTestBorrowFailure4() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        Book obj = bookMap.get(book.getBook_id());
+
+        assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 정리중인 도서입니다.");
+        assertThat(obj.getState()).isEqualTo(BookState.ARRANGEMENT);
+    }
+
+    @DisplayName("테스트 모드에서 정리중인 도서 5분 뒤 도서 대여 성공 검증")
+    @Test
+    public void validTestBorrowSuccess2() {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        book.setState(BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        Book elem = bookMap.get(book.getBook_id());
+
+        Timer m = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                book.setState(BookState.AVAILABLE);
+                library.borrow(bookMap, book.getBook_id());
+                assertThat(elem.getState()).isEqualTo(BookState.LOAN);
+            }
+        };
+        m.schedule(task, 10000);
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 1. 대여 중인 도서 등록
+     * 2. 등록된 도서를 JSON 입력
+     * 3. 반납과 update 수행
+     * 4. 도서 정리중으로 변경되었는지 검증
+     * 5. JSON 도서 정리중 검증
+     * 6. 도서 대여 가능으로 변경되었는지 검증
+     * 7. JSON 도서 대여 가능 검증
+     */
+    @DisplayName("일반 모드에서 대여중인 도서 반납 성공 검증")
+    @Test
+    public void validGeneralReturnSuccess1() {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+            mode.load(bookMap, filePath);
+        },
+                (map, filePath) -> {
+            mode.update(bookMap, filePath);
+        });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // bookMap -> JSON 등록
+
+        Book elem = bookMap.get(book.getBook_id());
+        assertThat(elem.getState()).isEqualTo(BookState.LOAN);
+        library.returns(bookMap, book.getBook_id(), filePath, 10000, library::update);
+        library.update(bookMap, filePath);
+        assertThat(elem.getState()).isEqualTo(BookState.ARRANGEMENT);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.getState());
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        compareBookObject(jsonObject, elem);
+
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.AVAILABLE.getState());
+    }
+
+    @DisplayName("일반 모드에서 존재하지 않는 도서 반납 실패 검증")
+    @Test
+    public void validGeneralReturnFailure1() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        assertThatThrownBy(() -> library.returns(bookMap, 10, filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("일반 모드에서 대여 가능한 도서 반납 실패 검증")
+    @Test
+    public void validGeneralReturnFailure2() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // bookMap -> JSON 등록
+
+        assertThatThrownBy(() -> library.returns(bookMap, book.getBook_id(), filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 원래 대여가 가능한 도서입니다.");
+        assertThat(book.getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @DisplayName("일반 모드에서 분실된 도서 반납 성공 검증")
+    @Test
+    public void validGeneralReturnSuccess2() {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // bookMap -> JSON 등록
+
+        Book elem = bookMap.get(book.getBook_id());
+        assertThat(elem.getState()).isEqualTo(BookState.LOST);
+        library.returns(bookMap, book.getBook_id(), filePath, 10000, library::update);
+        library.update(bookMap, filePath);
+        assertThat(elem.getState()).isEqualTo(BookState.ARRANGEMENT);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.getState());
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        compareBookObject(jsonObject, elem);
+
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.AVAILABLE.getState());
+    }
+
+    @DisplayName("일반 모드에서 정리중인 도서 반납 실패 검증")
+    @Test
+    public void validGeneralReturnFailure3() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // bookMap -> JSON 등록
+
+        assertThatThrownBy(() -> library.returns(bookMap, book.getBook_id(), filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 대여되지 않은 도서로 반납이 불가합니다.");
+        assertThat(book.getState()).isEqualTo(BookState.ARRANGEMENT);
+    }
+
+    @DisplayName("테스트 모드에서 존재하지 않은 도서 반납 실패 검증")
+    @Test
+    public void validTestReturnFailure1() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        assertThatThrownBy(() -> library.returns(bookMap, 10, filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("테스트 모드에서 정리중인 도서 반납 실패 검증")
+    @Test
+    public void validTestReturnFailure() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+
+        assertThatThrownBy(() -> library.returns(bookMap, book.getBook_id(), filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 대여되지 않은 도서로 반납이 불가합니다.");
+        assertThat(book.getState()).isEqualTo(BookState.ARRANGEMENT);
+    }
+
+    @DisplayName("테스트 모드에서 대여 가능한 도서 반납 실패 검증")
+    @Test
+    public void validTestReturnFailure2() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+
+        assertThatThrownBy(() -> library.returns(bookMap, book.getBook_id(), filePath, 10000, null))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 원래 대여가 가능한 도서입니다.");
+        assertThat(book.getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @DisplayName("테스트 모드에서 대여중인 도서 반납 성공 검증")
+    @Test
+    public void validTestReturnSuccess1() {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+
+        Book elem = bookMap.get(book.getBook_id());
+        assertThat(elem.getState()).isEqualTo(BookState.LOAN);
+        library.returns(bookMap, book.getBook_id(), null, 10000, null);
+        assertThat(elem.getState()).isEqualTo(BookState.ARRANGEMENT);
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertThat(elem.getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @DisplayName("테스트 모드에서 분실중인 도서 반납 성공 검증")
+    @Test
+    public void validTestReturnSuccess2() {
+
+        CountDownLatch lock = new CountDownLatch(1);
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+
+        Book elem = bookMap.get(book.getBook_id());
+        assertThat(elem.getState()).isEqualTo(BookState.LOST);
+        library.returns(bookMap, book.getBook_id(), null, 10000, null);
+        assertThat(elem.getState()).isEqualTo(BookState.ARRANGEMENT);
+
+        try {
+            lock.await(11000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        assertThat(elem.getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @DisplayName("일반 모드에서 대여 가능한 도서 분실 성공 검증")
+    @Test
+    public void validGeneralLostSuccess1() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // update
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.AVAILABLE);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        library.update(bookMap, filePath);
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
+    }
+
+    @DisplayName("일반 모드에서 대여중인 도서 분실 성공 검증")
+    @Test
+    public void validGeneralLostSuccess2() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // update
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOAN);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        library.update(bookMap, filePath);
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
+    }
+
+    @DisplayName("일반 모드에서 정리중인 도서 분실 성공 검증")
+    @Test
+    public void validGeneralLostSuccess3() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // update
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.ARRANGEMENT);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        library.update(bookMap, filePath);
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
+    }
+
+    @DisplayName("일반 모드에서 존재하지 않는 도서 분실 실패 검증")
+    @Test
+    public void validGeneralLostFailure1() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        assertThatThrownBy(() -> library.lost(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("일반 모드에서 분실된 도서 분실 실패 검증")
+    @Test
+    public void validGeneralLostFailure2() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, filePath) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, filePath) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath); // update
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
+
+        assertThatThrownBy(() -> library.lost(bookMap, book.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 이미 분실 처리된 도서입니다.");
+        library.update(bookMap, filePath);
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
+    }
+
+    @DisplayName("테스트 모드에서 대여 가능한 도서 분실 성공 검증")
+    @Test
+    public void validTestLostSuccess1() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.AVAILABLE);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @DisplayName("테스트 모드에서 대여중인 도서 분실 성공 검증")
+    @Test
+    public void validTestLostSuccess2() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOAN);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @DisplayName("테스트 모드에서 정리중인 도서 분실 성공 검증")
+    @Test
+    public void validTestLostSuccess3() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.ARRANGEMENT);
+        library.lost(bookMap, book.getBook_id()); // 분실 처리
+        assertThat(bookMap.get(book.getBook_id()).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @DisplayName("테스트 모드에서 존재하지 않는 도서 분실 실패 검증")
+    @Test
+    public void validTestLostFailure1() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        assertThatThrownBy(() -> library.lost(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
+    }
+
+    @DisplayName("테스트 모드에서 분실된 도서 분실 실패 검증")
+    @Test
+    public void validTestLostFailure2() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+
+        assertThatThrownBy(() -> library.lost(bookMap, book.getBook_id()))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 이미 분실 처리된 도서입니다.");
+    }
+
+    @DisplayName("일반 모드에서 대여 가능한 도서 삭제 성공 검증")
+    @Test
+    public void validGeneralDeleteSuccess1() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, path) -> {
+            mode.load(bookMap, filePath);
+        },
+                (map, path) -> {
+            mode.update(bookMap, filePath);
+        });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.toString()).isNotNull();
+        assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
+
+        library.delete(bookMap, book.getBook_id());
+        library.update(bookMap, filePath);
+
+        jsonArray = getJSONFile(filePath);
+        assertThat(jsonArray.size()).isEqualTo(0);
+    }
+
+    @DisplayName("일반 모드에서 대여중인 도서 삭제 성공 검증")
+    @Test
+    public void validGeneralDeleteSuccess2() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, path) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, path) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.toString()).isNotNull();
+        assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
+
+        library.delete(bookMap, book.getBook_id());
+        library.update(bookMap, filePath);
+
+        jsonArray = getJSONFile(filePath);
+        assertThat(jsonArray.size()).isEqualTo(0);
+    }
+
+    @DisplayName("일반 모드에서 정리중인 도서 삭제 성공 검증")
+    @Test
+    public void validGeneralDeleteSuccess3() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, path) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, path) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.toString()).isNotNull();
+        assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
+
+        library.delete(bookMap, book.getBook_id());
+        library.update(bookMap, filePath);
+
+        jsonArray = getJSONFile(filePath);
+        assertThat(jsonArray.size()).isEqualTo(0);
+    }
+
+    @DisplayName("일반 모드에서 분실된 도서 삭제 성공 검증")
+    @Test
+    public void validGeneralDeleteSuccess4() {
+
+        mode = new General();
+        library.setMode(mode);
+
+        TreeMap<Integer, Book> bookMap = new TreeMap<>();
+
+        library.setCallback(
+                (map, path) -> {
+                    mode.load(bookMap, filePath);
+                },
+                (map, path) -> {
+                    mode.update(bookMap, filePath);
+                });
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+        library.update(bookMap, filePath);
+
+        JSONArray jsonArray;
+        JSONObject jsonObject;
+
+        jsonArray = getJSONFile(filePath);
+        jsonObject = getJSONObject(jsonArray, 0);
+        assertThat(jsonObject.toString()).isNotNull();
+        assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
+
+        library.delete(bookMap, book.getBook_id());
+        library.update(bookMap, filePath);
+
+        jsonArray = getJSONFile(filePath);
+        assertThat(jsonArray.size()).isEqualTo(0);
+    }
+
+    @DisplayName("일반 모드에서 존재하지 않는 도서 삭제 실패 검증")
+    @Test
+    public void validGeneralDeleteFailure() {
+
+        Mode mode = new General();
+        library.setMode(mode);
+
+        library.setCallback(
+                (map, path) -> {
+                    mode.load(bookMap, filePath);
+        },
+                (map, path) -> {
+                    mode.update(bookMap, filePath);
+        });
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        assertThatThrownBy(() -> mode.delete(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 존재하지 않는 도서번호 입니다.");
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        JSONArray jsonArray;
+        jsonArray = getJSONFile(filePath); // Unexpected token END OF FILE at position 0.
+        assertThat(jsonArray).isNull();
+    }
+
+    @DisplayName("테스트 모드에서 대여 가능한 도서 삭제 성공 검증")
+    @Test
+    public void validTestDeleteSuccess1() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(book.getBook_id());
+        assertThat(bookMap).containsValue(book);
+
+        library.delete(bookMap, book.getBook_id());
+
+        assertThat(bookMap.size()).isEqualTo(0);
+        assertThat(bookMap).doesNotContainKey(book.getBook_id());
+        assertThat(bookMap).doesNotContainValue(book);
+    }
+
+    @DisplayName("테스트 모드에서 대여중인 도서 삭제 성공 검증")
+    @Test
+    public void validTestDeleteSuccess2() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(book.getBook_id());
+        assertThat(bookMap).containsValue(book);
+
+        library.delete(bookMap, book.getBook_id());
+
+        assertThat(bookMap.size()).isEqualTo(0);
+        assertThat(bookMap).doesNotContainKey(book.getBook_id());
+        assertThat(bookMap).doesNotContainValue(book);
+    }
+
+    @DisplayName("테스트 모드에서 정리중인 도서 삭제 성공 검증")
+    @Test
+    public void validTestDeleteSuccess3() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(book.getBook_id());
+        assertThat(bookMap).containsValue(book);
+
+        library.delete(bookMap, book.getBook_id());
+
+        assertThat(bookMap.size()).isEqualTo(0);
+        assertThat(bookMap).doesNotContainKey(book.getBook_id());
+        assertThat(bookMap).doesNotContainValue(book);
+    }
+
+    @DisplayName("테스트 모드에서 분실된 도서 삭제 성공 검증")
+    @Test
+    public void validTestDeleteSuccess4() {
+
+        mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
+        library.add(bookMap, book);
+
+        assertThat(bookMap.size()).isEqualTo(1);
+        assertThat(bookMap).containsKey(book.getBook_id());
+        assertThat(bookMap).containsValue(book);
+
+        library.delete(bookMap, book.getBook_id());
+
+        assertThat(bookMap.size()).isEqualTo(0);
+        assertThat(bookMap).doesNotContainKey(book.getBook_id());
+        assertThat(bookMap).doesNotContainValue(book);
+    }
+
+    @DisplayName("테스트 모드에서 존재하지 않는 도서 삭제 실패 검증")
+    @Test
+    public void validTestDeleteFailure() {
+
+        Mode mode = new Tests();
+        library.setMode(mode);
+
+        library.setCallback(
+                null,
+                null);
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        assertThatThrownBy(() -> mode.delete(bookMap, 10))
+                .isInstanceOf(FuncFailureException.class)
+                .hasMessageContaining("[System] 존재하지 않는 도서번호 입니다.");
+
+        assertThat(bookMap.size()).isEqualTo(0);
+    }
+
+    @DisplayName("도서 검색 검증")
+    @Test
+    public void testFindByTitle() {
+
+        MockMode mockMode = new MockMode(bookMap);
+
+        library.setMode(mockMode);
+
+        Book book1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        Book book2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
+        Book book3 = new Book(3, "스프링, 한 권으로 끝낸다", "아무개", 888, BookState.AVAILABLE);
+
+        library.add(bookMap, book1);
+        library.add(bookMap, book2);
+        library.add(bookMap, book3);
+
+        library.findByTitle(bookMap, "스프링");
+
+        List<Book> searched = mockMode.getSearched();
+        assertThat(searched.size()).isEqualTo(2);
+        assertThat(searched.get(0).getTitle()).isEqualTo(book1.getTitle());
+        assertThat(searched.get(1).getTitle()).isEqualTo(book3.getTitle());
+    }
+
+}
