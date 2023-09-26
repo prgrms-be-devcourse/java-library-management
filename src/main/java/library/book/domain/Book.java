@@ -62,4 +62,8 @@ public class Book {
 	public void rent() {
 		this.status.rent();
 	}
+
+	public void rentBook() {
+		this.status.returnBook();
+	}
 }

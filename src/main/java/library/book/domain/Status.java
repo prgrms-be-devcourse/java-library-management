@@ -60,6 +60,18 @@ public class Status {
 		this.bookStatus = RENTED;
 	}
 
+	public void returnBook() {
+		validateIsAbleToReturn();
+		this.bookStatus = CLEANING;
+		this.cleaningEndTime = LocalDateTime.now().plusMinutes(5);
+	}
+
+	private void validateIsAbleToReturn() {
+		if (bookStatus.equals(AVAILABLE_RENT)) {
+			throw BookException.of(bookStatus.errorCode);
+		}
+	}
+
 	private void validateIsAbleToRent() {
 		if (!bookStatus.equals(AVAILABLE_RENT)) {
 			throw BookException.of(bookStatus.errorCode);
