@@ -30,7 +30,8 @@ public class TestRepository implements Repository{
 
     @Override
     public Book findById(Long id) {
-        return null;
+        return bookList.stream().filter(b -> b.getId().equals(id))
+                .findAny().orElseThrow();
     }
 
     @Override
