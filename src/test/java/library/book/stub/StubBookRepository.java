@@ -15,7 +15,7 @@ public class StubBookRepository implements BookRepository {
 
 	@Override
 	public void save(Book book) {
-
+		System.out.println("[call save]");
 	}
 
 	@Override
@@ -38,7 +38,11 @@ public class StubBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		System.out.println("[call findById]");
 		return Optional.of(A.toEntity());
+	}
+
+	@Override
+	public void deleteById(long id) {
+		System.out.println("[call deleteById]");
 	}
 }

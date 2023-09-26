@@ -76,6 +76,15 @@ public class IoBookRepository implements BookRepository {
 	}
 
 	@Override
+	public void deleteById(long id) {
+		bookStorage.keySet()
+			.stream()
+			.filter(key -> Long.parseLong(key) == id)
+			.findAny()
+			.ifPresent(bookStorage::remove);
+	}
+
+	@Override
 	public void updateData() {
 		updateJsonFile();
 	}
