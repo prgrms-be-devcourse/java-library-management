@@ -43,7 +43,7 @@ public class FunctionExecutor {
 		consoleProcessor.outputBookInfo(
 			responses,
 			ENTRY_SEARCH_BOOKS_BY_TITLE.getValue(),
-			""
+			COMPLETE_SEARCH_ALL_BOOKS.getValue()
 		);
 	}
 
