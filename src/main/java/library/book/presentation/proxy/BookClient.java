@@ -1,6 +1,8 @@
 package library.book.presentation.proxy;
 
+import library.book.application.BookService;
 import library.book.application.DefaultBookService;
+import library.book.application.proxy.DataSaver;
 import library.book.domain.BookRepository;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
@@ -23,7 +25,7 @@ public class BookClient extends BookController {
 		String mode = consoleProcessor.inputNumber(OutputHandler::showSelectMode);
 
 		BookRepository bookRepository = ModeManager.valueOf(mode).getRepository();
-		DefaultBookService bookManageService = new DefaultBookService(bookRepository);
+		BookService bookManageService = new DataSaver(new DefaultBookService(bookRepository), bookRepository);
 
 		FunctionExecutor executor = new FunctionExecutor(bookManageService, consoleProcessor);
 		this.target = new BookController(executor, consoleProcessor);
