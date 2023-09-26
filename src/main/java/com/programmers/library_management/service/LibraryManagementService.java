@@ -30,7 +30,7 @@ public class LibraryManagementService {
             case Ranted -> throw new CBookAlreadyRantedException();
             case Lost -> throw new CBookAlreadyLostException();
             case Organized -> {
-                if (book.isOrganized()){
+                if (!book.isOrganized()){
                     throw new CBookInOrganizeException();
                 }
             }

@@ -1,7 +1,6 @@
 package com.programmers.library_management.business;
 
 import com.programmers.library_management.domain.Book;
-import com.programmers.library_management.exception.*;
 import com.programmers.library_management.repository.ProductBookRepository;
 import com.programmers.library_management.repository.TestBookRepository;
 import com.programmers.library_management.service.LibraryManagementService;
@@ -43,7 +42,7 @@ public class LibraryManagement {
     }
 
     public void run(){
-        String input;
+        String input = "";
         do {
             consoleIOManager.printFuncMenu();
             try{
@@ -62,11 +61,15 @@ public class LibraryManagement {
             } catch (IOException e){
                 consoleIOManager.printIOExceptionMsg();
                 break;
+            } catch (NumberFormatException e){
+                consoleIOManager.printNumberFormatExceptionMsg();
+            } catch (Exception e){
+                consoleIOManager.printSystemMsg(e.getMessage());
             }
         } while(!input.equals("0"));
     }
 
-    private void addBook() throws IOException {
+    private void addBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 등록 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 등록할 도서 제목을 입력하세요.");
         String title = consoleIOManager.getInput();
@@ -74,14 +77,8 @@ public class LibraryManagement {
         String writer = consoleIOManager.getInput();
         consoleIOManager.println("Q. 페이지 수를 입력하세요");
         String bookPages = consoleIOManager.getInput();
-        try {
-            libraryManagementService.addBook(title,writer, Integer.parseInt(bookPages));
-            consoleIOManager.printSystemMsg("도서 등록이 완료되었습니다.");
-        } catch (CBookAlreadyExistException e){
-            consoleIOManager.printSystemMsg(e.getMessage());
-        } catch (NumberFormatException e){
-            consoleIOManager.printNumberFormatExceptionMsg();
-        }
+        libraryManagementService.addBook(title,writer, Integer.parseInt(bookPages));
+        consoleIOManager.printSystemMsg("도서 등록이 완료되었습니다.");
     }
 
     private void showAllBook(){
@@ -104,64 +101,37 @@ public class LibraryManagement {
         consoleIOManager.printSystemMsg("검색된 도서 끝");
     }
 
-    private void rantBook() throws IOException {
+    private void rantBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 대여 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 대여할 도서 번호를 입력하세요");
-        try{
-            String bookNumber = consoleIOManager.getInput();
-            libraryManagementService.rantBook(Integer.parseInt(bookNumber));
-            consoleIOManager.printSystemMsg("도서가 대여 처리 되었습니다.");
-        } catch (CBookNumberNotExistException |
-                 CBookAlreadyRantedException |
-                 CBookAlreadyLostException |
-                 CBookInOrganizeException e){
-            consoleIOManager.printSystemMsg(e.getMessage());
-        } catch (NumberFormatException e){
-            consoleIOManager.printNumberFormatExceptionMsg();
-        }
+        String bookNumber = consoleIOManager.getInput();
+        libraryManagementService.rantBook(Integer.parseInt(bookNumber));
+        consoleIOManager.printSystemMsg("도서가 대여 처리 되었습니다.");
+
     }
-    private void returnBook() throws IOException {
+    private void returnBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 반납 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 반납할 도서 번호를 입력하세요");
-        try{
-            String bookNumber = consoleIOManager.getInput();
-            libraryManagementService.returnBook(Integer.parseInt(bookNumber));
-            consoleIOManager.printSystemMsg("도서가 반납 처리 되었습니다.");
-        } catch (CBookNumberNotExistException |
-                CBookAlreadyReturnedException e){
-            consoleIOManager.printSystemMsg(e.getMessage());
-        } catch (NumberFormatException e){
-            consoleIOManager.printNumberFormatExceptionMsg();
-        }
+        String bookNumber = consoleIOManager.getInput();
+        libraryManagementService.returnBook(Integer.parseInt(bookNumber));
+        consoleIOManager.printSystemMsg("도서가 반납 처리 되었습니다.");
     }
 
-    private void lostBook() throws IOException {
+    private void lostBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 분실 처리 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 분실 처리할 도서번호를 입력하세요");
-        try{
-            String bookNumber = consoleIOManager.getInput();
-            libraryManagementService.lostBook(Integer.parseInt(bookNumber));
-            consoleIOManager.printSystemMsg("도서가 분실 처리 되었습니다.");
-        } catch (CBookNumberNotExistException |
-                 CBookAlreadyLostException  e){
-            consoleIOManager.printSystemMsg(e.getMessage());
-        } catch (NumberFormatException e){
-            consoleIOManager.printNumberFormatExceptionMsg();
-        }
+        String bookNumber = consoleIOManager.getInput();
+        libraryManagementService.lostBook(Integer.parseInt(bookNumber));
+        consoleIOManager.printSystemMsg("도서가 분실 처리 되었습니다.");
     }
 
-    private void deleteBook() throws IOException {
+    private void deleteBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 삭제 처리 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 삭제 처리할 도서번호를 입력하세요");
-        try{
-            String bookNumber = consoleIOManager.getInput();
-            libraryManagementService.deleteBook(Integer.parseInt(bookNumber));
-            consoleIOManager.printSystemMsg("도서가 삭제 처리 되었습니다.");
-        } catch (CBookNumberNotExistException e){
-            consoleIOManager.printSystemMsg(e.getMessage());
-        } catch (NumberFormatException e){
-            consoleIOManager.printNumberFormatExceptionMsg();
-        }
+        String bookNumber = consoleIOManager.getInput();
+        libraryManagementService.deleteBook(Integer.parseInt(bookNumber));
+        consoleIOManager.printSystemMsg("도서가 삭제 처리 되었습니다.");
+
     }
 
 }
