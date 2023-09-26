@@ -27,4 +27,9 @@ public class StubFunctionExecutor extends FunctionExecutor {
 	public void executeSearchBooksByTitle() {
 		System.out.println("[call executeSearchBooksByTitle]");
 	}
+
+	@Override
+	public void executeRentBook() {
+		System.out.println("[call executeRentBook]");
+	}
 }
