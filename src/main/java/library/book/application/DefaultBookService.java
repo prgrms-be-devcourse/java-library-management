@@ -66,6 +66,8 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public void returnBook(long id) {
+		Book book = bookRepository.getById(id);
 
+		book.returnBook();
 	}
 }

@@ -63,7 +63,7 @@ public class Book {
 		this.status.rent();
 	}
 
-	public void rentBook() {
+	public void returnBook() {
 		this.status.returnBook();
 	}
 }
