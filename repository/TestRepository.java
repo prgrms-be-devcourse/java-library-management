@@ -19,7 +19,7 @@ public class TestRepository implements Repository{
 
     @Override
     public List<Book> findAll() {
-        return null;
+        return bookList;
     }
 
     @Override
