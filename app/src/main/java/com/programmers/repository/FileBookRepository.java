@@ -6,23 +6,38 @@ import com.programmers.domain.BookState;
 import java.util.List;
 
 public class FileBookRepository implements BookRepository {
+    private FileBookRepository() {
+    }
+
+    private static class Holder {
+        private static final FileBookRepository INSTANCE = new FileBookRepository();
+    }
+
+    public static FileBookRepository getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    @Override
+    public void addBook(Book Book) {
+    }
+
     @Override
     public List<Book> getAllBooks() {
         return null;
     }
 
     @Override
-    public void addBook(String Book) {
-
-    }
-
-    @Override
-    public Book searchBookByTitle(String title) {
+    public Book findBookById(int id) {
         return null;
     }
 
     @Override
-    public void changeBookState(int id, BookState bookState) {
+    public Book findBookByTitle(String title) {
+        return null;
+    }
+
+    @Override
+    public void updateBookState(int id, BookState bookState) {
 
     }
 

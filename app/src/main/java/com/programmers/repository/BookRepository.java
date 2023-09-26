@@ -6,13 +6,16 @@ import com.programmers.domain.BookState;
 import java.util.List;
 
 public interface BookRepository {
+
+    public void addBook(Book Book);
+
     public List<Book> getAllBooks();
 
-    public void addBook(String Book);
+    public Book findBookById(int id);
 
-    public Book searchBookByTitle(String title);
+    public Book findBookByTitle(String title);
 
-    public void changeBookState(int id, BookState bookState);
+    public void updateBookState(int id, BookState bookState);
 
     public void deleteBook(int id);
 }

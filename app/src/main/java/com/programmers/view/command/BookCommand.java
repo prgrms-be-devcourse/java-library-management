@@ -1,4 +1,4 @@
-package com.programmers.service.command;
+package com.programmers.view.command;
 
 @FunctionalInterface
 public interface BookCommand {

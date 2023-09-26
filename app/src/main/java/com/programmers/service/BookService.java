@@ -1,55 +1,54 @@
 package com.programmers.service;
 
 import com.programmers.common.Messages;
+import com.programmers.domain.Book;
 import com.programmers.repository.BookRepository;
-import com.programmers.service.command.BookCommand;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class BookService {
-    private final BookRepository bookRepository;
-    private Map<Integer, BookCommand> functionMap = new HashMap<>();
+    private static BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-        functionMap.put(1, this::registerBook);
-        functionMap.put(2, this::getAllBooks);
-        functionMap.put(3, this::searchBookByTitle);
-        functionMap.put(4, this::rentBook);
-        functionMap.put(5, this::returnBook);
-        functionMap.put(6, this::lostBook);
-        functionMap.put(7, this::deleteBook);
+    private BookService() {
     }
 
-    public void getCommand() {
-        while (true) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print(Messages.BOOK_MANAGEMENT_FEATURE_MESSAGE.getMessage());
-            functionMap.get(scanner.nextInt()).execute();
-        }
+    private static class Holder {
+        private static final BookService INSTANCE = new BookService();
+    }
 
+    public static BookService getInstance() {
+        Optional.ofNullable(bookRepository).orElseThrow(() -> new IllegalArgumentException());
+        return BookService.Holder.INSTANCE;
+    }
+
+    public static void setBookRepository(BookRepository _bookRepository) {
+        bookRepository = _bookRepository;
     }
 
     public void registerBook() {
-        System.out.println(this);
+        System.out.println(Messages.MOVE_TO_BOOK_REGISTER);
+        bookRepository.addBook(new Book());
     }
 
     public void getAllBooks() {
-        System.out.println(this);
-
+        System.out.println(Messages.BOOK_LIST_START);
+        bookRepository.getAllBooks().stream().forEach(book -> toString());
+        System.out.println(Messages.BOOK_LIST_FINISH);
     }
 
     public void searchBookByTitle() {
-        System.out.println(this);
-
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(Messages.MOVE_TO_BOOK_SEARCH);
+        System.out.print(Messages.BOOK_TITLE_PROMPT);
+        bookRepository.findBookByTitle(scanner.nextLine()).toString();
     }
 
     public void rentBook() {
-        System.out.println(this);
-
-
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println(Messages.MOVE_TO_BOOK_RENT);
+//        System.out.println(Messages.BOOK_RENT_PROMPT);
+//        bookRepository.updateBookState(scanner.nextInt(), BookState.RENTED);
     }
 
     public void returnBook() {
@@ -69,6 +68,4 @@ public class BookService {
 
 
     }
-
-
 }
