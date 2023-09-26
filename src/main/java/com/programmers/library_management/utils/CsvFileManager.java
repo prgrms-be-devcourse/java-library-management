@@ -7,12 +7,21 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class CsvFileManager {
-    private final String RESOURCES = Objects.requireNonNull(CsvFileManager.class.getClassLoader().getResource("book_list.csv")).getPath();
+    private String RESOURCES = System.getProperty("user.dir")+"/data";
 
-    public CsvFileManager(){}
+    public CsvFileManager(){
+        createDataFolder();
+        RESOURCES +="/book_list.csv";
+    }
+
+    private void createDataFolder(){
+        File file = new File(RESOURCES);
+        if(!file.exists()){
+            file.mkdir();
+        }
+    }
 
     // TODO: fix catch Block
     public void saveMemoryToCsv(Map<Integer, Book> bookList){
