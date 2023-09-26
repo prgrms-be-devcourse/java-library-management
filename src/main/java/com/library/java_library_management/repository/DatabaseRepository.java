@@ -65,4 +65,9 @@ public class DatabaseRepository implements Repository{
         book.get().setStatus(BookStatus.LOST);
         return "[System]도서가 분실처리 되었습니다.";
     }
+
+    @Override
+    public List<BookInfo> getTotalBook() {
+        return bookList;
+    }
 }

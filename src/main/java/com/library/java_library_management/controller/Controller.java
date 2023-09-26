@@ -25,6 +25,12 @@ public class Controller {
             switch (menu){
                 case 1: service.register();
                     break;
+                case 2: service.getBook();
+                break;
+                case 4: service.rent();
+                break;
+                case 5: service.returnBook();
+                break;
 
             }
         }

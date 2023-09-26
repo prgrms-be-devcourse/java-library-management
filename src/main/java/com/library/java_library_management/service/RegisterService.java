@@ -8,6 +8,7 @@ import com.library.java_library_management.status.BookStatus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class RegisterService {
     private Repository repository;
@@ -51,4 +52,17 @@ public class RegisterService {
         ApiResponse apiResponse = repository.returnBook(book_id);
         return apiResponse.message();
     }
+
+    public void getBook(){
+        List<BookInfo> totalBook = repository.getTotalBook();
+        for(BookInfo book : totalBook){
+            System.out.println("도서번호 : " + book.getBook_id());
+            System.out.println("제목 : " + book.getTitle());
+            System.out.println("작가 : " + book.getAuthor());
+            System.out.println("페이지 수 : " + book.getPage_size());
+            System.out.println("상태 : " + book.getStatus());
+        }
+    }
+
+
 }
