@@ -6,4 +6,8 @@ public class DeleteBookRequest {
 	public DeleteBookRequest(String id) {
 		this.id = Long.parseLong(id); //todo : validation
 	}
+
+	public long getId() {
+		return id;
+	}
 }

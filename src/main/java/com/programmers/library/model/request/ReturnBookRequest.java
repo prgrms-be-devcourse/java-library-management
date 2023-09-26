@@ -6,4 +6,8 @@ public class ReturnBookRequest {
 	public ReturnBookRequest(String id) {
 		this.id = Long.parseLong(id); //todo : validation
 	}
+
+	public long getId() {
+		return id;
+	}
 }

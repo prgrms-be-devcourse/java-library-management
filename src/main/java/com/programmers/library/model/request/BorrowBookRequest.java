@@ -6,4 +6,8 @@ public class BorrowBookRequest {
 	public BorrowBookRequest(String id) {
 		this.id = Long.parseLong(id); //todo : validation
 	}
+
+	public long getId() {
+		return id;
+	}
 }
