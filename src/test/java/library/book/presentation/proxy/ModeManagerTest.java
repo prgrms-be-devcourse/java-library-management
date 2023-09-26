@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import library.book.domain.BookRepository;
 import library.book.infra.repository.IoBookRepository;
 import library.book.infra.repository.TestBookRepository;
+import library.book.manager.ModeManager;
 
 @DisplayName("[ModeManager Test] - Presentation")
 class ModeManagerTest {

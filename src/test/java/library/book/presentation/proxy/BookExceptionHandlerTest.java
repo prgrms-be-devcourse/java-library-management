@@ -7,15 +7,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import library.book.infra.console.output.ConsoleOutputHandler;
-import library.book.infra.console.output.OutputHandler;
+import library.book.manager.BookExceptionHandler;
 import library.book.stub.StubBookController;
 import library.book.stub.StubExceptionBookController;
 
 @DisplayName("[BookExceptionHandler Test] - Presentation")
 class BookExceptionHandlerTest {
 
-	private final OutputHandler outputHandler = new ConsoleOutputHandler();
 	private BookExceptionHandler bookExceptionHandler;
 
 	@Nested
@@ -26,9 +24,7 @@ class BookExceptionHandlerTest {
 		@DisplayName("[Success] 예외가 발생할 경우 예외를 잡아서 콘솔로 메세지를 출력한다.")
 		void successWhenException() {
 			//given
-			bookExceptionHandler = new BookExceptionHandler(
-				new StubExceptionBookController(), outputHandler
-			);
+			bookExceptionHandler = new BookExceptionHandler(new StubExceptionBookController());
 
 			//when
 			Executable when = bookExceptionHandler::run;
@@ -41,9 +37,7 @@ class BookExceptionHandlerTest {
 		@DisplayName("[Success] 예외가 발생하지 않을 경우 통과한다.")
 		void successWhenNoException() {
 			//given
-			bookExceptionHandler = new BookExceptionHandler(
-				new StubBookController(), outputHandler
-			);
+			bookExceptionHandler = new BookExceptionHandler(new StubBookController());
 
 			//when
 			Executable when = bookExceptionHandler::run;
