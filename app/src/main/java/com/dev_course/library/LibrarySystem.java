@@ -75,13 +75,23 @@ public class LibrarySystem {
         writer.println(LIST_BOOK.msg());
 
         writer.append(bookManager.getInfo());
-        writer.append(END_LIST.msg());
-
+        writer.append(END_LIST_BOOK.msg());
         writer.flush();
     }
 
     private void findBookByTitle() {
         writer.println(FIND_BOOK_BY_TITLE.msg());
+
+        try {
+            String title = writeAndRead(READ_FIND_BY_TITLE.msg());
+
+            writer.append(bookManager.getInfoByTitle(title));
+        } catch (RuntimeException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
+        writer.append(END_FIND_BOOK_BY_TITLE.msg());
+        writer.flush();
     }
 
     private void deleteBookById() {
