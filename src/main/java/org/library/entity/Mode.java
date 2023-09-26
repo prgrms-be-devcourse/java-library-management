@@ -18,6 +18,14 @@ public enum Mode {
         return num;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Repository getRepository() {
+        return repository;
+    }
+
     private int num;
     private String name;
     private Repository repository;
