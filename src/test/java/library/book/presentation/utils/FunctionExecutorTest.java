@@ -75,4 +75,14 @@ class FunctionExecutorTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[executeDeleteBook 테스트]")
+	void executeDeleteBookTest() {
+		//when
+		Executable when = functionExecutor::executeDeleteBook;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }

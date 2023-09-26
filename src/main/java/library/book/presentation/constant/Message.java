@@ -2,7 +2,7 @@ package library.book.presentation.constant;
 
 public enum Message {
 
-	ENTRY_REGISTER_MENU("[System] 도서 등록 메뉴로 넘어갑니다.\n"),
+	ENTRY_REGISTER("[System] 도서 등록 메뉴로 넘어갑니다.\n"),
 	INPUT_BOOK_NAME("Q. 등록할 도서 제목을 입력하세요.\n"),
 	INPUT_AUTHOR_NAME("\nQ. 작가 이름을 입력하세요.\n"),
 	INPUT_PAGES("\nQ. 페이지 수를 입력하세요.\n"),
@@ -25,6 +25,10 @@ public enum Message {
 	ENTRY_LOST_BOOK("\n[System] 도서 분실 처리 메뉴로 넘어갑니다.\n"),
 	INPUT_LOST_BOOK_ID("Q. 분실 처리할 도서번호를 입력하세요.\n"),
 	COMPLETE_LOST("\n[System] 도서가 분실 처리 되었습니다.\n"),
+
+	ENTRY_DELETE("\n[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),
+	INPUT_DELETE_ID("Q. 삭제 처리할 도서번호를 입력하세요.\n"),
+	COMPLETE_DELETE("\n[System] 도서가 삭제 처리 되었습니다.\n"),
 	;
 
 	private final String value;

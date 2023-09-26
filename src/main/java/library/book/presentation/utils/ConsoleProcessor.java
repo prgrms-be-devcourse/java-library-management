@@ -47,7 +47,7 @@ public class ConsoleProcessor {
 	public RegisterBookRequest inputBookInfo() {
 		StringBuilder stringBuilder = new StringBuilder();
 
-		outputHandler.showSystemMessage(ENTRY_REGISTER_MENU.getValue());
+		outputHandler.showSystemMessage(ENTRY_REGISTER.getValue());
 
 		outputHandler.showSystemMessage(INPUT_BOOK_NAME.getValue());
 		outputHandler.showInputPrefix();
