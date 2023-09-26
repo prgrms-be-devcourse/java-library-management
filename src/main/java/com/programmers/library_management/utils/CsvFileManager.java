@@ -23,18 +23,16 @@ public class CsvFileManager {
         }
     }
 
-    // TODO: fix catch Block
     public void saveMemoryToCsv(Map<Integer, Book> bookList){
         try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RESOURCES, false), StandardCharsets.UTF_8))){
             for(Book book:bookList.values()){
                 bufferedWriter.write(book.toCsvString());
             }
-        } catch (IOException ignore){
-
+        } catch (IOException e){
+            System.out.println("[System] 잘못된 파일 접근입니다.\n");
         }
     }
 
-    // TODO: fix catch Block
     public Map<Integer, Book> loadMemoryFromCsv(){
         Map<Integer, Book> bookMemory = new HashMap<>();
         File file = new File(RESOURCES);
@@ -53,8 +51,10 @@ public class CsvFileManager {
                     );
                     bookMemory.put(Integer.parseInt(bookRawData[0]), book);
                 }
-            }catch (IOException ignore){
-
+            } catch (IOException ignore){
+                System.out.println("[System] 잘못된 파일 접근입니다.\n");
+            } catch (Exception e) {
+                System.out.println("[System] 손상된 파일입니다. 데이터 초기화 후 진행합니다.\n");
             }
         }
         return bookMemory;
