@@ -30,7 +30,7 @@ public class LibraryManagement {
                     consoleIOManager.printSystemMsg("테스트 모드로 애플리케이션을 실행합니다.");
                 }
                 default -> {
-                    consoleIOManager.print("[System] 잘못된 모드 선택입니다.");
+                    consoleIOManager.printSystemMsg("잘못된 모드 선택입니다.");
                     return false;
                 }
             }
