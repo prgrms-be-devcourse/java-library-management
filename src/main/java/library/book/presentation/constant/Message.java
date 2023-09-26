@@ -21,6 +21,10 @@ public enum Message {
 	ENTRY_RETURN_BOOK("\n[System] 도서 반납 메뉴로 넘어갑니다.\n"),
 	INPUT_RETURN_BOOK_ID("Q. 반납할 도서번호를 입력하세요.\n"),
 	COMPLETE_RETURN("\n[System] 도서가 반납 처리 되었습니다.\n"),
+
+	ENTRY_LOST_BOOK("\n[System] 도서 분실 처리 메뉴로 넘어갑니다.\n"),
+	INPUT_LOST_BOOK_ID("Q. 분실 처리할 도서번호를 입력하세요.\n"),
+	COMPLETE_LOST("\n[System] 도서가 분실 처리 되었습니다.\n"),
 	;
 
 	private final String value;

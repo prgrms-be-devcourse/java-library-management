@@ -37,4 +37,9 @@ public class StubFunctionExecutor extends FunctionExecutor {
 	public void executeReturnBook() {
 		System.out.println("[call executeReturnBook]");
 	}
+
+	@Override
+	public void executeRegisterAsLost() {
+		System.out.println("[call executeRegisterAsLost]");
+	}
 }
