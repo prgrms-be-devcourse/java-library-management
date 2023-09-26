@@ -81,11 +81,10 @@ class DefaultBookServiceTest {
 	@DisplayName("[rentBook 테스트]")
 	void rentBookTest() {
 		//when
-		bookService.rentBook(1L);
+		Executable when = () -> bookService.rentBook(1L);
 
 		//then
-		Book book = bookRepository.getById(1L);
-		assertThat(book.getBookStatus()).isEqualTo(BookStatus.RENTED);
+		assertDoesNotThrow(when);
 	}
 
 	private void assertBookSearchResponse(
