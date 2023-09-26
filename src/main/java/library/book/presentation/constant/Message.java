@@ -11,7 +11,7 @@ public enum Message {
 	ENTRY_SEARCH_ALL_BOOKS("\n[System] 전체 도서 목록입니다.\n"),
 	COMPLETE_SEARCH_ALL_BOOKS("[System] 도서 목록 끝"),
 
-	ENTRY_SEARCH_BOOKS_BY_TITLE("\n[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n"),
+	ENTRY_SEARCH_BOOKS_BY_TITLE("\n[System] 검색된 도서 끝.\n"),
 	INPUT_TITLE("Q. 검색할 도서 제목 일부를 입력하세요.\n"),
 
 	ENTRY_RENT_BOOK("\n[System] 도서 대여 메뉴로 넘어갑니다.\n"),

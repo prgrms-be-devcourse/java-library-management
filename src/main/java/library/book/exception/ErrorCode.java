@@ -7,6 +7,8 @@ public enum ErrorCode {
 	FILE_WRITE_FAIL("File Write 오류입니다."),
 	INVALID_BOOK_INFO_FORMAT("도서 정보를 입력 할 때 '|||' 는 입력할 수 없습니다."),
 
+	NOT_SUPPORT_FUNCTION("지원하지 않는 기능입니다."),
+
 	ALREADY_RENTED("이미 대여중인 도서입니다."),
 	NOW_LOST("분실된 도서입니다."),
 	NOW_CLEANING("정리중인 도서입니다."),
