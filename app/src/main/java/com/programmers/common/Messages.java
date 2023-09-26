@@ -2,6 +2,7 @@ package com.programmers.common;
 
 public enum Messages {
     MODE_CHOICE_MESSAGE("""
+                        
             Q. 모드를 선택해주세요.
             1. 일반 모드
             2. 테스트 모드
@@ -9,6 +10,7 @@ public enum Messages {
             >\s"""),
 
     BOOK_MANAGEMENT_FEATURE_MESSAGE("""
+                        
             Q. 사용할 기능을 선택해주세요.
             1. 도서 등록
             2. 전체 도서 목록 조회
@@ -76,7 +78,8 @@ public enum Messages {
         this.message = message;
     }
 
-    public String getMessage() {
-        return this.message;
+    @Override
+    public String toString() {
+        return message;
     }
 }
