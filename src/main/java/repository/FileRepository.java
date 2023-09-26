@@ -84,12 +84,33 @@ public class FileRepository implements Repository {
         if (index.isPresent()) {
             int bookIndex = index.getAsInt();
             Book book = bookList.get(bookIndex);
-            if (Status.isBorrowed(book.getStatus())) {
+            if (Status.isBorrowed(book.getStatus()) || Status.isLost(book.getStatus())) {
                 book.changeStatus(Status.ORGANIZING);
                 updateCvsFile();
                 System.out.println(Guide.RETURN_COMPLETE.getGuide());
             }else {
                 System.out.println(Guide.RETURN_FAIL.getGuide());
+            }
+        }else {
+            System.out.println("해당하는 책이 없습니다.");
+        }
+    }
+
+    // 분실 처리
+    @Override
+    public void lostBook(Long bookNo) {
+        OptionalInt index = IntStream.range(0, bookList.size())
+                .filter(i -> bookList.get(i).getBookNo().equals(bookNo))
+                .findFirst();
+        if (index.isPresent()) {
+            int bookIndex = index.getAsInt();
+            Book book = bookList.get(bookIndex);
+            if (Status.isLost(book.getStatus())) {
+                System.out.println(Guide.LOST_FAIL.getGuide());
+            }else {
+                book.changeStatus(Status.LOST);
+                updateCvsFile();
+                System.out.println(Guide.LOST_COMPLETE.getGuide());
             }
         }else {
             System.out.println("해당하는 책이 없습니다.");
