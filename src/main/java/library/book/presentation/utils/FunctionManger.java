@@ -7,7 +7,8 @@ public enum FunctionManger {
 	ONE(FunctionExecutor::executeRegisterBook),
 	TWO(FunctionExecutor::executeSearchAllBooks),
 	THREE(FunctionExecutor::executeSearchBooksByTitle),
-	FOUR(FunctionExecutor::executeRentBook)
+	FOUR(FunctionExecutor::executeRentBook),
+	FIVE(FunctionExecutor::executeReturnBook)
 	;
 
 	private final Consumer<FunctionExecutor> callback;

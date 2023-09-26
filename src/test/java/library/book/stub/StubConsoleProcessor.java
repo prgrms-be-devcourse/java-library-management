@@ -7,6 +7,7 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
+import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 import library.book.presentation.utils.ConsoleProcessor;
 
@@ -47,8 +48,13 @@ public class StubConsoleProcessor extends ConsoleProcessor {
 	}
 
 	@Override
-	public long inputBookId() {
+	public long inputBookId(Message entryMessage, Message inputMessage) {
 		System.out.println("[call inputBookId()]");
 		return 1L;
+	}
+
+	@Override
+	public void outputCompleteMessage(Message message) {
+		System.out.println("[call outputCompleteMessage]");
 	}
 }

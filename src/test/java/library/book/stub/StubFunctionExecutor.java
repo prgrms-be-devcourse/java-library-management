@@ -32,4 +32,9 @@ public class StubFunctionExecutor extends FunctionExecutor {
 	public void executeRentBook() {
 		System.out.println("[call executeRentBook]");
 	}
+
+	@Override
+	public void executeReturnBook() {
+		System.out.println("[call executeReturnBook]");
+	}
 }

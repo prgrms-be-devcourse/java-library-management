@@ -81,7 +81,17 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputBookId 테스트]")
 	void inputBookId() {
 		//when
-		Executable when = consoleProcessor::inputBookId;
+		Executable when = () -> consoleProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[outputCompleteMessage 테스트]")
+	void outputCompleteMessageTest() {
+		//when
+		Executable when = () -> consoleProcessor.outputCompleteMessage(COMPLETE_RENT);
 
 		//then
 		assertDoesNotThrow(when);

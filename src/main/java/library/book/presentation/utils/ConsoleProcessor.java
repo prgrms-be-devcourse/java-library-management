@@ -9,6 +9,7 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
+import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
 public class ConsoleProcessor {
@@ -86,12 +87,19 @@ public class ConsoleProcessor {
 		outputHandler.showSystemMessage(completeMessage);
 	}
 
-	public long inputBookId() {
-		outputHandler.showSystemMessage(ENTRY_RENT_BOOK.getValue());
-		outputHandler.showSystemMessage(INPUT_BOOK_ID.getValue());
+	public long inputBookId(
+		final Message entryMessage,
+		final Message inputMessage
+	) {
+		outputHandler.showSystemMessage(entryMessage.getValue());
+		outputHandler.showSystemMessage(inputMessage.getValue());
 
 		outputHandler.showInputPrefix();
 		return inputHandler.inputNumber();
+	}
+
+	public void outputCompleteMessage(final Message message) {
+		outputHandler.showSystemMessage(message.getValue());
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {
