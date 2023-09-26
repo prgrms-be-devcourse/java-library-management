@@ -110,6 +110,21 @@ class TestBookRepositoryTest {
 		assertThat(result).contains(book);
 	}
 
+	@Test
+	@DisplayName("[deleteById 테스트]")
+	void deleteByIdTest() {
+		//given
+		BookRepository bookRepository = new TestBookRepository();
+		bookRepository.save(A.toEntity());
+
+		//when
+		bookRepository.deleteById(A.getId());
+
+		//then
+		Optional<Book> findBook = bookRepository.findById(A.getId());
+		assertThat(findBook).isNotPresent();
+	}
+
 	private void assertBook(Book actual, Book expected) {
 		assertAll(
 			() -> assertThat(actual.getId()).isEqualTo(expected.getId()),

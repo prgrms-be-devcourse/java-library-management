@@ -46,4 +46,13 @@ public class TestBookRepository implements BookRepository {
 	public Optional<Book> findById(Long id) {
 		return Optional.ofNullable(bookStorage.get(id));
 	}
+
+	@Override
+	public void deleteById(long id) {
+		bookStorage.keySet()
+			.stream()
+			.filter(key -> key == id)
+			.findAny()
+			.ifPresent(bookStorage::remove);
+	}
 }

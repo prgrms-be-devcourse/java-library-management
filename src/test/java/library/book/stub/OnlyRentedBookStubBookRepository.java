@@ -35,4 +35,9 @@ public class OnlyRentedBookStubBookRepository implements BookRepository {
 		book.rent();
 		return Optional.of(book);
 	}
+
+	@Override
+	public void deleteById(long id) {
+
+	}
 }

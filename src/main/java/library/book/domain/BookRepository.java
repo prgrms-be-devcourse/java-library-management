@@ -19,6 +19,8 @@ public interface BookRepository {
 
 	Optional<Book> findById(final Long id);
 
+	void deleteById(final long id);
+
 	default void updateData() {}
 
 	default Book getById(final Long id) {
