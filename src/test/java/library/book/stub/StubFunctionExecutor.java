@@ -1,12 +1,12 @@
-package library.book.mock;
+package library.book.stub;
 
 import library.book.application.BookService;
 import library.book.presentation.utils.ConsoleProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 
-public class MockFunctionExecutor extends FunctionExecutor {
+public class StubFunctionExecutor extends FunctionExecutor {
 
-	public MockFunctionExecutor(
+	public StubFunctionExecutor(
 		final BookService bookService,
 		final ConsoleProcessor consoleProcessor
 	) {

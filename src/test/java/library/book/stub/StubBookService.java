@@ -1,4 +1,4 @@
-package library.book.mock;
+package library.book.stub;
 
 import static library.book.fixture.BookFixture.*;
 
@@ -10,7 +10,7 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 
-public class MockBookService implements BookService {
+public class StubBookService implements BookService {
 
 	@Override
 	public void registerBook(final RegisterBookRequest request) {

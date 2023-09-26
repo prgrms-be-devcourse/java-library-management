@@ -1,8 +1,8 @@
-package library.book.mock;
+package library.book.stub;
 
 import library.book.infra.console.input.InputHandler;
 
-public class MockInputHandler implements InputHandler {
+public class StubInputHandler implements InputHandler {
 
 	@Override
 	public int inputNumber() {

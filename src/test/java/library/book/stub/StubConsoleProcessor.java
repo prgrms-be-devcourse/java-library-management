@@ -1,4 +1,4 @@
-package library.book.mock;
+package library.book.stub;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -10,9 +10,9 @@ import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
 import library.book.presentation.utils.ConsoleProcessor;
 
-public class MockConsoleProcessor extends ConsoleProcessor {
+public class StubConsoleProcessor extends ConsoleProcessor {
 
-	public MockConsoleProcessor(
+	public StubConsoleProcessor(
 		InputHandler inputHandler,
 		OutputHandler outputHandler,
 		InputConverter converter
