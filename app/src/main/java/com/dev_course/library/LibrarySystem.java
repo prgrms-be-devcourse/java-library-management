@@ -74,10 +74,17 @@ public class LibrarySystem {
 
     private void listBooks() {
         writer.println(LIST_BOOK.msg());
+        writer.println(bookManager.getInfo());
+
+        selectFunction();
     }
 
     private void findBookByTitle() {
         writer.println(FIND_BOOK_BY_TITLE.msg());
+    }
+
+    private void deleteBookById() {
+        writeAndRead()
     }
 
     private String writeAndRead(String msg) {
