@@ -70,4 +70,11 @@ public class DefaultBookService implements BookService {
 
 		book.returnBook();
 	}
+
+	@Override
+	public void registerAsLost(long id) {
+		Book book = bookRepository.getById(id);
+
+		book.registerAsLost();
+	}
 }

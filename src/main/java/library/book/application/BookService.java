@@ -16,4 +16,6 @@ public interface BookService {
 	void rentBook(final long id);
 
 	void returnBook(final long id);
+
+	void registerAsLost(final long id);
 }

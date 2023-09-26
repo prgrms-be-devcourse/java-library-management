@@ -16,7 +16,6 @@ import org.junit.jupiter.api.function.Executable;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.domain.Book;
-import library.book.domain.BookRepository;
 import library.book.fixture.BookFixture;
 import library.book.stub.OnlyRentedBookStubBookRepository;
 import library.book.stub.StubBookRepository;
@@ -25,11 +24,9 @@ import library.book.stub.StubBookRepository;
 class DefaultBookServiceTest {
 
 	private final BookService bookService;
-	private final BookRepository bookRepository;
 
 	public DefaultBookServiceTest() {
-		this.bookRepository = new StubBookRepository();
-		this.bookService = new DefaultBookService(bookRepository);
+		this.bookService = new DefaultBookService(new StubBookRepository());
 	}
 
 	@Test
@@ -95,6 +92,16 @@ class DefaultBookServiceTest {
 
 		//when
 		Executable when = () -> returnBookService.returnBook(1L);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[registerAsLost 테스트]")
+	void registerAsLostTest() {
+		//when
+		Executable when = () -> bookService.registerAsLost(1L);
 
 		//then
 		assertDoesNotThrow(when);
