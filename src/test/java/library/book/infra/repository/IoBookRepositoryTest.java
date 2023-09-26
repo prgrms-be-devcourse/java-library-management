@@ -6,6 +6,7 @@ import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
@@ -106,25 +109,6 @@ class IoBookRepositoryTest {
 			//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
 			assertDoesNotThrow(when);
 		}
-
-		@Test
-		@DisplayName("[Fail] filePath 에 파일이 존재하지 않아 실패한다")
-		void failWhenNotExistFile() throws Exception {
-			//given
-			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
-
-			setWrongFilePath(bookRepository);
-
-			Book book = A.toEntity();
-
-			//when
-			ThrowingCallable when = () -> bookRepository.save(book);
-
-			//then
-			assertThatThrownBy(when)
-				.isInstanceOf(BookException.class)
-				.hasMessageContaining(FILE_WRITE_FAIL.getMessage());
-		}
 	}
 
 	@Test
@@ -199,6 +183,49 @@ class IoBookRepositoryTest {
 
 		//then
 		assertThat(result).contains(book);
+	}
+
+	@Nested
+	@DisplayName("[updateData 테스트]")
+	class updateDataTest {
+
+		@Test
+		@DisplayName("[Success]")
+		void success() throws IOException {
+			//given
+			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+			Book book = A.toEntity();
+			bookRepository.save(book);
+
+			//when
+			bookRepository.updateData();
+
+			//then
+			ObjectMapper objectMapper = new ObjectMapper();
+			FileInputStream inputStream = new FileInputStream(FILE_PATH);
+			Object json = objectMapper.readValue(inputStream, Object.class);
+
+			String actual = json.toString();
+			assertThat(actual).isNotEqualTo("{}");
+
+			inputStream.close();
+		}
+
+		@Test
+		@DisplayName("[Fail] 올바르지 않은 파일 경로로 실패한다")
+		void failWhenWrongFilePath() throws Exception {
+			//given
+			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+			setWrongFilePath(bookRepository);
+
+			//when
+			ThrowingCallable when = bookRepository::updateData;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(FILE_WRITE_FAIL.getMessage());
+		}
 	}
 
 	private void assertBook(Book actual, Book expected) {
