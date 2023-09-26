@@ -44,7 +44,7 @@ class StatusTest {
 			Status status = new Status();
 
 			//when
-			Executable when = status::updateBookStatusToRented;
+			Executable when = status::rent;
 
 			//then
 			assertDoesNotThrow(when);
@@ -59,7 +59,7 @@ class StatusTest {
 			setEndTime(status, -2);
 
 			//when
-			Executable when = status::updateBookStatusToRented;
+			Executable when = status::rent;
 
 			//then
 			assertDoesNotThrow(when);
@@ -73,7 +73,7 @@ class StatusTest {
 			setStatus(status, CLEANING);
 
 			//when
-			ThrowingCallable when = status::updateBookStatusToRented;
+			ThrowingCallable when = status::rent;
 
 			//then
 			assertThatThrownBy(when)
@@ -89,7 +89,7 @@ class StatusTest {
 			setStatus(status, RENTED);
 
 			//when
-			ThrowingCallable when = status::updateBookStatusToRented;
+			ThrowingCallable when = status::rent;
 
 			//then
 			assertThatThrownBy(when)
@@ -105,7 +105,7 @@ class StatusTest {
 			setStatus(status, LOST);
 
 			//when
-			ThrowingCallable when = status::updateBookStatusToRented;
+			ThrowingCallable when = status::rent;
 
 			//then
 			assertThatThrownBy(when)
@@ -122,7 +122,7 @@ class StatusTest {
 			setEndTime(status, 2);
 
 			//when
-			ThrowingCallable when = status::updateBookStatusToRented;
+			ThrowingCallable when = status::rent;
 
 			//then
 			assertThatThrownBy(when)

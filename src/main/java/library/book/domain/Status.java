@@ -6,6 +6,7 @@ import static library.book.exception.ErrorCode.*;
 import java.time.LocalDateTime;
 
 import library.book.exception.BookException;
+import library.book.exception.ErrorCode;
 
 public class Status {
 
@@ -21,15 +22,20 @@ public class Status {
 
 	public enum BookStatus {
 
-		AVAILABLE_RENT("대여 가능"),
-		RENTED("대여중"),
-		CLEANING("정리중"),
-		LOST("분실");
+		AVAILABLE_RENT("대여 가능", ALREADY_AVAILABLE_RENT),
+		RENTED("대여중", ALREADY_RENTED),
+		CLEANING("정리중", NOW_CLEANING),
+		LOST("분실", NOW_LOST);
 
 		private final String description;
+		private final ErrorCode errorCode;
 
-		BookStatus(String description) {
+		BookStatus(
+			final String description,
+			final ErrorCode errorCode
+		) {
 			this.description = description;
+			this.errorCode = errorCode;
 		}
 
 		public String getDescription() {
@@ -48,17 +54,15 @@ public class Status {
 	}
 
 	//== Business 메소드 ==//
-	public void updateBookStatusToRented() {
+	public void rent() {
 		checkCleaningComplete();
 		validateIsAbleToRent();
 		this.bookStatus = RENTED;
 	}
 
 	private void validateIsAbleToRent() {
-		switch (bookStatus) {
-			case RENTED -> throw BookException.of(ALREADY_RENTED);
-			case LOST -> throw BookException.of(NOW_LOST);
-			case CLEANING -> throw BookException.of(NOW_CLEANING);
+		if (!bookStatus.equals(AVAILABLE_RENT)) {
+			throw BookException.of(bookStatus.errorCode);
 		}
 	}
 
