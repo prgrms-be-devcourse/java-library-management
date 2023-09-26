@@ -60,4 +60,11 @@ public class FunctionExecutor {
 		bookService.returnBook(id);
 		consoleProcessor.outputCompleteMessage(COMPLETE_RETURN);
 	}
+
+	public void executeRegisterAsLost() {
+		long id = consoleProcessor.inputBookId(ENTRY_LOST_BOOK, INPUT_LOST_BOOK_ID);
+
+		bookService.registerAsLost(id);
+		consoleProcessor.outputCompleteMessage(COMPLETE_LOST);
+	}
 }

@@ -65,4 +65,14 @@ class FunctionExecutorTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[executeRegisterAsLost 테스트]")
+	void executeRegisterAsLost() {
+		//when
+		Executable when = functionExecutor::executeRegisterAsLost;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }

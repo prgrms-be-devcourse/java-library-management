@@ -54,10 +54,20 @@ public class FunctionMangerTest {
 	}
 
 	@Test
-	@DisplayName("[FOUR 테스트]")
+	@DisplayName("[FIVE 테스트]")
 	void FIVETest() {
 		//when
 		Executable when = () -> FunctionManger.FIVE.call(functionExecutor);
+
+		//then
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[SIX 테스트]")
+	void SIXTest() {
+		//when
+		Executable when = () -> FunctionManger.SIX.call(functionExecutor);
 
 		//then
 		assertDoesNotThrow(when);
