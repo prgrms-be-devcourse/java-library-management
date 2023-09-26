@@ -17,10 +17,11 @@ public enum LibraryMessage {
             6. 도서 분실
             7. 도서 삭제"""),
     EXIT("[System] 프로그램을 종료합니다."),
-    INVALID_NUMBER("[System] 사용할 수 없는 기능입니다."),
+    INVALID_FUNCTION("[System] 사용할 수 없는 기능입니다."),
     CREATE_BOOK("[System] 도서 등록 메뉴로 넘어갑니다."),
     LIST_BOOK("[System] 전체 도서 목록입니다."),
-    FIND_BOOK_BY_TITLE("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.");
+    FIND_BOOK_BY_TITLE("[System] 제목으로 도서 검색 메뉴로 넘어갑니다."),
+    INVALID_INPUT("[System] 잘못된 입력 입니다.");
 
     private final String msg;
 
