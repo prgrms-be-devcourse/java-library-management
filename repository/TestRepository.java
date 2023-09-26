@@ -24,7 +24,8 @@ public class TestRepository implements Repository{
 
     @Override
     public Book findByTitle(String title) {
-        return null;
+        return bookList.stream().filter(b -> b.getTitle().contains(title))
+                .findAny().orElseThrow();
     }
 
     @Override
@@ -53,8 +54,4 @@ public class TestRepository implements Repository{
     public void add(Book targetBook){
         bookList.add(targetBook);
     }
-
-
-
-
 }

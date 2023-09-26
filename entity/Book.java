@@ -42,4 +42,12 @@ public class Book {
     private String getReason(){
         return state.getDescription();
     }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public Long getId(){
+        return id;
+    }
 }
