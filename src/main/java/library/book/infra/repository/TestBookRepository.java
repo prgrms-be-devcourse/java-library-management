@@ -1,5 +1,7 @@
 package library.book.infra.repository;
 
+import static library.book.exception.ErrorCode.*;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
+import library.book.exception.BookException;
 
 public class TestBookRepository implements BookRepository {
 
@@ -53,6 +56,10 @@ public class TestBookRepository implements BookRepository {
 			.stream()
 			.filter(key -> key == id)
 			.findAny()
-			.ifPresent(bookStorage::remove);
+			.ifPresentOrElse(
+				bookStorage::remove,
+				() -> {
+					throw BookException.of(NOT_FOUND);
+				});
 	}
 }

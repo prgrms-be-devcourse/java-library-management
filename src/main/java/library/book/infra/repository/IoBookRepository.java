@@ -81,7 +81,11 @@ public class IoBookRepository implements BookRepository {
 			.stream()
 			.filter(key -> Long.parseLong(key) == id)
 			.findAny()
-			.ifPresent(bookStorage::remove);
+			.ifPresentOrElse(
+				bookStorage::remove,
+				() -> {
+					throw BookException.of(NOT_FOUND);
+				});
 	}
 
 	@Override
