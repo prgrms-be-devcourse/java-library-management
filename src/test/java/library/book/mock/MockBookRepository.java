@@ -13,6 +13,8 @@ import library.book.fixture.BookFixture;
 
 public class MockBookRepository implements BookRepository {
 
+	private final Book book = A.toEntity();
+
 	@Override
 	public void save(Book book) {
 
@@ -38,6 +40,6 @@ public class MockBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.empty();
+		return Optional.of(book);
 	}
 }

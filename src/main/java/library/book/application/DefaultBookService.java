@@ -59,6 +59,8 @@ public class DefaultBookService implements BookService {
 
 	@Override
 	public void rentBook(long id) {
+		Book book = bookRepository.getById(id);
 
+		book.rent();
 	}
 }
