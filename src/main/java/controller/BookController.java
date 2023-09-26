@@ -35,6 +35,7 @@ public class BookController {
             case 1 -> saveBook();
             case 2 -> findAllBook();
             case 3 -> findBooksByTitle();
+            case 4 -> borrowBookByBookNo();
         }
     }
 
@@ -78,4 +79,14 @@ public class BookController {
         output.printBookList(books);
         output.printGuide(Guide.FIND_BY_TITLE_END);
     }
+
+    // 도서 대여
+    public void borrowBookByBookNo() {
+        output.printGuide(Guide.BORROW_START);
+        output.printQuestion(Question.BORROW_BY_BOOK_NO);
+        Long bookNo = input.inputLong();
+        repository.borrowBook(bookNo);
+    }
 }
+
+

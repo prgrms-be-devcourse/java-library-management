@@ -47,6 +47,18 @@ public class Console implements Output, Input {
     }
 
     @Override
+    public Long inputLong() {
+        try {
+            Long number = scanner.nextLong();
+            scanner.nextLine();
+            return number;
+        } catch (InputMismatchException e) {
+            scanner.nextLine();
+            return 0L;
+        }
+    }
+
+    @Override
     public void printBookList(List<Book> books) {
         for (Book book : books) {
             System.out.println(book.toString());

@@ -9,4 +9,5 @@ public interface Repository {
     void saveBook(Book book);
     List<Book> findAllBook();
     List<Book> findBookByTitle(String title);
+    void borrowBook(Long bookNo);
 }
