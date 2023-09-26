@@ -35,4 +35,9 @@ public class StubBookService implements BookService {
 	public void rentBook(long id) {
 
 	}
+
+	@Override
+	public void returnBook(long id) {
+
+	}
 }
