@@ -10,4 +10,5 @@ public interface Repository {
     List<Book> findAllBook();
     List<Book> findBookByTitle(String title);
     void borrowBook(Long bookNo);
+    void returnBook(Long bookNo);
 }

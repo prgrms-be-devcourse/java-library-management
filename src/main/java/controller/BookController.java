@@ -36,6 +36,7 @@ public class BookController {
             case 2 -> findAllBook();
             case 3 -> findBooksByTitle();
             case 4 -> borrowBookByBookNo();
+            case 5 -> returnBookByBookNo();
         }
     }
 
@@ -93,7 +94,7 @@ public class BookController {
         output.printGuide(Guide.RETURN_START);
         output.printQuestion(Question.BORROW_BY_BOOK_NO);
         Long bookNo = input.inputLong();
-        repository.borrowBook(bookNo);
+        repository.returnBook(bookNo);
     }
 }
 

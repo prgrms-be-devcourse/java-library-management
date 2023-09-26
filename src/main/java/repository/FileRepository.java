@@ -7,8 +7,9 @@ import model.Status;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FileRepository implements Repository {
 
@@ -51,12 +52,12 @@ public class FileRepository implements Repository {
     // 책 대여
     @Override
     public void borrowBook(Long bookNo) {
-        Optional<Book> foundBook = bookList.stream()
-                .filter(book -> book.getBookNo().equals(bookNo))
+        OptionalInt index = IntStream.range(0, bookList.size())
+                .filter(i -> bookList.get(i).getBookNo().equals(bookNo))
                 .findFirst();
-        if (foundBook.isPresent()) {
-            Book book = foundBook.get();
-
+        if (index.isPresent()) {
+            int bookIndex = index.getAsInt();
+            Book book = bookList.get(bookIndex);
             if (Status.isBorrowed(book.getStatus())) {
                 System.out.println(Guide.BORROW_FAIL_BORROWED.getGuide());
             } else if (Status.isLost(book.getStatus())) {
@@ -64,10 +65,7 @@ public class FileRepository implements Repository {
             } else if (Status.isOrganizing(book.getStatus())) {
                 System.out.println(Guide.BORROW_FAIL_ORGANIZING.getGuide());
             } else {
-                bookList.stream()
-                        .filter(targetBook -> targetBook.getBookNo().equals(bookNo))
-                        .findFirst()
-                        .ifPresent(targetBook -> targetBook.changeStatus(Status.BORROWED));
+                book.changeStatus(Status.BORROWED);
                 updateCvsFile();
                 System.out.println(Guide.BORROW_COMPLETE.getGuide());
             }
@@ -76,6 +74,29 @@ public class FileRepository implements Repository {
         }
     }
 
+    // 책 반납
+    @Override
+    public void returnBook(Long bookNo) {
+        OptionalInt index = IntStream.range(0, bookList.size())
+                .filter(i -> bookList.get(i).getBookNo().equals(bookNo))
+                .findFirst();
+
+        if (index.isPresent()) {
+            int bookIndex = index.getAsInt();
+            Book book = bookList.get(bookIndex);
+            if (Status.isBorrowed(book.getStatus())) {
+                book.changeStatus(Status.ORGANIZING);
+                updateCvsFile();
+                System.out.println(Guide.RETURN_COMPLETE.getGuide());
+            }else {
+                System.out.println(Guide.RETURN_FAIL.getGuide());
+            }
+        }else {
+            System.out.println("해당하는 책이 없습니다.");
+        }
+    }
+
+    // csv 쓰기
     public void updateCvsFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Book book : bookList) {
