@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import library.book.infra.console.output.ConsoleOutputHandler;
+import library.book.manager.BookClient;
 import library.book.stub.StubBookController;
 import library.book.stub.StubInputHandler;
 import library.book.presentation.converter.InputConverter;
@@ -17,7 +18,7 @@ import library.book.presentation.converter.InputConverter;
 class BookClientTest {
 
 	private final BookClient bookClient = new BookClient(
-		new StubInputHandler(), new ConsoleOutputHandler(), new InputConverter()
+		new StubInputHandler(), new ConsoleOutputHandler()
 	);
 
 	@Test

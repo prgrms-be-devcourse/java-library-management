@@ -1,4 +1,4 @@
-package library.book.presentation.proxy;
+package library.book.manager;
 
 import library.book.application.BookService;
 import library.book.domain.BookRepository;
@@ -15,10 +15,11 @@ public class BookClient extends BookController {
 
 	public BookClient(
 		final InputHandler inputHandler,
-		final OutputHandler outputHandler,
-		final InputConverter converter
+		final OutputHandler outputHandler
 	) {
 		super(null, null);
+
+		InputConverter converter = new InputConverter();
 
 		ConsoleProcessor consoleProcessor = new ConsoleProcessor(inputHandler, outputHandler, converter);
 		String mode = consoleProcessor.inputNumber(OutputHandler::showSelectMode);
