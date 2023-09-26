@@ -21,7 +21,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -100,14 +99,14 @@ class IoBookRepositoryTest {
 		void success() {
 			//given
 			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
-
 			Book book = A.toEntity();
 
 			//when
-			Executable when = () -> bookRepository.save(book);
+			bookRepository.save(book);
 
-			//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
-			assertDoesNotThrow(when);
+			//then
+			Optional<Book> findBook = bookRepository.findById(A.getId());
+			assertThat(findBook).contains(book);
 		}
 	}
 
