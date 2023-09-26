@@ -1,6 +1,5 @@
 import controller.BookController;
-import io.Input;
-import io.Output;
+import io.Console;
 import repository.Repository;
 import repository.RepositoryInjector;
 
@@ -8,12 +7,12 @@ import repository.RepositoryInjector;
 public class Application {
 
     public static void main(String[] args) {
+        Console console = new Console();
 
-        Output.printModeOptions();
-        int mode = Input.inputNumber();
+        console.printModeOptions();
+        int mode = console.inputNumber();
+
         Repository repository = RepositoryInjector.getRepository(mode);
-
-        BookController bookController = new BookController(repository);
-        bookController.runApplication();
+        new BookController(repository, console, console).runApplication();
     }
 }
