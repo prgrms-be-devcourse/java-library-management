@@ -3,9 +3,10 @@ package com.programmers.repository;
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 
-import java.util.List;
+import java.util.*;
 
 public class MemBookRepository implements BookRepository {
+    private Map<Integer, Book> books = new HashMap<>();
 
     private MemBookRepository() {
     }
@@ -19,33 +20,48 @@ public class MemBookRepository implements BookRepository {
     }
 
     @Override
-    public void addBook(Book Book) {
+    public void addBook(Book book) {
+        book.setId(createUniqueId());
+        books.put(book.getId(), book);
 
+        System.out.println(books.get(book.getId()).toString());
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return null;
+        return new ArrayList<Book>(books.values());
     }
 
 
     @Override
-    public Book findBookById(int id) {
-        return null;
+    public Optional<Book> findBookById(int id) {
+        return Optional.ofNullable(books.get(id));
     }
 
     @Override
-    public Book findBookByTitle(String title) {
-        return null;
+    public Optional<Book> findBookByTitle(String title) {
+        return books.values().stream()
+                .filter(book -> book.getTitle().contains(title))
+                .findAny();
     }
 
     @Override
     public void updateBookState(int id, BookState bookState) {
-
+        books.get(id).setState(bookState);
     }
 
     @Override
     public void deleteBook(int id) {
+        books.remove(id);
+    }
 
+    @Override
+    public int createUniqueId() {
+        int randomId;
+        Random random = new Random();
+        do {
+            randomId = random.nextInt(Integer.MAX_VALUE);
+        } while (this.books.containsKey(randomId));
+        return randomId;
     }
 }

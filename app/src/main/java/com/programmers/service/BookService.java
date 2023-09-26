@@ -5,6 +5,7 @@ import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.repository.BookRepository;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class BookService {
     }
 
     public static BookService getInstance() {
-        Optional.ofNullable(bookRepository).orElseThrow(() -> new IllegalArgumentException());
+        Optional.ofNullable(bookRepository).orElseThrow(IllegalArgumentException::new);
         return BookService.Holder.INSTANCE;
     }
 
@@ -35,7 +36,7 @@ public class BookService {
 
     public void getAllBooks() {
         System.out.println(Messages.BOOK_LIST_START);
-        bookRepository.getAllBooks().stream().forEach(book -> toString());
+        bookRepository.getAllBooks().forEach(book -> System.out.println(book.toString()));
         System.out.println(Messages.BOOK_LIST_FINISH);
     }
 
@@ -43,13 +44,15 @@ public class BookService {
         Scanner scanner = new Scanner(System.in);
         System.out.println(Messages.MOVE_TO_BOOK_SEARCH);
         System.out.print(Messages.BOOK_TITLE_PROMPT);
-        bookRepository.findBookByTitle(scanner.nextLine()).toString();
+        Book book = bookRepository.findBookByTitle(scanner.nextLine())
+                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+        System.out.println(book.toString());
         System.out.println(Messages.BOOK_SEARCH_FINISH);
     }
 
     public void rentBook() {
         System.out.println(Messages.MOVE_TO_BOOK_RENT);
-        System.out.println(Messages.BOOK_RENT_PROMPT);
+        System.out.print(Messages.BOOK_RENT_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isRentable()) {
             bookRepository.updateBookState(book.getId(), BookState.RENTED);
@@ -58,7 +61,7 @@ public class BookService {
 
     public void returnBook() {
         System.out.println(Messages.MOVE_TO_BOOK_RETURN);
-        System.out.println(Messages.BOOK_RETURN_PROMPT);
+        System.out.print(Messages.BOOK_RETURN_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isReturnable()) {
             bookRepository.updateBookState(book.getId(), BookState.AVAILABLE);
@@ -67,7 +70,7 @@ public class BookService {
 
     public void lostBook() {
         System.out.println(Messages.MOVE_TO_BOOK_LOST);
-        System.out.println(Messages.BOOK_LOST_PROMPT);
+        System.out.print(Messages.BOOK_LOST_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isReportableAsLost()) {
             bookRepository.updateBookState(book.getId(), BookState.LOST);
@@ -83,6 +86,9 @@ public class BookService {
 
     private Book getBookByUserInputId() {
         Scanner scanner = new Scanner(System.in);
-        return bookRepository.findBookById(scanner.nextInt());
+        return bookRepository.findBookById(scanner.nextInt())
+                .orElseThrow(() ->
+                        new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString())
+                );
     }
 }
