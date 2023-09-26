@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
@@ -141,33 +140,77 @@ class StatusTest {
 		@DisplayName("[Success]")
 		void success() throws Exception {
 			//given
-			List<Status> statusList = List.of(new Status(), new Status(), new Status());
-
-			setBookStatus(statusList.get(0), RENTED);
-			setBookStatus(statusList.get(1), LOST);
-			setBookStatus(statusList.get(2), CLEANING);
+			Status status = new Status();
+			setBookStatus(status, RENTED);
 
 			//when
-			statusList.forEach(Status::returnBook);
+			status.returnBook();
 
 			//then
-			statusList.forEach(StatusTest.this::assertReturnBook);
+			assertAll(
+				() -> assertThat(status.getBookStatus()).isEqualTo(CLEANING),
+				() -> {
+					Duration duration = Duration.between(status.getCleaningEndTime(), LocalDateTime.now());
+					long minutesDifference = Math.abs(duration.toMinutes());
+
+					assertThat(minutesDifference).isEqualTo(5);
+				}
+			);
+		}
+
+		@Test
+		@DisplayName("[Fail] 이미 대여 가능한 상태여서 실패한다")
+		void failWhenBookStatusIsAvailableRent() {
+			//given
+			Status status = new Status();
+
+			//when
+			ThrowingCallable when = status::returnBook;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(ALREADY_AVAILABLE_RENT.getMessage());
 		}
 	}
 
-	private void assertReturnBook(final Status status) {
-		assertAll(
-			() -> assertThat(status.getBookStatus()).isEqualTo(CLEANING),
-			() -> {
-				Duration duration = Duration.between(status.getCleaningEndTime(), LocalDateTime.now());
-				long minutesDifference = Math.abs(duration.toMinutes());
+	@Nested
+	@DisplayName("[registerAsLost 테스트]")
+	class registerAsLostTest {
 
-				assertThat(minutesDifference).isEqualTo(5);
-			}
-		);
+		@Test
+		@DisplayName("[Success]")
+		void success() {
+			//given
+			Status status = new Status();
+
+			//when
+			status.registerAsLost();
+
+			//then
+			assertAll(
+				() -> assertThat(status.getBookStatus()).isEqualTo(LOST),
+				() -> assertThat(status.getCleaningEndTime()).isNull()
+			);
+		}
+
+		@Test
+		@DisplayName("[Fail] 상태가 분실 항태여서 실패한다")
+		void failWhenStatusIsLost() throws Exception {
+			//given
+			Status status = new Status();
+			setBookStatus(status, LOST);
+
+			//when
+			ThrowingCallable when = status::registerAsLost;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(ALREADY_LOST.getMessage());
+		}
 	}
 
-	//todo : 추후에 status 변경 로직이 구현되면 리플렉션 코드 제거
 	private void setBookStatus(final Status status, final BookStatus bookStatus) throws Exception {
 		Field field = status.getClass().getDeclaredField("bookStatus");
 		field.setAccessible(true);
