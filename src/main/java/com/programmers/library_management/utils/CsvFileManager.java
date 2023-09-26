@@ -7,32 +7,39 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class CsvFileManager {
-    private final String RESOURCES = Objects.requireNonNull(CsvFileManager.class.getClassLoader().getResource("book_list.csv")).getPath();
+    private String RESOURCES = System.getProperty("user.dir") + "/data";
 
-    public CsvFileManager(){}
+    public CsvFileManager() {
+        createDataFolder();
+        RESOURCES += "/book_list.csv";
+    }
 
-    // TODO: fix catch Block
-    public void saveMemoryToCsv(Map<Integer, Book> bookList){
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RESOURCES, false), StandardCharsets.UTF_8))){
-            for(Book book:bookList.values()){
-                bufferedWriter.write(book.toCsvString());
-            }
-        } catch (IOException ignore){
-
+    private void createDataFolder() {
+        File file = new File(RESOURCES);
+        if (!file.exists()) {
+            file.mkdir();
         }
     }
 
-    // TODO: fix catch Block
-    public Map<Integer, Book> loadMemoryFromCsv(){
+    public void saveMemoryToCsv(Map<Integer, Book> bookList) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RESOURCES, false), StandardCharsets.UTF_8))) {
+            for (Book book : bookList.values()) {
+                bufferedWriter.write(book.toCsvString());
+            }
+        } catch (IOException e) {
+            System.out.println("[System] 잘못된 파일 접근입니다.\n");
+        }
+    }
+
+    public Map<Integer, Book> loadMemoryFromCsv() {
         Map<Integer, Book> bookMemory = new HashMap<>();
         File file = new File(RESOURCES);
-        if(file.exists()){
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(RESOURCES), StandardCharsets.UTF_8))){
+        if (file.exists()) {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(RESOURCES), StandardCharsets.UTF_8))) {
                 String tempData;
-                while((tempData = bufferedReader.readLine()) != null){
+                while ((tempData = bufferedReader.readLine()) != null) {
                     String[] bookRawData = tempData.split(",");
                     Book book = new Book(
                             Integer.parseInt(bookRawData[0]),
@@ -44,8 +51,10 @@ public class CsvFileManager {
                     );
                     bookMemory.put(Integer.parseInt(bookRawData[0]), book);
                 }
-            }catch (IOException ignore){
-
+            } catch (IOException ignore) {
+                System.out.println("[System] 잘못된 파일 접근입니다.\n");
+            } catch (Exception e) {
+                System.out.println("[System] 손상된 파일입니다. 데이터 초기화 후 진행합니다.\n");
             }
         }
         return bookMemory;

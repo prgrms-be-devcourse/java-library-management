@@ -16,11 +16,11 @@ public class LibraryManagement {
         this.consoleIOManager = consoleIOManager;
     }
 
-    public boolean selectManagementMode(){
+    public boolean selectManagementMode() {
         consoleIOManager.printModeMenu();
         try {
             String input = consoleIOManager.getInput();
-            switch (input){
+            switch (input) {
                 case "1" -> {
                     libraryManagementService = new LibraryManagementService(new ProductBookRepository());
                     consoleIOManager.printSystemMsg("일반 모드로 애플리케이션을 실행합니다.");
@@ -41,13 +41,13 @@ public class LibraryManagement {
         return true;
     }
 
-    public void run(){
+    public void run() {
         String input = "";
         do {
             consoleIOManager.printFuncMenu();
-            try{
+            try {
                 input = consoleIOManager.getInput();
-                switch (input){
+                switch (input) {
                     case "1" -> addBook();
                     case "2" -> showAllBook();
                     case "3" -> searchBook();
@@ -58,15 +58,15 @@ public class LibraryManagement {
                     case "0" -> consoleIOManager.printSystemMsg("종료합니다.");
                     default -> consoleIOManager.printSystemMsg("잘못된 기능 선택입니다.");
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 consoleIOManager.printIOExceptionMsg();
                 break;
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 consoleIOManager.printNumberFormatExceptionMsg();
-            } catch (Exception e){
+            } catch (Exception e) {
                 consoleIOManager.printSystemMsg(e.getMessage());
             }
-        } while(!input.equals("0"));
+        } while (!input.equals("0"));
     }
 
     private void addBook() throws Exception {
@@ -77,13 +77,13 @@ public class LibraryManagement {
         String writer = consoleIOManager.getInput();
         consoleIOManager.println("Q. 페이지 수를 입력하세요");
         String bookPages = consoleIOManager.getInput();
-        libraryManagementService.addBook(title,writer, Integer.parseInt(bookPages));
+        libraryManagementService.addBook(title, writer, Integer.parseInt(bookPages));
         consoleIOManager.printSystemMsg("도서 등록이 완료되었습니다.");
     }
 
-    private void showAllBook(){
+    private void showAllBook() {
         consoleIOManager.printSystemMsg("전체 도서 목록입니다.");
-        for(Book book:libraryManagementService.showAllBooks()){
+        for (Book book : libraryManagementService.showAllBooks()) {
             consoleIOManager.println(book.toString());
             consoleIOManager.println("------------------------------");
         }
@@ -94,7 +94,7 @@ public class LibraryManagement {
         consoleIOManager.printSystemMsg("제목으로 도서 검색 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         String searchText = consoleIOManager.getInput();
-        for(Book book:libraryManagementService.searchBook(searchText)){
+        for (Book book : libraryManagementService.searchBook(searchText)) {
             consoleIOManager.println(book.toString());
             consoleIOManager.println("------------------------------");
         }
@@ -109,6 +109,7 @@ public class LibraryManagement {
         consoleIOManager.printSystemMsg("도서가 대여 처리 되었습니다.");
 
     }
+
     private void returnBook() throws Exception {
         consoleIOManager.printSystemMsg("도서 반납 메뉴로 넘어갑니다.");
         consoleIOManager.println("Q. 반납할 도서 번호를 입력하세요");

@@ -7,10 +7,15 @@ import java.util.Optional;
 
 public interface BookRepository {
     void save(Book book);
+
     Optional<Book> findByBookNumber(int bookNumber);
+
     List<Book> findByTitle(String searchText);
+
     List<Book> findAll();
+
     int generateBookNumber();
+
     void delete(Book book);
 
     void updateAllBookStatus();

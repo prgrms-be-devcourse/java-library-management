@@ -4,9 +4,10 @@ import com.programmers.library_management.domain.Book;
 
 import java.util.*;
 
-public class TestBookRepository implements BookRepository{
+public class TestBookRepository implements BookRepository {
 
     private final Map<Integer, Book> bookMemory;
+
     public TestBookRepository() {
         this.bookMemory = new HashMap<>();
     }
@@ -43,8 +44,8 @@ public class TestBookRepository implements BookRepository{
 
     @Override
     public void updateAllBookStatus() {
-        for(Book book: bookMemory.values()){
-            if (book.isOrganized()){
+        for (Book book : bookMemory.values()) {
+            if (book.isOrganized()) {
                 book.available();
             }
         }
@@ -53,11 +54,11 @@ public class TestBookRepository implements BookRepository{
     @Override
     public int generateBookNumber() {
         int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
-        for(int i=1;i<=max;i++){
-            if (!bookMemory.containsKey(i)){
+        for (int i = 1; i <= max; i++) {
+            if (!bookMemory.containsKey(i)) {
                 return i;
             }
         }
-        return max+1;
+        return max + 1;
     }
 }

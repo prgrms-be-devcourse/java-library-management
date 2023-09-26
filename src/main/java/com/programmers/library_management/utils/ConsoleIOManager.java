@@ -12,14 +12,14 @@ public class ConsoleIOManager {
         this.Buffered_Reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    public String getInput() throws IOException{
+    public String getInput() throws IOException {
         print("> ");
         String input = Buffered_Reader.readLine();
         print("\n");
         return input;
     }
 
-    public void printModeMenu(){
+    public void printModeMenu() {
         String mode_Menu = """
                 Q. 모드를 선택해주세요.
                 1. 일반 모드
@@ -27,7 +27,7 @@ public class ConsoleIOManager {
         println(mode_Menu);
     }
 
-    public void printFuncMenu(){
+    public void printFuncMenu() {
         String func_Menu = """
                 Q. 사용할 기능을 선택해주세요.
                 1. 도서 등록
@@ -37,29 +37,29 @@ public class ConsoleIOManager {
                 5. 도서 반납
                 6. 도서 분실
                 7. 도서 삭제
-                
+                                
                 0. 종료""";
         println(func_Menu);
     }
 
-    public void printSystemMsg(String s){
+    public void printSystemMsg(String s) {
         println("[System] " + s);
     }
 
-    public void printIOExceptionMsg(){
+    public void printIOExceptionMsg() {
         printSystemMsg("잘못된 입력 오류입니다.");
     }
 
-    public void printNumberFormatExceptionMsg(){
+    public void printNumberFormatExceptionMsg() {
         printSystemMsg("잘못된 숫자 입력입니다.");
     }
 
-    public void print(String s){
+    public void print(String s) {
         System.out.print(s);
     }
 
-    public void println(String s){
-        System.out.println(s+"\n");
+    public void println(String s) {
+        System.out.println(s + "\n");
     }
 
 

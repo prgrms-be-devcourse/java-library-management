@@ -14,23 +14,23 @@ public class LibraryManagementService {
         this.bookRepository = bookRepository;
     }
 
-    public void addBook(String title, String writer, int pageNumber){
+    public void addBook(String title, String writer, int pageNumber) {
         Book newBook = new Book(bookRepository.generateBookNumber(), title, writer, pageNumber);
-        for(Book book:bookRepository.findByTitle(title)){
-            if(book.equals(newBook)){
+        for (Book book : bookRepository.findByTitle(title)) {
+            if (book.equals(newBook)) {
                 throw new CBookAlreadyExistException();
             }
         }
         bookRepository.save(newBook);
     }
 
-    public void rantBook(int bookNumber){
+    public void rantBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
-        switch (book.getStatus()){
+        switch (book.getStatus()) {
             case Ranted -> throw new CBookAlreadyRantedException();
             case Lost -> throw new CBookAlreadyLostException();
             case Organized -> {
-                if (!book.isOrganized()){
+                if (!book.isOrganized()) {
                     throw new CBookInOrganizeException();
                 }
             }
@@ -39,35 +39,35 @@ public class LibraryManagementService {
         bookRepository.save(book);
     }
 
-    public void returnBook(int bookNumber){
+    public void returnBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
-        switch (book.getStatus()){
+        switch (book.getStatus()) {
             case Organized, Available -> throw new CBookAlreadyReturnedException();
         }
         book.returned();
         bookRepository.save(book);
     }
 
-    public void lostBook(int bookNumber){
+    public void lostBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
-        if(book.getStatus().equals(Status.Lost)){
+        if (book.getStatus().equals(Status.Lost)) {
             throw new CBookAlreadyLostException();
         }
         book.lost();
         bookRepository.save(book);
     }
 
-    public void deleteBook(int bookNumber){
+    public void deleteBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
         bookRepository.delete(book);
     }
 
-    public List<Book> showAllBooks(){
+    public List<Book> showAllBooks() {
         bookRepository.updateAllBookStatus();
         return bookRepository.findAll();
     }
 
-    public List<Book> searchBook(String text){
+    public List<Book> searchBook(String text) {
         bookRepository.updateAllBookStatus();
         return bookRepository.findByTitle(text);
     }
