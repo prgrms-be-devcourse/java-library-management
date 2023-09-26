@@ -1,6 +1,7 @@
 package com.library.java_library_management.repository;
 
 import com.library.java_library_management.dto.BookInfo;
+import com.library.java_library_management.service.RegisterService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DatabaseRepositoryTest {
     Repository repository = new DatabaseRepository();
+    RegisterService service = new RegisterService(new DatabaseRepository());
 
     @Test
     public void registerBook(){
@@ -53,6 +55,7 @@ class DatabaseRepositoryTest {
         String message2 = repository.missBook(2);
         Assertions.assertEquals(message2, "[System]이미 분실 처리된 도서입니다.");
     }
+
 
 
 }
