@@ -40,4 +40,9 @@ public class StubBookService implements BookService {
 	public void returnBook(long id) {
 		System.out.println("[call returnBook(id)]");
 	}
+
+	@Override
+	public void registerAsLost(long id) {
+		System.out.println("[call registerAsLost(id)]");
+	}
 }
