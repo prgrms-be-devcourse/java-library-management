@@ -42,4 +42,14 @@ public class FunctionMangerTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[FOUR 테스트]")
+	void FOURTest() {
+		//when
+		Executable when = () -> FunctionManger.FOUR.call(functionExecutor);
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
