@@ -22,10 +22,6 @@ import java.util.Objects;
 public class GeneralRepository implements Repository{
 
     private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFileEmpty.csv";
-    private final static int condition_possible = 1; //대여 가능
-    private final static int condition_onRent = 2; //대여 중
-    private final static int condition_organizing = 3; //정리 중
-    private final static int condition_lost = 4; //분실됨
 
     @Override
     public List<Book> load(List<Book> list) {
@@ -39,15 +35,13 @@ public class GeneralRepository implements Repository{
             // 각 레코드(행)를 처리
             for (String[] record : records) {
                 // CSV 파일에서 읽어온 데이터 처리
-                int intValue1 = Integer.parseInt(record[0]);
-                String stringValue1 = record[1];
-                String stringValue2 = record[2];
-                int intValue2 = Integer.parseInt(record[3]);
-                String stringValue3 = record[4];
-                list.add(new Book(intValue1, stringValue1, stringValue2, intValue2, stringValue3));
+                int id = Integer.parseInt(record[0]);
+                String title = record[1];
+                String author = record[2];
+                int page = Integer.parseInt(record[3]);
+                String condition = record[4];
+                list.add(new Book(id, title, author, page, condition));
             }
-
-            // CSVReader를 닫습니다.
             csvReader.close();
         } catch (IOException | CsvException e) {
             e.printStackTrace();
@@ -71,13 +65,12 @@ public class GeneralRepository implements Repository{
     @Override
     public List<Book> findByTitle(String searchTitle, List<Book> list) {
         List<Book> foundBooks = new ArrayList<>();
-        try (FileReader fileReader = new FileReader(csvFileName);
-             CSVParser csvParser = CSVFormat.DEFAULT.parse(fileReader)) {
 
+        try (FileReader fileReader = new FileReader(csvFileName); CSVParser csvParser = CSVFormat.DEFAULT.parse(fileReader)) {
             for (CSVRecord record : csvParser) {
                 String title = record.get(1); //id, title, author, page, condition 순서
 
-                // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
+                // title에서 검색어가 포함되어 있는지 확인
                 if (title.contains(searchTitle)) {
                     int id = Integer.parseInt(record.get(0));
                     String author = record.get(2);
@@ -87,7 +80,6 @@ public class GeneralRepository implements Repository{
                     foundBooks.add(new Book(id, title, author, page, condition));
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,80 +126,64 @@ public class GeneralRepository implements Repository{
             }
         }
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter(csvFileName))) {
-            for (Book book : list) {
-                String[] record = {
-                        String.valueOf(book.getId()),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        String.valueOf(book.getPage()),
-                        book.getCondition()
-                };
-                writer.writeNext(record);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveToCSV(list);
 
         return flag;
     }
 
     @Override
     public String lostById(int lostId, List<Book> list) {
+        String message = "";
+        boolean isBookExist = false;
 
-        String condition = "";
+        Iterator<Book> iterator = list.iterator();
 
-        for (Book book : list) {
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
             if (book.getId() == lostId) {
-                if(Objects.equals(book.getCondition(), "분실됨")){ //이미 분실된 것
-                    condition = "[System] 이미 분실 처리된 도서입니다.";
-                }
-                else { //
+                isBookExist = true;
+                if(Objects.equals(book.getCondition(), "분실됨")) {
+                    message = "이미 분실 처리된 도서입니다.";
+                } else {
                     book.setCondition("분실됨");
-                    condition = "[System] 도서가 분실 처리 되었습니다.";
+                    message = "도서가 분실 처리 되었습니다.";
                 }
-                break; // ID를 찾았으므로 루프 종료
+                break;
             }
         }
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter(csvFileName))) {
-            for (Book book : list) {
-                String[] record = {
-                        String.valueOf(book.getId()),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        String.valueOf(book.getPage()),
-                        book.getCondition()
-                };
-                writer.writeNext(record);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
-        return condition;
+        saveToCSV(list);
+
+        return message;
     }
 
     @Override
     public String deleteById(int deleteId, List<Book> list) {
-        //condition 1은 존재하는 상태에서 지움
-        //condition 2는 이미 없는 책
-
         String message = "";
-        boolean flag = false;
+        boolean isBookExist = false;
 
         Iterator<Book> iterator = list.iterator();
         while (iterator.hasNext()) {
             Book book = iterator.next();
             if (book.getId() == deleteId) {
-                iterator.remove(); // delete Id를 가진 레코드를 삭제
-                flag = true;
+                iterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs iterator 결정 이유
+                isBookExist = true;
                 message = "도서가 삭제 처리 되었습니다.";
+                break;
             }
         }
 
-        if(!flag) message = "존재하지 않는 도서번호 입니다.";
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
+        saveToCSV(list);
+
+        return message;
+    }
+
+    // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
+    private static void saveToCSV(List<Book> list) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFileName))) {
             for (Book book : list) {
                 String[] record = {
@@ -222,8 +198,5 @@ public class GeneralRepository implements Repository{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return message;
-
     }
 }
