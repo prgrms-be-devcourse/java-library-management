@@ -13,6 +13,7 @@ import com.programmers.library.model.request.SearchBookRequest;
 
 public class Console implements Input, Output{
 	private final Scanner scanner = new Scanner(System.in);
+	private static final String MODE_PROMPT = "Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n\n> ";
 	private static final String MENU_PROMPT = "Q. 사용할 기능을 선택해주세요.\n1. 도서 등록\n2. 전체 도서 목록 조회\n3. 제목으로 도서 검색\n4. 도서 대여\n5. 도서 반납\n6. 도서 분실\n7. 도서 삭제\n\n> ";
 	private static final String ADD_BOOK_TITLE_PROMPT = "\nQ. 등록할 도서 제목을 입력하세요.\n\n> ";
 	private static final String ADD_BOOK_AUTHOR_PROMPT = "\nQ. 작가 이름을 입력하세요.\n\n> ";
@@ -25,7 +26,8 @@ public class Console implements Input, Output{
 
 	@Override
 	public Mode inputMode() {
-		return null;
+		printPrompt(MODE_PROMPT);
+		return Mode.of(scanner.nextLine());
 	}
 
 	@Override

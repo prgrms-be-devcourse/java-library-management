@@ -9,8 +9,14 @@ import java.util.Optional;
 import com.programmers.library.entity.Book;
 
 public class MemoryRepository implements Repository{
-	Map<Long, Book> bookMap = new LinkedHashMap<>();
-	Long sequence = 0L;
+	private final Map<Long, Book> bookMap = new LinkedHashMap<>();
+	private Long sequence;
+
+	@Override
+	public void init() {
+		bookMap.clear();
+		sequence = 0L;
+	}
 
 	@Override
 	public Book save(Book book) {
@@ -36,7 +42,7 @@ public class MemoryRepository implements Repository{
 	@Override
 	public List<Book> findByTitleLike(String title) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(book -> bookList.add(book));
+		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(bookList::add);
 		return bookList;
 	}
 

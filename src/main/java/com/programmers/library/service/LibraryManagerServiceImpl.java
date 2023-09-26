@@ -18,6 +18,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService{
 
 	public LibraryManagerServiceImpl(Repository repository) {
 		this.repository = repository;
+		repository.init();
 	}
 
 	@Override
