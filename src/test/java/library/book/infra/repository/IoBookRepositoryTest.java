@@ -1,5 +1,6 @@
 package library.book.infra.repository;
 
+import static library.book.domain.Status.BookStatus.*;
 import static library.book.exception.ErrorCode.*;
 import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
@@ -46,12 +47,29 @@ class IoBookRepositoryTest {
 
 		@Test
 		@DisplayName("[Success]")
-		void success() {
+		void success() throws IOException {
+			//given
+			FileWriter fileWriter = new FileWriter(FILE_PATH);
+			fileWriter.write(
+				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookStatus\":\"AVAILABLE_RENT\"}}");
+
+			fileWriter.flush();
+			fileWriter.close();
+
 			//when
-			Executable when = () -> new IoBookRepository(FILE_PATH);
+			IoBookRepository ioBookRepository = new IoBookRepository(FILE_PATH);
 
 			//then
-			assertDoesNotThrow(when);
+			Optional<Book> findBook = ioBookRepository.findById(1L);
+			assertThat(findBook).isPresent();
+
+			Book book = findBook.get();
+			assertAll(
+				() -> assertThat(book.getId()).isEqualTo(1L),
+				() -> assertThat(book.getBookStatus()).isEqualTo(AVAILABLE_RENT),
+				() -> assertThat(book.getTitle()).isEqualTo("hello"),
+				() -> assertThat(book.getAuthorName()).isEqualTo("hello")
+			);
 		}
 
 		@Test
