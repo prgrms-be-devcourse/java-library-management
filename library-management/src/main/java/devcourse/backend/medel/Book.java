@@ -54,6 +54,7 @@ public class Book {
         return id + ";" + title + ";" + author + ";" + totalPages + ";" + status;
     }
 
+    public String getTitle() { return title; }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
