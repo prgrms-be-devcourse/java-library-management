@@ -48,8 +48,16 @@ public class FunctionExecutor {
 	}
 
 	public void executeRentBook() {
-		long id = consoleProcessor.inputBookId();
+		long id = consoleProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
 
 		bookService.rentBook(id);
+		consoleProcessor.outputCompleteMessage(COMPLETE_RENT);
+	}
+
+	public void executeReturnBook() {
+		long id = consoleProcessor.inputBookId(ENTRY_RETURN_BOOK, INPUT_RETURN_BOOK_ID);
+
+		bookService.returnBook(id);
+		consoleProcessor.outputCompleteMessage(COMPLETE_RETURN);
 	}
 }

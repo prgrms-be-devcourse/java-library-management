@@ -55,4 +55,14 @@ class FunctionExecutorTest {
 		//then
 		assertDoesNotThrow(when);
 	}
+
+	@Test
+	@DisplayName("[executeReturnBook 테스트]")
+	void executeReturnBookTest() {
+		//when
+		Executable when = functionExecutor::executeReturnBook;
+
+		//then
+		assertDoesNotThrow(when);
+	}
 }
