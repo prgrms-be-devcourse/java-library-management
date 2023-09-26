@@ -14,6 +14,15 @@ public class Book {
 
 	private Status status;
 
+	//json 데이터 매핑용
+	public Book(long id, String title, String authorName, int pages, Status status) {
+		this.id = id;
+		this.title = title;
+		this.authorName = authorName;
+		this.pages = pages;
+		this.status = status;
+	}
+
 	//== Factory 메소드 ==//
 	private Book(
 		final long id,

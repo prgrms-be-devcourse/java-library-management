@@ -54,7 +54,7 @@ class IoBookRepositoryTest {
 			//given
 			FileWriter fileWriter = new FileWriter(FILE_PATH);
 			fileWriter.write(
-				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookStatus\":\"AVAILABLE_RENT\"}}");
+				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookStatus\":\"RENTED\"}}");
 
 			fileWriter.flush();
 			fileWriter.close();
@@ -69,7 +69,7 @@ class IoBookRepositoryTest {
 			Book book = findBook.get();
 			assertAll(
 				() -> assertThat(book.getId()).isEqualTo(1L),
-				() -> assertThat(book.getBookStatus()).isEqualTo(AVAILABLE_RENT),
+				() -> assertThat(book.getBookStatus()).isEqualTo(RENTED),
 				() -> assertThat(book.getTitle()).isEqualTo("hello"),
 				() -> assertThat(book.getAuthorName()).isEqualTo("hello")
 			);
