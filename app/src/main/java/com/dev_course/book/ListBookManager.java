@@ -1,9 +1,11 @@
 package com.dev_course.book;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.dev_course.book.BookManagerMessage.*;
+import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
     private final List<Book> bookList;
@@ -45,7 +47,23 @@ public class ListBookManager implements BookManager {
     @Override
     public String rentById(int id) {
         System.out.println(id);
-        return null;
+
+        if (hasNotId(id)) {
+            return NOT_EXIST_ID.msg();
+        }
+
+        Book target = bookList.stream()
+                .filter(book -> book.getId() == id)
+                .findFirst()
+                .orElseThrow();
+
+        if (target.getState() != AVAILABLE) {
+            return "%s (%s)\n".formatted(FAIL_RENT_BOOK.msg(), target.getState().label());
+        }
+
+        target.setState(LOAN);
+
+        return SUCCESS_RENT_BOOK.msg();
     }
 
     @Override

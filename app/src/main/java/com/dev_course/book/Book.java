@@ -25,6 +25,14 @@ public class Book {
         return id;
     }
 
+    public BookState getState() {
+        return state;
+    }
+
+    public void setState(BookState state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return String.format("""
