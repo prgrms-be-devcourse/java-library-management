@@ -6,16 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
 import library.book.exception.BookException;
+import library.book.infra.repository.dto.BookInfo;
 
 public class IoBookRepository implements BookRepository {
 
@@ -23,13 +25,19 @@ public class IoBookRepository implements BookRepository {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private final Map<String, Book> bookStorage;
+	private final Map<String, Book> bookStorage = new HashMap<>();
 
 	public IoBookRepository(final String filePath) {
 		this.filePath = filePath;
 
 		try (FileInputStream inputStream = new FileInputStream(filePath)) {
-			this.bookStorage = objectMapper.readValue(inputStream, ConcurrentHashMap.class);
+			Map<String, Object> map = objectMapper.readValue(inputStream, Map.class);
+
+			for (Entry<String, Object> entry : map.entrySet()) {
+				String stringValue = objectMapper.writeValueAsString(entry.getValue());
+				BookInfo bookInfo = objectMapper.readValue(stringValue, BookInfo.class);
+				bookStorage.put(entry.getKey(), bookInfo.toBook());
+			}
 		} catch (IOException e) {
 			throw BookException.of(FILE_READ_FAIL);
 		}
