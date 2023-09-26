@@ -1,5 +1,6 @@
 package library.book.infra.repository;
 
+import static library.book.exception.ErrorCode.*;
 import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,12 +11,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
+import library.book.exception.BookException;
 import library.book.fixture.BookFixture;
 
 @DisplayName("[TestBookRepository Test] - Infra")
@@ -110,19 +114,39 @@ class TestBookRepositoryTest {
 		assertThat(result).contains(book);
 	}
 
-	@Test
+	@Nested
 	@DisplayName("[deleteById 테스트]")
-	void deleteByIdTest() {
-		//given
-		BookRepository bookRepository = new TestBookRepository();
-		bookRepository.save(A.toEntity());
+	class deleteByIdTest {
 
-		//when
-		bookRepository.deleteById(A.getId());
+		@Test
+		@DisplayName("[Success]")
+		void success() {
+			//given
+			BookRepository bookRepository = new TestBookRepository();
+			bookRepository.save(A.toEntity());
 
-		//then
-		Optional<Book> findBook = bookRepository.findById(A.getId());
-		assertThat(findBook).isNotPresent();
+			//when
+			bookRepository.deleteById(A.getId());
+
+			//then
+			Optional<Book> findBook = bookRepository.findById(A.getId());
+			assertThat(findBook).isNotPresent();
+		}
+
+		@Test
+		@DisplayName("[Fail] id 에 대한 Book 이 존재하지 않아 실패한다.")
+		void failWhenNotFoundById() {
+			//given
+			BookRepository bookRepository = new TestBookRepository();
+
+			//when
+			ThrowableAssert.ThrowingCallable when = () -> bookRepository.deleteById(A.getId());
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(NOT_FOUND.getMessage());
+		}
 	}
 
 	private void assertBook(Book actual, Book expected) {

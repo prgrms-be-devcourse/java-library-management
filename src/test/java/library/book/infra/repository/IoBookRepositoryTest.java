@@ -228,19 +228,39 @@ class IoBookRepositoryTest {
 		}
 	}
 
-	@Test
+	@Nested
 	@DisplayName("[deleteById 테스트]")
-	void deleteByIdTest() {
-		//given
-		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
-		bookRepository.save(A.toEntity());
+	class deleteByIdTest {
 
-		//when
-		bookRepository.deleteById(A.getId());
+		@Test
+		@DisplayName("[Success]")
+		void success() {
+			//given
+			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+			bookRepository.save(A.toEntity());
 
-		//then
-		Optional<Book> findBook = bookRepository.findById(A.getId());
-		assertThat(findBook).isNotPresent();
+			//when
+			bookRepository.deleteById(A.getId());
+
+			//then
+			Optional<Book> findBook = bookRepository.findById(A.getId());
+			assertThat(findBook).isNotPresent();
+		}
+
+		@Test
+		@DisplayName("[Fail] id 에 대한 Book 이 존재하지 않아 실패한다.")
+		void failWhenNotFoundById() {
+			//given
+			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
+
+			//when
+			ThrowingCallable when = () -> bookRepository.deleteById(A.getId());
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(NOT_FOUND.getMessage());
+		}
 	}
 
 	private void assertBook(Book actual, Book expected) {
