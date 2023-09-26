@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Book {
 
     private Long id;
-    private String name;
+    private String title;
     private String author;
     private int page;
     private State state = State.AVAILABLE;
@@ -16,8 +16,9 @@ public class Book {
     private static final String successRentString = "도서가 대여 처리 되었습니다.";
     private static final String successLostString = "도서가 분실 처리 되었습니다.";
     private static final String failLostString = "이미 분실 처리된 도서입니다.";
-    public Book(String name, String author, int page) {
-        this.name = name;
+
+    public Book(String title, String author, int page) {
+        this.title = title;
         this.author = author;
         this.page = page;
     }
