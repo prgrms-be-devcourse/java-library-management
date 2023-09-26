@@ -14,12 +14,8 @@ public enum Mode {
         this.repository = repository;
     }
 
-    public int getNum() {
-        return num;
-    }
-
-    public String getName() {
-        return name;
+    public boolean isEqual(int inputNum){
+        return this.num == inputNum;
     }
 
     public Repository getRepository() {
