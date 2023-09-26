@@ -33,11 +33,11 @@ public class StubBookService implements BookService {
 
 	@Override
 	public void rentBook(long id) {
-
+		System.out.println("[call returnBook(id)]");
 	}
 
 	@Override
 	public void returnBook(long id) {
-
+		System.out.println("[call returnBook(id)]");
 	}
 }
