@@ -45,4 +45,10 @@ public class StubConsoleProcessor extends ConsoleProcessor {
 	) {
 		System.out.println("[call outputBookInfo()]");
 	}
+
+	@Override
+	public long inputBookId() {
+		System.out.println("[call inputBookId()]");
+		return 1L;
+	}
 }
