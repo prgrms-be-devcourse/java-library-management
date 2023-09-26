@@ -73,7 +73,11 @@ public class LibrarySystem {
 
     private void listBooks() {
         writer.println(LIST_BOOK.msg());
-        writer.println(bookManager.getInfo());
+
+        writer.append(bookManager.getInfo());
+        writer.append(END_LIST.msg());
+
+        writer.flush();
     }
 
     private void findBookByTitle() {
