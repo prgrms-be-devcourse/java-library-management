@@ -17,22 +17,18 @@ public class NormalRepository implements Repository {
 
     @Override
     public void register(Book book) throws IOException {
-        book.setState("대여 가능");
-        book.setId(books.hashCode());
         books.add(book);
         updateFile(books, file);
     }
 
     @Override
     public void printList() {
-        books.stream().forEach(book -> {
-                printBookInfo(book);
-        });
+        books.forEach(this::printBookInfo);
     }
 
     @Override
     public void search(String titleWord) {
-        books.stream().forEach(book -> {
+        books.forEach(book -> {
             String title = book.getTitle();
             if(title.contains(titleWord)) {
                     printBookInfo(book);
@@ -44,23 +40,26 @@ public class NormalRepository implements Repository {
     public void rental(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
-                .get();
+                .orElse(null);
 
-        if (selectedBook.getState().equals("대여중")) {
-            System.out.println("[System] 이미 대여중인 도서입니다.");
-        } else if(selectedBook.getState().equals("대여 가능")) {
-            selectedBook.setState("대여중");
-            updateFile(books, file);
-            System.out.println("[System] 도서가 대여 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("도서 정리중")){
-            System.out.println("[System] 정리 중인 도서입니다.");
-        } else if(selectedBook.getState().equals("분실됨")) {
-            System.out.println("[System] 분실된 도서입니다.");
+        if(selectedBook == null) {
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            return;
+        }
+        switch (selectedBook.getState()) {
+            case "대여중" -> System.out.println("[System] 이미 대여중인 도서입니다.");
+            case "대여 가능" -> {
+                selectedBook.setState("대여중");
+                updateFile(books, file);
+                System.out.println("[System] 도서가 대여 처리 되었습니다.");
+            }
+            case "도서 정리중" -> System.out.println("[System] 정리 중인 도서입니다.");
+            case "분실됨" -> System.out.println("[System] 분실된 도서입니다.");
         }
     }
 
     private class ChangeStateThread extends Thread {
-        private Book book;
+        private final Book book;
 
         public ChangeStateThread(Book book) {
             this.book = book;
@@ -72,9 +71,7 @@ public class NormalRepository implements Repository {
                 Thread.sleep(300000);
                 book.setState("대여 가능");
                 updateFile(books, file);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (InterruptedException | IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -83,7 +80,11 @@ public class NormalRepository implements Repository {
     public void returnBook(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
-                .get();
+                .orElse(null);
+        if(selectedBook == null) {
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            return;
+        }
         ChangeStateThread thread = new ChangeStateThread(selectedBook);
 
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
@@ -103,15 +104,20 @@ public class NormalRepository implements Repository {
     public void lostBook(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
-                .get();
-        if (selectedBook.getState().equals("대여중")) {
-            selectedBook.setState("분실됨");
-            updateFile(books, file);
-            System.out.println("[System] 도서가 분실 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("대여 가능") || selectedBook.getState().equals("도서 정리중")) {
-            System.out.println("[System] 분실 처리가 불가능한 도서입니다.");
-        } else if(selectedBook.getState().equals("분실됨")){
-            System.out.println("[System] 이미 분실 처리된 도서입니다.");
+                .orElse(null);
+        if(selectedBook == null) {
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            return;
+        }
+
+        switch (selectedBook.getState()) {
+            case "대여중" -> {
+                selectedBook.setState("분실됨");
+                updateFile(books, file);
+                System.out.println("[System] 도서가 분실 처리 되었습니다.");
+            }
+            case "대여 가능", "도서 정리중" -> System.out.println("[System] 분실 처리가 불가능한 도서입니다.");
+            case "분실됨" -> System.out.println("[System] 이미 분실 처리된 도서입니다.");
         }
     }
 
@@ -119,10 +125,11 @@ public class NormalRepository implements Repository {
     public void deleteBook(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
-                .get();
+                .orElse(null);
 
         if(selectedBook == null) {
             System.out.println("[System] 존재하지 않는 도서번호 입니다.");
+            return;
         } else {
             books.remove(selectedBook);
             updateFile(books, file);
@@ -132,7 +139,7 @@ public class NormalRepository implements Repository {
 
     private void updateFile(List<Book> books, File file) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        books.stream().forEach(book -> {
+        books.forEach(book -> {
             try {
                 bw.write(String.valueOf(book.getId()) + "," + book.getTitle() + ","
                         + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState() + "\n");

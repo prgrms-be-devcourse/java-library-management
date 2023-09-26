@@ -8,7 +8,7 @@ public class Book {
     String state;
 
     public Book() {
-        this.id = id;
+        this.id = this.hashCode();
         this.state = "대여 가능";
     }
 
