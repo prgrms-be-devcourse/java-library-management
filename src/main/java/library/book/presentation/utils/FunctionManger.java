@@ -10,6 +10,7 @@ public enum FunctionManger {
 	FOUR(FunctionExecutor::executeRentBook),
 	FIVE(FunctionExecutor::executeReturnBook),
 	SIX(FunctionExecutor::executeRegisterAsLost),
+	SEVEN(FunctionExecutor::executeDeleteBook)
 	;
 
 	private final Consumer<FunctionExecutor> callback;

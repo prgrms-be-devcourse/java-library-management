@@ -67,4 +67,11 @@ public class FunctionExecutor {
 		bookService.registerAsLost(id);
 		consoleProcessor.outputCompleteMessage(COMPLETE_LOST);
 	}
+
+	public void executeDeleteBook() {
+		long id = consoleProcessor.inputBookId(ENTRY_DELETE, INPUT_LOST_BOOK_ID);
+
+		bookService.deleteBook(id);
+		consoleProcessor.outputCompleteMessage(COMPLETE_DELETE);
+	}
 }

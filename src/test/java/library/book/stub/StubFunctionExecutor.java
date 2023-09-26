@@ -42,4 +42,9 @@ public class StubFunctionExecutor extends FunctionExecutor {
 	public void executeRegisterAsLost() {
 		System.out.println("[call executeRegisterAsLost]");
 	}
+
+	@Override
+	public void executeDeleteBook() {
+		System.out.println("[call executeDeleteBook]");
+	}
 }
