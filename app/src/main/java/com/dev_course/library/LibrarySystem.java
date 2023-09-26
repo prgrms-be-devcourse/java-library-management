@@ -68,15 +68,11 @@ public class LibrarySystem {
         }
 
         writer.flush();
-
-        selectFunction();
     }
 
     private void listBooks() {
         writer.println(LIST_BOOK.msg());
         writer.println(bookManager.getInfo());
-
-        selectFunction();
     }
 
     private void findBookByTitle() {
@@ -84,7 +80,6 @@ public class LibrarySystem {
     }
 
     private void deleteBookById() {
-        writeAndRead()
     }
 
     private String writeAndRead(String msg) {
