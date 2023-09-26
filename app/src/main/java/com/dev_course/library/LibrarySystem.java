@@ -44,6 +44,7 @@ public class LibrarySystem {
             case "1" -> createBook();
             case "2" -> listBooks();
             case "3" -> findBookByTitle();
+            case "7" -> deleteBookById();
             default -> writer.println(INVALID_FUNCTION.msg());
         }
 
@@ -80,6 +81,18 @@ public class LibrarySystem {
     }
 
     private void deleteBookById() {
+        writer.println(DELETE_BOOK.msg());
+
+        try {
+            String input = writeAndRead(READ_DELETE_BOOK_ID.msg());
+            int id = Integer.parseInt(input);
+
+            writer.append(bookManager.deleteById(id));
+        } catch (RuntimeException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
+        writer.flush();
     }
 
     private String writeAndRead(String msg) {
