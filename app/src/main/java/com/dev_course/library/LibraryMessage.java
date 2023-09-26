@@ -17,6 +17,7 @@ public enum LibraryMessage {
             7. 도서 삭제"""),
     EXIT("[System] 프로그램을 종료합니다."),
     INVALID_FUNCTION("[System] 사용할 수 없는 기능 입니다.\n"),
+    EMPTY_INPUT("[System] 입력을 읽을 수 없습니다.\n"),
     INVALID_INPUT("[System] 잘못된 입력 입니다.\n"),
     CREATE_BOOK("[System] 도서 등록 메뉴로 넘어갑니다.\n"),
     DELETE_BOOK("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),

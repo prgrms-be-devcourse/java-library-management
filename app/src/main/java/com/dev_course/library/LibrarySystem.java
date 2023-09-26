@@ -66,7 +66,7 @@ public class LibrarySystem {
 
             writer.append(bookManager.create(title, author, pages));
         } catch (RuntimeException e) {
-            writer.append(INVALID_INPUT.msg());
+            writer.append(e);
         }
 
         writer.flush();
@@ -88,7 +88,7 @@ public class LibrarySystem {
 
             writer.append(bookManager.getInfoByTitle(title));
         } catch (RuntimeException e) {
-            writer.append(INVALID_INPUT.msg());
+            writer.append(e);
         }
 
         writer.append(END_FIND_BOOK_BY_TITLE.msg());
@@ -99,12 +99,11 @@ public class LibrarySystem {
         writer.println(RENT_BOOK_BY_ID.msg());
 
         try {
-            String input = writeAndRead(READ_RENT_BOOK_BY_ID.msg());
-            int id = Integer.parseInt(input);
+            int id = writeAndReadInt(READ_RENT_BOOK_BY_ID.msg());
 
             bookManager.rentById(id);
         } catch (RuntimeException e) {
-            writer.append(INVALID_INPUT.msg());
+            writer.append(e);
         }
 
         writer.flush();
@@ -114,12 +113,11 @@ public class LibrarySystem {
         writer.println(DELETE_BOOK.msg());
 
         try {
-            String input = writeAndRead(READ_DELETE_BOOK_ID.msg());
-            int id = Integer.parseInt(input);
+            int id = writeAndReadInt(READ_DELETE_BOOK_ID.msg());
 
             writer.append(bookManager.deleteById(id));
         } catch (RuntimeException e) {
-            writer.append(INVALID_INPUT.msg());
+            writer.append(e);
         }
 
         writer.flush();
@@ -131,7 +129,15 @@ public class LibrarySystem {
         try {
             return reader.read();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(EMPTY_INPUT.msg());
+        }
+    }
+
+    private int writeAndReadInt(String msg) {
+        try {
+            return Integer.parseInt(writeAndRead(msg));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(INVALID_INPUT.msg());
         }
     }
 }
