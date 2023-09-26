@@ -1,5 +1,8 @@
 package library.book.presentation;
 
+import static library.book.exception.ErrorCode.*;
+
+import library.book.exception.BookException;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.utils.ConsoleProcessor;
 import library.book.presentation.utils.FunctionExecutor;
@@ -19,10 +22,16 @@ public class BookController {
 	}
 
 	public void run() {
-		FunctionManger functionType = FunctionManger.valueOf(
-			consoleProcessor.inputNumber(OutputHandler::showSelectFunction)
-		);
+		FunctionManger functionType = FunctionManger.valueOf(inputFunction());
 
 		functionType.call(executor);
+	}
+
+	private String inputFunction() {
+		try {
+			return consoleProcessor.inputNumber(OutputHandler::showSelectFunction);
+		} catch (IllegalArgumentException e) {
+			throw BookException.of(NOT_SUPPORT_FUNCTION);
+		}
 	}
 }
