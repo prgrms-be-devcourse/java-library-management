@@ -13,6 +13,9 @@ public enum Message {
 
 	ENTRY_SEARCH_BOOKS_BY_TITLE("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n"),
 	INPUT_TITLE("Q. 검색할 도서 제목 일부를 입력하세요.\n"),
+
+	ENTRY_RENT_BOOK("[System] 도서 대여 메뉴로 넘어갑니다.\n"),
+	INPUT_BOOK_ID("Q. 대여할 도서번호를 입력하세요.\n")
 	;
 
 	private final String value;

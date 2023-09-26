@@ -16,8 +16,8 @@ import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.infra.console.output.OutputHandler;
-import library.book.stub.StubInputHandler;
 import library.book.presentation.converter.InputConverter;
+import library.book.stub.StubInputHandler;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
 class ConsoleProcessorTest {
@@ -74,6 +74,16 @@ class ConsoleProcessorTest {
 		);
 
 		//
+		assertDoesNotThrow(when);
+	}
+
+	@Test
+	@DisplayName("[inputBookId 테스트]")
+	void inputBookId() {
+		//when
+		Executable when = consoleProcessor::inputBookId;
+
+		//then
 		assertDoesNotThrow(when);
 	}
 }
