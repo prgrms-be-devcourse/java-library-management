@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +57,7 @@ class StatusTest {
 		void successWhenStatusIsCleaningAndAfterEndTime() throws Exception {
 			//given
 			Status status = new Status();
-			setStatus(status, CLEANING);
+			setBookStatus(status, CLEANING);
 			setEndTime(status, -2);
 
 			//when
@@ -70,7 +72,7 @@ class StatusTest {
 		void failWhenStatusIsCleaningAndEndTimeIsNull() throws Exception {
 			//given
 			Status status = new Status();
-			setStatus(status, CLEANING);
+			setBookStatus(status, CLEANING);
 
 			//when
 			ThrowingCallable when = status::rent;
@@ -86,7 +88,7 @@ class StatusTest {
 		void failWhenStatusIsRented() throws Exception {
 			//given
 			Status status = new Status();
-			setStatus(status, RENTED);
+			setBookStatus(status, RENTED);
 
 			//when
 			ThrowingCallable when = status::rent;
@@ -102,7 +104,7 @@ class StatusTest {
 		void failWhenStatusIsLost() throws Exception {
 			//given
 			Status status = new Status();
-			setStatus(status, LOST);
+			setBookStatus(status, LOST);
 
 			//when
 			ThrowingCallable when = status::rent;
@@ -118,7 +120,7 @@ class StatusTest {
 		void failWhenStatusIsCleaning() throws Exception {
 			//given
 			Status status = new Status();
-			setStatus(status, CLEANING);
+			setBookStatus(status, CLEANING);
 			setEndTime(status, 2);
 
 			//when
@@ -131,8 +133,42 @@ class StatusTest {
 		}
 	}
 
+	@Nested
+	@DisplayName("[returnBook 테스트]")
+	class returnBookTest {
+
+		@Test
+		@DisplayName("[Success]")
+		void success() throws Exception {
+			//given
+			List<Status> statusList = List.of(new Status(), new Status(), new Status());
+
+			setBookStatus(statusList.get(0), RENTED);
+			setBookStatus(statusList.get(1), LOST);
+			setBookStatus(statusList.get(2), CLEANING);
+
+			//when
+			statusList.forEach(Status::returnBook);
+
+			//then
+			statusList.forEach(StatusTest.this::assertReturnBook);
+		}
+	}
+
+	private void assertReturnBook(final Status status) {
+		assertAll(
+			() -> assertThat(status.getBookStatus()).isEqualTo(CLEANING),
+			() -> {
+				Duration duration = Duration.between(status.getCleaningEndTime(), LocalDateTime.now());
+				long minutesDifference = Math.abs(duration.toMinutes());
+
+				assertThat(minutesDifference).isEqualTo(5);
+			}
+		);
+	}
+
 	//todo : 추후에 status 변경 로직이 구현되면 리플렉션 코드 제거
-	private void setStatus(final Status status, final BookStatus bookStatus) throws Exception {
+	private void setBookStatus(final Status status, final BookStatus bookStatus) throws Exception {
 		Field field = status.getClass().getDeclaredField("bookStatus");
 		field.setAccessible(true);
 		field.set(status, bookStatus);
