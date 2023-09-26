@@ -39,6 +39,7 @@ public class Status {
 
 	//== Utility 메소드 ==//
 	public BookStatus getBookStatus() {
+		checkCleaningComplete();
 		return bookStatus;
 	}
 
