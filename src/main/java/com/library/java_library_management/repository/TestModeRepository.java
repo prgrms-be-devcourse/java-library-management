@@ -8,12 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DatabaseRepository implements Repository{
+public class TestModeRepository implements Repository{
 
     public List<BookInfo> bookList = new ArrayList<>();
-    public int getListSize(){
-        return bookList.size();
-    }
     @Override
     public String rentBook(int book_id){
         Optional<BookInfo> book = bookList.stream().filter(bookinfo -> bookinfo.getBook_id() == book_id).findAny();

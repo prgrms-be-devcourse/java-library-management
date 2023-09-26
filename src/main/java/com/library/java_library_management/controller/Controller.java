@@ -1,14 +1,16 @@
 package com.library.java_library_management.controller;
 
-import com.library.java_library_management.repository.DatabaseRepository;
-import com.library.java_library_management.service.RegisterService;
+import com.library.java_library_management.repository.TestModeRepository;
+import com.library.java_library_management.repository.Repository;
+import com.library.java_library_management.service.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Controller {
-    RegisterService service = new RegisterService(new DatabaseRepository());
+    Service service = new Service(new TestModeRepository());
+    Repository repository = new TestModeRepository();
 
     public void selectFunction() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,8 +26,8 @@ public class Controller {
             int menu = Integer.parseInt(br.readLine());
             switch (menu){
                 case 1: service.register();
-                    break;
-                case 2: service.getBook();
+                break;
+                case 2: repository.getTotalBook();
                 break;
                 case 4: service.rent();
                 break;

@@ -1,6 +1,6 @@
 package com.library.java_library_management.service;
 
-import com.library.java_library_management.repository.DatabaseRepository;
+import com.library.java_library_management.repository.TestModeRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 public class SelectFunction {
     public void printInitial() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        RegisterService service = new RegisterService(new DatabaseRepository());
+        Service service = new Service(new TestModeRepository());
         while(true){
             System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
                     "1. 도서 등록\n" +
@@ -23,10 +23,17 @@ public class SelectFunction {
             switch (menu){
                 case 1: service.register();
                     break;
+                case 2: service.getBook();
+                    break;
                 case 4: service.rent();
                     break;
                 case 5: service.returnBook();
                     break;
+                case 6: service.missBook();
+                    break;
+                case 7: service.deleteBook();
+                    break;
+
             }
         }
 

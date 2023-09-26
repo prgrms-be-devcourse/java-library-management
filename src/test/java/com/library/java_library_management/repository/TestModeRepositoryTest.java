@@ -1,22 +1,17 @@
 package com.library.java_library_management.repository;
 
 import com.library.java_library_management.dto.BookInfo;
-import com.library.java_library_management.service.RegisterService;
+import com.library.java_library_management.service.Service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.awt.print.Book;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-class DatabaseRepositoryTest {
-    Repository repository = new DatabaseRepository();
-    RegisterService service = new RegisterService(new DatabaseRepository());
+class TestModeRepositoryTest {
+    Repository repository = new TestModeRepository();
+    Service service = new Service(new TestModeRepository());
 
     @Test
     public void registerBook(){
@@ -39,7 +34,7 @@ class DatabaseRepositoryTest {
         repository.registerBook("제목1", "Injun Choi", 100);
         BookInfo book1 = repository.findByTitle("제목1");
         repository.deleteById(1);
-        Assertions.assertEquals(0, repository.getListSize());
+        Assertions.assertEquals(0, repository.getTotalBook());
     }
 
     @Test
@@ -55,6 +50,16 @@ class DatabaseRepositoryTest {
         String message2 = repository.missBook(2);
         Assertions.assertEquals(message2, "[System]이미 분실 처리된 도서입니다.");
     }
+
+//    @Test
+//    @DisplayName("전체 목록 조회 테스트")
+//    public void getTotalBook(){
+//        repository.registerBook("제목1", "Injun Choi", 100);
+//        BookInfo book1 = repository.findByTitle("제목1");
+//        repository.registerBook("제목2", "Choi", 150);
+//        BookInfo book2 = repository.findByTitle("제목2");
+//        Assertions.assertEquals(service.getBook(), 2);
+//    }
 
 
 
