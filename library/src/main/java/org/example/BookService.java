@@ -1,10 +1,7 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class BookService {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -43,7 +40,7 @@ public class BookService {
     }
 
     void printAllBooks(List<Book> bookList) {
-        bookList.stream().forEach(book -> {
+        bookList.forEach(book -> {
             System.out.println("도서번호 : " + book.getId());
             System.out.println("제목 : " + book.getTitle());
             System.out.println("작가 이름 : " + book.getAuthor());
@@ -52,8 +49,9 @@ public class BookService {
             System.out.println("\n------------------------------\n");
         });
     }
-    void getAllBooks() {
+    List<Book> getAllBooks() {
         printAllBooks(books);
+        return books;
     }
 
     List<Book> findByTitle() throws IOException {
@@ -70,7 +68,7 @@ public class BookService {
         return newList;
     }
 
-    void rentBook() throws IOException {
+    Book rentBook() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요\n");
         System.out.print("> ");
         int bookId = Integer.parseInt(br.readLine());
@@ -78,13 +76,16 @@ public class BookService {
 
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
-            return false; }).findAny().get();
+            return false; }).findAny()
+                .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
         BookState findBookState = findBook.getState();
         if(findBookState.equals(BookState.POSSIBLE)) {
-            findBookState.showPossibleState();
-            findBook.setState(BookState.NOT_POSSIBLE);
-        }else findBookState.showNotPossibleState();
+            findBookState.showChangeState();
+            findBook.setState(BookState.RENTING);
+        }else findBookState.showState();
+
+        return findBook;
     }
 
     void returnBook() throws IOException {
@@ -95,13 +96,19 @@ public class BookService {
 
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
-            return false; }).findAny().get();
+            return false; }).findAny()
+                .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
         BookState findBookState = findBook.getState();
-        if(findBookState.equals(BookState.NOT_POSSIBLE)) {
-            findBookState.showPossibleState();
-            findBook.setState(BookState.POSSIBLE);
-        }else findBookState.showNotPossibleState();
+        if(findBookState.equals(BookState.RENTING)) {
+            findBookState.showChangeState();
+            findBook.setState(BookState.ORGANIZING);
+            //여기서 상태변화
+            Timer timer = new Timer();
+            timer.schedule(new UpdateTask(findBook), 10000);
+        }else {
+            findBookState.showState();
+        }
 
     }
 
@@ -113,13 +120,16 @@ public class BookService {
 
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
-            return false; }).findAny().get();
+            return false; }).findAny()
+                .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
         BookState findBookState = findBook.getState();
-        if(!findBookState.equals(BookState.LOST)) {
-            findBookState.showPossibleState();
+        if(findBookState.equals(BookState.LOST)) {
+            findBookState.showState();
+        }else {
+            findBookState.showChangeState();
             findBook.setState(BookState.LOST);
-        }else findBookState.showNotPossibleState();
+        }
     }
 
     void deleteBook() throws IOException {
@@ -140,6 +150,19 @@ public class BookService {
             books.remove(bookId - 1);
 
             System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
+        }
+    }
+
+    static class UpdateTask extends TimerTask {
+        private Book book;
+
+        public UpdateTask(Book book) {
+            this.book = book;
+        }
+
+        @Override
+        public void run() {
+            book.setState(BookState.POSSIBLE);
         }
     }
 }

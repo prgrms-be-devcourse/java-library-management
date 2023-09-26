@@ -3,13 +3,10 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class Main {
     private static int modeNum;
-    private static int fun;
-    private static BookService bookService;
-    private static FileService fileService;
+    private static Mode mode;
 
     public static void main(String[] args) throws IOException {
 
@@ -21,62 +18,11 @@ public class Main {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         modeNum = Integer.parseInt(br.readLine());
-        bookService = new BookService();
-        fileService = new FileService();
-
+        mode = new Mode();
         if(modeNum == 1) {
-            System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
-
-            bookService.updateBooks(fileService.readFile());
-
-            while(true) {
-                System.out.println("0. 사용할 기능을 선택해 주세요.");
-                System.out.println("1. 도서 등록");
-                System.out.println("2. 전체 도서 목록 조회");
-                System.out.println("3. 제목으로 도서 검색");
-                System.out.println("4. 도서 대여");
-                System.out.println("5. 도서 반납");
-                System.out.println("6. 도서 분실");
-                System.out.println("7. 도서 삭제");
-
-                System.out.print("\n> ");
-
-                fun = Integer.parseInt(br.readLine());
-                switch (fun) {
-                    case 1:
-                        System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
-                        Book book = bookService.createBook();
-                        fileService.writeFile(book);
-                        break;
-                    case 2:
-                        System.out.println("[System] 전체 도서 목록입니다.\n");
-                        bookService.getAllBooks();
-                        break;
-                    case 3:
-                        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n");
-                        List<Book> bookList = bookService.findByTitle();
-                        bookService.printAllBooks(bookList);
-                        break;
-                    case 4:
-                        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.");
-                        bookService.rentBook();
-                        break;
-                    case 5:
-                        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.");
-                        bookService.returnBook();
-                        break;
-                    case 6:
-                        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
-                        bookService.lostBook();
-                        break;
-                    case 7:
-                        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
-                        bookService.deleteBook();
-                        break;
-                    default:
-                        System.out.println("[System] 시스템이 종료됩니다.");
-                }
-            }
+            mode.normalMode();
+        }else {
+            mode.testMode();
         }
     }
 }
