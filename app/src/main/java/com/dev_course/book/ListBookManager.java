@@ -43,8 +43,14 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
+    public String rentById(int id) {
+        System.out.println(id);
+        return null;
+    }
+
+    @Override
     public String deleteById(int id) {
-        if (!hasId(id)) {
+        if (hasNotId(id)) {
             return NOT_EXIST_ID.msg();
         }
 
@@ -53,9 +59,9 @@ public class ListBookManager implements BookManager {
         return SUCCESS_DELETE_BOOK.msg();
     }
 
-    private boolean hasId(int id) {
+    private boolean hasNotId(int id) {
         return bookList.stream()
-                .anyMatch(book -> book.getId() == id);
+                .noneMatch(book -> book.getId() == id);
     }
 
     private boolean hasTitle(String title) {

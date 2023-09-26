@@ -44,6 +44,7 @@ public class LibrarySystem {
             case "1" -> createBook();
             case "2" -> listBooks();
             case "3" -> findBookByTitle();
+            case "4" -> rentBookById();
             case "7" -> deleteBookById();
             default -> writer.println(INVALID_FUNCTION.msg());
         }
@@ -91,6 +92,21 @@ public class LibrarySystem {
         }
 
         writer.append(END_FIND_BOOK_BY_TITLE.msg());
+        writer.flush();
+    }
+
+    private void rentBookById() {
+        writer.println(RENT_BOOK_BY_ID.msg());
+
+        try {
+            String input = writeAndRead(READ_RENT_BOOK_BY_ID.msg());
+            int id = Integer.parseInt(input);
+
+            bookManager.rentById(id);
+        } catch (RuntimeException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
         writer.flush();
     }
 
