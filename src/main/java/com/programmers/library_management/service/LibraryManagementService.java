@@ -4,15 +4,14 @@ import com.programmers.library_management.domain.Book;
 import com.programmers.library_management.domain.Status;
 import com.programmers.library_management.exception.*;
 import com.programmers.library_management.repository.BookRepository;
-import com.programmers.library_management.repository.ProductBookRepository;
-import com.programmers.library_management.repository.TestBookRepository;
 
 import java.util.List;
 
 public class LibraryManagementService {
     private final BookRepository bookRepository;
-    public LibraryManagementService(boolean isTest){
-        this.bookRepository = isTest ? new TestBookRepository() : new ProductBookRepository();
+
+    public LibraryManagementService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     public void addBook(String title, String writer, int pageNumber){

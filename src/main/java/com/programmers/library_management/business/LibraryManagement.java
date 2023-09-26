@@ -2,6 +2,8 @@ package com.programmers.library_management.business;
 
 import com.programmers.library_management.domain.Book;
 import com.programmers.library_management.exception.*;
+import com.programmers.library_management.repository.ProductBookRepository;
+import com.programmers.library_management.repository.TestBookRepository;
 import com.programmers.library_management.service.LibraryManagementService;
 import com.programmers.library_management.utils.ConsoleIOManager;
 
@@ -11,8 +13,8 @@ public class LibraryManagement {
     private final ConsoleIOManager consoleIOManager;
     private LibraryManagementService libraryManagementService;
 
-    public LibraryManagement() {
-        this.consoleIOManager = new ConsoleIOManager();
+    public LibraryManagement(ConsoleIOManager consoleIOManager) {
+        this.consoleIOManager = consoleIOManager;
     }
 
     public boolean selectManagementMode(){
@@ -21,11 +23,11 @@ public class LibraryManagement {
             String input = consoleIOManager.getInput();
             switch (input){
                 case "1" -> {
-                    libraryManagementService = new LibraryManagementService(false);
+                    libraryManagementService = new LibraryManagementService(new ProductBookRepository());
                     consoleIOManager.printSystemMsg("일반 모드로 애플리케이션을 실행합니다.");
                 }
                 case "2" -> {
-                    libraryManagementService = new LibraryManagementService(true);
+                    libraryManagementService = new LibraryManagementService(new TestBookRepository());
                     consoleIOManager.printSystemMsg("테스트 모드로 애플리케이션을 실행합니다.");
                 }
                 default -> {

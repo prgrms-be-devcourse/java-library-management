@@ -6,6 +6,7 @@ import com.programmers.library_management.exception.CBookAlreadyExistException;
 import com.programmers.library_management.exception.CBookAlreadyLostException;
 import com.programmers.library_management.exception.CBookAlreadyRantedException;
 import com.programmers.library_management.exception.CBookAlreadyReturnedException;
+import com.programmers.library_management.repository.ProductBookRepository;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ class ProductLibraryManagementServiceTest {
 
     @BeforeAll
     static void init(){
-        libraryManagementService = new LibraryManagementService(false);
+        libraryManagementService = new LibraryManagementService(new ProductBookRepository());
     }
 
     @DisplayName("test addBook Success")

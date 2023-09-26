@@ -3,6 +3,7 @@ package com.programmers.library_management.service;
 import com.programmers.library_management.domain.Book;
 import com.programmers.library_management.domain.Status;
 import com.programmers.library_management.exception.*;
+import com.programmers.library_management.repository.TestBookRepository;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ class TestLibraryManagementServiceTest {
 
     @BeforeAll
     static void init(){
-        libraryManagementService = new LibraryManagementService(true);
+        libraryManagementService = new LibraryManagementService(new TestBookRepository());
     }
 
     @DisplayName("test addBook Success")
