@@ -38,7 +38,7 @@ class DefaultBookServiceTest {
 		//when
 		Executable when = () -> bookService.registerBook(request);
 
-		//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
+		//then
 		assertDoesNotThrow(when);
 	}
 

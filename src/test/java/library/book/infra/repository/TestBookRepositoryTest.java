@@ -15,7 +15,6 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
@@ -34,10 +33,11 @@ class TestBookRepositoryTest {
 		Book book = A.toEntity();
 
 		//when
-		Executable when = () -> bookRepository.save(book);
+		bookRepository.save(book);
 
-		//then //todo : 추후에 조회 로직을 구현하면 값 검증으로 테스트 방법 변경
-		assertDoesNotThrow(when);
+		//then
+		Optional<Book> findBook = bookRepository.findById(A.getId());
+		assertThat(findBook).contains(book);
 	}
 
 	@Test
