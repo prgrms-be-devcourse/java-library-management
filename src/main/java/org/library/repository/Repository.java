@@ -1,6 +1,7 @@
-package repository;
+package org.library.repository;
 
-import entity.Book;
+
+import org.library.entity.Book;
 
 import java.util.List;
 
