@@ -14,6 +14,10 @@ public enum Mode {
         this.repository = repository;
     }
 
+    public int getNum() {
+        return num;
+    }
+
     private int num;
     private String name;
     private Repository repository;
