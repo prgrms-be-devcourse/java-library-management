@@ -2,10 +2,10 @@ package com.programmers.librarymanagement.domain;
 
 public enum Status {
 
-    CAN_RENT("canRent"), // 대여 가능
-    CANNOT_RENT("cannotRent"), // 대여중
-    ARRANGE("arrange"), // 도서 정리중
-    LOST("lost"); // 분실됨
+    CAN_RENT("대여 가능"), // 대여 가능
+    CANNOT_RENT("대여중"), // 대여중
+    ARRANGE("도서 정리중"), // 도서 정리중
+    LOST("분실됨"); // 분실됨
 
     private final String value;
 
