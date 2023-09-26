@@ -13,8 +13,6 @@ import library.book.fixture.BookFixture;
 
 public class StubBookRepository implements BookRepository {
 
-	private final Book book = A.toEntity();
-
 	@Override
 	public void save(Book book) {
 
@@ -40,6 +38,7 @@ public class StubBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.of(book);
+		System.out.println("[call findById]");
+		return Optional.of(A.toEntity());
 	}
 }
