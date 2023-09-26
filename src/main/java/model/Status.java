@@ -27,13 +27,13 @@ public enum Status {
         return null;
     }
 
-    public static boolean isBorrowed(String statusString) {
-        return Objects.equals(BORROWED, findStatusByString(statusString));
+    public static boolean isBorrowed(Status status) {
+        return Objects.equals(BORROWED, status);
     }
-    public static boolean isOrganizing(String statusString) {
-        return Objects.equals(ORGANIZING, findStatusByString(statusString));
+    public static boolean isOrganizing(Status status) {
+        return Objects.equals(ORGANIZING, status);
     }
-    public static boolean isLost(String statusString) {
-        return Objects.equals(LOST, findStatusByString(statusString));
+    public static boolean isLost(Status status) {
+        return Objects.equals(LOST, status);
     }
 }

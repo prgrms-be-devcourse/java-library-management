@@ -22,4 +22,8 @@ public class Book {
                 "\n상태 : " + status.getStatus() +
                 "\n------------------------------";
     }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
 }

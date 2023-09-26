@@ -87,6 +87,14 @@ public class BookController {
         Long bookNo = input.inputLong();
         repository.borrowBook(bookNo);
     }
+
+    // 도서 반납
+    public void returnBookByBookNo() {
+        output.printGuide(Guide.RETURN_START);
+        output.printQuestion(Question.BORROW_BY_BOOK_NO);
+        Long bookNo = input.inputLong();
+        repository.borrowBook(bookNo);
+    }
 }
 
 
