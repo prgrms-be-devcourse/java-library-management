@@ -12,4 +12,5 @@ public interface Repository {
     void borrowBook(Long bookNo);
     void returnBook(Long bookNo);
     void lostBook(Long bookNo);
+    void deleteBook(Long bookNo);
 }

@@ -7,6 +7,7 @@ import model.Status;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -70,7 +71,7 @@ public class FileRepository implements Repository {
                 System.out.println(Guide.BORROW_COMPLETE.getGuide());
             }
         }else {
-            System.out.println("해당하는 책이 없습니다.");
+            System.out.println(Guide.NOT_EXIST.getGuide());
         }
     }
 
@@ -92,7 +93,7 @@ public class FileRepository implements Repository {
                 System.out.println(Guide.RETURN_FAIL.getGuide());
             }
         }else {
-            System.out.println("해당하는 책이 없습니다.");
+            System.out.println(Guide.NOT_EXIST.getGuide());
         }
     }
 
@@ -113,7 +114,21 @@ public class FileRepository implements Repository {
                 System.out.println(Guide.LOST_COMPLETE.getGuide());
             }
         }else {
-            System.out.println("해당하는 책이 없습니다.");
+            System.out.println(Guide.NOT_EXIST.getGuide());
+        }
+    }
+
+    @Override
+    public void deleteBook(Long bookNo) {
+        Optional<Book> foundBook = bookList.stream()
+                .filter(book -> book.getBookNo().equals(bookNo))
+                .findFirst();
+        if (foundBook.isPresent()) {
+            bookList.remove(foundBook.get());
+            updateCvsFile();
+            System.out.println(Guide.DELETE_COMPLETE.getGuide());
+        }else {
+            System.out.println(Guide.NOT_EXIST.getGuide());
         }
     }
 

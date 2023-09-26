@@ -21,7 +21,7 @@ public enum Guide {
     LOST_FAIL("[System] 이미 분실 처리된 도서입니다.\n"),
     DELETE_START("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),
     DELETE_COMPLETE("[System] 도서가 삭제 처리 되었습니다.\n"),
-    DELETE_FAIL("[System] 존재하지 않는 도서번호 입니다.\n");
+    NOT_EXIST("[System] 존재하지 않는 도서번호 입니다.\n");
 
     private final String guide;
 
