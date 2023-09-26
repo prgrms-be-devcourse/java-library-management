@@ -4,8 +4,6 @@ import com.dev_course.book.BookManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
-import java.io.IOException;
-
 import static com.dev_course.library.LibraryMessage.*;
 
 public class LibrarySystem {
@@ -59,19 +57,19 @@ public class LibrarySystem {
     private void createBook() {
         writer.println(CREATE_BOOK.msg());
 
-        String resMsg;
-
         try {
-            String title = reader.read();
-            String author = reader.read();
-            int pages = Integer.parseInt(reader.read());
+            String title = writeAndRead(READ_CREATE_BOOK_TITLE.msg());
+            String author = writeAndRead(READ_CREATE_BOOK_AUTHOR.msg());
+            int pages = Integer.parseInt(writeAndRead(READ_CREATE_BOOK_PAGES.msg()));
 
-            resMsg = bookManager.create(title, author, pages);
-        } catch (IOException | NumberFormatException e) {
-            resMsg = INVALID_INPUT.msg();
+            writer.append(bookManager.create(title, author, pages));
+        } catch (RuntimeException e) {
+            writer.append(INVALID_INPUT.msg());
         }
 
-        writer.println(resMsg);
+        writer.flush();
+
+        selectFunction();
     }
 
     private void listBooks() {
@@ -80,5 +78,15 @@ public class LibrarySystem {
 
     private void findBookByTitle() {
         writer.println(FIND_BOOK_BY_TITLE.msg());
+    }
+
+    private String writeAndRead(String msg) {
+        writer.println(msg);
+
+        try {
+            return reader.read();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
