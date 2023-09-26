@@ -9,8 +9,8 @@ import org.junit.jupiter.api.function.Executable;
 
 import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.infra.console.output.OutputHandler;
-import library.book.mock.MockBookController;
-import library.book.mock.MockExceptionBookController;
+import library.book.stub.StubBookController;
+import library.book.stub.StubExceptionBookController;
 
 @DisplayName("[BookExceptionHandler Test] - Presentation")
 class BookExceptionHandlerTest {
@@ -27,7 +27,7 @@ class BookExceptionHandlerTest {
 		void successWhenException() {
 			//given
 			bookExceptionHandler = new BookExceptionHandler(
-				new MockExceptionBookController(), outputHandler
+				new StubExceptionBookController(), outputHandler
 			);
 
 			//when
@@ -42,7 +42,7 @@ class BookExceptionHandlerTest {
 		void successWhenNoException() {
 			//given
 			bookExceptionHandler = new BookExceptionHandler(
-				new MockBookController(), outputHandler
+				new StubBookController(), outputHandler
 			);
 
 			//when

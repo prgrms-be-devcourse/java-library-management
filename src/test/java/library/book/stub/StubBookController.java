@@ -1,10 +1,10 @@
-package library.book.mock;
+package library.book.stub;
 
 import library.book.presentation.BookController;
 
-public class MockBookController extends BookController {
+public class StubBookController extends BookController {
 
-	public MockBookController() {
+	public StubBookController() {
 		super(null, null);
 	}
 

@@ -1,4 +1,4 @@
-package library.book.mock;
+package library.book.stub;
 
 import static library.book.fixture.BookFixture.*;
 
@@ -11,7 +11,7 @@ import library.book.domain.Book;
 import library.book.domain.BookRepository;
 import library.book.fixture.BookFixture;
 
-public class MockBookRepository implements BookRepository {
+public class StubBookRepository implements BookRepository {
 
 	private final Book book = A.toEntity();
 

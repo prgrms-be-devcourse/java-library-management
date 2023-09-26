@@ -19,7 +19,7 @@ import library.book.domain.Book;
 import library.book.domain.BookRepository;
 import library.book.domain.Status.BookStatus;
 import library.book.fixture.BookFixture;
-import library.book.mock.MockBookRepository;
+import library.book.stub.StubBookRepository;
 
 @DisplayName("[DefaultBookService Test] - Application")
 class DefaultBookServiceTest {
@@ -28,7 +28,7 @@ class DefaultBookServiceTest {
 	private final BookRepository bookRepository;
 
 	public DefaultBookServiceTest() {
-		this.bookRepository = new MockBookRepository();
+		this.bookRepository = new StubBookRepository();
 		this.bookService = new DefaultBookService(bookRepository);
 	}
 

@@ -6,15 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import library.book.mock.MockConsoleProcessor;
-import library.book.mock.MockFunctionExecutor;
+import library.book.stub.StubConsoleProcessor;
+import library.book.stub.StubFunctionExecutor;
 
 @DisplayName("[BookController Test] - Presentation")
 public class BookControllerTest {
 
 	private final BookController bookController = new BookController(
-		new MockFunctionExecutor(null, null),
-		new MockConsoleProcessor(null, null, null)
+		new StubFunctionExecutor(null, null),
+		new StubConsoleProcessor(null, null, null)
 	);
 
 	@Test

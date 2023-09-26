@@ -16,14 +16,14 @@ import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.infra.console.output.OutputHandler;
-import library.book.mock.MockInputHandler;
+import library.book.stub.StubInputHandler;
 import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[ConsoleProcessor Test] - Presentation")
 class ConsoleProcessorTest {
 
 	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
-		new MockInputHandler(), new ConsoleOutputHandler(), new InputConverter()
+		new StubInputHandler(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
 	@Test

@@ -1,13 +1,13 @@
-package library.book.mock;
+package library.book.stub;
 
 import static library.book.exception.ErrorCode.*;
 
 import library.book.exception.BookException;
 import library.book.presentation.BookController;
 
-public class MockExceptionBookController extends BookController {
+public class StubExceptionBookController extends BookController {
 
-	public MockExceptionBookController() {
+	public StubExceptionBookController() {
 		super(null, null);
 	}
 

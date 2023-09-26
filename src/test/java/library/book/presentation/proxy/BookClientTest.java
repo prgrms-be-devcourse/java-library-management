@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import library.book.infra.console.output.ConsoleOutputHandler;
-import library.book.mock.MockBookController;
-import library.book.mock.MockInputHandler;
+import library.book.stub.StubBookController;
+import library.book.stub.StubInputHandler;
 import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[BookClient Test] - Presentation")
 class BookClientTest {
 
 	private final BookClient bookClient = new BookClient(
-		new MockInputHandler(), new ConsoleOutputHandler(), new InputConverter()
+		new StubInputHandler(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
 	@Test
@@ -26,7 +26,7 @@ class BookClientTest {
 		//given
 		Field field = bookClient.getClass().getDeclaredField("target");
 		field.setAccessible(true);
-		field.set(bookClient, new MockBookController());
+		field.set(bookClient, new StubBookController());
 
 		//when
 		Executable when = bookClient::run;
