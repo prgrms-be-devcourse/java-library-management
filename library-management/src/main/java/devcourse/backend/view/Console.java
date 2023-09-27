@@ -48,12 +48,30 @@ public class Console implements Runnable {
 
     public static void searchMenu() {
         system("제목으로 도서 검색 메뉴로 넘어갑니다.");
+
         service.searchBooks(stringInput("검색할 도서 제목 일부를 입력하세요."))
                 .stream()
                 .forEach(b -> {
                     System.out.println(b);
                     partition();
                 });
+
+        system("검색된 도서 끝");
+    }
+
+    public static void rentMenu() {
+        system("도서 대여 메뉴로 넘어갑니다.");
+        try {
+            service.rentBook(longInput("대여할 도서번호를 입력하세요"));
+            system("도서가 대여 처리 되었습니다.");
+        } catch (IllegalArgumentException e) {
+            switch (e.getMessage()) {
+                case "대여 중" : system("이미 대여 중인 도서입니다."); break;
+                case "도서 정리중" : system("정리 중인 도서입니다. 5분 후 다시 대여해 주세요."); break;
+                case "분실됨" : system("현재 분실 처리된 도서입니다."); break;
+            }
+        }
+
     }
 
     private static void system(String s) {
@@ -79,7 +97,14 @@ public class Console implements Runnable {
         System.out.println();
         System.out.print("> ");
         int input = Integer.parseInt(sc.nextLine());
+        return input;
+    }
+
+    public static long longInput(String prompt) {
+        System.out.println("Q. " + prompt);
         System.out.println();
+        System.out.print("> ");
+        long input = Long.parseLong(sc.nextLine());
         return input;
     }
 

@@ -1,6 +1,7 @@
 package devcourse.backend.business;
 
 import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
 
@@ -22,4 +23,8 @@ public class BookService {
     }
 
     public List<Book> searchBooks(String keyword) { return repository.findByKeyword(keyword); }
+
+    public void rentBook(long bookId) {
+        repository.findById(bookId).changeStatus(BookStatus.BORROWED);
+    }
 }

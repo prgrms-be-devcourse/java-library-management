@@ -6,7 +6,8 @@ import java.util.Optional;
 public enum Menu {
     REGISTER(1, "도서 등록", Console::registerMenu),
     LOOKUP(2, "전체 도서 목록 조회", Console::allBookMenu),
-    SEARCH(3, "제목으로 도서 검색", Console::searchMenu);
+    SEARCH(3, "제목으로 도서 검색", Console::searchMenu),
+    RENT(4, "도서 대여", Console::rentMenu);
 
 
     private final String description;

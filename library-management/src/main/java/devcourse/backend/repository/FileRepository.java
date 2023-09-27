@@ -35,6 +35,12 @@ public class FileRepository {
                 .toList();
     }
 
+    public Book findById(long id) {
+        return books.stream()
+                .filter(b -> b.isMatched(id))
+                .findAny().orElseThrow();
+    }
+
     public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
         return books.stream()
                 .filter(b -> b.isMatched(title, author, totalPages))

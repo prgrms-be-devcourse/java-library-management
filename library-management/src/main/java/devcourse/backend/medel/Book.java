@@ -74,6 +74,15 @@ public class Book {
         return false;
     }
 
+    public boolean isMatched(long id) {
+        return this.id == id;
+    }
+
+    public void changeStatus(BookStatus status) {
+        if(BookStatus.canSwitch(this.status, status)) this.status = status;
+        else throw new IllegalArgumentException(this.status.toString());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
