@@ -3,6 +3,7 @@ package repository;
 import domain.Book;
 
 import java.io.*;
+import java.util.List;
 
 public interface Repository {
 
@@ -24,5 +25,11 @@ public interface Repository {
                 + "\n페이지 수: " + String.valueOf(book.getPage()) + "페이지"
                 + "\n상태 : " + book.getState()
                 + "\n\n------------------------------");
+    }
+    
+    default public void organizeState(List<Book> books) {
+        books.forEach(book -> {
+            if(book.getState().equals("도서 정리중")) book.setState("대여 가능");
+        });
     }
 }

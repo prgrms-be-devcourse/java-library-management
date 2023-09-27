@@ -18,11 +18,17 @@ class NormalRepositoryTest {
     File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
     BufferedReader bf = new BufferedReader(new FileReader(file));
 
+    String original = "";
     NormalRepositoryTest() throws IOException {
+        original = "";
+        String line = "";
+        while((line = bf.readLine()) != null) {
+            original += line + "\n";
+        }
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         outputMessage = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputMessage));
     }
@@ -33,10 +39,7 @@ class NormalRepositoryTest {
         System.setOut(System.out);
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        bw.write("1,해리포터,조앤롤링,32,대여 가능\n" +
-                "713338630,안,하이,324,대여중\n" +
-                "821270929,이기적 유전자,리처드 도킨스,324,도서 정리중\n" +
-                "302155142,책 먹는 여우,프란치스카 비어만,20,분실됨");
+        bw.write(original);
         bw.close();
     }
 
@@ -70,7 +73,6 @@ class NormalRepositoryTest {
 
     @Test
     void printList() throws IOException {
-        File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
         List<Book> books = new ArrayList<>();
         fileToList(books, file);
 
@@ -128,8 +130,18 @@ class NormalRepositoryTest {
         String state = getStateFromId(1);
         Assertions.assertEquals(state, "대여중");
 
-        repository.rental(821270929); //도서 정리중
+
+        Book book = new Book();
+        book.setId(3);
+        book.setTitle("순수 이성 비판");
+        book.setWriter("칸트");
+        book.setPage(432);
+        book.setState("도서 정리중");
+        repository.register(book);
+        repository.rental(3); //도서 정리중
         tmp += "[System] 정리 중인 도서입니다.\r\n";
+        repository.deleteBook(3);
+        tmp += "[System] 도서가 삭제 처리 되었습니다.\r\n";
 
         repository.rental(302155142); //분실됨
         tmp += "[System] 분실된 도서입니다.\r\n";
@@ -152,8 +164,17 @@ class NormalRepositoryTest {
         tmp += "[System] 원래 대여가 가능한 도서입니다.\r\n";
         //롤백
 
-        repository.returnBook(821270929); //도서 정리중
+        Book book = new Book();
+        book.setId(3);
+        book.setTitle("순수 이성 비판");
+        book.setWriter("칸트");
+        book.setPage(432);
+        book.setState("도서 정리중");
+        repository.register(book);
+        repository.returnBook(3); //도서 정리중
         tmp += "[System] 반납이 불가능한 도서입니다.\r\n";
+        repository.deleteBook(3);
+        tmp += "[System] 도서가 삭제 처리 되었습니다.\r\n";
 
         repository.returnBook(302155142); //분실됨
         tmp += "[System] 도서가 반납 처리 되었습니다.\r\n";

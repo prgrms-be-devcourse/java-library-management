@@ -13,6 +13,8 @@ public class NormalRepository implements Repository {
 
     public NormalRepository() throws IOException {
         fileToList(books, file);
+        organizeState(books);
+        updateFile(books, file);
     }
 
     @Override
@@ -73,13 +75,6 @@ public class NormalRepository implements Repository {
                 updateFile(books, file);
             } catch (InterruptedException | IOException e) {
                 throw new RuntimeException(e);
-            } finally {
-                book.setState("대여 가능");
-                try {
-                    updateFile(books, file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }
