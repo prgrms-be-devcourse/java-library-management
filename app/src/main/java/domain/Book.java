@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public class Book {
     private int id;
     private String title;
@@ -37,6 +39,15 @@ public class Book {
 
     public void setCondition(String condition) {
         this.condition = condition;
+    }
+
+    @Override
+    public String toString() {
+        return "도서 번호 : " + id + "\n" +
+                "제목 : " + title + "\n" +
+                "작가 이름 : " + author + "\n" +
+                "페이지 수 : " + page + "\n" +
+                "상태 : " + condition + "\n";
     }
 
     public enum BookCondition {
