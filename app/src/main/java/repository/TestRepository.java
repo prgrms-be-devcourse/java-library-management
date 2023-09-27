@@ -10,12 +10,6 @@ import java.util.Objects;
 
 public class TestRepository implements Repository{
 
-    private final static int condition_default = 0; // 기본 상태
-    private final static int condition_possible = 1; //대여 가능
-    private final static int condition_onRent = 2; //대여 중
-    private final static int condition_organizing = 3; //정리 중
-    private final static int condition_lost = 4; //분실됨
-
     @Override
     public List<Book> load(List<Book> list) {
         list = new ArrayList<>();
@@ -24,7 +18,7 @@ public class TestRepository implements Repository{
 
     @Override
     public void save(int id, String title, String author, int page, List<Book> list) {
-        list.add(new Book(id, title, author, page, "대여 가능")); // 처음에는 대여 가능하게
+        list.add(new Book(id, title, author, page, "대여 가능"));
     }
 
     @Override
@@ -37,7 +31,7 @@ public class TestRepository implements Repository{
             Book book = iterator.next();
             String title = book.getTitle();
             // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
-            if (title.contains(searchTitle)) {
+            if (title.toLowerCase().contains(searchTitle)) {
                 int id = book.getId();
                 String author = book.getAuthor();
                 int page = book.getPage();
@@ -50,86 +44,100 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public int rentById(int rentId, List<Book> list) {
-        int condition = condition_default;
-        int flag = 1;
-
+    public String rentById(int rentId, List<Book> list) {
+        String message = "";
+        boolean isBookExist = false;
         Iterator<Book> iterator = list.iterator();
 
         while (iterator.hasNext()) {
             Book book = iterator.next();
             if (book.getId() == rentId) {
-                if (Objects.equals(book.getCondition(), "대여 가능")) {
-                    flag = 2; // 대여 가능한 상황
+                isBookExist = true;
+                if(Objects.equals(book.getCondition(), "대여 가능")){
                     book.setCondition("대여 중");
-                } else if (book.getCondition().equals("분실됨") || book.getCondition().equals("도서 정리중")) {
-                    flag = 3; // 분실이거나 정리중인 상황이거나 책이 없는 경우
+                    message = "도서가 대여 처리 되었습니다.";
                 }
+                else if (Objects.equals(book.getCondition(), "대여 중")) {
+                    message = "이미 대여중인 도서입니다.";
+                }
+                else message = "현재 대여가 불가능한 도서입니다.";
                 break; // ID를 찾았으므로 루프 종료
             }
         }
-        return flag;
+
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
+
+        return message;
     }
 
     @Override
-    public int  returnById(int returnId, List<Book> list) {
-        int flag = 1; // -> 대여 중인 상황
+    public String returnById(int returnId, List<Book> list) {
+        String message = "";
+        boolean isBookExist = false;
+        Iterator<Book> iterator = list.iterator();
 
-        for (Book book : list) {
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
             if (book.getId() == returnId) {
-                if(Objects.equals(book.getCondition(), "대여 중")){
-                    flag = 2; // 대여 가능한 상황으로 (반납 가능)
+                isBookExist = true;
+                if(Objects.equals(book.getCondition(), "대여 중") || Objects.equals(book.getCondition(), "분실됨")) { //대여 중 or 분실됨이면 반납 가능
                     book.setCondition("대여 가능");
+                    message = "도서가 반납 처리 되었습니다";
+                } else { // 대여 가능
+                    message = "원래 대여가 가능한 도서입니다.";
                 }
-                else if (book.getCondition().equals("분실됨") || book.getCondition().equals("도서 정리중")) {
-                    flag = 3; // 반납 불가능
-                }
-                break; // ID를 찾았으므로 루프 종료
+                break;
             }
         }
 
-        return flag;
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
+
+        return message;
     }
 
     @Override
     public String lostById(int lostId, List<Book> list) {
-        String condition = "";
+        String message = "";
+        boolean isBookExist = false;
 
-        for (Book book : list) {
+        Iterator<Book> iterator = list.iterator();
+
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
             if (book.getId() == lostId) {
-                if(Objects.equals(book.getCondition(), "분실됨")){ //이미 분실된 것
-                    condition = "[System] 이미 분실 처리된 도서입니다.";
-                }
-                else { //
+                isBookExist = true;
+                if(Objects.equals(book.getCondition(), "분실됨")) {
+                    message = "이미 분실 처리된 도서입니다.";
+                } else {
                     book.setCondition("분실됨");
-                    condition = "[System] 도서가 분실 처리 되었습니다.";
+                    message = "도서가 분실 처리 되었습니다.";
                 }
-                break; // ID를 찾았으므로 루프 종료
+                break;
             }
         }
 
-        return condition;
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
+
+        return message;
     }
 
     @Override
     public String deleteById(int deleteId, List<Book> list) {
-        //condition 1은 존재하는 상태에서 지움
-        //condition 2는 이미 없는 책
-
         String message = "";
-        boolean flag = false;
+        boolean isBookExist = false;
 
         Iterator<Book> iterator = list.iterator();
         while (iterator.hasNext()) {
             Book book = iterator.next();
             if (book.getId() == deleteId) {
-                iterator.remove(); // delete Id를 가진 레코드를 삭제
-                flag = true;
+                iterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs iterator 결정 이유
+                isBookExist = true;
                 message = "도서가 삭제 처리 되었습니다.";
+                break;
             }
         }
 
-        if(!flag) message = "존재하지 않는 도서번호 입니다.";
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
         return message;
     }

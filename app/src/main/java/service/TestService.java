@@ -49,19 +49,17 @@ public class TestService implements Service {
         int mode = scanner.nextInt();
         scanner.nextLine();
 
-        /*
-
-        스위치로 모드 설정할 수 있도록
-
-         */
-        if(mode == 1) registration();
-        if(mode == 2) viewAll();
-        if(mode == 3) findByTitle();
-        if(mode == 4) rentBook();
-        if(mode == 5) returnBook();
-        if(mode == 6) lostBook();
-        if(mode == 7) deleteBook();
-        if(mode == 8) exit();
+        switch (mode) {
+            case 1 -> registration();
+            case 2 -> viewAll();
+            case 3 -> findByTitle();
+            case 4 -> rentBook();
+            case 5 -> returnBook();
+            case 6 -> lostBook();
+            case 7 -> deleteBook();
+            case 8 -> exit();
+            default -> throw new RuntimeException("잘못된 입력입니다.");
+        }
     }
 
     @Override
@@ -70,20 +68,17 @@ public class TestService implements Service {
         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.");
         System.out.println();
 
-        //책 제목 입력
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
         System.out.println();
         System.out.print("> ");
         String title = scanner.nextLine();
         System.out.println();
 
-        //작가 입력
         System.out.println("Q. 작가 이름을 입력하세요.");
         System.out.println();
         System.out.print("> ");
         String author = scanner.nextLine();
 
-        //페이지 수 입력
         System.out.println("Q. 페이지 수를 입력하세요.");
         System.out.println();
         System.out.print("> ");
@@ -95,7 +90,8 @@ public class TestService implements Service {
         System.out.println("[System] 도서 등록이 완료되었습니다.");
         System.out.println();
 
-        id++;
+        id++; // 마지막 책 번호를 기준으로 +1
+
         mainView();
     }
 
@@ -104,14 +100,12 @@ public class TestService implements Service {
         System.out.println();
         System.out.println("[System] 전체 도서 목록입니다.");
         System.out.println();
+
         StringBuilder stringBuilder = new StringBuilder();
+
         for (Book book : list) {
             // 각 필드를 StringBuilder에 추가
-            stringBuilder.append("도서 번호 : ").append(book.getId()).append("\n");
-            stringBuilder.append("제목 : ").append(book.getTitle()).append("\n");
-            stringBuilder.append("작가 이름 : ").append(book.getAuthor()).append("\n");
-            stringBuilder.append("페이지 수 : ").append(book.getPage()).append("\n");
-            stringBuilder.append("상태 : ").append(book.getCondition()).append("\n\n");
+            stringBuilder.append("\n").append(book.toString()).append("\n");
             stringBuilder.append("------------------------------").append("\n");
         }
 
@@ -139,26 +133,16 @@ public class TestService implements Service {
 
         List<Book> foundBooks = repository.findByTitle(searchTitle, list);
 
+        StringBuilder stringBuilder = new StringBuilder();
+
         if (foundBooks.isEmpty()) {
             System.out.println("검색 결과가 없습니다.");
         } else {
             for (Book book : foundBooks) {
-
-                int id = book.getId();
-                String title = book.getTitle();
-                String author = book.getAuthor();
-                int page = book.getPage();
-                String condition = book.getCondition();
-
-                System.out.println();
-                System.out.println("도서 번호 : " + id);
-                System.out.println("제목 : " + title);
-                System.out.println("작가 이름 : " + author);
-                System.out.println("페이지 수 : " + page);
-                System.out.println("상태 :  " + condition);
-                System.out.println();
-                System.out.println("------------------------------");
+                stringBuilder.append("\n").append(book.toString()).append("\n");
+                stringBuilder.append("------------------------------").append("\n");
             }
+            System.out.println(stringBuilder);
             System.out.println("[System] 검색된 도서 끝");
         }
 
@@ -174,16 +158,12 @@ public class TestService implements Service {
         System.out.println("Q. 대여할 도서번호를 입력하세요");
         System.out.println();
         System.out.print("> ");
-        int rentId = scanner.nextInt();
+        int returnId = scanner.nextInt();
         scanner.nextLine();
 
-        if(repository.rentById(rentId, list) == 2){
-            System.out.println("[System] 도서가 대여 처리 되었습니다.");
-        } else if(repository.rentById(rentId, list) == 1) {
-            System.out.println("[System] 이미 대여중인 도서입니다.");
-        } else {
-            System.out.println("[System] 현재 대여가 불가능한 도서입니다.");
-        }
+        System.out.println();
+        String message = repository.rentById(returnId, list);
+        System.out.println("[System] " + message);
 
         mainView();
     }
@@ -200,13 +180,9 @@ public class TestService implements Service {
         int returnId = scanner.nextInt();
         scanner.nextLine();
 
-        if(repository.returnById(returnId, list) == 2){
-            System.out.println("[System] 도서가 반납 처리 되었습니다.");
-        } else if(repository.returnById(returnId, list) == 1) {
-            System.out.println("[System] 원래 대여가 가능한 도서입니다.");
-        } else {
-            System.out.println("[System] 잘못된 도서 번호를 입력하셨습니다.");
-        }
+        System.out.println();
+        String message = repository.returnById(returnId, list);
+        System.out.println("[System] " + message);
 
         mainView();
     }
@@ -223,8 +199,9 @@ public class TestService implements Service {
         int lostId = scanner.nextInt();
         scanner.nextLine();
 
-        String result = repository.lostById(lostId, list);
-        System.out.println(result);
+        System.out.println();
+        String message = repository.lostById(lostId, list);
+        System.out.println("[System] " + message);
 
         mainView();
     }
@@ -241,8 +218,9 @@ public class TestService implements Service {
         int deleteId = scanner.nextInt();
         scanner.nextLine();
 
+        System.out.println();
         String result = repository.deleteById(deleteId, list);
-        System.out.println("[System]" + result);
+        System.out.println("[System] " + result);
 
         mainView();
     }
@@ -251,6 +229,8 @@ public class TestService implements Service {
     public void exit() {
         System.out.println();
         System.out.println("[System] 애플리케이션을 종료합니다.");
+        System.out.println();
+
         System.exit(0);
     }
 }

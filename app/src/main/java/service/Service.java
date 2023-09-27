@@ -2,7 +2,8 @@ package service;
 
 public interface Service {
 
-    //csv에서 데이터를 가져오는 코드
+    //일반 모드는 csv에서 데이터를 가져오는 코드
+    //테스트 모드는 list 초기화
     public void load();
 
     //main화면을 출력하는 코드

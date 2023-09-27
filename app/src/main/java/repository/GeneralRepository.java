@@ -6,6 +6,7 @@ import com.opencsv.exceptions.CsvException;
 
 import domain.Book;
 
+import domain.Book.BookCondition;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -32,9 +33,8 @@ public class GeneralRepository implements Repository{
 
             // CSV 파일 내용을 읽어오기
             List<String[]> records = csvReader.readAll();
-            // 각 레코드(행)를 처리
+
             for (String[] record : records) {
-                // CSV 파일에서 읽어온 데이터 처리
                 int id = Integer.parseInt(record[0]);
                 String title = record[1];
                 String author = record[2];
@@ -66,69 +66,79 @@ public class GeneralRepository implements Repository{
     public List<Book> findByTitle(String searchTitle, List<Book> list) {
         List<Book> foundBooks = new ArrayList<>();
 
-        try (FileReader fileReader = new FileReader(csvFileName); CSVParser csvParser = CSVFormat.DEFAULT.parse(fileReader)) {
-            for (CSVRecord record : csvParser) {
-                String title = record.get(1); //id, title, author, page, condition 순서
+        Iterator<Book> iterator = list.iterator();
 
-                // title에서 검색어가 포함되어 있는지 확인
-                if (title.contains(searchTitle)) {
-                    int id = Integer.parseInt(record.get(0));
-                    String author = record.get(2);
-                    int page = Integer.parseInt(record.get(3));
-                    String condition = record.get(4);
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            String title = book.getTitle();
+            // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
+            if (title.toLowerCase().contains(searchTitle)) {
+                int id = book.getId();
+                String author = book.getAuthor();
+                int page = book.getPage();
+                String condition = book.getCondition();
 
-                    foundBooks.add(new Book(id, title, author, page, condition));
-                }
+                foundBooks.add(new Book(id, title, author, page, condition));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
         return foundBooks;
     }
 
     @Override
-    public int rentById(int rentId, List<Book> list) {
+    public String rentById(int rentId, List<Book> list) {
+        String message = "";
+        boolean isBookExist = false;
+        Iterator<Book> iterator = list.iterator();
 
-        int flag = 1; // -> 대여 중인 상황
-
-        for (Book book : list) {
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
             if (book.getId() == rentId) {
+                isBookExist = true;
                 if(Objects.equals(book.getCondition(), "대여 가능")){
-                    flag = 2; // 대여 가능한 상황
                     book.setCondition("대여 중");
+                    message = "도서가 대여 처리 되었습니다.";
                 }
-                else if (book.getCondition().equals("분실됨") || book.getCondition().equals("도서 정리중")) {
-                    flag = 3; // 분실이거나 정리중인 상황이거나 책이 없는 경우
+                else if (Objects.equals(book.getCondition(), "대여 중")) {
+                    message = "이미 대여중인 도서입니다.";
                 }
+                else message = "현재 대여가 불가능한 도서입니다.";
                 break; // ID를 찾았으므로 루프 종료
             }
         }
 
-        return flag;
-    }
-
-    @Override
-    public int returnById(int returnId, List<Book> list) {
-
-        int flag = 1; // -> 대여 중인 상황
-
-        for (Book book : list) {
-            if (book.getId() == returnId) {
-                if(Objects.equals(book.getCondition(), "대여 중")){
-                    flag = 2; // 대여 가능한 상황으로 (반납 가능)
-                    book.setCondition("대여 가능");
-                }
-                else if (book.getCondition().equals("분실됨") || book.getCondition().equals("도서 정리중")) {
-                    flag = 3; // 반납 불가능
-                }
-                break; // ID를 찾았으므로 루프 종료
-            }
-        }
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
         saveToCSV(list);
 
-        return flag;
+        return message;
+    }
+
+    //반납 하면 5분 동안 대여 불가능 한 상태로
+    @Override
+    public String returnById(int returnId, List<Book> list) {
+        String message = "";
+        boolean isBookExist = false;
+        Iterator<Book> iterator = list.iterator();
+
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (book.getId() == returnId) {
+                isBookExist = true;
+                if(Objects.equals(book.getCondition(), "대여 중") || Objects.equals(book.getCondition(), "분실됨")) { //대여 중 or 분실됨이면 반납 가능
+                    book.setCondition("대여 가능");
+                    message = "도서가 반납 처리 되었습니다";
+                } else { // 대여 가능
+                    message = "원래 대여가 가능한 도서입니다.";
+                }
+                break;
+            }
+        }
+
+        if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
+
+        saveToCSV(list);
+
+        return message;
     }
 
     @Override

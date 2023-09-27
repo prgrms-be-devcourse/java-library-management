@@ -12,9 +12,9 @@ public interface Repository {
 
     public List<Book> findByTitle(String searchTitle, List<Book> list);
 
-    public int rentById(int rentId, List<Book> list);
+    public String rentById(int rentId, List<Book> list);
 
-    public int returnById(int returnId, List<Book> list);
+    public String returnById(int returnId, List<Book> list);
 
     public String lostById(int lostId, List<Book> list);
 
