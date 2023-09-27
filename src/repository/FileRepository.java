@@ -51,7 +51,7 @@ public class FileRepository implements Repository{
 
     @Override
     public List<Book> getAll() {
-        return null;
+        return bookList;
     }
 
     @Override
