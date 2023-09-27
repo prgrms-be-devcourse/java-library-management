@@ -65,11 +65,16 @@ public class FileRepository implements Repository{
 
     @Override
     public Book getBook(Long bookNumber) {
-        return null;
+        return bookList.stream()
+                .filter(b -> b.getId().equals(bookNumber))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("[System] 존재하지 않는 도서번호 입니다."));
     }
 
     @Override
     public void deleteBook(Long bookNumber) {
-
+        Book book = getBook(bookNumber);
+        bookList.remove(book);
+        writeFile();
     }
 }
