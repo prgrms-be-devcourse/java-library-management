@@ -12,4 +12,5 @@ public interface Repository {
     Book findByTitle(String title);
     Book findById(Long id);
     void delete(Book book);
+    void processAvailable();
 }

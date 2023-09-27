@@ -27,17 +27,20 @@ public class TestRepository implements Repository{
 
     @Override
     public List<Book> findAll() {
+        processAvailable();
         return bookMap.values().stream().sorted().toList();
     }
 
     @Override
     public Book findByTitle(String title) {
+        processAvailable();
         return bookMap.values().stream().filter(b->b.getTitle().contains(title))
                 .findAny().orElseThrow();
     }
 
     @Override
     public Book findById(Long id) {
+        processAvailable();
         return bookMap.values().stream().filter(b -> b.getId().equals(id))
                 .findAny().orElseThrow();
     }
@@ -48,7 +51,7 @@ public class TestRepository implements Repository{
     }
 
     public boolean exists(Book book){
-        return bookMap.values().stream().anyMatch(b -> b.equals(book));
+        return bookMap.values().stream().anyMatch(b -> b.getId().equals(book.getId()));
     }
 
     public void edit(Book targetBook){
@@ -59,6 +62,10 @@ public class TestRepository implements Repository{
                 break;
             }
         }
+    }
+    @Override
+    public void processAvailable(){
+        bookMap.values().forEach(Book::processAvailable);
     }
 
     public void add(Book targetBook){

@@ -1,6 +1,5 @@
 package org.library.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Book {
@@ -10,7 +9,7 @@ public class Book {
     private String author;
     private int page;
     private State state = State.AVAILABLE;
-    private LocalDateTime editDateTime;
+    private LocalDateTime organizingTime;
 
     private static final String successRentString = "도서가 대여 처리 되었습니다.";
     private static final String successLostString = "도서가 분실 처리 되었습니다.";
@@ -37,7 +36,7 @@ public class Book {
             return getReason();
         }
         state = State.ORGANIZING;
-        editDateTime = LocalDateTime.now().plusMinutes(5);
+        organizingTime = LocalDateTime.now().plusMinutes(5);
         return successReturnString;
     }
 
@@ -47,6 +46,12 @@ public class Book {
         }
         this.state = State.LOST;
         return successLostString;
+    }
+
+    public void processAvailable(){
+        if(organizingTime.isBefore(LocalDateTime.now())){
+            state = State.AVAILABLE;
+        }
     }
 
     private String getReason(){
