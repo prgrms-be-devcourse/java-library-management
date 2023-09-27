@@ -6,6 +6,7 @@ import repository.Repository;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class Service{
 
@@ -17,82 +18,37 @@ public class Service{
         this.repository = repository;
     }
 
-    public void addBook() throws IOException {
-        System.out.println("Q. 등록할 도서 제목을 입력하세요.");
-        System.out.print("\n >");
-        String bookName = br.readLine();
-        System.out.println("Q. 작가 이름을 입력하세요.");
-        System.out.print("\n >");
-        String author = br.readLine();
-        System.out.println("Q. 페이지 수를 입력하세요.");
-        System.out.print("\n >");
-        int page = Integer.parseInt(br.readLine());
-
-        repository.addBook(new Book(bookName, author, page));
-        System.out.println("[System] 도서 등록이 완료되었습니다.\n");
+    public void addBook(Book book){
+        repository.addBook(book);
     }
 
-    public void getAll() {
-        repository.getAll().forEach(book -> {
-            System.out.println("Id : " + book.getId());
-            System.out.println("제목 : " + book.getName());
-            System.out.println("작가 이름 : " + book.getPage());
-            System.out.println("페이지 수 : " + book.getPage());
-            System.out.println("상태 : " + book.getStatus().getStatusName());
-            System.out.println("----------------------");
-        });
-        System.out.println("[System] 도서 목록 끝\n");
+    public List<Book> getAll() {
+        return repository.getAll();
     }
 
-    public void searchName() throws IOException {
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
-        System.out.print("\n >");
-        String name = br.readLine();
-        repository.searchBook(name).forEach(
-                book->{
-                    System.out.println("도서제목 : " + book.getId());
-                    System.out.println("제목 : " + book.getName());
-                    System.out.println("작가 이름 : " + book.getAuthor());
-                    System.out.println("페이지 수 : " + book.getPage());
-                    System.out.println("상태 : " + book.getStatus().getStatusName());
-                    System.out.println("----------------------");
-                }
-        );
-        System.out.println("[System] 검색된 도서 끝\n");
+    public List<Book> searchName(String keyword){
+        return repository.searchBook(keyword);
     }
 
-    public void rentalBook() throws IOException {
-        System.out.println("Q. 대여할 도서번호를 입력하세요");
-        System.out.print("\n >");
-        Long bookNumber = Long.parseLong(br.readLine());
-        Book book = repository.getBook(bookNumber);
+    public void rentalBook(int bookNumber){
+        Book book = repository.getBook((long)bookNumber);
         book.rentalBook();
     }
 
-    public void organizeBook() throws IOException {
-        System.out.println("Q. 반납할 도서번호를 입력하세요");
-        System.out.print("\n >");
-        Long bookNumber = Long.parseLong(br.readLine());
-        Book book = repository.getBook(bookNumber);
+    public void organizeBook(int bookNumber){
+        Book book = repository.getBook((long)bookNumber);
         book.organizeBook();
         BackGround backGroundTimer = new BackGround(book);
         backGroundTimer.start();
     }
 
-    public void lostBook() throws IOException {
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요");
-        System.out.print("\n >");
-        Long bookNumber = Long.parseLong(br.readLine());
-        Book book = repository.getBook(bookNumber);
+    public void lostBook(int bookNumber){
+        Book book = repository.getBook((long)bookNumber);
         book.lostBook();
     }
 
-    public void deleteBook() throws IOException {
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
-        System.out.print("\n >");
-        Long bookNumber = Long.parseLong(br.readLine());
-        repository.deleteBook(bookNumber);
-        System.out.println("[System] 도서가 삭제 처리 되었습니다.");
+    public void deleteBook(int bookNumber){
+        repository.deleteBook((long)bookNumber);
     }
 
     private static class BackGround extends Thread{
