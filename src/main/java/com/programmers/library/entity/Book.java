@@ -15,6 +15,7 @@ public class Book {
 
 	public Book() {
 	}
+
 	public Book(String title, String author, Long pages) {
 		this.title = title;
 		this.author = author;
@@ -24,18 +25,23 @@ public class Book {
 
 	@Override
 	public String toString() {
-		return String.format("\n도서번호 : %d\n제목 : %s\n작가 이름 : %s\n페이지 수 : %d 페이지\n상태 : %s\n\n------------------------------\n",
-			id, title, author, pages, status.getValue());	}
+		return String.format(
+			"\n도서번호 : %d\n제목 : %s\n작가 이름 : %s\n페이지 수 : %d 페이지\n상태 : %s\n\n------------------------------\n",
+			id, title, author, pages, status.getValue());
+	}
 
 	public boolean isBorrowed() {
 		return status == BookStatus.BORROWED;
 	}
+
 	public boolean isAvailable() {
 		return status == BookStatus.AVAILABLE;
 	}
+
 	public boolean isLost() {
 		return status == BookStatus.LOST;
 	}
+
 	public boolean isOrganizing() {
 		return status == BookStatus.ORGANIZING;
 	}
@@ -43,15 +49,18 @@ public class Book {
 	public void borrow() {
 		status = BookStatus.BORROWED;
 	}
+
 	public void returned() {
 		status = BookStatus.ORGANIZING;
 		returnedAt = LocalDateTime.now();
 	}
+
 	public void lost() {
 		status = BookStatus.LOST;
 	}
+
 	public void organize() {
-		if(status == BookStatus.ORGANIZING && returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+		if (status == BookStatus.ORGANIZING && returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
 			status = BookStatus.AVAILABLE;
 		}
 	}
@@ -59,22 +68,28 @@ public class Book {
 	public String getTitle() {
 		return title;
 	}
+
 	public Long getId() {
 		return id;
 	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getAuthor() {
 		return author;
 	}
+
 	public Long getPages() {
 		return pages;
 	}
+
 	public BookStatus getStatus() {
 		return status;
 	}
+
 	public LocalDateTime getReturnedAt() {
 		return returnedAt;
-	}
-	public void setId(Long id) {
-		this.id = id;
 	}
 }

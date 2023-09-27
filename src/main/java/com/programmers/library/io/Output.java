@@ -5,5 +5,7 @@ import java.util.List;
 import com.programmers.library.entity.Book;
 
 public interface Output {
-	void printMessage(String message);
+	void printSystemMessage(String message);
+	void printWithLineBreak(String message);
+	void printWithoutLineBreak(String message);
 }

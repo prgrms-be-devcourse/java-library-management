@@ -1,7 +1,8 @@
 package com.programmers.library;
 
 import com.programmers.library.controller.LibraryManagerController;
-import com.programmers.library.io.Console;
+import com.programmers.library.io.ConsoleInput;
+import com.programmers.library.io.ConsoleOutput;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
 import com.programmers.library.model.Mode;
@@ -13,8 +14,8 @@ import com.programmers.library.service.LibraryManagerServiceImpl;
 
 public class Application {
 	public static void main(String[] args) {
-		Input input = new Console();
-		Output output = new Console();
+		Input input = new ConsoleInput();
+		Output output = new ConsoleOutput();
 		Mode mode = input.inputMode();
 		Repository repository;
 		repository = switch (mode) {
