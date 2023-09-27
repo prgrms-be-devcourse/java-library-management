@@ -1,6 +1,4 @@
-package org.example;
-
-import java.util.TimerTask;
+package org.example.domain;
 
 public class Book {
     private Integer id;

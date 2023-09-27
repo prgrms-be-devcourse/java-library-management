@@ -1,4 +1,7 @@
-package org.example;
+package org.example.service;
+
+import org.example.domain.Book;
+import org.example.domain.BookState;
 
 import java.io.*;
 import java.util.*;
@@ -7,27 +10,21 @@ public class BookService {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private List<Book> books = new ArrayList<>();
 
-    void updateBooks(List<Book> bookList) {
+    public void updateBooks(List<Book> bookList) {
+        bookList.stream().filter(book -> {
+            if(book.getState().equals(BookState.ORGANIZING)) return true;
+            return false;
+        }).forEach(book -> {
+            book.setState(BookState.POSSIBLE);
+        });
         this.books = bookList;
     }
-    Book createBook() throws IOException {
-        System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
-
+    public Book createBook(String title, String author, int pageNum) throws IOException {
         Book book = new Book();
 
-        System.out.println("Q. 등록할 도서 제목을 입력하세요.\n");
-        System.out.print("> ");
-        book.setTitle(br.readLine());
-
-        System.out.println("Q. 작가 이름을 입력하세요.\n");
-        System.out.print("> ");
-        book.setAuthor(br.readLine());
-        System.out.println();
-
-        System.out.println("Q. 페이지 수를 입력하세요.\n");
-        System.out.print("> ");
-        book.setPageNum(Integer.parseInt(br.readLine()));
-        System.out.println();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setPageNum(pageNum);
 
         book.setState(BookState.POSSIBLE);
 
@@ -39,7 +36,7 @@ public class BookService {
         return book;
     }
 
-    void printAllBooks(List<Book> bookList) {
+    public void printAllBooks(List<Book> bookList) {
         bookList.forEach(book -> {
             System.out.println("도서번호 : " + book.getId());
             System.out.println("제목 : " + book.getTitle());
@@ -49,17 +46,12 @@ public class BookService {
             System.out.println("\n------------------------------\n");
         });
     }
-    List<Book> getAllBooks() {
-        printAllBooks(books);
+    public List<Book> getAllBooks() {
+        //printAllBooks(books);
         return books;
     }
 
-    List<Book> findByTitle() throws IOException {
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.\n");
-        System.out.print("> ");
-        String word = br.readLine();
-        System.out.println();
-
+    public List<Book> findByTitle(String word) throws IOException {
         List<Book> newList = books.stream().filter(book -> {
             if(book.getTitle().contains(word)) return true;
             return false;
@@ -68,12 +60,7 @@ public class BookService {
         return newList;
     }
 
-    Book rentBook() throws IOException {
-        System.out.println("Q. 대여할 도서번호를 입력하세요\n");
-        System.out.print("> ");
-        int bookId = Integer.parseInt(br.readLine());
-        System.out.println();
-
+    public Book rentBook(int bookId) throws IOException {
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
             return false; }).findAny()
@@ -88,55 +75,41 @@ public class BookService {
         return findBook;
     }
 
-    void returnBook() throws IOException {
-        System.out.println("Q. 반납할 도서번호를 입력하세요\n");
-        System.out.print("> ");
-        int bookId = Integer.parseInt(br.readLine());
-        System.out.println();
-
+    public void returnBook(int bookId) throws IOException {
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
             return false; }).findAny()
                 .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
         BookState findBookState = findBook.getState();
-        if(findBookState.equals(BookState.RENTING)) {
-            findBookState.showChangeState();
+        if(findBookState.equals(BookState.RENTING) || findBookState.equals(BookState.LOST)) {
+            BookState.RENTING.showChangeState();
             findBook.setState(BookState.ORGANIZING);
             //여기서 상태변화
-            Timer timer = new Timer();
+            Timer timer = new Timer(true);
             timer.schedule(new UpdateTask(findBook), 10000);
-        }else {
+        } else {
             findBookState.showState();
         }
 
     }
 
-    void lostBook() throws IOException {
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요\n");
-        System.out.print("> ");
-        int bookId = Integer.parseInt(br.readLine());
-        System.out.println();
-
+    public void lostBook(int bookId) throws IOException {
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
             return false; }).findAny()
                 .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
         BookState findBookState = findBook.getState();
-        if(findBookState.equals(BookState.LOST)) {
-            findBookState.showState();
-        }else {
-            findBookState.showChangeState();
+        if(!findBookState.equals(BookState.LOST)) {
+            BookState.LOST.showChangeState();
             findBook.setState(BookState.LOST);
+        }else {
+            findBookState.showState();
         }
     }
 
-    void deleteBook() throws IOException {
-        System.out.println("Q. 삭제할 도서번호를 입력하세요\n");
-        System.out.print("> ");
-        int bookId = Integer.parseInt(br.readLine());
-        System.out.println();
+    public void deleteBook(int bookId) throws IOException {
 
         if(bookId > books.size()) {
             System.out.println("[System] 존재하지 않는 도서번호 입니다.");

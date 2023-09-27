@@ -20,9 +20,9 @@ public class Main {
         modeNum = Integer.parseInt(br.readLine());
         mode = new Mode();
         if(modeNum == 1) {
-            mode.normalMode();
+            mode.normalMode(1);
         }else {
-            mode.testMode();
+            mode.normalMode(2);
         }
     }
 }

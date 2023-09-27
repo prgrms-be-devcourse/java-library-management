@@ -1,16 +1,18 @@
-package org.example;
+package org.example.service;
+
+import org.example.domain.Book;
+import org.example.domain.BookState;
 
 import java.io.*;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileService {
-    private final File csv;
+    private File csv;
     private final String filePath;
-    //private final BookService bookService;
     BufferedReader br = null;
-    BufferedWriter bw = null;
 
     public FileService() throws FileNotFoundException {
         filePath = "src/main/resources/book.csv";
@@ -22,9 +24,10 @@ public class FileService {
         String line = "";
         try {
             br = new BufferedReader(new FileReader(csv));
+            int id = 1;
             while ((line = br.readLine()) != null) {
                 String[] lineArr = line.split(",");
-                Book book = new Book(Integer.parseInt(lineArr[0]), lineArr[1], lineArr[2],
+                Book book = new Book(id++, lineArr[1], lineArr[2],
                         Integer.parseInt(lineArr[3]), BookState.valueOf(lineArr[4]));
                 bookList.add(book);
             }
@@ -38,10 +41,11 @@ public class FileService {
     }
 
     public void writeFile(Book book) throws IOException {
-        try (FileWriter csvFileWriter = new FileWriter(filePath)) {
+        csv = new File(filePath);
+        try (FileWriter fileWriter = new FileWriter(filePath, true);) {
             String data = "";
             data = book.toString();
-            csvFileWriter.append(data);
+            fileWriter.append(data).append("\n");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -50,6 +54,7 @@ public class FileService {
     }
 
     public void writeFiles(List<Book> bookList) throws IOException {
+        csv = new File(filePath);
         bookList.forEach(book -> {
             try {
                 writeFile(book);
@@ -57,6 +62,14 @@ public class FileService {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public void deleteFile() {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
