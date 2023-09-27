@@ -6,6 +6,7 @@ import org.library.entity.Book;
 import java.util.List;
 
 public interface Repository {
+    Long generatedId();
     void save(Book book);
     List<Book> findAll();
     Book findByTitle(String title);

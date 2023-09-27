@@ -2,12 +2,19 @@ package org.library.repository;
 
 import org.library.entity.Book;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TestRepository implements Repository{
     private static final Map<Long, Book> bookMap = new HashMap<>();
+
+    @Override
+    public Long generatedId() {
+        Long max = bookMap.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
+        return max + 1;
+    }
 
     @Override
     public void save(Book book) {
