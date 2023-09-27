@@ -45,6 +45,9 @@ public class FileRepository implements Repository{
 
     @Override
     public void addBook(Book book) {
+        int size = bookList.size();
+        Long id = size > 0 ? bookList.get(size - 1).getId() + 1 : 0;
+        book.setId(id);
         bookList.add(book);
         writeFile();
     }
