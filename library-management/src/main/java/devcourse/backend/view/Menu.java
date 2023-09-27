@@ -8,7 +8,8 @@ public enum Menu {
     LOOKUP(2, "전체 도서 목록 조회", Console::allBookMenu),
     SEARCH(3, "제목으로 도서 검색", Console::searchMenu),
     RENT(4, "도서 대여", Console::rentMenu),
-    RETURN(5, "도서 반납", Console::returnMenu);
+    RETURN(5, "도서 반납", Console::returnMenu),
+    REPORT(6, "도서 분실", Console::reportMenu);
 
 
     private final String description;

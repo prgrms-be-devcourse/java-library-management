@@ -129,4 +129,45 @@ public class BookServiceTest {
             }
         }, 5 * 60 * 1000);
     }
+
+    @Test
+    void 도서_분실_처리() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        //when
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.reportLoss(id);
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.reportLoss(id));
+    }
+
+    @Test
+    void 분실_도서_반납() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        //when
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.reportLoss(id);
+        service.returnBook(id);
+
+        //then
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Assertions.assertDoesNotThrow(() -> service.rentBook(id));
+            }
+        }, 5 * 60 * 1000);
+    }
 }

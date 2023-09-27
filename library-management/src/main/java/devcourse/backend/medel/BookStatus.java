@@ -22,16 +22,20 @@ public enum BookStatus {
     }
 
     public static final boolean canSwitch(BookStatus before, BookStatus after) {
-        if (after == BookStatus.BORROWED) {
+        if (after == BORROWED) {
             if (before == BookStatus.AVAILABLE) return true;
         }
 
-        if(after == BookStatus.ARRANGING) {
-            if (before == BookStatus.BORROWED) return true;
+        if(after == ARRANGING) {
+            if (before == BORROWED || before == LOST) return true;
         }
 
-        if(after == BookStatus.AVAILABLE) {
-            if(before == BookStatus.ARRANGING) return true;
+        if(after == AVAILABLE) {
+            if(before == ARRANGING) return true;
+        }
+
+        if(after == LOST) {
+            return (before == LOST)? false : true;
         }
 
         return false;
