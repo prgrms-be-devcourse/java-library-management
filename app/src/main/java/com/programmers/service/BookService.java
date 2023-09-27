@@ -5,7 +5,10 @@ import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.repository.BookRepository;
 
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookService {
     private static BookRepository bookRepository;
@@ -19,7 +22,7 @@ public class BookService {
     }
 
     public static BookService getInstance() {
-        Optional.ofNullable(bookRepository).orElseThrow(IllegalArgumentException::new);
+        Optional.ofNullable(bookRepository).orElseThrow(NoSuchElementException::new);
         return BookService.Holder.INSTANCE;
     }
 
@@ -27,72 +30,44 @@ public class BookService {
         bookRepository = _bookRepository;
     }
 
-    public void registerBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_REGISTER);
-        bookRepository.addBook(new Book());
-        System.out.println(Messages.BOOK_REGISTER_SUCCESS);
+    public void registerBook(Book book) {
+        bookRepository.addBook(book);
     }
 
-    public void getAllBooks() {
-        System.out.println(Messages.BOOK_LIST_START);
+    public void showAllBooks() {
         bookRepository.getAllBooks().forEach(book -> System.out.println(book.toString()));
-        System.out.println(Messages.BOOK_LIST_FINISH);
     }
 
-    public void searchBookByTitle() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(Messages.MOVE_TO_BOOK_SEARCH);
-        System.out.print(Messages.BOOK_TITLE_PROMPT);
-        bookRepository.findBookByTitle(scanner.nextLine())
+    public void searchBookByTitle(String title) {
+        bookRepository.findBookByTitle(title)
                 .forEach(book -> System.out.println(book.toString()));
-        System.out.println(Messages.BOOK_SEARCH_FINISH);
     }
 
-    public void rentBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_RENT);
-        System.out.print(Messages.BOOK_RENT_PROMPT);
-        Book book = getBookByUserInputId();
-        if (book.isRentable()) {
-            bookRepository.updateBookState(book, BookState.RENTED);
-            System.out.println(Messages.BOOK_RENT_SUCCESS);
-        }
+    public void rentBook(int bookId) {
+        Book book = bookRepository.findBookById(bookId)
+                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+        if (book.isRentable()) bookRepository.updateBookState(book, BookState.RENTED);
     }
 
-    public void returnBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_RETURN);
-        System.out.print(Messages.BOOK_RETURN_PROMPT);
-        Book book = getBookByUserInputId();
+    public void returnBook(int bookId) {
+        Book book = bookRepository.findBookById(bookId)
+                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
         if (book.isReturnable()) {
             bookRepository.updateBookState(book, BookState.ORGANIZING);
-            System.out.println(Messages.BOOK_RETURN_SUCCESS);
             startOrganizing(book);
         }
     }
 
-    public void lostBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_LOST);
-        System.out.print(Messages.BOOK_LOST_PROMPT);
-        Book book = getBookByUserInputId();
-        if (book.isReportableAsLost()) {
-            bookRepository.updateBookState(book, BookState.LOST);
-            System.out.println(Messages.BOOK_LOST_SUCCESS);
-        }
+    public void lostBook(int bookId) {
+        Book book = bookRepository.findBookById(bookId)
+                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+        if (book.isReportableAsLost()) bookRepository.updateBookState(book, BookState.LOST);
     }
 
-    public void deleteBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_DELETE);
-        System.out.print(Messages.BOOK_DELETE_PROMPT);
-        Book book = getBookByUserInputId();
+    public void deleteBook(int bookId) {
+        Book book = bookRepository.findBookById(bookId)
+                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
         bookRepository.deleteBook(book);
-        System.out.println(Messages.BOOK_DELETE_SUCCESS);
-    }
-
-    private Book getBookByUserInputId() {
-        Scanner scanner = new Scanner(System.in);
-        return bookRepository.findBookById(scanner.nextInt())
-                .orElseThrow(() ->
-                        new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString())
-                );
     }
 
     private void startOrganizing(Book book) {

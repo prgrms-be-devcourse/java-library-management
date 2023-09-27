@@ -67,7 +67,7 @@ public class Book {
         this.pages = pages;
         this.state = state;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -97,9 +97,9 @@ public class Book {
             case AVAILABLE -> {
                 return true;
             }
-            case RENTED -> System.out.println(Messages.BOOK_ALREADY_RENTED);
-            case ORGANIZING -> System.out.println(Messages.BOOK_BEING_ORGANIZED);
-            case LOST -> System.out.println(Messages.BOOK_NOW_LOST);
+            case RENTED -> throw new RuntimeException(Messages.BOOK_ALREADY_RENTED.toString());
+            case ORGANIZING -> throw new RuntimeException(Messages.BOOK_BEING_ORGANIZED.toString());
+            case LOST -> throw new RuntimeException(Messages.BOOK_NOW_LOST.toString());
         }
         return false;
     }
@@ -109,8 +109,8 @@ public class Book {
             case RENTED, LOST -> {
                 return true;
             }
-            case AVAILABLE -> System.out.println(Messages.BOOK_RETURN_FAILED);
-            case ORGANIZING -> System.out.println(Messages.BOOK_BEING_ORGANIZED);
+            case AVAILABLE -> throw new RuntimeException(Messages.BOOK_RETURN_FAILED.toString());
+            case ORGANIZING -> throw new RuntimeException(Messages.BOOK_BEING_ORGANIZED.toString());
         }
         return false;
     }
@@ -120,7 +120,7 @@ public class Book {
             case RENTED, AVAILABLE, ORGANIZING -> {
                 return true;
             }
-            case LOST -> System.out.println(Messages.BOOK_LOST_FAILED);
+            case LOST -> throw new RuntimeException(Messages.BOOK_LOST_FAILED.toString());
         }
         return false;
     }
