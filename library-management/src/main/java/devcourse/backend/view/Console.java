@@ -46,6 +46,16 @@ public class Console implements Runnable {
         system("도서 목록 끝");
     }
 
+    public static void searchMenu() {
+        system("제목으로 도서 검색 메뉴로 넘어갑니다.");
+        service.searchBooks(stringInput("검색할 도서 제목 일부를 입력하세요."))
+                .stream()
+                .forEach(b -> {
+                    System.out.println(b);
+                    partition();
+                });
+    }
+
     private static void system(String s) {
         System.out.println();
         System.out.println("[System] " + s);

@@ -24,7 +24,7 @@ public class BookServiceTest {
 
         //then
         Assertions.assertEquals(repository.findAll().size(), 1);
-        Assertions.assertEquals(repository.findAll().get(0).getTitle(), book.getTitle());
+        Assertions.assertTrue(repository.findAll().get(0).isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages()));
     }
 
     @Test
@@ -47,8 +47,25 @@ public class BookServiceTest {
 
         //then
         Assertions.assertEquals(books.size(), 2);
-        Assertions.assertEquals(books.get(0).getTitle(), book.getTitle());
-        Assertions.assertEquals(books.get(1).getTitle(), book2.getTitle());
+        Assertions.assertTrue(books.get(0).isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages()));
+        Assertions.assertTrue(books.get(1).isMatched(book2.getTitle(), book2.getAuthor(), book2.getTotalPages()));
     }
 
+    @Test
+    void 도서_제목으로_검색() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        String keyword = "객체지향";
+
+        //when
+        Book found = service.searchBooks(keyword).get(0);
+
+        //then
+        Assertions.assertTrue(found.isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages()));
+    }
 }
