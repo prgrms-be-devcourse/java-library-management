@@ -38,4 +38,8 @@ public class Book {
     public void setCondition(String condition) {
         this.condition = condition;
     }
+
+    public enum BookCondition {
+        AVAILABLE, RENTED, ORGANIZING, LOST, NotExists
+    }
 }
