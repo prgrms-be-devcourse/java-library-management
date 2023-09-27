@@ -12,12 +12,13 @@ public class Book {
     private State state = State.AVAILABLE;
     private LocalDateTime editDateTime;
 
-    private static Long baseId = 0L;
     private static final String successRentString = "도서가 대여 처리 되었습니다.";
     private static final String successLostString = "도서가 분실 처리 되었습니다.";
     private static final String failLostString = "이미 분실 처리된 도서입니다.";
+    private static final String successReturnString = "도서가 반납 처리 되었습니다";
 
-    public Book(String title, String author, int page) {
+    public Book(Long id, String title, String author, int page) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.page = page;
@@ -31,6 +32,15 @@ public class Book {
         return successRentString;
     }
 
+    public String doReturn(){
+        if(!state.equals(State.RENT) && !state.equals(State.LOST)){
+            return getReason();
+        }
+        state = State.ORGANIZING;
+        editDateTime = LocalDateTime.now().plusMinutes(5);
+        return successReturnString;
+    }
+
     public String doReportLost(){
         if(state.equals(State.LOST)){
             return failLostString;
@@ -38,7 +48,6 @@ public class Book {
         this.state = State.LOST;
         return successLostString;
     }
-
     private String getReason(){
         return state.getDescription();
     }
