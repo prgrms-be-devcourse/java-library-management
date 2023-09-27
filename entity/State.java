@@ -11,4 +11,8 @@ public enum State {
     private String koreanState;
     State(String koreanState) {
     }
+
+    public String getKoreanState() {
+        return koreanState;
+    }
 }
