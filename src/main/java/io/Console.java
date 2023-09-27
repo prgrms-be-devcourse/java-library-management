@@ -64,4 +64,9 @@ public class Console implements Output, Input {
             System.out.println(book.toString());
         }
     }
+
+    @Override
+    public void printException(String exception) {
+        System.out.println(exception);
+    }
 }

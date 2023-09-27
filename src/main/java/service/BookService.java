@@ -6,14 +6,17 @@ import model.Status;
 import repository.Repository;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookService {
 
     private final Repository repository;
-
     public BookService(Repository repository) {
         this.repository = repository;
     }
+
+    Timer timer = new Timer(true);
 
     // 도서 등록
     public void saveBook(String title, String author, int pageNum) {
@@ -53,6 +56,7 @@ public class BookService {
             case AVAILABLE, ORGANIZING -> throw new BookReturnFailException();
         }
         repository.returnBook(book);
+        scheduleTask(book);
     }
 
     // 도서 분실
@@ -70,5 +74,17 @@ public class BookService {
         Book book = repository.findBookByBookNo(bookNo)
                 .orElseThrow(BookNotExistException::new);
         repository.deleteBook(bookNo);
+    }
+
+    private void scheduleTask(Book book) {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                book.changeStatus(Status.AVAILABLE);
+                repository.saveBook(book);
+            }
+        };
+        Timer timer = new Timer(true);
+        timer.schedule(timerTask, 300000);
     }
 }

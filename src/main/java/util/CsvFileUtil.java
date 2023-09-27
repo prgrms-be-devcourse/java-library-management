@@ -31,7 +31,12 @@ public class CsvFileUtil {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split(",");
-                    bookMemory.put(Long.parseLong(parts[0]), new Book(Long.parseLong(parts[0]), parts[1], parts[2], Integer.parseInt(parts[3]), Status.findStatusByString(parts[4])));
+                    Book book = new Book(Long.parseLong(parts[0]), parts[1], parts[2], Integer.parseInt(parts[3]), Status.findStatusByString(parts[4]));
+                    // 정리 상태 도서가 있으면 대여 가능으로 변경
+                    if (Status.isOrganizing(book.getStatus())) {
+                        book.changeStatus(Status.AVAILABLE);
+                    }
+                    bookMemory.put(Long.parseLong(parts[0]), book);
                 }
             } catch (IOException ignore) {
                 System.out.println("[System] 잘못된 파일 접근입니다.\n");
