@@ -11,7 +11,7 @@ public class Book {
     private State state;
     private long lastReturn;
 
-    private Book(String title, String author, int pageNum) {
+    public Book(String title, String author, int pageNum) {
         this.number = numberCnt++;
         this.title = title;
         this.author = author;
@@ -20,14 +20,13 @@ public class Book {
         this.lastReturn = -1;
     }
 
-    public static Book createBook(String title, String author, int pageNum){
-        return new Book(title, author, pageNum);
-    }
-
-    public static Book createBook(String[] bookInfo){
-        if (bookInfo.length != 3)
-            throw new IllegalArgumentException("입력 개수가 3개가 아닙니다.");
-        return createBook(bookInfo[0], bookInfo[1], Integer.parseInt(bookInfo[2]));
+    public Book(int number, String title, String author, int pageNum, State state, long lastReturn) {
+        this.number = number;
+        this.title = title;
+        this.author = author;
+        this.pageNum = pageNum;
+        this.state = state;
+        this.lastReturn = lastReturn;
     }
 
     public String printInfo(){
