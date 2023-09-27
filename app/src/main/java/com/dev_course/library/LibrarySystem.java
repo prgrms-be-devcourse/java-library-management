@@ -35,7 +35,7 @@ public class LibrarySystem {
     private void selectFunction() {
         writer.println(FUNCTION_SCREEN.msg());
 
-        String input = reader.readOrElse("-1");
+        String input = reader.readOrDefault("-1");
 
         switch (input) {
             case "0" -> {
@@ -59,14 +59,15 @@ public class LibrarySystem {
     private void createBook() {
         writer.println(CREATE_BOOK.msg());
 
+        String title = writeAndRead(READ_CREATE_BOOK_TITLE.msg());
+        String author = writeAndRead(READ_CREATE_BOOK_AUTHOR.msg());
+
         try {
-            String title = writeAndRead(READ_CREATE_BOOK_TITLE.msg());
-            String author = writeAndRead(READ_CREATE_BOOK_AUTHOR.msg());
             int pages = Integer.parseInt(writeAndRead(READ_CREATE_BOOK_PAGES.msg()));
 
             writer.append(bookManager.create(title, author, pages));
-        } catch (RuntimeException e) {
-            writer.append(e);
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
         }
 
         writer.flush();
@@ -83,14 +84,9 @@ public class LibrarySystem {
     private void findBookByTitle() {
         writer.println(FIND_BOOK_BY_TITLE.msg());
 
-        try {
-            String title = writeAndRead(READ_FIND_BY_TITLE.msg());
+        String title = writeAndRead(READ_FIND_BY_TITLE.msg());
 
-            writer.append(bookManager.getInfoByTitle(title));
-        } catch (RuntimeException e) {
-            writer.append(e);
-        }
-
+        writer.append(bookManager.getInfoByTitle(title));
         writer.append(END_FIND_BOOK_BY_TITLE.msg());
         writer.flush();
     }
@@ -102,8 +98,8 @@ public class LibrarySystem {
             int id = writeAndReadInt(READ_RENT_BOOK_BY_ID.msg());
 
             writer.append(bookManager.rentById(id));
-        } catch (RuntimeException e) {
-            writer.append(e);
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
         }
 
         writer.flush();
@@ -116,8 +112,8 @@ public class LibrarySystem {
             int id = writeAndReadInt(READ_DELETE_BOOK_ID.msg());
 
             writer.append(bookManager.deleteById(id));
-        } catch (RuntimeException e) {
-            writer.append(e);
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
         }
 
         writer.flush();
@@ -125,19 +121,10 @@ public class LibrarySystem {
 
     private String writeAndRead(String msg) {
         writer.println(msg);
-
-        try {
-            return reader.read();
-        } catch (Exception e) {
-            throw new RuntimeException(EMPTY_INPUT.msg());
-        }
+        return reader.read();
     }
 
     private int writeAndReadInt(String msg) {
-        try {
-            return Integer.parseInt(writeAndRead(msg));
-        } catch (RuntimeException e) {
-            throw new RuntimeException(INVALID_INPUT.msg());
-        }
+        return Integer.parseInt(writeAndRead(msg));
     }
 }
