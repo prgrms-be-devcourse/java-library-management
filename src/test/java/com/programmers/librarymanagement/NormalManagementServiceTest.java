@@ -1,5 +1,6 @@
-package com.programmers.librarymanagement.application;
+package com.programmers.librarymanagement;
 
+import com.programmers.librarymanagement.application.LibraryManagementService;
 import com.programmers.librarymanagement.domain.Book;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
 import org.junit.jupiter.api.*;
@@ -55,8 +56,8 @@ public class NormalManagementServiceTest {
 
         // then
         List<Book> bookList = normalBookRepository.findAll();
-        Assertions.assertEquals("스펜서", bookList.get(0).getAuthor()); // 데브코스에서 살아남기
-        Assertions.assertEquals("쿠쿠", bookList.get(1).getAuthor()); // 신촌 맛집 탐방기
+        Assertions.assertEquals("스펜서", bookList.get(3).getAuthor()); // 데브코스에서 살아남기
+        Assertions.assertEquals("쿠쿠", bookList.get(4).getAuthor()); // 신촌 맛집 탐방기
     }
 
     @Order(3)

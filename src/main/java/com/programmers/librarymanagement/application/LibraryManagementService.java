@@ -22,19 +22,18 @@ public class LibraryManagementService {
         bookRepository.addBook(book);
     }
 
-    public List<Book> getAllBooks() {
+    public void getAllBooks() {
 
         updateAllStatus();
 
         List<Book> bookList = bookRepository.findAll();
         printBookInfo(bookList);
-
-        return bookList;
     }
 
     public void getBookByTitle(String title) {
 
-        printBookInfo(bookRepository.findByTitle(title));
+        List<Book> bookList = bookRepository.findByTitle(title);
+        printBookInfo(bookList);
     }
 
     public String rentBook(Long id) {
@@ -43,6 +42,7 @@ public class LibraryManagementService {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
 
+        // 도서가 대여 가능할 경우, 대여중으로 상태 변경
         switch (book.getStatus()) {
             case CAN_RENT -> {
                 Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CANNOT_RENT, book.getReturnDateTime());
@@ -72,6 +72,7 @@ public class LibraryManagementService {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
 
+        // 도서가 반납 가능할 경우, 정리중으로 상태 변경
         switch (book.getStatus()) {
             case CAN_RENT -> result = "[System] 원래 대여가 가능한 도서입니다. \n";
 
@@ -81,6 +82,8 @@ public class LibraryManagementService {
             }
 
             case ARRANGE -> {
+
+                // 도서 반납 후 5분이 지났다면 대여 가능
                 if (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now())) {
                     result = "[System] 원래 대여가 가능한 도서입니다. \n";
                 } else {
@@ -98,6 +101,7 @@ public class LibraryManagementService {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
 
+        // 도서가 분실 처리 가능할 경우, 분실됨으로 상태 변경
         switch (book.getStatus()) {
             case CAN_RENT, CANNOT_RENT, ARRANGE -> {
                 Book missBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.LOST, book.getReturnDateTime());
@@ -142,6 +146,7 @@ public class LibraryManagementService {
         List<Book> bookList = bookRepository.findAll();
         for (Book book : bookList) {
 
+            // 도서 반납 후 5분이 지났다면 대여 가능으로 상태 변경
             if ((book.getStatus() == Status.ARRANGE) && (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now()))) {
 
                 Book statusBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CAN_RENT, book.getReturnDateTime());

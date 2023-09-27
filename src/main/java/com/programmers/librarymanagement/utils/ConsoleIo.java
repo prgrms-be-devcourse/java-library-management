@@ -33,7 +33,7 @@ public class ConsoleIo {
 
         System.out.print("> ");
 
-        String input = null;
+        String input;
         try {
             input = br.readLine().strip();
         } catch (IOException e) {

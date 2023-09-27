@@ -8,6 +8,7 @@ public class LibraryManagementApplication {
 	public static void main(String[] args) {
 
 		LibraryManagementController libraryManagementController = new LibraryManagementController(new ConsoleIo());
+
 		libraryManagementController.start();
 	}
 

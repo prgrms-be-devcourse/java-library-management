@@ -1,5 +1,6 @@
-package com.programmers.librarymanagement.application;
+package com.programmers.librarymanagement;
 
+import com.programmers.librarymanagement.application.LibraryManagementService;
 import com.programmers.librarymanagement.domain.Book;
 import com.programmers.librarymanagement.repository.TestBookRepository;
 import org.junit.jupiter.api.*;
