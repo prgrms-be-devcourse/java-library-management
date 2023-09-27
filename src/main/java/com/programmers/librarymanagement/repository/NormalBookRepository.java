@@ -1,17 +1,22 @@
 package com.programmers.librarymanagement.repository;
 
 import com.programmers.librarymanagement.domain.Book;
+import com.programmers.librarymanagement.domain.Status;
+import com.programmers.librarymanagement.utils.CsvFileIo;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class NormalBookRepository implements BookRepository{
 
-    private static final Map<Long, Book> libraryStorage = new HashMap<>();
-    private static long sequence = 0L;
+    private static final CsvFileIo csvFileIo = new CsvFileIo();
+    private static final Map<Long, Book> libraryStorage = addBookByFile(csvFileIo.readCsv());
 
     @Override
     public void addBook(Book book) {
+
         libraryStorage.put(book.getId(), book);
+        csvFileIo.writeCsv(book);
     }
 
     @Override
@@ -43,6 +48,23 @@ public class NormalBookRepository implements BookRepository{
 
     @Override
     public Long createId() {
-        return sequence++;
+
+        Set<Long> keys = libraryStorage.keySet();
+        Long maxId = Collections.max(keys);
+
+        return maxId + 1;
+    }
+
+    private static Map<Long, Book> addBookByFile(List<List<String>> dataList) {
+
+        Map<Long, Book> csvBookList = new HashMap<>();
+
+        for (List<String> splitData : dataList) {
+
+            Book book = new Book(Long.parseLong(splitData.get(0)), splitData.get(1), splitData.get(2), Integer.parseInt(splitData.get(3)), Status.CAN_RENT, LocalDateTime.now());
+            csvBookList.put(book.getId(), book);
+        }
+
+        return csvBookList;
     }
 }

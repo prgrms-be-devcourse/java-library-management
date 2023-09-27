@@ -41,7 +41,7 @@ public class CsvFileIo {
         return dataList;
     }
 
-    public void writeCsv(List<Book> bookList) {
+    public void writeCsv(Book book) {
 
         File csv = new File(PATH);
         BufferedWriter bw;
@@ -49,22 +49,14 @@ public class CsvFileIo {
         try {
             bw = new BufferedWriter(new FileWriter(csv, true));
 
-            String singleData;
+            String singleData = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage();
 
-            for (Book book : bookList) {
-                singleData = book.getTitle() + "," + book.getAuthor() + "," + book.getPage();
+            bw.write(singleData);
+            bw.newLine();
 
-                bw.write(singleData);
-                bw.newLine();
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             bw.flush();
             bw.close();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
