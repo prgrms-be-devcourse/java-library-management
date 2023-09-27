@@ -7,9 +7,9 @@ public enum State {
     LOST("분실됨"),
     DELETED("삭제됨");
 
-    private String name;
-    private String koreanState;
+    private final String koreanState;
     State(String koreanState) {
+        this.koreanState = koreanState;
     }
 
     public String getKoreanState() {

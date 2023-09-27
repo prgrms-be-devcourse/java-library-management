@@ -2,7 +2,8 @@ package entity;
 
 public class Book {
     private static int numberCnt = 1;
-    static String[] fieldKoreanName = {"도서번호", "제목", "작가", "페이지 수", "상태"};
+    private static String[] fieldKoreanName = {"도서번호", "제목", "작가", "페이지 수", "상태"};
+    private static final int PROCESSING_TIME = 5 * 60 * 1000;
     private final int number;
     private final String title;
     private final String author;
@@ -68,10 +69,11 @@ public class Book {
     }
 
     public boolean hasText(String text){
-        return this.title.contains(text);
+        return this.title.contains(text) && !this.isDeleted();
     }
 
-    public boolean isOver5Minutes(){
-        return System.currentTimeMillis() - this.lastReturn >= 5 * 60 * 1000;
+    public void isOver5Minutes(){
+        if(this.state == State.PROCESSING && System.currentTimeMillis() - this.lastReturn >= PROCESSING_TIME)
+            this.state = State.AVAILABLE;
     }
 }
