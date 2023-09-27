@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class GeneralRepository implements Repository{
 
-    private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFileEmpty.csv";
+    private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
 
     @Override
     public void load(List<Book> list) {
