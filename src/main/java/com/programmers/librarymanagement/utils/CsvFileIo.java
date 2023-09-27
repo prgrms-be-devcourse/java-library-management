@@ -11,7 +11,7 @@ public class CsvFileIo {
 
     private final BufferedReader br;
 
-    String PATH = System.getProperty("user.dir") + "/src/resources/data.csv";
+    String PATH = System.getProperty("user.dir") + "/src/main/resources/data.csv";
 
     public CsvFileIo() {
         try {
