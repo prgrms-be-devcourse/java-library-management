@@ -2,6 +2,7 @@ package devcourse.backend.view;
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.BookStatus;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static devcourse.backend.medel.BookStatus.*;
@@ -26,12 +27,16 @@ public class Console implements Runnable {
         BookDto data = new BookDto();
 
         system("도서 등록 메뉴로 넘어갑니다.");
+        try {
+            data.setTitle(stringInput("등록할 도서 제목을 입력하세요."));
+            data.setAuthor(stringInput("작가 이름을 입력하세요."));
+            data.setTotalPages(intInput("페이지 수를 입력하세요."));
 
-        data.setTitle(stringInput("등록할 도서 제목을 입력하세요."));
-        data.setAuthor(stringInput("작가 이름을 입력하세요."));
-        data.setTotalPages(intInput("페이지 수를 입력하세요."));
-
-        service.registerBook(data);
+            service.registerBook(data);
+        } catch (IllegalArgumentException e) {
+            system(e.getMessage());
+            return;
+        }
 
         system("도서 등록이 완료되었습니다.");
     }
@@ -93,7 +98,9 @@ public class Console implements Runnable {
         try {
             service.reportLoss(longInput("분실 처리할 도서번호를 입력하세요"));
             system("도서가 분실 처리 되었습니다.");
-        } catch (IllegalArgumentException e) { system("이미 분실 처리된 도서입니다."); }
+        } catch (IllegalArgumentException e) {
+            system("이미 분실 처리된 도서입니다.");
+        }
     }
 
     public static void deleteMenu() {
@@ -114,12 +121,6 @@ public class Console implements Runnable {
     private static void partition() {
         System.out.println();
         System.out.println("------------------------------");
-        System.out.println();
-    }
-
-    public void inputError() {
-        System.out.println();
-        System.out.println("입력이 잘못되었습니다.");
         System.out.println();
     }
 
@@ -154,9 +155,7 @@ public class Console implements Runnable {
         while (true) {
             try {
                 menu();
-            } catch (NumberFormatException e) {
-                inputError();
-            }
+            } catch (IllegalArgumentException e) { system(e.getMessage()); }
         }
     }
 }
