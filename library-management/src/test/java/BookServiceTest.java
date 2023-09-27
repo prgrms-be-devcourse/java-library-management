@@ -50,8 +50,8 @@ public class BookServiceTest {
 
         //then
         Assertions.assertEquals(books.size(), 2);
-        Assertions.assertTrue(books.get(0).isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages()));
-        Assertions.assertTrue(books.get(1).isMatched(book2.getTitle(), book2.getAuthor(), book2.getTotalPages()));
+        Assertions.assertTrue(books.stream().anyMatch(b -> b.isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages())));
+        Assertions.assertTrue(books.stream().anyMatch(b -> b.isMatched(book2.getTitle(), book2.getAuthor(), book2.getTotalPages())));
     }
 
     @Test
@@ -169,5 +169,40 @@ public class BookServiceTest {
                 Assertions.assertDoesNotThrow(() -> service.rentBook(id));
             }
         }, 5 * 60 * 1000);
+    }
+
+    @Test
+    void 도서_삭제_성공() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        //when
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.deleteBook(id);
+
+        //then
+        Assertions.assertEquals(service.getAllBooks().size(), 0);
+    }
+
+    @Test
+    void 도서_삭제_실패() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        //when
+
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            service.deleteBook(-1);
+        });
     }
 }

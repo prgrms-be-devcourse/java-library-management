@@ -5,15 +5,13 @@ import devcourse.backend.medel.Book;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Repository가 model 레이어에 들어가는 것이 맞는가?
  */
 public class FileRepository {
-    private List<Book> books;
+    private Set<Book> books;
     private final Path FILEPATH;
     private String firstLine;
 
@@ -36,7 +34,7 @@ public class FileRepository {
     public Book findById(long id) {
         return books.stream()
                 .filter(b -> b.isMatched(id))
-                .findAny().orElseThrow();
+                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
     }
 
     public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
@@ -45,12 +43,16 @@ public class FileRepository {
                 .findAny().orElseThrow().copy();
     }
 
+    public void deleteById(long bookId) {
+        books.remove(findById(bookId));
+    }
+
     public void addBook(Book book) {
         books.add(book);
     }
 
-    private List<Book> loadBooks() {
-        List<Book> books = new ArrayList<>();
+    private Set<Book> loadBooks() {
+        Set<Book> books = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILEPATH.toFile()))) {
             firstLine = reader.readLine();
             reader.lines()
