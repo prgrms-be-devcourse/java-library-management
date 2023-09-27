@@ -7,6 +7,7 @@ import java_library_management.domain.Book;
 import java_library_management.domain.BookState;
 import java_library_management.exception.FuncFailureException;
 import java_library_management.manager.ConsoleManager;
+import java_library_management.manager.JSONFileManager;
 import java_library_management.repository.General;
 import java_library_management.repository.Mode;
 import java_library_management.repository.Tests;
@@ -14,8 +15,6 @@ import java_library_management.repository.mock.MockMode;
 import java_library_management.service.LibraryManagement;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +55,7 @@ public class Valid {
     FileWriter writer;
     FileOutputStream fileOutputStream;
     TestModeConfig testModeConfig;
+    JSONFileManager jsonFileManager;
 
     /**
      * 테스트용 JSON 파일을 사용해서 테스트를 진행했음
@@ -88,6 +88,7 @@ public class Valid {
             filePath = "src/java_library_management/resources/TestBook.json"; // 테스트용 JSON 파일을 사용하여 테스트 진행
             writer = new FileWriter(filePath);
             testModeConfig = new TestModeConfig(0);
+            jsonFileManager = new JSONFileManager();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,25 +141,25 @@ public class Valid {
         library.add(bookMap, book2);
 
         assertThat(bookMap.size()).isEqualTo(2);
-        assertThat(getJSONFile(filePath)).isNull(); // Unexpected token END OF FILE at position 0.
+        assertThat(jsonFileManager.getJSON(filePath)).isNull(); // Unexpected token END OF FILE at position 0.
 
         library.update(bookMap, filePath); // JSON 파일에 등록함
 
         bookMap.clear();
         assertThat(bookMap.size()).isEqualTo(0);
 
-        assertThat(getJSONFile(filePath)).isNotNull();
+        assertThat(jsonFileManager.getJSON(filePath)).isNotNull();
 
         library.load(bookMap, filePath); // JSON 파일에서 읽어와 bookMap 저장함
 
         assertThat(bookMap.size()).isEqualTo(2);
 
-        JSONArray jsonArray = getJSONFile(filePath);
+        JSONArray jsonArray = jsonFileManager.getJSON(filePath);
 
-        JSONObject object1 = getJSONObject(jsonArray, 0);
+        JSONObject object1 = jsonFileManager.getJSONObject(jsonArray, 0);
         compareBookObject(object1, book1);
 
-        JSONObject object2 = getJSONObject(jsonArray, 1);
+        JSONObject object2 = jsonFileManager.getJSONObject(jsonArray, 1);
         compareBookObject(object2, book2);
     }
 
@@ -190,7 +191,6 @@ public class Valid {
         assertThat(bookMap).containsKey(obj1.getBook_id());
         assertThat(bookMap).containsValue(obj1);
 
-
         Book obj2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
         assertThat(bookMap).doesNotContainKey(obj2.getBook_id());
         assertThat(bookMap).doesNotContainValue(obj2);
@@ -204,14 +204,15 @@ public class Valid {
         library.update(bookMap, filePath); // JSON 파일에 등록함
 
         // 변경된 사항이 JSON 파일에 제대로 작성되었는지 검증
-        JSONArray jsonArray = getJSONFile(filePath);
-        JSONObject object1 = getJSONObject(jsonArray, 0);
+        JSONArray jsonArray = jsonFileManager.getJSON(filePath);
+        JSONObject object1 = jsonFileManager.getJSONObject(jsonArray, 0);
         compareBookObject(object1, obj1);
 
-        JSONObject object2 = getJSONObject(jsonArray, 1);
+        JSONObject object2 = jsonFileManager.getJSONObject(jsonArray, 1);
         compareBookObject(object2, obj2);
     }
 
+    /**
     public JSONObject getJSONObject(JSONArray jsonArray, int idx) {
         return (JSONObject) jsonArray.get(idx);
     }
@@ -231,6 +232,7 @@ public class Valid {
         } catch (ParseException e) {}
         return null;
     }
+    */
 
     public void compareBookObject(JSONObject object, Book book) {
 
@@ -621,8 +623,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.getState());
 
         try {
@@ -631,8 +633,8 @@ public class Valid {
             throw new RuntimeException(e);
         }
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         compareBookObject(jsonObject, elem);
 
         assertThat(jsonObject.get("state")).isEqualTo(BookState.AVAILABLE.getState());
@@ -713,8 +715,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.getState());
 
         try {
@@ -723,8 +725,8 @@ public class Valid {
             throw new RuntimeException(e);
         }
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         compareBookObject(jsonObject, elem);
 
         assertThat(jsonObject.get("state")).isEqualTo(BookState.AVAILABLE.getState());
@@ -902,8 +904,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
     }
 
@@ -934,8 +936,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
     }
 
@@ -966,8 +968,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
     }
 
@@ -1013,8 +1015,8 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
 
         assertThatThrownBy(() -> library.lost(bookMap, book.getBook_id()))
@@ -1022,8 +1024,8 @@ public class Valid {
                 .hasMessageContaining("[System] 이미 분실 처리된 도서입니다.");
         library.update(bookMap, filePath);
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.get("state")).isEqualTo(BookState.LOST.getState());
     }
 
@@ -1146,15 +1148,15 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.toString()).isNotNull();
         assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
 
         library.delete(bookMap, book.getBook_id());
         library.update(bookMap, filePath);
 
-        jsonArray = getJSONFile(filePath);
+        jsonArray = jsonFileManager.getJSON(filePath);
         assertThat(jsonArray.size()).isEqualTo(0);
     }
 
@@ -1180,15 +1182,15 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.toString()).isNotNull();
         assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
 
         library.delete(bookMap, book.getBook_id());
         library.update(bookMap, filePath);
 
-        jsonArray = getJSONFile(filePath);
+        jsonArray = jsonFileManager.getJSON(filePath);
         assertThat(jsonArray.size()).isEqualTo(0);
     }
 
@@ -1214,15 +1216,15 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.toString()).isNotNull();
         assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
 
         library.delete(bookMap, book.getBook_id());
         library.update(bookMap, filePath);
 
-        jsonArray = getJSONFile(filePath);
+        jsonArray = jsonFileManager.getJSON(filePath);
         assertThat(jsonArray.size()).isEqualTo(0);
     }
 
@@ -1248,15 +1250,15 @@ public class Valid {
         JSONArray jsonArray;
         JSONObject jsonObject;
 
-        jsonArray = getJSONFile(filePath);
-        jsonObject = getJSONObject(jsonArray, 0);
+        jsonArray = jsonFileManager.getJSON(filePath);
+        jsonObject = jsonFileManager.getJSONObject(jsonArray, 0);
         assertThat(jsonObject.toString()).isNotNull();
         assertThat(Integer.parseInt(String.valueOf(jsonObject.get("book_id")))).isEqualTo(book.getBook_id());
 
         library.delete(bookMap, book.getBook_id());
         library.update(bookMap, filePath);
 
-        jsonArray = getJSONFile(filePath);
+        jsonArray = jsonFileManager.getJSON(filePath);
         assertThat(jsonArray.size()).isEqualTo(0);
     }
 
@@ -1284,7 +1286,7 @@ public class Valid {
         assertThat(bookMap.size()).isEqualTo(0);
 
         JSONArray jsonArray;
-        jsonArray = getJSONFile(filePath); // Unexpected token END OF FILE at position 0.
+        jsonArray = jsonFileManager.getJSON(filePath); // Unexpected token END OF FILE at position 0.
         assertThat(jsonArray).isNull();
     }
 

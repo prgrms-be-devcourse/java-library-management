@@ -23,6 +23,7 @@ import java.util.function.Function;
 
 public class JSONFileManager {
 
+    private FileReader fileReader;
     private final JSONParser jsonParser;
     private final Gson gson;
 
@@ -35,20 +36,51 @@ public class JSONFileManager {
 
     public void readFile(Map<Integer, Book> map, String filePath, BiConsumer<Map<Integer, Book>, Book> addCallback) {
 
+
         try {
-            FileReader fileReader = new FileReader(filePath);
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(fileReader);
-            JSONArray jsonArray = (JSONArray) jsonObject.get("book");
+            fileReader = new FileReader(filePath);
+            JSONObject jsonObject = getJSONObect(filePath);
+            JSONArray jsonArray = getJSONArray(jsonObject, "book");
 
             for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject object = (JSONObject) jsonArray.get(i);
+                JSONObject object = getJSONObject(jsonArray, i);
                 Book elem = parseJSONObject(object);
                 addCallback.accept(map, elem);
             }
+
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException ignored) {}
+        }
+    }
+
+    public JSONObject getJSONObect(String filePath) {
+
+        try {
+            fileReader = new FileReader(filePath);
+            JSONParser parser = new JSONParser();
+            return (JSONObject) parser.parse(fileReader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {}
+        return null;
+    }
+
+    public JSONObject getJSONObject(JSONArray jsonArray, int idx) {
+        return (JSONObject) jsonArray.get(idx);
+    }
+
+    public JSONArray getJSONArray(JSONObject jsonObject, String key) {
+        return (JSONArray) jsonObject.get(key);
+    }
+
+    public JSONArray getJSON(String filePath) {
+
+        JSONObject jsonObject = getJSONObect(filePath);
+        if (jsonObject == null) return null;
+        JSONArray jsonArray = getJSONArray(jsonObject, "book");
+        if (jsonArray == null) return null;
+        return jsonArray;
     }
 
     public Book parseJSONObject(JSONObject object) {

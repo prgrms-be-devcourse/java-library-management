@@ -4,7 +4,6 @@ import java_library_management.manager.ConsoleManager;
 import java_library_management.service.LibraryManagement;
 
 /**
- * 구현하면서 가장 애먹었던 부분,,,
  * DI 컨테이너가 아닌 자바 애플리케이션 상에서 의존성을 주입해주고자 Config 클래스를 둠
  * Config 클래스는 사용자가 사용할 LibraryManagement 인스턴스를 (모드에 따라) 적절하게 반환해줌
  *
@@ -19,13 +18,17 @@ public class AppConfig {
     }
 
     /**
-     * LibraryConfig 는 ModeConfig / CallbackConfig, ConsoleManager 를 아우르는 클래스
-     * injectLibraryConfig 메서드를 통해서
-     * 1. modeId에 맞는 Mode 구현체를 주입받음
-     * 2. 해당 모드에 필요한 콜백함수에 적절한 인자를 전달해줌
+     * LibraryConfig 는 ModeConfig / CallbackConfig / ConsoleManager 를 아우르는 클래스
+     * 1. modeId에 맞는 Mode 구현체를 주입받음 -> ModeConfig
+     * 2. 해당 모드에 필요한 콜백함수에 적절한 인자를 전달해줌 -> injectCallback
      */
+
     public LibraryConfig getLibraryConfig(int modeId) {
         return new LibraryConfig(getModeConfig(modeId), getCallbackConfig(modeId), getConsoleManager());
+    }
+
+    public ModeConfig getModeConfig(int modeId) {
+        return new ModeConfig(modeId);
     }
 
     public CallbackConfig getCallbackConfig(int modeId) {
@@ -36,9 +39,5 @@ public class AppConfig {
 
     public ConsoleManager getConsoleManager() {
         return new ConsoleManager();
-    }
-
-    public ModeConfig getModeConfig(int modeId) {
-        return new ModeConfig(modeId);
     }
 }
