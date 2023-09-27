@@ -20,6 +20,14 @@ public class Book {
         this.status = Status.POSSIBLE;
     }
 
+    public Book(Long id, String name, String author, int page, Status status){
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.page = page;
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
