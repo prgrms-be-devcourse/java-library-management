@@ -10,8 +10,12 @@ import java.io.InputStreamReader;
 
 public class Controller {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private Service service;
+    public Controller(Repository repository) {
+        this.service = new Service(repository);
+    }
 
-    Service service = new Service(new TestModeRepository());
+
 
     public void printInitial() throws IOException {
 

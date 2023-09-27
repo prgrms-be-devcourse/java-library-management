@@ -31,15 +31,21 @@ public class TestModeRepository implements Repository{
                 .collect(Collectors.toList());
     }
     @Override
-    public void rentBook(int book_id){
-        bookList.stream()
+    public String rentBook(int book_id){
+        Optional<BookInfo> book = bookList.stream()
                 .filter(
-                bookinfo -> bookinfo.getBook_id() == book_id && bookinfo.getStatus() == BookStatus.AVAILABLE).findAny()
-                .ifPresentOrElse(bookInfo -> {
-                    bookInfo.setStatus(BookStatus.RENT);
-                }, () -> {
-                    throw new RuntimeException("이미 대여중인 도서입니다.");
-                        });
+                        bookinfo -> bookinfo.getBook_id() == book_id)
+                .findAny();
+        return book.get().getStatus().rentBook(book.get());
+
+
+//                .ifPresentOrElse(bookInfo -> {
+//                    bookInfo.setStatus(BookStatus.RENT);
+//                    return bookInfo.getStatus();
+//                }, () -> {
+//
+//                    throw new RuntimeException("이미 대여중인 도서입니다.");
+//                        });
 
     }
 
