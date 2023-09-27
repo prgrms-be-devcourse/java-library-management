@@ -1,5 +1,6 @@
 import devcourse.backend.medel.Book;
 import devcourse.backend.medel.FileRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +13,19 @@ import java.util.List;
 
 public class FileRepositoryTest {
     String path = "src/test/resources/도서 목록.csv";
+    String firstLine = "도서 번호;도서명;작가;총 페이지 수;상태";
+
+    @AfterEach
+    void 파일_내용_지우기() {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write(firstLine);
+            writer.newLine();
+        } catch (IOException e) {}
+    }
 
     @Test
-    void 파일로부터_도서_등록 () throws IOException {
+    void 파일로부터_도서_등록() throws IOException {
         //given
-        String firstLine = "도서 번호;도서명;작가;총 페이지 수;상태";
         List<Book> books = Arrays.asList(
                 new Book.Builder("이펙티브 자바 Effective Java 3/E", "조슈아 블로크", 520)
                         .id(2)
@@ -45,10 +54,5 @@ public class FileRepositoryTest {
         Assertions.assertEquals(loadedBooks.size(), books.size());
         for(int i = 0; i < books.size(); ++i)
             Assertions.assertEquals(books.get(i), loadedBooks.get(i));
-
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write(firstLine);
-            writer.newLine();
-        } catch (IOException e) {}
     }
 }
