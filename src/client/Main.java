@@ -1,5 +1,6 @@
 package client;
 
+import repository.FileRepository;
 import repository.TestRepository;
 import service.Service;
 
@@ -36,7 +37,7 @@ public class Main {
         int mode = sc.nextInt();
 
         if (mode == 1){
-//                Service service = new Service(new FileRepository());
+            service = new Service(new FileRepository());
             System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
             return true;
         }
