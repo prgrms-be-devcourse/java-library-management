@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface Repository {
 
-    public String rentBook(int book_id);
+    public void rentBook(int book_id);
     public ApiResponse returnBook(int book_id);
     public List<BookInfo> findByTitle(String title);
     public void deleteById(int book_id);
@@ -17,4 +17,6 @@ public interface Repository {
     public String missBook(int book_id);
 
     public List<BookInfo> getTotalBook();
+
+    public Optional<BookInfo> findSameBook(String title);
 }

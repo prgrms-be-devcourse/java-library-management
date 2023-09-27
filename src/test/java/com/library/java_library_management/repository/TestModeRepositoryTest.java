@@ -2,6 +2,7 @@ package com.library.java_library_management.repository;
 
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.service.Service;
+import com.library.java_library_management.status.BookStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,10 +27,14 @@ class TestModeRepositoryTest {
     @Test
     public void rentBook(){
         repository.registerBook("제목1", "Injun Choi", 100);
-        List<BookInfo> books = repository.findByTitle("제목1");
-
-        Assertions.assertEquals(repository.rentBook(1), "도서가 대여 처리 되었습니다."); // 대여 성공 경우
-        Assertions.assertEquals(repository.rentBook(1), "대여중"); //대여 실패 경우
+        Optional<BookInfo> book = repository.findSameBook("제목1");
+        repository.rentBook(1);
+        Assertions.assertEquals(BookStatus.RENT, book.get().getStatus()); // 대여 성공 경우
+        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class,
+                () -> {
+                    repository.rentBook(1);
+                });//대여 실패 경우
+        Assertions.assertEquals(runtimeException.getMessage(), "이미 대여중인 도서입니다.");
     }
 
     @Test

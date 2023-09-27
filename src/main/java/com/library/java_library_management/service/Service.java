@@ -3,6 +3,7 @@ package com.library.java_library_management.service;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.repository.Repository;
 import com.library.java_library_management.response.ApiResponse;
+import com.library.java_library_management.response.ApiStatus;
 import com.library.java_library_management.status.BookStatus;
 
 import java.io.BufferedReader;
@@ -77,12 +78,16 @@ public class Service {
     }
 
     //도서 대여
-    public String rent() throws IOException {
+    public void rent() throws IOException {
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n" +
                 "\n" +
                 "Q. 대여할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-        return repository.rentBook(book_id);
+        try{
+            repository.rentBook(book_id);
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     //도서 반납
@@ -92,6 +97,7 @@ public class Service {
                 "Q. 반납할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
         ApiResponse apiResponse = repository.returnBook(book_id);
+
         return apiResponse.message();
     }
 
@@ -103,14 +109,19 @@ public class Service {
         int number = Integer.parseInt(br.readLine());
         repository.missBook(number);
     }
-    
+
     //도서 삭제처리
     public void deleteBook() throws IOException{
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n" +
                 "\n" +
                 "Q. 삭제 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-        repository.deleteById(number);
+        try{
+            repository.deleteById(number);
+        }catch(RuntimeException e){
+            System.out.println("[System]" + e.getMessage());
+        }
+
     }
 
 

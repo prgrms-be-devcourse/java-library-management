@@ -2,6 +2,7 @@ package com.library.java_library_management.repository;
 
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.response.ApiResponse;
+import com.library.java_library_management.response.ApiStatus;
 import com.library.java_library_management.status.BookStatus;
 
 import java.util.ArrayList;
@@ -30,9 +31,16 @@ public class TestModeRepository implements Repository{
                 .collect(Collectors.toList());
     }
     @Override
-    public String rentBook(int book_id){
-        Optional<BookInfo> book = bookList.stream().filter(bookinfo -> bookinfo.getBook_id() == book_id).findAny();
-        return book.get().getStatus().rentBook(book.get());
+    public void rentBook(int book_id){
+        bookList.stream()
+                .filter(
+                bookinfo -> bookinfo.getBook_id() == book_id && bookinfo.getStatus() == BookStatus.AVAILABLE).findAny()
+                .ifPresentOrElse(bookInfo -> {
+                    bookInfo.setStatus(BookStatus.RENT);
+                }, () -> {
+                    throw new RuntimeException("이미 대여중인 도서입니다.");
+                        });
+
     }
 
     @Override
@@ -64,15 +72,22 @@ public class TestModeRepository implements Repository{
 
     @Override
     public void deleteById(int book_id) {
-        Optional<BookInfo> book = bookList.stream()
+        bookList.stream()
                 .filter(bookinfo -> bookinfo.getBook_id() == book_id)
-                .findAny();
-        bookList.remove(book.get());
+                .findAny()
+                .ifPresentOrElse(bookInfo -> {
+                    bookList.remove(bookInfo);
+                },
+                        () -> {
+                    throw new RuntimeException("존재하지 않는 도서입니다.");
+                        });
+
     }
 
-
-
-
-
-
+    @Override
+    public Optional<BookInfo> findSameBook(String title) {
+        return bookList.stream().filter(bookInfo ->
+            bookInfo.getTitle().equals(title)
+        ).findAny();
+    }
 }
