@@ -1,10 +1,10 @@
 package com.programmers;
 
-import com.programmers.config.AppConfig;
-import com.programmers.config.enums.Mode;
-import com.programmers.infrastructure.IO.Console;
-import com.programmers.infrastructure.IO.ConsoleRequestProcessor;
+import com.programmers.config.DependencyInjector;
+import com.programmers.config.enums.ExitCommand;
 import com.programmers.mediator.RequestProcessor;
+import com.programmers.mediator.dto.Request;
+import com.programmers.mediator.dto.Response;
 
 public class BookApplication implements Runnable{
     private final RequestProcessor requestProcessor;
@@ -13,24 +13,14 @@ public class BookApplication implements Runnable{
         this.requestProcessor = requestProcessor;
     }
 
-    public static void main(String[] args) {
-        initialize();
-        // 애플리케이션 실행
-        new BookApplication(new ConsoleRequestProcessor()).run();
-    }
-
-    private static void initialize() {
-        Console.getInstance().printToConsole(
-            """
-            Q. 모드를 선택해주세요.
-            1. 일반 모드
-            2. 테스트 모드"""
-        );
-        AppConfig.getInstance().initializeRepository(Mode.getBookRepositoryByMode(Console.getInstance().getInput()));
-    }
-
     @Override
     public void run() {
-        new BookApplicationRunner(requestProcessor).run();
+        while (true) {
+            Request request = requestProcessor.getRequest();
+            Response response = requestProcessor.processRequest(request);
+            requestProcessor.sendResponse(response);
+
+            ExitCommand.promptForExit(DependencyInjector.getInstance().getUserInteraction());
+        }
     }
 }

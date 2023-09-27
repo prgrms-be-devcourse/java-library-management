@@ -15,8 +15,8 @@ public class AppConfig {
         return instance;
     }
 
-    public void initializeRepository(BookRepository userPikedRepository) {
-        this.bookRepository = userPikedRepository;
+    public void initializeRepository(BookRepository userPickedRepository) {
+        this.bookRepository = userPickedRepository;
     }
 
     public BookRepository getBookRepository() {

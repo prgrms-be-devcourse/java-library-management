@@ -2,9 +2,11 @@ package com.programmers.presentation;
 
 import com.programmers.application.BookService;
 import com.programmers.mediator.dto.Response;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ConsoleController implements Controller<String> {
-    private final BookService bookService = new BookService();
+    private final BookService bookService;
 
     @Override
     public Response<String> registerBook() {

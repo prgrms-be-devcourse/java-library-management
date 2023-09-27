@@ -1,9 +1,9 @@
 package com.programmers.application;
 
-import com.programmers.config.AppConfig;
 import com.programmers.domain.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class BookService {
-    private final BookRepository repository = AppConfig.getInstance().getBookRepository();
-
+    private final BookRepository repository;
 }
