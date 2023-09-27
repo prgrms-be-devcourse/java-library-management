@@ -14,7 +14,6 @@ import com.programmers.library.repository.Repository;
 public class LibraryManagerServiceImpl implements LibarayManagerService{
 
 	private final Repository repository;
-	private final StringBuilder sb = new StringBuilder();
 
 	public LibraryManagerServiceImpl(Repository repository) {
 		this.repository = repository;
@@ -29,6 +28,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService{
 
 	@Override
 	public String listBook() {
+		StringBuilder sb = new StringBuilder();
 		List<Book> bookList = repository.findAll();
 		bookList.forEach(book -> sb.append(book.toString()).append("\n"));
 		return sb.toString();
@@ -36,6 +36,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService{
 
 	@Override
 	public String searchBook(SearchBookRequest request) {
+		StringBuilder sb = new StringBuilder();
 		List<Book> bookList = repository.findByTitleLike(request.getTitle());
 		bookList.forEach(book -> sb.append(book.toString()).append("\n"));
 		return sb.toString();

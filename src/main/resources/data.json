@@ -1,0 +1,26 @@
+[
+  {
+  "id": 1,
+  "title": "도시와 그 불확실한 벽",
+  "author": "무라카미 하루키",
+  "pages": 100,
+  "status": "AVAILABLE",
+  "returnedAt": "2023-09-23T12:34:56.789"
+  },
+  {
+    "id": 2,
+    "title": "퓨처 셀프",
+    "author": "벤저민 하디",
+    "pages": 100,
+    "status": "BORROWED",
+    "returnedAt": "2023-09-23T12:34:56.789"
+  },
+  {
+    "id": 3,
+    "title": "도둑맞은 집중력",
+    "author": "요한 하리",
+    "pages": 100,
+    "status": "LOST",
+    "returnedAt": "2023-09-23T12:34:56.789"
+  }
+]
