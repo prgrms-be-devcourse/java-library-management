@@ -9,8 +9,8 @@ import com.programmers.library.model.request.SearchBookRequest;
 
 public interface LibarayManagerService {
 	String addBook(AddBookRequest request);
-	String listBook();
-	String searchBook(SearchBookRequest request);
+	String getAllBooks();
+	String findBooksByTitle(SearchBookRequest request);
 	String borrowBook(BorrowBookRequest request);
 	String returnBook(ReturnBookRequest request);
 	String lostBook(LostBookRequest request);
