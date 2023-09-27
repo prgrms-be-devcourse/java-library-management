@@ -7,7 +7,6 @@ import com.programmers.librarymanagement.repository.BookRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public class LibraryManagementService {
 
@@ -80,7 +79,7 @@ public class LibraryManagementService {
             }
 
             case ARRANGE -> {
-                if (book.getReturnDateTime().plusMinutes(5).isAfter(LocalDateTime.now())) {
+                if (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now())) {
                     result = "[System] 원래 대여가 가능한 도서입니다. \n";
                 } else {
                     result = "[System] 정리 중인 도서입니다. \n";
@@ -113,12 +112,19 @@ public class LibraryManagementService {
 
         String result = "[System] 도서가 삭제 처리 되었습니다. \n";
 
-        Optional<Book> book = bookRepository.findById(id);
+//        Optional<Book> book = bookRepository.findById(id);
+//
+//        if (book.isEmpty()) {
+//            result = "[System] 존재하지 않는 도서번호 입니다. \n";
+//        } else {
+//            bookRepository.deleteBook(book.get());
+//        }
 
-        if (book.isEmpty()) {
+        try {
+            Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+            bookRepository.deleteBook(book);
+        } catch (BookNotFoundException e) {
             result = "[System] 존재하지 않는 도서번호 입니다. \n";
-        } else {
-            bookRepository.deleteBook(book.get());
         }
 
         return result;
