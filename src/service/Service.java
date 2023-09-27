@@ -34,7 +34,7 @@ public class Service{
 
     public void getAll() {
         repository.getAll().forEach(book -> {
-            System.out.println("도서제목 : " + book.getId());
+            System.out.println("Id : " + book.getId());
             System.out.println("제목 : " + book.getName());
             System.out.println("작가 이름 : " + book.getPage());
             System.out.println("페이지 수 : " + book.getPage());
