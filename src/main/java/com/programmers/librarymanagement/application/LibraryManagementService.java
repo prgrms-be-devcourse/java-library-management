@@ -1,4 +1,4 @@
-package com.programmers.librarymanagement.service;
+package com.programmers.librarymanagement.application;
 
 import com.programmers.librarymanagement.domain.Book;
 import com.programmers.librarymanagement.domain.Status;

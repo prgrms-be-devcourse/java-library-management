@@ -1,14 +1,14 @@
-package com.programmers.librarymanagement.io;
+package com.programmers.librarymanagement.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleIO {
+public class ConsoleIo {
 
     private final BufferedReader br;
 
-    public ConsoleIO() {
+    public ConsoleIo() {
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 

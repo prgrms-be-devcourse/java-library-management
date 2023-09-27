@@ -1,26 +1,26 @@
-package com.programmers.librarymanagement.application;
+package com.programmers.librarymanagement.presentation;
 
 import com.programmers.librarymanagement.exception.SelectNotFoundException;
-import com.programmers.librarymanagement.io.ConsoleIO;
+import com.programmers.librarymanagement.utils.ConsoleIo;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
 import com.programmers.librarymanagement.repository.TestBookRepository;
-import com.programmers.librarymanagement.service.LibraryManagementService;
+import com.programmers.librarymanagement.application.LibraryManagementService;
 
-public class LibraryManagementSystem {
+public class LibraryManagementController {
 
-    private final ConsoleIO consoleIO;
+    private final ConsoleIo consoleIo;
     private LibraryManagementService libraryManagementService;
 
-    public LibraryManagementSystem(ConsoleIO consoleIO) {
-        this.consoleIO = consoleIO;
+    public LibraryManagementController(ConsoleIo consoleIo) {
+        this.consoleIo = consoleIo;
     }
 
     // 모드 선택
     public void start() {
 
-        consoleIO.printSelectMode();
+        consoleIo.printSelectMode();
 
-        switch (consoleIO.getInput()) {
+        switch (consoleIo.getInput()) {
             case "1" -> {
                 System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다. \n");
                 libraryManagementService = new LibraryManagementService(new NormalBookRepository());
@@ -40,9 +40,9 @@ public class LibraryManagementSystem {
     // 모드 진입 후 선택 화면
     private void run() {
 
-        consoleIO.printSelectFun();
+        consoleIo.printSelectFun();
 
-        switch (consoleIO.getInput()) {
+        switch (consoleIo.getInput()) {
             case "1" -> addBook();
 
             case "2" -> getAllBooks();
@@ -56,7 +56,7 @@ public class LibraryManagementSystem {
             case "6" -> lostBook();
 
             case "7" -> deleteBook();
-            
+
             default -> throw new SelectNotFoundException();
         }
 
@@ -68,13 +68,13 @@ public class LibraryManagementSystem {
         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 등록할 도서 제목을 입력하세요. \n");
-        String title = consoleIO.getInput();
+        String title = consoleIo.getInput();
 
         System.out.println("Q. 작가 이름을 입력하세요. \n");
-        String author = consoleIO.getInput();
+        String author = consoleIo.getInput();
 
         System.out.println("Q. 페이지 수를 입력하세요. \n");
-        int page = Integer.parseInt(consoleIO.getInput());
+        int page = Integer.parseInt(consoleIo.getInput());
 
         libraryManagementService.addBook(title, author, page);
 
@@ -95,7 +95,7 @@ public class LibraryManagementSystem {
         System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요. \n");
-        String title = consoleIO.getInput();
+        String title = consoleIo.getInput();
 
         libraryManagementService.getBookByTitle(title);
 
@@ -107,7 +107,7 @@ public class LibraryManagementSystem {
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 대여할 도서번호를 입력하세요. \n");
-        Long id = Long.parseLong(consoleIO.getInput());
+        Long id = Long.parseLong(consoleIo.getInput());
 
         String result = libraryManagementService.rentBook(id);
         System.out.println(result);
@@ -118,7 +118,7 @@ public class LibraryManagementSystem {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 반납할 도서번호를 입력하세요. \n");
-        Long id = Long.parseLong(consoleIO.getInput());
+        Long id = Long.parseLong(consoleIo.getInput());
 
         String result = libraryManagementService.returnBook(id);
         System.out.println(result);
@@ -129,7 +129,7 @@ public class LibraryManagementSystem {
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 분실 처리할 도서번호를 입력하세요. \n");
-        Long id = Long.parseLong(consoleIO.getInput());
+        Long id = Long.parseLong(consoleIo.getInput());
 
         String result = libraryManagementService.lostBook(id);
         System.out.println(result);
@@ -140,7 +140,7 @@ public class LibraryManagementSystem {
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다. \n");
 
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요. \n");
-        Long id = Long.parseLong(consoleIO.getInput());
+        Long id = Long.parseLong(consoleIo.getInput());
 
         String result = libraryManagementService.deleteBook(id);
         System.out.println(result);

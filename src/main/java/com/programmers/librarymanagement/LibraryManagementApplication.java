@@ -1,14 +1,14 @@
 package com.programmers.librarymanagement;
 
-import com.programmers.librarymanagement.application.LibraryManagementSystem;
-import com.programmers.librarymanagement.io.ConsoleIO;
+import com.programmers.librarymanagement.presentation.LibraryManagementController;
+import com.programmers.librarymanagement.utils.ConsoleIo;
 
 public class LibraryManagementApplication {
 
 	public static void main(String[] args) {
 
-		LibraryManagementSystem libraryManagementSystem = new LibraryManagementSystem(new ConsoleIO());
-		libraryManagementSystem.start();
+		LibraryManagementController libraryManagementController = new LibraryManagementController(new ConsoleIo());
+		libraryManagementController.start();
 	}
 
 }
