@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class CsvFileUtil {
 
-    private final String FILE_PATH = "book.csv";
+    private final String FILE_PATH;
 
-    public CsvFileUtil() throws IOException {
-        createFile();
+    public CsvFileUtil(String FILE_PATH) {
+        this.FILE_PATH = FILE_PATH;
     }
 
     private void createFile() throws IOException {

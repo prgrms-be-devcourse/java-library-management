@@ -3,7 +3,6 @@ package repository;
 import model.Book;
 import util.CsvFileUtil;
 
-import java.io.IOException;
 import java.util.*;
 
 public class FileRepository implements Repository {
@@ -11,8 +10,8 @@ public class FileRepository implements Repository {
     private final CsvFileUtil csvFileUtil;
     Map<Long, Book> bookMap = new HashMap<>();
 
-    public FileRepository() throws IOException {
-        csvFileUtil = new CsvFileUtil();
+    public FileRepository(String file_path) {
+        csvFileUtil = new CsvFileUtil(file_path);
         bookMap = csvFileUtil.readAllBooksFromCsv();
     }
 

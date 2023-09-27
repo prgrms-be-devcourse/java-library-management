@@ -17,9 +17,9 @@ public class BookController {
     private final Input input;
     private final Output output;
 
-    public BookController(int mode, Input input, Output output) throws IOException {
+    public BookController(int mode, Input input, Output output) {
         if (mode == 1) {
-            this.bookService = new BookService(new FileRepository());
+            this.bookService = new BookService(new FileRepository("book.csv"));
         } else if (mode == 2) {
             this.bookService = new BookService(new MemoryRepository());
         }

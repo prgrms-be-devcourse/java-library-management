@@ -87,6 +87,6 @@ public class BookService {
             }
         };
         Timer timer = new Timer(true);
-        timer.schedule(timerTask, 300000);
+        timer.schedule(timerTask, 10000);   // 테스트코드 실행을 위해 짧게 설정
     }
 }
