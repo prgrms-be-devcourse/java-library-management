@@ -17,6 +17,7 @@ public class TestService implements Service {
 
     public TestService() {
         load();
+        mainView();
     }
 
     @Override

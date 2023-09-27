@@ -17,6 +17,7 @@ public class GeneralService implements Service{
 
     public GeneralService() {
         load();
+        mainView();
     }
 
     @Override
