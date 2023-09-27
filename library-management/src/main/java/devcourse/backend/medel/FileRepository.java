@@ -25,8 +25,7 @@ public class FileRepository {
     }
 
     public List<Book> findAll() {
-        // TODO : 깊은 복사를 하도록 코드 수정 필요! (일단 테스트 때문에)
-        return books;
+        return books.stream().map(b -> b.copy()).toList();
     }
 
     public List<Book> findByTitle(String title) {

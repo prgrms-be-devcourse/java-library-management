@@ -4,6 +4,8 @@ import devcourse.backend.medel.Book;
 import devcourse.backend.medel.FileRepository;
 import devcourse.backend.view.BookDto;
 
+import java.util.List;
+
 public class BookService {
     private final FileRepository repository;
 
@@ -13,5 +15,9 @@ public class BookService {
 
     public void registerBook(BookDto data) {
         repository.addBook(new Book.Builder(data.getTitle(), data.getAuthor(), data.getTotalPages()).build());
+    }
+
+    public List<Book> getAllBooks() {
+        return repository.findAll();
     }
 }
