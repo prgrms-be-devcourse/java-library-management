@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookServiceTest {
     FileRepository repository = new FileRepository("src/test/resources/도서 목록.csv");
@@ -80,10 +82,51 @@ public class BookServiceTest {
         service.registerBook(book);
 
         //when
-        service.rentBook(1L);
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.rentBook(id);
 
         //then
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> repository.findById(1L).changeStatus(BookStatus.BORROWED));
+                () -> repository.findById(id).changeStatus(BookStatus.BORROWED));
+    }
+
+    @Test
+    void 도서_반납_후_정리() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.rentBook(id);
+
+        //when
+        service.returnBook(id);
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> service.rentBook(id));
+    }
+
+    @Test
+    void 도서_반납_5분_뒤() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+        long id = repository.findByTitleAndAuthorAndTotalPages(book.getTitle(), book.getAuthor(), book.getTotalPages()).getId();
+        service.rentBook(id);
+
+        //when
+        service.returnBook(id);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Assertions.assertDoesNotThrow(() -> service.rentBook(id));
+            }
+        }, 5 * 60 * 1000);
     }
 }

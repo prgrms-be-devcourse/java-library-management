@@ -25,6 +25,15 @@ public enum BookStatus {
         if (after == BookStatus.BORROWED) {
             if (before == BookStatus.AVAILABLE) return true;
         }
+
+        if(after == BookStatus.ARRANGING) {
+            if (before == BookStatus.BORROWED) return true;
+        }
+
+        if(after == BookStatus.AVAILABLE) {
+            if(before == BookStatus.ARRANGING) return true;
+        }
+
         return false;
     }
 }

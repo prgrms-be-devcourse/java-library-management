@@ -6,6 +6,8 @@ import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookService {
     private final FileRepository repository;
@@ -26,5 +28,15 @@ public class BookService {
 
     public void rentBook(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.BORROWED);
+    }
+
+    public void returnBook(long bookId) {
+        repository.findById(bookId).changeStatus(BookStatus.ARRANGING);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                repository.findById(bookId).changeStatus(BookStatus.AVAILABLE);
+            }
+        }, 5 * 60 * 1000);
     }
 }

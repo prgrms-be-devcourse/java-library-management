@@ -1,8 +1,7 @@
 package devcourse.backend.view;
 import devcourse.backend.business.BookService;
-import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Console implements Runnable {
@@ -65,13 +64,24 @@ public class Console implements Runnable {
             service.rentBook(longInput("대여할 도서번호를 입력하세요"));
             system("도서가 대여 처리 되었습니다.");
         } catch (IllegalArgumentException e) {
-            switch (e.getMessage()) {
-                case "대여 중" : system("이미 대여 중인 도서입니다."); break;
-                case "도서 정리중" : system("정리 중인 도서입니다. 5분 후 다시 대여해 주세요."); break;
-                case "분실됨" : system("현재 분실 처리된 도서입니다."); break;
-            }
+            BookStatus status =  BookStatus.get(e.getMessage()).get();
+            if(BookStatus.BORROWED == status) system("이미 대여 중인 도서입니다.");
+            else if(BookStatus.ARRANGING == status) system("정리 중인 도서입니다. 5분 후 다시 대여해 주세요.");
+            else if(BookStatus.LOST == status) system("현재 분실 처리된 도서입니다.");
         }
+    }
 
+    public static void returnMenu() {
+        system("도서 반납 메뉴로 넘어갑니다.");
+        try {
+            service.returnBook(longInput("반납할 도서번호를 입력하세요"));
+            system("도서가 반납 처리 되었습니다.");
+        } catch (IllegalArgumentException e) {
+            BookStatus status =  BookStatus.get(e.getMessage()).get();
+            if(BookStatus.AVAILABLE == status) system("원래 대여가 가능한 도서입니다.");
+            else if(BookStatus.ARRANGING == status) system("정리 중인 도서입니다.");
+            else if(BookStatus.LOST == status) system("현재 분실 처리된 도서입니다.");
+        }
     }
 
     private static void system(String s) {
