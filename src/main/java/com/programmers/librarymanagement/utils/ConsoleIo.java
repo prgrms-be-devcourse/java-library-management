@@ -31,12 +31,16 @@ public class ConsoleIo {
 
     public String getInput() {
 
+        System.out.print("> ");
+
         String input = null;
         try {
-            input = br.readLine();
+            input = br.readLine().strip();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println();
 
         return input;
     }
