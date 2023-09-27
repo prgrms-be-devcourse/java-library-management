@@ -5,12 +5,11 @@ import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.repository.BookRepository;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class BookService {
     private static BookRepository bookRepository;
+    private static final int organizingMilliseconds = 1000 * 10; // 10초
 
     private BookService() {
     }
@@ -44,9 +43,8 @@ public class BookService {
         Scanner scanner = new Scanner(System.in);
         System.out.println(Messages.MOVE_TO_BOOK_SEARCH);
         System.out.print(Messages.BOOK_TITLE_PROMPT);
-        Book book = bookRepository.findBookByTitle(scanner.nextLine())
-                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
-        System.out.println(book.toString());
+        bookRepository.findBookByTitle(scanner.nextLine())
+                .forEach(book -> System.out.println(book.toString()));
         System.out.println(Messages.BOOK_SEARCH_FINISH);
     }
 
@@ -55,7 +53,8 @@ public class BookService {
         System.out.print(Messages.BOOK_RENT_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isRentable()) {
-            bookRepository.updateBookState(book.getId(), BookState.RENTED);
+            bookRepository.updateBookState(book, BookState.RENTED);
+            System.out.println(Messages.BOOK_RENT_SUCCESS);
         }
     }
 
@@ -64,8 +63,9 @@ public class BookService {
         System.out.print(Messages.BOOK_RETURN_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isReturnable()) {
-            bookRepository.updateBookState(book.getId(), BookState.ORGANIZING);
-            book.startOrganizing();
+            bookRepository.updateBookState(book, BookState.ORGANIZING);
+            System.out.println(Messages.BOOK_RETURN_SUCCESS);
+            startOrganizing(book);
         }
     }
 
@@ -74,15 +74,17 @@ public class BookService {
         System.out.print(Messages.BOOK_LOST_PROMPT);
         Book book = getBookByUserInputId();
         if (book.isReportableAsLost()) {
-            bookRepository.updateBookState(book.getId(), BookState.LOST);
+            bookRepository.updateBookState(book, BookState.LOST);
+            System.out.println(Messages.BOOK_LOST_SUCCESS);
         }
     }
 
     public void deleteBook() {
         System.out.println(Messages.MOVE_TO_BOOK_DELETE);
-        System.out.println(Messages.BOOK_DELETE_PROMPT);
+        System.out.print(Messages.BOOK_DELETE_PROMPT);
         Book book = getBookByUserInputId();
-        bookRepository.deleteBook(book.getId());
+        bookRepository.deleteBook(book);
+        System.out.println(Messages.BOOK_DELETE_SUCCESS);
     }
 
     private Book getBookByUserInputId() {
@@ -91,5 +93,15 @@ public class BookService {
                 .orElseThrow(() ->
                         new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString())
                 );
+    }
+
+    private void startOrganizing(Book book) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                bookRepository.updateBookState(book, BookState.AVAILABLE);
+            }
+        }, organizingMilliseconds); // 10초
     }
 }

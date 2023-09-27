@@ -2,13 +2,17 @@ package com.programmers.repository;
 
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
+import com.programmers.provider.BookIdProvider;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class MemBookRepository implements BookRepository {
-    private Map<Integer, Book> books = new HashMap<>();
+    private List<Book> books = new ArrayList<>();
 
     private MemBookRepository() {
+        BookIdProvider.initBookId(books);
     }
 
     private static class Holder {
@@ -21,47 +25,32 @@ public class MemBookRepository implements BookRepository {
 
     @Override
     public void addBook(Book book) {
-        book.setId(createUniqueId());
-        books.put(book.getId(), book);
-
-        System.out.println(books.get(book.getId()).toString());
+        books.add(book);
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return new ArrayList<Book>(books.values());
+        return books;
     }
-
 
     @Override
     public Optional<Book> findBookById(int id) {
-        return Optional.ofNullable(books.get(id));
+        return books.stream().filter(book -> book.getId() == id).findAny();
     }
 
     @Override
-    public Optional<Book> findBookByTitle(String title) {
-        return books.values().stream()
-                .filter(book -> book.getTitle().contains(title))
-                .findAny();
+    public List<Book> findBookByTitle(String title) {
+        return books.stream()
+                .filter(book -> book.getTitle().contains(title)).toList();
     }
 
     @Override
-    public void updateBookState(int id, BookState bookState) {
-        books.get(id).setState(bookState);
+    public void updateBookState(Book book, BookState bookState) {
+        book.setState(bookState);
     }
 
     @Override
-    public void deleteBook(int id) {
-        books.remove(id);
-    }
-
-    @Override
-    public int createUniqueId() {
-        int randomId;
-        Random random = new Random();
-        do {
-            randomId = random.nextInt(Integer.MAX_VALUE);
-        } while (this.books.containsKey(randomId));
-        return randomId;
+    public void deleteBook(Book book) {
+        books.remove(books.indexOf(book));
     }
 }
