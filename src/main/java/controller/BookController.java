@@ -5,6 +5,7 @@ import constant.Question;
 import io.Input;
 import io.Output;
 import repository.FileRepository;
+import repository.MemoryRepository;
 import service.BookService;
 
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class BookController {
     public BookController(int mode, Input input, Output output) throws IOException {
         if (mode == 1) {
             this.bookService = new BookService(new FileRepository());
+        } else if (mode == 2) {
+            this.bookService = new BookService(new MemoryRepository());
         }
         this.input = input;
         this.output = output;

@@ -2,6 +2,7 @@ package constant;
 
 public enum Guide {
     START_NORMAL_MODE("[System] 일반 모드로 애플리케이션을 실행합니다.\n"),
+    START_TEST_MODE("[System] 테스트 모드로 애플리케이션을 실행합니다.\n"),
     REGISTER_START("[System] 도서 등록 메뉴로 넘어갑니다.\n"),
     REGISTER_END("[System] 도서 등록이 완료되었습니다.\n"),
     FIND_ALL_START("[System] 전체 도서 목록입니다.\n"),
