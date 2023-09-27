@@ -2,11 +2,12 @@ package org.library.repository;
 
 import org.library.entity.Book;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestRepository implements Repository{
-    private static final List<Book> bookList = new ArrayList<>();
+    private static final Map<Long, Book> bookMap = new HashMap<>();
 
     @Override
     public void save(Book book) {
@@ -19,32 +20,32 @@ public class TestRepository implements Repository{
 
     @Override
     public List<Book> findAll() {
-        return bookList;
+        return bookMap.values().stream().sorted().toList();
     }
 
     @Override
     public Book findByTitle(String title) {
-        return bookList.stream().filter(b -> b.getTitle().contains(title))
+        return bookMap.values().stream().filter(b->b.getTitle().contains(title))
                 .findAny().orElseThrow();
     }
 
     @Override
     public Book findById(Long id) {
-        return bookList.stream().filter(b -> b.getId().equals(id))
+        return bookMap.values().stream().filter(b -> b.getId().equals(id))
                 .findAny().orElseThrow();
     }
 
     @Override
     public void delete(Book book) {
-        bookList.remove(book);
+        bookMap.remove(book.getId());
     }
 
     public boolean exists(Book book){
-        return bookList.stream().anyMatch(b -> b.equals(book));
+        return bookMap.values().stream().anyMatch(b -> b.equals(book));
     }
 
     public void edit(Book targetBook){
-        for(Book book : bookList){
+        for(Book book : bookMap.values()){
             if(book.equals(targetBook)){
                 book = targetBook;
                 return;
@@ -53,6 +54,6 @@ public class TestRepository implements Repository{
     }
 
     public void add(Book targetBook){
-        bookList.add(targetBook);
+        bookMap.put(targetBook.getId(), targetBook);
     }
 }
