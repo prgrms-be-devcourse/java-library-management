@@ -10,19 +10,14 @@ public enum Guide {
     FIND_BY_TITLE_END("[System] 검색된 도서 끝\n"),
     BORROW_START("[System] 도서 대여 메뉴로 넘어갑니다.\n"),
     BORROW_COMPLETE("[System] 도서가 대여 처리 되었습니다.\n"),
-    BORROW_FAIL_BORROWED("[System] 이미 대여중인 도서입니다.\n"),
-    BORROW_FAIL_LOST("[System] 분실된 도서입니다.\n"),
-    BORROW_FAIL_ORGANIZING("[System] 정리중인 도서입니다.\n"),
     RETURN_START("[System] 도서 반납 메뉴로 넘어갑니다.\n"),
     RETURN_COMPLETE("[System] 도서가 반납 처리 되었습니다.\n"),
-    RETURN_FAIL("[System] 원래 대여가 가능한 도서입니다.\n"),
     LOST_START("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n"),
     LOST_COMPLETE("[System] 도서가 분실 처리 되었습니다.\n"),
-    LOST_FAIL("[System] 이미 분실 처리된 도서입니다.\n"),
     DELETE_START("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),
     DELETE_COMPLETE("[System] 도서가 삭제 처리 되었습니다.\n"),
-    NOT_EXIST("[System] 존재하지 않는 도서번호 입니다.\n");
-
+    SYSTEM_END("[System] 시스템을 종료합니다."),
+    ;
     private final String guide;
 
     Guide(String guide) {

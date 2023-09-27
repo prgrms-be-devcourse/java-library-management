@@ -17,4 +17,5 @@ public interface Output {
     void printQuestion(Question question);
 
     void printBookList(List<Book> books);
+    void printException(String exception);
 }
