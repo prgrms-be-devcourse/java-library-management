@@ -79,6 +79,7 @@ public class TestService implements Service {
         System.out.println();
         System.out.print("> ");
         String author = scanner.nextLine();
+        System.out.println();
 
         System.out.println("Q. 페이지 수를 입력하세요.");
         System.out.println();
