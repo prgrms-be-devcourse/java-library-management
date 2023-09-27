@@ -20,7 +20,7 @@ public class FileRepository implements Repository{
 	public void init() {
 		List<Book> bookList = fileUtil.readFile();
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
-		sequence = (long) bookList.size();
+		sequence = bookList.stream().mapToLong(Book::getId).max().orElse(0);
 	}
 
 	@Override
