@@ -20,72 +20,52 @@ public class LibraryManagerServiceImpl implements LibarayManagerService{
 	}
 
 	@Override
-	public String addBook(AddBookRequest request) {
+	public void addBook(AddBookRequest request) {
 		repository.save(request.toEntity());
-		return "도서 등록이 완료되었습니다.";
 	}
 
 	@Override
-	public String getAllBooks() {
-		StringBuilder sb = new StringBuilder();
-		List<Book> bookList = repository.findAll();
-		bookList.forEach(book -> sb.append(book.toString()).append("\n"));
-		return sb.toString();
+	public List<Book> getAllBooks() {
+		return repository.findAll();
 	}
 
 	@Override
-	public String findBooksByTitle(FindBookRequest request) {
-		StringBuilder sb = new StringBuilder();
-		List<Book> bookList = repository.findByTitleLike(request.getTitle());
-		bookList.forEach(book -> sb.append(book.toString()).append("\n"));
-		return sb.toString();
+	public List<Book> findBooksByTitle(FindBookRequest request) {
+		return repository.findByTitleLike(request.getTitle());
 	}
 
 	@Override
-	public String borrowBook(BorrowBookRequest request) {
+	public void borrowBook(BorrowBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 도서번호 입니다."));
 		if (book.isAvailable()) {
 			book.borrow();
 			repository.save(book);
-			return "도서가 대여 처리 되었습니다.";
-		} else if(book.isBorrowed()) {
-			return "이미 대여중인 도서입니다.";
-		} else if(book.isLost()) {
-			return "분실된 도서입니다.";
-		} else if(book.isOrganizing()) {
-			return "정리중인 도서입니다.";
-		}
-		return null;
+		} else if(book.isBorrowed()) { throw new RuntimeException("이미 대여중인 도서입니다.");
+		} else if(book.isLost()) { throw new RuntimeException("분실된 도서입니다.");
+		} else if(book.isOrganizing()) { throw new RuntimeException("정리중인 도서입니다."); }
 	}
 
 	@Override
-	public String returnBook(ReturnBookRequest request) {
+	public void returnBook(ReturnBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 도서번호 입니다."));
-		if(book.isBorrowed() || book.isLost()) {
+		if (book.isBorrowed() || book.isLost()) {
 			book.returned();
 			repository.save(book);
-			return "도서가 반납 처리 되었습니다.";
-		} else if(book.isAvailable()) {
-			return "원래 대여가 가능한 도서입니다.";
-		} else if(book.isOrganizing()) {
-			return "정리중인 도서입니다.";
-		}
-		return null;
+		} else if (book.isAvailable()) { throw new RuntimeException("원래 대여가 가능한 도서입니다.");
+		} else if (book.isOrganizing()) { throw new RuntimeException("정리중인 도서입니다."); }
 	}
 
 	@Override
-	public String lostBook(LostBookRequest request) {
+	public void lostBook(LostBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 도서번호 입니다."));
-		if(book.isLost()) return "이미 분실 처리된 도서입니다.";
+		if(book.isLost()) throw new RuntimeException("이미 분실된 도서입니다.");
 		book.lost();
 		repository.save(book);
-		return "도서가 분실 처리 되었습니다.";
 	}
 
 	@Override
-	public String deleteBook(DeleteBookRequest request) {
+	public void deleteBook(DeleteBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(() -> new RuntimeException("존재하지 않는 도서번호 입니다."));
 		repository.deleteById(book.getId());
-		return "도서가 삭제 처리 되었습니다.";
 	}
 }
