@@ -1,6 +1,8 @@
 package com.programmers.common;
 
 public enum Messages {
+
+    // 모드 선택
     MODE_CHOICE_MESSAGE("""
                         
             Q. 모드를 선택해주세요.
@@ -9,6 +11,7 @@ public enum Messages {
                         
             >\s"""),
 
+    // 내부 기능 선택
     BOOK_MANAGEMENT_FEATURE_MESSAGE("""
                         
             Q. 사용할 기능을 선택해주세요.
@@ -22,13 +25,15 @@ public enum Messages {
                         
             >\s"""),
 
-    // 기능 선택 메세지
+    // 모드 선택 결과 메세지
     NORMAL_MODE_EXECUTION("\n[System] 일반 모드로 애플리케이션을 실행합니다."),
     TEST_MODE_EXECUTION("\n[System] 테스트 모드로 애플리케이션을 실행합니다."),
 
     // ERROR MESSAGE
     INVALID_INPUT("\n[System] 잘못된 입력입니다."),
     BOOK_NOT_EXIST("\n[System] 존재하지 않는 도서입니다."),
+    CSV_FORMAT_ERROR("\n[System] CSV 데이터의 형식이 도서 형식과 다릅니다."),
+
 
     //PROMPT MESSAGE
     BOOK_TITLE_PROMPT("\nQ. 검색할 도서 제목 일부를 입력하세요.\n\n> "),
@@ -52,7 +57,6 @@ public enum Messages {
 
     // 도서 대여 기능
     MOVE_TO_BOOK_RENT("\n[System] 도서 대여 메뉴로 넘어갑니다."),
-
     BOOK_RENT_SUCCESS("\n[System] 도서가 대여 처리 되었습니다."),
     BOOK_ALREADY_RENTED("\n[System] 이미 대여중인 도서입니다."),
     BOOK_BEING_ORGANIZED("\n[System] 현재 도서가 정리중입니다."),

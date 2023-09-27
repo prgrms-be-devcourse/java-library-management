@@ -14,11 +14,9 @@ public interface BookRepository {
 
     public Optional<Book> findBookById(int id);
 
-    public Optional<Book> findBookByTitle(String title);
+    public List<Book> findBookByTitle(String title);
 
-    public void updateBookState(int id, BookState bookState);
+    public void updateBookState(Book book, BookState bookState);
 
-    public void deleteBook(int id);
-
-    public int createUniqueId();
+    public void deleteBook(Book book);
 }

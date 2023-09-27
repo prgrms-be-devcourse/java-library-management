@@ -2,10 +2,19 @@ package com.programmers.repository;
 
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
+import com.programmers.provider.BookIdProvider;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
+
+    private List<Book> books = new ArrayList<>();
+    private final String csvFile = "./app/src/main/resources/data.csv";
+    private final String csvSplitBy = ",";  // CSV 파일의 구분자
+
     private FileBookRepository() {
     }
 
@@ -14,35 +23,76 @@ public class FileBookRepository implements BookRepository {
     }
 
     public static FileBookRepository getInstance() {
-        return Holder.INSTANCE;
+        FileBookRepository fileBookRepository = FileBookRepository.Holder.INSTANCE;
+        fileBookRepository.loadDataFromFile();
+        return fileBookRepository;
     }
 
     @Override
-    public void addBook(Book Book) {
+    public void addBook(Book book) {
+        books.add(book);
+        updateFile();
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return null;
+        return books;
     }
 
     @Override
-    public Book findBookById(int id) {
-        return null;
+    public Optional<Book> findBookById(int id) {
+        return books.stream().filter(book -> book.getId() == id).findAny();
     }
 
     @Override
-    public Book findBookByTitle(String title) {
-        return null;
+    public List<Book> findBookByTitle(String title) {
+        return books.stream()
+                .filter(book -> book.getTitle().contains(title)).toList();
     }
 
     @Override
-    public void updateBookState(int id, BookState bookState) {
-
+    public void updateBookState(Book book, BookState bookState) {
+        book.setState(bookState);
+        updateFile();
     }
 
     @Override
-    public void deleteBook(int id) {
-
+    public void deleteBook(Book book) {
+        books.remove(books.indexOf(book));
+        updateFile();
     }
+
+    public void loadDataFromFile() {
+        String line;
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(csvSplitBy);
+                Book book = new Book(values);
+                books.add(book);
+                //System.out.println(book);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BookIdProvider.initBookId(books);
+    }
+
+    public void updateFile() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile))) {
+            // 각 Book 객체의 정보를 CSV 형식으로 변환
+            books.stream()
+                    .map(book -> book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPages() + "," + book.getState())
+                    .forEach(line -> {
+                        try {
+                            bw.write(line);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
