@@ -2,10 +2,7 @@ package org.library.repository;
 
 import org.library.entity.Book;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TestRepository implements Repository{
     private static final Map<Long, Book> bookMap = new HashMap<>();
@@ -28,7 +25,8 @@ public class TestRepository implements Repository{
     @Override
     public List<Book> findAll() {
         processAvailable();
-        return bookMap.values().stream().sorted().toList();
+        Optional<List<Book>> books = Optional.ofNullable(bookMap.values().stream().sorted(Comparator.comparingLong(Book::getId)).toList());
+        return books.orElse(new ArrayList<>());
     }
 
     @Override
