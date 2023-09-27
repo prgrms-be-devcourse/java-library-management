@@ -56,7 +56,11 @@ public class FileRepository implements Repository{
 
     @Override
     public List<Book> searchBook(String name) {
-        return null;
+        List<Book> searchResult = new ArrayList<>();
+        bookList.stream()
+                .filter(book->book.getName().contains(name))
+                .forEach(searchResult::add);
+        return searchResult;
     }
 
     @Override
