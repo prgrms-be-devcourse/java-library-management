@@ -24,7 +24,7 @@ public class Book {
         this.page = page;
     }
 
-    public String doRent(){
+    public String rent(){
         if(!state.equals(State.AVAILABLE)){
             return getReason();
         }
@@ -32,7 +32,7 @@ public class Book {
         return successRentString;
     }
 
-    public String doReturn(){
+    public String returns(){
         if(!state.equals(State.RENT) && !state.equals(State.LOST)){
             return getReason();
         }
@@ -41,13 +41,14 @@ public class Book {
         return successReturnString;
     }
 
-    public String doReportLost(){
+    public String reportLost(){
         if(state.equals(State.LOST)){
             return failLostString;
         }
         this.state = State.LOST;
         return successLostString;
     }
+
     private String getReason(){
         return state.getDescription();
     }
