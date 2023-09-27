@@ -1,6 +1,8 @@
 package devcourse.backend.view;
 import devcourse.backend.business.BookService;
+import devcourse.backend.medel.Book;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Console implements Runnable {
@@ -38,9 +40,32 @@ public class Console implements Runnable {
         system("도서 등록이 완료되었습니다.");
     }
 
+    public static void allBookMenu() {
+        system("전체 도서 목록입니다.");
+
+        service.getAllBooks().stream().forEach(b -> {
+            System.out.println(b);
+            partition();
+        });
+
+        system("도서 목록 끝");
+    }
+
     private static void system(String s) {
         System.out.println();
         System.out.println("[System] " + s);
+        System.out.println();
+    }
+
+    private static void partition() {
+        System.out.println();
+        System.out.println("------------------------------");
+        System.out.println();
+    }
+
+    public void inputError() {
+        System.out.println();
+        System.out.println("입력이 잘못되었습니다.");
         System.out.println();
     }
 
@@ -59,12 +84,6 @@ public class Console implements Runnable {
         System.out.println();
 
         return input;
-    }
-
-    public void inputError() {
-        System.out.println();
-        System.out.println("입력이 잘못되었습니다.");
-        System.out.println();
     }
 
     @Override

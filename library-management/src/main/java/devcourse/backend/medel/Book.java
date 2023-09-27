@@ -12,7 +12,7 @@ public class Book {
     private BookStatus status;
 
     public static class Builder {
-        private static long sequence;
+        private static long sequence = 1;
         private String title;
         private String author;
         private int totalPages;
@@ -50,8 +50,21 @@ public class Book {
         status = builder.status;
     }
 
+    public void setTitle(String t) {
+        this.title = t;
+    }
+
     public String toRecord() {
         return id + ";" + title + ";" + author + ";" + totalPages + ";" + status;
+    }
+
+    @Override
+    public String toString() {
+        return  "도서번호 : " + id + "\n" +
+                "제목 : " + title + "\n" +
+                "작가 이름 : " + author + "\n" +
+                "페이지 수 : " + totalPages + " 페이지\n" +
+                "상태 : " + status;
     }
 
     public String getTitle() { return title; }
@@ -66,5 +79,10 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, author, totalPages, status);
+    }
+
+    public Book copy() {
+        return new Builder(title, author, totalPages)
+                .id(id).bookStatus(status.toString()).build();
     }
 }
