@@ -10,9 +10,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TestBookManager implements BookManager {
-    private final List<Book> bookList = new ArrayList<>(); // 전체 노드 풀
+public class ListBookManager implements BookManager {
+    private final List<Book> bookList; // 전체 노드 풀
     private final HashMap<Integer, Integer> numToIdx = new HashMap<>(); // {도서번호, idx}
+
+    public ListBookManager() {
+        bookList = new ArrayList<>();
+    }
+
+    public ListBookManager(List<Book> bookList){
+        this.bookList = bookList;
+        bookList.stream().forEach(book -> numToIdx.put(book.getNumber(), bookList.size()));
+    }
+
     @Override
     public Book register(Book book) {
         numToIdx.put(book.getNumber(), bookList.size());
@@ -22,18 +32,24 @@ public class TestBookManager implements BookManager {
 
     @Override
     public List<Book> searchAll() {
-        return bookList.stream().filter(book -> !book.isDeleted()).collect(Collectors.toList());
+        return bookList.stream().filter(book -> {
+            book.isOver5Minutes();
+            return !book.isDeleted();
+        }).collect(Collectors.toList());
     }
 
     @Override
     public List<Book> search(String text) {
-        return bookList.stream().filter(book -> book.hasText(text)).collect(Collectors.toList());
+        return bookList.stream().filter(book -> {
+            book.isOver5Minutes();
+            return book.hasText(text);
+        }).collect(Collectors.toList());
     }
 
     @Override
     public State rent(int bookNum) {
         Book book = getBook(bookNum);
-        if (book.getState() != State.AVAILABLE || book.getState() == State.PROCESSING && book.isOver5Minutes() ) {
+        if (book.getState() == State.AVAILABLE) {
             book.setState(State.RENTED);
             return State.AVAILABLE;
         }
@@ -76,6 +92,9 @@ public class TestBookManager implements BookManager {
 
     private Book getBook(int bookNum) {
         Integer idx = Optional.ofNullable(numToIdx.get(bookNum)).orElseThrow(EntityNotFoundException::new);
-        return bookList.get(idx);
+        Book book = bookList.get(idx);
+        if (book.isDeleted()) throw new EntityNotFoundException();
+        book.isOver5Minutes();
+        return book;
     }
 }
