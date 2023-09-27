@@ -48,15 +48,20 @@ class TestModeRepositoryTest {
     @Test
     @DisplayName("도서 분실 처리 성공 실패 테스트")
     public void missingBook(){
-        repository.registerBook("제목1", "Injun Choi", 100);
-        List<BookInfo> books1 = repository.findByTitle("제목1");
-        repository.registerBook("제목2", "Choi", 150);
-        List<BookInfo> books2 = repository.findByTitle("제목2");
-        String message = repository.missBook(2);
-        Assertions.assertEquals(message, "[System]도서가 분실처리 되었습니다.");
 
-        String message2 = repository.missBook(2);
-        Assertions.assertEquals(message2, "[System]이미 분실 처리된 도서입니다.");
+        repository.registerBook("제목1", "Injun Choi", 100);
+        repository.registerBook("제목2", "Choi", 150);
+
+        Optional<BookInfo> book1 = repository.findSameBook("제목1");
+        Optional<BookInfo> book2 = repository.findSameBook("제목2");
+        repository.missBook(1);
+
+        Assertions.assertEquals(book1.get().getStatus(), BookStatus.LOST);
+
+        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class, () -> {
+            repository.missBook(1);
+        });
+        Assertions.assertEquals(runtimeException.getMessage(), "[System] 이미 분실 처리된 도서입니다.");
     }
 
 
@@ -65,6 +70,22 @@ class TestModeRepositoryTest {
     public void findBookNotExist(){
         List<BookInfo> books = repository.findByTitle("blah blah");
         Assertions.assertEquals(0, books.size());
+    }
+
+    @Test
+    @DisplayName("도서 반납 실패 예외처리 테스트")
+    public void returnBookFail(){
+        //given
+        repository.registerBook("제목1", "Injun Choi", 100);
+        Optional<BookInfo> book = repository.findSameBook("제목1");
+        book.get().setStatus(BookStatus.RENT);
+        //when
+        repository.returnBook(1);
+        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class, () -> {
+            repository.returnBook(1);
+        });
+        //then
+        Assertions.assertEquals(runtimeException.getMessage(), "원래 대여 가능한 도서입니다.");
     }
 
 

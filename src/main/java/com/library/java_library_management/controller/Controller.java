@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 
 public class Controller {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
     Service service = new Service(new TestModeRepository());
 
     public void printInitial() throws IOException {

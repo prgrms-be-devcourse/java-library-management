@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.library.java_library_management.repository.TestModeRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-09-27T10:03:25" hostname="DLSWNS" time="0.87">
+<testsuite name="com.library.java_library_management.repository.TestModeRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-09-27T10:48:48" hostname="DLSWNS" time="0.825">
   <properties/>
-  <testcase name="rentBook()" classname="com.library.java_library_management.repository.TestModeRepositoryTest" time="0.87"/>
-  <system-out><![CDATA[19:03:24.238 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.library.java_library_management.repository.TestModeRepositoryTest]: TestModeRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-19:03:24.355 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.library.java_library_management.JavaLibraryManagementApplication for test class com.library.java_library_management.repository.TestModeRepositoryTest
+  <testcase name="도서 분실 처리 성공 실패 테스트" classname="com.library.java_library_management.repository.TestModeRepositoryTest" time="0.825"/>
+  <system-out><![CDATA[19:48:47.531 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.library.java_library_management.repository.TestModeRepositoryTest]: TestModeRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:48:47.650 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.library.java_library_management.JavaLibraryManagementApplication for test class com.library.java_library_management.repository.TestModeRepositoryTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -13,9 +13,9 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.4)
 
-2023-09-27T19:03:24.759+09:00  INFO 18188 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Starting TestModeRepositoryTest using Java 17.0.6 with PID 18188 (started by dlswn in D:\Users\java_library_management)
-2023-09-27T19:03:24.760+09:00  INFO 18188 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : No active profile set, falling back to 1 default profile: "default"
-2023-09-27T19:03:25.261+09:00  INFO 18188 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Started TestModeRepositoryTest in 0.738 seconds (process running for 2.009)
+2023-09-27T19:48:48.040+09:00  INFO 5592 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Starting TestModeRepositoryTest using Java 17.0.6 with PID 5592 (started by dlswn in D:\Users\java_library_management)
+2023-09-27T19:48:48.042+09:00  INFO 5592 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : No active profile set, falling back to 1 default profile: "default"
+2023-09-27T19:48:48.577+09:00  INFO 5592 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Started TestModeRepositoryTest in 0.758 seconds (process running for 2.077)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

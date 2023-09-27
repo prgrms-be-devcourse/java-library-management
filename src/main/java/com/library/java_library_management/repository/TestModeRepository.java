@@ -44,28 +44,32 @@ public class TestModeRepository implements Repository{
     }
 
     @Override
-    public ApiResponse returnBook(int book_id) {
-        Optional<BookInfo> returnBookInfo = bookList.stream()
-                .filter(book -> book.getBook_id() == book_id)
-                .findAny();
+    public void returnBook(int book_id) {
+        bookList.stream()
+                .filter(book -> book.getBook_id() == book_id
+                && book.getStatus().equals(BookStatus.RENT) || book.getStatus().equals(BookStatus.LOST))
+                .findAny()
+                .ifPresentOrElse(book -> {
+                    book.setStatus(BookStatus.AVAILABLE);
+                },() -> {
+                    throw new RuntimeException("원래 대여 가능한 도서입니다.");
+                });
 
-        if(returnBookInfo.get().getStatus().equals(BookStatus.RENT) || returnBookInfo.get().getStatus().equals(BookStatus.LOST)){
-            returnBookInfo.get().setStatus(BookStatus.AVAILABLE);
-            return ApiResponse.success("반납 처리 되었습니다.");
-        }
-        return ApiResponse.error(returnBookInfo.get().getStatus().rentBook(returnBookInfo.get()));
 
     }
 
     @Override
-    public String missBook(int book_id) {
-        Optional<BookInfo> book = bookList.stream().filter(bookInfo -> bookInfo.getBook_id() == book_id).findAny();
-        if(book.get().getStatus().equals(BookStatus.LOST)){
-            return "[System]이미 분실 처리된 도서입니다.";
-        }
+    public void missBook(int book_id) {
+        bookList.stream()
+                .filter(bookInfo -> bookInfo.getBook_id() == book_id
+                && bookInfo.getStatus() != BookStatus.LOST)
+                .findAny()
+                .ifPresentOrElse(book -> {
+                    book.setStatus(BookStatus.LOST);
+                }, () -> {
+                    throw new RuntimeException("[System] 이미 분실 처리된 도서입니다.");
+                });
 
-        book.get().setStatus(BookStatus.LOST);
-        return "[System]도서가 분실처리 되었습니다.";
     }
 
 
@@ -79,7 +83,7 @@ public class TestModeRepository implements Repository{
                     bookList.remove(bookInfo);
                 },
                         () -> {
-                    throw new RuntimeException("존재하지 않는 도서입니다.");
+                    throw new RuntimeException("[System] 존재하지 않는 도서입니다.");
                         });
 
     }

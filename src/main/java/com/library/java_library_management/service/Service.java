@@ -14,11 +14,9 @@ import java.util.Optional;
 
 public class Service {
     private Repository repository;
-
     public Service(Repository repository) {
         this.repository = repository;
     }
-
 
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private String title;
@@ -61,7 +59,7 @@ public class Service {
         String title = br.readLine();
         List<BookInfo> books = repository.findByTitle(title);
         if(books.isEmpty()){
-            System.out.println("존재하지 않는 책입니다.");
+            System.out.println("조회된 책이 없습니다.");
             return;
         }
         for(BookInfo book : books){
@@ -74,7 +72,6 @@ public class Service {
                     "------------------------------\n" +
                     "\n");
                 }
-
     }
 
     //도서 대여
@@ -85,21 +82,26 @@ public class Service {
         int book_id = Integer.parseInt(br.readLine());
         try{
             repository.rentBook(book_id);
+            System.out.println("대여 완료되었습니다.");
         }catch (RuntimeException e){
             System.out.println(e.getMessage());
         }
     }
 
     //도서 반납
-    public String returnBook() throws IOException {
+    public void returnBook() throws IOException {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n" +
                 "\n" +
                 "Q. 반납할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-        ApiResponse apiResponse = repository.returnBook(book_id);
-
-        return apiResponse.message();
+        try{
+            repository.returnBook(book_id);
+            System.out.println("[System] 반납 처리 되었습니다.");
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
     }
+
 
     //도서 분실처리
     public void missBook() throws IOException{
@@ -107,7 +109,13 @@ public class Service {
                 "\n" +
                 "Q. 분실 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-        repository.missBook(number);
+        try{
+            repository.missBook(number);
+            System.out.println("[System] 도서가 분실 처리 되었습니다.");
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     //도서 삭제처리
@@ -118,11 +126,9 @@ public class Service {
         int number = Integer.parseInt(br.readLine());
         try{
             repository.deleteById(number);
+            System.out.println("[System] 삭제 처리 되었습니다.");
         }catch(RuntimeException e){
-            System.out.println("[System]" + e.getMessage());
+            System.out.println(e.getMessage());
         }
-
     }
-
-
 }
