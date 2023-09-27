@@ -43,4 +43,8 @@ public class BookService {
     public void reportLoss(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.LOST);
     }
+
+    public void deleteBook(long bookId) {
+        repository.deleteById(bookId);
+    }
 }

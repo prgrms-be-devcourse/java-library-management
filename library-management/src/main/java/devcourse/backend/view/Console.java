@@ -96,6 +96,15 @@ public class Console implements Runnable {
         } catch (IllegalArgumentException e) { system("이미 분실 처리된 도서입니다."); }
     }
 
+    public static void deleteMenu() {
+        system("도서 삭제 처리 메뉴로 넘어갑니다.");
+
+        try {
+            service.deleteBook(longInput("삭제 처리할 도서번호를 입력하세요"));
+            system("도서가 삭제 처리 되었습니다.");
+        } catch (IllegalArgumentException e) { system(e.getMessage()); }
+    }
+
     private static void system(String s) {
         System.out.println();
         System.out.println("[System] " + s);
