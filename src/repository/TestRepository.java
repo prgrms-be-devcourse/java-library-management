@@ -15,6 +15,9 @@ public class TestRepository implements Repository{
 
     @Override
     public void addBook(Book book) {
+        int size = bookRepository.size();
+        Long id = size>0?bookRepository.get(size-1).getId()+1:0;
+        book.setId(id);
         bookRepository.add(book);
     }
 

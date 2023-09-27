@@ -1,10 +1,6 @@
 package domain;
 
-
 public class Book {
-
-    //도서 번호 제공
-    private static Long number = 0L;
 
     //도서 번호
     private Long id;
@@ -18,7 +14,6 @@ public class Book {
     private Status status;
 
     public Book(String name, String author, int page) {
-        this.id = ++number;
         this.name = name;
         this.author = author;
         this.page = page;
@@ -35,6 +30,10 @@ public class Book {
     public int getPage(){ return page; }
     public Status getStatus(){
         return status;
+    }
+
+    public void setId(Long id){
+        this.id = id;
     }
 
 
