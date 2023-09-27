@@ -5,19 +5,14 @@ import com.programmers.librarymanagement.utils.ConsoleIo;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
 import com.programmers.librarymanagement.repository.TestBookRepository;
 import com.programmers.librarymanagement.application.LibraryManagementService;
-import com.programmers.librarymanagement.utils.CsvFileIo;
-
-import java.util.List;
 
 public class LibraryManagementController {
 
     private final ConsoleIo consoleIo;
-    private final CsvFileIo csvFileIo;
     private LibraryManagementService libraryManagementService;
 
-    public LibraryManagementController(ConsoleIo consoleIo, CsvFileIo csvFileIo) {
+    public LibraryManagementController(ConsoleIo consoleIo) {
         this.consoleIo = consoleIo;
-        this.csvFileIo = csvFileIo;
     }
 
     // 모드 선택
@@ -29,19 +24,17 @@ public class LibraryManagementController {
             case "1" -> {
                 System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다. \n");
                 libraryManagementService = new LibraryManagementService(new NormalBookRepository());
-                addBookByFile(csvFileIo.readCsv());
-                run();
-                csvFileIo.writeCsv(libraryManagementService.getAllBooks());
             }
 
             case "2" -> {
                 System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다. \n");
                 libraryManagementService = new LibraryManagementService(new TestBookRepository());
-                run();
             }
 
             default -> throw new SelectNotFoundException();
         }
+
+        run();
     }
 
     // 모드 진입 후 선택 화면
@@ -68,14 +61,6 @@ public class LibraryManagementController {
         }
 
         run();
-    }
-
-    private void addBookByFile(List<List<String>> dataList) {
-
-        for (List<String> splitData : dataList) {
-
-            libraryManagementService.addBook(splitData.get(0), splitData.get(1), Integer.parseInt(splitData.get(2)));
-        }
     }
 
     private void addBook() {
