@@ -20,4 +20,6 @@ public class BookService {
     public List<Book> getAllBooks() {
         return repository.findAll();
     }
+
+    public List<Book> searchBooks(String keyword) { return repository.findByKeyword(keyword); }
 }

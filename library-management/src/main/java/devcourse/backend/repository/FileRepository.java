@@ -28,10 +28,17 @@ public class FileRepository {
         return books.stream().map(b -> b.copy()).toList();
     }
 
-    public List<Book> findByTitle(String title) {
+    public List<Book> findByKeyword(String keyword) {
         return books.stream()
-                .filter(b -> b.getTitle().equals(title))
+                .filter(b -> b.like(keyword))
+                .map(b -> b.copy())
                 .toList();
+    }
+
+    public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
+        return books.stream()
+                .filter(b -> b.isMatched(title, author, totalPages))
+                .findAny().orElseThrow().copy();
     }
 
     public void addBook(Book book) {

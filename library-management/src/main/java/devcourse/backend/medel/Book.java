@@ -50,10 +50,6 @@ public class Book {
         status = builder.status;
     }
 
-    public void setTitle(String t) {
-        this.title = t;
-    }
-
     public String toRecord() {
         return id + ";" + title + ";" + author + ";" + totalPages + ";" + status;
     }
@@ -67,7 +63,17 @@ public class Book {
                 "상태 : " + status;
     }
 
-    public String getTitle() { return title; }
+    public boolean like(String keyword) {
+        return title.contains(keyword);
+    }
+
+    public boolean isMatched(String title, String author, int totalPages) {
+        if(this.title.equals(title) &&
+            this.author.equals(author) &&
+            this.totalPages == totalPages) return true;
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
