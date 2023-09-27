@@ -1,11 +1,10 @@
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.Book;
-import devcourse.backend.medel.FileRepository;
+import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.List;
 
 public class BookServiceTest {

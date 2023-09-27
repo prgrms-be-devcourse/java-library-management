@@ -1,4 +1,4 @@
-package devcourse.backend.medel;
+package devcourse.backend.repository;
 
 import devcourse.backend.medel.Book;
 

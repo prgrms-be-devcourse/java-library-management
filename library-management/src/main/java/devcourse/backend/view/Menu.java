@@ -7,6 +7,7 @@ public enum Menu {
     REGISTER(1, "도서 등록", Console::registerMenu),
     LOOKUP(2, "전체 도서 목록 조회", Console::allBookMenu);
 
+
     private final String description;
     private final int num;
 

@@ -1,7 +1,7 @@
 package devcourse.backend.business;
 
 import devcourse.backend.medel.Book;
-import devcourse.backend.medel.FileRepository;
+import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
 
 import java.util.List;
