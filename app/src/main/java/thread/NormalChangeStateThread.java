@@ -1,6 +1,6 @@
 package thread;
 
-import domain.Book;
+import repository.Book;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,7 @@
-package domain;
+package repository;
 
 public class Book {
+    static int countId;
     int id;
     String title;
     String writer;
@@ -8,7 +9,7 @@ public class Book {
     String state;
 
     public Book() {
-        this.id = this.hashCode();
+        this.id = countId++;
         this.state = "대여 가능";
     }
 

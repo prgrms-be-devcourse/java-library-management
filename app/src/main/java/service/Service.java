@@ -1,6 +1,6 @@
 package service;
 
-import domain.Book;
+import repository.Book;
 import repository.Repository;
 
 import java.io.*;

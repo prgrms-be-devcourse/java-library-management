@@ -1,6 +1,6 @@
 package thread;
 
-import domain.Book;
+import repository.Book;
 
 public class TestChangeStateThread extends Thread {
     private Book book;

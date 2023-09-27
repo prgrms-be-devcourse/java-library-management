@@ -1,12 +1,12 @@
 package repository;
 
-import domain.Book;
 import thread.NormalChangeStateThread;
 
 import java.io.*;
-import java.nio.BufferOverflowException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static repository.Book.countId;
 
 public class NormalRepository implements Repository {
     File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
@@ -14,6 +14,7 @@ public class NormalRepository implements Repository {
 
     public NormalRepository() throws IOException {
         fileToList(books, file);
+        countId = books.get(books.size() - 1).getId() + 1;
         organizeState(books);
         updateFile(books, file);
     }

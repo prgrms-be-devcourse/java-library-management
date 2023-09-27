@@ -1,16 +1,18 @@
 package repository;
 
-import domain.Book;
 import thread.TestChangeStateThread;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static repository.Book.countId;
+
 public class TestRepository implements Repository {
     List<Book> books = new ArrayList<>();
+
+    public TestRepository() {
+        countId = 1;
+    }
 
     public void register(Book book) {
         books.add(book);
