@@ -12,10 +12,7 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GeneralRepository implements Repository{
 
@@ -121,7 +118,7 @@ public class GeneralRepository implements Repository{
             if (book.getId() == returnId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), "대여 중") || Objects.equals(book.getCondition(), "분실됨")) { //대여 중 or 분실됨이면 반납 가능
-                    book.setCondition("대여 가능");
+                    book.setCondition("도서 정리중");
                     message = "도서가 반납 처리 되었습니다";
                 } else { // 대여 가능
                     message = "원래 대여가 가능한 도서입니다.";
@@ -133,6 +130,8 @@ public class GeneralRepository implements Repository{
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
         saveToCSV(list);
+
+        returnCondition(returnId, list);
 
         return message;
     }
@@ -188,21 +187,39 @@ public class GeneralRepository implements Repository{
         return message;
     }
 
-    // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
-    private static void saveToCSV(List<Book> list) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(csvFileName))) {
-            for (Book book : list) {
-                String[] record = {
-                        String.valueOf(book.getId()),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        String.valueOf(book.getPage()),
-                        book.getCondition()
-                };
-                writer.writeNext(record);
+    //애플리케이션 종료 시 도서 관리중을 바꾸기 위한 메서드
+    public static void endApplication(List<Book> list) {
+        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
+            for(Book book : list) {
+                if(Objects.equals(book.getCondition(), "도서 정리중")) book.setCondition("대여 가능");
+                csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
+    private static void saveToCSV(List<Book> list) {
+        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
+            for(Book book : list) {
+                csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //도서 정리중에서 대여 가능으로 바꾸는 메서드
+    private static void returnCondition(int returnId, List<Book> list) {
+        Timer m_timer = new Timer(true);
+        TimerTask m_task = new TimerTask() {
+            @Override
+            public void run() {
+                list.get(returnId-1).setCondition("대여 가능");
+                saveToCSV(list);
+            }
+        };
+        m_timer.schedule(m_task, 300000);
     }
 }
