@@ -10,9 +10,8 @@ import java.util.Objects;
 public class TestRepository implements Repository{
 
     @Override
-    public List<Book> load(List<Book> list) {
-        list = new ArrayList<>();
-        return list;
+    public void load(List<Book> list) {
+        list.clear();
     }
 
     @Override

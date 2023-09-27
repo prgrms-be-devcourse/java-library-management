@@ -4,6 +4,7 @@ import domain.Book;
 import repository.GeneralRepository;
 import repository.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,7 +12,7 @@ public class GeneralService implements Service{
 
     Scanner scanner = new Scanner(System.in);
 
-    private List<Book> list;
+    private List<Book> list = new ArrayList<>();
     Repository repository = new GeneralRepository();
     private int id;
 
@@ -22,7 +23,7 @@ public class GeneralService implements Service{
 
     @Override
     public void load() {
-        list = repository.load(list);
+        repository.load(list);
 
         if(list.isEmpty()) id = 1;
         else {

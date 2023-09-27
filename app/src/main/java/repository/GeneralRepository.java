@@ -22,8 +22,8 @@ public class GeneralRepository implements Repository{
     private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFileEmpty.csv";
 
     @Override
-    public List<Book> load(List<Book> list) {
-        list = new ArrayList<>();
+    public void load(List<Book> list) {
+        list.clear();
         try {
             // CSV 파일을 읽어오는 CSVReader 객체 생성
             CSVReader csvReader = new CSVReader(new FileReader(csvFileName));
@@ -43,7 +43,6 @@ public class GeneralRepository implements Repository{
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         }
-        return list;
     }
 
     @Override

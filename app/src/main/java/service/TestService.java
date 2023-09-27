@@ -12,7 +12,7 @@ public class TestService implements Service {
 
     Scanner scanner = new Scanner(System.in);
     Repository repository = new TestRepository();
-    private List<Book> list;
+    private List<Book> list = new ArrayList<>();
     private int id;
 
     public TestService() {
@@ -22,7 +22,7 @@ public class TestService implements Service {
 
     @Override
     public void load() {
-        list = new ArrayList<>();
+        repository.load(list);
 
         if(list.isEmpty()) id = 1;
         else {

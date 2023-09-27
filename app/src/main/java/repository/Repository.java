@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Repository {
 
-    List<Book> load(List<Book> list);
+    void load(List<Book> list);
 
     void save(int id, String title, String author, int page, List<Book> list);
 
