@@ -3,12 +3,22 @@
  */
 package com.programmers.library;
 
+import java.util.Scanner;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+    public static void run() {
+        Mode.showModes();
+
+        Scanner scanner = new Scanner(System.in);
+        int modeId = scanner.nextInt();
+
+        Mode mode = Mode.selectMode(modeId);
+        mode.run();
+
+        scanner.close();
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        run();
     }
 }
