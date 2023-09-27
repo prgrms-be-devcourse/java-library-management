@@ -52,10 +52,11 @@ public class TestRepository implements Repository{
     }
 
     public void edit(Book targetBook){
-        for(Book book : bookMap.values()){
-            if(book.equals(targetBook)){
+        for(Long id : bookMap.keySet()){
+            if(targetBook.getId().equals(id)){
+                Book book = bookMap.get(id);
                 book = targetBook;
-                return;
+                break;
             }
         }
     }
