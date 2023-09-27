@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.*;
 
 public class BookService {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private List<Book> books = new ArrayList<>();
 
     public void updateBooks(List<Book> bookList) {
@@ -41,7 +40,7 @@ public class BookService {
             System.out.println("도서번호 : " + book.getId());
             System.out.println("제목 : " + book.getTitle());
             System.out.println("작가 이름 : " + book.getAuthor());
-            System.out.println("페이지 수 : " + book.getPageNum());
+            System.out.println("페이지 수 : " + book.getPageNum() +" 페이지");
             System.out.println("상태 : " + book.getState());
             System.out.println("\n------------------------------\n");
         });
@@ -75,7 +74,7 @@ public class BookService {
         return findBook;
     }
 
-    public void returnBook(int bookId) throws IOException {
+    public Book returnBook(int bookId) throws IOException {
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
             return false; }).findAny()
@@ -92,9 +91,10 @@ public class BookService {
             findBookState.showState();
         }
 
+        return findBook;
     }
 
-    public void lostBook(int bookId) throws IOException {
+    public Book lostBook(int bookId) throws IOException {
         Book findBook = books.stream().filter(book -> {
             if(book.getId()==bookId) return true;
             return false; }).findAny()
@@ -107,12 +107,15 @@ public class BookService {
         }else {
             findBookState.showState();
         }
+
+        return findBook;
     }
 
-    public void deleteBook(int bookId) throws IOException {
+    public Book deleteBook(int bookId) throws IOException {
 
         if(bookId > books.size()) {
             System.out.println("[System] 존재하지 않는 도서번호 입니다.");
+            throw new NoSuchElementException("존재하지 않는 도서번호 입니다.");
         }else {
             books.stream().filter(book -> book.getId() > bookId)
                     .forEach(book -> {
@@ -120,9 +123,11 @@ public class BookService {
                         book.setId(id - 1);
                     });
 
+            Book removeBook = books.get(bookId);
             books.remove(bookId - 1);
 
             System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
+            return removeBook;
         }
     }
 
