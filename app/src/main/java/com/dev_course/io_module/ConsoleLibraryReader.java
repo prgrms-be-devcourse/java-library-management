@@ -3,30 +3,32 @@ package com.dev_course.io_module;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Objects;
 
 public class ConsoleLibraryReader implements LibraryReader {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    private String str;
+    private String sVal;
 
-    private void next() throws IOException {
-        str = br.readLine();
+    private void next() {
+        try {
+            sVal = br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public String read() throws IOException {
+    public String read() {
         next();
-        return str;
+        return sVal;
     }
 
     @Override
-    public String readOrElse(String defaultValue) {
+    public String readOrDefault(String defaultValue) {
         try {
             next();
-        } catch (IOException ignored) {
-            str = null;
+            return sVal;
+        } catch (RuntimeException e) {
+            return defaultValue;
         }
-
-        return Objects.isNull(str) ? defaultValue : str;
     }
 }
