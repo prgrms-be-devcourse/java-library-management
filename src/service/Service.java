@@ -48,14 +48,16 @@ public class Service{
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         System.out.print("\n >");
         String name = br.readLine();
-        Book book = repository.searchBook(name);
-
-        System.out.println("도서제목 : " + book.getId());
-        System.out.println("제목 : " + book.getName());
-        System.out.println("작가 이름 : " + book.getAuthor());
-        System.out.println("페이지 수 : " + book.getPage());
-        System.out.println("상태 : " + book.getStatus().getStatusName());
-        System.out.println("----------------------");
+        repository.searchBook(name).forEach(
+                book->{
+                    System.out.println("도서제목 : " + book.getId());
+                    System.out.println("제목 : " + book.getName());
+                    System.out.println("작가 이름 : " + book.getAuthor());
+                    System.out.println("페이지 수 : " + book.getPage());
+                    System.out.println("상태 : " + book.getStatus().getStatusName());
+                    System.out.println("----------------------");
+                }
+        );
         System.out.println("[System] 검색된 도서 끝\n");
     }
 

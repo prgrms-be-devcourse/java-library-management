@@ -24,11 +24,12 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public Book searchBook(String name) {
-        return bookRepository.stream()
+    public List<Book> searchBook(String name) {
+        List<Book> searchResult = new ArrayList<>();
+        bookRepository.stream()
                 .filter(book->book.getName().contains(name))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("[System] 존재하지 않습니다"));
+                .forEach(searchResult::add);
+        return searchResult;
     }
 
     @Override

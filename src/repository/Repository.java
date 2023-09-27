@@ -11,7 +11,7 @@ public interface Repository {
     //전체 목록 조회
     List<Book> getAll();
     //제목 검색
-    Book searchBook(String name);
+    List<Book> searchBook(String name);
     //도서 조회
     Book getBook(Long bookNumber);
     //도서 삭제
