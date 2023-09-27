@@ -78,6 +78,8 @@ public class Book {
         return this.id == id;
     }
 
+    public long getId() { return id; }
+
     public void changeStatus(BookStatus status) {
         if(BookStatus.canSwitch(this.status, status)) this.status = status;
         else throw new IllegalArgumentException(this.status.toString());
