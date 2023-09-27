@@ -39,4 +39,8 @@ public class BookService {
             }
         }, 5 * 60 * 1000);
     }
+
+    public void reportLoss(long bookId) {
+        repository.findById(bookId).changeStatus(BookStatus.LOST);
+    }
 }
