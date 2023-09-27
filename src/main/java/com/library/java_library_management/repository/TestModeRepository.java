@@ -6,11 +6,29 @@ import com.library.java_library_management.status.BookStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TestModeRepository implements Repository{
 
     public List<BookInfo> bookList = new ArrayList<>();
+    int book_number_cnt = 1;
+    @Override
+    public void registerBook(String title, String author, int pageSize) {
+        bookList.add(new BookInfo(book_number_cnt, author, title, pageSize, BookStatus.AVAILABLE));
+        book_number_cnt++;
+    }
+    @Override
+    public List<BookInfo> getTotalBook() {
+        return bookList;
+    }
+    @Override
+    public List<BookInfo> findByTitle(String title) {
+        return bookList.stream()
+                .filter(bookinfo -> bookinfo.getTitle().contains(title))
+                .collect(Collectors.toList());
+    }
     @Override
     public String rentBook(int book_id){
         Optional<BookInfo> book = bookList.stream().filter(bookinfo -> bookinfo.getBook_id() == book_id).findAny();
@@ -32,27 +50,6 @@ public class TestModeRepository implements Repository{
     }
 
     @Override
-    public BookInfo findByTitle(String title) {
-        Optional<BookInfo> book = bookList.stream()
-                .filter(bookinfo -> bookinfo.getTitle() == title)
-                .findAny();
-        return book.get();
-    }
-
-    @Override
-    public void deleteById(int book_id) {
-        Optional<BookInfo> book = bookList.stream()
-                .filter(bookinfo -> bookinfo.getBook_id() == book_id)
-                .findAny();
-        bookList.remove(book.get());
-    }
-
-    @Override
-    public void registerBook(String title, String author, int pageSize) {
-        bookList.add(new BookInfo(bookList.size() + 1, author, title, pageSize, BookStatus.AVAILABLE));
-    }
-
-    @Override
     public String missBook(int book_id) {
         Optional<BookInfo> book = bookList.stream().filter(bookInfo -> bookInfo.getBook_id() == book_id).findAny();
         if(book.get().getStatus().equals(BookStatus.LOST)){
@@ -63,8 +60,19 @@ public class TestModeRepository implements Repository{
         return "[System]도서가 분실처리 되었습니다.";
     }
 
+
+
     @Override
-    public List<BookInfo> getTotalBook() {
-        return bookList;
+    public void deleteById(int book_id) {
+        Optional<BookInfo> book = bookList.stream()
+                .filter(bookinfo -> bookinfo.getBook_id() == book_id)
+                .findAny();
+        bookList.remove(book.get());
     }
+
+
+
+
+
+
 }

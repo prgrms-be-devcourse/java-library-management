@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.library.java_library_management.repository.TestModeRepositoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-09-27T08:47:58" hostname="DLSWNS" time="0.825">
+  <properties/>
+  <testcase name="존재하지 않는 책 조회" classname="com.library.java_library_management.repository.TestModeRepositoryTest" time="0.825"/>
+  <system-out><![CDATA[17:47:57.749 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.library.java_library_management.repository.TestModeRepositoryTest]: TestModeRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:47:57.876 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.library.java_library_management.JavaLibraryManagementApplication for test class com.library.java_library_management.repository.TestModeRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.4)
+
+2023-09-27T17:47:58.282+09:00  INFO 16820 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Starting TestModeRepositoryTest using Java 17.0.6 with PID 16820 (started by dlswn in D:\Users\java_library_management)
+2023-09-27T17:47:58.284+09:00  INFO 16820 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : No active profile set, falling back to 1 default profile: "default"
+2023-09-27T17:47:58.794+09:00  INFO 16820 --- [    Test worker] c.l.j.repository.TestModeRepositoryTest  : Started TestModeRepositoryTest in 0.755 seconds (process running for 2.0)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

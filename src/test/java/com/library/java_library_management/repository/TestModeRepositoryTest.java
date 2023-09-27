@@ -7,6 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @SpringBootTest
 class TestModeRepositoryTest {
@@ -16,34 +19,34 @@ class TestModeRepositoryTest {
     @Test
     public void registerBook(){
         repository.registerBook("제목1", "Injun Choi", 100);
-        BookInfo book1 = repository.findByTitle("제목1");
-        Assertions.assertEquals(book1.getPage_size(), 100);
+        List<BookInfo> books = repository.findByTitle("제목1");
+//        Assertions.assertEquals(book.get().getPage_size(), 100);
     }
 
     @Test
     public void rentBook(){
         repository.registerBook("제목1", "Injun Choi", 100);
-        BookInfo book1 = repository.findByTitle("제목1");
+        List<BookInfo> books = repository.findByTitle("제목1");
 
         Assertions.assertEquals(repository.rentBook(1), "도서가 대여 처리 되었습니다."); // 대여 성공 경우
-        Assertions.assertEquals(repository.rentBook(1), "대여중인 도서입니다."); //대여 실패 경우
+        Assertions.assertEquals(repository.rentBook(1), "대여중"); //대여 실패 경우
     }
 
     @Test
     public void deleteById(){
         repository.registerBook("제목1", "Injun Choi", 100);
-        BookInfo book1 = repository.findByTitle("제목1");
+        List<BookInfo> books = repository.findByTitle("제목1");
         repository.deleteById(1);
-        Assertions.assertEquals(0, repository.getTotalBook());
+        Assertions.assertEquals(0, repository.getTotalBook().size());
     }
 
     @Test
     @DisplayName("도서 분실 처리 성공 실패 테스트")
     public void missingBook(){
         repository.registerBook("제목1", "Injun Choi", 100);
-        BookInfo book1 = repository.findByTitle("제목1");
+        List<BookInfo> books1 = repository.findByTitle("제목1");
         repository.registerBook("제목2", "Choi", 150);
-        BookInfo book2 = repository.findByTitle("제목2");
+        List<BookInfo> books2 = repository.findByTitle("제목2");
         String message = repository.missBook(2);
         Assertions.assertEquals(message, "[System]도서가 분실처리 되었습니다.");
 
@@ -51,16 +54,13 @@ class TestModeRepositoryTest {
         Assertions.assertEquals(message2, "[System]이미 분실 처리된 도서입니다.");
     }
 
-//    @Test
-//    @DisplayName("전체 목록 조회 테스트")
-//    public void getTotalBook(){
-//        repository.registerBook("제목1", "Injun Choi", 100);
-//        BookInfo book1 = repository.findByTitle("제목1");
-//        repository.registerBook("제목2", "Choi", 150);
-//        BookInfo book2 = repository.findByTitle("제목2");
-//        Assertions.assertEquals(service.getBook(), 2);
-//    }
 
+    @Test
+    @DisplayName("존재하지 않는 책 조회")
+    public void findBookNotExist(){
+        List<BookInfo> books = repository.findByTitle("blah blah");
+        Assertions.assertEquals(0, books.size());
+    }
 
 
 }

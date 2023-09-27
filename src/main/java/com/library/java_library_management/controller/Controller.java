@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Controller {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     Service service = new Service(new TestModeRepository());
-    Repository repository = new TestModeRepository();
 
-    public void selectFunction() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public void printInitial() throws IOException {
+
         while(true){
             System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
                     "1. 도서 등록\n" +
@@ -26,17 +26,22 @@ public class Controller {
             int menu = Integer.parseInt(br.readLine());
             switch (menu){
                 case 1: service.register();
-                break;
-                case 2: repository.getTotalBook();
-                break;
+                    break;
+                case 2: service.getBook();
+                    break;
+                case 3: service.findByTitle();
+                    break;
                 case 4: service.rent();
-                break;
+                    break;
                 case 5: service.returnBook();
-                break;
+                    break;
+                case 6: service.missBook();
+                    break;
+                case 7: service.deleteBook();
+                    break;
 
             }
         }
-
 
     }
 }

@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Optional;
 
 public class Service {
     private Repository repository;
@@ -31,19 +32,20 @@ public class Service {
         author = br.readLine();
         System.out.println("페이지 수를 입력하세요");
         pageSize = Integer.parseInt(br.readLine());
-        BookInfo bookInfo = new BookInfo(0, author, title, pageSize, BookStatus.AVAILABLE);
+
         repository.registerBook(title, author, pageSize);
     }
-
+    
+    //전체 목록 조회
     public void getBook(){
         List<BookInfo> totalBook = repository.getTotalBook();
         System.out.println(totalBook.size());
         for(BookInfo book : totalBook){
-            System.out.println("도서번호 : " + book.getTitle() + "\n" +
+            System.out.println("도서번호 : " + book.getBook_id() + "\n" +
                     "제목 : " + book.getTitle() + "\n" +
                     "작가 : " + book.getAuthor() + "\n" +
                     "페이지 수 : " + book.getPage_size() + "\n" +
-                    "상태 + " + book.getStatus());
+                    "상태 : " + book.getStatus());
             System.out.println("\n" +
                     "------------------------------\n" +
                     "\n");
@@ -56,12 +58,22 @@ public class Service {
                 "\n" +
                 "Q. 검색할 도서 제목 일부를 입력하세요.");
         String title = br.readLine();
-        BookInfo book = repository.findByTitle(title);
-        System.out.println("도서번호 : " + book.getTitle() + "\n" +
-                "제목 : " + book.getTitle() + "\n" +
-                "작가 : " + book.getAuthor() + "\n" +
-                "페이지 수 : " + book.getPage_size() + "\n" +
-                "상태 + " + book.getStatus());
+        List<BookInfo> books = repository.findByTitle(title);
+        if(books.isEmpty()){
+            System.out.println("존재하지 않는 책입니다.");
+            return;
+        }
+        for(BookInfo book : books){
+            System.out.println("도서번호 : " + book.getBook_id() + "\n" +
+                    "제목 : " + book.getTitle() + "\n" +
+                            "작가 : " + book.getAuthor() + "\n" +
+                            "페이지 수 : " + book.getPage_size() + "\n" +
+                            "상태 : " + book.getStatus());
+            System.out.println("\n" +
+                    "------------------------------\n" +
+                    "\n");
+                }
+
     }
 
     //도서 대여
@@ -73,6 +85,7 @@ public class Service {
         return repository.rentBook(book_id);
     }
 
+    //도서 반납
     public String returnBook() throws IOException {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n" +
                 "\n" +
@@ -82,6 +95,7 @@ public class Service {
         return apiResponse.message();
     }
 
+    //도서 분실처리
     public void missBook() throws IOException{
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n" +
                 "\n" +
@@ -89,7 +103,8 @@ public class Service {
         int number = Integer.parseInt(br.readLine());
         repository.missBook(number);
     }
-
+    
+    //도서 삭제처리
     public void deleteBook() throws IOException{
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n" +
                 "\n" +

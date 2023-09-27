@@ -8,17 +8,17 @@ import java.util.function.BiFunction;
 public enum BookStatus {
 
     RENT(((bookInfo, s) -> {
-        return "대여중인 도서입니다.";
+        return "대여중";
     })),
     AVAILABLE(((bookInfo, s) -> {
         bookInfo.setStatus(BookStatus.RENT);
         return "도서가 대여 처리 되었습니다.";
     }) ),
     LOST(((bookInfo, s) -> {
-        return "분실된 도서입니다.";
+        return "분실";
     })),
     CLEANING(((bookInfo, s) -> {
-        return "정리중인 도서입니다.";
+        return "정리중";
     }));
 
     private final BiFunction<BookInfo, String, String> expression;

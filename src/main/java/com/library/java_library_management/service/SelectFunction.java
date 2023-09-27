@@ -25,6 +25,8 @@ public class SelectFunction {
                     break;
                 case 2: service.getBook();
                     break;
+                case 3: service.findByTitle();
+                    break;
                 case 4: service.rent();
                     break;
                 case 5: service.returnBook();
