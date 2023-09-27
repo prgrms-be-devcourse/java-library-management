@@ -23,9 +23,12 @@ public class LibraryManagementService {
         bookRepository.addBook(book);
     }
 
-    public void getAllBooks() {
+    public List<Book> getAllBooks() {
 
-        printBookInfo(bookRepository.findAll());
+        List<Book> bookList = bookRepository.findAll();
+        printBookInfo(bookList);
+
+        return bookList;
     }
 
     public void getBookByTitle(String title) {
