@@ -1,6 +1,7 @@
 package com.programmers.library.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,28 +13,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.programmers.library.entity.Book;
 
-public class FileUtil {
-	private final String FILE_PATH = "src/main/resources/data.json";
-	private final ObjectMapper objectMapper = new ObjectMapper();
+public class FileUtil<T> {
+	private static final String FILE_PATH = "src/main/resources/data.json";
+	private final ObjectMapper objectMapper;
 
-
-	public List<Book> readFile() {
+	public FileUtil() {
+		objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		List<Book> bookList = new ArrayList<>();
-		try {
-			bookList = objectMapper.readValue(new File(FILE_PATH), new TypeReference<>() {});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bookList;
 	}
 
-	public void writeFile(List<Book> bookList) {
-		objectMapper.registerModule(new JavaTimeModule());
+	public <T> List<T> readFile(Class<T> clazz) {
+		if (!Files.exists(Paths.get(FILE_PATH))) {
+			throw new RuntimeException("파일이 존재하지 않습니다: " + FILE_PATH);
+		}
+
+		List<T> list = new ArrayList<>();
 		try {
-			objectMapper.writeValue(new File(FILE_PATH), bookList);
+			list = objectMapper.readValue(new File(FILE_PATH), objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException("파일을 읽어오는데 실패했습니다.");
+		}
+		return list;
+	}
+
+	public void writeFile(List<T> list) {
+		if (!Files.exists(Paths.get(FILE_PATH))) {
+			throw new RuntimeException("파일이 존재하지 않습니다: " + FILE_PATH);
+		}
+
+		try {
+			objectMapper.writeValue(new File(FILE_PATH), list);
+		} catch (IOException e) {
+			throw new RuntimeException("파일 저장에 실패했습니다.");
 		}
 	}
 }
