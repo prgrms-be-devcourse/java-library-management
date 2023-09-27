@@ -1,9 +1,9 @@
 package com.programmers.library.model.request;
 
-public class SearchBookRequest {
+public class FindBookRequest {
 	private String title;
 
-	public SearchBookRequest(String title) {
+	public FindBookRequest(String title) {
 		this.title = title;
 	}
 

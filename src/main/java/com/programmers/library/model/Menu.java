@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public enum Menu {
 	ADD_BOOK(1),
-	LIST_BOOK(2),
-	SEARCH_BOOK(3),
+	GET_ALL_BOOKS(2),
+	FIND_BOOKS_BY_TITLE(3),
 	BORROW_BOOK(4),
 	RETURN_BOOK(5),
 	LOST_BOOK(6),

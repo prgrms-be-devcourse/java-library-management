@@ -7,7 +7,7 @@ import com.programmers.library.model.request.BorrowBookRequest;
 import com.programmers.library.model.request.DeleteBookRequest;
 import com.programmers.library.model.request.LostBookRequest;
 import com.programmers.library.model.request.ReturnBookRequest;
-import com.programmers.library.model.request.SearchBookRequest;
+import com.programmers.library.model.request.FindBookRequest;
 
 public interface Input {
 	Mode inputMode();
@@ -17,5 +17,5 @@ public interface Input {
 	DeleteBookRequest inputDeleteBookRequest();
 	LostBookRequest	inputLostBookRequest();
 	ReturnBookRequest inputReturnBookRequest();
-	SearchBookRequest inputSearchBookRequest();
+	FindBookRequest inputFindBookRequest();
 }

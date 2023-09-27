@@ -24,8 +24,8 @@ public class LibraryManagerController implements Runnable {
 				Menu menu = input.inputMenu();
 				switch (menu) {
 					case ADD_BOOK -> output.printMessage(service.addBook(input.inputAddBookRequest()));
-					case LIST_BOOK -> output.printMessage(service.getAllBooks());
-					case SEARCH_BOOK -> output.printMessage(service.findBooksByTitle(input.inputSearchBookRequest()));
+					case GET_ALL_BOOKS -> output.printMessage(service.getAllBooks());
+					case FIND_BOOKS_BY_TITLE -> output.printMessage(service.findBooksByTitle(input.inputFindBookRequest()));
 					case BORROW_BOOK -> output.printMessage(service.borrowBook(input.inputBorrowBookRequest()));
 					case RETURN_BOOK -> output.printMessage(service.returnBook(input.inputReturnBookRequest()));
 					case LOST_BOOK -> output.printMessage(service.lostBook(input.inputLostBookRequest()));

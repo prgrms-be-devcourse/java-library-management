@@ -8,7 +8,7 @@ import com.programmers.library.model.request.BorrowBookRequest;
 import com.programmers.library.model.request.DeleteBookRequest;
 import com.programmers.library.model.request.LostBookRequest;
 import com.programmers.library.model.request.ReturnBookRequest;
-import com.programmers.library.model.request.SearchBookRequest;
+import com.programmers.library.model.request.FindBookRequest;
 import com.programmers.library.repository.Repository;
 
 public class LibraryManagerServiceImpl implements LibarayManagerService{
@@ -34,7 +34,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService{
 	}
 
 	@Override
-	public String findBooksByTitle(SearchBookRequest request) {
+	public String findBooksByTitle(FindBookRequest request) {
 		StringBuilder sb = new StringBuilder();
 		List<Book> bookList = repository.findByTitleLike(request.getTitle());
 		bookList.forEach(book -> sb.append(book.toString()).append("\n"));

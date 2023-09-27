@@ -9,7 +9,7 @@ import com.programmers.library.model.request.BorrowBookRequest;
 import com.programmers.library.model.request.DeleteBookRequest;
 import com.programmers.library.model.request.LostBookRequest;
 import com.programmers.library.model.request.ReturnBookRequest;
-import com.programmers.library.model.request.SearchBookRequest;
+import com.programmers.library.model.request.FindBookRequest;
 
 public class Console implements Input, Output{
 	private final Scanner scanner = new Scanner(System.in);
@@ -18,7 +18,7 @@ public class Console implements Input, Output{
 	private static final String ADD_BOOK_TITLE_PROMPT = "\nQ. 등록할 도서 제목을 입력하세요.\n\n> ";
 	private static final String ADD_BOOK_AUTHOR_PROMPT = "\nQ. 작가 이름을 입력하세요.\n\n> ";
 	private static final String ADD_BOOK_PAGES_PROMPT = "\nQ. 페이지 수를 입력하세요.\n\n> ";
-	private static final String SEARCH_BOOK_TITLE_PROMPT = "\nQ. 검색할 도서 제목 일부를 입력하세요.\n\n> ";
+	private static final String FIND_BOOK_TITLE_PROMPT = "\nQ. 검색할 도서 제목 일부를 입력하세요.\n\n> ";
 	private static final String BORROW_BOOK_ID_PROMPT = "\nQ. 대여할 도서번호를 입력하세요.\n\n> ";
 	private static final String RETURN_BOOK_ID_PROMPT = "\nQ. 반납할 도서번호를 입력하세요.\n\n> ";
 	private static final String LOST_BOOK_ID_PROMPT = "\nQ. 분실 처리할 도서번호를 입력하세요.\n\n> ";
@@ -76,9 +76,9 @@ public class Console implements Input, Output{
 	}
 
 	@Override
-	public SearchBookRequest inputSearchBookRequest() {
-		printPrompt(SEARCH_BOOK_TITLE_PROMPT);
-		return new SearchBookRequest(scanner.nextLine());
+	public FindBookRequest inputFindBookRequest() {
+		printPrompt(FIND_BOOK_TITLE_PROMPT);
+		return new FindBookRequest(scanner.nextLine());
 	}
 
 	@Override
