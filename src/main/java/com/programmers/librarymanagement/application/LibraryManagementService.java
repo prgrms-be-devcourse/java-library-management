@@ -24,6 +24,8 @@ public class LibraryManagementService {
 
     public List<Book> getAllBooks() {
 
+        updateAllStatus();
+
         List<Book> bookList = bookRepository.findAll();
         printBookInfo(bookList);
 
@@ -98,7 +100,7 @@ public class LibraryManagementService {
 
         switch (book.getStatus()) {
             case CAN_RENT, CANNOT_RENT, ARRANGE -> {
-                Book missBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.LOST, LocalDateTime.now());
+                Book missBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.LOST, book.getReturnDateTime());
                 bookRepository.updateBook(missBook);
             }
 
@@ -111,14 +113,6 @@ public class LibraryManagementService {
     public String deleteBook(Long id) {
 
         String result = "[System] 도서가 삭제 처리 되었습니다. \n";
-
-//        Optional<Book> book = bookRepository.findById(id);
-//
-//        if (book.isEmpty()) {
-//            result = "[System] 존재하지 않는 도서번호 입니다. \n";
-//        } else {
-//            bookRepository.deleteBook(book.get());
-//        }
 
         try {
             Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
@@ -140,6 +134,19 @@ public class LibraryManagementService {
                     + "상태 : " + book.getStatus().getValue() + "\n");
 
             System.out.println("------------------------------ \n");
+        }
+    }
+
+    private void updateAllStatus() {
+
+        List<Book> bookList = bookRepository.findAll();
+        for (Book book : bookList) {
+
+            if ((book.getStatus() == Status.ARRANGE) && (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now()))) {
+
+                Book statusBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CAN_RENT, book.getReturnDateTime());
+                bookRepository.updateBook(statusBook);
+            }
         }
     }
 }
