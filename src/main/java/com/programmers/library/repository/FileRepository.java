@@ -12,13 +12,14 @@ import com.programmers.library.util.FileUtil;
 
 public class FileRepository implements Repository{
 
-	private final Map<Long, Book> bookMap = new LinkedHashMap<>();
-	private final FileUtil fileUtil = new FileUtil();
+	private final Map<Long, Book> bookMap;
+	private final FileUtil<Book> fileUtil;
 	private Long sequence;
 
-	@Override
-	public void init() {
-		List<Book> bookList = fileUtil.readFile();
+	public FileRepository() {
+		fileUtil = new FileUtil<>();
+		bookMap = new LinkedHashMap<>();
+		List<Book> bookList = fileUtil.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		sequence = bookList.stream().mapToLong(Book::getId).max().orElse(0);
 	}

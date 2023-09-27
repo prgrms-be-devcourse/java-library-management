@@ -10,7 +10,7 @@ public class Book {
 	private String title;
 	private String author;
 	private Long pages;
-	private BookStatus status = BookStatus.AVAILABLE;
+	private BookStatus status;
 	private LocalDateTime returnedAt;
 
 	public Book() {
@@ -19,15 +19,7 @@ public class Book {
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
-	}
-
-	public Book(String id, String title, String author, String pages, String status, String returnedAt) {
-		this.id = Long.parseLong(id);
-		this.title = title;
-		this.author = author;
-		this.pages = Long.parseLong(pages);
-		this.status = BookStatus.valueOf(status);
-		this.returnedAt = LocalDateTime.parse(returnedAt);
+		this.status = BookStatus.AVAILABLE;
 	}
 
 	@Override
@@ -70,23 +62,18 @@ public class Book {
 	public Long getId() {
 		return id;
 	}
-
 	public String getAuthor() {
 		return author;
 	}
-
 	public Long getPages() {
 		return pages;
 	}
-
 	public BookStatus getStatus() {
 		return status;
 	}
-
 	public LocalDateTime getReturnedAt() {
 		return returnedAt;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}

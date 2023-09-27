@@ -9,12 +9,11 @@ import java.util.Optional;
 import com.programmers.library.entity.Book;
 
 public class MemoryRepository implements Repository{
-	private final Map<Long, Book> bookMap = new LinkedHashMap<>();
+	private final Map<Long, Book> bookMap;
 	private Long sequence;
 
-	@Override
-	public void init() {
-		bookMap.clear();
+	public MemoryRepository() {
+		bookMap = new LinkedHashMap<>();
 		sequence = 0L;
 	}
 

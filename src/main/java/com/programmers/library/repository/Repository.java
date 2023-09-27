@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.programmers.library.entity.Book;
 
 public interface Repository {
-	void init();
 	Book save(Book entity);
 	List<Book> findAll();
 	Optional<Book> findById(Long id);
