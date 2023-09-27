@@ -37,14 +37,11 @@ public class MemoryRepository implements Repository {
 
     @Override
     public void deleteBook(Long bookNo) {
-        this.bookList = bookList.stream()
-                .filter(book -> book.getBookNo().equals(bookNo))
-                .toList();
+        this.bookList.removeIf(book -> book.getBookNo().equals(bookNo));
     }
 
     @Override
     public Long createBookNo() {
-
         Optional<Long> maxBookNo = bookList.stream()
                 .map(Book::getBookNo)
                 .max(Long::compareTo);
