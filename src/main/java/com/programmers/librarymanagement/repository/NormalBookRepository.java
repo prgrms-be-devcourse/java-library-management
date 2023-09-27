@@ -16,7 +16,7 @@ public class NormalBookRepository implements BookRepository{
     public void addBook(Book book) {
 
         libraryStorage.put(book.getId(), book);
-        csvFileIo.writeCsv(book);
+        csvFileIo.writeCsv(book); // 콘솔로 등록한 도서 정보를 파일에도 저장
     }
 
     @Override
@@ -43,7 +43,9 @@ public class NormalBookRepository implements BookRepository{
 
     @Override
     public void deleteBook(Book book) {
+
         libraryStorage.remove(book.getId());
+        csvFileIo.updateCsv(libraryStorage); // 삭제 후 도서 정보를 파일에도 저장
     }
 
     @Override
@@ -55,6 +57,7 @@ public class NormalBookRepository implements BookRepository{
         return maxId + 1;
     }
 
+    // 파일로 저장된 도서 정보 등록
     private static Map<Long, Book> addBookByFile(List<List<String>> dataList) {
 
         Map<Long, Book> csvBookList = new HashMap<>();

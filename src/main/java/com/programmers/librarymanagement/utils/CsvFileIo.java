@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class CsvFileIo {
 
@@ -53,6 +54,32 @@ public class CsvFileIo {
 
             bw.write(singleData);
             bw.newLine();
+
+            bw.flush();
+            bw.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateCsv(Map<Long, Book> bookMap) {
+
+        File csv = new File(PATH);
+        BufferedWriter bw;
+
+        String singleData;
+
+        try {
+            bw = new BufferedWriter(new FileWriter(csv));
+
+            for (Book book : bookMap.values()) {
+
+                singleData = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage();
+
+                bw.write(singleData);
+                bw.newLine();
+            }
 
             bw.flush();
             bw.close();
