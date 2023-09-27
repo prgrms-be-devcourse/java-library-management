@@ -82,6 +82,7 @@ public class GeneralService implements Service{
         System.out.println();
         System.out.print("> ");
         String author = scanner.nextLine();
+        System.out.println();
 
         //페이지 수 입력
         System.out.println("Q. 페이지 수를 입력하세요.");
@@ -236,6 +237,8 @@ public class GeneralService implements Service{
         System.out.println();
         System.out.println("[System] 애플리케이션을 종료합니다.");
         System.out.println();
+
+        GeneralRepository.endApplication(list);
 
         System.exit(0);
     }
