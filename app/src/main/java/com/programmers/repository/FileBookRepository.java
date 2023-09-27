@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
-
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
     private final String csvFile = "./app/src/main/resources/data.csv";
-    private final String csvSplitBy = ",";  // CSV 파일의 구분자
 
     private FileBookRepository() {
     }
@@ -58,7 +56,7 @@ public class FileBookRepository implements BookRepository {
 
     @Override
     public void deleteBook(Book book) {
-        books.remove(books.indexOf(book));
+        books.remove(book);
         updateFile();
     }
 
@@ -71,7 +69,7 @@ public class FileBookRepository implements BookRepository {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(csvSplitBy);
+                String[] values = line.split(",");
                 Book book = new Book(values);
                 books.add(book);
                 //System.out.println(book);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MemBookRepository implements BookRepository {
-    private List<Book> books = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 
     private MemBookRepository() {
         BookIdProvider.initBookId(books);
@@ -51,7 +51,7 @@ public class MemBookRepository implements BookRepository {
 
     @Override
     public void deleteBook(Book book) {
-        books.remove(books.indexOf(book));
+        books.remove(book);
     }
 
     @Override
