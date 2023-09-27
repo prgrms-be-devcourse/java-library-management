@@ -53,4 +53,9 @@ public class MemBookRepository implements BookRepository {
     public void deleteBook(Book book) {
         books.remove(books.indexOf(book));
     }
+
+    @Override
+    public void clearBooks() {
+        books.clear();
+    }
 }

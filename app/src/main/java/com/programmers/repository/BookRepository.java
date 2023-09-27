@@ -19,4 +19,6 @@ public interface BookRepository {
     public void updateBookState(Book book, BookState bookState);
 
     public void deleteBook(Book book);
+
+    public void clearBooks();
 }

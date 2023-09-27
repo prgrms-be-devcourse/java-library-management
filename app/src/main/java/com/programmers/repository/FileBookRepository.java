@@ -62,6 +62,11 @@ public class FileBookRepository implements BookRepository {
         updateFile();
     }
 
+    @Override
+    public void clearBooks() {
+        books.clear();
+    }
+
     public void loadDataFromFile() {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
