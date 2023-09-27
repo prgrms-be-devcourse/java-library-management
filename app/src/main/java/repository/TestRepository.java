@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TestRepository implements Repository {
     List<Book> books = new ArrayList<>();
+
     public void register(Book book) {
         books.add(book);
     }
@@ -33,7 +34,7 @@ public class TestRepository implements Repository {
                 .orElse(null);
 
         if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서입니다.");
+            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
             return;
         }
         switch (selectedBook.getState()) {
