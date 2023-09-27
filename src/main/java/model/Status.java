@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Objects;
-
 public enum Status {
     AVAILABLE("대여 가능"),
     BORROWED("대여중"),
@@ -25,15 +23,5 @@ public enum Status {
             }
         }
         return null;
-    }
-
-    public static boolean isBorrowed(Status status) {
-        return Objects.equals(BORROWED, status);
-    }
-    public static boolean isOrganizing(Status status) {
-        return Objects.equals(ORGANIZING, status);
-    }
-    public static boolean isLost(Status status) {
-        return Objects.equals(LOST, status);
     }
 }

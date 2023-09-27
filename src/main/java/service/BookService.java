@@ -12,11 +12,10 @@ import java.util.TimerTask;
 public class BookService {
 
     private final Repository repository;
+
     public BookService(Repository repository) {
         this.repository = repository;
     }
-
-    Timer timer = new Timer(true);
 
     // 도서 등록
     public void saveBook(String title, String author, int pageNum) {
@@ -30,7 +29,7 @@ public class BookService {
     }
 
     // 특정 도서 제목으로 조회
-    public List<Book>  findBooksByTitle(String title) {
+    public List<Book> findBooksByTitle(String title) {
         return repository.findBookByTitle(title);
     }
 
@@ -44,7 +43,8 @@ public class BookService {
             case LOST -> throw new BookLostException();
             case ORGANIZING -> throw new BookOrganizingException();
         }
-        repository.borrowBook(book);
+        book.toBorrowed();
+        repository.saveBook(book);
     }
 
     // 도서 반납
@@ -55,7 +55,8 @@ public class BookService {
         switch (book.getStatus()) {
             case AVAILABLE, ORGANIZING -> throw new BookReturnFailException();
         }
-        repository.returnBook(book);
+        book.toOrganizing();
+        repository.saveBook(book);
         scheduleTask(book);
     }
 
@@ -63,10 +64,11 @@ public class BookService {
     public void lostBookByBookNo(Long bookNo) throws BookNotExistException, BookAlreadyLostException {
         Book book = repository.findBookByBookNo(bookNo)
                 .orElseThrow(BookNotExistException::new);
-        if (Status.isLost(book.getStatus())) {
+        if (book.getStatus().equals(Status.LOST)) {
             throw new BookAlreadyLostException();
         }
-        repository.lostBook(book);
+        book.toLost();
+        repository.saveBook(book);
     }
 
     // 도서 삭제
@@ -80,7 +82,7 @@ public class BookService {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                book.changeStatus(Status.AVAILABLE);
+                book.toAvailable();
                 repository.saveBook(book);
             }
         };

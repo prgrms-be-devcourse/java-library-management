@@ -33,8 +33,8 @@ public class CsvFileUtil {
                     String[] parts = line.split(",");
                     Book book = new Book(Long.parseLong(parts[0]), parts[1], parts[2], Integer.parseInt(parts[3]), Status.findStatusByString(parts[4]));
                     // 정리 상태 도서가 있으면 대여 가능으로 변경
-                    if (Status.isOrganizing(book.getStatus())) {
-                        book.changeStatus(Status.AVAILABLE);
+                    if (book.getStatus().equals(Status.ORGANIZING)) {
+                        book.toAvailable();
                     }
                     bookMemory.put(Long.parseLong(parts[0]), book);
                 }

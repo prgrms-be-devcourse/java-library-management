@@ -1,7 +1,6 @@
 package repository;
 
 import model.Book;
-import model.Status;
 import util.CsvFileUtil;
 
 import java.io.IOException;
@@ -39,30 +38,7 @@ public class FileRepository implements Repository {
                 .toList();
     }
 
-    // 책 대여
-    @Override
-    public void borrowBook(Book book) {
-        book.changeStatus(Status.BORROWED);
-        bookMap.put(book.getBookNo(), book);
-        updateCvsFile();
-    }
-
-    // 책 반납
-    @Override
-    public void returnBook(Book book) {
-        book.changeStatus(Status.ORGANIZING);
-        bookMap.put(book.getBookNo(), book);
-        updateCvsFile();
-    }
-
-    // 분실 처리
-    @Override
-    public void lostBook(Book book) {
-        book.changeStatus(Status.LOST);
-        bookMap.put(book.getBookNo(), book);
-        updateCvsFile();
-    }
-
+    // 특정 book 제거
     @Override
     public void deleteBook(Long bookNo) {
         bookMap.remove(bookNo);

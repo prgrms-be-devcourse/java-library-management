@@ -23,7 +23,19 @@ public class Book {
                 "\n------------------------------";
     }
 
-    public void changeStatus(Status status) {
-        this.status = status;
+    public void toBorrowed() {
+        this.status = Status.BORROWED;
+    }
+
+    public void toOrganizing() {
+        this.status = Status.ORGANIZING;
+    }
+
+    public void toLost() {
+        this.status = Status.LOST;
+    }
+
+    public void toAvailable() {
+        this.status = Status.AVAILABLE;
     }
 }
