@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface Repository {
 
-    public List<Book> load(List<Book> list);
+    List<Book> load(List<Book> list);
 
-    public void save(int id, String title, String author, int page, List<Book> list);
+    void save(int id, String title, String author, int page, List<Book> list);
 
-    public List<Book> findByTitle(String searchTitle, List<Book> list);
+    List<Book> findByTitle(String searchTitle, List<Book> list);
 
-    public String rentById(int rentId, List<Book> list);
+    String rentById(int rentId, List<Book> list);
 
-    public String returnById(int returnId, List<Book> list);
+    String returnById(int returnId, List<Book> list);
 
-    public String lostById(int lostId, List<Book> list);
+    String lostById(int lostId, List<Book> list);
 
-    public String deleteById(int deleteId, List<Book> list);
+    String deleteById(int deleteId, List<Book> list);
 }
