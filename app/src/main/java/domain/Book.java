@@ -1,7 +1,5 @@
 package domain;
 
-import java.util.Objects;
-
 public class Book {
     private int id;
     private String title;
