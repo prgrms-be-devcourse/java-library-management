@@ -27,24 +27,67 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
+/**
+ * 도서 관리 애플리케이션의 일반 모드와 테스트 모드 테스트
+ * 사용할 모드를 선택하는 과정에서, setter 메서드의 사용을 최대한 지양하고 싶었으나,,
+ * 일반 모드에서 입력받는 modeId 값을 통해 각 모드의 구현체를 사용하도록 구현했기 때문에
+ * 현재의 설계 상에서는 테스트를 위해 setter 메서드로 값을 전달하는 것이 최선이라고 생각했습니다.
+ *
+ * 이 부분에 대해서 궁금한 점이
+ * 1. 실무에서는 실제 서비스 환경과 테스트 환경이 다른 경우에, 매우 불가피한 상황이 아니라면 테스트 환경에서도 setter 사용을 무조건 지양하는 편인가요?
+ *    테스트 환경에서드 사용을 지양한다면 그 이유는 좋은 객체지향 설계가 아니기 때문일까요?
+ *
+ * 2. 테스트 코드를 작성하면서 가장 어려움을 겪었던 부분은, Mode의 구현체를 적용하여 LibraryManagement 인스턴스를 객체지향적으로 설계하고 받아오는 부분이었습니다.
+ *    만약 제가 구현한 아키텍처에서 테스트를 위해 무조건 setter 메서드를 사용해야 한다면, 이는 아키텍처 설계가 객체지향적이지 않기 떄문일까요?
+ *
+ * 3. 테스트 코드를 작성하면서, 한 번에 테스트하고자 하는 로직(?)의 범위가 작을수록 좋다는 것을 적용하고자 했습니다.
+ *    그런데 작성하다보니, 도서의 기능에 비해 너무 많은 테스트 코드가 만들어진 것 같다는 생각을 했습니다.
+ *    테스트 코드를 작성할 때 테스트하고자 하는 번위를 어떤 식으로 설정하는 것이 좋은지에 대한 멘토님의 기준이 궁금합니다.
+ */
+
 public class Valid {
 
-    LibraryManagement library;
     Map<Integer, Book> bookMap = new TreeMap<>();
-    ModeConfig modeConfig = new ModeConfig();
-    CallbackConfig callbackConfig = new CallbackConfig();
+    CallbackConfig callbackConfig;
     LibraryConfig libraryConfig;
+    LibraryManagement library;
     Mode mode;
     String filePath;
     FileWriter writer;
     FileOutputStream fileOutputStream;
+    TestModeConfig testModeConfig;
+
+    /**
+     * 테스트용 JSON 파일을 사용해서 테스트를 진행했음
+     * 테스트 상에서는 도서가 반납처리된 후, 5분 뒤에 대여가 가능하다는 검증을 간단히 10초로 진행했음
+     * 도서 제목으로 검색을 하는 로직 상에서, 일반 모드와 테스트 모드의 차이가 없기 때문에 하나의 테스트로 검증했음
+     * 대부분의 일반 모드와 테스트 모드의 로직은 비슷하나, JSON 파일에서 읽어오고 (load), JSON 파일에 작성되는지 (update) 추가로 검증했음
+     */
+
+    static class TestModeConfig extends ModeConfig {
+
+        private Mode mode;
+
+        private TestModeConfig(int modeId) {
+            super(modeId);
+        }
+
+        public void setMode(Mode mode) {
+            this.mode = mode;
+        }
+
+        public Mode getMode() {
+            return this.mode;
+        }
+    }
 
     @BeforeEach
     public void init() {
         try {
             bookMap.clear();
-            filePath = "src/java_library_management/resources/TestBook.json";
+            filePath = "src/java_library_management/resources/TestBook.json"; // 테스트용 JSON 파일을 사용하여 테스트 진행
             writer = new FileWriter(filePath);
+            testModeConfig = new TestModeConfig(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,65 +96,11 @@ public class Valid {
     @AfterEach
     public void after() {
         try {
-            fileOutputStream = new FileOutputStream(filePath, false);
+            fileOutputStream = new FileOutputStream(filePath, false); // 하나의 테스트가 끝나고 테스트할 파일 다 지우기
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
-    @DisplayName("일반 모드에서 파일의 자동 등록 검증")
-    @Test
-    public void validGeneralAutoRegister() {
-
-        mode = new General();
-        modeConfig.setMode(mode);
-        callbackConfig.setCallback(
-                (map, path) -> mode.load(bookMap, filePath),
-                (map, path) -> mode.update(bookMap, filePath)
-        );
-
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
-        library = buildLibrary(libraryConfig);
-
-        assertThat(bookMap.size()).isEqualTo(0);
-
-        Book book1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
-        Book book2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
-        library.add(bookMap, book1);
-        library.add(bookMap, book2);
-
-        assertThat(bookMap.size()).isEqualTo(2);
-        assertThat(getJSONFile(filePath)).isNull(); // Unexpected token END OF FILE at position 0.
-
-        library.update(bookMap, filePath); // JSON 파일에 등록함
-
-        bookMap.clear();
-        assertThat(bookMap.size()).isEqualTo(0);
-
-        assertThat(getJSONFile(filePath)).isNotNull();
-
-        library.load(bookMap, filePath); // JSON 파일에서 읽어옴. bookMap 저장함
-
-        assertThat(bookMap.size()).isEqualTo(2);
-
-        JSONArray jsonArray = getJSONFile(filePath);
-
-        JSONObject object1 = getJSONObject(jsonArray, 0);
-        compareBookObject(object1, book1);
-
-        JSONObject object2 = getJSONObject(jsonArray, 1);
-        compareBookObject(object2, book2);
-    }
-
-    /**
-    public LibraryManagement build(Mode mode, CallbackConfig callbackConfig, ConsoleManager consoleManager) {
-        return LibraryManagement.builder()
-                .mode(mode)
-                .callbackConfig(callbackConfig)
-                .consoleManager(consoleManager)
-                .build();
-    }
-    */
 
     public LibraryManagement buildLibrary(LibraryConfig libraryConfig) {
         return LibraryManagement.builder()
@@ -127,18 +116,66 @@ public class Valid {
                 .build();
     }
 
-    @DisplayName("일반 모드에서 도서 등록, 조회 검증")
+    @DisplayName("일반 모드에서 JSON 파일의 자동 등록 기능 검증")
     @Test
-    public void validGeneralAddNGet() {
+    public void validGeneralAutoRegister() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
+        library = buildLibrary(libraryConfig);
+
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        Book book1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
+        Book book2 = new Book(2, "스킨 인 더 게임", "나심 탈레브", 444, BookState.AVAILABLE);
+
+        library.add(bookMap, book1);
+        library.add(bookMap, book2);
+
+        assertThat(bookMap.size()).isEqualTo(2);
+        assertThat(getJSONFile(filePath)).isNull(); // Unexpected token END OF FILE at position 0.
+
+        library.update(bookMap, filePath); // JSON 파일에 등록함
+
+        bookMap.clear();
+        assertThat(bookMap.size()).isEqualTo(0);
+
+        assertThat(getJSONFile(filePath)).isNotNull();
+
+        library.load(bookMap, filePath); // JSON 파일에서 읽어와 bookMap 저장함
+
+        assertThat(bookMap.size()).isEqualTo(2);
+
+        JSONArray jsonArray = getJSONFile(filePath);
+
+        JSONObject object1 = getJSONObject(jsonArray, 0);
+        compareBookObject(object1, book1);
+
+        JSONObject object2 = getJSONObject(jsonArray, 1);
+        compareBookObject(object2, book2);
+    }
+
+
+    @DisplayName("일반 모드에서 도서 등록, 조회 기능 검증")
+    @Test
+    public void validGeneralAddNGet() {
+
+        mode = new General();
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
+        callbackConfig.setCallback(
+                (map, path) -> mode.load(bookMap, filePath),
+                (map, path) -> mode.update(bookMap, filePath)
+        );
+
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookMap.size()).isEqualTo(0);
@@ -166,8 +203,8 @@ public class Valid {
 
         library.update(bookMap, filePath); // JSON 파일에 등록함
 
+        // 변경된 사항이 JSON 파일에 제대로 작성되었는지 검증
         JSONArray jsonArray = getJSONFile(filePath);
-        // JSON 파일에 작성되었는지 검증?
         JSONObject object1 = getJSONObject(jsonArray, 0);
         compareBookObject(object1, obj1);
 
@@ -176,7 +213,6 @@ public class Valid {
     }
 
     public JSONObject getJSONObject(JSONArray jsonArray, int idx) {
-
         return (JSONObject) jsonArray.get(idx);
     }
 
@@ -205,15 +241,16 @@ public class Valid {
         assertThat(BookState.valueOfState(String.valueOf(object.get("state")))).isEqualTo(BookState.AVAILABLE);
     }
 
-    @DisplayName("테스트 모드에서 도서 등록, 조회 검증")
+    @DisplayName("테스트 모드에서 도서 등록, 조회 기능 검증")
     @Test
     public void validTestAddNGet() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookMap.size()).isEqualTo(0);
@@ -239,18 +276,19 @@ public class Valid {
         assertThat(bookMap).containsValue(obj2);
     }
 
-    @DisplayName("일반 모드에서 도서 대여 성공 검증")
+    @DisplayName("일반 모드에서 '대여 가능' 상태의 도서 대여 성공 검증")
     @Test
     public void validGeneralBorrowSuccess1() throws FuncFailureException {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -266,13 +304,14 @@ public class Valid {
     public void validGeneralBorrowFailure1() throws FuncFailureException {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.borrow(bookMap, 10))
@@ -280,18 +319,19 @@ public class Valid {
                 .hasMessageContaining("[System] 해당 도서가 존재하지 않습니다.");
     }
 
-    @DisplayName("일반 모드에서 대여중인 도서 대여 실패 검증")
+    @DisplayName("일반 모드에서 '대여중' 상태의 도서 대여 실패 검증")
     @Test
     public void validGeneralBorrowFailure2() throws FuncFailureException {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -305,25 +345,26 @@ public class Valid {
         assertThat(obj.getState()).isEqualTo(BookState.LOAN);
     }
 
-    @DisplayName("일반 모드에서 분실된 도서 대여 실패 검증")
+    @DisplayName("일반 모드에서 '분실됨' 상태의 도서 대여 실패 검증")
     @Test
     public void validGeneralBorrowFailure3() throws FuncFailureException {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
-        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
-        book.setState(BookState.LOST);
-        library.add(bookMap, book);
-        Book obj = bookMap.get(book.getBook_id());
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
 
+        library.add(bookMap, book);
+
+        Book obj = bookMap.get(book.getBook_id());
         assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
                 .isInstanceOf(FuncFailureException.class)
                 .hasMessageContaining("[System] 분실된 도서입니다.");
@@ -335,20 +376,21 @@ public class Valid {
     public void validGeneralBorrowFailure4() throws FuncFailureException {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
-        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
-        book.setState(BookState.ARRANGEMENT);
-        library.add(bookMap, book);
-        Book obj = bookMap.get(book.getBook_id());
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
 
+        library.add(bookMap, book);
+
+        Book obj = bookMap.get(book.getBook_id());
         assertThatThrownBy(() -> library.borrow(bookMap, obj.getBook_id()))
                 .isInstanceOf(FuncFailureException.class)
                 .hasMessageContaining("[System] 정리중인 도서입니다.");
@@ -362,18 +404,20 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
-        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
-        book.setState(BookState.ARRANGEMENT);
+        Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
+
         library.add(bookMap, book);
+
         Book elem = bookMap.get(book.getBook_id());
 
         Timer m = new Timer();
@@ -400,10 +444,11 @@ public class Valid {
     public void validTestBorrowSuccess() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -419,10 +464,11 @@ public class Valid {
     public void validTestBorrowFailure1() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.borrow(bookMap, 10))
@@ -435,10 +481,11 @@ public class Valid {
     public void validTestBorrowFailure2() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -457,10 +504,11 @@ public class Valid {
     public void validTestBorrowFailure3() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -479,10 +527,11 @@ public class Valid {
     public void validTestBorrowFailure4() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -503,10 +552,11 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -548,13 +598,14 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -592,13 +643,14 @@ public class Valid {
     public void validGeneralReturnFailure1() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.returns(bookMap, 10, filePath, 10000, null))
@@ -611,13 +663,14 @@ public class Valid {
     public void validGeneralReturnFailure2() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -637,13 +690,14 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -681,13 +735,14 @@ public class Valid {
     public void validGeneralReturnFailure3() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -705,10 +760,11 @@ public class Valid {
     public void validTestReturnFailure1() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.returns(bookMap, 10, filePath, 10000, null))
@@ -721,10 +777,11 @@ public class Valid {
     public void validTestReturnFailure() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -741,10 +798,11 @@ public class Valid {
     public void validTestReturnFailure2() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -763,10 +821,11 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -793,10 +852,11 @@ public class Valid {
         CountDownLatch lock = new CountDownLatch(1);
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -820,13 +880,14 @@ public class Valid {
     public void validGeneralLostSuccess1() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -851,13 +912,14 @@ public class Valid {
     public void validGeneralLostSuccess2() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -882,13 +944,14 @@ public class Valid {
     public void validGeneralLostSuccess3() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -913,13 +976,14 @@ public class Valid {
     public void validGeneralLostFailure1() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.lost(bookMap, 10))
@@ -932,13 +996,14 @@ public class Valid {
     public void validGeneralLostFailure2() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -967,10 +1032,11 @@ public class Valid {
     public void validTestLostSuccess1() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -986,10 +1052,11 @@ public class Valid {
     public void validTestLostSuccess2() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -1005,10 +1072,11 @@ public class Valid {
     public void validTestLostSuccess3() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1024,10 +1092,11 @@ public class Valid {
     public void validTestLostFailure1() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.lost(bookMap, 10))
@@ -1040,10 +1109,11 @@ public class Valid {
     public void validTestLostFailure2() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1059,13 +1129,14 @@ public class Valid {
     public void validGeneralDeleteSuccess1() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -1092,13 +1163,14 @@ public class Valid {
     public void validGeneralDeleteSuccess2() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -1125,13 +1197,14 @@ public class Valid {
     public void validGeneralDeleteSuccess3() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1158,13 +1231,14 @@ public class Valid {
     public void validGeneralDeleteSuccess4() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1191,13 +1265,14 @@ public class Valid {
     public void validGeneralDeleteFailure() {
 
         mode = new General();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(
                 (map, path) -> mode.load(bookMap, filePath),
                 (map, path) -> mode.update(bookMap, filePath)
         );
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookMap.size()).isEqualTo(0);
@@ -1218,10 +1293,11 @@ public class Valid {
     public void validTestDeleteSuccess1() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);
@@ -1243,10 +1319,11 @@ public class Valid {
     public void validTestDeleteSuccess2() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOAN);
@@ -1268,10 +1345,11 @@ public class Valid {
     public void validTestDeleteSuccess3() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1293,10 +1371,11 @@ public class Valid {
     public void validTestDeleteSuccess4() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1318,10 +1397,11 @@ public class Valid {
     public void validTestDeleteFailure() {
 
         mode = new Tests();
-        modeConfig.setMode(mode);
+        testModeConfig.setMode(mode);
+        callbackConfig = new CallbackConfig(testModeConfig);
         callbackConfig.setCallback(null, null);
 
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookMap.size()).isEqualTo(0);
@@ -1333,13 +1413,16 @@ public class Valid {
         assertThat(bookMap.size()).isEqualTo(0);
     }
 
-    @DisplayName("도서 검색 검증")
+    @DisplayName("Mock 객체인 MockMode를 이용한 도서 검색 검증")
     @Test
     public void testFindByTitle() {
 
         MockMode mockMode = new MockMode();
-        modeConfig.setMode(mockMode);
-        libraryConfig = buildConfig(modeConfig, callbackConfig, null);
+        testModeConfig.setMode(mockMode);
+        callbackConfig = new CallbackConfig(testModeConfig);
+        callbackConfig.setCallback(null, null);
+
+        libraryConfig = buildConfig(testModeConfig, callbackConfig, null);
         library = buildLibrary(libraryConfig);
 
         Book book1 = new Book(1, "토비의 스프링", "이일민", 999, BookState.AVAILABLE);

@@ -17,6 +17,10 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * JSON 파일에 접근해서 파일을 읽어오고, 작성하는 책임을 담당하는 클래스
+ */
+
 public class JSONFileManager {
 
     private final JSONParser jsonParser;

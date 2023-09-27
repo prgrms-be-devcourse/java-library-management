@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * 콘솔에 입력을 받는 책임을 담당하는 클래스
+ */
+
 public class ConsoleManager {
 
     private final BufferedReader bufferedReader;

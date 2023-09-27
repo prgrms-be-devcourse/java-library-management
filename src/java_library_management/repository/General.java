@@ -2,6 +2,10 @@ package java_library_management.repository;
 
 import java_library_management.repository.Mode;
 
+/**
+ * 일반 모드 구현체
+ */
+
 public class General implements Mode {
 
     @Override
