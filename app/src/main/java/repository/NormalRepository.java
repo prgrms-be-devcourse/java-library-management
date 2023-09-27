@@ -1,6 +1,7 @@
 package repository;
 
 import domain.Book;
+import thread.NormalChangeStateThread;
 
 import java.io.*;
 import java.nio.BufferOverflowException;
@@ -60,24 +61,6 @@ public class NormalRepository implements Repository {
         }
     }
 
-    private class ChangeStateThread extends Thread {
-        private final Book book;
-
-        public ChangeStateThread(Book book) {
-            this.book = book;
-        }
-
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(300000);
-                book.setState("대여 가능");
-                updateFile(books, file);
-            } catch (InterruptedException | IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
     @Override
     public void returnBook(int id) throws IOException {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
@@ -87,7 +70,7 @@ public class NormalRepository implements Repository {
             System.out.println("[System] 존재하지 않는 도서 번호입니다.");
             return;
         }
-        ChangeStateThread thread = new ChangeStateThread(selectedBook);
+        NormalChangeStateThread thread = new NormalChangeStateThread(selectedBook, file, books);
 
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
             selectedBook.setState("도서 정리중");
@@ -140,7 +123,7 @@ public class NormalRepository implements Repository {
         }
     }
 
-    private void updateFile(List<Book> books, File file) throws IOException {
+    public static void updateFile(List<Book> books, File file) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         books.forEach(book -> {
             try {

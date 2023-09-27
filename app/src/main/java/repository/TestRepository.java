@@ -1,6 +1,7 @@
 package repository;
 
 import domain.Book;
+import thread.TestChangeStateThread;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -48,24 +49,6 @@ public class TestRepository implements Repository {
         }
     }
 
-    private static class ChangeStateThread extends Thread {
-        private final Book book;
-
-        public ChangeStateThread(Book book) {
-            this.book = book;
-        }
-
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(300000);
-                book.setState("대여 가능");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Override
     public void returnBook(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
@@ -75,7 +58,7 @@ public class TestRepository implements Repository {
             System.out.println("[System] 존재하지 않는 도서 번호입니다.");
             return;
         }
-        ChangeStateThread thread = new ChangeStateThread(selectedBook);
+        TestChangeStateThread thread = new TestChangeStateThread(selectedBook);
 
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
             selectedBook.setState("도서 정리중");
