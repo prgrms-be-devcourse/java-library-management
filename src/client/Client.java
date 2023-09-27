@@ -22,21 +22,19 @@ public class Client {
     }
 
     private void selectMode() throws IOException {
-        int mode = consoleManager.selectMode();
+        int mode = consoleManager.modeSelect();
         switch (mode) {
             case 1 -> {
                 service = new Service(new FileRepository());
-                System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
             }
             case 2 -> {
                 service = new Service(new TestRepository());
-                System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
             }
             default -> {
-                System.out.println("[System] 다시 선택해주세요\n");
                 selectMode();
             }
         }
+        consoleManager.modePrint(mode);
     }
 
     private void selectFunction() throws IOException {

@@ -21,17 +21,28 @@ public class ConsoleManager {
         return Integer.parseInt(br.readLine());
     }
 
-    public String inputText() throws IOException {
+    private String inputText() throws IOException {
         System.out.print("\n >");
         return br.readLine();
     }
 
-    public int selectMode() throws IOException {
+    public int modeSelect() throws IOException {
         System.out.println("Q. 모드를 선택해주세요.");
         System.out.println("1. 일반 모드");
         System.out.println("2. 테스트 모드");
 
         return inputNumber();
+    }
+
+    public void modePrint(int mode) {
+        switch(mode){
+            case 1 -> {
+                System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
+            }
+            case 2 -> {
+                System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
+            }
+        }
     }
 
     public int selectFunction() throws IOException {
@@ -76,12 +87,12 @@ public class ConsoleManager {
     }
 
     public String searchName() throws IOException {
+        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n");
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         return inputText();
     }
 
     public void searchNamePrint(List<Book> list){
-        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n");
         list.forEach(book -> {
             System.out.println("도서제목 : " + book.getId());
             System.out.println("제목 : " + book.getName());
