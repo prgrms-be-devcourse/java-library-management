@@ -1,7 +1,6 @@
 package com.dev_course.book;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.dev_course.book.BookManagerMessage.*;
@@ -62,6 +61,11 @@ public class ListBookManager implements BookManager {
         target.setState(LOAN);
 
         return SUCCESS_RENT_BOOK.msg();
+    }
+
+    @Override
+    public String lossById(int id) {
+        return null;
     }
 
     @Override
