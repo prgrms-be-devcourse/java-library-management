@@ -93,7 +93,18 @@ class NormalRepositoryTest {
     }
 
     @Test
-    void search() {
+    void search() throws IOException {
+        File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
+        List<Book> books = new ArrayList<>();
+        fileToList(books, file);
+
+        repository.search("여우");
+        StringBuilder tmp = new StringBuilder();
+        for(Book book : books) {
+            if(book.getTitle().contains("여우"))
+                tmp.append("\n도서번호 : ").append(String.valueOf(book.getId())).append("\n제목 : ").append(book.getTitle()).append("\n작가 이름 : ").append(book.getWriter()).append("\n페이지 수: ").append(String.valueOf(book.getPage())).append("페이지").append("\n상태 : ").append(book.getState()).append("\n\n------------------------------\r\n");
+        }
+        Assertions.assertEquals(tmp.toString(), outputMessage.toString());
     }
 
     @Test
