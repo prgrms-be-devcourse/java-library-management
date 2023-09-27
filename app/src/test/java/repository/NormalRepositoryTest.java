@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class NormalRepositoryTest {
 
     Repository repository = new NormalRepository();
     private static ByteArrayOutputStream outputMessage;
+    File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
+    BufferedReader bf = new BufferedReader(new FileReader(file));
+
     NormalRepositoryTest() throws IOException {
     }
 
@@ -27,21 +28,28 @@ class NormalRepositoryTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws IOException {
+
         System.setOut(System.out);
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        bw.write("1,해리포터,조앤롤링,32,대여 가능\n" +
+                "713338630,안,하이,324,대여중\n" +
+                "821270929,이기적 유전자,리처드 도킨스,324,도서 정리중\n" +
+                "302155142,책 먹는 여우,프란치스카 비어만,20,분실됨");
+        bw.close();
     }
 
     @Test
     void register() throws IOException {
         Book book = new Book();
-        book.setTitle("책 먹는 여우");
-        book.setWriter("프란치스카 비어만");
+        book.setTitle("어린왕자");
+        book.setWriter("생떽쥐베리");
         book.setPage(20);
 
         repository.register(book);
 
-        File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
-        BufferedReader bf = new BufferedReader(new FileReader(file));
+        bf = new BufferedReader(new FileReader(file));
 
         String line = "";
         boolean flag = false;
@@ -94,7 +102,6 @@ class NormalRepositoryTest {
 
     @Test
     void search() throws IOException {
-        File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
         List<Book> books = new ArrayList<>();
         fileToList(books, file);
 
@@ -108,18 +115,104 @@ class NormalRepositoryTest {
     }
 
     @Test
-    void rental() {
+    void rental() throws IOException {
+        String tmp = "";
+        repository.rental(32434); //없는 번호
+        tmp += "[System] 존재하지 않는 도서 번호입니다.\r\n";
+        
+        repository.rental(713338630); //대여중
+        tmp += "[System] 이미 대여중인 도서입니다.\r\n";
+
+        repository.rental(1); //대여 가능
+        tmp += "[System] 도서가 대여 처리 되었습니다.\r\n";
+        String state = getStateFromId(1);
+        Assertions.assertEquals(state, "대여중");
+
+        repository.rental(821270929); //도서 정리중
+        tmp += "[System] 정리 중인 도서입니다.\r\n";
+
+        repository.rental(302155142); //분실됨
+        tmp += "[System] 분실된 도서입니다.\r\n";
+
+        Assertions.assertEquals(tmp, outputMessage.toString());
     }
 
     @Test
-    void returnBook() {
+    void returnBook() throws IOException {
+        String tmp = "";
+        repository.returnBook(32434); //없는 번호
+        tmp += "[System] 존재하지 않는 도서 번호입니다.\r\n";
+
+        repository.returnBook(713338630); //대여중
+        tmp += "[System] 도서가 반납 처리 되었습니다.\r\n";
+        String state = getStateFromId(713338630);
+        Assertions.assertEquals(state, "도서 정리중");
+
+        repository.returnBook(1); //대여 가능
+        tmp += "[System] 원래 대여가 가능한 도서입니다.\r\n";
+        //롤백
+
+        repository.returnBook(821270929); //도서 정리중
+        tmp += "[System] 반납이 불가능한 도서입니다.\r\n";
+
+        repository.returnBook(302155142); //분실됨
+        tmp += "[System] 도서가 반납 처리 되었습니다.\r\n";
+        state = getStateFromId(302155142);
+        Assertions.assertEquals(state, "도서 정리중");
+
+        Assertions.assertEquals(tmp, outputMessage.toString());
     }
 
     @Test
-    void lostBook() {
+    void lostBook() throws IOException {
+        String tmp = "";
+        repository.lostBook(32434); //없는 번호
+        tmp += "[System] 존재하지 않는 도서 번호입니다.\r\n";
+
+        repository.lostBook(713338630); //대여중
+        tmp += "[System] 도서가 분실 처리 되었습니다.\r\n";
+        String state = getStateFromId(713338630);
+        Assertions.assertEquals(state, "분실됨");
+
+        repository.lostBook(1); //대여 가능
+        tmp += "[System] 분실 처리가 불가능한 도서입니다.\r\n";
+
+        repository.lostBook(821270929); //도서 정리중
+        tmp += "[System] 분실 처리가 불가능한 도서입니다.\r\n";
+
+        repository.lostBook(302155142); //분실됨
+        tmp += "[System] 이미 분실 처리된 도서입니다.\r\n";
+
+        Assertions.assertEquals(tmp, outputMessage.toString());
     }
 
     @Test
-    void deleteBook() {
+    void deleteBook() throws IOException {
+        repository.deleteBook(1);
+
+        bf = new BufferedReader(new FileReader(file));
+        String line = "";
+        boolean flag = false;
+
+        while((line = bf.readLine()) != null) {
+            String[] split = line.split(",");
+            if(Integer.parseInt(split[0]) == 1) {
+                flag = true;
+                break;
+            }
+        }
+        Assertions.assertFalse(flag);
+    }
+
+    private String getStateFromId(int id) throws IOException {
+        BufferedReader bf = new BufferedReader(new FileReader(file));
+        String line = "";
+        while((line = bf.readLine()) != null) {
+            String[] split = line.split(",");
+            if(Integer.parseInt(split[0]) == id) {
+                return split[4];
+            }
+        }
+        return "";
     }
 }
