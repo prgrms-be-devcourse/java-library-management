@@ -73,6 +73,13 @@ public class NormalRepository implements Repository {
                 updateFile(books, file);
             } catch (InterruptedException | IOException e) {
                 throw new RuntimeException(e);
+            } finally {
+                book.setState("대여 가능");
+                try {
+                    updateFile(books, file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -90,6 +97,7 @@ public class NormalRepository implements Repository {
         if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
             selectedBook.setState("도서 정리중");
             updateFile(books, file);
+            thread.setDaemon(true);
             thread.start();
 
             System.out.println("[System] 도서가 반납 처리 되었습니다.");

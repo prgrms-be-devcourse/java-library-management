@@ -62,6 +62,8 @@ public class TestRepository implements Repository {
                 book.setState("대여 가능");
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } finally {
+                book.setState("대여 가능");
             }
         }
     }
