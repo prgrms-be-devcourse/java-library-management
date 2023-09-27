@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum BookStatus {
-    AVAILABLE("대여 가능"), BORROWED("대여중"), ARRANGING("도서 정리중"), LOST("분실됨");
+    AVAILABLE("대여 가능"), BORROWED("대여 중"), ARRANGING("도서 정리 중"), LOST("분실됨");
 
     private final String description;
 
@@ -19,5 +19,12 @@ public enum BookStatus {
         return Arrays.stream(BookStatus.values())
                 .filter(e -> e.description.equals(description))
                 .findAny();
+    }
+
+    public static final boolean canSwitch(BookStatus before, BookStatus after) {
+        if (after == BookStatus.BORROWED) {
+            if (before == BookStatus.AVAILABLE) return true;
+        }
+        return false;
     }
 }

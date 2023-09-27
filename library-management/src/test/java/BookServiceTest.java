@@ -1,5 +1,6 @@
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
 import org.junit.jupiter.api.Assertions;
@@ -67,5 +68,22 @@ public class BookServiceTest {
 
         //then
         Assertions.assertTrue(found.isMatched(book.getTitle(), book.getAuthor(), book.getTotalPages()));
+    }
+
+    @Test
+    void 도서_대여_성공() {
+        //given
+        BookDto book = new BookDto();
+        book.setTitle("객체지향의 사실과 오해");
+        book.setAuthor("조영호");
+        book.setTotalPages(260);
+        service.registerBook(book);
+
+        //when
+        service.rentBook(1L);
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> repository.findById(1L).changeStatus(BookStatus.BORROWED));
     }
 }
