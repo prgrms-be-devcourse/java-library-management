@@ -14,11 +14,11 @@ public class Console implements Runnable {
     }
 
     public void menu() {
-        System.out.println("Q. 사용할 기능을 선택해주세요.");
+        StringBuffer prompt = new StringBuffer("사용할 기능을 선택해주세요.");
         for(Menu menu : Menu.values())
-            System.out.println(menu);
+            prompt.append("\n").append(menu);
 
-        Menu.selected(intInput());
+        Menu.selected(intInput(prompt.toString()));
     }
 
     public static void registerMenu() {
@@ -26,14 +26,9 @@ public class Console implements Runnable {
 
         system("도서 등록 메뉴로 넘어갑니다.");
 
-        System.out.println("Q. 등록할 도서 제목을 입력하세요.");
-        data.setTitle(stringInput());
-
-        System.out.println("Q. 작가 이름을 입력하세요.");
-        data.setAuthor(stringInput());
-
-        System.out.println("Q. 페이지 수를 입력하세요.");
-        data.setTotalPages(intInput());
+        data.setTitle(stringInput("등록할 도서 제목을 입력하세요."));
+        data.setAuthor(stringInput("작가 이름을 입력하세요."));
+        data.setTotalPages(intInput("페이지 수를 입력하세요."));
 
         service.registerBook(data);
 
@@ -69,7 +64,8 @@ public class Console implements Runnable {
         System.out.println();
     }
 
-    public static int intInput() {
+    public static int intInput(String prompt) {
+        System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
         int input = Integer.parseInt(sc.nextLine());
@@ -77,7 +73,8 @@ public class Console implements Runnable {
         return input;
     }
 
-    public static String stringInput() {
+    public static String stringInput(String prompt) {
+        System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
         String input = sc.nextLine();
@@ -88,10 +85,12 @@ public class Console implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             try {
                 menu();
-            } catch (NumberFormatException e) { inputError(); }
+            } catch (NumberFormatException e) {
+                inputError();
+            }
         }
     }
 }

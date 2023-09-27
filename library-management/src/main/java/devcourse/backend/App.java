@@ -1,7 +1,7 @@
 package devcourse.backend;
 
 import devcourse.backend.business.BookService;
-import devcourse.backend.medel.FileRepository;
+import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.Console;
 
 public class App {
