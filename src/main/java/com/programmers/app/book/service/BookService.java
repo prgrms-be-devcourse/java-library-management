@@ -1,6 +1,8 @@
-package com.programmers.app.book;
+package com.programmers.app.book.service;
 
 import java.util.Map;
+
+import com.programmers.app.book.domain.Book;
 
 public interface BookService {
 

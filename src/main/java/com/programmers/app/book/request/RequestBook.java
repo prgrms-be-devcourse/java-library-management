@@ -1,4 +1,4 @@
-package com.programmers.app.book;
+package com.programmers.app.book.request;
 
 public class RequestBook {
     private String title;

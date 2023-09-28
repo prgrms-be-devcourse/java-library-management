@@ -1,4 +1,4 @@
-package com.programmers.app.book;
+package com.programmers.app.book.domain;
 
 public class Book {
     private long bookNumber;

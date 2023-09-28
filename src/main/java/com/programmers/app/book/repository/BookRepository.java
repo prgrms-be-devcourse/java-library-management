@@ -1,6 +1,8 @@
-package com.programmers.app.book;
+package com.programmers.app.book.repository;
 
 import java.util.Map;
+
+import com.programmers.app.book.domain.Book;
 
 public interface BookRepository {
 
