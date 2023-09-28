@@ -27,6 +27,7 @@ public class Book {
         this.pageNum = pageNum;
         this.state = state;
         this.lastReturn = lastReturn;
+        numberCnt++;
     }
 
     public String printInfo(){
@@ -61,6 +62,22 @@ public class Book {
 
     public State getState() {
         return state;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public long getLastReturn() {
+        return lastReturn;
     }
 
     public boolean isDeleted(){
