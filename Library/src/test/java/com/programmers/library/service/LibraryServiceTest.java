@@ -2,6 +2,7 @@ package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
 import com.programmers.library.domain.BookStatus;
+import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.mock.MockRepository;
 import com.programmers.library.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LibraryServiceTest {
 
@@ -98,4 +100,19 @@ class LibraryServiceTest {
         assertEquals(book.getBookStatus().getStatusDescription(), "분실");
     }
 
+    @Test
+    @DisplayName("존재하지 않는 도서번호에 대한 예외처리 테스트")
+    public void bookNotFoundExceptionTest(){
+        // Given
+        Long bookId = 100L;
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.findBookById(bookId);
+        });
+
+        // Then
+        String bookNotFound = "\n[System] 입력하신 도서를 찾을 수 없습니다.";
+        assertEquals(bookNotFound,  result.getMessage());
+    }
 }
