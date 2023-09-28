@@ -1,6 +1,6 @@
 package com.programmers.app.console;
 
-import com.programmers.app.book.Book;
+import com.programmers.app.book.RequestBook;
 
 public interface CommunicationAgent {
 
@@ -8,17 +8,15 @@ public interface CommunicationAgent {
 
     int instructMenuSelection();
 
-    Book instructRegister();
-
-    void instructFindAll();
+    RequestBook instructRegister();
 
     String instructFindTitle();
 
-    int instructBorrow();
+    long instructBorrow();
 
-    int instructReturn();
+    long instructReturn();
 
-    int instructReportLost();
+    long instructReportLost();
 
     void print(String message);
 }

@@ -1,8 +1,24 @@
 package com.programmers.app.console;
 
-public interface ConsoleReader {
+import java.util.Scanner;
 
-    int readInt();
+public class ConsoleReader {
 
-    String readString();
+    private final Scanner sc;
+
+    public ConsoleReader() {
+        sc = new Scanner(System.in);
+    }
+
+    int readInt() {
+        return sc.nextInt();
+    }
+
+    long readLong() {
+        return sc.nextLong();
+    }
+
+    String readString() {
+        return sc.nextLine();
+    }
 }
