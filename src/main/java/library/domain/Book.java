@@ -27,6 +27,15 @@ public class Book {
         this.status = AVAILABLE;
     }
 
+    public Book(long bookNumber, String title, String author, int pageCount, LocalDateTime returnDateTime, BookStatus status) {
+        this.bookNumber = bookNumber;
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.returnDateTime = returnDateTime;
+        this.status = status;
+    }
+
     public long getBookNumber() {
         return bookNumber;
     }
@@ -46,6 +55,10 @@ public class Book {
     public BookStatus getStatus() {
         updateCleanUpStatus();
         return status;
+    }
+
+    public LocalDateTime getReturnDateTime() {
+        return returnDateTime;
     }
 
     public boolean equalsBookNumber(long bookNumber) {
