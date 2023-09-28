@@ -5,6 +5,6 @@ import entity.Book;
 import java.util.List;
 
 public interface FileManager {
-    List<Book> read(String filePath);
+    List<Book> read();
     void write(List<Book> bookList);
 }
