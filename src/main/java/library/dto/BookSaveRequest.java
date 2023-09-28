@@ -14,6 +14,6 @@ public class BookSaveRequest {
     }
 
     public Book toBook(long bookNumber) {
-        return new Book(bookNumber, title, author, pageCount);
+        return Book.createAvailableBook(bookNumber, title, author, pageCount);
     }
 }

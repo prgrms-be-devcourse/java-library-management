@@ -19,21 +19,21 @@ public class Book {
     private LocalDateTime returnDateTime;
     private BookStatus status;
 
-    public Book(long bookNumber, String title, String author, int pageCount) {
-        this.bookNumber = bookNumber;
-        this.title = title;
-        this.author = author;
-        this.pageCount = pageCount;
-        this.status = AVAILABLE;
-    }
-
-    public Book(long bookNumber, String title, String author, int pageCount, LocalDateTime returnDateTime, BookStatus status) {
+    private Book(long bookNumber, String title, String author, int pageCount, LocalDateTime returnDateTime, BookStatus status) {
         this.bookNumber = bookNumber;
         this.title = title;
         this.author = author;
         this.pageCount = pageCount;
         this.returnDateTime = returnDateTime;
         this.status = status;
+    }
+
+    public static Book createAvailableBook(long bookNumber, String title, String author, int pageCount) {
+        return new Book(bookNumber, title, author, pageCount, null, AVAILABLE);
+    }
+
+    public static Book createBook(long bookNumber, String title, String author, int pageCount, LocalDateTime returnDateTime, BookStatus status) {
+        return new Book(bookNumber, title, author, pageCount, returnDateTime, status);
     }
 
     public long getBookNumber() {

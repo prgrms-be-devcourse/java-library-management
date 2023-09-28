@@ -60,7 +60,7 @@ public class CsvFileHandler {
         LocalDateTime returnDateTime = parseDateTime(parts[4]);
         BookStatus status = BookStatus.valueOf(parts[5]);
 
-        return new Book(bookNumber, title, author, pageCount, returnDateTime, status);
+        return Book.createBook(bookNumber, title, author, pageCount, returnDateTime, status);
     }
 
     private <T> T getParseInputWithPrint(String part, Function<String, T> parseFunction) {
