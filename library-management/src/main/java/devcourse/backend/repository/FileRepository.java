@@ -3,8 +3,10 @@ package devcourse.backend.repository;
 import devcourse.backend.medel.Book;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -13,7 +15,7 @@ import java.util.*;
 public class FileRepository {
     private Set<Book> books;
     private final Path FILEPATH;
-    private String firstLine;
+    private String columns;
 
     public FileRepository(String path) {
         this.FILEPATH = Paths.get(Objects.requireNonNull(path));
@@ -21,13 +23,17 @@ public class FileRepository {
     }
 
     public List<Book> findAll() {
-        return books.stream().map(b -> b.copy()).toList();
+        return books.stream()
+                .map(b -> b.copy())
+                .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
+                .toList();
     }
 
     public List<Book> findByKeyword(String keyword) {
         return books.stream()
                 .filter(b -> b.like(keyword))
                 .map(b -> b.copy())
+                .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }
 
@@ -45,16 +51,26 @@ public class FileRepository {
 
     public void deleteById(long bookId) {
         books.remove(findById(bookId));
+        flush();
     }
 
     public void addBook(Book book) {
         books.add(book);
+        flush();
+    }
+
+    public BufferedWriter getWriter() throws IOException {
+        return Files.newBufferedWriter(FILEPATH, StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
+    public String getColumns() {
+        return columns;
     }
 
     private Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(FILEPATH.toFile()))) {
-            firstLine = reader.readLine();
+            columns = reader.readLine();
             reader.lines()
                     .map(s -> s.split("[;,]"))
                     .forEach(data -> {
@@ -67,5 +83,19 @@ public class FileRepository {
         } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
 
         return books;
+    }
+
+    public void flush() {
+        try (BufferedWriter writer = getWriter()) {
+            writer.write(columns);
+            writer.newLine();
+            books.stream().sorted((a, b )-> Math.toIntExact(a.getId() - b.getId()))
+                    .forEach(book -> {
+                        try {
+                            writer.write(book.toRecord());
+                            writer.newLine();
+                        } catch (IOException e) {}
+                    });
+        } catch (IOException e) {}
     }
 }

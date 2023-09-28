@@ -29,10 +29,12 @@ public class BookService {
 
     public void rentBook(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.BORROWED);
+        repository.flush();
     }
 
     public void returnBook(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.ARRANGING);
+        repository.flush();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -43,6 +45,7 @@ public class BookService {
 
     public void reportLoss(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.LOST);
+        repository.flush();
     }
 
     public void deleteBook(long bookId) {

@@ -13,12 +13,13 @@ import java.util.List;
 
 public class FileRepositoryTest {
     String path = "src/test/resources/도서 목록.csv";
-    String firstLine = "도서 번호;도서명;작가;총 페이지 수;상태";
+    String columns = "도서 번호;도서명;작가;총 페이지 수;상태";
+    FileRepository repository = new FileRepository(path);
 
     @AfterEach
     void 파일_내용_지우기() {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write(firstLine);
+            writer.write(columns);
             writer.newLine();
         } catch (IOException e) {}
     }
@@ -27,7 +28,7 @@ public class FileRepositoryTest {
     void 파일로부터_도서_등록() throws IOException {
         //given
         List<Book> books = Arrays.asList(
-                new Book.Builder("이펙티브 자바 Effective Java 3/E", "조슈아 블로크", 520)
+                new Book.Builder("이펙티브 자바", "조슈아 블로크", 520)
                         .id(2)
                         .bookStatus("대여 가능")
                         .build(),
@@ -36,7 +37,7 @@ public class FileRepositoryTest {
                 );
 
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write(firstLine);
+            writer.write(columns);
             writer.newLine();
             books.stream().forEach(book -> {
                 try {
@@ -47,12 +48,38 @@ public class FileRepositoryTest {
         } catch (IOException e) {}
 
         //when
-        FileRepository repository = new FileRepository(path);
+        repository = new FileRepository(path);
 
         //then
         List<Book> loadedBooks = repository.findAll();
         Assertions.assertEquals(loadedBooks.size(), books.size());
-        for(int i = 0; i < books.size(); ++i)
-            Assertions.assertEquals(books.get(i), loadedBooks.get(i));
+        for(int i = 0; i < books.size(); ++i) {
+            Book loadedBook = loadedBooks.get(i);
+            Assertions.assertDoesNotThrow(() ->books.stream().filter(b -> b.equals(loadedBook)).findAny().get());
+        }
+    }
+
+    @Test
+    public void 파일_저장() {
+        //given
+        try (BufferedWriter writer = repository.getWriter()) {
+            writer.write(columns);
+            writer.newLine();
+        } catch (IOException e) {}
+
+        //when
+        Book book = new Book.Builder("이펙티브 자바", "조슈아 블로크", 520).build();
+        repository.addBook(book);
+
+        //then
+        try (BufferedReader reader = new BufferedReader(new FileReader(Paths.get(path).toFile()))) {
+            columns = reader.readLine();
+            String[] data = reader.readLine().split("[;,]");
+            Book storedBook = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]))
+                    .id(Long.valueOf(data[0]))
+                    .bookStatus(data[4])
+                    .build();
+            Assertions.assertEquals(storedBook, book);
+        } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
     }
 }
