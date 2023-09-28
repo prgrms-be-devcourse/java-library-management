@@ -29,8 +29,10 @@ public class MenuConsole implements Console {
                 request.requestData.bookName = scanBookName();
                 break;
             }
-            case BORROW: {
+            case BORROW:
+            case RETURN: {
                 request.requestData.bookId = scanBookId();
+                break;
             }
         }
         return request;

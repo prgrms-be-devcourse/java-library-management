@@ -42,6 +42,9 @@ public class ServerApplication {
             case BORROW: {
                 return bookController.borrow(request.requestData.bookId);
             }
+            case RETURN: {
+                return bookController.returnBook(request.requestData.bookId);
+            }
         }
         return null;
     }

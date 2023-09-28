@@ -29,4 +29,9 @@ public class BookController {
         bookService.borrow(bookId);
         return "[System] 도서가 대여 처리 되었습니다.\n";
     }
+
+    public String returnBook(int bookId) {
+        bookService.returnBook(bookId);
+        return "[System] 도서가 반납 처리 되었습니다.\n";
+    }
 }
