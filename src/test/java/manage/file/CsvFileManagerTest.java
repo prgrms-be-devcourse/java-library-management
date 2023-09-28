@@ -1,9 +1,8 @@
-package test.manage.file;
+package manage.file;
 
-import main.entity.Book;
-import main.entity.State;
-import main.manage.file.CsvFileManager;
-import main.manage.file.FileManager;
+
+import entity.Book;
+import entity.State;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,17 +15,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CsvFileManagerTest {
-    private static final String filePath = "test/res/temp.csv";
+    private static final String FILE_PATH = "temp.csv";
     private final FileManager fileManager;
 
     public CsvFileManagerTest() {
-        this.fileManager = new CsvFileManager(filePath);
+        this.fileManager = new CsvFileManager(FILE_PATH);
     }
 
     @BeforeEach
     void setUp() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))){
-            File csvFile = new File(filePath);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(getClass().getClassLoader().getResource(FILE_PATH).getPath()))){
+            File csvFile = new File(getClass().getClassLoader().getResource(FILE_PATH).getPath());
             csvFile.createNewFile();
 
             bw.write("도서번호,도서 제목,작가,페이지 수, 상태, 마지막으로 반납한 시간");

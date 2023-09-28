@@ -1,4 +1,4 @@
-package main.exception;
+package exception;
 
 public class BookNumberAlreadyExistException extends RuntimeException {
     public BookNumberAlreadyExistException() {

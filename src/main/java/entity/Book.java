@@ -1,4 +1,4 @@
-package main.entity;
+package entity;
 
 public class Book {
     private static int numberCnt = 1;

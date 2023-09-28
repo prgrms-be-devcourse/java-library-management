@@ -1,10 +1,8 @@
-package main;
-
-import main.exception.BookNumberAlreadyExistException;
-import main.manage.file.CsvFileManager;
-import main.manage.book.ListBookManager;
-import main.manage.file.TestFileManager;
-import main.manage.TotalManager;
+import exception.BookNumberAlreadyExistException;
+import manage.file.CsvFileManager;
+import manage.book.ListBookManager;
+import manage.file.TestFileManager;
+import manage.TotalManager;
 
 import java.util.Scanner;
 
@@ -26,7 +24,7 @@ public class Main {
         try {
             TotalManager totalManager;
             if (mode == 1)
-                totalManager = new TotalManager(new ListBookManager(new CsvFileManager("res/temp.csv")), sc);
+                totalManager = new TotalManager(new ListBookManager(new CsvFileManager("temp.csv")), sc);
             else
                 totalManager = new TotalManager(new ListBookManager(new TestFileManager()), sc);
 

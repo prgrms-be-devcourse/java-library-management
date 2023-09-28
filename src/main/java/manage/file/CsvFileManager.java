@@ -1,8 +1,8 @@
-package main.manage.file;
+package manage.file;
 
-import main.entity.Book;
-import main.entity.State;
-import main.exception.BookNumberAlreadyExistException;
+import entity.Book;
+import entity.State;
+import exception.BookNumberAlreadyExistException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +16,7 @@ public class CsvFileManager implements FileManager {
     private final String filePath;
 
     public CsvFileManager(String filePath) {
-        this.filePath = filePath;
+        this.filePath = getClass().getClassLoader().getResource(filePath).getPath();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class CsvFileManager implements FileManager {
         try (BufferedReader br =
                      new BufferedReader(
                              new InputStreamReader(
-                                     new FileInputStream(filePath), StandardCharsets.UTF_8))){
+                                     new FileInputStream(this.filePath), StandardCharsets.UTF_8))){
             String line = br.readLine(); // 첫 행 건너뛰기
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(CSV_PATTERN);
@@ -41,7 +41,7 @@ public class CsvFileManager implements FileManager {
                         new Book(bookNum, split[1], split[2], Integer.parseInt(split[3]), State.valueOf(split[4]), Long.parseLong(split[5]))
                 );
             }
-        }catch (Exception e){
+        } catch (IOException e){
             throw new RuntimeException("파일 읽기 중 문제 발생");
         }
 
@@ -52,7 +52,7 @@ public class CsvFileManager implements FileManager {
     public void write(List<Book> bookList) {
         try (BufferedWriter bw = new BufferedWriter(
                 new OutputStreamWriter(
-                        new FileOutputStream(filePath), StandardCharsets.UTF_8))){
+                        new FileOutputStream(this.filePath), StandardCharsets.UTF_8))){
             bw.write("도서번호,도서 제목,작가,페이지 수,상태,마지막으로 반납한 시간");
             bw.newLine();
             for(Book book : bookList)

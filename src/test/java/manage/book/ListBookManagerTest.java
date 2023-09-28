@@ -1,11 +1,9 @@
-package test.manage.book;
+package manage.book;
 
-import main.entity.Book;
-import main.entity.State;
-import main.exception.EntityNotFoundException;
-import main.manage.book.BookManager;
-import main.manage.book.ListBookManager;
-import main.manage.file.TestFileManager;
+import entity.Book;
+import entity.State;
+import exception.EntityNotFoundException;
+import manage.file.TestFileManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
