@@ -1,6 +1,6 @@
-import manage.FileManager;
 import manage.CsvFileManager;
 import manage.ListBookManager;
+import manage.TestFileManager;
 import manage.TotalManager;
 
 import java.util.Scanner;
@@ -22,10 +22,9 @@ public class Main {
 
         TotalManager totalManager;
         if(mode == 1) {
-            FileManager fileManager = new CsvFileManager();
-            totalManager = new TotalManager(new ListBookManager(fileManager.read("res/temp.csv")), sc);
+            totalManager = new TotalManager(new ListBookManager(new CsvFileManager("res/temp.csv")), sc);
         }else{
-            totalManager = new TotalManager(new ListBookManager(), sc);
+            totalManager = new TotalManager(new ListBookManager(new TestFileManager()), sc);
         }
 
         totalManager.run();
