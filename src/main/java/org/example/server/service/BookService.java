@@ -34,4 +34,9 @@ public class BookService {
         Book book = repository.getById(bookId);
         book.state = BookState.CAN_BORROW; // 5분 설정 필요
     }
+
+    public void lost(int bookId) {
+        Book book = repository.getById(bookId);
+        book.state = BookState.LOSTED;
+    }
 }

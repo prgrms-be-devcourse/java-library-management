@@ -30,7 +30,8 @@ public class MenuConsole implements Console {
                 break;
             }
             case BORROW:
-            case RETURN: {
+            case RETURN:
+            case LOST: {
                 request.requestData.bookId = scanBookId();
                 break;
             }

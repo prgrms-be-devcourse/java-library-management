@@ -45,6 +45,9 @@ public class ServerApplication {
             case RETURN: {
                 return bookController.returnBook(request.requestData.bookId);
             }
+            case LOST: {
+                return bookController.lost(request.requestData.bookId);
+            }
         }
         return null;
     }
