@@ -3,24 +3,29 @@ package manage;
 import entity.Book;
 import entity.State;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class CsvFileManager implements FileManager {
     private static final String CSV_PATTERN = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+    private final String filePath;
+
+    public CsvFileManager(String filePath) {
+        this.filePath = filePath;
+    }
 
     @Override
-    public List<Book> read(String filePath) {
+    public List<Book> read() {
         List<Book> bookList = new ArrayList<>();
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
-
-            String line = bufferedReader.readLine(); // 첫 행 건너뛰기
-            while ((line = bufferedReader.readLine()) != null) {
+        try (BufferedReader br =
+                     new BufferedReader(
+                             new InputStreamReader(
+                                     new FileInputStream(filePath), StandardCharsets.UTF_8))){
+            String line = br.readLine(); // 첫 행 건너뛰기
+            while ((line = br.readLine()) != null) {
                 String[] split = line.split(CSV_PATTERN);
                 for (int i = 0; i < split.length; i++) split[i] = split[i].replaceAll("\"", "");
                 bookList.add(
@@ -36,6 +41,35 @@ public class CsvFileManager implements FileManager {
 
     @Override
     public void write(List<Book> bookList) {
+        try (BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(
+                        new FileOutputStream(filePath), StandardCharsets.UTF_8))){
+            bw.write("도서번호,도서 제목,작가,페이지 수,상태,마지막으로 빌린 시간");
+            bw.newLine();
+            for(Book book : bookList)
+                writeBook(bw, book);
 
+        }catch (Exception e){
+            throw new RuntimeException("파일 쓰기 중 문제 발생");
+        }
+    }
+
+    private void writeBook(BufferedWriter bw, Book book) throws IOException {
+        String[] fieldsVal = {String.valueOf(book.getNumber()),
+                book.getTitle(),
+                book.getAuthor(),
+                String.valueOf(book.getPageNum()),
+                String.valueOf(book.getState()),
+                String.valueOf(book.getLastReturn())
+        };
+        IntStream.rangeClosed(1, 2).forEach(i -> {
+            if(fieldsVal[i].contains(",")) fieldsVal[i] = "\"" + fieldsVal[i] + "\"";
+        });
+
+        for (int i = 0; i < fieldsVal.length; i++){
+            bw.write(fieldsVal[i]);
+            if (i != fieldsVal.length - 1) bw.write(',');
+        }
+        bw.newLine();
     }
 }
