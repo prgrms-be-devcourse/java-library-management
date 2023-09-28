@@ -1,4 +1,5 @@
 package devcourse.backend.view;
+import devcourse.backend.Mode;
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.BookStatus;
 
@@ -113,9 +114,10 @@ public class Console implements Runnable {
     }
 
     public static int selectMode() {
-        return intInput("Q. 모드를 선택해주세요.\n" +
-                        "1. 일반 모드\n" +
-                        "2. 테스트 모드");
+        StringBuffer prompt = new StringBuffer("모드를 선택해주세요.");
+        for(Mode mode : Mode.values())
+            prompt.append("\n").append(mode);
+        return intInput(prompt.toString());
     }
 
     private static void system(String s) {
