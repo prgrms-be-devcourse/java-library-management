@@ -10,4 +10,6 @@ public interface BookRepository {
     String readAll();
     
     String searchByName(String bookName);
+
+    Book getById(int bookId);
 }

@@ -39,6 +39,9 @@ public class ServerApplication {
             case SEARCH_BY_NAME: {
                 return bookController.seachByName(request.requestData.bookName);
             }
+            case BORROW: {
+                return bookController.borrow(request.requestData.bookId);
+            }
         }
         return null;
     }

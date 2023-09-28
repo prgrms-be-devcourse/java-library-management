@@ -24,4 +24,9 @@ public class BookService {
     public String searchByName(String bookName) {
         return repository.searchByName(bookName);
     }
+
+    public void borrow(int bookId) {
+        Book book = repository.getById(bookId);
+        book.state = BookState.BORROWED;
+    }
 }

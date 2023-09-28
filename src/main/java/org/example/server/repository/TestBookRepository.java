@@ -45,4 +45,9 @@ public class TestBookRepository implements BookRepository {
         sb.append("\n");
         return sb.toString();
     }
+
+    @Override
+    public Book getById(int bookId) {
+        return data.get(bookId);
+    }
 }

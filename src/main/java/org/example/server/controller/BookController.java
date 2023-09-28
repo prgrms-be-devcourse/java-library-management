@@ -22,6 +22,11 @@ public class BookController {
     }
 
     public String seachByName(String bookName) {
-        return bookService.searchByName(bookName) + "[System] 검색된 도서 끝\n";
+        return bookService.searchByName(bookName) + "\n[System] 검색된 도서 끝\n";
+    }
+
+    public String borrow(int bookId) {
+        bookService.borrow(bookId);
+        return "[System] 도서가 대여 처리 되었습니다.\n";
     }
 }

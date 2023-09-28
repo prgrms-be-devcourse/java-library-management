@@ -20,6 +20,8 @@ public class MenuConsole implements Console {
     ));
     public static String scanBookNameQuestions = "Q. 검색할 도서 제목 일부를 입력하세요.\n\n> ";
 
+    public String getScanBookIdQuestions = "Q. 대여할 도서번호를 입력하세요\n\n> ";
+
     @Override
     public void show() {
         System.out.print("Q. 사용할 기능을 선택해주세요.\n\n> ");
@@ -39,13 +41,16 @@ public class MenuConsole implements Console {
                 request.requestData.bookName = scanBookName();
                 break;
             }
+            case BORROW: {
+                request.requestData.bookId = scanBookId();
+            }
         }
         return request;
     }
 
     public int scanBookId() {
-//        printMenu(); 각 메뉴에 따른 화면 출력 후 string 반환
-        return 0;
+        System.out.print(getScanBookIdQuestions);
+        return Integer.parseInt(scanner.nextLine());
     }
 
     public String scanBookName() {
