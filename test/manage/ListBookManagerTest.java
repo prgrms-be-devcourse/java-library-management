@@ -32,7 +32,7 @@ public class ListBookManagerTest {
         // given
         BookManager bookManager = new ListBookManager(new TestFileManager());
         List<Book> books = List.of(
-                new Book("title1", "author1", 120),
+                new Book(1, "title1", "author1", 120, State.AVAILABLE, -1),
                 new Book(2, "title2", "author2", 140, State.DELETED, -1),
                 new Book(3, "title3", "author3", 150, State.RENTED, -1),
                 new Book(4, "title4", "author4", 10, State.LOST, -1),
@@ -50,7 +50,7 @@ public class ListBookManagerTest {
         // given
         BookManager bookManager = new ListBookManager(new TestFileManager());
         List<Book> books = List.of(
-                new Book("t_itle1", "author1", 120),
+                new Book(1, "t_itle1", "author1", 120, State.AVAILABLE, -1),
                 new Book(2, "titl_e2", "author2", 140, State.DELETED, -1),
                 new Book(3, "title3", "author3", 150, State.RENTED, -1)
         );
@@ -68,7 +68,7 @@ public class ListBookManagerTest {
 
         BookManager bookManager = new ListBookManager(new TestFileManager());
 
-        bookManager.register(new Book("title1", "author1", 100));
+        bookManager.register(new Book(1, "title1", "author1", 100, State.AVAILABLE, -1));
         bookManager.register(new Book(2, "title2", "author2",
                 200, State.PROCESSING, System.currentTimeMillis() - 5 * 60 * 1000));
         bookManager.register(new Book(3, "title3", "author3", 400, State.PROCESSING, System.currentTimeMillis()));
@@ -89,7 +89,7 @@ public class ListBookManagerTest {
         // given
         BookManager bookManager = new ListBookManager(new TestFileManager());
 
-        bookManager.register(new Book("title1", "author1", 100));
+        bookManager.register(new Book(1, "title1", "author1", 100, State.AVAILABLE, -1));
         bookManager.register(new Book(2, "title2", "author2", 100, State.RENTED, -1));
         bookManager.register(new Book(3, "title3", "author3", 100, State.DELETED, -1));
         // when
@@ -104,7 +104,7 @@ public class ListBookManagerTest {
         // given
         BookManager bookManager = new ListBookManager(new TestFileManager());
 
-        bookManager.register(new Book("title1", "author1", 100));
+        bookManager.register(new Book(1, "title1", "author1", 100, State.AVAILABLE, -1));
         bookManager.register(new Book(2, "title2", "author2", 100, State.LOST, -1));
         bookManager.register(new Book(3, "title3", "author3", 100, State.DELETED, -1));
         // when
@@ -119,7 +119,7 @@ public class ListBookManagerTest {
         // given
         BookManager bookManager = new ListBookManager(new TestFileManager());
 
-        bookManager.register(new Book("title1", "author1", 100));
+        bookManager.register(new Book(1, "title1", "author1", 100, State.AVAILABLE, -1));
         bookManager.register(new Book(2, "title2", "author2", 100, State.LOST, -1));
         bookManager.register(new Book(3, "title3", "author3", 100, State.DELETED, -1));
         // when
