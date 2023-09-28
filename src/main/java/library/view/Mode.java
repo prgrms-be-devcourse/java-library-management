@@ -3,6 +3,8 @@ package library.view;
 import library.repository.BookRepository;
 import library.repository.InMemoryBookRepository;
 
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public enum Mode {
@@ -17,5 +19,19 @@ public enum Mode {
         this.code = code;
         this.description = description;
         this.bookRepositorySupplier = bookRepositorySupplier;
+    }
+
+    public static Optional<Mode> findByCode(String code) {
+        return Arrays.stream(values())
+                .filter(option -> option.code.equals(code))
+                .findFirst();
+    }
+
+    public String getExecutionMessage() {
+        return this.description + "로 애플리케이션을 실행합니다.";
+    }
+
+    public BookRepository getBookRepository() {
+        return bookRepositorySupplier.get();
     }
 }
