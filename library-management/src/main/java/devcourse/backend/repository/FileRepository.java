@@ -1,6 +1,7 @@
 package devcourse.backend.repository;
 
 import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -67,7 +68,8 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void modify() {
+    public void changeStatus(long id, BookStatus status) {
+        findById(id).changeStatus(status);
         flush();
     }
 
@@ -111,7 +113,7 @@ public class FileRepository implements Repository {
         return books;
     }
 
-    public void flush() {
+    private void flush() {
         try (BufferedWriter writer = getWriter()) {
             writer.write(columns);
             writer.newLine();

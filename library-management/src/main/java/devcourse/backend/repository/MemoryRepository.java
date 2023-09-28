@@ -1,6 +1,7 @@
 package devcourse.backend.repository;
 
 import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +46,8 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
-    public void modify() {
-
+    public void changeStatus(long id, BookStatus status) {
+        findById(id).changeStatus(status);
     }
 
     @Override

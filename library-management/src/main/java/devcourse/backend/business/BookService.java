@@ -2,12 +2,10 @@ package devcourse.backend.business;
 
 import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
-import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.BookDto;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,24 +27,21 @@ public class BookService {
     public List<Book> searchBooks(String keyword) { return repository.findByKeyword(keyword); }
 
     public void rentBook(long bookId) {
-        repository.findById(bookId).changeStatus(BookStatus.BORROWED);
-        repository.modify();
+        repository.changeStatus(bookId, BookStatus.BORROWED);
     }
 
     public void returnBook(long bookId) {
-        repository.findById(bookId).changeStatus(BookStatus.ARRANGING);
-        repository.modify();
+        repository.changeStatus(bookId, BookStatus.ARRANGING);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                repository.findById(bookId).changeStatus(BookStatus.AVAILABLE);
+                repository.changeStatus(bookId, BookStatus.AVAILABLE);
             }
         }, 5 * 60 * 1000);
     }
 
     public void reportLoss(long bookId) {
-        repository.findById(bookId).changeStatus(BookStatus.LOST);
-        repository.modify();
+        repository.changeStatus(bookId, BookStatus.LOST);
     }
 
     public void deleteBook(long bookId) {
