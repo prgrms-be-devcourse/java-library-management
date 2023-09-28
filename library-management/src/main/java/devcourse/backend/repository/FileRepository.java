@@ -100,7 +100,7 @@ public class FileRepository implements Repository {
         try (BufferedWriter writer = getWriter()) {
             writer.write(columns);
             writer.newLine();
-            books.stream().sorted((a, b )-> Math.toIntExact(a.getId() - b.getId()))
+            books.stream().sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
                     .forEach(book -> {
                         try {
                             writer.write(book.toRecord());
