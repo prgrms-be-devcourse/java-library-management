@@ -1,5 +1,6 @@
 package org.example.client.console;
 
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public interface Console {

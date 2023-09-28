@@ -5,7 +5,6 @@ import org.example.server.entity.Book;
 import java.util.LinkedHashMap;
 
 public class TestBookRepository implements BookRepository {
-
     private static int count;
     private static LinkedHashMap<Integer, Book> data;
 

@@ -14,6 +14,16 @@ public enum ModeType {
     COMMON(1, "1. 일반 모드\n", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n", CommonBookRepository::new),
     TEST(2, "2. 테스트 모드\n", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n", TestBookRepository::new);
 
+    private static final Map<Integer, ModeType> BY_NUMBER =
+            Stream.of(values()).collect(Collectors.toMap(ModeType::getNum, Function.identity()));
+
+    public static ModeType valueOfNumber(int num) {
+        return BY_NUMBER.get(num);
+    }
+
+    public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n"
+            + String.join("", Stream.of(values()).map(type -> type.name).toArray(String[]::new)) + "\n> ";
+
     private final int num;
     private final String name;
     private final String alert;
@@ -25,16 +35,6 @@ public enum ModeType {
         this.alert = alert;
         this.bookRepositorySupplier = bookRepositorySupplier;
     }
-
-    private static final Map<Integer, ModeType> BY_NUMBER =
-            Stream.of(values()).collect(Collectors.toMap(ModeType::getNum, Function.identity()));
-
-    public static ModeType valueOfNumber(int num) {
-        return BY_NUMBER.get(num);
-    }
-
-    public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n"
-            + String.join("", Stream.of(values()).map(type -> type.name).toArray(String[]::new)) + "\n> ";
 
     public int getNum() {
         return num;

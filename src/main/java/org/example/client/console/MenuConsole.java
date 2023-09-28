@@ -1,6 +1,6 @@
 package org.example.client.console;
 
-import org.example.client.connect.Request;
+import org.example.connect.Request;
 import org.example.type.MenuType;
 import org.example.server.entity.RequestBookDto;
 

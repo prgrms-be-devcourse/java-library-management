@@ -8,7 +8,7 @@ public interface BookRepository {
     void create(Book book);
 
     String readAll();
-    
+
     String searchByName(String bookName);
 
     Book getById(int bookId);

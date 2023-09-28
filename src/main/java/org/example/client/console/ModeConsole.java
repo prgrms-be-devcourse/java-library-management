@@ -7,8 +7,10 @@ import org.example.type.ModeType;
 // "모드"만 아는 입출력 클래스
 public class ModeConsole implements Console {
     public static ModeType modeType;
+
     private ModeConsole() {
     }
+
     public static ModeType scanType() {
         System.out.print(ModeType.MODE_CONSOLE);
         modeType = ModeType.valueOfNumber(Integer.parseInt(scanner.nextLine())); //숫자 & 범위 체크

@@ -1,7 +1,7 @@
 package org.example.server;
 
 import org.example.type.ModeType;
-import org.example.client.connect.Request;
+import org.example.connect.Request;
 import org.example.server.controller.BookController;
 import org.example.server.service.BookService;
 
@@ -10,10 +10,10 @@ import org.example.server.service.BookService;
 // 모드 = 레포 세팅
 // 메뉴 = 컨트롤러 뭐할지 세팅
 public class ServerApplication {
-    private static BookController bookController;
-
     private ServerApplication() {
     }
+
+    private static BookController bookController;
 
     public static void setModeType(ModeType modeType) {
         BookService bookService = new BookService(modeType.getRepository());

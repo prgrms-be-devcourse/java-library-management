@@ -1,4 +1,4 @@
-package org.example.client.connect;
+package org.example.connect;
 
 import org.example.type.MenuType;
 
