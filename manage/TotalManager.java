@@ -54,7 +54,7 @@ public class TotalManager {
                 System.out.println("존재하지 않는 도서입니다. 이미 삭제된 도서일 수 있습니다. 최초 선택으로 이동합니다.\n");
             }
         }
-
+        bookManager.saveFile();
     }
 
     private void register(){
