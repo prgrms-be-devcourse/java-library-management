@@ -20,4 +20,8 @@ public class BookService {
     public String readAll() {
         return repository.readAll();
     }
+
+    public String searchByName(String bookName) {
+        return repository.searchByName(bookName);
+    }
 }

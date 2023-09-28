@@ -35,4 +35,14 @@ public class TestBookRepository implements BookRepository {
         sb.append("\n");
         return sb.toString();
     }
+
+    @Override
+    public String searchByName(String bookName) {
+        StringBuilder sb = new StringBuilder();
+        data.values().stream().filter(book -> book.name.contains(bookName)).forEach((book) -> {
+            sb.append(book.toString());
+        });
+        sb.append("\n");
+        return sb.toString();
+    }
 }

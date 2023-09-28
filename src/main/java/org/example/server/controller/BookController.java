@@ -20,4 +20,8 @@ public class BookController {
     public String readAllBook() {
         return bookService.readAll() + "[System] 도서 목록 끝\n";
     }
+
+    public String seachByName(String bookName) {
+        return bookService.searchByName(bookName) + "[System] 검색된 도서 끝\n";
+    }
 }

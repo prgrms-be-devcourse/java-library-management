@@ -36,6 +36,9 @@ public class ServerApplication {
             case READ_ALL: {
                 return bookController.readAllBook();
             }
+            case SEARCH_BY_NAME: {
+                return bookController.seachByName(request.requestData.bookName);
+            }
         }
         return null;
     }

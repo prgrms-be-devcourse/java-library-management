@@ -18,6 +18,7 @@ public class MenuConsole implements Console {
             ("Q. 작가 이름을 입력하세요.\n\n> "),
             ("Q. 페이지 수를 입력하세요.\n\n> ")
     ));
+    public static String scanBookNameQuestions = "Q. 검색할 도서 제목 일부를 입력하세요.\n\n> ";
 
     @Override
     public void show() {
@@ -32,14 +33,24 @@ public class MenuConsole implements Console {
         switch (menuType) {
             case REGISTER: {
                 request.requestData.requestBookDto = scanBookInfo();
+                break;
+            }
+            case SEARCH_BY_NAME: {
+                request.requestData.bookName = scanBookName();
+                break;
             }
         }
         return request;
     }
 
-    public int scanInfo() {
+    public int scanBookId() {
 //        printMenu(); 각 메뉴에 따른 화면 출력 후 string 반환
         return 0;
+    }
+
+    public String scanBookName() {
+        System.out.print(scanBookNameQuestions);
+        return scanner.nextLine();
     }
 
     public RequestBookDto scanBookInfo() {
