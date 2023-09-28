@@ -1,6 +1,7 @@
 package devcourse.backend.repository;
 
 import devcourse.backend.medel.Book;
+import devcourse.backend.medel.BookStatus;
 
 import java.util.List;
 
@@ -10,6 +11,6 @@ public interface Repository {
     Book findById(long id);
     Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages);
     void addBook(Book book);
-    void modify();
+    void changeStatus(long id, BookStatus status);
     void deleteById(long bookId);
 }
