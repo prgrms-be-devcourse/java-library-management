@@ -24,7 +24,9 @@ public class BookService {
         return repository.findAll();
     }
 
-    public List<Book> searchBooks(String keyword) { return repository.findByKeyword(keyword); }
+    public List<Book> searchBooks(String keyword) {
+        return repository.findByKeyword(keyword);
+    }
 
     public void rentBook(long bookId) {
         repository.changeStatus(bookId, BookStatus.BORROWED);

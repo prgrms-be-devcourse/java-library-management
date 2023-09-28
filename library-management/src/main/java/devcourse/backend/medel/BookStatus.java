@@ -13,7 +13,9 @@ public enum BookStatus {
     }
 
     @Override
-    public String toString() { return description; }
+    public String toString() {
+        return description;
+    }
 
     public static Optional<BookStatus> get(String description) {
         return Arrays.stream(BookStatus.values())
@@ -26,16 +28,16 @@ public enum BookStatus {
             if (before == BookStatus.AVAILABLE) return true;
         }
 
-        if(after == ARRANGING) {
+        if (after == ARRANGING) {
             if (before == BORROWED || before == LOST) return true;
         }
 
-        if(after == AVAILABLE) {
-            if(before == ARRANGING) return true;
+        if (after == AVAILABLE) {
+            if (before == ARRANGING) return true;
         }
 
-        if(after == LOST) {
-            return (before == LOST)? false : true;
+        if (after == LOST) {
+            return (before == LOST) ? false : true;
         }
 
         return false;

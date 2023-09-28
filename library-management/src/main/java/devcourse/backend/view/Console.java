@@ -1,4 +1,5 @@
 package devcourse.backend.view;
+
 import devcourse.backend.Mode;
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.BookStatus;
@@ -17,7 +18,7 @@ public class Console implements Runnable {
 
     public void menu() {
         StringBuffer prompt = new StringBuffer("사용할 기능을 선택해주세요.");
-        for(Menu menu : Menu.values())
+        for (Menu menu : Menu.values())
             prompt.append("\n").append(menu);
 
         Menu.selected(intInput(prompt.toString()));
@@ -74,10 +75,10 @@ public class Console implements Runnable {
         } catch (NumberFormatException e) {
             system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
-            BookStatus status =  BookStatus.get(e.getMessage()).get();
-            if(status == BORROWED) system("이미 대여 중인 도서입니다.");
-            else if(status == ARRANGING) system("정리 중인 도서입니다. 5분 후 다시 대여해 주세요.");
-            else if(status == LOST) system("현재 분실 처리된 도서입니다.");
+            BookStatus status = BookStatus.get(e.getMessage()).get();
+            if (status == BORROWED) system("이미 대여 중인 도서입니다.");
+            else if (status == ARRANGING) system("정리 중인 도서입니다. 5분 후 다시 대여해 주세요.");
+            else if (status == LOST) system("현재 분실 처리된 도서입니다.");
         }
     }
 
@@ -90,9 +91,9 @@ public class Console implements Runnable {
         } catch (NumberFormatException e) {
             system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
-            BookStatus status =  BookStatus.get(e.getMessage()).get();
-            if(status == AVAILABLE) system("원래 대여가 가능한 도서입니다.");
-            else if(status == ARRANGING) system("정리 중인 도서입니다.");
+            BookStatus status = BookStatus.get(e.getMessage()).get();
+            if (status == AVAILABLE) system("원래 대여가 가능한 도서입니다.");
+            else if (status == ARRANGING) system("정리 중인 도서입니다.");
         }
     }
 
@@ -117,12 +118,14 @@ public class Console implements Runnable {
             system("도서가 삭제 처리 되었습니다.");
         } catch (NumberFormatException e) {
             system("숫자를 입력해주세요.");
-        } catch (IllegalArgumentException e) { system(e.getMessage()); }
+        } catch (IllegalArgumentException e) {
+            system(e.getMessage());
+        }
     }
 
     public static int selectMode() {
         StringBuffer prompt = new StringBuffer("모드를 선택해주세요.");
-        for(Mode mode : Mode.values())
+        for (Mode mode : Mode.values())
             prompt.append("\n").append(mode);
 
         try {
@@ -152,7 +155,9 @@ public class Console implements Runnable {
         try {
             int input = Integer.parseInt(sc.nextLine());
             return input;
-        } catch (NumberFormatException e) { throw new NumberFormatException("숫자를 입력해주세요."); }
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("숫자를 입력해주세요.");
+        }
     }
 
     public static long longInput(String prompt) {
@@ -162,7 +167,9 @@ public class Console implements Runnable {
         try {
             long input = Long.parseLong(sc.nextLine());
             return input;
-        } catch (NumberFormatException e) { throw new NumberFormatException("숫자를 입력해주세요."); }
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("숫자를 입력해주세요.");
+        }
     }
 
     public static String stringInput(String prompt) {
@@ -180,7 +187,9 @@ public class Console implements Runnable {
         while (true) {
             try {
                 menu();
-            } catch (IllegalArgumentException e) { system(e.getMessage()); }
+            } catch (IllegalArgumentException e) {
+                system(e.getMessage());
+            }
         }
     }
 }
