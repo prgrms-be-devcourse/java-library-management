@@ -53,7 +53,7 @@ public class CsvFileManager implements FileManager {
         try (BufferedWriter bw = new BufferedWriter(
                 new OutputStreamWriter(
                         new FileOutputStream(filePath), StandardCharsets.UTF_8))){
-            bw.write("도서번호,도서 제목,작가,페이지 수,상태,마지막으로 빌린 시간");
+            bw.write("도서번호,도서 제목,작가,페이지 수,상태,마지막으로 반납한 시간");
             bw.newLine();
             for(Book book : bookList)
                 writeBook(bw, book);
