@@ -9,6 +9,8 @@ import library.view.console.ConsoleIOHandler;
 
 import java.util.List;
 
+import static library.view.constant.InputMessage.SEARCH_BY_TITLE;
+
 public class BookFunctionHandler {
 
     private final BookController bookController;
@@ -28,6 +30,13 @@ public class BookFunctionHandler {
         List<BookFindResponse> allBookList = bookController.findAllBooks();
 
         consoleIOHandler.printList(allBookList);
+    }
+
+    public void searchByTitle() {
+        String searchTitle = consoleIOHandler.inputWithMessage(SEARCH_BY_TITLE);
+        List<BookFindResponse> searchBookList = bookController.findBookLisContainTitle(searchTitle);
+
+        consoleIOHandler.printList(searchBookList);
     }
 }
 
