@@ -36,10 +36,16 @@ public class ConsoleIOHandler {
         return input;
     }
 
-    public String inputWithMessage(InputMessage inputMessage) {
+    public String inputStringWithMessage(InputMessage inputMessage) {
         this.printQuestionMessage(inputMessage.getMessage());
 
         return getInputWithPrint();
+    }
+
+    public long inputLongWithMessage(InputMessage inputMessage) {
+        this.printQuestionMessage(inputMessage.getMessage());
+
+        return getParseInputWithPrint(Long::parseLong);
     }
 
     private <T> T getParseInputWithPrint(Function<String, T> parseFunction) {

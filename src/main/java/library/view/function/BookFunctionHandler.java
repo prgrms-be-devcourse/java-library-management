@@ -33,7 +33,7 @@ public class BookFunctionHandler {
     }
 
     public void searchByTitle() {
-        String searchTitle = consoleIOHandler.inputWithMessage(SEARCH_BY_TITLE);
+        String searchTitle = consoleIOHandler.inputStringWithMessage(SEARCH_BY_TITLE);
         List<BookFindResponse> searchBookList = bookController.findBookLisContainTitle(searchTitle);
 
         consoleIOHandler.printList(searchBookList);
