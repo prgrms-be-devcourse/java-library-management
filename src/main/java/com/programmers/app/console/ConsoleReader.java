@@ -19,6 +19,12 @@ public class ConsoleReader {
     }
 
     String readString() {
-        return sc.nextLine();
+        String input = sc.nextLine();
+
+        while (input.equals("")) {
+            input = sc.nextLine();
+        }
+
+        return input;
     }
 }
