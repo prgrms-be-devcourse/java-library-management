@@ -1,21 +1,20 @@
 package config;
 
-import input.ConsoleInput;
-import input.Input;
-import output.ConsoleOutput;
-import output.Output;
+import controller.BookController;
 import repository.MemoryRepository;
 import repository.Repository;
+import view.ConsoleView;
+import view.View;
 
 public class Appconfig {
 
-    public Input getInput(){
-        return new ConsoleInput();
-    }
-    public Output getOutput(){
-        return new ConsoleOutput();
+    private final Repository repository = new MemoryRepository();
+    private final View view = new ConsoleView();
+
+    public View getView(){
+        return view;
     }
     public Repository getRepository(){
-        return new MemoryRepository();
+        return repository;
     }
 }
