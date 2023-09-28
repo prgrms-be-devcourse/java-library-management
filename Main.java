@@ -1,5 +1,5 @@
 import manage.FileManager;
-import manage.FileManagerImpl;
+import manage.CsvFileManager;
 import manage.ListBookManager;
 import manage.TotalManager;
 
@@ -22,8 +22,8 @@ public class Main {
 
         TotalManager totalManager;
         if(mode == 1) {
-            FileManager fileManager = new FileManagerImpl();
-            totalManager = new TotalManager(new ListBookManager(fileManager.readCsv("res/temp.csv")), sc);
+            FileManager fileManager = new CsvFileManager();
+            totalManager = new TotalManager(new ListBookManager(fileManager.read("res/temp.csv")), sc);
         }else{
             totalManager = new TotalManager(new ListBookManager(), sc);
         }

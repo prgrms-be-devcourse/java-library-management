@@ -10,11 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileManagerImpl implements FileManager {
+public class CsvFileManager implements FileManager {
     private static final String CSV_PATTERN = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
     @Override
-    public List<Book> readCsv(String filePath) {
+    public List<Book> read(String filePath) {
         List<Book> bookList = new ArrayList<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8));
@@ -35,7 +35,7 @@ public class FileManagerImpl implements FileManager {
     }
 
     @Override
-    public void writeCsv(List<Book> bookList) {
+    public void write(List<Book> bookList) {
 
     }
 }
