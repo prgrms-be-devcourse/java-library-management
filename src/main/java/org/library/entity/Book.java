@@ -49,9 +49,19 @@ public class Book {
     }
 
     public void processAvailable(){
-        if(organizingTime.isBefore(LocalDateTime.now())){
+        if(organizingTime != null && organizingTime.isBefore(LocalDateTime.now())){
             state = State.AVAILABLE;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "도서번호 : " + id +
+                "\n제목 : " + title +
+                "\n작가 이름 : " + author +
+                "\n페이지 수 : " + page + " 페이지"+
+                "\n상태 : " + state.getDescription() +
+                "\n------------------------------";
     }
 
     private String getReason(){
