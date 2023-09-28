@@ -1,20 +1,19 @@
 package org.example.client;
 
-import org.example.client.console.MenuConsole;
+import org.example.client.console.MethodConsole;
 import org.example.client.console.ModeConsole;
-import org.example.connect.Request;
-import org.example.type.ModeType;
+import org.example.packet.Request;
 
 public class Client {
     private Client() {
 
     }
 
-    public static ModeType getMode() {
+    public static String getMode() {
         return ModeConsole.scanType();
     }
 
     public static Request getMenu() {
-        return MenuConsole.scanTypeAndInfo();
+        return MethodConsole.scanTypeAndInfo();
     }
 }

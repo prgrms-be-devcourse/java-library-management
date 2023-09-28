@@ -1,4 +1,4 @@
-package org.example.connect;
+package org.example.packet;
 
 import org.example.server.entity.RequestBookDto;
 

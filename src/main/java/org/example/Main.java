@@ -7,9 +7,9 @@ public class Main {
     static String response;
 
     public static void main(String[] args) {
-        Server.setModeType(Client.getMode());
+        Server.requestMode(Client.getMode());
         while (true) {
-            response = Server.request(Client.getMenu());
+            response = Server.requestMethod(Client.getMenu());
             System.out.println(response);
         }
     }
