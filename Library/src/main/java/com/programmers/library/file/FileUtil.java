@@ -2,6 +2,8 @@ package com.programmers.library.file;
 
 import com.programmers.library.domain.Book;
 import com.programmers.library.domain.BookStatus;
+import com.programmers.library.exception.ErrorCode;
+import com.programmers.library.exception.ExceptionHandler;
 
 import java.io.*;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class FileUtil {
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
+                    throw ExceptionHandler.err(ErrorCode.CREATE_FILE_FAILED_EXCEPTION);
                 }
             }
         }
@@ -31,6 +34,7 @@ public class FileUtil {
 
                 writer.append(line);
             } catch (IOException e) {
+                throw ExceptionHandler.err(ErrorCode.WRITE_FILE_FAILED_EXCEPTION);
             }
         }
 
@@ -51,6 +55,7 @@ public class FileUtil {
                     bookMap.put(bookId, book);
                 }
             } catch (IOException e) {
+                throw ExceptionHandler.err(ErrorCode.READ_FILE_FAILED_EXCEPTION);
             }
             return bookMap;
         }
@@ -74,6 +79,7 @@ public class FileUtil {
                     lineNumber++;
                 }
             } catch (IOException e) {
+                throw ExceptionHandler.err(ErrorCode.UPDATE_FILE_FAILED_EXCEPTION);
             }
 
             File tempFile = new File(FILE_PATH + ".temp");
