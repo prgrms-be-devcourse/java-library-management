@@ -1,0 +1,71 @@
+package library.repository;
+
+import library.domain.Book;
+import library.util.file.CsvFileHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class FileBookRepository implements BookRepository {
+
+    private static final String CSV_FILE_PATH = "src/main/resources/books.csv";
+    private final List<Book> bookList;
+    private final CsvFileHandler csvFileHandler;
+
+    public FileBookRepository() {
+        this.bookList = loadBooksFromFile();
+        this.csvFileHandler = new CsvFileHandler(CSV_FILE_PATH);
+    }
+
+    @Override
+    public void add(Book item) {
+        bookList.add(item);
+        saveBooksToFile();
+    }
+
+    @Override
+    public Optional<Book> findByBookNumber(long bookNumber) {
+        return bookList.stream()
+                .filter(book -> book.getBookNumber() == bookNumber)
+                .findFirst();
+    }
+
+    @Override
+    public List<Book> findAll() {
+        return new ArrayList<>(bookList);
+    }
+
+    @Override
+    public List<Book> findListContainTitle(String title) {
+        return bookList.stream()
+                .filter(book -> book.getTitle().contains(title))
+                .toList();
+    }
+
+    @Override
+    public void delete(Book book) {
+        bookList.remove(book);
+        saveBooksToFile();
+    }
+
+    @Override
+    public void persist() {
+        saveBooksToFile();
+    }
+
+    @Override
+    public long getNextBookNumber() {
+        return bookList.isEmpty()
+                ? 1
+                : bookList.get(bookList.size() - 1).getBookNumber() + 1;
+    }
+
+    private List<Book> loadBooksFromFile() {
+        return csvFileHandler.loadBooksFromFile();
+    }
+
+    private void saveBooksToFile() {
+        csvFileHandler.saveBooksToFile(bookList);
+    }
+}
