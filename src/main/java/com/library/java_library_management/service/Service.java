@@ -8,6 +8,7 @@ import com.library.java_library_management.status.BookStatus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,14 +80,7 @@ public class Service {
                 "\n" +
                 "Q. 대여할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-//        try{
-//            repository.rentBook(book_id);
-//            System.out.println("대여 완료되었습니다.");
-//        }catch (RuntimeException e){
-//
-//            System.out.println("");
-//            System.out.println(e.getMessage());
-//        }
+
         System.out.println(repository.rentBook(book_id));
 
     }

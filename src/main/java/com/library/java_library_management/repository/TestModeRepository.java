@@ -3,14 +3,18 @@ package com.library.java_library_management.repository;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.status.BookStatus;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TestModeRepository implements Repository{
-
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     public List<BookInfo> bookList = new ArrayList<>();
     int book_number_cnt = 1;
     @Override
@@ -36,15 +40,6 @@ public class TestModeRepository implements Repository{
                 .findAny();
         return book.get().getStatus().rentBook(book.get());
 
-
-//                .ifPresentOrElse(bookInfo -> {
-//                    bookInfo.setStatus(BookStatus.RENT);
-//                    return bookInfo.getStatus();
-//                }, () -> {
-//
-//                    throw new RuntimeException("이미 대여중인 도서입니다.");
-//                        });
-
     }
 
     @Override
@@ -54,7 +49,12 @@ public class TestModeRepository implements Repository{
                 && book.getStatus().equals(BookStatus.RENT) || book.getStatus().equals(BookStatus.LOST))
                 .findAny()
                 .ifPresentOrElse(book -> {
-                    book.setStatus(BookStatus.AVAILABLE);
+                    LocalDateTime now = LocalDateTime.now();
+                    book.setStatus(BookStatus.CLEANING);
+                    scheduler.schedule(() -> {
+                        book.setStatus(BookStatus.AVAILABLE);
+                        System.out.println("Book status updated to AVAILABLE.");
+                    }, 5, TimeUnit.MINUTES);
                 },() -> {
                     throw new RuntimeException("원래 대여 가능한 도서입니다.");
                 });

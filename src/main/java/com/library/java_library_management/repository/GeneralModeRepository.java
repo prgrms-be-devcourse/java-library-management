@@ -16,9 +16,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GeneralModeRepository implements Repository{
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     ObjectMapper objectMapper = new ObjectMapper();
     FileControl fileControl = new FileControl();
     private String bookNumPath;
@@ -28,12 +32,10 @@ public class GeneralModeRepository implements Repository{
 
 
     public GeneralModeRepository() throws IOException{
-        //"D:\Users\java_library_management\bookcnt"
-//        this.bookNumPath = "D:\\Users\\java_library_management\\src\\main\\java\\com\\library\\java_library_management\\json\\bookcnt.json";
         this.bookNumPath = "D:\\Users\\java_library_management\\bookcnt.json";
         JsonNode jsonNode = objectMapper.readTree(new File(bookNumPath));
         this.value = Integer.parseInt(jsonNode.get("count").asText());
-//        this.filePath = "D:\\Users\\java_library_management\\src\\main\\java\\com\\library\\java_library_management\\json\\";
+
         this.filePath = "D:\\Users\\java_library_management\\";
         this.fileName = value + ". book.json";
     }
@@ -123,8 +125,18 @@ public class GeneralModeRepository implements Repository{
                     throw new RuntimeException("원래 대여 가능한 도서입니다");
                 }
                 else if(book.getBook_id() == book_id){
-                    String jsonStatus = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
+                    String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
                     fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+                    scheduler.schedule(() -> {
+                        try {
+                            String statusAfterFive = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
+                            fileControl.modifyFile(file.getAbsolutePath(), "status", statusAfterFive);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }, 5, TimeUnit.MINUTES);
+
+
                 }
             }
         }catch (IOException e){
@@ -152,7 +164,6 @@ public class GeneralModeRepository implements Repository{
     }
     @Override
     public void deleteById(int book_id) {
-//        Path jsonFilePath = Paths.get(filePath + book_id + ". book.json");
         List<File> allFile = fileControl.getAllFile(filePath);
         try{
             for(File file : allFile){
