@@ -31,17 +31,22 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 
 	@Override
 	public List<Book> getAllBooks() {
-		return repository.findAll();
+		List<Book> list = repository.findAll();
+		list.forEach(this::updateBookToAvailableAfterOrganizing);
+		return list;
 	}
 
 	@Override
 	public List<Book> findBooksByTitle(FindBookRequest request) {
-		return repository.findByTitleLike(request.getTitle());
+		List<Book> list = repository.findByTitleLike(request.getTitle());
+		list.forEach(this::updateBookToAvailableAfterOrganizing);
+		return list;
 	}
 
 	@Override
 	public void borrowBook(BorrowBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
+		updateBookToAvailableAfterOrganizing(book);
 		if (book.isAvailable()) {
 			book.borrow();
 			repository.save(book);
@@ -57,6 +62,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	@Override
 	public void returnBook(ReturnBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
+		updateBookToAvailableAfterOrganizing(book);
 		if (book.isBorrowed() || book.isLost()) {
 			book.returned();
 			repository.save(book);
@@ -70,6 +76,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	@Override
 	public void lostBook(LostBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
+		updateBookToAvailableAfterOrganizing(book);
 		if (book.isLost())
 			throw new BookLostException();
 		book.lost();
@@ -79,6 +86,15 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	@Override
 	public void deleteBook(DeleteBookRequest request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
+		updateBookToAvailableAfterOrganizing(book);
 		repository.deleteById(book.getId());
 	}
+
+	private void updateBookToAvailableAfterOrganizing(Book book) {
+		if (book.finishedOrganizing()) {
+			book.updateToAvailble();
+			repository.save(book);
+		}
+	}
+
 }
