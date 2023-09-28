@@ -3,6 +3,7 @@ package library.domain;
 import library.exception.BookException;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static library.domain.BookStatus.*;
 import static library.exception.BookErrorMessage.*;
@@ -87,5 +88,18 @@ public class Book {
             this.status = AVAILABLE;
             this.returnDateTime = null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return getBookNumber() == book.getBookNumber();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBookNumber());
     }
 }
