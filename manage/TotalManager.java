@@ -3,6 +3,7 @@ package manage;
 import entity.Book;
 import entity.State;
 import exception.EntityNotFoundException;
+import manage.book.BookManager;
 
 import java.util.List;
 import java.util.Scanner;

@@ -1,6 +1,6 @@
-import manage.CsvFileManager;
-import manage.ListBookManager;
-import manage.TestFileManager;
+import manage.file.CsvFileManager;
+import manage.book.ListBookManager;
+import manage.file.TestFileManager;
 import manage.TotalManager;
 
 import java.util.Scanner;
