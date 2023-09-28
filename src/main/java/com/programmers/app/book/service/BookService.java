@@ -3,10 +3,11 @@ package com.programmers.app.book.service;
 import java.util.Map;
 
 import com.programmers.app.book.domain.Book;
+import com.programmers.app.book.request.RequestBook;
 
 public interface BookService {
 
-    void register(Book book);
+    void register(RequestBook requestBook);
 
     Map<Integer, Book> findAllBooks();
 

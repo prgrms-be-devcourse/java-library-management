@@ -6,9 +6,9 @@ import com.programmers.app.book.domain.Book;
 
 public interface BookRepository {
 
-    void loadBooksFromFile();
-
     void add(Book book);
+
+    long getLastBookNumber();
 
     Map<Integer, Book> findAllBooks();
 

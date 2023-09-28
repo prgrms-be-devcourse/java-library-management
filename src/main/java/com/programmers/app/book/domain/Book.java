@@ -14,4 +14,8 @@ public class Book {
         this.totalPages = totalPages;
         this.status = "대여 가능";
     }
+
+    public long getBookNumber() {
+        return bookNumber;
+    }
 }

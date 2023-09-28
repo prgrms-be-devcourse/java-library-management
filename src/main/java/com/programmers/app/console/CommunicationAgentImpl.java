@@ -1,6 +1,6 @@
 package com.programmers.app.console;
 
-import com.programmers.app.book.RequestBook;
+import com.programmers.app.book.request.RequestBook;
 
 public class CommunicationAgentImpl implements CommunicationAgent {
 
@@ -15,7 +15,7 @@ public class CommunicationAgentImpl implements CommunicationAgent {
         System.out.println(
                 "Q. 모드를 선택해주세요.\n" +
                 "1. 일반 모드\n" +
-                "2.테스트 모드"
+                "2. 테스트 모드"
         );
         return consoleReader.readInt();
     }

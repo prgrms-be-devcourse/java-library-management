@@ -1,6 +1,6 @@
 package com.programmers.app.console;
 
-import com.programmers.app.book.RequestBook;
+import com.programmers.app.book.request.RequestBook;
 
 public interface CommunicationAgent {
 
