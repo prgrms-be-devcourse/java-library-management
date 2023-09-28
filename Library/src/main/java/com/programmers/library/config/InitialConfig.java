@@ -14,28 +14,14 @@ import com.programmers.library.view.console.ConsoleOutput;
 
 public class InitialConfig {
 
-    private static final int NORMAL_MODE = 1;
-    private static final int TEST_MODE = 2;
-
     public static LibraryExecutor configLibrary() {
         ConsoleOutput output = new ConsoleOutput();
         ConsoleInput input = new ConsoleInput();
 
-        LibraryService libraryService;
 
-        int mode = selectMode(output,input);
+        LibraryServiceFactory libraryServiceFactory = new LibraryServiceFactory();
+        LibraryService libraryService = libraryServiceFactory.createLibraryService(selectMode(output,input));
 
-        switch (mode) {
-            case NORMAL_MODE->{
-                libraryService = new LibraryService(new FileRepository(new FileHandler(new FileUtil())));
-            }
-            case TEST_MODE ->{
-                libraryService = new LibraryService(new TestRepository());
-            }
-            default ->{
-                throw ExceptionHandler.err(ErrorCode.INVALID_MODE_EXCEPTION);
-            }
-        }
         Menu menu = new Menu(libraryService, output, input);
 
         return new LibraryExecutor(menu);
