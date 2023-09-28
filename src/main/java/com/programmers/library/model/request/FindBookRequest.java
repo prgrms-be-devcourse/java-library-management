@@ -9,6 +9,7 @@ public class FindBookRequest {
 		if (title == null || title.isEmpty()) {
 			throw new IllegalArgumentException(INVALID_TITLE);
 		}
+		this.title = title;
 	}
 
 	public String getTitle() {

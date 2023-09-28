@@ -8,7 +8,7 @@ public class BorrowBookRequest {
 	public BorrowBookRequest(String id) {
 		try {
 			this.id = Long.parseLong(id);
-		} catch (NumberFormatException | NullPointerException e) {
+		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(INVALID_ID);
 		}
 	}
