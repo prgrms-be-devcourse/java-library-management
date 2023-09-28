@@ -1,4 +1,4 @@
-package test.manage;
+package test.manage.book;
 
 import main.entity.Book;
 import main.entity.State;
