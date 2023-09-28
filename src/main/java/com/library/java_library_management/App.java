@@ -24,7 +24,12 @@ public class App {
             break;
             case "2": controller = new Controller(new TestModeRepository());
         }
-        controller.printInitial();
+        try{
+            controller.printInitial();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
 }

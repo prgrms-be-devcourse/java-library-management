@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.library.java_library_management.dto.BookInfo;
+import com.library.java_library_management.dto.JsonInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,16 +14,19 @@ import java.util.List;
 public class FileControl {
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public int readFile(String filePath, String key) throws IOException{
+    public String readFile(String filePath, String key) throws IOException{
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(new File(filePath));
 
             String value = jsonNode.get(key).asText();
-            return Integer.parseInt(value);
+            return value;
     }
 
     public void writeFile(String filePath, BookInfo bookInfo) throws IOException{
         objectMapper.writeValue(new File(filePath), bookInfo);
+    }
+    public void writeFile(String filePath, JsonInfo jsonInfo) throws IOException{
+        objectMapper.writeValue(new File(filePath), jsonInfo);
     }
 
     public void modifyFile(String filePath, String key, String value) throws IOException{
@@ -46,7 +50,7 @@ public class FileControl {
         if (files != null) {
             for (File file : files) {
                 // Check if the file is a JSON file (has a .json extension)
-                if (file.isFile() && file.getName().endsWith(".json")) {
+                if (file.isFile() && file.getName().endsWith(".json") && !file.getName().equals("bookcnt.json")) {
                     jsonFiles.add(file);
                 }
             }
