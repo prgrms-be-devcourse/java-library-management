@@ -1,8 +1,11 @@
 package library.domain;
 
+import library.exception.BookException;
+
 import java.time.LocalDateTime;
 
-import static library.domain.BookStatus.AVAILABLE;
+import static library.domain.BookStatus.*;
+import static library.exception.BookErrorMessage.*;
 
 public class Book {
     private static final int CLEANUP_MINUTES = 5;
@@ -21,5 +24,39 @@ public class Book {
         this.author = author;
         this.pageCount = pageCount;
         this.status = AVAILABLE;
+    }
+
+    public void toRent() {
+        updateCleanUpStatus();
+        switch (this.status) {
+            case AVAILABLE -> this.status = RENTED;
+            case IN_CLEANUP -> throw new BookException(BOOK_IN_CLEANUP);
+            case LOST -> throw new BookException(BOOK_LOST);
+            case RENTED -> throw new BookException(BOOK_ALREADY_RENTED);
+        }
+    }
+
+    public void toReturn() {
+        switch (this.status) {
+            case RENTED, LOST -> this.status = IN_CLEANUP;
+            case IN_CLEANUP -> throw new BookException(BOOK_IN_CLEANUP);
+            case AVAILABLE -> throw new BookException(BOOK_ALREADY_AVAILABLE);
+        }
+        this.returnDateTime = LocalDateTime.now();
+    }
+
+    public void toLost() {
+        switch (this.status) {
+            case RENTED, IN_CLEANUP, AVAILABLE -> this.status = LOST;
+            case LOST -> throw new BookException(BOOK_ALREADY_LOST);
+        }
+    }
+
+    private void updateCleanUpStatus() {
+        if (this.status == IN_CLEANUP
+                && LocalDateTime.now().isAfter(this.returnDateTime.plusMinutes(CLEANUP_MINUTES))) {
+            this.status = AVAILABLE;
+            this.returnDateTime = null;
+        }
     }
 }
