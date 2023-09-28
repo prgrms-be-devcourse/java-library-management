@@ -1,5 +1,7 @@
 package library.view.function;
 
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public enum BookFunction {
@@ -27,5 +29,23 @@ public enum BookFunction {
         this.menuEntranceMessage = menuEntranceMessage;
         this.menuSuccessMessage = menuSuccessMessage;
         this.bookConsumer = bookConsumer;
+    }
+
+    public static Optional<BookFunction> findByCode(String code) {
+        return Arrays.stream(values())
+                .filter(option -> option.code.equals(code))
+                .findFirst();
+    }
+
+    public String getMenuEntranceMessage() {
+        return this.menuEntranceMessage;
+    }
+
+    public String getMenuSuccessMessage() {
+        return this.menuSuccessMessage;
+    }
+
+    public void execute(BookFunctionHandler bookFunctionHandler) {
+        this.bookConsumer.accept(bookFunctionHandler);
     }
 }
