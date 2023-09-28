@@ -14,7 +14,7 @@ class NormalRepositoryTest {
 
     Repository repository = new NormalRepository();
     private static ByteArrayOutputStream outputMessage;
-    File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
+    File file = new File("C:/데브코스/java-library-management/app/src/main/resources/library.csv");
     BufferedReader bf = new BufferedReader(new FileReader(file));
 
     String original = "";

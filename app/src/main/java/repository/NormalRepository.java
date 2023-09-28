@@ -9,7 +9,7 @@ import java.util.List;
 import static repository.Book.countId;
 
 public class NormalRepository implements Repository {
-    File file = new File("C:/데브코스/java-library-management/app/src/main/resources/도서.csv");
+    File file = new File("src/main/resources/library.csv");
     List<Book> books = new ArrayList<>();
 
     public NormalRepository() throws IOException {
