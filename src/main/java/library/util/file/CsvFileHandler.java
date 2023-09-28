@@ -94,7 +94,7 @@ public class CsvFileHandler {
     }
 
     private String createCsvLine(Book book) {
-        String returnDateTimeString = book.getReturnDateTime() == null
+        String returnDateTimeString = book.returnDateTimeIsNull()
                 ? EMPTY
                 : book.getReturnDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 

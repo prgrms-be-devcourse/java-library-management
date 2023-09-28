@@ -27,7 +27,7 @@ public class FileBookRepository implements BookRepository {
     @Override
     public Optional<Book> findByBookNumber(long bookNumber) {
         return bookList.stream()
-                .filter(book -> book.getBookNumber() == bookNumber)
+                .filter(book -> book.equalsBookNumber(bookNumber))
                 .findFirst();
     }
 
@@ -39,7 +39,7 @@ public class FileBookRepository implements BookRepository {
     @Override
     public List<Book> findListContainTitle(String title) {
         return bookList.stream()
-                .filter(book -> book.getTitle().contains(title))
+                .filter(book -> book.containsTitle(title))
                 .toList();
     }
 

@@ -69,6 +69,10 @@ public class Book {
         return this.title.contains(title);
     }
 
+    public boolean returnDateTimeIsNull() {
+        return this.returnDateTime == null;
+    }
+
     public void toRent() {
         updateCleanUpStatus();
         switch (this.status) {
