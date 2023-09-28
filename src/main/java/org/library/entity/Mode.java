@@ -14,6 +14,10 @@ public enum Mode {
         this.repository = repository;
     }
 
+    private int num;
+    private String name;
+    private Repository repository;
+
     public boolean isEqual(int inputNum){
         return this.num == inputNum;
     }
@@ -22,7 +26,8 @@ public enum Mode {
         return repository;
     }
 
-    private int num;
-    private String name;
-    private Repository repository;
+    @Override
+    public String toString() {
+        return num + ". " + name;
+    }
 }
