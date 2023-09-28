@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Book {
-    private static long sequence;
+    private static long sequence = 1;
     private final long id;
     private String title;
     private String author;
@@ -16,7 +16,7 @@ public class Book {
         private String title;
         private String author;
         private int totalPages;
-        private long id = sequence++;
+        private long id = sequence;
         private BookStatus status = BookStatus.AVAILABLE;
 
         public Builder(String title, String author, int totalPages) {
@@ -27,7 +27,10 @@ public class Book {
 
         public Builder id(long id) {
             this.id = id;
-            this.sequence = id + 1;
+            if(sequence < id) {
+                sequence = id;
+                System.out.println("sequence -> " + sequence);
+            }
             return this;
         }
 
@@ -37,6 +40,8 @@ public class Book {
         }
 
         public Book build() {
+            sequence++;
+            System.out.println("sequence++ -> " + sequence);
             return new Book(this);
         }
     }
@@ -48,6 +53,14 @@ public class Book {
         author = builder.author;
         totalPages = builder.totalPages;
         status = builder.status;
+    }
+
+    private Book(Book book) {
+        id = book.id;
+        title = book.title;
+        author = book.author;
+        totalPages = book.totalPages;
+        status = book.status;
     }
 
     public String toRecord() {
@@ -99,7 +112,6 @@ public class Book {
     }
 
     public Book copy() {
-        return new Builder(title, author, totalPages)
-                .id(id).bookStatus(status.toString()).build();
+        return new Book(this);
     }
 }
