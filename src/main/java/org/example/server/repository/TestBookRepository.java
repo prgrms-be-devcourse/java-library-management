@@ -28,6 +28,7 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public String readAll() {
+        if (data.isEmpty()) return "존재하는 도서가 없습니다.\n";
         StringBuilder sb = new StringBuilder();
         data.values().forEach((book) -> {
             sb.append(book.toString());
