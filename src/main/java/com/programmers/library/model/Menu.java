@@ -1,5 +1,7 @@
 package com.programmers.library.model;
 
+import static com.programmers.library.constants.MessageConstants.*;
+
 import java.util.Arrays;
 
 public enum Menu {
@@ -11,7 +13,6 @@ public enum Menu {
 	LOST_BOOK(6),
 	DELETE_BOOK(7);
 
-	private static final String INVALID_MENU = "메뉴는 1~7 사이의 숫자만 입력 가능합니다.";
 	private final int menuNumber;
 
 	Menu(int menuNumber) {
@@ -19,10 +20,15 @@ public enum Menu {
 	}
 
 	public static Menu of(String menuNumber) {
-		return Arrays.stream(values())
-			.filter(menu -> menu.menuNumber == Integer.parseInt(menuNumber)) //TODO : 숫자 형식이 아닐 경우에는?
-			.findFirst()
-			.orElseThrow(() -> new IllegalArgumentException(INVALID_MENU));
+		try {
+			int parsedMenuNumber = Integer.parseInt(menuNumber);
+			return Arrays.stream(values())
+				.filter(menu -> menu.menuNumber == parsedMenuNumber)
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(INVALID_MENU));
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException(INVALID_MENU);
+		}
 	}
 
 }

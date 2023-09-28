@@ -31,53 +31,57 @@ public class ConsoleInput implements Input{
 	@Override
 	public Mode inputMode() {
 		printPrompt(MODE_PROMPT);
-		return Mode.of(scanner.nextLine());
+		return Mode.of(readLineWithTrimming());
+	}
+
+	private String readLineWithTrimming() {
+		return scanner.nextLine().trim();
 	}
 
 	@Override
 	public Menu inputMenu() {
 		printPrompt(MENU_PROMPT);
-		return Menu.of(scanner.nextLine());
+		return Menu.of(readLineWithTrimming());
 	}
 
 	@Override
 	public AddBookRequest inputAddBookRequest() {
 		printPrompt(ADD_BOOK_TITLE_PROMPT);
-		String title = scanner.nextLine();
+		String title = readLineWithTrimming();
 		printPrompt(ADD_BOOK_AUTHOR_PROMPT);
-		String author = scanner.nextLine();
+		String author = readLineWithTrimming();
 		printPrompt(ADD_BOOK_PAGES_PROMPT);
-		String pages = scanner.nextLine();
+		String pages = readLineWithTrimming();
 		return new AddBookRequest(title, author, pages);
 	}
 
 	@Override
 	public BorrowBookRequest inputBorrowBookRequest() {
 		printPrompt(BORROW_BOOK_ID_PROMPT);
-		return new BorrowBookRequest(scanner.nextLine());
+		return new BorrowBookRequest(readLineWithTrimming());
 	}
 
 	@Override
 	public DeleteBookRequest inputDeleteBookRequest() {
 		printPrompt(DELETE_BOOK_ID_PROMPT);
-		return new DeleteBookRequest(scanner.nextLine());
+		return new DeleteBookRequest(readLineWithTrimming());
 	}
 
 	@Override
 	public LostBookRequest inputLostBookRequest() {
 		printPrompt(LOST_BOOK_ID_PROMPT);
-		return new LostBookRequest(scanner.nextLine());
+		return new LostBookRequest(readLineWithTrimming());
 	}
 
 	@Override
 	public ReturnBookRequest inputReturnBookRequest() {
 		printPrompt(RETURN_BOOK_ID_PROMPT);
-		return new ReturnBookRequest(scanner.nextLine());
+		return new ReturnBookRequest(readLineWithTrimming());
 	}
 
 	@Override
 	public FindBookRequest inputFindBookRequest() {
 		printPrompt(FIND_BOOK_TITLE_PROMPT);
-		return new FindBookRequest(scanner.nextLine());
+		return new FindBookRequest(readLineWithTrimming());
 	}
 }

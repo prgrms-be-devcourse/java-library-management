@@ -24,4 +24,11 @@ public final class MessageConstants {
 	public static final String DELETE_BOOK_START = "도서 삭제 처리 메뉴로 넘어갑니다.";
 	public static final String DELETE_BOOK_END = "도서가 삭제 처리 되었습니다.";
 
+	public static final String INVALID_MENU = "메뉴는 1~7 사이의 숫자만 입력 가능합니다.";
+	public static final String INVALID_MODE = "모드는 1~2 사이의 숫자만 입력 가능합니다.";
+	public static final String INVALID_TITLE = "제목은 비어있을 수 없습니다.";
+	public static final String INVALID_AUTHOR = "작가는 비어있을 수 없습니다.";
+	public static final String INVALID_PAGES = "페이지는 숫자만 입력 가능합니다.";
+	public static final String INVALID_ID = "도서번호는 숫자만 입력 가능합니다.";
+	
 }

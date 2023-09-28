@@ -1,10 +1,16 @@
 package com.programmers.library.model.request;
 
+import static com.programmers.library.constants.MessageConstants.*;
+
 public class BorrowBookRequest {
 	private long id;
 
 	public BorrowBookRequest(String id) {
-		this.id = Long.parseLong(id); //todo : validation
+		try {
+			this.id = Long.parseLong(id);
+		} catch (NumberFormatException | NullPointerException e) {
+			throw new IllegalArgumentException(INVALID_ID);
+		}
 	}
 
 	public long getId() {
