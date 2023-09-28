@@ -16,4 +16,8 @@ public class BookService {
         Book book = new Book(requestBookDto);
         repository.create(book);
     }
+
+    public String readAll() {
+        return repository.readAll();
+    }
 }

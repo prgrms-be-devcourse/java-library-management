@@ -26,4 +26,14 @@ public class TestBookRepository implements BookRepository {
         data.put(bookId, book);
         System.out.println("Test: book 등록 했음\n" + book.toString() + data.size());
     }
+
+    @Override
+    public String readAll() {
+        StringBuilder sb = new StringBuilder();
+        data.values().forEach((book) -> {
+            sb.append(book.toString());
+        });
+        sb.append("\n");
+        return sb.toString();
+    }
 }

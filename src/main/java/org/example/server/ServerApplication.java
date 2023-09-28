@@ -29,11 +29,14 @@ public class ServerApplication {
     }
 
     public String request(Request request) {
-//        switch (request.menuType) {
-//            case REGISTER: {
-        return bookController.registerBook(request.requestData.requestBookDto);
-
-//            }
-//    }
+        switch (request.menuType) {
+            case REGISTER: {
+                return bookController.registerBook(request.requestData.requestBookDto);
+            }
+            case READ_ALL: {
+                return bookController.readAllBook();
+            }
+        }
+        return null;
     }
 }

@@ -6,8 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum MenuType {
-    REGISTER(1, "1. 도서 등록\n");
-//    READ_ALL(2, "2. 전체 도서 목록 조회\n"),
+    REGISTER(1, "1. 도서 등록\n"),
+
+    READ_ALL(2, "2. 전체 도서 목록 조회\n");
 //    SEARCH_BY_NAME(3, "3. 도서 대여\n"),
 //    BORROW(4, "4. 도서 반납\n"),
 //    LOST(5, "5. 도서 분실\n"),

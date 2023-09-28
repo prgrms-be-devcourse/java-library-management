@@ -16,4 +16,8 @@ public class BookController {
         bookService.register(requestBookDto);
         return "[System] 도서 등록이 완료되었습니다.\n";
     }
+
+    public String readAllBook() {
+        return bookService.readAll() + "[System] 도서 목록 끝\n";
+    }
 }

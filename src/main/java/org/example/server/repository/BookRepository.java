@@ -6,4 +6,6 @@ public interface BookRepository {
     void loadData();
 
     void create(Book book);
+
+    String readAll();
 }
