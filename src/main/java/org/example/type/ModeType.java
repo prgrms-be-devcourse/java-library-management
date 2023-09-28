@@ -24,6 +24,8 @@ public enum ModeType {
         this.bookRepositorySupplier = bookRepositorySupplier;
     }
 
+    public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n" + String.join("", Stream.of(values()).map(type -> type.modeName).toArray(String[]::new)) + "\n> ";
+
     private static final Map<Integer, ModeType> BY_NUMBER =
             Stream.of(values()).collect(Collectors.toMap(ModeType::getModeNum, Function.identity()));
 

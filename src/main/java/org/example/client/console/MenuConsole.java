@@ -12,7 +12,7 @@ public class MenuConsole implements Console {
 
     @Override
     public void show() {
-        System.out.print("Q. 사용할 기능을 선택해주세요.\n\n> ");
+        System.out.print(MenuType.MENU_CONSOLE);
     }
 
     public Request scanTypeAndInfo() {

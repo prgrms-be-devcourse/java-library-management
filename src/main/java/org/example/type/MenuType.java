@@ -46,9 +46,8 @@ public enum MenuType {
         return menuStartMent;
     }
 
-    //    public static String getMenuNames() {
-//        return
-//    }
+    public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요.\n" + String.join("", Stream.of(values()).map(type -> type.menuName).toArray(String[]::new)) + "\n> ";
+
     public LinkedList<String> getMenuQuestion() {
         return menuQuestion;
     }

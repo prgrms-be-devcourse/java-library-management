@@ -18,7 +18,7 @@ public class ModeConsole implements Console {
 
     @Override
     public void show() {
-        System.out.print("Q. 모드를 선택해주세요.\n\n> ");
+        System.out.print(ModeType.MODE_CONSOLE);
     }
 
     private void alert() {
