@@ -10,12 +10,12 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    public String registerBook(RequestBookDto requestBookDto) {
+    public String register(RequestBookDto requestBookDto) {
         bookService.register(requestBookDto);
         return "\n[System] 도서 등록이 완료되었습니다.\n";
     }
 
-    public String readAllBook() {
+    public String readAll() {
         return bookService.readAll() + "[System] 도서 목록 끝\n";
 //        return "\n[System] 존재하는 도서가 없습니다.\n";
     }
@@ -39,13 +39,13 @@ public class BookController {
 //        return "\n[System] 존재하지 않는 도서입니다.\n";
     }
 
-    public String returnBook(int bookId) {
+    public String restore(int bookId) {
         /*도서가 '대여중' 상태 일 때는 도서를 반납할 수 있습니다.
          * 이때 도서가 반납되면 도서의 상태는 '도서 정리중' 상태로 바뀌어야합니다.
          * 그리고 '도서 정리중' 상태에서 5분이 지난 도서는 '대여 가능'으로 바뀌어야합니다.
          * (대여된 후 5분이 지난 도서를 누군가 대여하려고 했을 때 대여 처리가 되어야한다는 겁니다)
          */
-        bookService.returnBook(bookId);
+        bookService.restore(bookId);
         return "\n[System] 도서가 반납 처리 되었습니다.\n";
 //        return "\n[System] 원래 대여가 가능한 도서입니다.\n";
 //        return "\n[System] 존재하지 않는 도서입니다.\n";

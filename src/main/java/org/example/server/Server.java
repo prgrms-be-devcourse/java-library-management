@@ -23,10 +23,10 @@ public class Server {
     public static String request(Request request) {
         switch (request.menuType) {
             case REGISTER -> {
-                return bookController.registerBook(request.requestData.requestBookDto);
+                return bookController.register(request.requestData.requestBookDto);
             }
             case READ_ALL -> {
-                return bookController.readAllBook();
+                return bookController.readAll();
             }
             case SEARCH_BY_NAME -> {
                 return bookController.seachByName(request.requestData.bookName);
@@ -35,7 +35,7 @@ public class Server {
                 return bookController.borrow(request.requestData.bookId);
             }
             case RETURN -> {
-                return bookController.returnBook(request.requestData.bookId);
+                return bookController.restore(request.requestData.bookId);
             }
             case LOST -> {
                 return bookController.lost(request.requestData.bookId);

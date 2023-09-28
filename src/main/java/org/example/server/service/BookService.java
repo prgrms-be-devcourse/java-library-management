@@ -30,7 +30,7 @@ public class BookService {
         book.state = BookState.BORROWED;
     }
 
-    public void returnBook(int bookId) {
+    public void restore(int bookId) {
         Book book = repository.getById(bookId);
         book.state = BookState.CAN_BORROW; // 5분 설정 필요
     }
