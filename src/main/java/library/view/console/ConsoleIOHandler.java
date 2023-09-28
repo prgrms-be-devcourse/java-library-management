@@ -36,6 +36,12 @@ public class ConsoleIOHandler {
         return input;
     }
 
+    public String inputWithMessage(InputMessage inputMessage) {
+        this.printQuestionMessage(inputMessage.getMessage());
+
+        return getInputWithPrint();
+    }
+
     private <T> T getParseInputWithPrint(Function<String, T> parseFunction) {
         try {
             return parseFunction.apply(getInputWithPrint());
@@ -43,7 +49,6 @@ public class ConsoleIOHandler {
             throw new InputException(NOT_NUMBER);
         }
     }
-
 
     public BookSaveRequest inputBookInfo() {
         printQuestionMessage(InputMessage.TITLE.getMessage());
