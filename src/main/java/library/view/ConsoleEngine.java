@@ -21,10 +21,10 @@ public class ConsoleEngine implements Runnable {
     private void progress() {
         try {
         } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
+            consoleIOHandler.printSystemMessage(e.getMessage());
         } catch (Exception e) {
             isRunning = false;
-            System.out.println(e.getMessage());
+            consoleIOHandler.printSystemMessage(e.getMessage());
         }
     }
 }
