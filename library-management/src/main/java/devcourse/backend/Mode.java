@@ -3,7 +3,6 @@ package devcourse.backend;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
-import devcourse.backend.view.Menu;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -28,7 +27,8 @@ public enum Mode {
     }
 
     public static Repository getRepository(int num) {
-        return get(num).orElseThrow().repository;
+        return get(num).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 모드입니다."))
+                .repository;
     }
     private static Optional<Mode> get(int num) {
         return Arrays.stream(Mode.values())

@@ -33,7 +33,7 @@ public enum Menu {
     }
 
     public static void selected(int num) {
-        get(num).orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."))
+        get(num).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."))
                 .viewer.run();
     }
 

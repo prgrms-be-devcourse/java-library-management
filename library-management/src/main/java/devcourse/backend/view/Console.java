@@ -3,7 +3,6 @@ import devcourse.backend.Mode;
 import devcourse.backend.business.BookService;
 import devcourse.backend.medel.BookStatus;
 
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import static devcourse.backend.medel.BookStatus.*;
@@ -72,6 +71,8 @@ public class Console implements Runnable {
         try {
             service.rentBook(longInput("대여할 도서번호를 입력하세요"));
             system("도서가 대여 처리 되었습니다.");
+        } catch (NumberFormatException e) {
+            system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
             BookStatus status =  BookStatus.get(e.getMessage()).get();
             if(status == BORROWED) system("이미 대여 중인 도서입니다.");
@@ -86,6 +87,8 @@ public class Console implements Runnable {
         try {
             service.returnBook(longInput("반납할 도서번호를 입력하세요"));
             system("도서가 반납 처리 되었습니다.");
+        } catch (NumberFormatException e) {
+            system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
             BookStatus status =  BookStatus.get(e.getMessage()).get();
             if(status == AVAILABLE) system("원래 대여가 가능한 도서입니다.");
@@ -99,6 +102,8 @@ public class Console implements Runnable {
         try {
             service.reportLoss(longInput("분실 처리할 도서번호를 입력하세요"));
             system("도서가 분실 처리 되었습니다.");
+        } catch (NumberFormatException e) {
+            system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
             system("이미 분실 처리된 도서입니다.");
         }
@@ -110,6 +115,8 @@ public class Console implements Runnable {
         try {
             service.deleteBook(longInput("삭제 처리할 도서번호를 입력하세요"));
             system("도서가 삭제 처리 되었습니다.");
+        } catch (NumberFormatException e) {
+            system("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) { system(e.getMessage()); }
     }
 
@@ -117,7 +124,13 @@ public class Console implements Runnable {
         StringBuffer prompt = new StringBuffer("모드를 선택해주세요.");
         for(Mode mode : Mode.values())
             prompt.append("\n").append(mode);
-        return intInput(prompt.toString());
+
+        try {
+            return intInput(prompt.toString());
+        } catch (NumberFormatException e) {
+            system(e.getMessage());
+            return selectMode();
+        }
     }
 
     private static void system(String s) {
@@ -136,16 +149,20 @@ public class Console implements Runnable {
         System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
-        int input = Integer.parseInt(sc.nextLine());
-        return input;
+        try {
+            int input = Integer.parseInt(sc.nextLine());
+            return input;
+        } catch (NumberFormatException e) { throw new NumberFormatException("숫자를 입력해주세요."); }
     }
 
     public static long longInput(String prompt) {
         System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
-        long input = Long.parseLong(sc.nextLine());
-        return input;
+        try {
+            long input = Long.parseLong(sc.nextLine());
+            return input;
+        } catch (NumberFormatException e) { throw new NumberFormatException("숫자를 입력해주세요."); }
     }
 
     public static String stringInput(String prompt) {
