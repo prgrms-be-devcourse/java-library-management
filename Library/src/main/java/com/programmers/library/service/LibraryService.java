@@ -2,6 +2,8 @@ package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
 import com.programmers.library.domain.BookStatus;
+import com.programmers.library.exception.ErrorCode;
+import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.repository.Repository;
 
 import java.util.List;
@@ -38,11 +40,11 @@ public class LibraryService {
     }
 
     public Book findBookById(Long id) {
-        return repository.findBookById(id).get();
+        return repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
     }
 
     public void deleteBook(Long id) {
-        repository.findBookById(id).get();
+        repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
         repository.deleteBook(id);
     }
 
