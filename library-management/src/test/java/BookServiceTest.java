@@ -9,17 +9,24 @@ import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class BookServiceTest {
-    FileRepository repository = new FileRepository("src/test/resources/도서 목록.csv");
+    String path = "src/test/resources/";
+    String fileName = "도서 목록.csv";
+    Path FILE_PATH = Paths.get(path.concat(fileName));
+    FileRepository repository = new FileRepository(path, fileName);
     BookService service = new BookService(repository);
 
     @AfterEach
     void 파일_내용_지우기() {
-        try (BufferedWriter writer = repository.getWriter()) {
+        try (BufferedWriter writer = Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write(repository.getColumns());
             writer.newLine();
         } catch (IOException e) {}

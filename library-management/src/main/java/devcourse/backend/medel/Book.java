@@ -29,7 +29,6 @@ public class Book {
             this.id = id;
             if (sequence < id) {
                 sequence = id;
-                System.out.println("sequence -> " + sequence);
             }
             return this;
         }
@@ -41,7 +40,6 @@ public class Book {
 
         public Book build() {
             sequence++;
-            System.out.println("sequence++ -> " + sequence);
             return new Book(this);
         }
     }

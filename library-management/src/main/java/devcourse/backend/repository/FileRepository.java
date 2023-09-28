@@ -19,8 +19,8 @@ public class FileRepository implements Repository {
     private String columns = "도서 번호;도서명;작가;총 페이지 수;상태";
 
     public FileRepository(String path, String fileName) {
-        createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
         this.FILE_PATH = Paths.get(path.concat(fileName));
+        createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
         this.books = loadBooks();
     }
 
@@ -73,11 +73,17 @@ public class FileRepository implements Repository {
         flush();
     }
 
-    private BufferedWriter getWriter() throws IOException {
-        return Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING);
+    private BufferedWriter getWriter() {
+        try {
+            return Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) { throw new RuntimeException("파일 쓰기 실패"); }
     }
 
-    
+    private BufferedReader getReader() {
+        try {
+            return new BufferedReader(new FileReader(FILE_PATH.toFile()));
+        } catch (IOException e) { throw new RuntimeException("파일 읽기 실패"); }
+    }
 
     public String getColumns() {
         return columns;
@@ -90,7 +96,7 @@ public class FileRepository implements Repository {
                 file.createNewFile();
             } catch (IOException e) { e.printStackTrace(); }
 
-            try(BufferedWriter writer = Files.newBufferedWriter(Paths.get(path.concat(name)))) {
+            try(BufferedWriter writer = getWriter()) {
                     writer.write(columns);
                     writer.newLine();
             } catch (IOException e) { e.printStackTrace(); }
@@ -99,7 +105,7 @@ public class FileRepository implements Repository {
 
     private Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH.toFile()))) {
+        try (BufferedReader reader = getReader()) {
             columns = reader.readLine();
             reader.lines()
                     .map(s -> s.split("[;,]"))
