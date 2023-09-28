@@ -1,5 +1,6 @@
 package com.programmers.library.view.console;
 
+import com.programmers.library.validation.ValidateInput;
 import com.programmers.library.view.Input;
 
 import java.util.Scanner;
@@ -14,7 +15,7 @@ public class ConsoleInput implements Input {
 
     @Override
     public Long selectNumber() {
-        return Long.valueOf(scanner.nextLine());
+        return ValidateInput.checkNumberValidate(scanner);
     }
 
     @Override
