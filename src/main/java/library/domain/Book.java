@@ -26,6 +26,18 @@ public class Book {
         this.status = AVAILABLE;
     }
 
+    public long getBookNumber() {
+        return bookNumber;
+    }
+
+    public boolean equalsBookNumber(long bookNumber) {
+        return this.bookNumber == bookNumber;
+    }
+
+    public boolean containsTitle(String title) {
+        return this.title.contains(title);
+    }
+
     public void toRent() {
         updateCleanUpStatus();
         switch (this.status) {
