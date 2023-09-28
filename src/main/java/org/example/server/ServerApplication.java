@@ -48,7 +48,10 @@ public class ServerApplication {
             case LOST -> {
                 return bookController.lost(request.requestData.bookId);
             }
+            case DELETE -> {
+                return bookController.delete(request.requestData.bookId);
+            }
         }
-        return null;
+        return null;// 예외 처리?
     }
 }

@@ -51,4 +51,9 @@ public class TestBookRepository implements BookRepository {
     public Book getById(int bookId) {
         return data.get(bookId);
     }
+
+    @Override
+    public void delete(int bookId) {
+        data.remove(bookId);
+    }
 }
