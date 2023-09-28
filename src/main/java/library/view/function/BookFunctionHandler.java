@@ -9,7 +9,7 @@ import library.view.console.ConsoleIOHandler;
 
 import java.util.List;
 
-import static library.view.constant.InputMessage.SEARCH_BY_TITLE;
+import static library.view.constant.InputMessage.*;
 
 public class BookFunctionHandler {
 
@@ -37,6 +37,30 @@ public class BookFunctionHandler {
         List<BookFindResponse> searchBookList = bookController.findBookLisContainTitle(searchTitle);
 
         consoleIOHandler.printList(searchBookList);
+    }
+
+    public void rentBook() {
+        long rentBookNumber = consoleIOHandler.inputLongWithMessage(RENT_BOOK);
+
+        bookController.rentBook(rentBookNumber);
+    }
+
+    public void returnBook() {
+        long returnBookNumber = consoleIOHandler.inputLongWithMessage(RETURN_BOOK);
+
+        bookController.returnBook(returnBookNumber);
+    }
+
+    public void lostBook() {
+        long lostBookNumber = consoleIOHandler.inputLongWithMessage(LOST_BOOK);
+
+        bookController.lostBook(lostBookNumber);
+    }
+
+    public void deleteBook() {
+        long deleteBookNumber = consoleIOHandler.inputLongWithMessage(DELETE_BOOK);
+
+        bookController.deleteBook(deleteBookNumber);
     }
 }
 
