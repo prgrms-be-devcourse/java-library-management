@@ -1,8 +1,10 @@
 package library;
 
+import library.view.ConsoleEngine;
+
 public class LibraryApplication {
 
     public static void main(String[] args) {
-        System.out.println("Hello, Library");
+        new ConsoleEngine().run();
     }
 }
