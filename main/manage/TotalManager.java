@@ -1,9 +1,9 @@
-package manage;
+package main.manage;
 
-import entity.Book;
-import entity.State;
-import exception.EntityNotFoundException;
-import manage.book.BookManager;
+import main.entity.Book;
+import main.entity.State;
+import main.exception.EntityNotFoundException;
+import main.manage.book.BookManager;
 
 import java.util.List;
 import java.util.Scanner;

@@ -1,7 +1,7 @@
-package manage.book;
+package main.manage.book;
 
-import entity.Book;
-import entity.State;
+import main.entity.Book;
+import main.entity.State;
 
 import java.util.List;
 

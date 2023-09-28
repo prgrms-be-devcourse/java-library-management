@@ -1,4 +1,4 @@
-package entity;
+package main.entity;
 
 public enum State {
     AVAILABLE("대여 가능"),

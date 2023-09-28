@@ -1,9 +1,9 @@
-package manage.book;
+package main.manage.book;
 
-import entity.Book;
-import entity.State;
-import exception.EntityNotFoundException;
-import manage.file.FileManager;
+import main.entity.Book;
+import main.entity.State;
+import main.exception.EntityNotFoundException;
+import main.manage.file.FileManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +72,7 @@ public class ListBookManager implements BookManager {
         Book book = getBook(bookNum);
         State initState = book.getState();
 
-        if (book.getState() != State.LOST && book.getState() != State.DELETED)
+        if (book.getState() != State.LOST)
             book.setState(State.LOST);
 
         return initState;
