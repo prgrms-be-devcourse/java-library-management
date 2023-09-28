@@ -1,0 +1,16 @@
+[
+  {
+    "id": 0,
+    "name": "이것이 테스트 책",
+    "author": "테스터",
+    "pages": 444,
+    "state": "CAN_BORROW"
+  },
+  {
+    "id": 1,
+    "name": "이것이 테스트 책2",
+    "author": "테스터",
+    "pages": 555,
+    "state": "CAN_BORROW"
+  }
+]
