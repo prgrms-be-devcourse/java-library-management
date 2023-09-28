@@ -10,7 +10,7 @@ public interface Repository {
     Long generatedId();
     void save(Book book);
     List<Book> findAll();
-    Book findByTitle(String title);
+    List<Book> findByTitle(String title);
     Book findById(Long id);
     void delete(Book book);
     void processAvailable();

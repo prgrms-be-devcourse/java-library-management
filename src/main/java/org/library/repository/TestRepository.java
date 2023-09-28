@@ -30,10 +30,10 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public Book findByTitle(String title) {
+    public List<Book> findByTitle(String title) {
         processAvailable();
-        return bookMap.values().stream().filter(b->b.getTitle().contains(title))
-                .findAny().orElseThrow();
+        List<Book> findBooks = bookMap.values().stream().filter(b -> b.getTitle().contains(title)).sorted(Comparator.comparingLong(Book::getId)).toList();
+        return Optional.ofNullable(findBooks).orElseThrow();
     }
 
     @Override
