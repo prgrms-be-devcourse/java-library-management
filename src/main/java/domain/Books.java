@@ -14,6 +14,10 @@ public class Books {
     private Integer pageNum;
     private BookStatus bookStatus;
 
+    public void setBookNo(Long bookNo){
+        this.bookNo = bookNo;
+    }
+
     public void toAvailable(){
         this.bookStatus = BookStatus.AVAILABLE;
     }

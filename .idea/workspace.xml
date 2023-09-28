@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dce5e077-44f7-44c7-8a5a-5d87e69b553c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ProgramRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ProgramRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/Appconfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/config/Appconfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/BookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/input/ConsoleInput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/input/Input.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/output/ConsoleOutput.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/output/Output.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/BookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/BookStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/BookStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/domain/Books.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/Books.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/repository/MemoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/repository/MemoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/ConsoleView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/ConsoleView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/View.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +75,20 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Application" />
+      <module name="java-library-management.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Application" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -84,7 +98,7 @@
       <option name="presentableId" value="Default" />
       <updated>1695797341274</updated>
       <workItem from="1695797343196" duration="1718000" />
-      <workItem from="1695869855432" duration="18132000" />
+      <workItem from="1695869855432" duration="21494000" />
     </task>
     <servers />
   </component>

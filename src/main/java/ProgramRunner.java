@@ -1,5 +1,6 @@
 import config.Appconfig;
 import controller.BookController;
+import lombok.SneakyThrows;
 import repository.Repository;
 import service.BookService;
 import view.ConsoleView;
@@ -12,6 +13,7 @@ public class ProgramRunner implements Runnable{
     private View view;
     private BookController bookController;
 
+    @SneakyThrows
     @Override
     public void run() {
         // Dependency 설정

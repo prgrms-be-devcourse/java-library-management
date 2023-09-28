@@ -11,8 +11,16 @@ import java.util.stream.Collectors;
 public class MemoryRepository implements Repository{
     private static final List<Books> bookList = new ArrayList<>();
 
+    private static Long bookNoSeq = 1L;
+
+    private void addBookNoSeq(){
+        bookNoSeq++;
+    }
+
     @Override
     public void addBook(Books book) {
+        book.setBookNo(bookNoSeq);
+        addBookNoSeq();
         bookList.add(book);
     }
 

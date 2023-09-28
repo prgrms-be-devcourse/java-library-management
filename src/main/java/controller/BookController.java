@@ -9,33 +9,35 @@ import view.View;
 import vo.BookInfoVo;
 import vo.NumberVo;
 
+import java.io.IOException;
 import java.util.List;
 
 public class BookController {
     private Repository repository;
-    private BookService bookService = new BookService(repository);
+    private BookService bookService;
     private View view;
 
     public BookController(View view) {
         this.view = view;
     }
 
-    public void init(){
+    public void init() throws IOException {
         NumberVo mode = view.selectMode();
         selectMode(mode);
     }
 
-    public void selectMode(NumberVo numberVo){
+    public void selectMode(NumberVo numberVo) throws IOException {
         if(numberVo.getNumber().equals(1)){
             repository = new MemoryRepository();
         }
         else if(numberVo.getNumber().equals(2)){
             repository = new TestRepository();
         }
+        bookService = new BookService(repository);
         selectMenu();
     }
 
-    private void selectMenu() {
+    private void selectMenu() throws IOException {
         NumberVo menu = view.selectMenu();
 
         switch (menu.getNumber()) {
@@ -49,28 +51,30 @@ public class BookController {
         }
     }
 
-    public void addBook(){
+    public void addBook() throws IOException {
         BookInfoVo bookInfoVo = view.addBook();
 
         bookService.addBook(bookInfoVo);
         selectMenu();
     };
-    public void listBooks(){
+    public void listBooks() throws IOException {
         List<Books> books = bookService.listBooks();
 
         view.listBooks(books);
         selectMenu();
     };
-    public void searchBook(){
+    public void searchBook() throws IOException {
         BookInfoVo bookInfoVo = view.searchBook();
 
-        bookService.searchBook(bookInfoVo);
+        List<Books> books = bookService.searchBook(bookInfoVo);
+        view.searchList(books);
         selectMenu();
     };
-    public void borrowBook(){
+    public void borrowBook() throws IOException {
         NumberVo numberVo = view.borrowBook();
         try {
             bookService.borrowBook(numberVo.getNumber().longValue());
+            view.borrowBookSuccess();
         }
         catch (Exception e){
             view.errorMsg(e.getMessage());
@@ -79,10 +83,11 @@ public class BookController {
             selectMenu();
         }
     };
-    public void returnBook(){
+    public void returnBook() throws IOException {
         NumberVo numberVo = view.returnBook();
         try {
             bookService.returnBook(numberVo.getNumber().longValue());
+            view.returnBookSuccess();
         }
         catch (Exception e){
             view.errorMsg(e.getMessage());
@@ -91,7 +96,7 @@ public class BookController {
             selectMenu();
         }
     };
-    public void lostBook(){
+    public void lostBook() throws IOException {
         NumberVo numberVo = view.lostBook();
         try {
             bookService.lostBook(numberVo.getNumber().longValue());
@@ -103,7 +108,7 @@ public class BookController {
             selectMenu();
         }
     };
-    public void deleteBook(){
+    public void deleteBook() throws IOException {
         NumberVo numberVo = view.deleteBook();
         try {
             bookService.deleteBook(numberVo.getNumber().longValue());
