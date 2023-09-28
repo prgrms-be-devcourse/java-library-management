@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 
 public class TestBookRepository implements BookRepository {
 
-    private static int bookCount;
-    private static LinkedHashMap<Integer, Book> database;
+    private static int count;
+    private static LinkedHashMap<Integer, Book> data;
 
     public TestBookRepository() {
         loadData();
@@ -15,16 +15,15 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public void loadData() {
-        bookCount = 0;
-        database = new LinkedHashMap<>();
+        count = 0;
+        data = new LinkedHashMap<>();
     }
 
     @Override
     public void create(Book book) {
-        int bookId = bookCount++;
+        int bookId = count++;
         book.id = bookId;
-        database.put(bookId, book);
-        System.out.println("Test: book 등록 했음\n" + book.toString() + database.size());
+        data.put(bookId, book);
+        System.out.println("Test: book 등록 했음\n" + book.toString() + data.size());
     }
-
 }
