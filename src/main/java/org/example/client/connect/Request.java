@@ -4,10 +4,9 @@ import org.example.type.MenuType;
 
 public class Request {
     public MenuType menuType;
-    public RequestData requestData;
+    public RequestData requestData = new RequestData();
 
-    public Request(MenuType menuType, RequestData requestData) {
+    public Request(MenuType menuType) {
         this.menuType = menuType;
-        this.requestData = requestData;
     }
 }

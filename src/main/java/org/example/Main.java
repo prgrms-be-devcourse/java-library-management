@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         server.setModeType(modeConsole.scanType());
         while (true) {
-            Request request = new Request(menuConsole.scanType(), new RequestData(menuConsole.scanBookInfo())); // 수정 필요, 함수 실행 순서가 정해져 있음. 캡슐화 해버리자.
+            Request request = menuConsole.scanTypeAndInfo();
             response = server.request(request); // 이름 수정 필요
             System.out.println(response);
         }

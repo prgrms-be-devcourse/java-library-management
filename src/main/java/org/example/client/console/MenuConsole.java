@@ -1,5 +1,7 @@
 package org.example.client.console;
 
+import org.example.client.connect.Request;
+import org.example.client.connect.RequestData;
 import org.example.type.MenuType;
 import org.example.server.entity.RequestBookDto;
 
@@ -22,11 +24,16 @@ public class MenuConsole implements Console {
         System.out.print("Q. 사용할 기능을 선택해주세요.\n\n> ");
     }
 
-    public MenuType scanType() {
+    public Request scanTypeAndInfo() {
         show();
         menuType = MenuType.valueOfNumber(Integer.parseInt(scanner.nextLine()));
-        // 결과 출력
-        return menuType;
+        Request request = new Request(menuType);
+        switch (menuType) {
+            case REGISTER: {
+                request.requestData.requestBookDto = scanBookInfo();
+            }
+        }
+        return request;
     }
 
     public int scanInfo() {
