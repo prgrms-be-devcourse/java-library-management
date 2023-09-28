@@ -1,9 +1,9 @@
 package org.example.packet;
 
-import org.example.server.entity.RequestBookDto;
-
+// Optional 처리
 public class RequestData {
-    public RequestBookDto requestBookDto;
-    public int bookId;
-    public String bookName;
+    public int id; // 5000 미만
+    public String name; // 100자 이내
+    public String author; // 100자 이내
+    public int pages; // 5000 이내
 }

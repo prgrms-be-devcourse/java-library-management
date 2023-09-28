@@ -15,6 +15,6 @@ public class Server {
     }
 
     public static String requestMethod(Request request) {
-        return BookController.valueOf(request.method).mapping(request); // 예외 처리?
+        return BookController.valueOf(request.method).mapping(request.requestData); // 예외 처리?
     }
 }

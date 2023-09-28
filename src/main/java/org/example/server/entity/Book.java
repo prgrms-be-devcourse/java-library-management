@@ -10,19 +10,19 @@ public class Book {
     public BookState state;
     public LocalDateTime borrowTime = null;
 
-    public Book(RequestBookDto requestBookDto) {//        id
-        this.name = requestBookDto.name;
-        this.author = requestBookDto.author;
-        this.pages = requestBookDto.pages;
+    public Book(String name, String author, int pages) {
+        this.name = name;
+        this.author = author;
+        this.pages = pages;
         this.state = BookState.CAN_BORROW;
         this.borrowTime = LocalDateTime.now();
     } // 새로 등록 할 때
 
-    public Book(String name, String author, int pages, int id, String name1, String author1, int pages1, BookState state, LocalDateTime borrowTime) {
+    public Book(int id, String name, String author, int pages, BookState state, LocalDateTime borrowTime) {
         this.id = id;
-        this.name = name1;
-        this.author = author1;
-        this.pages = pages1;
+        this.name = name;
+        this.author = author;
+        this.pages = pages;
         this.state = state;
         this.borrowTime = borrowTime;
     }// 파일에서 로드 할 때
@@ -33,7 +33,6 @@ public class Book {
                 "제목 : " + name + "\n"
                 + "작가 이름 : " + author + "\n"
                 + "페이지 수 : " + pages + " 페이지\n" +
-                "상태 : " + state.getStatus() + "\n" +
-                "\n------------------------------\n";
+                "상태 : " + state.getStatus() + "\n\n------------------------------\n";
     }
 }

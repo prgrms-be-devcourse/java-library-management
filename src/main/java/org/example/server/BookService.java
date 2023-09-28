@@ -2,7 +2,6 @@ package org.example.server;
 
 import org.example.server.entity.Book;
 import org.example.server.entity.BookState;
-import org.example.server.entity.RequestBookDto;
 import org.example.server.repository.BookRepository;
 
 public class BookService {
@@ -13,8 +12,8 @@ public class BookService {
         this.repository = repository;
     }
 
-    public static void register(RequestBookDto requestBookDto) {
-        Book book = new Book(requestBookDto);
+    public static void register(String name, String author, int pages) {
+        Book book = new Book(name, author, pages);
         repository.create(book);
     }
 

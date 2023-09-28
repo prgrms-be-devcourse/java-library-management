@@ -21,7 +21,7 @@ public enum ClientMode {
 
     private final int num;
     private final String name;
-    private final String alert;
+    public final String alert;
 
     ClientMode(int num, String name, String alert) {
         this.num = num;
@@ -31,9 +31,5 @@ public enum ClientMode {
 
     public int getNum() {
         return num;
-    }
-
-    public String getAlert() {
-        return alert;
     }
 }

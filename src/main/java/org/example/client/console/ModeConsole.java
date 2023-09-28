@@ -14,7 +14,7 @@ public class ModeConsole implements Console {
     public static String scanType() {
         System.out.print(ClientMode.MODE_CONSOLE);
         clientMode = ClientMode.valueOfNumber(Integer.parseInt(scanner.nextLine())); //숫자 & 범위 체크
-        System.out.print(clientMode.getAlert());
+        System.out.print(clientMode.alert);
         return clientMode.name();
     }
 }

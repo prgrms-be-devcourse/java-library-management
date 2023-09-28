@@ -9,11 +9,15 @@ public class Client {
 
     }
 
-    public static String getMode() {
+    public static String scanMode() {
         return ModeConsole.scanType();
     }
 
-    public static Request getMenu() {
+    public static Request scanMenu() {
         return MethodConsole.scanTypeAndInfo();
+    }
+
+    public static void printResponse(String response) {
+        System.out.println(response);
     }
 }
