@@ -14,11 +14,12 @@ import java.util.*;
  */
 public class FileRepository implements Repository {
     private Set<Book> books;
-    private final Path FILEPATH;
-    private String columns;
+    private final Path FILE_PATH;
+    private String columns = "도서 번호;도서명;작가;총 페이지 수;상태";
 
-    public FileRepository(String path) {
-        this.FILEPATH = Paths.get(Objects.requireNonNull(path));
+    public FileRepository(String path, String fileName) {
+        createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
+        this.FILE_PATH = Paths.get(path.concat(fileName));
         this.books = loadBooks();
     }
 
@@ -71,16 +72,30 @@ public class FileRepository implements Repository {
     }
 
     public BufferedWriter getWriter() throws IOException {
-        return Files.newBufferedWriter(FILEPATH, StandardOpenOption.TRUNCATE_EXISTING);
+        return Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     public String getColumns() {
         return columns;
     }
 
+    private void createFileIfNotExist(String path, String name) {
+        File file = new File(new File(path), name);
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) { e.printStackTrace(); }
+
+            try(BufferedWriter writer = Files.newBufferedWriter(Paths.get(path.concat(name)))) {
+                    writer.write(columns);
+                    writer.newLine();
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+
     private Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILEPATH.toFile()))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH.toFile()))) {
             columns = reader.readLine();
             reader.lines()
                     .map(s -> s.split("[;,]"))

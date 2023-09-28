@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Mode {
-    NORMAL(1, "일반 모드", new FileRepository("src/main/resources/도서 목록.csv")),
+    NORMAL(1, "일반 모드", new FileRepository("src/main/resources/", "도서 목록.csv")),
     TEST(2, "테스트 모드", new MemoryRepository());
 
     private final int num;
