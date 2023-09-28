@@ -112,6 +112,12 @@ public class Console implements Runnable {
         } catch (IllegalArgumentException e) { system(e.getMessage()); }
     }
 
+    public static int selectMode() {
+        return intInput("Q. 모드를 선택해주세요.\n" +
+                        "1. 일반 모드\n" +
+                        "2. 테스트 모드");
+    }
+
     private static void system(String s) {
         System.out.println();
         System.out.println("[System] " + s);

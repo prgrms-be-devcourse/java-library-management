@@ -1,5 +1,6 @@
 import devcourse.backend.medel.Book;
 import devcourse.backend.repository.FileRepository;
+import devcourse.backend.repository.Repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

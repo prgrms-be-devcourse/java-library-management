@@ -1,0 +1,56 @@
+package devcourse.backend.repository;
+
+import devcourse.backend.medel.Book;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MemoryRepository implements Repository {
+    List<Book> books = new ArrayList<>();
+
+    @Override
+    public List<Book> findAll() {
+        return books.stream()
+                .map(b -> b.copy())
+                .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
+                .toList();
+    }
+
+    @Override
+    public List<Book> findByKeyword(String keyword) {
+        return books.stream()
+                .filter(b -> b.like(keyword))
+                .map(b -> b.copy())
+                .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
+                .toList();
+    }
+
+    @Override
+    public Book findById(long id) {
+        return books.stream()
+                .filter(b -> b.isMatched(id))
+                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
+    }
+
+    @Override
+    public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
+        return books.stream()
+                .filter(b -> b.isMatched(title, author, totalPages))
+                .findAny().orElseThrow().copy();
+    }
+
+    @Override
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    @Override
+    public void modify() {
+
+    }
+
+    @Override
+    public void deleteById(long bookId) {
+        books.remove(findById(bookId));
+    }
+}
