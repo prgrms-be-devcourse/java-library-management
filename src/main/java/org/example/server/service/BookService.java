@@ -37,7 +37,7 @@ public class BookService {
 
     public void lost(int bookId) {
         Book book = repository.getById(bookId);
-        book.state = BookState.LOSTED;
+        book.state = BookState.LOST;
     }
 
     public void delete(int bookId) {

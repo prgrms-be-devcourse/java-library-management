@@ -1,6 +1,5 @@
 package org.example.server;
 
-import org.example.type.MenuType;
 import org.example.type.ModeType;
 import org.example.client.connect.Request;
 import org.example.server.controller.BookController;
@@ -11,24 +10,17 @@ import org.example.server.service.BookService;
 // 모드 = 레포 세팅
 // 메뉴 = 컨트롤러 뭐할지 세팅
 public class ServerApplication {
-    private static ServerApplication instance = new ServerApplication();
-    private static MenuType menuType;
-    static private BookService bookService;
-    static private BookController bookController;
+    private static BookController bookController;
 
     private ServerApplication() {
     }
 
-    public static ServerApplication getInstance() {
-        return instance;
-    }
-
-    public void setModeType(ModeType modeType) {
-        bookService = new BookService(modeType.getModeRepository());
+    public static void setModeType(ModeType modeType) {
+        BookService bookService = new BookService(modeType.getRepository());
         bookController = new BookController(bookService);
     }
 
-    public String request(Request request) {
+    public static String request(Request request) {
         switch (request.menuType) {
             case REGISTER -> {
                 return bookController.registerBook(request.requestData.requestBookDto);

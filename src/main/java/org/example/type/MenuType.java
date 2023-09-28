@@ -20,42 +20,37 @@ public enum MenuType {
     LOST(6, "6. 도서 분실\n", "\n[System] 도서 분실 처리 메뉴로 넘어갑니다.\n\n", new LinkedList<>(Arrays.asList("Q. 분실 처리할 도서번호를 입력하세요\n\n> "))),
     DELETE(7, "7. 도서 삭제\n", "\n[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n\n", new LinkedList<>(Arrays.asList("Q. 삭제 처리할 도서번호를 입력하세요\n\n> ")));
 
-    private final int menuNum;
-    private final String menuName;
-    private final String menuStartMent;
-    private final LinkedList<String> menuQuestion;
+    private final int num;
+    private final String name;
+    private final String alert;
+    private final LinkedList<String> questions;
 
-    private MenuType(int menuNum, String menuName, String menuStartMent, LinkedList<String> menuQuestion) {
-        this.menuNum = menuNum;
-        this.menuName = menuName;
-        this.menuStartMent = menuStartMent;
-        this.menuQuestion = menuQuestion;
-    }
-
-    public int getMenuNum() {
-        return menuNum;
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public String getMenuStartMent() {
-        return menuStartMent;
-    }
-
-    public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요.\n" + String.join("", Stream.of(values()).map(type -> type.menuName).toArray(String[]::new)) + "\n> ";
-
-    public LinkedList<String> getMenuQuestion() {
-        return menuQuestion;
+    private MenuType(int num, String name, String alert, LinkedList<String> questions) {
+        this.num = num;
+        this.name = name;
+        this.alert = alert;
+        this.questions = questions;
     }
 
     private static final Map<Integer, MenuType> BY_NUMBER =
-            Stream.of(values()).collect(Collectors.toMap(MenuType::getMenuNum, Function.identity()));
+            Stream.of(values()).collect(Collectors.toMap(MenuType::getNum, Function.identity()));
 
-    public static MenuType valueOfNumber(int number) {
-        return BY_NUMBER.get(number);
+    public static MenuType valueOfNumber(int num) {
+        return BY_NUMBER.get(num);
     }
 
+    public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요.\n"
+            + String.join("", Stream.of(values()).map(type -> type.name).toArray(String[]::new)) + "\n> ";
 
+    public int getNum() {
+        return num;
+    }
+
+    public String getAlert() {
+        return alert;
+    }
+
+    public LinkedList<String> getQuestions() {
+        return questions;
+    }
 }

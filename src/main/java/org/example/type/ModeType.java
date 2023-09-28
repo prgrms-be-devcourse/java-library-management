@@ -14,41 +14,37 @@ public enum ModeType {
     COMMON(1, "1. 일반 모드\n", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n", CommonBookRepository::new),
     TEST(2, "2. 테스트 모드\n", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n", TestBookRepository::new);
 
-    private final int modeNum;
-    private final String modeName;
-    private final String modeStartMent;
-
+    private final int num;
+    private final String name;
+    private final String alert;
     private final Supplier<BookRepository> bookRepositorySupplier;
 
-    ModeType(int modeNum, String modeName, String modeStartMent, Supplier<BookRepository> bookRepositorySupplier) {
-        this.modeNum = modeNum;
-        this.modeName = modeName;
+    ModeType(int num, String name, String alert, Supplier<BookRepository> bookRepositorySupplier) {
+        this.num = num;
+        this.name = name;
+        this.alert = alert;
         this.bookRepositorySupplier = bookRepositorySupplier;
-        this.modeStartMent = modeStartMent;
     }
-
-    public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n" + String.join("", Stream.of(values()).map(type -> type.modeName).toArray(String[]::new)) + "\n> ";
 
     private static final Map<Integer, ModeType> BY_NUMBER =
-            Stream.of(values()).collect(Collectors.toMap(ModeType::getModeNum, Function.identity()));
+            Stream.of(values()).collect(Collectors.toMap(ModeType::getNum, Function.identity()));
 
-    public static ModeType valueOfNumber(int number) {
-        return BY_NUMBER.get(number);
+    public static ModeType valueOfNumber(int num) {
+        return BY_NUMBER.get(num);
     }
 
-    public int getModeNum() {
-        return modeNum;
+    public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n"
+            + String.join("", Stream.of(values()).map(type -> type.name).toArray(String[]::new)) + "\n> ";
+
+    public int getNum() {
+        return num;
     }
 
-    public String getModeName() {
-        return modeName;
+    public String getAlert() {
+        return alert;
     }
 
-    public String getModeStartMent() {
-        return modeStartMent;
-    }
-
-    public BookRepository getModeRepository() {
+    public BookRepository getRepository() {
         return bookRepositorySupplier.get();
     }
 

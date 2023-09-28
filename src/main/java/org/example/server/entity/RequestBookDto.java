@@ -1,9 +1,9 @@
 package org.example.server.entity;
 
 public class RequestBookDto {
-    public String name;
-    public String author;
-    public int pages;
+    public String name; // 100자 이내
+    public String author; // 100자 이내
+    public int pages; // 5000 이내
 
     public RequestBookDto(String[] bookInfo) {
         this.name = bookInfo[0];

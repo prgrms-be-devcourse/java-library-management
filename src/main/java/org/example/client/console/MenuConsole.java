@@ -10,52 +10,43 @@ import org.example.server.entity.RequestBookDto;
 public class MenuConsole implements Console {
     public static MenuType menuType;
 
-    @Override
-    public void show() {
-        System.out.print(MenuType.MENU_CONSOLE);
+    private MenuConsole() {
     }
 
-    public Request scanTypeAndInfo() {
-        show();
+    public static Request scanTypeAndInfo() {
+        System.out.print(MenuType.MENU_CONSOLE);
         menuType = MenuType.valueOfNumber(Integer.parseInt(scanner.nextLine()));
-        System.out.print(menuType.getMenuStartMent());
+        System.out.print(menuType.getAlert());
         Request request = new Request(menuType);
         switch (menuType) {
-            case REGISTER: {
+            case REGISTER -> {
                 request.requestData.requestBookDto = scanBookInfo();
-                break;
             }
-            case SEARCH_BY_NAME: {
+            case SEARCH_BY_NAME -> {
                 request.requestData.bookName = scanBookName();
-                break;
             }
-            case BORROW:
-            case RETURN:
-            case LOST:
-            case DELETE: {
+            case BORROW, RETURN, LOST, DELETE -> {
                 request.requestData.bookId = scanBookId();
-                break;
             }
         }
         return request;
     }
 
-    public int scanBookId() {
-        System.out.print(menuType.getMenuQuestion().get(0));
-        return Integer.parseInt(scanner.nextLine());
-    }
-
-    public String scanBookName() {
-        System.out.print(menuType.getMenuQuestion().get(0));
-        return scanner.nextLine();
-    }
-
-    public RequestBookDto scanBookInfo() {
-        String[] bookInfo = menuType.getMenuQuestion().stream().map(q -> {
+    public static RequestBookDto scanBookInfo() {
+        String[] bookInfo = menuType.getQuestions().stream().map(q -> {
             System.out.print(q);
-            return scanner.nextLine();
+            return scanner.nextLine(); // 제목, 저자 100자 이내, 페이지 숫자 & 범위 확인
         }).toArray(String[]::new);
-
         return new RequestBookDto(bookInfo);
+    }
+
+    public static String scanBookName() {
+        System.out.print(menuType.getQuestions().get(0));
+        return scanner.nextLine(); // 특수 문자 확인?
+    }
+
+    public static int scanBookId() {
+        System.out.print(menuType.getQuestions().get(0));
+        return Integer.parseInt(scanner.nextLine()); // 숫자 & 범위 확인
     }
 }

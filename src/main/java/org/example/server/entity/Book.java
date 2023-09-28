@@ -3,10 +3,10 @@ package org.example.server.entity;
 import java.time.LocalDateTime;
 
 public class Book {
-    public int id;
-    public String name;
-    public String author;
-    public int pages;
+    public int id; // 5000 미만
+    public String name; // 100자 이내
+    public String author; // 100자 이내
+    public int pages; // 5000 이내
     public BookState state;
     public LocalDateTime borrowTime = null;
 
