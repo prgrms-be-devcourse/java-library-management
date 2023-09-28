@@ -26,25 +26,25 @@ public class ConsoleEngine implements Runnable {
     }
 
     private BookFunctionHandler initializeMode() {
-        Mode mode = selectMode();
-        consoleIOHandler.printSystemMessage(mode.getExecutionMessage());
-        return new BookFunctionHandler(mode.getBookRepository(), consoleIOHandler);
+        try {
+            Mode mode = selectMode();
+            consoleIOHandler.printSystemMessage(mode.getExecutionMessage());
+            return new BookFunctionHandler(mode.getBookRepository(), consoleIOHandler);
+        } catch (RuntimeException e) {
+            consoleIOHandler.printSystemMessage(e.getMessage());
+            return initializeMode();
+        }
     }
 
     private Mode selectMode() {
-        try {
-            consoleIOHandler.printQuestionMessage(InputMessage.MODE.getMessage());
-            consoleIOHandler.printEnumString(Mode.class);
+        consoleIOHandler.printQuestionMessage(InputMessage.MODE.getMessage());
+        consoleIOHandler.printEnumString(Mode.class);
 
-            String input = consoleIOHandler.getInputWithPrint();
+        String input = consoleIOHandler.getInputWithPrint();
 
-            return Mode
-                    .findByCode(input)
-                    .orElseThrow(() -> new InputException(INVALID_INPUT));
-        } catch (RuntimeException e) {
-            consoleIOHandler.printSystemMessage(e.getMessage());
-            return selectMode();
-        }
+        return Mode
+                .findByCode(input)
+                .orElseThrow(() -> new InputException(INVALID_INPUT));
     }
 
     private void progress(BookFunctionHandler bookFunctionHandler) {
