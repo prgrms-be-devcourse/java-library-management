@@ -9,8 +9,8 @@ import org.example.server.service.BookService;
 // 콘솔에서 입력 받은 모드, 메뉴, 각 메뉴에 대한 입력 값들을 세팅.
 // 모드 = 레포 세팅
 // 메뉴 = 컨트롤러 뭐할지 세팅
-public class ServerApplication {
-    private ServerApplication() {
+public class Server {
+    private Server() {
     }
 
     private static BookController bookController;

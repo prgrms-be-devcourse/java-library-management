@@ -1,15 +1,15 @@
 package org.example;
 
 import org.example.client.Client;
-import org.example.server.ServerApplication;
+import org.example.server.Server;
 
 public class Main {
     static String response;
 
     public static void main(String[] args) {
-        ServerApplication.setModeType(Client.getMode());
+        Server.setModeType(Client.getMode());
         while (true) {
-            response = ServerApplication.request(Client.getMenu());
+            response = Server.request(Client.getMenu());
             System.out.println(response);
         }
     }
