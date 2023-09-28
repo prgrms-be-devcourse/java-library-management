@@ -2,10 +2,12 @@ package main.manage.file;
 
 import main.entity.Book;
 import main.entity.State;
+import main.exception.BookNumberAlreadyExistException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -20,6 +22,7 @@ public class CsvFileManager implements FileManager {
     @Override
     public List<Book> read() {
         List<Book> bookList = new ArrayList<>();
+        HashSet<Integer> bookNumSet = new HashSet<>();
         try (BufferedReader br =
                      new BufferedReader(
                              new InputStreamReader(
@@ -28,8 +31,14 @@ public class CsvFileManager implements FileManager {
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(CSV_PATTERN);
                 for (int i = 0; i < split.length; i++) split[i] = split[i].replaceAll("\"", "");
+
+                int bookNum = Integer.parseInt(split[0]);
+                if (bookNumSet.contains(bookNum))
+                    throw new BookNumberAlreadyExistException("파일에 도서번호가 중복됩니다. 다시 확인해 주세요.");
+
+                bookNumSet.add(bookNum);
                 bookList.add(
-                        new Book(Integer.parseInt(split[0]), split[1], split[2], Integer.parseInt(split[3]), State.valueOf(split[4]), Long.parseLong(split[5]))
+                        new Book(bookNum, split[1], split[2], Integer.parseInt(split[3]), State.valueOf(split[4]), Long.parseLong(split[5]))
                 );
             }
         }catch (Exception e){

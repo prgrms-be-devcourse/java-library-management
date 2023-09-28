@@ -1,5 +1,6 @@
 package main;
 
+import main.exception.BookNumberAlreadyExistException;
 import main.manage.file.CsvFileManager;
 import main.manage.book.ListBookManager;
 import main.manage.file.TestFileManager;
@@ -22,13 +23,16 @@ public class Main {
             }
         }
 
-        TotalManager totalManager;
-        if(mode == 1) {
-            totalManager = new TotalManager(new ListBookManager(new CsvFileManager("res/temp.csv")), sc);
-        }else{
-            totalManager = new TotalManager(new ListBookManager(new TestFileManager()), sc);
-        }
+        try {
+            TotalManager totalManager;
+            if (mode == 1)
+                totalManager = new TotalManager(new ListBookManager(new CsvFileManager("res/temp.csv")), sc);
+            else
+                totalManager = new TotalManager(new ListBookManager(new TestFileManager()), sc);
 
-        totalManager.run();
+            totalManager.run();
+        }catch (BookNumberAlreadyExistException e){
+            System.out.println("읽어오는 파일에 중복되는 도서번호가 존재하여 불러올 수 없습니다.");
+        }
     }
 }

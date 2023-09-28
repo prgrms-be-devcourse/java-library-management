@@ -27,7 +27,7 @@ public class Book {
         this.pageNum = pageNum;
         this.state = state;
         this.lastReturn = lastReturn;
-        numberCnt++;
+        numberCnt = Math.max(numberCnt, number) + 1;
     }
 
     public String printInfo(){
