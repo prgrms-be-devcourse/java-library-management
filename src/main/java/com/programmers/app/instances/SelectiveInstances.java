@@ -1,0 +1,49 @@
+package com.programmers.app.instances;
+
+import com.programmers.app.book.repository.BookRepository;
+import com.programmers.app.book.repository.TestBookRepository;
+import com.programmers.app.book.service.BookService;
+import com.programmers.app.book.service.TestBookService;
+import com.programmers.app.menu.MenuExecuter;
+import com.programmers.app.menu.MenuExecuterImpl;
+import com.programmers.app.menu.MenuSelector;
+import com.programmers.app.menu.MenuSelectorImpl;
+import com.programmers.app.mode.Mode;
+
+public class SelectiveInstances {
+
+    private final GeneralInstances generalInstances;
+    private final MenuSelector menuSelector;
+    private final MenuExecuter menuExecuter;
+
+    public SelectiveInstances(GeneralInstances generalInstances, Mode mode) {
+        this.generalInstances = generalInstances;
+        this.menuSelector = generateMenuSelector();
+        this.menuExecuter = generateMenuExecuter(mode);
+    }
+
+    private MenuSelector generateMenuSelector() {
+        return new MenuSelectorImpl(generalInstances.getCommunicationAgent());
+    }
+
+    public MenuSelector getMenuSelector() {
+        return menuSelector;
+    }
+
+    private BookRepository generateBookRepository(Mode mode) {
+        if (mode != Mode.TEST) System.out.println("Temoporarily testing");
+        return new TestBookRepository();
+    }
+
+    private BookService generateBookSevice(Mode mode) {
+        return new TestBookService(generateBookRepository(mode));
+    }
+
+    private MenuExecuter generateMenuExecuter(Mode mode) {
+        return new MenuExecuterImpl(generateBookSevice(mode), generalInstances.getCommunicationAgent());
+    }
+
+    public MenuExecuter getMenuExecuter() {
+        return this.menuExecuter;
+    }
+}
