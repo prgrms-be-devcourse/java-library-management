@@ -11,7 +11,7 @@ public class ModeConsole implements Console {
 
     public ModeType scanType() {
         show();
-        modeType = ModeType.valueOfNumber(scanner.nextInt()); // 매핑
+        modeType = ModeType.valueOfNumber(Integer.parseInt(scanner.nextLine())); // 매핑
         alert();
         return modeType;
     }
@@ -22,6 +22,6 @@ public class ModeConsole implements Console {
     }
 
     private void alert() {
-        System.out.println(modeType.getModeName());
+        System.out.print(modeType.getModeName());
     }
 }

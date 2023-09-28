@@ -24,7 +24,7 @@ public class MenuConsole implements Console {
 
     public MenuType scanType() {
         show();
-        menuType = MenuType.valueOfNumber(scanner.nextInt());
+        menuType = MenuType.valueOfNumber(Integer.parseInt(scanner.nextLine()));
         // 결과 출력
         return menuType;
     }
@@ -35,7 +35,6 @@ public class MenuConsole implements Console {
     }
 
     public RequestBookDto scanBookInfo() {
-        scanner.nextLine();
         String[] bookInfo = scanBookInfoQuestions.stream().map(q -> {
             System.out.print(q);
             return scanner.nextLine();

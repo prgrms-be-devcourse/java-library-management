@@ -14,6 +14,6 @@ public class BookController {
 
     public String registerBook(RequestBookDto requestBookDto) {
         bookService.register(requestBookDto);
-        return "\n[System] 도서 등록이 완료되었습니다.";
+        return "[System] 도서 등록이 완료되었습니다.\n";
     }
 }
