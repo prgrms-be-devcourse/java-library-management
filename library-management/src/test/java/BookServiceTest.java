@@ -3,9 +3,15 @@ import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.view.BookDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,6 +19,14 @@ import java.util.TimerTask;
 public class BookServiceTest {
     FileRepository repository = new FileRepository("src/test/resources/도서 목록.csv");
     BookService service = new BookService(repository);
+
+    @AfterEach
+    void 파일_내용_지우기() {
+        try (BufferedWriter writer = repository.getWriter()) {
+            writer.write(repository.getColumns());
+            writer.newLine();
+        } catch (IOException e) {}
+    }
 
     @Test
     void 수동_도서_등록() {
