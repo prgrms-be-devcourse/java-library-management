@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static library.exception.InputErrorMessage.NOT_NUMBER;
+import static library.view.constant.InputMessage.*;
 
 public class ConsoleIOHandler {
 
@@ -42,6 +43,12 @@ public class ConsoleIOHandler {
         return getInputWithPrint();
     }
 
+    public int inputIntWithMessage(InputMessage inputMessage) {
+        this.printQuestionMessage(inputMessage.getMessage());
+
+        return getParseInputWithPrint(Integer::parseInt);
+    }
+
     public long inputLongWithMessage(InputMessage inputMessage) {
         this.printQuestionMessage(inputMessage.getMessage());
 
@@ -57,14 +64,9 @@ public class ConsoleIOHandler {
     }
 
     public BookSaveRequest inputBookInfo() {
-        printQuestionMessage(InputMessage.TITLE.getMessage());
-        String title = getInputWithPrint();
-
-        printQuestionMessage(InputMessage.AUTHOR.getMessage());
-        String author = getInputWithPrint();
-
-        printQuestionMessage(InputMessage.PAGE_COUNT.getMessage());
-        int pageCount = getParseInputWithPrint(Integer::parseInt);
+        String title = inputStringWithMessage(TITLE);
+        String author = inputStringWithMessage(AUTHOR);
+        int pageCount = inputIntWithMessage(PAGE_COUNT);
 
         return new BookSaveRequest(title, author, pageCount);
     }
