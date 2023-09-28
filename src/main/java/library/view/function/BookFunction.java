@@ -48,4 +48,13 @@ public enum BookFunction {
     public void execute(BookFunctionHandler bookFunctionHandler) {
         this.bookConsumer.accept(bookFunctionHandler);
     }
+
+    public String getCodeWithDescription() {
+        return this.code + ". " + this.description;
+    }
+
+    @Override
+    public String toString() {
+        return getCodeWithDescription();
+    }
 }
