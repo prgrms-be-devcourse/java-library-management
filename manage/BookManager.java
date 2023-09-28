@@ -13,4 +13,5 @@ public interface BookManager {
     State returnBook(int bookNum);
     State lost(int bookNum);
     State delete(int bookNum);
+    void saveFile();
 }
