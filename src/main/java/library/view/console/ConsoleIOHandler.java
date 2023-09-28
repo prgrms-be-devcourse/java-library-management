@@ -90,4 +90,11 @@ public class ConsoleIOHandler {
         }
         consoleOutput.printEmptyLine();
     }
+
+    public void printEnumString(Class<? extends Enum<?>> e) {
+        for (Enum<?> enumConstant : e.getEnumConstants()) {
+            consoleOutput.println(enumConstant.toString());
+        }
+        consoleOutput.printEmptyLine();
+    }
 }
