@@ -42,12 +42,4 @@ public class MenuConsole implements Console {
 
         return new RequestBookDto(bookInfo);
     }
-
-    public Object[] scanTypeAndInfo() {
-        Object[] typeAndInfo = new Object[2];
-        typeAndInfo[0] = scanType();
-        // 메뉴에 따른 케이스 분기
-        typeAndInfo[1] = scanBookInfo();
-        return typeAndInfo;
-    }
 }
