@@ -3,6 +3,7 @@ package devcourse.backend.business;
 import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.FileRepository;
+import devcourse.backend.repository.Repository;
 import devcourse.backend.view.BookDto;
 
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BookService {
-    private final FileRepository repository;
+    private final Repository repository;
 
-    public BookService(FileRepository repository) {
+    public BookService(Repository repository) {
         this.repository = repository;
     }
 
@@ -29,12 +30,12 @@ public class BookService {
 
     public void rentBook(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.BORROWED);
-        repository.flush();
+        repository.modify();
     }
 
     public void returnBook(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.ARRANGING);
-        repository.flush();
+        repository.modify();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -45,7 +46,7 @@ public class BookService {
 
     public void reportLoss(long bookId) {
         repository.findById(bookId).changeStatus(BookStatus.LOST);
-        repository.flush();
+        repository.modify();
     }
 
     public void deleteBook(long bookId) {

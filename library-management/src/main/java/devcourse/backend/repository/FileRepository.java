@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Repository가 model 레이어에 들어가는 것이 맞는가?
  */
-public class FileRepository {
+public class FileRepository implements Repository {
     private Set<Book> books;
     private final Path FILEPATH;
     private String columns;
@@ -22,6 +22,7 @@ public class FileRepository {
         this.books = loadBooks();
     }
 
+    @Override
     public List<Book> findAll() {
         return books.stream()
                 .map(b -> b.copy())
@@ -29,6 +30,7 @@ public class FileRepository {
                 .toList();
     }
 
+    @Override
     public List<Book> findByKeyword(String keyword) {
         return books.stream()
                 .filter(b -> b.like(keyword))
@@ -37,25 +39,34 @@ public class FileRepository {
                 .toList();
     }
 
+    @Override
     public Book findById(long id) {
         return books.stream()
                 .filter(b -> b.isMatched(id))
                 .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
     }
 
+    @Override
     public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
         return books.stream()
                 .filter(b -> b.isMatched(title, author, totalPages))
                 .findAny().orElseThrow().copy();
     }
 
+    @Override
     public void deleteById(long bookId) {
         books.remove(findById(bookId));
         flush();
     }
 
+    @Override
     public void addBook(Book book) {
         books.add(book);
+        flush();
+    }
+
+    @Override
+    public void modify() {
         flush();
     }
 
