@@ -43,6 +43,11 @@ public class InMemoryBookRepository implements BookRepository {
     }
 
     @Override
+    public void persist() {
+        // do nothing
+    }
+
+    @Override
     public long getNextBookNumber() {
         return bookList.isEmpty()
                 ? 1

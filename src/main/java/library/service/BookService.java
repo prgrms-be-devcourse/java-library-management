@@ -51,18 +51,22 @@ public class BookService {
 
     public void rentBook(long rentBookNumber) {
         findByBookNumber(rentBookNumber).toRent();
+        bookRepository.persist();
     }
 
     public void returnBook(long returnBookNumber) {
         findByBookNumber(returnBookNumber).toReturn();
+        bookRepository.persist();
     }
 
     public void lostBook(long lostBookNumber) {
         findByBookNumber(lostBookNumber).toLost();
+        bookRepository.persist();
     }
 
     public void deleteBook(long deleteBookNumber) {
         bookRepository.delete(findByBookNumber(deleteBookNumber));
+        bookRepository.persist();
     }
 
     private Book findByBookNumber(long bookNumber) {

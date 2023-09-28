@@ -17,5 +17,7 @@ public interface BookRepository {
 
     void delete(Book book);
 
+    void persist();
+
     long getNextBookNumber();
 }
