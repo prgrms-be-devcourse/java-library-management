@@ -6,6 +6,7 @@ import library.view.console.in.ConsoleInput;
 import library.view.console.out.ConsoleOutput;
 import library.view.constant.InputMessage;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static library.exception.InputErrorMessage.NOT_NUMBER;
@@ -15,6 +16,7 @@ public class ConsoleIOHandler {
     private static final String SYSTEM_MESSAGE_PREFIX = "[SYSTEM] ";
     private static final String QUESTION_MESSAGE_PREFIX = "Q. ";
     private static final String INPUT_PREFIX = "> ";
+    private static final String SEPARATOR = "------------------------------";
 
     private final ConsoleInput consoleInput;
     private final ConsoleOutput consoleOutput;
@@ -67,4 +69,12 @@ public class ConsoleIOHandler {
         consoleOutput.println(QUESTION_MESSAGE_PREFIX + message);
     }
 
+    public <T> void printList(List<T> list) {
+        for (T t : list) {
+            consoleOutput.println(t.toString());
+            consoleOutput.printEmptyLine();
+            consoleOutput.println(SEPARATOR);
+        }
+        consoleOutput.printEmptyLine();
+    }
 }
