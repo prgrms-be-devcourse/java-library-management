@@ -1,10 +1,13 @@
 package library.view.function;
 
 import library.controller.BookController;
+import library.dto.BookFindResponse;
 import library.dto.BookSaveRequest;
 import library.repository.BookRepository;
 import library.service.BookService;
 import library.view.console.ConsoleIOHandler;
+
+import java.util.List;
 
 public class BookFunctionHandler {
 
@@ -19,6 +22,12 @@ public class BookFunctionHandler {
     public void addBook() {
         BookSaveRequest bookSaveRequest = consoleIOHandler.inputBookInfo();
         bookController.addBook(bookSaveRequest);
+    }
+
+    public void searchAll() {
+        List<BookFindResponse> allBookList = bookController.findAllBooks();
+
+        consoleIOHandler.printList(allBookList);
     }
 }
 
