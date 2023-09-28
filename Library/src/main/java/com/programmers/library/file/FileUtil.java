@@ -6,17 +6,21 @@ import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FileUtil {
         private static final String FILE_PATH = System.getProperty("user.home") + "/book.csv";
         private static final String DELIMITER = ",";
-        private final File file;
 
         public FileUtil() {
             // 파일이 없는 경우 파일 생성
-            this.file = new File(FILE_PATH);
+            File file = new File(FILE_PATH);
             if (!file.exists()) {
                 try {
                     file.createNewFile();
@@ -27,12 +31,9 @@ public class FileUtil {
         }
 
         public void saveToCsvFile(Book book) {
-            try (FileWriter writer = new FileWriter(FILE_PATH, true)) {
-                String line = book(book);;
-
-                line += System.lineSeparator();
-
-                writer.append(line);
+            try {
+                String line = book(book) + System.lineSeparator();
+                Files.writeString(Path.of(FILE_PATH), line, StandardOpenOption.APPEND);
             } catch (IOException e) {
                 throw ExceptionHandler.err(ErrorCode.WRITE_FILE_FAILED_EXCEPTION);
             }
@@ -41,10 +42,10 @@ public class FileUtil {
         public Map<Long, Book> loadFromCsvFile() {
             Map<Long, Book> bookMap = new HashMap<>();
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-                String line;
+            try {
+                List<String> lines = Files.readAllLines(Path.of(FILE_PATH), StandardCharsets.UTF_8);
 
-                while ((line = reader.readLine()) != null) {
+                for (String line : lines) {
                     String[] parts = line.split(DELIMITER);
                     Long bookId = Long.parseLong(parts[0]);
                     String title = parts[1];
