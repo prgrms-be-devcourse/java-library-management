@@ -4,23 +4,21 @@ import entity.Book;
 import entity.State;
 import exception.EntityNotFoundException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ListBookManager implements BookManager {
     private final List<Book> bookList; // 전체 노드 풀
     private final HashMap<Integer, Integer> numToIdx = new HashMap<>(); // {도서번호, idx}
+    private final FileManager fileManager;
 
-    public ListBookManager() {
-        bookList = new ArrayList<>();
-    }
-
-    public ListBookManager(List<Book> bookList){
-        this.bookList = bookList;
-        bookList.stream().forEach(book -> numToIdx.put(book.getNumber(), bookList.size()));
+    public ListBookManager(FileManager fileManager){
+        this.fileManager = fileManager;
+        this.bookList = fileManager.read();
+        IntStream.range(0, bookList.size()).forEach(i -> numToIdx.put(bookList.get(i).getNumber(), i));
     }
 
     @Override
@@ -88,6 +86,10 @@ public class ListBookManager implements BookManager {
             book.setState(State.DELETED);
 
         return initState;
+    }
+
+    public void saveFile(){
+        fileManager.write(this.bookList);
     }
 
     private Book getBook(int bookNum) {
