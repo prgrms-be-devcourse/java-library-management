@@ -30,22 +30,22 @@ public class ServerApplication {
 
     public String request(Request request) {
         switch (request.menuType) {
-            case REGISTER: {
+            case REGISTER -> {
                 return bookController.registerBook(request.requestData.requestBookDto);
             }
-            case READ_ALL: {
+            case READ_ALL -> {
                 return bookController.readAllBook();
             }
-            case SEARCH_BY_NAME: {
+            case SEARCH_BY_NAME -> {
                 return bookController.seachByName(request.requestData.bookName);
             }
-            case BORROW: {
+            case BORROW -> {
                 return bookController.borrow(request.requestData.bookId);
             }
-            case RETURN: {
+            case RETURN -> {
                 return bookController.returnBook(request.requestData.bookId);
             }
-            case LOST: {
+            case LOST -> {
                 return bookController.lost(request.requestData.bookId);
             }
         }
