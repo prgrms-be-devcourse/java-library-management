@@ -11,17 +11,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum ModeType {
-    COMMON(1, "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n", CommonBookRepository::new),
-    TEST(2, "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n", TestBookRepository::new);
+    COMMON(1, "1. 일반 모드\n", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n", CommonBookRepository::new),
+    TEST(2, "2. 테스트 모드\n", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n", TestBookRepository::new);
 
-    private int modeNum;
-    private String modeName;
-    private Supplier<BookRepository> bookRepositorySupplier;
+    private final int modeNum;
+    private final String modeName;
+    private final String modeStartMent;
 
-    ModeType(int modeNum, String modeName, Supplier<BookRepository> bookRepositorySupplier) {
+    private final Supplier<BookRepository> bookRepositorySupplier;
+
+    ModeType(int modeNum, String modeName, String modeStartMent, Supplier<BookRepository> bookRepositorySupplier) {
         this.modeNum = modeNum;
         this.modeName = modeName;
         this.bookRepositorySupplier = bookRepositorySupplier;
+        this.modeStartMent = modeStartMent;
     }
 
     public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n" + String.join("", Stream.of(values()).map(type -> type.modeName).toArray(String[]::new)) + "\n> ";
@@ -39,6 +42,10 @@ public enum ModeType {
 
     public String getModeName() {
         return modeName;
+    }
+
+    public String getModeStartMent() {
+        return modeStartMent;
     }
 
     public BookRepository getModeRepository() {

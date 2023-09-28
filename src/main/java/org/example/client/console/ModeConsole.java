@@ -22,6 +22,6 @@ public class ModeConsole implements Console {
     }
 
     private void alert() {
-        System.out.print(modeType.getModeName());
+        System.out.print(modeType.getModeStartMent());
     }
 }
