@@ -87,8 +87,8 @@ public class ConsoleIOHandler {
             consoleOutput.println(t.toString());
             consoleOutput.printEmptyLine();
             consoleOutput.println(SEPARATOR);
+            consoleOutput.printEmptyLine();
         }
-        consoleOutput.printEmptyLine();
     }
 
     public void printEnumString(Class<? extends Enum<?>> e) {
