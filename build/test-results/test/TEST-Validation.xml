@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Validation" tests="46" skipped="0" failures="0" errors="0" timestamp="2023-09-28T06:52:30" hostname="hongjiin-ui-MacBookPro.local" time="66.302">
+  <properties/>
+  <testcase name="테스트 모드에서 존재하지 않는 도서 대여 실패 검증" classname="Validation" time="0.119"/>
+  <testcase name="테스트 모드에서 대여중인 도서 대여 실패 검증" classname="Validation" time="0.006"/>
+  <testcase name="테스트 모드에서 분실된 도서 대여 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 정리중인 도서 대여 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 도서 등록, 조회 기능 검증" classname="Validation" time="0.021"/>
+  <testcase name="테스트 모드에서 존재하지 않는 도서 삭제 실패 검증" classname="Validation" time="0.001"/>
+  <testcase name="일반 모드에서 존재하지 않는 도서 대여 실패 검증" classname="Validation" time="0.001"/>
+  <testcase name="일반 모드에서 '대여중' 상태의 도서 대여 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 '분실됨' 상태의 도서 대여 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 정리중인 도서 대여 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 대여 가능한 도서 분실 성공 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 대여중인 도서 분실 성공 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 정리중인 도서 분실 성공 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 존재하지 않은 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 대여 가능한 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 정리중인 도서 5분 뒤 도서 대여 성공 검증" classname="Validation" time="11.006"/>
+  <testcase name="일반 모드에서 JSON 파일의 자동 등록 기능 검증" classname="Validation" time="0.013"/>
+  <testcase name="일반 모드에서 존재하지 않는 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 대여 가능한 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 정리중인 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 대여 가능한 도서 삭제 성공 검증" classname="Validation" time="0.001"/>
+  <testcase name="테스트 모드에서 대여중인 도서 삭제 성공 검증" classname="Validation" time="0.001"/>
+  <testcase name="테스트 모드에서 정리중인 도서 삭제 성공 검증" classname="Validation" time="0.001"/>
+  <testcase name="테스트 모드에서 분실된 도서 삭제 성공 검증" classname="Validation" time="0.001"/>
+  <testcase name="일반 모드에서 존재하지 않는 도서 분실 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 분실된 도서 분실 실패 검증" classname="Validation" time="0.004"/>
+  <testcase name="일반 모드에서 '대여 가능' 상태의 도서 대여 성공 검증" classname="Validation" time="0.002"/>
+  <testcase name="일반 모드에서 정리중인 도서 대여 5분 뒤 성공 검증" classname="Validation" time="11.004"/>
+  <testcase name="Mock 객체인 MockMode를 이용한 도서 검색 성공과 존재하지 않는 도서 검색 실패 검증" classname="Validation" time="0.004"/>
+  <testcase name="일반 모드에서 대여 가능한 도서 삭제 성공 검증" classname="Validation" time="0.004"/>
+  <testcase name="일반 모드에서 대여중인 도서 삭제 성공 검증" classname="Validation" time="0.003"/>
+  <testcase name="일반 모드에서 정리중인 도서 삭제 성공 검증" classname="Validation" time="0.004"/>
+  <testcase name="일반 모드에서 분실된 도서 삭제 성공 검증" classname="Validation" time="0.003"/>
+  <testcase name="일반 모드에서 존재하지 않는 도서 삭제 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 정리중인 도서 반납 실패 검증" classname="Validation" time="0.002"/>
+  <testcase name="테스트 모드에서 도서 등록, 조회 기능 검증" classname="Validation" time="0.001"/>
+  <testcase name="테스트 모드에서 대여중인 도서 반납 성공 검증" classname="Validation" time="11.006"/>
+  <testcase name="테스트 모드에서 분실중인 도서 반납 성공 검증" classname="Validation" time="11.005"/>
+  <testcase name="테스트 모드에서 대여 가능한 도서 대여 성공 검증" classname="Validation" time="0.001"/>
+  <testcase name="일반 모드에서 대여중인 도서 반납 성공 검증" classname="Validation" time="11.006"/>
+  <testcase name="일반 모드에서 분실된 도서 반납 성공 검증" classname="Validation" time="11.008"/>
+  <testcase name="테스트 모드에서 존재하지 않는 도서 분실 실패 검증" classname="Validation" time="0.001"/>
+  <testcase name="테스트 모드에서 분실된 도서 분실 실패 검증" classname="Validation" time="0.001"/>
+  <testcase name="일반 모드에서 대여 가능한 도서 분실 성공 검증" classname="Validation" time="0.003"/>
+  <testcase name="일반 모드에서 대여중인 도서 분실 성공 검증" classname="Validation" time="0.003"/>
+  <testcase name="일반 모드에서 정리중인 도서 분실 성공 검증" classname="Validation" time="0.003"/>
+  <system-out><![CDATA[[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 대여 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 자동 등록되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 대여 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 대여 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 검색 조회가 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 삭제 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 반납 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 반납 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서가 대여 처리 되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 반납 처리 되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 반납 처리 되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서 등록이 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+[System] 도서가 분실 처리 되었습니다.
+
+[System] 도서 분실 처리가 완료되었습니다.
+
+[System] 파일이 업데이트되었습니다.
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
