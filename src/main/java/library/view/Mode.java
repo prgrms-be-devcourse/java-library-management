@@ -34,4 +34,13 @@ public enum Mode {
     public BookRepository getBookRepository() {
         return bookRepositorySupplier.get();
     }
+
+    public String getCodeWithDescription() {
+        return this.code + ". " + this.description;
+    }
+
+    @Override
+    public String toString() {
+        return getCodeWithDescription();
+    }
 }
