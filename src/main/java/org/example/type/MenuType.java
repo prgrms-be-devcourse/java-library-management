@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum MenuType {
-    REGISTER(1, "1. 도서 등록\n"),
+    REGISTER(1, "1. 도서 등록\n", "\n[System] 도서 등록 메뉴로 넘어갑니다.\n\n"),
 
-    READ_ALL(2, "2. 전체 도서 목록 조회\n");
+    READ_ALL(2, "2. 전체 도서 목록 조회\n", "\n[System] 전체 도서 목록입니다.\n\n");
 //    SEARCH_BY_NAME(3, "3. 도서 대여\n"),
 //    BORROW(4, "4. 도서 반납\n"),
 //    LOST(5, "5. 도서 분실\n"),
@@ -16,10 +16,12 @@ public enum MenuType {
 
     private int menuNum;
     private String menuName;
+    private String menuStartMent;
 
-    private MenuType(int menuNum, String menuName) {
+    private MenuType(int menuNum, String menuName, String menuStartMent) {
         this.menuNum = menuNum;
         this.menuName = menuName;
+        this.menuStartMent = menuStartMent;
     }
 
     public int getMenuNum() {
@@ -28,6 +30,10 @@ public enum MenuType {
 
     public String getMenuName() {
         return menuName;
+    }
+
+    public String getMenuStartMent() {
+        return menuStartMent;
     }
 
     //    public static String getMenuNames() {

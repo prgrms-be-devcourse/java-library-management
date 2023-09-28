@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum ModeType {
-    COMMON(1, "일반 모드", CommonBookRepository::new),
-    TEST(2, "테스트 모드", TestBookRepository::new);
+    COMMON(1, "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n", CommonBookRepository::new),
+    TEST(2, "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n", TestBookRepository::new);
 
     private int modeNum;
     private String modeName;

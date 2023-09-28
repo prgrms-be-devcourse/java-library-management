@@ -29,12 +29,11 @@ public class Book {
 
     @Override
     public String toString() {
-        return "도서번호 : " + id + "\n" +
+        return "\n도서번호 : " + id + "\n" +
                 "제목 : " + name + "\n"
                 + "작가 이름 : " + author + "\n"
                 + "페이지 수 : " + pages + " 페이지\n" +
                 "상태 : " + state.getStatus() + "\n" +
-                "\n" +
-                "------------------------------";
+                "\n------------------------------\n";
     }
 }

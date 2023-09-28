@@ -24,7 +24,6 @@ public class TestBookRepository implements BookRepository {
         int bookId = count++;
         book.id = bookId;
         data.put(bookId, book);
-        System.out.println("Test: book 등록 했음\n" + book.toString() + data.size());
     }
 
     @Override

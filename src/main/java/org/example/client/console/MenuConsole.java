@@ -27,6 +27,7 @@ public class MenuConsole implements Console {
     public Request scanTypeAndInfo() {
         show();
         menuType = MenuType.valueOfNumber(Integer.parseInt(scanner.nextLine()));
+        System.out.print(menuType.getMenuStartMent());
         Request request = new Request(menuType);
         switch (menuType) {
             case REGISTER: {
