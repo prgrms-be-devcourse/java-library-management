@@ -10,7 +10,7 @@ public class BookDto {
     }
 
     public void setTitle(String title) {
-        if(title.equals("")) throw new IllegalArgumentException("제목은 빈칸일 수 없습니다.");
+        if (title.equals("")) throw new IllegalArgumentException("제목은 빈칸일 수 없습니다.");
         this.title = title;
     }
 
@@ -19,7 +19,7 @@ public class BookDto {
     }
 
     public void setAuthor(String author) {
-        if(author.equals("")) throw new IllegalArgumentException("작가 이름은 빈칸일 수 없습니다.");
+        if (author.equals("")) throw new IllegalArgumentException("작가 이름은 빈칸일 수 없습니다.");
         this.author = author;
     }
 

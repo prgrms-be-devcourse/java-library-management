@@ -27,7 +27,7 @@ public class Book {
 
         public Builder id(long id) {
             this.id = id;
-            if(sequence < id) {
+            if (sequence < id) {
                 sequence = id;
                 System.out.println("sequence -> " + sequence);
             }
@@ -69,7 +69,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return  "도서번호 : " + id + "\n" +
+        return "도서번호 : " + id + "\n" +
                 "제목 : " + title + "\n" +
                 "작가 이름 : " + author + "\n" +
                 "페이지 수 : " + totalPages + " 페이지\n" +
@@ -81,9 +81,9 @@ public class Book {
     }
 
     public boolean isMatched(String title, String author, int totalPages) {
-        if(this.title.equals(title) &&
-            this.author.equals(author) &&
-            this.totalPages == totalPages) return true;
+        if (this.title.equals(title) &&
+                this.author.equals(author) &&
+                this.totalPages == totalPages) return true;
         return false;
     }
 
@@ -91,10 +91,12 @@ public class Book {
         return this.id == id;
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
     public void changeStatus(BookStatus status) {
-        if(BookStatus.canSwitch(this.status, status)) this.status = status;
+        if (BookStatus.canSwitch(this.status, status)) this.status = status;
         else throw new IllegalArgumentException(this.status.toString());
     }
 

@@ -30,6 +30,7 @@ public enum Mode {
         return get(num).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 모드입니다."))
                 .repository;
     }
+
     private static Optional<Mode> get(int num) {
         return Arrays.stream(Mode.values())
                 .filter(e -> e.num == num)

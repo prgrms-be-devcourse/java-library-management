@@ -73,9 +73,11 @@ public class FileRepository implements Repository {
         flush();
     }
 
-    public BufferedWriter getWriter() throws IOException {
+    private BufferedWriter getWriter() throws IOException {
         return Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING);
     }
+
+    
 
     public String getColumns() {
         return columns;
