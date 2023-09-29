@@ -1,6 +1,6 @@
 package com.programmers.app.book.service;
 
-import java.util.Map;
+import java.util.List;
 
 import com.programmers.app.book.domain.Book;
 import com.programmers.app.book.request.RequestBook;
@@ -9,9 +9,9 @@ public interface BookService {
 
     void register(RequestBook requestBook);
 
-    Map<Integer, Book> findAllBooks();
+    List<Book> findAllBooks();
 
-    Book findByTitle(String title);
+    List<Book> findByTitle(String title);
 
     void borrowBook(long bookNumber);
 

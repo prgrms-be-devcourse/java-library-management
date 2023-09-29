@@ -1,6 +1,7 @@
 package com.programmers.app.book.repository;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 import com.programmers.app.book.domain.Book;
 
@@ -10,11 +11,11 @@ public interface BookRepository {
 
     long getLastBookNumber();
 
-    Map<Integer, Book> findAllBooks();
+    Optional<List<Book>> findAllBooks();
 
-    Book findByTitle(String title);
+    Optional<List<Book>> findByTitle(String title);
 
-    Book findByBookNumber(long bookNumber);
+    Optional<Book> findByBookNumber(long bookNumber);
 
     void save(Book book);
 
