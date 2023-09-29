@@ -1,17 +1,39 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public class Book {
 
-    private Long bookNo;
-    private String title;
-    private String author;
-    private int pageNum;
+    private final Long bookNo;
+    private final String title;
+    private final String author;
+    private final int pageNum;
     private Status status;
+    public Long getBookNo() {
+        return bookNo;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Book(Long bookNo, String title, String author, int pageNum, Status status) {
+        this.bookNo = bookNo;
+        this.title = title;
+        this.author = author;
+        this.pageNum = pageNum;
+        this.status = status;
+    }
 
     @Override
     public String toString() {
