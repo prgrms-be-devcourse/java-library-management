@@ -9,7 +9,11 @@ java {
     sourceCompatibility = '17'
 }
 
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
 
 repositories {
     mavenCentral()
