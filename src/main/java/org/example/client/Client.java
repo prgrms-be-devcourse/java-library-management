@@ -2,6 +2,7 @@ package org.example.client;
 
 import org.example.client.console.MethodConsole;
 import org.example.client.console.ModeConsole;
+import org.example.client.console.ValidateException;
 import org.example.client.io.IO;
 import org.example.packet.Request;
 

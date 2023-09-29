@@ -1,7 +1,5 @@
 package org.example.client.console;
 
-import org.example.client.ValidateException;
-import org.example.client.Validator;
 import org.example.client.io.IO;
 import org.example.packet.Request;
 import org.example.packet.RequestData;

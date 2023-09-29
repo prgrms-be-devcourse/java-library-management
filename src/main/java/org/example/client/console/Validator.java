@@ -1,4 +1,4 @@
-package org.example.client;
+package org.example.client.console;
 
 import org.example.packet.RequestData;
 

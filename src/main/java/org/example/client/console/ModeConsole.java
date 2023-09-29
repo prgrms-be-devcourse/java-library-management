@@ -1,6 +1,5 @@
 package org.example.client.console;
 
-import org.example.client.Validator;
 import org.example.client.io.IO;
 
 import java.util.Map;
