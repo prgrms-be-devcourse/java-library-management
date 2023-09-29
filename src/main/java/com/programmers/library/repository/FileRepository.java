@@ -9,7 +9,7 @@ import java.util.Optional;
 import com.programmers.library.entity.Book;
 import com.programmers.library.util.FileUtils;
 
-public class FileRepository implements Repository{
+public class FileRepository implements Repository {
 
 	private final Map<Long, Book> bookMap;
 	private final FileUtils<Book> fileUtils;
@@ -25,7 +25,7 @@ public class FileRepository implements Repository{
 
 	@Override
 	public Book save(Book entity) {
-		if(entity.getId() == null) {
+		if (entity.getId() == null) {
 			entity.setId(++sequence);
 		}
 		bookMap.put(entity.getId(), entity);
