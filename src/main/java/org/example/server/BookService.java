@@ -2,13 +2,9 @@ package org.example.server;
 
 import org.example.server.entity.Book;
 import org.example.server.entity.BookState;
-import org.example.server.exception.BookBorrowedException;
-import org.example.server.exception.BookCanBorrowException;
-import org.example.server.exception.BookLoadingException;
-import org.example.server.exception.BookLostException;
 import org.example.server.repository.BookRepository;
 
-import static org.example.server.entity.BookState.LOADING;
+import static org.example.server.entity.BookState.*;
 
 public class BookService {
     private static BookRepository repository;
@@ -32,36 +28,29 @@ public class BookService {
 
     public static void borrow(int bookId) {
         Book book = repository.getById(bookId);
-        switch (book.state) {
-            case BORROWED -> throw new BookBorrowedException();
-            case LOADING -> throw new BookLoadingException();
-            case LOST -> throw new BookLostException();
-        }
+        if (book.state.equals(BORROWED) || book.state.equals(LOADING) || book.state.equals(LOST))
+            throw book.state.throwStatusException();
         book.state = BookState.BORROWED;
     }
 
     public static void restore(int bookId) {
         Book book = repository.getById(bookId);
-        switch (book.state) {
-            case CAN_BORROW -> throw new BookCanBorrowException();
-            case LOADING -> throw new BookLoadingException();
-        }
+        if (book.state.equals(CAN_BORROW) || book.state.equals(LOADING))
+            throw book.state.throwStatusException();
         book.state = BookState.CAN_BORROW; // 5분 설정 필요
     }
 
     public static void lost(int bookId) {
         Book book = repository.getById(bookId);
-        switch (book.state) {
-            case LOADING -> throw new BookLoadingException();
-            case LOST -> throw new BookLostException();
-        }
+        if (book.state.equals(LOADING) || book.state.equals(LOST))
+            throw book.state.throwStatusException();
         book.state = BookState.LOST;
     }
 
     public static void delete(int bookId) {
         Book book = repository.getById(bookId);
-        if (book.state == LOADING)
-            throw new BookLoadingException();
+        if (book.state.equals(LOADING))
+            throw book.state.throwStatusException();
         repository.delete(bookId);
     }
 }
