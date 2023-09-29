@@ -28,7 +28,7 @@ public class Configuration {
                 bookRepository = new FileStorageAdaptor(fileStorage());
                 break;
             case TEST:
-                bookRepository = new BookMemoryRepository(fileStorage());
+                bookRepository = new BookMemoryRepository();
                 break;
         }
         return bookRepository;

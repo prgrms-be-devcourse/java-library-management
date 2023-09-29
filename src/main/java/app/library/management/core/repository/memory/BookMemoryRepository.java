@@ -10,14 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
-
-    private final FileStorage fileStorage;
     private static List<Book> bookArrayList = new ArrayList<>();
     private static long nextId = 0L;
-
-    public BookMemoryRepository(FileStorage fileStorage) {
-        this.fileStorage = fileStorage;
-    }
 
     @Override
     public Book save(Book book) {
