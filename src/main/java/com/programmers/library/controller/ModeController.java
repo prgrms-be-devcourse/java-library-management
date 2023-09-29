@@ -16,10 +16,17 @@ import com.programmers.library.service.LibraryManagerServiceImpl;
 
 public class ModeController implements Runnable {
 
+	private final Input input;
+	private final Output output;
+	private final static String FILE_PATH = "src/main/resources/data.json";
+
+	public ModeController(Input input, Output output) {
+		this.input = input;
+		this.output = output;
+	}
+
 	@Override
 	public void run() {
-		Input input = new ConsoleInput();
-		Output output = new ConsoleOutput();
 		while(true) {
 			try {
 				Mode mode = input.inputMode();
@@ -36,7 +43,7 @@ public class ModeController implements Runnable {
 		switch (mode) {
 			case NORMAL_MODE:
 				output.printSystemMessage(START_NORMAL_MODE);
-				return new FileRepository();
+				return new FileRepository(FILE_PATH);
 			case TEST_MODE:
 				output.printSystemMessage(START_TEST_MODE);
 				return new MemoryRepository();

@@ -14,22 +14,23 @@ import com.programmers.library.exception.FileNotExistException;
 import com.programmers.library.exception.FileReadException;
 
 public class FileUtils<T> {
-	private static final String FILE_PATH = "src/main/resources/data.json";
 	private final ObjectMapper objectMapper;
+	private final String filePath;
 
-	public FileUtils() {
+	public FileUtils(String filePath) {
+		this.filePath = filePath;
 		objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 	}
 
 	public <T> List<T> readFile(Class<T> clazz) {
-		if (!Files.exists(Paths.get(FILE_PATH))) {
+		if (!Files.exists(Paths.get(filePath))) {
 			throw new FileNotExistException();
 		}
 
 		List<T> list;
 		try {
-			list = objectMapper.readValue(new File(FILE_PATH),
+			list = objectMapper.readValue(new File(filePath),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
 		} catch (IOException e) {
 			throw new FileReadException();
@@ -38,12 +39,12 @@ public class FileUtils<T> {
 	}
 
 	public void writeFile(List<T> list) {
-		if (!Files.exists(Paths.get(FILE_PATH))) {
+		if (!Files.exists(Paths.get(filePath))) {
 			throw new FileNotExistException();
 		}
 
 		try {
-			objectMapper.writeValue(new File(FILE_PATH), list);
+			objectMapper.writeValue(new File(filePath), list);
 		} catch (IOException e) {
 			throw new FileReadException();
 		}

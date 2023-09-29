@@ -15,8 +15,8 @@ public class FileRepository implements Repository {
 	private final FileUtils<Book> fileUtils;
 	private Long sequence;
 
-	public FileRepository() {
-		fileUtils = new FileUtils<>();
+	public FileRepository(String filePath) {
+		fileUtils = new FileUtils<>(filePath);
 		bookMap = new LinkedHashMap<>();
 		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
