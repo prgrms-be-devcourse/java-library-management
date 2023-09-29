@@ -107,7 +107,7 @@ public class MethodConsole {
     public static RequestData scanAndSetBookId(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.id = Validator.validateIdAndPages(io.scanLineToInt()); // 숫자 & 범위 확인
+        requestData.id = Validator.validateId(io.scanLineToInt()); // 숫자 & 범위 확인
         return requestData;
     }
 }

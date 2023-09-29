@@ -9,7 +9,7 @@ public class Validator {
         requestData.name = validateNameAndAuthor(input[0]);
         requestData.author = validateNameAndAuthor(input[1]);
 //        if (input[2]) // 숫자인지 확인
-        requestData.pages = validateIdAndPages(Integer.parseInt(input[2]));
+        requestData.pages = validatePages(Integer.parseInt(input[2]));
         return requestData;
     }
 
@@ -19,7 +19,14 @@ public class Validator {
         return input;
     }
 
-    public static int validateIdAndPages(int input) {
+    public static int validateId(int input) {
+        if (input < 0 || 4999 < input) {
+            throw new RuntimeException();
+        }
+        return input;
+    }
+
+    public static int validatePages(int input) {
         if (input < 1 || 4999 < input) {
             throw new RuntimeException();
         }
