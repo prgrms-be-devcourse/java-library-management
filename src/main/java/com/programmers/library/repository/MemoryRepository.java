@@ -35,7 +35,7 @@ public class MemoryRepository implements Repository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return bookMap.values().stream().filter(book -> book.getId().equals(id)).findFirst();
+		return Optional.ofNullable(bookMap.get(id));
 	}
 
 	@Override
