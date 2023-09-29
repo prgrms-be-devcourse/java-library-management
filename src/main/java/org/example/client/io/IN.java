@@ -7,10 +7,10 @@ public interface IN {
     Scanner scanner = new Scanner(System.in);
 
     default String scanLine() {
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     default int scanLineToInt() {
-        return Integer.parseInt((scanner.nextLine()));
+        return Integer.parseInt((scanner.nextLine().trim()));
     }
 }
