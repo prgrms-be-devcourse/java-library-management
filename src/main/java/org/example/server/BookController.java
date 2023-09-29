@@ -10,7 +10,7 @@ public enum BookController {
         return "\n[System] 도서 등록이 완료되었습니다.\n";
     }),
     READ_ALL(data -> {
-        return BookService.readAll() + "[System] 도서 목록 끝\n";
+        return BookService.readAll() + "\n[System] 도서 목록 끝\n";
     }),
     SEARCH_BY_NAME(data -> {
         return BookService.searchByName(data.name) + "\n[System] 검색된 도서 끝\n";

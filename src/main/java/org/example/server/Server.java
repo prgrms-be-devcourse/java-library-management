@@ -32,7 +32,6 @@ public class Server {
         BookService.setRepository(ServerMode.valueOf(mode).getRepository());
     } // 레포지토리 모드에 따라 세팅
 
-
     public static String requestMethod(Request request) {
         try {
             return BookController.valueOf(request.method).mapping(request.requestData); // 예외 처리?
