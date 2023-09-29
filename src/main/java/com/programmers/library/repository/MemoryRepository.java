@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.programmers.library.entity.Book;
 
-public class MemoryRepository implements Repository{
+public class MemoryRepository implements Repository {
 	private final Map<Long, Book> bookMap;
 	private Long sequence;
 
@@ -19,7 +19,7 @@ public class MemoryRepository implements Repository{
 
 	@Override
 	public Book save(Book book) {
-		if(book.getId() == null) {
+		if (book.getId() == null) {
 			book.setId(++sequence);
 		}
 		bookMap.put(book.getId(), book);
@@ -29,7 +29,7 @@ public class MemoryRepository implements Repository{
 	@Override
 	public List<Book> findAll() {
 		List<Book> list = new ArrayList<>();
-		bookMap.forEach((key,value) -> list.add(value));
+		bookMap.forEach((key, value) -> list.add(value));
 		return list;
 	}
 

@@ -23,6 +23,7 @@ public final class MessageConstants {
 	public static final String INVALID_ID = "도서번호는 숫자만 입력 가능합니다.";
 	public static final String START_NORMAL_MODE = "일반 모드로 애플리케이션을 실행합니다.";
 	public static final String START_TEST_MODE = "테스트 모드로 애플리케이션을 실행합니다.";
+
 	private MessageConstants() {
 	}
 

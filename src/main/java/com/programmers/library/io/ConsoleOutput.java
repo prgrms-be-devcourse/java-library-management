@@ -1,10 +1,6 @@
 package com.programmers.library.io;
 
-import java.util.List;
-
-import com.programmers.library.entity.Book;
-
-public class ConsoleOutput implements Output{
+public class ConsoleOutput implements Output {
 
 	@Override
 	public void printSystemMessage(String message) {

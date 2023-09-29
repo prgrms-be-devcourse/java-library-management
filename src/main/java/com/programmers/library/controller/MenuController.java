@@ -5,10 +5,10 @@ import static com.programmers.library.constants.MessageConstants.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.programmers.library.enums.Menu;
 import com.programmers.library.exception.InvalidMenuException;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
-import com.programmers.library.enums.Menu;
 import com.programmers.library.service.LibarayManagerService;
 
 public class MenuController implements Runnable {

@@ -7,7 +7,9 @@ import com.programmers.library.entity.Book;
 
 public interface Repository {
 	Book save(Book entity);
+
 	List<Book> findAll();
+
 	Optional<Book> findById(Long id);
 
 	List<Book> findByTitleLike(String title);
