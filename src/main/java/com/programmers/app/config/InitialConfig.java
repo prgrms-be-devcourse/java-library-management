@@ -1,18 +1,16 @@
-package com.programmers.app.instances;
+package com.programmers.app.config;
 
 import com.programmers.app.console.CommunicationAgent;
-import com.programmers.app.console.CommunicationAgentImpl;
 import com.programmers.app.console.ConsoleReader;
 import com.programmers.app.mode.ModeSelector;
-import com.programmers.app.mode.ModeSelectorImpl;
 
-public class GeneralInstances {
+public class InitialConfig {
     private final ModeSelector modeSelector;
     private final CommunicationAgent communicationAgent;
 
-    public GeneralInstances() {
-        communicationAgent = new CommunicationAgentImpl(new ConsoleReader());
-        modeSelector = new ModeSelectorImpl(communicationAgent);
+    public InitialConfig() {
+        communicationAgent = new CommunicationAgent(new ConsoleReader());
+        modeSelector = new ModeSelector(communicationAgent);
     }
 
     public CommunicationAgent getCommunicationAgent() {

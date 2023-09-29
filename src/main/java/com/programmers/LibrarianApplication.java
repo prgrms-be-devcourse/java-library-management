@@ -1,13 +1,13 @@
 package com.programmers;
 
 import com.programmers.app.App;
-import com.programmers.app.instances.GeneralInstances;
+import com.programmers.app.config.InitialConfig;
 
 public class LibrarianApplication {
     public static void main(String[] args) {
 
-        GeneralInstances generalInstances = new GeneralInstances();
-        App app = new App(generalInstances);
+        InitialConfig initialConfig = new InitialConfig();
+        App app = new App(initialConfig);
 
         app.run();
     }
