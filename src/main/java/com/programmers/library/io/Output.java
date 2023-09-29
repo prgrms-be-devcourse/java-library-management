@@ -5,5 +5,4 @@ public interface Output {
 
 	void printWithLineBreak(String message);
 
-	void printWithoutLineBreak(String message);
 }

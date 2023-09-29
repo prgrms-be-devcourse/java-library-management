@@ -85,7 +85,10 @@ public class MenuController implements Runnable {
 
 		T result = serviceAction.get();
 		if (result instanceof List<?> resultList) {
-			resultList.forEach(item -> output.printWithLineBreak(item.toString()));
+			resultList.forEach(item -> {
+				output.printWithLineBreak(item.toString());
+				output.printWithLineBreak("------------------------------");
+			});
 		} else {
 			output.printSystemMessage(result.toString());
 		}

@@ -44,7 +44,11 @@ public class Book {
 	@Override
 	public String toString() {
 		return String.format(
-			"\n도서번호 : %d\n제목 : %s\n작가 이름 : %s\n페이지 수 : %d 페이지\n상태 : %s\n\n------------------------------\n",
+			"%n도서번호 : %d%n" +
+				"제목 : %s%n" +
+				"작가 이름 : %s%n" +
+				"페이지 수 : %d 페이지%n" +
+				"상태 : %s%n",
 			id, title, author, pages, status.getValue());
 	}
 
