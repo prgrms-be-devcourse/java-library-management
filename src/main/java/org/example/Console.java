@@ -8,7 +8,10 @@ public enum Console {
 
     START {
         @Override
-        public void consolePrint() {
+        public String[] getConsolePrint() throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String[] ar = new String[3];
+
             System.out.println("0. 사용할 기능을 선택해 주세요.");
             System.out.println("1. 도서 등록");
             System.out.println("2. 전체 도서 목록 조회");
@@ -19,16 +22,12 @@ public enum Console {
             System.out.println("7. 도서 삭제");
 
             System.out.print("\n> ");
-        }
+            ar[0] = br.readLine();
 
-        @Override
-        public String[] getConsolePrint() { return null; }
+            return ar;
+        }
     },
     CREATE_BOOK {
-        @Override
-        public void consolePrint() throws IOException {
-        }
-
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -55,22 +54,14 @@ public enum Console {
         }
     },
     GET_ALL_BOOKS {
-        void consolePrint() throws IOException {
-            System.out.println("[System] 전체 도서 목록입니다.\n");
-        }
-
         @Override
         String[] getConsolePrint() throws IOException {
+            System.out.println("[System] 전체 도서 목록입니다.\n");
             return new String[0];
         }
 
     },
     GET_BY_TITLE {
-        @Override
-        void consolePrint() throws IOException {
-
-        }
-
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -87,11 +78,6 @@ public enum Console {
     },
     RENT_BOOK {
         @Override
-        void consolePrint() throws IOException {
-
-        }
-
-        @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String[] word = new String[3];
@@ -106,11 +92,6 @@ public enum Console {
         }
     },
     RETURN_BOOK {
-        @Override
-        void consolePrint() throws IOException {
-
-        }
-
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -127,11 +108,6 @@ public enum Console {
     },
     LOST_BOOK {
         @Override
-        void consolePrint() throws IOException {
-
-        }
-
-        @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String[] word = new String[3];
@@ -146,11 +122,6 @@ public enum Console {
         }
     },
     DELETE_BOOK {
-        @Override
-        void consolePrint() throws IOException {
-
-        }
-
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -187,8 +158,6 @@ public enum Console {
         }
     }
 
-
-    abstract void consolePrint() throws IOException;
     abstract String[] getConsolePrint() throws IOException;
 
 }

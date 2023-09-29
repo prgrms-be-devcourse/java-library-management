@@ -35,12 +35,9 @@ public class Mode {
         if(i==1) bookService.updateBooks(fileService.readFile());
 
         while(true) {
-            Console.START.consolePrint();
+            int fun; String[] id; List<Book> bookList;
 
-            int fun, bookId;
-            String[] id;
-            List<Book> bookList;
-            fun = Integer.parseInt(br.readLine());
+            fun = Integer.parseInt(START.getConsolePrint()[0]);
             Console console = Console.getByNumber(fun);
             switch (console) {
                 case CREATE_BOOK:
@@ -48,7 +45,7 @@ public class Mode {
                     bookService.createBook(ar[0], ar[1], Integer.parseInt(ar[2]));
                     break;
                 case GET_ALL_BOOKS:
-                    GET_ALL_BOOKS.consolePrint();
+                    GET_ALL_BOOKS.getConsolePrint();
                     bookList = bookService.getAllBooks();
                     bookService.printAllBooks(bookList);
                     break;
