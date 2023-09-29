@@ -15,4 +15,8 @@ public enum BookState {
     public String label() {
         return label;
     }
+
+    public boolean isReturnable() {
+        return this == LOAN || this == LOST;
+    }
 }

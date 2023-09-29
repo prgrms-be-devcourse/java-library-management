@@ -74,8 +74,10 @@ public class ListBookManager implements BookManager {
                 .findFirst()
                 .orElseThrow();
 
-        if (target.getState() != LOAN) {
-            return "%s (%s)".formatted(FAIL_RETURN_BOOK.msg(), target.getState().label());
+        BookState state = target.getState();
+
+        if (!state.isReturnable()) {
+            return FAIL_RETURN_BOOK.msg();
         }
 
         target.setState(AVAILABLE);
