@@ -1,11 +1,11 @@
-package com.programmers.library.model.request;
+package com.programmers.library.dto;
 
 import static com.programmers.library.constants.MessageConstants.*;
 
-public class BorrowBookRequest {
+public class DeleteBookRequest {
 	private long id;
 
-	public BorrowBookRequest(String id) {
+	public DeleteBookRequest(String id) {
 		try {
 			this.id = Long.parseLong(id);
 		} catch (NumberFormatException e) {

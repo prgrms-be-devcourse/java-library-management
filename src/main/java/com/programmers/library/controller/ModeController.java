@@ -3,11 +3,9 @@ package com.programmers.library.controller;
 import static com.programmers.library.constants.MessageConstants.*;
 
 import com.programmers.library.exception.InvalidModeException;
-import com.programmers.library.io.ConsoleInput;
-import com.programmers.library.io.ConsoleOutput;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
-import com.programmers.library.model.Mode;
+import com.programmers.library.enums.Mode;
 import com.programmers.library.repository.FileRepository;
 import com.programmers.library.repository.MemoryRepository;
 import com.programmers.library.repository.Repository;

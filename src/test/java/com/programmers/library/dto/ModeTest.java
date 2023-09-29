@@ -1,9 +1,11 @@
-package com.programmers.library.model;
+package com.programmers.library.dto;
 
 import org.junit.jupiter.api.Test;
 
 import static com.programmers.library.constants.MessageConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.programmers.library.enums.Mode;
 
 public class ModeTest {
 

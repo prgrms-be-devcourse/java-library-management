@@ -1,9 +1,11 @@
-package com.programmers.library.model.request;
+package com.programmers.library.dto;
 
 import static com.programmers.library.constants.MessageConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import com.programmers.library.dto.FindBookRequest;
 
 class FindBookRequestTest {
 

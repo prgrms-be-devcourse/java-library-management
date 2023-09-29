@@ -1,4 +1,4 @@
-package com.programmers.library.model;
+package com.programmers.library.enums;
 
 import static com.programmers.library.constants.MessageConstants.*;
 

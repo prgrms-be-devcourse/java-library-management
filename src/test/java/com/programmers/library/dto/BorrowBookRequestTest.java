@@ -1,8 +1,10 @@
-package com.programmers.library.model.request;
+package com.programmers.library.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import com.programmers.library.dto.BorrowBookRequest;
 
 class BorrowBookRequestTest {
 

@@ -19,12 +19,12 @@ import com.programmers.library.exception.BookAlreadyBorrowedException;
 import com.programmers.library.exception.BookLostException;
 import com.programmers.library.exception.BookNotFoundException;
 import com.programmers.library.exception.BookUnderOrganizingException;
-import com.programmers.library.model.request.AddBookRequest;
-import com.programmers.library.model.request.BorrowBookRequest;
-import com.programmers.library.model.request.DeleteBookRequest;
-import com.programmers.library.model.request.FindBookRequest;
-import com.programmers.library.model.request.LostBookRequest;
-import com.programmers.library.model.request.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequest;
+import com.programmers.library.dto.BorrowBookRequest;
+import com.programmers.library.dto.DeleteBookRequest;
+import com.programmers.library.dto.FindBookRequest;
+import com.programmers.library.dto.LostBookRequest;
+import com.programmers.library.dto.ReturnBookRequest;
 import com.programmers.library.repository.Repository;
 
 class LibraryManagerServiceImplTest {

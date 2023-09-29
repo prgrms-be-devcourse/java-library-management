@@ -1,4 +1,4 @@
-package com.programmers.library.model.request;
+package com.programmers.library.dto;
 
 import static com.programmers.library.constants.MessageConstants.*;
 
