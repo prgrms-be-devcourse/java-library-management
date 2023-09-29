@@ -11,5 +11,7 @@ public interface BookManager {
 
     String lossById(int id);
 
+    String returnById(int id);
+
     String deleteById(int id);
 }

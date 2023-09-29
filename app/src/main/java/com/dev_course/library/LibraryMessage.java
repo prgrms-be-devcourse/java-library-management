@@ -25,6 +25,7 @@ public enum LibraryMessage {
     FIND_BOOK_BY_TITLE("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n"),
     END_FIND_BOOK_BY_TITLE("[System] 검색된 도서 끝\n"),
     RENT_BOOK_BY_ID("[System] 도서 대여 메뉴로 넘어갑니다.\n"),
+    RETURN_BOOK_BY_ID("[System] 도서 반납 메뉴로 넘어갑니다.\n"),
     LOSS_BOOK_BY_ID("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n"),
     DELETE_BOOK("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),
     READ_CREATE_BOOK_TITLE("Q. 등록할 도서 제목을 입력하세요."),
@@ -32,6 +33,7 @@ public enum LibraryMessage {
     READ_CREATE_BOOK_PAGES("Q. 페이지 수를 입력하세요."),
     READ_FIND_BY_TITLE("Q. 검색할 도서 제목 일부를 입력하세요."),
     READ_RENT_BOOK_BY_ID("Q. 대여할 도서번호를 입력하세요."),
+    READ_RETURN_BOOK_BY_ID("Q. 반납할 도서번호를 입력하세요."),
     READ_LOSS_BOOK_BY_ID("Q. 분실 처리할 도서번호를 입력하세요."),
     READ_DELETE_BOOK_ID("Q. 삭제 처리할 도서번호를 입력하세요");
 

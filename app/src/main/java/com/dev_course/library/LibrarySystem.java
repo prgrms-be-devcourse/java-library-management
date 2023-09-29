@@ -45,6 +45,7 @@ public class LibrarySystem {
             case "2" -> listBooks();
             case "3" -> findBookByTitle();
             case "4" -> rentBookById();
+            case "5" -> returnBookById();
             case "6" -> lossBookById();
             case "7" -> deleteBookById();
             default -> writer.println(INVALID_FUNCTION.msg());
@@ -99,6 +100,20 @@ public class LibrarySystem {
             int id = writeAndReadInt(READ_RENT_BOOK_BY_ID.msg());
 
             writer.append(bookManager.rentById(id));
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
+        writer.flush();
+    }
+
+    private void returnBookById() {
+        writer.println(RETURN_BOOK_BY_ID.msg());
+
+        try {
+            int id = writeAndReadInt(READ_RETURN_BOOK_BY_ID.msg());
+
+            writer.append(bookManager.returnById(id));
         } catch (NumberFormatException e) {
             writer.append(INVALID_INPUT.msg());
         }

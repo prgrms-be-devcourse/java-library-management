@@ -69,6 +69,11 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
+    public String returnById(int id) {
+        return null;
+    }
+
+    @Override
     public String deleteById(int id) {
         if (hasNotId(id)) {
             return NOT_EXIST_ID.msg();
