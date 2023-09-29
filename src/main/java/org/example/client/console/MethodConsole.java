@@ -1,5 +1,6 @@
 package org.example.client.console;
 
+import org.example.client.ValidateException;
 import org.example.client.Validator;
 import org.example.client.io.IO;
 import org.example.packet.Request;
@@ -76,7 +77,12 @@ public class MethodConsole {
 
     public static Request scanTypeAndInfo(IO io) {
         Request request = setClientMethod(io);
-        request.requestData = clientMethod.scanInfo(io);
+        try {
+            request.requestData = clientMethod.scanInfo(io);
+        } catch (ValidateException e) {
+            io.print(e.getMessage());
+            request.requestData = clientMethod.scanInfo(io);
+        } // 메뉴 선택 후 각 메뉴에서 받는 입력 정보가 유효하지 않은 경우 예외 발생
         return request;
     }
 
@@ -86,8 +92,9 @@ public class MethodConsole {
         clientMethod = ClientMethod.valueOfNumber(selectNum);
         io.print(clientMethod.alert);
         return new Request(clientMethod.name());
-    }
+    } // 메뉴 리스트를 띄우고, 메뉴 번호를 입력받는 기능
 
+    /* ----------------- ↓ 메뉴에 맞는 정보 입력 받는 메서드 ↓ ---------------------------------- */
     public static RequestData scanAndSetBookInfo(IO io) {
         RequestData requestData = new RequestData();
         String[] bookInfo = clientMethod.getQuestions().stream().map(question -> {
@@ -100,7 +107,7 @@ public class MethodConsole {
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.name = Validator.validateNameAndAuthor(io.scanLine()); // 특수 문자 확인?
+        requestData.name = Validator.validateName(io.scanLine()); // 특수 문자 확인?
         return requestData;
     }
 
