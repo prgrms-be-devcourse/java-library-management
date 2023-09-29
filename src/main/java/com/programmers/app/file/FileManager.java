@@ -1,8 +1,10 @@
 package com.programmers.app.file;
 
-public interface FileManager {
+import java.io.IOException;
 
-    void read();
+public interface FileManager<T, C> {
 
-    void write();
+    T loadDataFromFile() throws IOException;
+
+    void save(C c);
 }
