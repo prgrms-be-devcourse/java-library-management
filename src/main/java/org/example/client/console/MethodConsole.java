@@ -1,5 +1,6 @@
 package org.example.client.console;
 
+import org.example.client.Validator;
 import org.example.client.io.IO;
 import org.example.packet.Request;
 import org.example.packet.RequestData;
@@ -81,7 +82,8 @@ public class MethodConsole {
 
     public static Request setClientMethod(IO io) {
         io.print(ClientMethod.MENU_CONSOLE);
-        clientMethod = ClientMethod.valueOfNumber(io.scanLineToInt());
+        int selectNum = Validator.validateSelectNum(ClientMethod.values().length, io.scanLineToInt());
+        clientMethod = ClientMethod.valueOfNumber(selectNum);
         io.print(clientMethod.alert);
         return new Request(clientMethod.name());
     }
@@ -92,23 +94,20 @@ public class MethodConsole {
             io.print(question);
             return io.scanLine(); // 제목, 저자 100자 이내, 페이지 숫자 & 범위 확인
         }).toArray(String[]::new);
-        requestData.name = bookInfo[0];
-        requestData.author = bookInfo[1];
-        requestData.pages = Integer.parseInt((bookInfo[2]));
-        return requestData;
+        return Validator.validateBook(requestData, bookInfo);
     }
 
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.name = io.scanLine(); // 특수 문자 확인?
+        requestData.name = Validator.validateNameAndAuthor(io.scanLine()); // 특수 문자 확인?
         return requestData;
     }
 
     public static RequestData scanAndSetBookId(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.id = io.scanLineToInt(); // 숫자 & 범위 확인
+        requestData.id = Validator.validateIdAndPages(io.scanLineToInt()); // 숫자 & 범위 확인
         return requestData;
     }
 }
