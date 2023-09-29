@@ -1,6 +1,5 @@
 package com.programmers.library.repository;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,18 +7,18 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.util.FileUtil;
+import com.programmers.library.util.FileUtils;
 
 public class FileRepository implements Repository{
 
 	private final Map<Long, Book> bookMap;
-	private final FileUtil<Book> fileUtil;
+	private final FileUtils<Book> fileUtils;
 	private Long sequence;
 
 	public FileRepository() {
-		fileUtil = new FileUtil<>();
+		fileUtils = new FileUtils<>();
 		bookMap = new LinkedHashMap<>();
-		List<Book> bookList = fileUtil.readFile(Book.class);
+		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		sequence = bookList.stream().mapToLong(Book::getId).max().orElse(0);
 	}
@@ -32,7 +31,7 @@ public class FileRepository implements Repository{
 		bookMap.put(entity.getId(), entity);
 		List<Book> bookList = new ArrayList<>();
 		bookMap.forEach((key, value) -> bookList.add(value));
-		fileUtil.writeFile(bookList);
+		fileUtils.writeFile(bookList);
 		return entity;
 	}
 
@@ -60,7 +59,7 @@ public class FileRepository implements Repository{
 		bookMap.remove(id);
 		List<Book> bookList = new ArrayList<>();
 		bookMap.forEach((key, value) -> bookList.add(value));
-		fileUtil.writeFile(bookList);
+		fileUtils.writeFile(bookList);
 	}
 
 }

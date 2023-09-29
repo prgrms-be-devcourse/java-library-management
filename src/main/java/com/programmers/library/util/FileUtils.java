@@ -1,23 +1,20 @@
 package com.programmers.library.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.programmers.library.entity.Book;
 
-public class FileUtil<T> {
+public class FileUtils<T> {
 	private static final String FILE_PATH = "src/main/resources/data.json";
 	private final ObjectMapper objectMapper;
 
-	public FileUtil() {
+	public FileUtils() {
 		objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 	}
