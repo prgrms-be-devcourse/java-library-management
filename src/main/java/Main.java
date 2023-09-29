@@ -1,34 +1,16 @@
-import library.management.config.Configuration;
-import library.management.controller.BookController;
-import library.management.infra.console.Console;
+import app.library.management.App;
+import app.library.management.infra.console.Console;
+import app.library.management.infra.mode.ExecutionMode;
 
-public class App {
+public class Main {
 
     public static void main(String[] args) {
 
-        Configuration configuration = new Configuration();
-        BookController bookController = configuration.bookController();
-        Console console = configuration.console();
+        Console console = new Console();
+        console.selectMode();
+        ExecutionMode mode = ExecutionMode.fromNum(console.inputInt());
 
-        while(true) {
-            console.selectMenu();
-            int num = console.inputInt();
-
-            if (num == 8) break;
-
-            switch(num) {
-                case 1 : bookController.saveBook(); break;
-                case 2 : bookController.findAll(); break;
-                case 3 : bookController.findByTitle(); break;
-                case 4 : bookController.rentById(); break;
-                case 5 : bookController.returnById(); break;
-                case 6 : bookController.reportLostById(); break;
-                case 7 : bookController.deleteById(); break;
-                default :
-                    System.out.println("유효하지 않은 값입니다.");
-                    break;
-            }
-
-        }
+        App app = new App(mode);
+        app.logic();
     }
 }
