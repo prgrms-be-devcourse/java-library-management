@@ -2,41 +2,50 @@ package com.programmers.app.book.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.programmers.app.book.domain.Book;
 import com.programmers.app.book.domain.BookStatus;
 import com.programmers.app.book.repository.BookRepository;
-import com.programmers.app.book.request.RequestBook;
+import com.programmers.app.book.dto.BookRequest;
 import com.programmers.app.exception.ActionNotAllowedException;
 import com.programmers.app.exception.BookNotFoundException;
 import com.programmers.app.timer.Timer;
 import com.programmers.app.timer.TimerManger;
 
-public class TestBookService implements BookService {
+public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final TimerManger timerManger;
 
-    public TestBookService(BookRepository bookRepository, TimerManger timerManger) {
+    public BookServiceImpl(BookRepository bookRepository, TimerManger timerManger) {
         this.bookRepository = bookRepository;
         this.timerManger = timerManger;
     }
 
     @Override
-    public void register(RequestBook requestBook) {
+    public void register(BookRequest bookRequest) {
         long newBookNumber = bookRepository.getLastBookNumber() + 1L;
-        bookRepository.add(requestBook.toBook(newBookNumber));
+        bookRepository.add(bookRequest.toBook(newBookNumber));
+
+        bookRepository.save();
     }
 
     @Override
     public List<Book> findAllBooks() {
-        updateArrangementCompleted();
+        if (updateArrangementCompleted()) {
+            timerManger.save();
+        }
+
         return bookRepository.findAllBooks()
                 .orElseThrow(BookNotFoundException::new);
     }
 
     @Override
     public List<Book> findByTitle(String title) {
-        updateArrangementCompleted();
+        if (updateArrangementCompleted()) {
+            timerManger.save();
+        }
+
         return bookRepository.findByTitle(title)
                 .orElseThrow(BookNotFoundException::new);
     }
@@ -59,6 +68,7 @@ public class TestBookService implements BookService {
         }
 
         book.setStatus(BookStatus.ON_LOAN);
+        bookRepository.save();
     }
 
     @Override
@@ -66,19 +76,26 @@ public class TestBookService implements BookService {
         Book book = bookRepository.findByBookNumber(bookNumber)
                 .orElseThrow(BookNotFoundException::new);
 
-        if (book.getStatus().equals(BookStatus.AVAILABLE) || book.getStatus().equals(BookStatus.ON_ARRANGEMENT)) {
+        if (book.getStatus().equals(BookStatus.IN_PLACE) || book.getStatus().equals(BookStatus.ON_ARRANGEMENT)) {
             throw new ActionNotAllowedException("[System] 이미 반납된 도서입니다.");
         }
 
         book.setStatus(BookStatus.ON_ARRANGEMENT);
         timerManger.add(new Timer(bookNumber, LocalDateTime.now()));
+
+        bookRepository.save();
+        timerManger.save();
     }
 
     @Override
     public void deleteBook(long bookNumber) {
         bookRepository.delete(bookRepository.findByBookNumber(bookNumber)
                         .orElseThrow(BookNotFoundException::new));
-        timerManger.remove(bookNumber);
+
+        bookRepository.save();
+        if (timerManger.remove(bookNumber)) {
+            timerManger.save();
+        }
     }
 
     @Override
@@ -91,15 +108,27 @@ public class TestBookService implements BookService {
         }
 
         book.setStatus(BookStatus.LOST);
-        timerManger.remove(bookNumber);
+
+        bookRepository.save();
+        if (timerManger.remove(bookNumber)) {
+            timerManger.save();
+        }
     }
 
+    //todo: if timer exists, but not book?
     @Override
-    public void updateArrangementCompleted() {
+    public boolean updateArrangementCompleted() {
+        AtomicBoolean changed = new AtomicBoolean(false);
+
         timerManger.popArrangedBooks(LocalDateTime.now())
                 .stream()
-                .map(n -> bookRepository.findByBookNumber(n)
+                .map(bookNumber -> bookRepository.findByBookNumber(bookNumber)
                         .orElseThrow(BookNotFoundException::new)) //todo: proper exception to be raised
-                .forEach(b -> b.setStatus(BookStatus.AVAILABLE));
+                .forEach(book -> {
+                    book.setStatus(BookStatus.IN_PLACE);
+                    changed.set(true);
+                });
+
+        return changed.get();
     }
 }

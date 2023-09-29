@@ -9,5 +9,7 @@ public interface TimerManger {
 
     List<Long> popArrangedBooks(LocalDateTime now);
 
-    void remove(long bookNumber);
+    boolean remove(long bookNumber);
+
+    default void save() {}
 }
