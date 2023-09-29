@@ -112,11 +112,11 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return getBookNumber() == book.getBookNumber();
+        return getBookNumber() == book.getBookNumber() && getPageCount() == book.getPageCount() && Objects.equals(getTitle(), book.getTitle()) && Objects.equals(getAuthor(), book.getAuthor());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getBookNumber());
+        return Objects.hash(getBookNumber(), getTitle(), getAuthor(), getPageCount());
     }
 }
