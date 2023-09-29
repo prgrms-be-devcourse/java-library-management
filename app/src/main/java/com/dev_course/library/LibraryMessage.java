@@ -3,8 +3,9 @@ package com.dev_course.library;
 public enum LibraryMessage {
     MOD_SCREEN("""
             Q. 모드를 선택해주세요.
+            0. 테스트 모드
             1. 일반 모드
-            2. 테스트 모드"""),
+            """),
     FUNCTION_SCREEN("""
             Q. 사용할 기능을 선택해주세요.
             0. 프로그램 종료
@@ -14,8 +15,10 @@ public enum LibraryMessage {
             4. 도서 대여
             5. 도서 반납
             6. 도서 분실
-            7. 도서 삭제"""),
+            7. 도서 삭제
+            """),
     EXIT("[System] 프로그램을 종료합니다."),
+    INVALID_MODE("[System] 사용할 수 없는 모드 입니다.\n"),
     INVALID_FUNCTION("[System] 사용할 수 없는 기능 입니다.\n"),
     EMPTY_INPUT("[System] 입력을 읽을 수 없습니다.\n"),
     INVALID_INPUT("[System] 잘못된 입력 입니다.\n"),

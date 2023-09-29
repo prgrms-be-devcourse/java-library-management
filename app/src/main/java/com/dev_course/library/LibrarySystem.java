@@ -1,6 +1,7 @@
 package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
+import com.dev_course.data.DataManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
@@ -9,6 +10,7 @@ import static com.dev_course.library.LibraryMessage.*;
 public class LibrarySystem {
     LibraryReader reader;
     LibraryWriter writer;
+    DataManager dataManager;
     BookManager bookManager;
 
 
@@ -30,6 +32,23 @@ public class LibrarySystem {
         writer.println(MOD_SCREEN.msg());
 
         // TODO : SystemMode 따른 도서관 앱의 로드, 저장 기능 변경
+
+        String input = reader.read();
+
+        switch (input) {
+            case "0" -> init(LibraryMode.TEST);
+            case "1" -> init(LibraryMode.NORMAL);
+            default -> {
+                writer.println(INVALID_MODE.msg());
+                setMode();
+            }
+        }
+    }
+
+    private void init(LibraryMode mode) {
+        dataManager = mode.getDataManager();
+
+        dataManager.load();
     }
 
     private void selectFunction() {
@@ -57,6 +76,8 @@ public class LibrarySystem {
     }
 
     private void exit() {
+        dataManager.save();
+
         writer.println(EXIT.msg());
     }
 
