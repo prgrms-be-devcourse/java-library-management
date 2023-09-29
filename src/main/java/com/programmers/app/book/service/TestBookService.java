@@ -1,7 +1,6 @@
 package com.programmers.app.book.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.programmers.app.book.domain.Book;
 import com.programmers.app.book.domain.BookStatus;
@@ -9,7 +8,6 @@ import com.programmers.app.book.repository.BookRepository;
 import com.programmers.app.book.request.RequestBook;
 import com.programmers.app.exception.ActionNotAllowedException;
 import com.programmers.app.exception.BookNotFoundException;
-import com.programmers.app.validator.Validator;
 
 public class TestBookService implements BookService {
     private final BookRepository bookRepository;
@@ -32,7 +30,8 @@ public class TestBookService implements BookService {
 
     @Override
     public List<Book> findByTitle(String title) {
-        return null;
+        return bookRepository.findByTitle(title)
+                .orElseThrow(BookNotFoundException::new);
     }
 
     @Override

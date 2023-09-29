@@ -39,7 +39,15 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public Optional<List<Book>> findByTitle(String title) {
-        return null;
+        List<Book> foundBooks = books.values()
+                .stream()
+                .filter(b -> b.isMatching(title))
+                .collect(Collectors.toList());
+
+        if (foundBooks.isEmpty()) return Optional.empty();
+
+        foundBooks.sort((b1, b2) -> (int) (b1.getBookNumber() - b2.getBookNumber()));
+        return Optional.of(foundBooks);
     }
 
     @Override

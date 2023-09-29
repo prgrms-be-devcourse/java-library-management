@@ -1,7 +1,6 @@
 package com.programmers.app.book.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import com.programmers.app.book.domain.Book;
 import com.programmers.app.book.service.BookService;
@@ -36,6 +35,12 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void searchBookByTitle() {
+        try {
+            List<Book> books = bookService.findByTitle(communicationAgent.instructFindTitle());
+            books.forEach(b -> communicationAgent.print(b.toString()));
+        } catch (RuntimeException e) {
+            communicationAgent.print(e.getMessage());
+        }
     }
 
     @Override
