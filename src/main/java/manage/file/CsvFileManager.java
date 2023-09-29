@@ -16,13 +16,21 @@ public class CsvFileManager implements FileManager {
     private final String filePath;
 
     public CsvFileManager(String filePath) {
-        this.filePath = getClass().getClassLoader().getResource(filePath).getPath();
+        this.filePath = filePath;
     }
 
     @Override
     public List<Book> read() {
         List<Book> bookList = new ArrayList<>();
         HashSet<Integer> bookNumSet = new HashSet<>();
+
+        File file = new File(filePath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException("파일 확인 중 문제 발생", e);
+        }
+
         try (BufferedReader br =
                      new BufferedReader(
                              new InputStreamReader(
@@ -58,7 +66,10 @@ public class CsvFileManager implements FileManager {
             for(Book book : bookList)
                 writeBook(bw, book);
 
-        }catch (Exception e){
+        }catch (FileNotFoundException e){
+            throw new RuntimeException("파일이 존재하지 않음");
+        }
+        catch (IOException e){
             throw new RuntimeException("파일 쓰기 중 문제 발생");
         }
     }

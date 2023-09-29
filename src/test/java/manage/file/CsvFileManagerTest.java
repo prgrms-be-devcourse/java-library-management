@@ -24,7 +24,7 @@ public class CsvFileManagerTest {
 
     @BeforeEach
     void setUp() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(getClass().getClassLoader().getResource(FILE_PATH).getPath()))){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))){
             File csvFile = new File(getClass().getClassLoader().getResource(FILE_PATH).getPath());
             csvFile.createNewFile();
 
