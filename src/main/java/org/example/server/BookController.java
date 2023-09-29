@@ -11,11 +11,9 @@ public enum BookController {
     }),
     READ_ALL(data -> {
         return BookService.readAll() + "[System] 도서 목록 끝\n";
-//        return "\n[System] 존재하는 도서가 없습니다.\n";
     }),
     SEARCH_BY_NAME(data -> {
         return BookService.searchByName(data.name) + "\n[System] 검색된 도서 끝\n";
-//        return "\n[System] 존재하는 도서가 없습니다.\n";
     }),
     BORROW(data -> {
         /*
@@ -26,9 +24,6 @@ public enum BookController {
          */
         BookService.borrow(data.id);
         return "\n[System] 도서가 대여 처리 되었습니다.\n";
-//        return "\n[System] 해당 도서는 정리중입니다.\n";
-//        return "\n[System] 분실된 도서입니다.\n";
-//        return "\n[System] 존재하지 않는 도서입니다.\n";
     }),
     RESTORE(data -> {
         /*
@@ -37,27 +32,15 @@ public enum BookController {
          * (대여된 후 5분이 지난 도서를 누군가 대여하려고 했을 때 대여 처리가 되어야한다는 겁니다)
          */
         BookService.restore(data.id);
-        return "\n[System] 도서가 반납 처리 되었습니다.\n";
-//        return "\n[System] 원래 대여가 가능한 도서입니다.\n";
-//        return "\n[System] 존재하지 않는 도서입니다.\n";
+        return "\n[System] 도서가 반납 처리 되었습니다.\n"; // 대여중, 분실됨
     }),
-
     LOST(data -> {
-        /*
-         * 도서를 분실 처리하면 도서는 '분실됨' 상태가 되어야합니다.
-         * 만약 분실된 도서를 찾게된 경우 반납 처리를 하면 도서를 찾은 것으로 간주합니다.
-         * 이 경우 도서를 반납하는 것과 동일한 절차가 진행되어야합니다.
-         */
         BookService.lost(data.id);
-        return "\n[System] 도서가 분실 처리 되었습니다.\n";
-//        return "\n[System] [System] 이미 분실 처리된 도서입니다.\n";
-//        return "\n[System] 존재하지 않는 도서입니다.\n";
+        return "\n[System] 도서가 분실 처리 되었습니다.\n"; // 대여 가능, 대여중에만 가능
     }),
     DELETE(data -> {
         BookService.delete(data.id);
-        return "\n[System] 도서가 삭제 처리 되었습니다.\n";
-//        return "\n[System] 존재하지 않는 도서번호 입니다.\n";
-//        return "\n[System] 해당 도서는 정리중입니다.\n";
+        return "\n[System] 도서가 삭제 처리 되었습니다.\n"; // 대여 가능, 대여중, 분실됨
     });
     public final Function<RequestData, String> mappingFunction;
 

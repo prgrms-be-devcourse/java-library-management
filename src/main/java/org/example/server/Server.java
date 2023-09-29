@@ -29,11 +29,15 @@ public class Server {
     }
 
     public static void requestMode(String mode) {
-        BookService.repository = ServerMode.valueOf(mode).getRepository();
+        BookService.setRepository(ServerMode.valueOf(mode).getRepository());
     } // 레포지토리 모드에 따라 세팅
 
 
     public static String requestMethod(Request request) {
-        return BookController.valueOf(request.method).mapping(request.requestData); // 예외 처리?
+        try {
+            return BookController.valueOf(request.method).mapping(request.requestData); // 예외 처리?
+        } catch (RuntimeException e) {
+            return e.getMessage();
+        }
     } // 메뉴에 다른 메서드 매핑 및 호출
 }
