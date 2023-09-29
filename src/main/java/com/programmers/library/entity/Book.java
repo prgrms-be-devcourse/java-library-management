@@ -1,6 +1,7 @@
 package com.programmers.library.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,6 +22,23 @@ public class Book {
 		this.author = author;
 		this.pages = pages;
 		this.status = BookStatus.AVAILABLE;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Book book = (Book)o;
+		return Objects.equals(id, book.id) && Objects.equals(title, book.title)
+			&& Objects.equals(author, book.author) && Objects.equals(pages, book.pages)
+			&& status == book.status && Objects.equals(returnedAt, book.returnedAt);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, title, author, pages, status, returnedAt);
 	}
 
 	@Override
