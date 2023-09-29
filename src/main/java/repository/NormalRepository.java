@@ -1,6 +1,7 @@
 package repository;
 
 import domain.Book;
+import domain.Status;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,11 +14,12 @@ public class NormalRepository{
     private List<Book> bookList= new ArrayList<>();
 
     public NormalRepository() {
-        updateBookList();
+        loadData();
     }
 
     // file -> list
-    private void updateBookList() {
+    private void loadData() {
+        bookList.clear();
         try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
             String line="";
             while ((line = br.readLine())!=null){
@@ -25,7 +27,8 @@ public class NormalRepository{
                 String title = split[1];
                 String author = split[2];
                 Integer page = Integer.valueOf(split[3]);
-                Book book = new Book(title,author,page);
+                Status status = Status.valueOf(split[4]);
+                Book book = new Book(createId(),title,author,page, status);
 
                 bookList.add(book);
             }
@@ -33,11 +36,13 @@ public class NormalRepository{
             throw new RuntimeException();
         }
     }
+
     // list -> file
     private void updateFile(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH,true))){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
             for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+"\n");
+                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
+                bw.newLine();
             }
         } catch(IOException e){
             throw new RuntimeException();
@@ -47,10 +52,10 @@ public class NormalRepository{
     // [1] 도서 등록
     public void register(Book book) {
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH,true))){
-            bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage());
+            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
             bw.newLine();
             bw.flush();
-            updateBookList();
+            bookList.add(book);
         } catch(IOException e){
             throw new RuntimeException();
         }
@@ -95,5 +100,10 @@ public class NormalRepository{
             }
         }
         return Optional.empty();
+    }
+
+    public Long createId(){
+        if (bookList.isEmpty()) return 1L;
+        return bookList.get(bookList.size()-1).getId()+1;
     }
 }

@@ -1,3 +1,5 @@
+package service;
+
 import domain.Book;
 import domain.Status;
 import exception.NotExistBookIdException;
@@ -11,7 +13,7 @@ public class BookService {
 
 
     public void saveBook(String title, String author, Integer page){
-        Book book = new Book(title, author, page);
+        Book book = new Book(normalRepository.createId(), title, author, page, Status.AVAILABLE);
         normalRepository.register(book);
 
     }

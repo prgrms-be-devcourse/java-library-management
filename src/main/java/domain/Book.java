@@ -1,20 +1,18 @@
 package domain;
 
 public class Book {
-    private static Long serialNum = 0L;
     private final Long id;
     private final String title;
     private final String author;
     private final Integer page;
     private Status status;
 
-    public Book(String title, String author, int page) {
-        serialNum++;
-        id = serialNum;
+    public Book(Long id, String title, String author, int page, Status status) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.page = page;
-        this.status = Status.AVAILABLE;
+        this.status = status;
     }
 
     public void printBookInfo() {
