@@ -45,7 +45,12 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void borrowBook() {
-
+        try {
+            bookService.borrowBook(communicationAgent.instructBorrow());
+            communicationAgent.print("[System] 도서가 대여 처리 되었습니다.");
+        } catch (RuntimeException e) {
+            communicationAgent.print(e.getMessage());
+        }
     }
 
     @Override

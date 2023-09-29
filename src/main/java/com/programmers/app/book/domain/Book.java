@@ -27,6 +27,10 @@ public class Book {
         return this.status;
     }
 
+    public void setStatus(BookStatus bookStatus) {
+        this.status = bookStatus;
+    }
+
     @Override
     public String toString() {
         return "도서 번호 : " + bookNumber + "\n" +
