@@ -1,5 +1,7 @@
 package repository;
 
+import domain.BookState;
+import message.ExecuteMessage;
 import thread.TestChangeStateThread;
 
 import java.util.ArrayList;
@@ -37,17 +39,17 @@ public class TestRepository implements Repository {
                 .orElse(null);
 
         if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            System.out.println(ExecuteMessage.NOT_EXIST);
             return;
         }
         switch (selectedBook.getState()) {
-            case "대여중" -> System.out.println("[System] 이미 대여중인 도서입니다.");
-            case "대여 가능" -> {
-                selectedBook.setState("대여중");
-                System.out.println("[System] 도서가 대여 처리 되었습니다.");
+            case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING);
+            case AVAILABLE -> {
+                selectedBook.setState(BookState.RENTING);
+                System.out.println(ExecuteMessage.RENTAL_AVAILABLE);
             }
-            case "도서 정리중" -> System.out.println("[System] 정리 중인 도서입니다.");
-            case "분실됨" -> System.out.println("[System] 분실된 도서입니다.");
+            case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING);
+            case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST);
         }
     }
 
@@ -57,19 +59,19 @@ public class TestRepository implements Repository {
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            System.out.println(ExecuteMessage.NOT_EXIST);
             return;
         }
         TestChangeStateThread thread = new TestChangeStateThread(selectedBook);
 
-        if (selectedBook.getState().equals("대여중") || selectedBook.getState().equals("분실됨")) {
-            selectedBook.setState("도서 정리중");
+        if (selectedBook.getState() == BookState.RENTING || selectedBook.getState() == BookState.LOST) {
+            selectedBook.setState(BookState.ORGANIZING);
             thread.start();
-            System.out.println("[System] 도서가 반납 처리 되었습니다.");
-        } else if(selectedBook.getState().equals("대여 가능")) {
-            System.out.println("[System] 원래 대여가 가능한 도서입니다.");
+            System.out.println(ExecuteMessage.RETURN_COMPLETE);
+        } else if(selectedBook.getState() == BookState.AVAILABLE) {
+            System.out.println(ExecuteMessage.RETURN_AVAILABLE);
         } else {
-            System.out.println("[System] 반납이 불가능한 도서입니다.");
+            System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE);
         }
     }
 
@@ -79,16 +81,16 @@ public class TestRepository implements Repository {
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서 번호입니다.");
+            System.out.println(ExecuteMessage.NOT_EXIST);
             return;
         }
         switch (selectedBook.getState()) {
-            case "대여중" -> {
-                selectedBook.setState("분실됨");
-                System.out.println("[System] 도서가 분실 처리 되었습니다.");
+            case RENTING -> {
+                selectedBook.setState(BookState.LOST);
+                System.out.println(ExecuteMessage.LOST_COMPLETE);
             }
-            case "대여 가능", "도서 정리중" -> System.out.println("[System] 분실 처리가 불가능한 도서입니다.");
-            case "분실됨" -> System.out.println("[System] 이미 분실 처리된 도서입니다.");
+            case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE);
+            case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY);
         }
     }
 
@@ -98,11 +100,11 @@ public class TestRepository implements Repository {
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
-            System.out.println("[System] 존재하지 않는 도서번호 입니다.");
+            System.out.println(ExecuteMessage.NOT_EXIST);
             return;
         } else {
             books.remove(selectedBook);
-            System.out.println("[System] 도서가 삭제 처리 되었습니다.");
+            System.out.println(ExecuteMessage.DELETE_COMPLETE);
         }
     }
 

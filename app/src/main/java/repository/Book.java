@@ -1,16 +1,18 @@
 package repository;
 
+import domain.BookState;
+
 public class Book {
     static int countId;
     int id;
     String title;
     String writer;
     int page;
-    String state;
+    BookState state;
 
     public Book() {
         this.id = countId++;
-        this.state = "대여 가능";
+        this.state = BookState.AVAILABLE;
     }
 
     public int getId() {
@@ -21,11 +23,11 @@ public class Book {
         this.id = id;
     }
 
-    public String getState() {
+    public BookState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(BookState state) {
         this.state = state;
     }
 
