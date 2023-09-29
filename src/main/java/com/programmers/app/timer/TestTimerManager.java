@@ -29,4 +29,9 @@ public class TestTimerManager implements TimerManger {
 
         return arrangedBooks;
     }
+
+    @Override
+    public void remove(long bookNumber) {
+        arrangementTimer.removeIf(t -> t.getBookNumber() == bookNumber);
+    }
 }

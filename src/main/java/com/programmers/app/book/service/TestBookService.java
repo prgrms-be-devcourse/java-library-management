@@ -78,6 +78,7 @@ public class TestBookService implements BookService {
     public void deleteBook(long bookNumber) {
         bookRepository.delete(bookRepository.findByBookNumber(bookNumber)
                         .orElseThrow(BookNotFoundException::new));
+        timerManger.remove(bookNumber);
     }
 
     @Override
@@ -90,6 +91,7 @@ public class TestBookService implements BookService {
         }
 
         book.setStatus(BookStatus.LOST);
+        timerManger.remove(bookNumber);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class TestBookService implements BookService {
         timerManger.popArrangedBooks(LocalDateTime.now())
                 .stream()
                 .map(n -> bookRepository.findByBookNumber(n)
-                        .orElseThrow(BookNotFoundException::new)) // proper exception to be raised
+                        .orElseThrow(BookNotFoundException::new)) //todo: proper exception to be raised
                 .forEach(b -> b.setStatus(BookStatus.AVAILABLE));
     }
 }
