@@ -43,4 +43,22 @@ public class Book {
         return page;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    //책 상태 관련 함수
+    public void borrow(){
+        status = Status.BORROWED;
+    }
+
+    public void doReturn(){
+        //status = Status.CLEANING;
+        status = Status.AVAILABLE;
+    }
+
+    public void report(){
+        status = Status.LOST;
+    }
+
 }
