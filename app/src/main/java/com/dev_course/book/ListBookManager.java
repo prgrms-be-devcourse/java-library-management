@@ -64,12 +64,27 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
-    public String lossById(int id) {
-        return null;
+    public String returnById(int id) {
+        if (hasNotId(id)) {
+            return NOT_EXIST_ID.msg();
+        }
+
+        Book target = bookList.stream()
+                .filter(book -> book.getId() == id)
+                .findFirst()
+                .orElseThrow();
+
+        if (target.getState() != LOAN) {
+            return "%s (%s)".formatted(FAIL_RETURN_BOOK.msg(), target.getState().label());
+        }
+
+        target.setState(AVAILABLE);
+
+        return SUCCESS_RETURN_BOOK.msg();
     }
 
     @Override
-    public String returnById(int id) {
+    public String lossById(int id) {
         return null;
     }
 
