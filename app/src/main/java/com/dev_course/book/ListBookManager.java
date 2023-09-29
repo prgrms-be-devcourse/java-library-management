@@ -7,6 +7,7 @@ import static com.dev_course.book.BookManagerMessage.*;
 import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
+    private static final int PROCESSING_COST = 300_000;
     private final List<Book> bookList;
     private int id;
 
@@ -16,12 +17,25 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
+    public void updateStates() {
+        long currentTime = getCurrentTime();
+        long processedTime = currentTime - PROCESSING_COST;
+
+        bookList.stream()
+                .filter(book -> isProcessed(book, processedTime))
+                .forEach(book -> {
+                    book.setState(AVAILABLE);
+                    book.setUpdateAt(currentTime);
+                });
+    }
+
+    @Override
     public String create(String title, String author, int pages) {
         if (hasTitle(title)) {
             return ALREADY_EXIST_TITLE.msg();
         }
 
-        Book newBook = new Book(++id, title, author, pages);
+        Book newBook = new Book(++id, title, author, pages, getCurrentTime());
 
         bookList.add(newBook);
 
@@ -59,6 +73,7 @@ public class ListBookManager implements BookManager {
         }
 
         target.setState(LOAN);
+        target.setUpdateAt(getCurrentTime());
 
         return SUCCESS_RENT_BOOK.msg();
     }
@@ -80,7 +95,8 @@ public class ListBookManager implements BookManager {
             return FAIL_RETURN_BOOK.msg();
         }
 
-        target.setState(AVAILABLE);
+        target.setState(PROCESSING);
+        target.setUpdateAt(getCurrentTime());
 
         return SUCCESS_RETURN_BOOK.msg();
     }
@@ -101,6 +117,7 @@ public class ListBookManager implements BookManager {
         }
 
         target.setState(LOST);
+        target.setUpdateAt(getCurrentTime());
 
         return SUCCESS_LOSS_BOOK.msg();
     }
@@ -114,6 +131,14 @@ public class ListBookManager implements BookManager {
         bookList.removeIf(book -> book.getId() == id);
 
         return SUCCESS_DELETE_BOOK.msg();
+    }
+
+    private long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
+    private boolean isProcessed(Book book, long processedTime) {
+        return book.getState() == PROCESSING && book.getUpdateAt() <= processedTime;
     }
 
     private boolean hasNotId(int id) {

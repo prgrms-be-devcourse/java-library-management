@@ -35,6 +35,8 @@ public class LibrarySystem {
     private void selectFunction() {
         writer.println(FUNCTION_SCREEN.msg());
 
+        bookManager.updateStates();
+
         String input = reader.readOrDefault("-1");
 
         switch (input) {

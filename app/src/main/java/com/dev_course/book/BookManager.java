@@ -1,6 +1,8 @@
 package com.dev_course.book;
 
 public interface BookManager {
+    void updateStates();
+
     String create(String title, String author, int pages);
 
     String getInfo();
