@@ -10,17 +10,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("0. 모드를 선택해주세요.");
+        System.out.println("1. 일반 모드");
+        System.out.println("2. 테스트 모드");
+
+        System.out.print("\n> ");
+        modeNum = Integer.parseInt(br.readLine());
+        mode = new Mode();
+
         while(true) {
 
-            System.out.println("0. 모드를 선택해주세요.");
-            System.out.println("1. 일반 모드");
-            System.out.println("2. 테스트 모드");
-
-            System.out.print("\n> ");
-
             try {
-                modeNum = Integer.parseInt(br.readLine());
-                mode = new Mode();
                 if (modeNum == 1) {
                     mode.normalMode(1);
                 } else if (modeNum == 2) {

@@ -29,8 +29,6 @@ public class Mode {
         if(i==1) System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
         else System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         // 파일에 있는 책 목록 불러오기
         if(i==1) bookService.updateBooks(fileService.readFile());
 

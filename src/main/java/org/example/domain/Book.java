@@ -24,8 +24,8 @@ public class Book {
     }
 
     public String printBook() {
-        return "도서번호 : " + this.getId() + "제목 : " + this.getTitle()+"작가 이름 : " + this.getAuthor()
-        + "페이지 수 : " + this.getPageNum() +" 페이지" + "상태 : " + this.getState() + "\n------------------------------\n";
+        return "도서번호 : " + this.getId() + "\n제목 : " + this.getTitle()+"\n작가 이름 : " + this.getAuthor()
+        + "\n페이지 수 : " + this.getPageNum() +" 페이지" + "\n상태 : " + this.getState() + "\n------------------------------\n";
     }
     public Integer getId() {
         return id;
@@ -39,24 +39,12 @@ public class Book {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public Integer getPageNum() {
         return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
     }
 
     public BookState getState() {

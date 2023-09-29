@@ -10,26 +10,14 @@ public class BookService {
     private List<Book> books = new ArrayList<>();
 
     public void updateBooks(List<Book> bookList) {
-        bookList.stream().filter(book -> {
-            if(book.getState().equals(BookState.ORGANIZING)) return true;
-            return false;
-        }).forEach(book -> {
-            book.setState(BookState.POSSIBLE);
-        });
+        bookList.stream().filter(book -> book.getState().equals(BookState.ORGANIZING))
+                .forEach(book -> book.setState(BookState.POSSIBLE));
         this.books = bookList;
     }
     public Book createBook(String title, String author, int pageNum) {
-        Book book = new Book();
-
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setPageNum(pageNum);
-
-        book.setState(BookState.POSSIBLE);
+        Book book = new Book(books.size()+1, title, author, pageNum,BookState.POSSIBLE);
 
         System.out.println("[System] 도서 등록이 완료되었습니다.\n");
-
-        book.setId(books.size()+1);
         books.add(book);
 
         return book;
@@ -77,13 +65,12 @@ public class BookService {
             if (findBookState.equals(BookState.RENTING) || findBookState.equals(BookState.LOST)) {
                 BookState.RENTING.showChangeState();
                 findBook.setState(BookState.ORGANIZING);
-                //여기서 상태변화
+                // 도서 상태변화
                 Timer timer = new Timer(true);
                 timer.schedule(new UpdateTask(findBook), 10000);
             } else {
                 findBookState.showState();
             }
-
             return findBook;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
