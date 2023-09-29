@@ -11,6 +11,8 @@ import com.programmers.app.menu.MenuExecuterImpl;
 import com.programmers.app.menu.MenuSelector;
 import com.programmers.app.menu.MenuSelectorImpl;
 import com.programmers.app.mode.Mode;
+import com.programmers.app.timer.TestTimerManager;
+import com.programmers.app.timer.TimerManger;
 
 public class SelectiveInstances {
 
@@ -37,8 +39,13 @@ public class SelectiveInstances {
         return new TestBookRepository();
     }
 
+    private TimerManger generateTimerManager(Mode mode) {
+        if (mode != Mode.TEST) System.out.println("Temporarily testing");
+        return new TestTimerManager();
+    }
+
     private BookService generateBookSevice(Mode mode) {
-        return new TestBookService(generateBookRepository(mode));
+        return new TestBookService(generateBookRepository(mode), generateTimerManager(mode));
     }
 
     private BookController generateBookController(Mode mode) {

@@ -1,5 +1,6 @@
 package com.programmers.app.book.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.programmers.app.book.domain.Book;
@@ -8,12 +9,16 @@ import com.programmers.app.book.repository.BookRepository;
 import com.programmers.app.book.request.RequestBook;
 import com.programmers.app.exception.ActionNotAllowedException;
 import com.programmers.app.exception.BookNotFoundException;
+import com.programmers.app.timer.Timer;
+import com.programmers.app.timer.TimerManger;
 
 public class TestBookService implements BookService {
     private final BookRepository bookRepository;
+    private final TimerManger timerManger;
 
-    public TestBookService(BookRepository bookRepository) {
+    public TestBookService(BookRepository bookRepository, TimerManger timerManger) {
         this.bookRepository = bookRepository;
+        this.timerManger = timerManger;
     }
 
     @Override
@@ -59,11 +64,12 @@ public class TestBookService implements BookService {
         Book book = bookRepository.findByBookNumber(bookNumber)
                 .orElseThrow(BookNotFoundException::new);
 
-        if (book.getStatus().equals(BookStatus.AVAILABLE)) {
-            throw new ActionNotAllowedException("[System] 이미 대여 가능한 도서입니다.");
+        if (book.getStatus().equals(BookStatus.AVAILABLE) || book.getStatus().equals(BookStatus.ON_ARRANGEMENT)) {
+            throw new ActionNotAllowedException("[System] 이미 반납된 도서입니다.");
         }
 
         book.setStatus(BookStatus.ON_ARRANGEMENT);
+        timerManger.add(new Timer(bookNumber, LocalDateTime.now()));
     }
 
     @Override
