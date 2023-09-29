@@ -68,7 +68,8 @@ public class TestBookService implements BookService {
 
     @Override
     public void deleteBook(long bookNumber) {
-
+        bookRepository.delete(bookRepository.findByBookNumber(bookNumber)
+                        .orElseThrow(BookNotFoundException::new));
     }
 
     @Override

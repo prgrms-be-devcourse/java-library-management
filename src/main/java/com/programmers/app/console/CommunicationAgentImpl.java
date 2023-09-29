@@ -74,6 +74,12 @@ public class CommunicationAgentImpl implements CommunicationAgent {
     }
 
     @Override
+    public long instructDelete() {
+        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
+        return consoleReader.readLong();
+    }
+
+    @Override
     public void print(String message) {
         System.out.println(message);
     }

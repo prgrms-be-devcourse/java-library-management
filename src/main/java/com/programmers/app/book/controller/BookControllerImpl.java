@@ -75,6 +75,11 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void deleteBook() {
-
+        try {
+            bookService.deleteBook(communicationAgent.instructDelete());
+            communicationAgent.print("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
+        } catch (RuntimeException e) {
+            communicationAgent.print(e.getMessage());
+        }
     }
 }

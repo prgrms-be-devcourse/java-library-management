@@ -18,5 +18,7 @@ public interface CommunicationAgent {
 
     long instructReportLost();
 
+    long instructDelete();
+
     void print(String message);
 }

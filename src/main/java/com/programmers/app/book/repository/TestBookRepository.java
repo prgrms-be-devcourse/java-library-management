@@ -56,8 +56,8 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteByBookNumber(long bookNumber) {
-
+    public void delete(Book book) {
+        books.remove(book.getBookNumber());
     }
 
     @Override
