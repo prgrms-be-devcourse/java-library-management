@@ -17,10 +17,6 @@ public class Client {
 
     }
 
-    public static void setIo(IO io) {
-        Client.io = io;
-    }
-
     public static String scanMode() {
         try {
             return ModeConsole.scanType(io);
