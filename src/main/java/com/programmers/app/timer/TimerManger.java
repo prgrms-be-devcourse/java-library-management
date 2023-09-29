@@ -1,12 +1,11 @@
 package com.programmers.app.timer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TimerManger {
 
-    void loadTimersFromFile();
-
     void add(Timer timer);
 
-    List<Long> popEliminated();
+    List<Long> popArrangedBooks(LocalDateTime now);
 }

@@ -20,4 +20,6 @@ public interface BookService {
     void deleteBook(long bookNumber);
 
     void reportLost(long bookNumber);
+
+    void updateArrangementCompleted();
 }

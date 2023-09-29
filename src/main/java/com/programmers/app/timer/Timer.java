@@ -11,4 +11,13 @@ public class Timer {
         this.bookNumber = bookNumber;
         this.arrangementBegunAt = arrangementBegunAt;
     }
+
+    public long getBookNumber() {
+        return bookNumber;
+    }
+
+    public boolean isCompleted(LocalDateTime localDateTime) {
+        LocalDateTime completedAt = arrangementBegunAt.plusMinutes(5);
+        return completedAt.isBefore(localDateTime);
+    }
 }

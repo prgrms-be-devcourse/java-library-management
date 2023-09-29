@@ -29,12 +29,14 @@ public class TestBookService implements BookService {
 
     @Override
     public List<Book> findAllBooks() {
+        updateArrangementCompleted();
         return bookRepository.findAllBooks()
                 .orElseThrow(BookNotFoundException::new);
     }
 
     @Override
     public List<Book> findByTitle(String title) {
+        updateArrangementCompleted();
         return bookRepository.findByTitle(title)
                 .orElseThrow(BookNotFoundException::new);
     }
@@ -88,5 +90,14 @@ public class TestBookService implements BookService {
         }
 
         book.setStatus(BookStatus.LOST);
+    }
+
+    @Override
+    public void updateArrangementCompleted() {
+        timerManger.popArrangedBooks(LocalDateTime.now())
+                .stream()
+                .map(n -> bookRepository.findByBookNumber(n)
+                        .orElseThrow(BookNotFoundException::new)) // proper exception to be raised
+                .forEach(b -> b.setStatus(BookStatus.AVAILABLE));
     }
 }
