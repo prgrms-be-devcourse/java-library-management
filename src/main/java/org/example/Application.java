@@ -10,7 +10,7 @@ public class Application {
         IO io = new IO();
         try {
             Client.setIo(io);
-            Server.requestMode(Client.scanMode());
+            Server.setServer(Client.scanMode());
             while (true) {
                 Request request = Client.scanMenu();
                 String response = Server.requestMethod(request);

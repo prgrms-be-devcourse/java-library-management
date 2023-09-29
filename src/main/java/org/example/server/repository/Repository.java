@@ -2,7 +2,7 @@ package org.example.server.repository;
 
 import org.example.server.entity.Book;
 
-public interface BookRepository {
+public interface Repository {
     void loadData();
 
     void create(Book book);

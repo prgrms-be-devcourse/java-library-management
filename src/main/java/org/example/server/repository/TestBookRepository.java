@@ -7,9 +7,9 @@ import org.example.server.exception.EmptyLibraryException;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-public class TestBookRepository implements BookRepository {
-    private static int count;
-    private static LinkedHashMap<Integer, Book> data;
+public class TestBookRepository implements Repository {
+    private int count;
+    private LinkedHashMap<Integer, Book> data;
 
     public TestBookRepository() {
         loadData();
