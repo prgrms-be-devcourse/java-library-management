@@ -23,6 +23,10 @@ public class Book {
         return this.id+","+this.title+","+this.author+","+this.pageNum+","+this.state;
     }
 
+    public String printBook() {
+        return "도서번호 : " + this.getId() + "제목 : " + this.getTitle()+"작가 이름 : " + this.getAuthor()
+        + "페이지 수 : " + this.getPageNum() +" 페이지" + "상태 : " + this.getState() + "\n------------------------------\n";
+    }
     public Integer getId() {
         return id;
     }

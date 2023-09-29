@@ -53,7 +53,7 @@ public class FileService {
         }
     }
 
-    public void writeFiles(List<Book> bookList) throws IOException {
+    public void writeFiles(List<Book> bookList) {
         csv = new File(filePath);
         bookList.forEach(book -> {
             try {
