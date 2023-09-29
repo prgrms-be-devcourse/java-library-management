@@ -1,26 +1,19 @@
 import domain.Book;
+import domain.Status;
+import exception.NotExistBookIdException;
+import exception.UnableStatusException;
 import repository.NormalRepository;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 public class BookService {
-    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private final NormalRepository normalRepository = new NormalRepository();
 
 
-    public void saveBook() throws IOException {
-        System.out.println("등록할 도서 제목을 입력하세요.\n");
-        String title = getInput();
-        System.out.println("\n작가 이름을 입력하세요.\n");
-        String author = getInput();
-        System.out.println("\n페이지 수를 입력하세요.\n");
-        Integer page = Integer.parseInt(getInput());
-
+    public void saveBook(String title, String author, Integer page){
         Book book = new Book(title, author, page);
         normalRepository.register(book);
+
     }
 
     public void showBookList() {
@@ -30,10 +23,7 @@ public class BookService {
         }
     }
 
-    public void findBookByTitle() throws Exception {
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.\n");
-        String title = getInput();
-
+    public void findBookByTitle(String title){
         List<Book> bookList = normalRepository.findByTitle(title);
 
         for (Book book:bookList) {
@@ -41,32 +31,33 @@ public class BookService {
         }
     }
 
-    public void borrowBook() throws IOException {
-        System.out.println("Q. 대여할 도서번호를 입력하세요\n");
-        Long id = Long.valueOf(getInput());
-        normalRepository.borrow(id);
+    public void borrowBook(Long id){
+        Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
+        switch (book.getStatus()){
+            case CLEANING -> throw new UnableStatusException("정리 중인 도서입니다.");
+            case BORROWED -> throw new UnableStatusException("이미 대여 중인 도서입니다.");
+            case LOST ->    throw new UnableStatusException("분실된 도서입니다.");
+        }
+        normalRepository.borrow(book);
     }
 
-    public void returnBook() throws IOException {
-        System.out.println("Q. 반납할 도서번호를 입력하세요\n");
-        Long id = Long.valueOf(getInput());
-        normalRepository.returnBook(id);
+    public void returnBook(Long id){
+        Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
+        switch (book.getStatus()){
+            case AVAILABLE -> throw new UnableStatusException("원래 대여가 가능한 도서입니다.");
+            case CLEANING -> throw new UnableStatusException("이미 반납되어 정리 중인 도서입니다.");
+        }
+        normalRepository.returnBook(book);
     }
 
-    public void reportLostBook() throws IOException {
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요\n");
-        Long id = Long.valueOf(getInput());
-        normalRepository.report(id);
+    public void reportLostBook(Long id) throws Exception {
+        Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
+        if (book.getStatus()== Status.LOST) throw new UnableStatusException("이미 분실처리된 도서입니다.");
+        normalRepository.report(book);
     }
 
-    public void removeBook() throws Exception{
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요\n");
-        Long id = Long.valueOf(getInput());
-        normalRepository.remove(id);
-    }
-
-    public String getInput() throws IOException {
-        System.out.print("> ");
-        return br.readLine().strip();
+    public void removeBook(Long id) throws Exception {
+        Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
+        normalRepository.remove(book);
     }
 }
