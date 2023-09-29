@@ -12,8 +12,8 @@ import org.example.server.service.Service;
 import java.util.function.Supplier;
 
 // 서버는 싱글톤으로 생성
-// 클라이언트로부터 받은 모드에 따라 controller, service, repository 세팅
-// 클라이언트로부터 받은 메뉴(요청) 수행하고 String으로 응답
+// 기능 1: 클라이언트로부터 받은 모드에 따라 controller, service, repository 세팅
+// 기능 2: 클라이언트로부터 받은 메뉴(요청) 수행하고 String으로 응답
 public class Server {
     private enum ServerMode { // 모드가 늘어날 경우를 대비하기 위해, enum으로 레포지토리 생성 기능 매핑.
         COMMON(FileBookRepository::new),

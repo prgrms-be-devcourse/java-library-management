@@ -1,15 +1,13 @@
 package org.example;
 
 import org.example.client.Client;
-import org.example.client.io.IO;
 import org.example.packet.Request;
 import org.example.server.Server;
 
+// 애플리케이션 동작의 메인이 되는 곳
 public class Application {
     public static void main(String[] args) {
-        IO io = new IO();
         try {
-            Client.setIo(io);
             Server.setServer(Client.scanMode());
             while (true) {
                 Request request = Client.scanMenu();
@@ -17,7 +15,7 @@ public class Application {
                 Client.printResponse(response);
             }
         } catch (RuntimeException e) {
-            io.print("\n>> 두 번 이상의 유효하지 않은 값 입력으로 시스템을 종료합니다.\n");
+            System.err.print("\n>> 시스템 에러 발생! 프로그램을 종료합니다.\n");
         }
     }
 }

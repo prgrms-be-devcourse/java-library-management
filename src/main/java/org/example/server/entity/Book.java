@@ -19,7 +19,7 @@ public class Book {
         this.author = author;
         this.pages = pages;
         this.state = BookState.CAN_BORROW.name();
-        this.endLoadTime = "";
+        this.endLoadTime = ""; // Q. 날짜는 보통은 DB에 저장할 때 어떤 형식으로 저장하는지 궁금합니다!
     } // 서비스 레이어에서 새로 생성 할 때. id는 레포지토리 저장시 생성.
 
     public Book(int id, String name, String author, int pages, String state, String borrowTime) {

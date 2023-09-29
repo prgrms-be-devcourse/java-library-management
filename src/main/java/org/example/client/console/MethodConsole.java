@@ -11,9 +11,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// "메뉴"만 아는 클래스
 // io를 전달 받아 사용자로부터 메뉴를 입력 받고 enum과 매핑
 // 매핑 후 사용자가 선택한 메뉴 타입을 반환하는 역할
-// "메뉴"만 아는 입출력 클래스
 public class MethodConsole {
     private enum ClientMethod {
         REGISTER(1, "1. 도서 등록\n", "\n[System] 도서 등록 메뉴로 넘어갑니다.\n\n", new ArrayList<>(Arrays.asList(
@@ -86,7 +86,7 @@ public class MethodConsole {
 
     public static Request setClientMethod(IO io) {
         io.print(ClientMethod.MENU_CONSOLE);
-        int selectNum = Validator.validateSelectNum(ClientMethod.values().length, io.scanLineToInt());
+        int selectNum = Validator.validateSelectNum(ClientMethod.values().length, io.scanLine());
         clientMethod = ClientMethod.valueOfNumber(selectNum);
         io.print(clientMethod.alert);
         return new Request(clientMethod.name());
@@ -97,7 +97,7 @@ public class MethodConsole {
         RequestData requestData = new RequestData();
         String[] bookInfo = clientMethod.getQuestions().stream().map(question -> {
             io.print(question);
-            return io.scanLine(); // 제목, 저자 100자 이내, 페이지 숫자 & 범위 확인
+            return io.scanLine();
         }).toArray(String[]::new);
         return Validator.validateBook(requestData, bookInfo);
     }
@@ -105,14 +105,14 @@ public class MethodConsole {
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.name = Validator.validateName(io.scanLine()); // 특수 문자 확인?
+        requestData.name = Validator.validateName(io.scanLine());
         return requestData;
     }
 
     public static RequestData scanAndSetBookId(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.id = Validator.validateId(io.scanLineToInt()); // 숫자 & 범위 확인
+        requestData.id = Validator.validateId(io.scanLine());
         return requestData;
     }
 }

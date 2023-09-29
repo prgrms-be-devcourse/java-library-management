@@ -6,8 +6,8 @@ import org.example.server.service.Service;
 
 import java.util.function.BiFunction;
 
+// 클라이언트로부터 받는 Request 데이터에따라 메서드 매핑
 public class BookController implements Controller {
-
     private enum Method { // 메서드가 늘어날 경우를 대비해 enum으로 매핑(그런데 if문으로 하는 것과 같이 코드가 길긴합니다...)
         REGISTER((service, data) -> {
             service.register(data.name, data.author, data.pages);
@@ -25,15 +25,15 @@ public class BookController implements Controller {
         }),
         RESTORE((service, data) -> {
             service.restore(data.id);
-            return "\n[System] 도서가 반납 처리 되었습니다.\n"; // 대여중, 분실됨
+            return "\n[System] 도서가 반납 처리 되었습니다.\n";
         }),
         LOST((service, data) -> {
             service.lost(data.id);
-            return "\n[System] 도서가 분실 처리 되었습니다.\n"; // 대여 가능, 대여중에만 가능
+            return "\n[System] 도서가 분실 처리 되었습니다.\n";
         }),
         DELETE((service, data) -> {
             service.delete(data.id);
-            return "\n[System] 도서가 삭제 처리 되었습니다.\n"; // 대여 가능, 대여중, 분실됨
+            return "\n[System] 도서가 삭제 처리 되었습니다.\n";
         });
 
         private static Service service; // 외부에서 의존성 주읩
