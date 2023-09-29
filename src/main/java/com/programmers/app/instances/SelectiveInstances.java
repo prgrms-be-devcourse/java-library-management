@@ -1,5 +1,7 @@
 package com.programmers.app.instances;
 
+import com.programmers.app.book.controller.BookController;
+import com.programmers.app.book.controller.BookControllerImpl;
 import com.programmers.app.book.repository.BookRepository;
 import com.programmers.app.book.repository.TestBookRepository;
 import com.programmers.app.book.service.BookService;
@@ -39,8 +41,12 @@ public class SelectiveInstances {
         return new TestBookService(generateBookRepository(mode));
     }
 
+    private BookController generateBookController(Mode mode) {
+        return new BookControllerImpl(generateBookSevice(mode), generalInstances.getCommunicationAgent());
+    }
+
     private MenuExecuter generateMenuExecuter(Mode mode) {
-        return new MenuExecuterImpl(generateBookSevice(mode), generalInstances.getCommunicationAgent());
+        return new MenuExecuterImpl(generateBookController(mode));
     }
 
     public MenuExecuter getMenuExecuter() {
