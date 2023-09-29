@@ -9,8 +9,4 @@ public interface IN {
     default String scanLine() {
         return scanner.nextLine().trim();
     }
-
-    default int scanLineToInt() {
-        return Integer.parseInt((scanner.nextLine().trim()));
-    }
 }
