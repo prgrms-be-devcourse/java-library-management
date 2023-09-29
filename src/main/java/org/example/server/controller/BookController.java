@@ -24,11 +24,6 @@ public class BookController implements Controller {
             return "\n[System] 도서가 대여 처리 되었습니다.\n";
         }),
         RESTORE((service, data) -> {
-            /*
-             * 이때 도서가 반납되면 도서의 상태는 '도서 정리중' 상태로 바뀌어야합니다.
-             * 그리고 '도서 정리중' 상태에서 5분이 지난 도서는 '대여 가능'으로 바뀌어야합니다.
-             * (대여된 후 5분이 지난 도서를 누군가 대여하려고 했을 때 대여 처리가 되어야한다는 겁니다)
-             */
             service.restore(data.id);
             return "\n[System] 도서가 반납 처리 되었습니다.\n"; // 대여중, 분실됨
         }),
