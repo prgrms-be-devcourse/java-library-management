@@ -12,14 +12,14 @@ public class Book {
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;
-        this.status = BookStatus.AVAILABLE;
+        this.status = BookStatus.IN_PLACE;
     }
 
     public long getBookNumber() {
         return bookNumber;
     }
 
-    public boolean isMatching(String title) {
+    public boolean containsInTitle(String title) {
         return this.title.contains(title);
     }
 

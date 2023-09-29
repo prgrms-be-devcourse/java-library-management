@@ -1,13 +1,13 @@
-package com.programmers.app.book.request;
+package com.programmers.app.book.dto;
 
 import com.programmers.app.book.domain.Book;
 
-public class RequestBook {
+public class BookRequest {
     private String title;
     private String author;
     private int totalPages;
 
-    public RequestBook(String title, String author, int totalPages) {
+    public BookRequest(String title, String author, int totalPages) {
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;

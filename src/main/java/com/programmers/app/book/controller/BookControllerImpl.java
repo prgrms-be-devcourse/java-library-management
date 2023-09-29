@@ -37,7 +37,7 @@ public class BookControllerImpl implements BookController {
     public void searchBookByTitle() {
         try {
             List<Book> books = bookService.findByTitle(communicationAgent.instructFindTitle());
-            books.forEach(b -> communicationAgent.print(b.toString()));
+            books.forEach(book -> communicationAgent.print(book.toString()));
         } catch (RuntimeException e) {
             communicationAgent.print(e.getMessage());
         }

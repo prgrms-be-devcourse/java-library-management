@@ -7,11 +7,11 @@ import com.programmers.app.book.domain.Book;
 
 public interface BookRepository {
 
-    void add(Book book);
+     void add(Book book);
 
-    long getLastBookNumber();
+     long getLastBookNumber();
 
-    Optional<List<Book>> findAllBooks();
+     Optional<List<Book>> findAllBooks();
 
     Optional<List<Book>> findByTitle(String title);
 
@@ -19,5 +19,5 @@ public interface BookRepository {
 
     void delete(Book book);
 
-    void saveFile();
+    default void save() {}
 }

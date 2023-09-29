@@ -1,6 +1,6 @@
 package com.programmers.app.console;
 
-import com.programmers.app.book.request.RequestBook;
+import com.programmers.app.book.dto.BookRequest;
 
 public class CommunicationAgent {
 
@@ -33,7 +33,7 @@ public class CommunicationAgent {
         return consoleReader.readInt();
     }
 
-    public RequestBook instructRegister() {
+    public BookRequest instructRegister() {
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
         String title = consoleReader.readString();
 
@@ -43,7 +43,7 @@ public class CommunicationAgent {
         System.out.println("Q. 페이지 수를 입력하세요.");
         int totalPages = consoleReader.readInt();
 
-        return new RequestBook(title, author, totalPages);
+        return new BookRequest(title, author, totalPages);
     }
 
     public String instructFindTitle() {
@@ -57,12 +57,12 @@ public class CommunicationAgent {
     }
 
     public long instructReturn() {
-        System.out.println("Q. 대여할 도서번호를 입력하세요");
+        System.out.println("Q. 반납할 도서번호를 입력하세요");
         return consoleReader.readLong();
     }
 
     public long instructReportLost() {
-        System.out.println("Q. 반납할 도서번호를 입력하세요");
+        System.out.println("Q. 분실 신고할 도서번호를 입력하세요");
         return consoleReader.readLong();
     }
 

@@ -3,11 +3,11 @@ package com.programmers.app.book.service;
 import java.util.List;
 
 import com.programmers.app.book.domain.Book;
-import com.programmers.app.book.request.RequestBook;
+import com.programmers.app.book.dto.BookRequest;
 
 public interface BookService {
 
-    void register(RequestBook requestBook);
+    void register(BookRequest bookRequest);
 
     List<Book> findAllBooks();
 
@@ -21,5 +21,5 @@ public interface BookService {
 
     void reportLost(long bookNumber);
 
-    void updateArrangementCompleted();
+    boolean updateArrangementCompleted();
 }
