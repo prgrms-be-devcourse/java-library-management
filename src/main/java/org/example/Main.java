@@ -14,11 +14,11 @@ public class Main {
         System.out.println("1. 일반 모드");
         System.out.println("2. 테스트 모드");
 
-        System.out.print("\n> ");
-        modeNum = Integer.parseInt(br.readLine());
         mode = new Mode();
 
         while(true) {
+            System.out.print("\n> ");
+            modeNum = Integer.parseInt(br.readLine());
 
             try {
                 if (modeNum == 1) {
