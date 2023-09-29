@@ -1,11 +1,11 @@
 package com.programmers.library.io;
 
-import com.programmers.library.dto.AddBookRequest;
-import com.programmers.library.dto.BorrowBookRequest;
-import com.programmers.library.dto.DeleteBookRequest;
-import com.programmers.library.dto.FindBookRequest;
-import com.programmers.library.dto.LostBookRequest;
-import com.programmers.library.dto.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequestDto;
+import com.programmers.library.dto.BorrowBookRequestDto;
+import com.programmers.library.dto.DeleteBookRequestDto;
+import com.programmers.library.dto.FindBookRequestDto;
+import com.programmers.library.dto.LostBookRequestDto;
+import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.enums.Menu;
 import com.programmers.library.enums.Mode;
 
@@ -14,15 +14,15 @@ public interface Input {
 
 	Menu inputMenu();
 
-	AddBookRequest inputAddBookRequest();
+	AddBookRequestDto inputAddBookRequest();
 
-	BorrowBookRequest inputBorrowBookRequest();
+	BorrowBookRequestDto inputBorrowBookRequest();
 
-	DeleteBookRequest inputDeleteBookRequest();
+	DeleteBookRequestDto inputDeleteBookRequest();
 
-	LostBookRequest inputLostBookRequest();
+	LostBookRequestDto inputLostBookRequest();
 
-	ReturnBookRequest inputReturnBookRequest();
+	ReturnBookRequestDto inputReturnBookRequest();
 
-	FindBookRequest inputFindBookRequest();
+	FindBookRequestDto inputFindBookRequest();
 }

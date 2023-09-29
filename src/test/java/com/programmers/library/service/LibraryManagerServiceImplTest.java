@@ -19,12 +19,12 @@ import com.programmers.library.exception.BookAlreadyBorrowedException;
 import com.programmers.library.exception.BookLostException;
 import com.programmers.library.exception.BookNotFoundException;
 import com.programmers.library.exception.BookUnderOrganizingException;
-import com.programmers.library.dto.AddBookRequest;
-import com.programmers.library.dto.BorrowBookRequest;
-import com.programmers.library.dto.DeleteBookRequest;
-import com.programmers.library.dto.FindBookRequest;
-import com.programmers.library.dto.LostBookRequest;
-import com.programmers.library.dto.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequestDto;
+import com.programmers.library.dto.BorrowBookRequestDto;
+import com.programmers.library.dto.DeleteBookRequestDto;
+import com.programmers.library.dto.FindBookRequestDto;
+import com.programmers.library.dto.LostBookRequestDto;
+import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.repository.Repository;
 
 class LibraryManagerServiceImplTest {
@@ -43,7 +43,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testAddBook() {
 		// given
-		AddBookRequest request = new AddBookRequest("title", "author", "100");
+		AddBookRequestDto request = new AddBookRequestDto("title", "author", "100");
 		Book book = request.toEntity();
 
 		// when
@@ -68,7 +68,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	void findBooksByTitle() {
 		String titleSearch = "title";
-		FindBookRequest request = new FindBookRequest(titleSearch);
+		FindBookRequestDto request = new FindBookRequestDto(titleSearch);
 		Book book1 = new Book("title1", "author1", 100L);
 		Book book2 = new Book("title2", "author2", 150L);
 		when(repository.findByTitleLike(titleSearch)).thenReturn(Arrays.asList(book1, book2));
@@ -82,7 +82,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testBorrowAvailableBook() {
 		String bookId = "1";
-		BorrowBookRequest request = new BorrowBookRequest(bookId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
@@ -95,7 +95,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testBorrowAlreadyBorrowedBook() {
 		String bookId = "1";
-		BorrowBookRequest request = new BorrowBookRequest(bookId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.borrow();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -106,7 +106,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testBorrowLostBook() {
 		String bookId = "1";
-		BorrowBookRequest request = new BorrowBookRequest(bookId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.lost();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -117,7 +117,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testBorrowBookUnderOrganizing() {
 		String bookId = "1";
-		BorrowBookRequest request = new BorrowBookRequest(bookId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.returned();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -128,7 +128,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testBorrowNonexistentBook() {
 		String bookId = "1";
-		BorrowBookRequest request = new BorrowBookRequest(bookId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
 		assertThrows(BookNotFoundException.class, () -> service.borrowBook(request));
@@ -137,7 +137,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testReturnBorrowedBook() {
 		String bookId = "1";
-		ReturnBookRequest request = new ReturnBookRequest(bookId);
+		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.borrow();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -151,7 +151,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testReturnLostBook() {
 		String bookId = "1";
-		ReturnBookRequest request = new ReturnBookRequest(bookId);
+		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.lost();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -166,7 +166,7 @@ class LibraryManagerServiceImplTest {
 	public void testReturnAlreadyAvailableBook() {
 		// given
 		String bookId = "1";
-		ReturnBookRequest request = new ReturnBookRequest(bookId);
+		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
@@ -177,7 +177,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testReturnBookUnderOrganizing() {
 		String bookId = "1";
-		ReturnBookRequest request = new ReturnBookRequest(bookId);
+		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.returned();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -188,7 +188,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testReturnNonexistentBook() {
 		String bookId = "1";
-		ReturnBookRequest request = new ReturnBookRequest(bookId);
+		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
 		assertThrows(BookNotFoundException.class, () -> service.returnBook(request));
@@ -197,7 +197,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testLostAvailableBook() {
 		String bookId = "1";
-		LostBookRequest request = new LostBookRequest(bookId);
+		LostBookRequestDto request = new LostBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
@@ -210,7 +210,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testLostAlreadyLostBook() {
 		String bookId = "1";
-		LostBookRequest request = new LostBookRequest(bookId);
+		LostBookRequestDto request = new LostBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.lost();
 		when(repository.findById(request.getId())).thenReturn(Optional.of(book));
@@ -221,7 +221,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testLostNonexistentBook() {
 		String bookId = "1";
-		LostBookRequest request = new LostBookRequest(bookId);
+		LostBookRequestDto request = new LostBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
 		assertThrows(BookNotFoundException.class, () -> service.lostBook(request));
@@ -230,7 +230,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testDeleteExistingBook() {
 		String bookId = "1";
-		DeleteBookRequest request = new DeleteBookRequest(bookId);
+		DeleteBookRequestDto request = new DeleteBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
 		book.setId(Long.parseLong(bookId));
 		when(repository.findById(Long.parseLong(bookId))).thenReturn(Optional.of(book));
@@ -243,7 +243,7 @@ class LibraryManagerServiceImplTest {
 	@Test
 	public void testDeleteNonexistentBook() {
 		String bookId = "1";
-		DeleteBookRequest request = new DeleteBookRequest(bookId);
+		DeleteBookRequestDto request = new DeleteBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
 		assertThrows(BookNotFoundException.class, () -> service.deleteBook(request));

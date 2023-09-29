@@ -5,10 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.programmers.library.dto.AddBookRequest;
 import com.programmers.library.entity.Book;
 
-class AddBookRequestTest {
+class AddBookRequestDtoTest {
 
 	@Test
 	void testValidRequest() {
@@ -16,7 +15,7 @@ class AddBookRequestTest {
 		String validAuthor = "Test Author";
 		String validPages = "150";
 
-		AddBookRequest request = new AddBookRequest(validTitle, validAuthor, validPages);
+		AddBookRequestDto request = new AddBookRequestDto(validTitle, validAuthor, validPages);
 		Book book = request.toEntity();
 
 		assertEquals(validTitle, book.getTitle());
@@ -30,7 +29,7 @@ class AddBookRequestTest {
 		String validAuthor = "Test Author";
 		String validPages = "150";
 
-		assertThrows(IllegalArgumentException.class, () -> new AddBookRequest(invalidTitle, validAuthor, validPages), INVALID_TITLE);
+		assertThrows(IllegalArgumentException.class, () -> new AddBookRequestDto(invalidTitle, validAuthor, validPages), INVALID_TITLE);
 	}
 
 	@Test
@@ -39,7 +38,7 @@ class AddBookRequestTest {
 		String invalidAuthor = "";
 		String validPages = "150";
 
-		assertThrows(IllegalArgumentException.class, () -> new AddBookRequest(validTitle, invalidAuthor, validPages), INVALID_AUTHOR);
+		assertThrows(IllegalArgumentException.class, () -> new AddBookRequestDto(validTitle, invalidAuthor, validPages), INVALID_AUTHOR);
 	}
 
 	@Test
@@ -48,6 +47,6 @@ class AddBookRequestTest {
 		String validAuthor = "Test Author";
 		String invalidPages = "abc";
 
-		assertThrows(IllegalArgumentException.class, () -> new AddBookRequest(validTitle, validAuthor, invalidPages), INVALID_PAGES);
+		assertThrows(IllegalArgumentException.class, () -> new AddBookRequestDto(validTitle, validAuthor, invalidPages), INVALID_PAGES);
 	}
 }

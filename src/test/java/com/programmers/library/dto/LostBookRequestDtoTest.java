@@ -5,26 +5,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.programmers.library.dto.ReturnBookRequest;
-
-class ReturnBookRequestTest {
+class LostBookRequestDtoTest {
 
 	@Test
 	void testValidId() {
 		String validId = "12345";
-		ReturnBookRequest request = new ReturnBookRequest(validId);
+		LostBookRequestDto request = new LostBookRequestDto(validId);
 		assertEquals(12345L, request.getId());
 	}
 
 	@Test
 	void testInvalidIdNotANumber() {
 		String invalidId = "abc";
-		assertThrows(IllegalArgumentException.class, () -> new ReturnBookRequest(invalidId), INVALID_ID);
+		assertThrows(IllegalArgumentException.class, () -> new LostBookRequestDto(invalidId), INVALID_ID);
 	}
 
 	@Test
 	void testInvalidIdEmptyString() {
 		String emptyId = "";
-		assertThrows(IllegalArgumentException.class, () -> new ReturnBookRequest(emptyId));
+		assertThrows(IllegalArgumentException.class, () -> new LostBookRequestDto(emptyId));
 	}
 }

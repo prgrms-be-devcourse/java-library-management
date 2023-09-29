@@ -2,26 +2,26 @@ package com.programmers.library.service;
 
 import java.util.List;
 
-import com.programmers.library.dto.AddBookRequest;
-import com.programmers.library.dto.BorrowBookRequest;
-import com.programmers.library.dto.DeleteBookRequest;
-import com.programmers.library.dto.FindBookRequest;
-import com.programmers.library.dto.LostBookRequest;
-import com.programmers.library.dto.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequestDto;
+import com.programmers.library.dto.BorrowBookRequestDto;
+import com.programmers.library.dto.DeleteBookRequestDto;
+import com.programmers.library.dto.FindBookRequestDto;
+import com.programmers.library.dto.LostBookRequestDto;
+import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
 
 public interface LibarayManagerService {
-	void addBook(AddBookRequest request);
+	void addBook(AddBookRequestDto request);
 
 	List<Book> getAllBooks();
 
-	List<Book> findBooksByTitle(FindBookRequest request);
+	List<Book> findBooksByTitle(FindBookRequestDto request);
 
-	void borrowBook(BorrowBookRequest request);
+	void borrowBook(BorrowBookRequestDto request);
 
-	void returnBook(ReturnBookRequest request);
+	void returnBook(ReturnBookRequestDto request);
 
-	void lostBook(LostBookRequest request);
+	void lostBook(LostBookRequestDto request);
 
-	void deleteBook(DeleteBookRequest request);
+	void deleteBook(DeleteBookRequestDto request);
 }

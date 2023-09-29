@@ -2,12 +2,12 @@ package com.programmers.library.io;
 
 import java.util.Scanner;
 
-import com.programmers.library.dto.AddBookRequest;
-import com.programmers.library.dto.BorrowBookRequest;
-import com.programmers.library.dto.DeleteBookRequest;
-import com.programmers.library.dto.FindBookRequest;
-import com.programmers.library.dto.LostBookRequest;
-import com.programmers.library.dto.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequestDto;
+import com.programmers.library.dto.BorrowBookRequestDto;
+import com.programmers.library.dto.DeleteBookRequestDto;
+import com.programmers.library.dto.FindBookRequestDto;
+import com.programmers.library.dto.LostBookRequestDto;
+import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.enums.Menu;
 import com.programmers.library.enums.Mode;
 
@@ -45,43 +45,43 @@ public class ConsoleInput implements Input {
 	}
 
 	@Override
-	public AddBookRequest inputAddBookRequest() {
+	public AddBookRequestDto inputAddBookRequest() {
 		printPrompt(ADD_BOOK_TITLE_PROMPT);
 		String title = readLineWithTrimming();
 		printPrompt(ADD_BOOK_AUTHOR_PROMPT);
 		String author = readLineWithTrimming();
 		printPrompt(ADD_BOOK_PAGES_PROMPT);
 		String pages = readLineWithTrimming();
-		return new AddBookRequest(title, author, pages);
+		return new AddBookRequestDto(title, author, pages);
 	}
 
 	@Override
-	public BorrowBookRequest inputBorrowBookRequest() {
+	public BorrowBookRequestDto inputBorrowBookRequest() {
 		printPrompt(BORROW_BOOK_ID_PROMPT);
-		return new BorrowBookRequest(readLineWithTrimming());
+		return new BorrowBookRequestDto(readLineWithTrimming());
 	}
 
 	@Override
-	public DeleteBookRequest inputDeleteBookRequest() {
+	public DeleteBookRequestDto inputDeleteBookRequest() {
 		printPrompt(DELETE_BOOK_ID_PROMPT);
-		return new DeleteBookRequest(readLineWithTrimming());
+		return new DeleteBookRequestDto(readLineWithTrimming());
 	}
 
 	@Override
-	public LostBookRequest inputLostBookRequest() {
+	public LostBookRequestDto inputLostBookRequest() {
 		printPrompt(LOST_BOOK_ID_PROMPT);
-		return new LostBookRequest(readLineWithTrimming());
+		return new LostBookRequestDto(readLineWithTrimming());
 	}
 
 	@Override
-	public ReturnBookRequest inputReturnBookRequest() {
+	public ReturnBookRequestDto inputReturnBookRequest() {
 		printPrompt(RETURN_BOOK_ID_PROMPT);
-		return new ReturnBookRequest(readLineWithTrimming());
+		return new ReturnBookRequestDto(readLineWithTrimming());
 	}
 
 	@Override
-	public FindBookRequest inputFindBookRequest() {
+	public FindBookRequestDto inputFindBookRequest() {
 		printPrompt(FIND_BOOK_TITLE_PROMPT);
-		return new FindBookRequest(readLineWithTrimming());
+		return new FindBookRequestDto(readLineWithTrimming());
 	}
 }

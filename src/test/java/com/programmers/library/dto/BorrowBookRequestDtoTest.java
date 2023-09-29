@@ -4,26 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.programmers.library.dto.DeleteBookRequest;
-
-class DeleteBookRequestTest {
+class BorrowBookRequestDtoTest {
 
 	@Test
 	void testValidId() {
 		String validId = "12345";
-		DeleteBookRequest request = new DeleteBookRequest(validId);
+		BorrowBookRequestDto request = new BorrowBookRequestDto(validId);
 		assertEquals(12345L, request.getId());
 	}
 
 	@Test
 	void testInvalidIdNotANumber() {
 		String invalidId = "abc";
-		assertThrows(IllegalArgumentException.class, () -> new DeleteBookRequest(invalidId));
+		assertThrows(IllegalArgumentException.class, () -> new BorrowBookRequestDto(invalidId));
 	}
 
 	@Test
 	void testInvalidIdEmptyString() {
 		String emptyId = "";
-		assertThrows(IllegalArgumentException.class, () -> new DeleteBookRequest(emptyId));
+		assertThrows(IllegalArgumentException.class, () -> new BorrowBookRequestDto(emptyId));
 	}
 }

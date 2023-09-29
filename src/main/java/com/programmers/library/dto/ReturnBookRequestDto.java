@@ -2,10 +2,10 @@ package com.programmers.library.dto;
 
 import static com.programmers.library.constants.MessageConstants.*;
 
-public class BorrowBookRequest {
+public class ReturnBookRequestDto {
 	private long id;
 
-	public BorrowBookRequest(String id) {
+	public ReturnBookRequestDto(String id) {
 		try {
 			this.id = Long.parseLong(id);
 		} catch (NumberFormatException e) {

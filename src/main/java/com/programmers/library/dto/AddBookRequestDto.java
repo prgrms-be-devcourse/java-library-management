@@ -4,12 +4,12 @@ import static com.programmers.library.constants.MessageConstants.*;
 
 import com.programmers.library.entity.Book;
 
-public class AddBookRequest {
+public class AddBookRequestDto {
 	private String title;
 	private String author;
 	private long pages;
 
-	public AddBookRequest(String title, String author, String pages) {
+	public AddBookRequestDto(String title, String author, String pages) {
 		if (title == null || title.isEmpty()) {
 			throw new IllegalArgumentException(INVALID_TITLE);
 		}

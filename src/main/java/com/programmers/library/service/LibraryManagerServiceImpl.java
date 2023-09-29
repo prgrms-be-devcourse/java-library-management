@@ -2,12 +2,12 @@ package com.programmers.library.service;
 
 import java.util.List;
 
-import com.programmers.library.dto.AddBookRequest;
-import com.programmers.library.dto.BorrowBookRequest;
-import com.programmers.library.dto.DeleteBookRequest;
-import com.programmers.library.dto.FindBookRequest;
-import com.programmers.library.dto.LostBookRequest;
-import com.programmers.library.dto.ReturnBookRequest;
+import com.programmers.library.dto.AddBookRequestDto;
+import com.programmers.library.dto.BorrowBookRequestDto;
+import com.programmers.library.dto.DeleteBookRequestDto;
+import com.programmers.library.dto.FindBookRequestDto;
+import com.programmers.library.dto.LostBookRequestDto;
+import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
 import com.programmers.library.exception.BookAlreadyAvailableException;
 import com.programmers.library.exception.BookAlreadyBorrowedException;
@@ -25,7 +25,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	}
 
 	@Override
-	public void addBook(AddBookRequest request) {
+	public void addBook(AddBookRequestDto request) {
 		repository.save(request.toEntity());
 	}
 
@@ -37,14 +37,14 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	}
 
 	@Override
-	public List<Book> findBooksByTitle(FindBookRequest request) {
+	public List<Book> findBooksByTitle(FindBookRequestDto request) {
 		List<Book> list = repository.findByTitleLike(request.getTitle());
 		list.forEach(this::updateBookToAvailableAfterOrganizing);
 		return list;
 	}
 
 	@Override
-	public void borrowBook(BorrowBookRequest request) {
+	public void borrowBook(BorrowBookRequestDto request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
 		updateBookToAvailableAfterOrganizing(book);
 		if (book.isAvailable()) {
@@ -60,7 +60,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	}
 
 	@Override
-	public void returnBook(ReturnBookRequest request) {
+	public void returnBook(ReturnBookRequestDto request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
 		updateBookToAvailableAfterOrganizing(book);
 		if (book.isBorrowed() || book.isLost()) {
@@ -74,7 +74,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	}
 
 	@Override
-	public void lostBook(LostBookRequest request) {
+	public void lostBook(LostBookRequestDto request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
 		updateBookToAvailableAfterOrganizing(book);
 		if (book.isLost())
@@ -84,7 +84,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	}
 
 	@Override
-	public void deleteBook(DeleteBookRequest request) {
+	public void deleteBook(DeleteBookRequestDto request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
 		updateBookToAvailableAfterOrganizing(book);
 		repository.deleteById(book.getId());

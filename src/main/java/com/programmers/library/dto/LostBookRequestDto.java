@@ -2,10 +2,10 @@ package com.programmers.library.dto;
 
 import static com.programmers.library.constants.MessageConstants.*;
 
-public class DeleteBookRequest {
+public class LostBookRequestDto {
 	private long id;
 
-	public DeleteBookRequest(String id) {
+	public LostBookRequestDto(String id) {
 		try {
 			this.id = Long.parseLong(id);
 		} catch (NumberFormatException e) {
