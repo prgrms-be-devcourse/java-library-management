@@ -18,6 +18,7 @@ public enum Guide {
     DELETE_START("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n"),
     DELETE_COMPLETE("[System] 도서가 삭제 처리 되었습니다.\n"),
     SYSTEM_END("[System] 시스템을 종료합니다."),
+    WRONG_MODE("[System] 모드를 정확히 선택해주세요."),
     ;
     private final String guide;
 

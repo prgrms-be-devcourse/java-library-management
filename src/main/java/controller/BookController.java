@@ -8,8 +8,6 @@ import repository.FileRepository;
 import repository.MemoryRepository;
 import service.BookService;
 
-import java.io.IOException;
-
 
 public class BookController {
 
@@ -17,14 +15,30 @@ public class BookController {
     private final Input input;
     private final Output output;
 
-    public BookController(int mode, Input input, Output output) {
-        if (mode == 1) {
-            this.bookService = new BookService(new FileRepository("book.csv"));
-        } else if (mode == 2) {
-            this.bookService = new BookService(new MemoryRepository());
-        }
+    public BookController(Input input, Output output) {
         this.input = input;
         this.output = output;
+    }
+
+    public boolean chooseMode() {
+        output.printModeOptions();
+        try {
+            int mode = input.inputNumber();
+            if (mode == 1) {
+                output.printGuide(Guide.START_NORMAL_MODE);
+                this.bookService = new BookService(new FileRepository("book.csv"));
+            } else if (mode == 2) {
+                output.printGuide(Guide.START_TEST_MODE);
+                this.bookService = new BookService(new MemoryRepository());
+            } else {
+                output.printGuide(Guide.WRONG_MODE);
+                return false;
+            }
+            runApplication();
+        } catch (Exception e) {
+            output.printException(e.getMessage());
+        }
+        return true;
     }
 
     public void runApplication() {
@@ -45,10 +59,10 @@ public class BookController {
                         case 7 -> deleteBook();
                     }
                 } catch (Exception e) {
-                    output.printException(e.getLocalizedMessage());
+                    output.printException(e.getMessage());
                 }
             }
-        }while (function != 0);
+        } while (function != 0);
     }
 
     public void saveBook() {
