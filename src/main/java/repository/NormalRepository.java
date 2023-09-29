@@ -6,6 +6,7 @@ import domain.Status;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,10 +39,10 @@ public class NormalRepository{
     }
 
     // list -> file
-    private void updateFile(){
+    public void updateFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
             for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
+                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus().getLabel());
                 bw.newLine();
             }
         } catch(IOException e){
@@ -52,7 +53,7 @@ public class NormalRepository{
     // [1] 도서 등록
     public void register(Book book) {
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH,true))){
-            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
+            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus().getLabel());
             bw.newLine();
             bw.flush();
             bookList.add(book);
@@ -89,21 +90,20 @@ public class NormalRepository{
     // [7] 도서 삭제
     public void remove(Book book){
         bookList.remove(book);
-        updateFile();
     }
 
     // 아이디로 도서 조회
-    public Optional<Book> findById(Long id){
+    public Optional<Book> findById(Integer id){
         for (Book book: bookList){
-            if (id == book.getId()){
+            if (Objects.equals(id, book.getId())){
                 return Optional.of(book);
             }
         }
         return Optional.empty();
     }
 
-    public Long createId(){
-        if (bookList.isEmpty()) return 1L;
+    public Integer createId(){
+        if (bookList.isEmpty()) return 1;
         return bookList.get(bookList.size()-1).getId()+1;
     }
 }

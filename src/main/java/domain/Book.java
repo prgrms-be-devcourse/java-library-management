@@ -1,13 +1,13 @@
 package domain;
 
 public class Book {
-    private final Long id;
+    private final Integer id;
     private final String title;
     private final String author;
     private final Integer page;
     private Status status;
 
-    public Book(Long id, String title, String author, int page, Status status) {
+    public Book(Integer id, String title, String author, int page, Status status) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -25,7 +25,7 @@ public class Book {
         );
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

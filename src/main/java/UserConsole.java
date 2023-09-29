@@ -47,6 +47,9 @@ public class UserConsole {
                     case "7" -> deleteBook();
                 }
             }
+            catch (NumberFormatException e){
+                System.out.println("숫자를 입력해주세요.");
+            }
             catch (IOException e){
                 e.printStackTrace();
             }
@@ -58,21 +61,21 @@ public class UserConsole {
     private void reportLostBook() throws Exception {
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n");
         System.out.println("Q. 분실 처리할 도서번호를 입력하세요\n");
-        bookService.reportLostBook(Long.valueOf(getInput()));
+        bookService.reportLostBook(Integer.valueOf(getInput()));
         System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
     }
 
     private void returnBook() throws Exception {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n");
         System.out.println("Q. 반납할 도서번호를 입력하세요\n");
-        bookService.returnBook(Long.valueOf(getInput()));
+        bookService.returnBook(Integer.valueOf(getInput()));
         System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
     }
 
     private void borrowBook() throws Exception {
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n");
         System.out.println("Q. 대여할 도서번호를 입력하세요\n");
-        bookService.borrowBook(Long.valueOf(getInput()));
+        bookService.borrowBook(Integer.valueOf(getInput()));
         System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
     }
 
@@ -109,7 +112,7 @@ public class UserConsole {
     private void deleteBook() throws Exception {
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요\n");
-        Long id = Long.valueOf(getInput());
+        Integer id =Integer.valueOf(getInput());
         bookService.removeBook(id);
         System.out.println("[System] 도서가 삭제 처리 되었습니다.");
     }
