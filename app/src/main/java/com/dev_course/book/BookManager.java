@@ -9,9 +9,9 @@ public interface BookManager {
 
     String rentById(int id);
 
-    String lossById(int id);
-
     String returnById(int id);
+
+    String lossById(int id);
 
     String deleteById(int id);
 }

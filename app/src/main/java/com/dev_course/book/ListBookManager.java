@@ -85,7 +85,22 @@ public class ListBookManager implements BookManager {
 
     @Override
     public String lossById(int id) {
-        return null;
+        if (hasNotId(id)) {
+            return NOT_EXIST_ID.msg();
+        }
+
+        Book target = bookList.stream()
+                .filter(book -> book.getId() == id)
+                .findFirst()
+                .orElseThrow();
+
+        if (target.getState() == LOST) {
+            return ALREADY_LOST_BOOK.msg();
+        }
+
+        target.setState(LOST);
+
+        return SUCCESS_LOSS_BOOK.msg();
     }
 
     @Override
