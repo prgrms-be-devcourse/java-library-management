@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FileRepository implements Repository{
 
-    private final String path = System.getProperty("user.dir") + "/src/main/resources/repository.csv";
+    private final String path = System.getProperty("user.dir") + "/repository.csv";
     private final List<Book> bookList = new ArrayList<>();
 
     public FileRepository(){
