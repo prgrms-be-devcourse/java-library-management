@@ -1,18 +1,16 @@
 package org.example.server.repository;
 
 import org.example.server.entity.Book;
-import org.example.server.entity.BookState;
 import org.example.server.exception.BookNotFoundException;
 import org.example.server.exception.EmptyLibraryException;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
+// 서버의 테스트 모드 레포지토리를 담당하는 부분
 public class TestBookRepository implements Repository {
-    private int count;
-    private LinkedHashMap<Integer, Book> data;
+    private int count; //  생성 예정인 id 값
+    private LinkedHashMap<Integer, Book> data; // 저장한 순서대로 저장
 
     public TestBookRepository() {
         loadData();
@@ -20,7 +18,7 @@ public class TestBookRepository implements Repository {
 
     @Override
     public void loadData() {
-        count = 0; // id 생성자
+        count = 0;
         data = new LinkedHashMap<>();
     }
 
@@ -38,7 +36,7 @@ public class TestBookRepository implements Repository {
         StringBuilder sb = new StringBuilder();
         data.values().forEach((book) -> {
             sb.append(checkLoadTime(book));
-        }); // 정리 여부 수정 후 append
+        }); // 정리 완료 시간 체크 후 업데이트 후 append
         sb.append("\n");
         return sb.toString();
     }
@@ -46,7 +44,7 @@ public class TestBookRepository implements Repository {
     @Override
     public String searchByName(String bookName) {
         StringBuilder sb = new StringBuilder();
-        data.values().forEach(this::checkLoadTime); // 정리 여부 수정
+        data.values().forEach(this::checkLoadTime); // 정리 완료 시간 체크 후 업데이트
         data.values().stream().filter(book -> book.name.contains(bookName)).forEach(sb::append);
         if (sb.isEmpty())
             throw new EmptyLibraryException();
@@ -59,7 +57,7 @@ public class TestBookRepository implements Repository {
         Optional<Book> book = Optional.ofNullable(data.get(bookId));
         if (book.isEmpty())
             throw new BookNotFoundException();
-        return checkLoadTime(book.get()); // 정리 여부 수정
+        return checkLoadTime(book.get()); // 정리 완료 시간 체크 후 업데이트
     }
 
     @Override
@@ -67,20 +65,8 @@ public class TestBookRepository implements Repository {
         data.remove(bookId);
     }
 
-    private Book checkLoadTime(Book book) {
-        if (BookState.valueOf(book.state).equals(BookState.LOADING)) {
-            try {
-                Date endLoadTime = Book.format.parse(book.endLoadTime);
-                Date now = Book.format.parse(Book.format.format(new Date()));
-                if (now.after(endLoadTime)) {
-                    book.state = BookState.CAN_BORROW.name();
-                    book.endLoadTime = "";
-                    return book;
-                } // save
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return book;
-    } // 책 꺼내올 때마다 책이 (1. 도서 정리중/2. 반납 시간이 5분 지남)이면 초기화
+    @Override
+    public void save() {
+
+    }
 }
