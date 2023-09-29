@@ -56,7 +56,18 @@ public class TestBookService implements BookService {
 
     @Override
     public void returnBook(long bookNumber) {
+        Book book = bookRepository.findByBookNumber(bookNumber)
+                .orElseThrow(BookNotFoundException::new);
 
+        if (book.getStatus().equals(BookStatus.AVAILABLE)) {
+            throw new ActionNotAllowedException("[System] 이미 대여 가능한 도서입니다.");
+        }
+
+        if (book.getStatus().equals(BookStatus.LOST)) {
+            throw new ActionNotAllowedException("[System] 분실중인 도서입니다.");
+        }
+
+        book.setStatus(BookStatus.ON_ARRANGEMENT);
     }
 
     @Override

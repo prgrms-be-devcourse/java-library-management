@@ -17,8 +17,6 @@ public interface BookRepository {
 
     Optional<Book> findByBookNumber(long bookNumber);
 
-    void save(Book book);
-
     void deleteByBookNumber(long bookNumber);
 
     void saveFile();

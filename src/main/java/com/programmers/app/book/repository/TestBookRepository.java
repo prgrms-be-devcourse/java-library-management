@@ -56,11 +56,6 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public void save(Book book) {
-
-    }
-
-    @Override
     public void deleteByBookNumber(long bookNumber) {
 
     }
