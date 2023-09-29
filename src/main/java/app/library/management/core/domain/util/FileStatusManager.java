@@ -18,21 +18,6 @@ public class FileStatusManager implements StatusManager {
         scheduler.schedule(() -> {
             book.available();
             bookRepository.update(book);
-            System.out.println("상태 변경 완료");
-        }, 20, TimeUnit.SECONDS);
+        }, 5, TimeUnit.MINUTES);
     }
-
-//    private static final int POOL_SIZE = 256;
-//    private final ScheduledExecutorService scheduler;
-//
-//    public StatusManager() {
-//        this.scheduler = Executors.newScheduledThreadPool(POOL_SIZE);
-//    }
-//
-//    public void execute(Book book) {
-//        scheduler.schedule(() -> {
-//            book.available();
-//            System.out.println("상태 변경 완료");
-//        }, 1, TimeUnit.MINUTES);
-//    }
 }

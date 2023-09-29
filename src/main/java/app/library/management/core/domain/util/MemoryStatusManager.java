@@ -17,7 +17,6 @@ public class MemoryStatusManager implements StatusManager {
     public void execute(Book book) {
         scheduler.schedule(() -> {
             book.available();
-            System.out.println("상태 변경 완료");
-        }, 20, TimeUnit.SECONDS);
+        }, 5, TimeUnit.MINUTES);
     }
 }
