@@ -2,13 +2,19 @@ package org.example.server.repository;
 
 import org.example.server.entity.Book;
 
-public class CommonBookRepository implements BookRepository {
-    public CommonBookRepository() {
+import java.util.LinkedHashMap;
+
+public class FileBookRepository implements BookRepository {
+    private static int count;
+    private static LinkedHashMap<Integer, Book> data;
+
+    public FileBookRepository() {
         loadData();
     }
 
     @Override
     public void loadData() {
+
     }
 
     @Override
