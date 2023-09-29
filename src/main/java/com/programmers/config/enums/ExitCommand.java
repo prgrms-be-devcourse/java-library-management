@@ -1,8 +1,6 @@
 package com.programmers.config.enums;
 
 import com.programmers.exception.checked.InvalidExitCommandException;
-import com.programmers.presentation.UserInteraction;
-import com.programmers.util.Messages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,21 +25,13 @@ public enum ExitCommand {
         return NOT_EXIT.commands.contains(command);
     }
 
-    public static void promptForExit(UserInteraction userInteraction) {
-        try {
-            userInteraction.displayMessage(Messages.CONTINUE_PROMPT.getMessage());
-            String exitInput = userInteraction.collectUserInput();
-
-            if (isExitCommand(exitInput)) {
-                System.exit(0);
-            } else if (isNotExitCommand(exitInput)) {
-                return;
-            }
-
-            throw new InvalidExitCommandException(INVALID_EXIT);
-        } catch (Exception e) {
-            userInteraction.displayMessage(e.getMessage());
-            promptForExit(userInteraction);
+    //TODO: 종료 시 메세지를 보내려면?
+    public static void promptForExit(String exitInput) throws InvalidExitCommandException {
+        if (isExitCommand(exitInput)) {
+            System.exit(0);
+        } else if (isNotExitCommand(exitInput)) {
+            return;
         }
+        throw new InvalidExitCommandException(INVALID_EXIT);
     }
 }

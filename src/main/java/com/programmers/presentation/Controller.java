@@ -16,4 +16,6 @@ public interface Controller<R> {
     Response<R> reportLostBook();
 
     Response<R> deleteBook();
+
+    Response<R> exitApplication();
 }

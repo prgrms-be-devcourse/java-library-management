@@ -2,8 +2,11 @@ package com.programmers.util;
 
 public enum Messages {
     SELECT_MODE("select.mode"),
-    CONTINUE_PROMPT("continue.prompt"),
-    INPUT_MISS("input.miss")
+    Exit_PROMPT("exitConfirmation.prompt"),
+    SELECT_MENU("select.menu"),
+    Return_MENU("return.mainMenu"),
+
+
     ;
 
     private final String key;

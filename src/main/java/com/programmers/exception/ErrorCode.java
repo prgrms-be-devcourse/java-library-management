@@ -6,6 +6,7 @@ public enum ErrorCode {
     INVALID_MODE_NUMBER("invalid.mode"),
     INVALID_INPUT("invalid.input"),
     INVALID_EXIT("invalid.exit"),
+    INVALID_MENU_NUMBER("invalid.menu"),
     ;
 
     ErrorCode(String key) {

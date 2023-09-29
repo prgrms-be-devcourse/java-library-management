@@ -1,7 +1,7 @@
 package com.programmers.presentation;
 
 import com.programmers.application.BookService;
-import com.programmers.mediator.dto.Response;
+import com.programmers.mediator.dto.ConsoleResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -9,37 +9,42 @@ public class ConsoleController implements Controller<String> {
     private final BookService bookService;
 
     @Override
-    public Response<String> registerBook() {
+    public ConsoleResponse registerBook() {
         return null;
     }
 
     @Override
-    public Response<String> getAllBooks() {
+    public ConsoleResponse getAllBooks() {
         return null;
     }
 
     @Override
-    public Response<String> searchBooksByTitle() {
+    public ConsoleResponse searchBooksByTitle() {
         return null;
     }
 
     @Override
-    public Response<String> rentBook() {
+    public ConsoleResponse rentBook() {
         return null;
     }
 
     @Override
-    public Response<String> returnBook() {
+    public ConsoleResponse returnBook() {
         return null;
     }
 
     @Override
-    public Response<String> reportLostBook() {
+    public ConsoleResponse reportLostBook() {
         return null;
     }
 
     @Override
-    public Response<String> deleteBook() {
+    public ConsoleResponse deleteBook() {
         return null;
+    }
+
+    @Override
+    public ConsoleResponse exitApplication() {
+        return ConsoleResponse.of(bookService.exitApp());
     }
 }
