@@ -8,6 +8,7 @@ public class FileBookRepository implements BookRepository {
     private static int count;
     private static LinkedHashMap<Integer, Book> data;
 
+
     public FileBookRepository() {
         loadData();
     }
