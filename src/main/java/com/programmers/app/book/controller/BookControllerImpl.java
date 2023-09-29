@@ -65,7 +65,12 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void reportLostBook() {
-
+        try {
+            bookService.reportLost(communicationAgent.instructReportLost());
+            communicationAgent.print("[System] 도서가 분실 처리 되었습니다.");
+        } catch (RuntimeException e) {
+            communicationAgent.print(e.getMessage());
+        }
     }
 
     @Override
