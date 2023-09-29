@@ -5,18 +5,19 @@ import static com.programmers.library.constants.MessageConstants.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.programmers.library.exception.InvalidMenuException;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
 import com.programmers.library.model.Menu;
 import com.programmers.library.service.LibarayManagerService;
 
-public class LibraryManagerController implements Runnable {
+public class MenuController implements Runnable {
 
 	private final Input input;
 	private final Output output;
 	private final LibarayManagerService service;
 
-	public LibraryManagerController(Input input, Output output, LibarayManagerService service) {
+	public MenuController(Input input, Output output, LibarayManagerService service) {
 		this.input = input;
 		this.output = output;
 		this.service = service;
@@ -65,6 +66,7 @@ public class LibraryManagerController implements Runnable {
 						() -> service.deleteBook(input.inputDeleteBookRequest()),
 						DELETE_BOOK_END
 					);
+					default -> throw new InvalidMenuException();
 				}
 			} catch (Exception e) {
 				output.printSystemMessage(e.getMessage());
