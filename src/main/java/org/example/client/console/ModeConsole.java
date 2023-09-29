@@ -45,10 +45,10 @@ public class ModeConsole {
     }
 
     public static String scanType(IO io) {
-        System.out.print(ClientMode.MODE_CONSOLE);
+        io.print(ClientMode.MODE_CONSOLE);
         int selectNum = Validator.validateSelectNum(ClientMode.values().length, io.scanLineToInt()); //숫자 & 범위 체크
         ClientMode clientMode = ClientMode.valueOfNumber(selectNum);
-        System.out.print(clientMode.alert);
+        io.print(clientMode.alert);
         return clientMode.name();
     }
 }
