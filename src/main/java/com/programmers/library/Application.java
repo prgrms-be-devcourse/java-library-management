@@ -1,9 +1,15 @@
 package com.programmers.library;
 
 import com.programmers.library.controller.ModeController;
+import com.programmers.library.io.ConsoleInput;
+import com.programmers.library.io.ConsoleOutput;
+import com.programmers.library.io.Input;
+import com.programmers.library.io.Output;
 
 public class Application {
 	public static void main(String[] args) {
-		new ModeController().run();
+		Input input = new ConsoleInput();
+		Output output = new ConsoleOutput();
+		new ModeController(input, output).run();
 	}
 }
