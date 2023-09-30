@@ -4,6 +4,7 @@ import domain.Book;
 import domain.Status;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,10 @@ public class NormalRepository{
                 String author = split[2];
                 Integer page = Integer.valueOf(split[3]);
                 Status status = Status.valueOf(split[4]);
-                Book book = new Book(createId(),title,author,page, status);
+                Instant returnTime = null;
+                if (!split[5].equals("null"))
+                    returnTime = Instant.parse(split[5]);
+                Book book = new Book(createId(),title,author,page, status,returnTime);
 
                 bookList.add(book);
             }
@@ -42,7 +46,7 @@ public class NormalRepository{
     public void updateFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
             for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
+                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus()+","+book.getReturnTime());
                 bw.newLine();
             }
         } catch(IOException e){

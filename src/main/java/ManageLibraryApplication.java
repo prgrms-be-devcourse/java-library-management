@@ -1,4 +1,4 @@
-public class Main {
+public class ManageLibraryApplication {
     public static void main(String[] args) throws Exception {
         UserConsole userConsole = new UserConsole();
         userConsole.selectMode();

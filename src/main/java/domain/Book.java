@@ -3,6 +3,9 @@ package domain;
 
 import lombok.Getter;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Getter
 public class Book {
     private final Integer id;
@@ -10,13 +13,24 @@ public class Book {
     private final String author;
     private final Integer page;
     private Status status;
+    private Instant returnTime;
 
-    public Book(Integer id, String title, String author, int page, Status status) {
+    public Book(Integer id, String title, String author, int page, Status status, Instant returnTime) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.page = page;
         this.status = status;
+        this.returnTime = returnTime;
+    }
+
+    public Book(Integer id, String title, String author, Integer page) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.page = page;
+        this.status = Status.AVAILABLE;
+        this.returnTime = null;
     }
 
 
@@ -35,9 +49,17 @@ public class Book {
         status = Status.BORROWED;
     }
 
-    public void doReturn(){
-        //status = Status.CLEANING;
-        status = Status.AVAILABLE;
+    public void doReturn() {
+        returnTime = Instant.now();
+        status = Status.CLEANING;
+    }
+
+    public boolean isCleaning(){
+        if (Duration.between(returnTime, Instant.now()).toMinutes()<5) {
+            status = Status.AVAILABLE;
+            return true;
+        }
+        return false;
     }
 
     public void report(){

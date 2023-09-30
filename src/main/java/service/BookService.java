@@ -13,7 +13,7 @@ public class BookService {
 
     // [1] 도서 저장
     public void saveBook(String title, String author, Integer page){
-        Book book = new Book(normalRepository.createId(), title, author, page, Status.AVAILABLE);
+        Book book = new Book(normalRepository.createId(), title, author, page);
         normalRepository.register(book);
     }
 
@@ -38,9 +38,12 @@ public class BookService {
     public void borrowBook(Integer id){
         Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
         switch (book.getStatus()){
-            case CLEANING -> throw new UnableStatusException("정리 중인 도서입니다.");
             case BORROWED -> throw new UnableStatusException("이미 대여 중인 도서입니다.");
             case LOST ->    throw new UnableStatusException("분실된 도서입니다.");
+            case CLEANING -> {
+                if (book.isCleaning())
+                    throw new UnableStatusException("정리 중인 도서입니다.");
+            }
         }
         normalRepository.borrow(book);
         normalRepository.updateFile();
@@ -51,7 +54,10 @@ public class BookService {
         Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
         switch (book.getStatus()){
             case AVAILABLE -> throw new UnableStatusException("원래 대여가 가능한 도서입니다.");
-            case CLEANING -> throw new UnableStatusException("이미 반납되어 정리 중인 도서입니다.");
+            case CLEANING -> {
+                if (book.isCleaning())
+                    throw new UnableStatusException("이미 반납되어 정리 중인 도서입니다.");
+            }
         }
         normalRepository.returnBook(book);
         normalRepository.updateFile();
