@@ -1,6 +1,6 @@
 package com.programmers.library.utils;
 
-public enum Message {
+public enum MessageType {
     ADD_SUCCESS("도서 등록이 완료되었습니다."),         // SUCCESS
     RENT_SUCCESS("도서가 대여 처리 되었습니다."),
     RETURN_SUCCESS("도서가 반납 처리 되었습니다."),
@@ -21,7 +21,7 @@ public enum Message {
 
     private final String message;
 
-    Message(String message) {
+    MessageType(String message) {
         this.message = message;
     }
 

@@ -2,7 +2,7 @@ package com.programmers.library.utils;
 
 import java.util.Scanner;
 
-public enum Menu {
+public enum MenuType {
     ADD(1, "도서 등록"),
     VIEW(2, "전체 도서 목록 조회"),
     SEARCH(3, "제목으로 도서 검색"),
@@ -15,13 +15,13 @@ public enum Menu {
     private int menuNum;
     private String menuName;
 
-    Menu(int menuNum, String menuName) {
+    MenuType(int menuNum, String menuName) {
         this.menuNum = menuNum;
         this.menuName = menuName;
     }
 
-    private static Menu getMenuByNum(int menuNum) {
-        for(Menu menu : Menu.values()) {
+    private static MenuType getMenuByNum(int menuNum) {
+        for(MenuType menu : MenuType.values()) {
             if(menu.menuNum == menuNum) {
                 if(menuNum == 0) {
                     System.out.println("\n[System] 애플리케이션을 종료합니다.\n");
@@ -34,11 +34,11 @@ public enum Menu {
         throw new IllegalArgumentException("메뉴를 찾을 수 없습니다");
     }
 
-    public static Menu selectMenu() {
+    public static MenuType selectMenu() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Q. 사용할 기능을 선택해주세요.");
-        for(Menu menu : Menu.values()) {
+        for(MenuType menu : MenuType.values()) {
             System.out.println(menu.menuNum + ". " + menu.menuName);
         }
         System.out.print("\n> ");

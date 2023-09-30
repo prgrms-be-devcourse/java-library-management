@@ -1,9 +1,9 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.utils.BookStatus;
+import com.programmers.library.utils.StatusType;
 import com.programmers.library.repository.LibraryRepository;
-import com.programmers.library.utils.Message;
+import com.programmers.library.utils.MessageType;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class LibraryService {
         Book book = new Book(title, author, pages);
         libraryRepository.save(book);
         libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-        printMessage(Message.ADD_SUCCESS.getMessage(), "\n");
+        printMessage(MessageType.ADD_SUCCESS.getMessage(), "\n");
     }
 
     // 전체 도서 목록 조회
@@ -36,16 +36,16 @@ public class LibraryService {
         List<Book> books = libraryRepository.findAll();
 
         if(books.isEmpty()) {   // 현재 등록된 도서가 없는 경우
-            printMessage(Message.NO_BOOKS.getMessage(), "\n");
+            printMessage(MessageType.NO_BOOKS.getMessage(), "\n");
             return;
         }
 
-        printMessage(Message.LIST_START.getMessage(), "\n");
+        printMessage(MessageType.LIST_START.getMessage(), "\n");
         for (Book book : books) {
             System.out.println(book.toString());
             System.out.println("\n------------------------------\n");
         }
-        printMessage(Message.LIST_END.getMessage(), "\n");
+        printMessage(MessageType.LIST_END.getMessage(), "\n");
     }
 
     // 도서 제목으로 검색
@@ -53,7 +53,7 @@ public class LibraryService {
         List<Book> books = libraryRepository.findByTitle(title);
 
         if(books.isEmpty()) {
-            printMessage(Message.NO_SEARCH_BOOKS.getMessage(), "\n");
+            printMessage(MessageType.NO_SEARCH_BOOKS.getMessage(), "\n");
             return;
         }
 
@@ -61,7 +61,7 @@ public class LibraryService {
             System.out.println("\n" + book.toString());
             System.out.println("\n------------------------------");
         }
-        printMessage(Message.SEARCH_END.getMessage(), "\n");
+        printMessage(MessageType.SEARCH_END.getMessage(), "\n");
     }
 
     // 도서 대여
@@ -70,20 +70,20 @@ public class LibraryService {
 
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            BookStatus bookStatus = book.getStatus();
+            StatusType bookStatus = book.getStatus();
 
             switch (bookStatus) {
                 case AVAILABLE -> {
-                    book.setStatus(BookStatus.RENTING);
+                    book.setStatus(StatusType.RENTING);
                     libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(Message.RENT_SUCCESS.getMessage(), "\n");
+                    printMessage(MessageType.RENT_SUCCESS.getMessage(), "\n");
                 }
-                case RENTING -> printMessage(Message.ALREADY_RENTED.getMessage(), "\n");
-                case ORGANIZING, LOST -> printMessage(Message.NOT_AVAILABLE.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
+                case RENTING -> printMessage(MessageType.ALREADY_RENTED.getMessage(), "\n");
+                case ORGANIZING, LOST -> printMessage(MessageType.NOT_AVAILABLE.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
             }
         }
         else {
-            printMessage(Message.BOOK_NOT_FOUND.getMessage(), "\n");
+            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
         }
     }
 
@@ -93,29 +93,29 @@ public class LibraryService {
 
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            BookStatus bookStatus = book.getStatus();
+            StatusType bookStatus = book.getStatus();
 
             switch (bookStatus) {
                 case RENTING, LOST -> {
-                    book.setStatus(BookStatus.ORGANIZING);
+                    book.setStatus(StatusType.ORGANIZING);
                     libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(Message.RETURN_SUCCESS.getMessage(), "\n");
+                    printMessage(MessageType.RETURN_SUCCESS.getMessage(), "\n");
 
                     Timer timer = new Timer();  // 5분 뒤 '대여 가능' 설정
                     TimerTask timerTask = new TimerTask() {
                         @Override
                         public void run() {
-                            book.setStatus(BookStatus.AVAILABLE);
+                            book.setStatus(StatusType.AVAILABLE);
                         }
                     };
                     timer.schedule(timerTask, 5 * 60 * 1000);
                     libraryRepository.saveAll();    // CSV 파일 덮어쓰기
                 }
-                case AVAILABLE, ORGANIZING -> printMessage(Message.CANNOT_RETURN.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
+                case AVAILABLE, ORGANIZING -> printMessage(MessageType.CANNOT_RETURN.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
             }
         }
         else {
-            printMessage(Message.BOOK_NOT_FOUND.getMessage(), "\n");
+            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
         }
     }
 
@@ -125,19 +125,19 @@ public class LibraryService {
 
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            BookStatus bookStatus = book.getStatus();
+            StatusType bookStatus = book.getStatus();
 
             switch (bookStatus) {
                 case AVAILABLE, RENTING, ORGANIZING -> {
-                    book.setStatus(BookStatus.LOST);
+                    book.setStatus(StatusType.LOST);
                     libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(Message.LOST_SUCCESS.getMessage(), "\n");
+                    printMessage(MessageType.LOST_SUCCESS.getMessage(), "\n");
                 }
-                case LOST -> printMessage(Message.ALREADY_LOST.getMessage(), "\n");
+                case LOST -> printMessage(MessageType.ALREADY_LOST.getMessage(), "\n");
             }
         }
         else {
-            printMessage(Message.BOOK_NOT_FOUND.getMessage(), "\n");
+            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
         }
     }
 
@@ -148,9 +148,9 @@ public class LibraryService {
         if(book.isPresent()) {
             libraryRepository.delete(bookId);
             libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-            printMessage(Message.DELETE_SUCCESS.getMessage(), "\n");
+            printMessage(MessageType.DELETE_SUCCESS.getMessage(), "\n");
         } else {
-            printMessage(Message.BOOK_NOT_FOUND.getMessage(), "\n");
+            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
         }
     }
 

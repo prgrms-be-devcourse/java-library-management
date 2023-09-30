@@ -1,22 +1,22 @@
 package com.programmers.library.domain;
 
-import com.programmers.library.utils.BookStatus;
+import com.programmers.library.utils.StatusType;
 
 public class Book {
     private int bookId;
     private String title;
     private String author;
     private int pages;
-    private BookStatus status;
+    private StatusType status;
 
     public Book(String title, String author, int pages) {
         this.title = title;
         this.author = author;
         this.pages = pages;
-        this.status = BookStatus.AVAILABLE; // 기본 도서 상태 - AVAILABLE(대여 가능)
+        this.status = StatusType.AVAILABLE; // 기본 도서 상태 - AVAILABLE(대여 가능)
     }
 
-    public Book(int bookId, String title, String author, int pages, BookStatus status) {
+    public Book(int bookId, String title, String author, int pages, StatusType status) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -65,11 +65,11 @@ public class Book {
         this.pages = pages;
     }
 
-    public BookStatus getStatus() {
+    public StatusType getStatus() {
         return status;
     }
 
-    public void setStatus(BookStatus status) {
+    public void setStatus(StatusType status) {
         this.status = status;
     }
 }

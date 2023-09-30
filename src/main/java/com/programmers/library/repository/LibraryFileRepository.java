@@ -1,7 +1,7 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.utils.BookStatus;
+import com.programmers.library.utils.StatusType;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class LibraryFileRepository implements LibraryRepository {
                     String title = data[0];
                     String author = data[1];
                     int pages = Integer.parseInt(data[2]);
-                    BookStatus status = BookStatus.getStatus(data[3]);
+                    StatusType status = StatusType.getStatus(data[3]);
 
                     Book book = new Book(bookId, title, author, pages, status);
                     books.add(book);

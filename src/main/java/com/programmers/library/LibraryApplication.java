@@ -5,16 +5,16 @@ import com.programmers.library.repository.LibraryFileRepository;
 import com.programmers.library.repository.LibraryMemoryRepository;
 import com.programmers.library.repository.LibraryRepository;
 import com.programmers.library.service.LibraryService;
-import com.programmers.library.utils.Mode;
+import com.programmers.library.utils.ModeType;
 
 public class LibraryApplication {
     public static void main(String[] args) {
         // 모드 선택
-        Mode modeType = Mode.selectMode();
+        ModeType modeType = ModeType.selectMode();
 
         // 모드별 Repository 의존 주입
         LibraryRepository libraryRepository;
-        if(modeType == Mode.NORMAL) {
+        if(modeType == ModeType.NORMAL) {
             libraryRepository = new LibraryFileRepository();
         }
         else {

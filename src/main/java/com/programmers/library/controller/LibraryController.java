@@ -1,6 +1,6 @@
 package com.programmers.library.controller;
 
-import com.programmers.library.utils.Menu;
+import com.programmers.library.utils.MenuType;
 import com.programmers.library.service.LibraryService;
 
 import java.util.Scanner;
@@ -20,7 +20,7 @@ public class LibraryController {
         boolean isRunning = true;
 
         while(isRunning) {
-            Menu menuType = Menu.selectMenu();
+            MenuType menuType = MenuType.selectMenu();
 
             switch (menuType) {
                 case ADD:
