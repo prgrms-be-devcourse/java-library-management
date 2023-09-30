@@ -49,18 +49,18 @@ public class NormalRepository implements Repository {
                 .orElse(null);
 
         if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST);
+            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
             return;
         }
         switch (selectedBook.getState()) {
-            case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING);
+            case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING.getMessage());
             case AVAILABLE -> {
                 selectedBook.setState(BookState.RENTING);
                 updateFile(books, file);
-                System.out.println(ExecuteMessage.RENTAL_AVAILABLE);
+                System.out.println(ExecuteMessage.RENTAL_AVAILABLE.getMessage());
             }
-            case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING);
-            case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST);
+            case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING.getMessage());
+            case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST.getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ public class NormalRepository implements Repository {
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST);
+            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
             return;
         }
         NormalChangeStateThread thread = new NormalChangeStateThread(selectedBook, file, books);
@@ -81,11 +81,11 @@ public class NormalRepository implements Repository {
             thread.setDaemon(true);
             thread.start();
 
-            System.out.println(ExecuteMessage.RETURN_COMPLETE);
+            System.out.println(ExecuteMessage.RETURN_COMPLETE.getMessage());
         } else if(selectedBook.getState() == BookState.AVAILABLE) {
-            System.out.println(ExecuteMessage.RETURN_AVAILABLE);
+            System.out.println(ExecuteMessage.RETURN_AVAILABLE.getMessage());
         } else {
-            System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE);
+            System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE.getMessage());
         }
     }
 
@@ -95,7 +95,7 @@ public class NormalRepository implements Repository {
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST);
+            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
             return;
         }
 
@@ -103,10 +103,10 @@ public class NormalRepository implements Repository {
             case RENTING -> {
                 selectedBook.setState(BookState.LOST);
                 updateFile(books, file);
-                System.out.println(ExecuteMessage.LOST_COMPLETE);
+                System.out.println(ExecuteMessage.LOST_COMPLETE.getMessage());
             }
-            case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE);
-            case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY);
+            case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE.getMessage());
+            case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY.getMessage());
         }
     }
 
@@ -117,12 +117,12 @@ public class NormalRepository implements Repository {
                 .orElse(null);
 
         if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST);
+            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
             return;
         } else {
             books.remove(selectedBook);
             updateFile(books, file);
-            System.out.println(ExecuteMessage.DELETE_COMPLETE);
+            System.out.println(ExecuteMessage.DELETE_COMPLETE.getMessage());
         }
     }
 
@@ -131,7 +131,7 @@ public class NormalRepository implements Repository {
         books.forEach(book -> {
             try {
                 bw.write(String.valueOf(book.getId()) + "," + book.getTitle() + ","
-                        + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState() + "\n");
+                        + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState().getState() + "\n");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -151,7 +151,7 @@ public class NormalRepository implements Repository {
             tmpBook.setTitle(split[1]);
             tmpBook.setWriter(split[2]);
             tmpBook.setPage(Integer.parseInt(split[3]));
-            tmpBook.setState(BookState.valueOf(split[4]));
+            tmpBook.setState(BookState.valueOfState(split[4]));
 
             books.add(tmpBook);
         }

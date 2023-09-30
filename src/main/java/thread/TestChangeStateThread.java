@@ -1,5 +1,6 @@
 package thread;
 
+import domain.BookState;
 import repository.Book;
 
 public class TestChangeStateThread extends Thread {
@@ -13,7 +14,7 @@ public class TestChangeStateThread extends Thread {
     public void run() {
         try {
             Thread.sleep(300000);
-            book.setState("대여 가능");
+            book.setState(BookState.AVAILABLE);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

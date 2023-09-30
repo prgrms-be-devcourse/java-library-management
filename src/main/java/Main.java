@@ -13,13 +13,13 @@ public class Main {
 
     public static Mode selectMode() throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println(SelectMessage.MODE_SELECT_MESSAGE);
+        System.out.println(SelectMessage.MODE_SELECT_MESSAGE.getMessage());
         String num = bf.readLine();
         if(num.equals("1")) {
-            System.out.println(ExecuteMessage.NORMAL_MODE);
+            System.out.println(ExecuteMessage.NORMAL_MODE.getMessage());
             return new Mode(ModeType.NORMAL_MODE);
         } else {
-            System.out.println(ExecuteMessage.TEST_MODE);
+            System.out.println(ExecuteMessage.TEST_MODE.getMessage());
             return new Mode(ModeType.TEST_MODE);
         }
     }

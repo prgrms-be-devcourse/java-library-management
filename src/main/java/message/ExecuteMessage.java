@@ -27,6 +27,12 @@ public enum ExecuteMessage {
     LOST_ALREADY("[System] 이미 분실 처리된 도서입니다."),
     DELETE_COMPLETE("[System] 도서가 삭제 처리 되었습니다.");
 
+    private String message;
     ExecuteMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

@@ -9,5 +9,13 @@ public enum QuestionMessage {
     RETURN_ID("Q. 반납할 도서번호를 입력하세요"),
     LOST_ID("Q. 분실 처리할 도서번호를 입력하세요"),
     DELETE_ID("Q. 삭제 처리할 도서번호를 입력하세요");
-    QuestionMessage(String message) {}
+
+    private String message;
+    QuestionMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

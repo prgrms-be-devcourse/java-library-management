@@ -1,5 +1,6 @@
 package thread;
 
+import domain.BookState;
 import repository.Book;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public class NormalChangeStateThread extends Thread {
     public void run() {
         try {
             Thread.sleep(300000);
-            book.setState("대여 가능");
+            book.setState(BookState.AVAILABLE);
             updateFile(books, file);
         } catch (InterruptedException | IOException e) {
             throw new RuntimeException(e);

@@ -1,5 +1,7 @@
 package repository;
 
+import domain.BookState;
+
 import java.io.*;
 import java.util.List;
 
@@ -21,13 +23,13 @@ public interface Repository {
                 + "\n제목 : " + book.getTitle()
                 + "\n작가 이름 : " + book.getWriter()
                 + "\n페이지 수: " + String.valueOf(book.getPage()) + "페이지"
-                + "\n상태 : " + book.getState()
+                + "\n상태 : " + book.getState().getState()
                 + "\n\n------------------------------");
     }
     
     default public void organizeState(List<Book> books) {
         books.forEach(book -> {
-            if(book.getState().equals("도서 정리중")) book.setState("대여 가능");
+            if(book.getState() == BookState.ORGANIZING) book.setState(BookState.AVAILABLE);
         });
     }
 }
