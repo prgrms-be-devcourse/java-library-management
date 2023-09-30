@@ -11,7 +11,9 @@ public enum Code{
     FOUR(4, "도서 대여", Executor::rent),
     FIVE(5, "도서 반납", Executor::returns),
     SIX(6, "도서 분실", Executor::reportLost),
-    SEVEN(7, "도서 삭제", Executor::delete);
+    SEVEN(7, "도서 삭제", Executor::delete),
+    EIGHT(8, "프로그램 종료", Executor::exit);
+
 
     private final int value;
     private final String name;
