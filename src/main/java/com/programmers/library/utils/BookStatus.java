@@ -12,6 +12,16 @@ public enum BookStatus {
         return description;
     }
 
+    public static BookStatus getStatus(String description) {    // description -> 열거형 상수
+        for(BookStatus status : BookStatus.values()) {
+            if(status.getDescription().equals(description)) {
+                return status;
+            }
+        }
+
+        throw new IllegalArgumentException("유효하지 않은 도서 상태입니다.");
+    }
+
     BookStatus(String description) {
         this.description = description;
     }
