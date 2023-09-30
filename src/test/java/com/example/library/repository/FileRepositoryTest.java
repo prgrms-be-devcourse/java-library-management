@@ -1,7 +1,7 @@
 package com.example.library.repository;
 
 import com.example.library.domain.Book;
-import com.example.library.domain.BookStatus;
+import com.example.library.domain.BookStatusType;
 import com.example.library.file.FileInit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +20,7 @@ public class FileRepositoryTest {
     @BeforeEach
     public void initBook() {
 
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatus.대여가능, LocalDateTime.now());
+        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
         bookRepository = new BookFileRepository();
 
     }
