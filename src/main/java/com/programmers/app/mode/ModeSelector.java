@@ -14,9 +14,14 @@ public class ModeSelector {
         while (true) {
             try {
                 int modeCode = communicationAgent.instructModeSelection();
-                if (modeCode == 1) return Mode.NORMAL;
-                else if (modeCode == 2) return Mode.TEST;
-                else throw new InvalidInputException();
+                switch(modeCode) {
+                    case 1:
+                        return Mode.NORMAL;
+                    case 2:
+                        return Mode.TEST;
+                    default:
+                        throw new InvalidInputException();
+                }
             } catch (InvalidInputException e) {
                 //would like to manage this with another object
                 System.out.println(e.getMessage());

@@ -16,6 +16,12 @@ public class BookControllerImpl implements BookController {
     }
 
     @Override
+    public void exit() {
+        communicationAgent.print("[System] 시스템을 종료합니다.");
+        System.exit(0);
+    }
+
+    @Override
     public void register() {
         bookService.register(communicationAgent.instructRegister());
         communicationAgent.print("[System] 도서 등록이 완료되었습니다.");

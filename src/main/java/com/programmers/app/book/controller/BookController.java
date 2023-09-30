@@ -2,6 +2,8 @@ package com.programmers.app.book.controller;
 
 public interface BookController {
 
+    void exit();
+
     void register();
 
     void findAllBooks();
