@@ -91,7 +91,9 @@ public class LibraryService {
         String pageNumber = consoleInput.enterPageNumber();
         consoleOutput.printAddComplete();
 
-        bookRepository.addBook(new Book(DEFAULT, title, writer, pageNumber, BookStatusType.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
+        long bookId = generateRandomNumber();
+
+        bookRepository.addBook(new Book(bookId, title, writer, pageNumber, BookStatusType.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
 
     }
 
@@ -141,6 +143,17 @@ public class LibraryService {
         if (!bookRepository.deleteBook(bookId)) {
             consoleOutput.printBookNotExist();
         }else System.out.println("도서가 삭제 처리 되었습니다.");
+    }
+
+    private Long generateRandomNumber() {
+
+        while (true){
+            long random = (long)Math.random()*10;
+            if (!bookRepository.isContainsKey(random)) {
+                return random;
+            }
+        }
+
     }
 
 }
