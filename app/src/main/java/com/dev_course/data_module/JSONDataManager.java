@@ -22,7 +22,6 @@ public class JSONDataManager implements DataManager {
     @Override
     public void load() {
         if (!file.exists()) {
-            createDirectory();
             data = new LibraryData(0, new ArrayList<>());
             return;
         }
@@ -37,6 +36,10 @@ public class JSONDataManager implements DataManager {
 
     @Override
     public void save(int seed, List<Book> books) {
+        if (!file.exists()) {
+            createDirectory();
+        }
+
         try {
             objectMapper.writer(pp)
                     .writeValue(file, new LibraryData(seed, books));
