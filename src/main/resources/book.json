@@ -1,19 +1,21 @@
 {
-  "count": 2,
+  "new_id": 3,
   "data": [
     {
-      "id": 0,
+      "id": 1,
       "name": "이것이 테스트 책",
       "author": "테스터",
       "pages": 444,
-      "state": "CAN_BORROW"
+      "state": "CAN_BORROW",
+      "endLoadTime": ""
     },
     {
-      "id": 1,
+      "id": 2,
       "name": "이것이 테스트 책2",
       "author": "테스터",
       "pages": 555,
-      "state": "CAN_BORROW"
+      "state": "CAN_BORROW",
+      "endLoadTime": ""
     }
   ]
 }
