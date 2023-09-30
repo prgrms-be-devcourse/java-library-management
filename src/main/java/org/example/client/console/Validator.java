@@ -28,7 +28,7 @@ public class Validator {
     }
 
     public static int validateIdAndPages(String inputStr) {
-        if (Pattern.matches("^[0-9]*$", inputStr)) {
+        if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input < 5000) {
                 return input;
@@ -43,7 +43,7 @@ public class Validator {
     }
 
     public static int validateSelectNum(int selectCount, String inputStr) {
-        if (Pattern.matches("^[0-9]*$", inputStr)) {
+        if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input <= selectCount) {
                 return input;
