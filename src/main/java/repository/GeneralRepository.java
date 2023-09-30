@@ -15,6 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static domain.BookCondition.*;
+
 public class GeneralRepository implements Repository{
 
     private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
@@ -46,8 +48,8 @@ public class GeneralRepository implements Repository{
     public void save(int id, String title, String author, int page, List<Book> list) {
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName, true), CSVFormat.DEFAULT)) {
 
-            list.add(new Book(id, title, author, page, "대여 가능"));
-            csvPrinter.printRecord(id, title, author, page, "대여 가능");
+            list.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
+            csvPrinter.printRecord(id, title, author, page, AVAILABLE.getCondition());
 
         } catch (IOException e) {
             throw new SaveException("CSV 파일에 저장할 수 없습니다.");
@@ -86,11 +88,11 @@ public class GeneralRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == rentId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "대여 가능")){
-                    book.setCondition("대여 중");
+                if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
+                    book.setCondition(RENTED.getCondition());
                     message = "도서가 대여 처리 되었습니다.";
                 }
-                else if (Objects.equals(book.getCondition(), "대여 중")) {
+                else if (Objects.equals(book.getCondition(), RENTED.getCondition())) {
                     message = "이미 대여중인 도서입니다.";
                 }
                 else message = "현재 대여가 불가능한 도서입니다.";
@@ -116,8 +118,8 @@ public class GeneralRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == returnId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "대여 중") || Objects.equals(book.getCondition(), "분실됨")) { //대여 중 or 분실됨이면 반납 가능
-                    book.setCondition("도서 정리중");
+                if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
+                    book.setCondition(ORGANIZING.getCondition());
                     message = "도서가 반납 처리 되었습니다";
                 } else { // 대여 가능
                     message = "원래 대여가 가능한 도서입니다.";
@@ -146,10 +148,10 @@ public class GeneralRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == lostId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "분실됨")) {
+                if(Objects.equals(book.getCondition(), LOST.getCondition())) {
                     message = "이미 분실 처리된 도서입니다.";
                 } else {
-                    book.setCondition("분실됨");
+                    book.setCondition(LOST.getCondition());
                     message = "도서가 분실 처리 되었습니다.";
                 }
                 break;
@@ -190,7 +192,7 @@ public class GeneralRepository implements Repository{
     public static void endApplication(List<Book> list) {
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
             for(Book book : list) {
-                if(Objects.equals(book.getCondition(), "도서 정리중")) book.setCondition("대여 가능");
+                if(Objects.equals(book.getCondition(), ORGANIZING.getCondition())) book.setCondition(AVAILABLE.getCondition());
                 csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
         } catch (IOException e) {
@@ -215,7 +217,7 @@ public class GeneralRepository implements Repository{
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
-                list.get(returnId-1).setCondition("대여 가능");
+                list.get(returnId-1).setCondition(AVAILABLE.getCondition());
                 saveToCSV(list);
             }
         };

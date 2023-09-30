@@ -1,11 +1,14 @@
 package repository;
 
 import domain.Book;
+import domain.BookCondition;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+
+import static domain.BookCondition.*;
 
 public class TestRepository implements Repository{
 
@@ -16,7 +19,7 @@ public class TestRepository implements Repository{
 
     @Override
     public void save(int id, String title, String author, int page, List<Book> list) {
-        list.add(new Book(id, title, author, page, "대여 가능"));
+        list.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
     }
 
     @Override
@@ -51,11 +54,11 @@ public class TestRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == rentId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "대여 가능")){
-                    book.setCondition("대여 중");
+                if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
+                    book.setCondition(RENTED.getCondition());
                     message = "도서가 대여 처리 되었습니다.";
                 }
-                else if (Objects.equals(book.getCondition(), "대여 중")) {
+                else if (Objects.equals(book.getCondition(), RENTED.getCondition())) {
                     message = "이미 대여중인 도서입니다.";
                 }
                 else message = "현재 대여가 불가능한 도서입니다.";
@@ -78,8 +81,8 @@ public class TestRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == returnId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "대여 중") || Objects.equals(book.getCondition(), "분실됨")) { //대여 중 or 분실됨이면 반납 가능
-                    book.setCondition("대여 가능");
+                if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
+                    book.setCondition(AVAILABLE.getCondition());
                     message = "도서가 반납 처리 되었습니다";
                 } else { // 대여 가능
                     message = "원래 대여가 가능한 도서입니다.";
@@ -104,10 +107,10 @@ public class TestRepository implements Repository{
             Book book = iterator.next();
             if (book.getId() == lostId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), "분실됨")) {
+                if(Objects.equals(book.getCondition(), LOST.getCondition())) {
                     message = "이미 분실 처리된 도서입니다.";
                 } else {
-                    book.setCondition("분실됨");
+                    book.setCondition(LOST.getCondition());
                     message = "도서가 분실 처리 되었습니다.";
                 }
                 break;

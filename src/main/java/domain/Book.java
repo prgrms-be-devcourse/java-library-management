@@ -47,8 +47,4 @@ public class Book {
                 "페이지 수 : " + page + "\n" +
                 "상태 : " + condition + "\n";
     }
-
-    public enum BookCondition {
-        AVAILABLE, RENTED, ORGANIZING, LOST, NotExists
-    }
 }
