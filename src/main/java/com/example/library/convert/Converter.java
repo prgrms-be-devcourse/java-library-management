@@ -18,7 +18,7 @@ public class Converter {
         String bookStatus = (String) jsonObject.get("bookStatus");
         String bookReturnTime = (String) jsonObject.get("bookReturnTime");
 
-        return new Book(Long.parseLong(id), title, writer, pageNumber,
+        return Book.newInstance(Long.parseLong(id), title, writer, pageNumber,
                 convertStringToBookStatus(bookStatus), convertStringToLocalDateTime(bookReturnTime));
     }
 
