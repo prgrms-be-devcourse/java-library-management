@@ -1,7 +1,6 @@
 package constant;
 
 public enum Selection {
-
     MODE_CHOOSE("Q. 모드를 선택해주세요."),
     MODE_NORMAL("1. 일반 모드"),
     MODE_TEST("2. 테스트 모드"),
@@ -23,20 +22,5 @@ public enum Selection {
 
     public String getValue() {
         return value;
-    }
-
-    public static void printModeOptions() {
-        for (Selection selection : Selection.values()) {
-            if (selection.name().startsWith("MODE_")) {
-                System.out.println(selection.getValue());
-            }
-        }
-    }
-    public static void printFunctionOptions() {
-        for (Selection selection : Selection.values()) {
-            if (selection.name().startsWith("FUNCTION_")) {
-                System.out.println(selection.getValue());
-            }
-        }
     }
 }

@@ -7,15 +7,9 @@ import model.Book;
 import java.util.List;
 
 public interface Output {
-
-    void printModeOptions();
-
-    void printFunctionOptions();
-
+    void printSelection(String selectionType);
     void printGuide(Guide guide);
-
     void printQuestion(Question question);
-
-    void printBookList(List<Book> books);
+    void printBooks(List<Book> books);
     void printException(String exception);
 }

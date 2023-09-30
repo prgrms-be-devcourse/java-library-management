@@ -5,20 +5,17 @@ import constant.Question;
 import constant.Selection;
 import model.Book;
 
-import java.util.InputMismatchException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Console implements Output, Input {
-    static Scanner scanner = new Scanner(System.in);
-    @Override
-    public void printModeOptions() {
-        Selection.printModeOptions();
-    }
+    private static final Scanner scanner = new Scanner(System.in);
 
-    @Override
-    public void printFunctionOptions() {
-        Selection.printFunctionOptions();
+    public void printSelection(String selectionType) {
+        Arrays.stream(Selection.values())
+                .filter(selection -> selection.name().startsWith(selectionType))
+                .forEach(selection -> System.out.println(selection.getValue()));
     }
 
     public void printGuide(Guide guide) {
@@ -30,36 +27,22 @@ public class Console implements Output, Input {
     }
 
     @Override
-    public int inputNumber() {
-        try {
-            int number = scanner.nextInt();
-            scanner.nextLine();
-            return number;
-        } catch (InputMismatchException e) {
-            scanner.nextLine();
-            return 0;
-        }
-    }
-
-    @Override
     public String inputString() {
         return scanner.nextLine();
     }
 
     @Override
-    public Long inputLong() {
-        try {
-            Long number = scanner.nextLong();
-            scanner.nextLine();
-            return number;
-        } catch (InputMismatchException e) {
-            scanner.nextLine();
-            return 0L;
-        }
+    public int inputNumber() {
+        return readNumber(Integer.class);
     }
 
     @Override
-    public void printBookList(List<Book> books) {
+    public Long inputLong() {
+        return readNumber(Long.class);
+    }
+
+    @Override
+    public void printBooks(List<Book> books) {
         for (Book book : books) {
             System.out.println(book.toString());
         }
@@ -68,5 +51,23 @@ public class Console implements Output, Input {
     @Override
     public void printException(String exception) {
         System.out.println(exception);
+    }
+
+    private <T extends Number> T readNumber(Class<T> numType) {
+        Number result = null;
+        while (result == null) {
+            try {
+                if (Integer.class.equals(numType)) {
+                    result = scanner.nextInt();
+                } else if (Long.class.equals(numType)) {
+                    result = scanner.nextLong();
+                }
+                scanner.nextLine();
+            } catch (Exception e) {
+                scanner.nextLine();
+                System.out.println("정수만 입력 가능합니다.");
+            }
+        }
+        return (T) result;
     }
 }
