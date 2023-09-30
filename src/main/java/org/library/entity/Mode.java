@@ -22,6 +22,10 @@ public enum Mode {
         return this.num == inputNum;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Repository getRepository() {
         return repository;
     }
