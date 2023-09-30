@@ -29,7 +29,7 @@ public class NormalRepository implements Repository {
 
     @Override
     public void printList() {
-        books.forEach(this::printBookInfo);
+        books.forEach(book -> System.out.println(book.toString()));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class NormalRepository implements Repository {
         books.forEach(book -> {
             String title = book.getTitle();
             if(title.contains(titleWord)) {
-                    printBookInfo(book);
+                System.out.println(book.toString());;
             }
         });
     }

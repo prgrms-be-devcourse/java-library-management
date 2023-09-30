@@ -15,6 +15,15 @@ public class Book {
         this.state = BookState.AVAILABLE;
     }
 
+    public String toString() {
+        return "\n도서번호 : " + String.valueOf(id)
+                + "\n제목 : " + title
+                + "\n작가 이름 : " + writer
+                + "\n페이지 수: " + String.valueOf(page) + "페이지"
+                + "\n상태 : " + state.getState()
+                + "\n\n------------------------------";
+    }
+
     public int getId() {
         return id;
     }
