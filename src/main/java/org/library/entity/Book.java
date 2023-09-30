@@ -1,5 +1,7 @@
 package org.library.entity;
 
+import org.library.error.*;
+
 import java.time.LocalDateTime;
 
 public class Book {
@@ -11,11 +13,6 @@ public class Book {
     private State state = State.AVAILABLE;
     private LocalDateTime organizingTime;
 
-    private static final String successRentString = "도서가 대여 처리 되었습니다.";
-    private static final String successLostString = "도서가 분실 처리 되었습니다.";
-    private static final String failLostString = "이미 분실 처리된 도서입니다.";
-    private static final String successReturnString = "도서가 반납 처리 되었습니다";
-
     public Book(Long id, String title, String author, int page) {
         this.id = id;
         this.title = title;
@@ -24,33 +21,40 @@ public class Book {
     }
 
     public String rent(){
-        if(!state.equals(State.AVAILABLE)){
-            return getReason();
+        if(state.equals(State.RENT)){
+            throw new AlreadyRentError();
+        }
+        if(state.equals(State.LOST)){
+            throw new AlreadyLostError();
+        }
+        if(state.equals(State.ORGANIZING)){
+            throw new AlreadyOrganizingError();
         }
         state = State.RENT;
-        return successRentString;
+        return Message.SUCCESS_RENT.getMessage();
     }
 
     public String returns(){
         if(!state.equals(State.RENT) && !state.equals(State.LOST)){
-            return getReason();
+            throw new NotReturnsError();
         }
         state = State.ORGANIZING;
         organizingTime = LocalDateTime.now().plusMinutes(5);
-        return successReturnString;
+        return Message.SUCCESS_RETURNS.getMessage();
     }
 
     public String reportLost(){
         if(state.equals(State.LOST)){
-            return failLostString;
+            throw new AlreadyLostError();
         }
         this.state = State.LOST;
-        return successLostString;
+        return Message.SUCCESS_REPORT_LOST.getMessage();
     }
 
     public void processAvailable(){
         if(organizingTime != null && organizingTime.isBefore(LocalDateTime.now())){
             state = State.AVAILABLE;
+            organizingTime = null;
         }
     }
 
@@ -62,10 +66,6 @@ public class Book {
                 "\n페이지 수 : " + page + " 페이지"+
                 "\n상태 : " + state.getDescription() +
                 "\n------------------------------";
-    }
-
-    private String getReason(){
-        return state.getDescription();
     }
 
     public String getTitle(){
