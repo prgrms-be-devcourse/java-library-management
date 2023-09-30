@@ -8,41 +8,40 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class MemoryRepository implements Repository {
-
-    List<Book> bookList = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
 
     @Override
     public void saveBook(Book inputBook) {
-        for (int i = 0; i < bookList.size(); i++) {
-            Book book = bookList.get(i);
+        for (int i = 0; i < books.size(); i++) {
+            Book book = books.get(i);
             if (Objects.equals(book.getBookNo(), inputBook.getBookNo())) {
-                bookList.set(i, inputBook);
+                books.set(i, inputBook);
                 return;
             }
         }
-        bookList.add(inputBook);
+        books.add(inputBook);
     }
 
     @Override
     public List<Book> findAllBook() {
-        return bookList;
+        return books;
     }
 
     @Override
-    public List<Book> findBookByTitle(String title) {
-        return bookList.stream()
-                .filter(book -> book.getTitle().contains(title))
+    public List<Book> findBookByTitle(String searchTitle) {
+        return books.stream()
+                .filter(book -> book.isTitleContaining(searchTitle))
                 .toList();
     }
 
     @Override
     public void deleteBook(Long bookNo) {
-        this.bookList.removeIf(book -> book.getBookNo().equals(bookNo));
+        this.books.removeIf(book -> book.isBookNo(bookNo));
     }
 
     @Override
     public Long createBookNo() {
-        Optional<Long> maxBookNo = bookList.stream()
+        Optional<Long> maxBookNo = books.stream()
                 .map(Book::getBookNo)
                 .max(Long::compareTo);
         return maxBookNo.map(aLong -> aLong + 1).orElse(1L);
@@ -50,8 +49,8 @@ public class MemoryRepository implements Repository {
 
     @Override
     public Optional<Book> findBookByBookNo(Long bookNo) {
-        return bookList.stream()
-                .filter(book -> book.getBookNo().equals(bookNo))
+        return books.stream()
+                .filter(book -> book.isBookNo(bookNo))
                 .findFirst();
     }
 }
