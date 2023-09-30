@@ -1,0 +1,132 @@
+package manage.book;
+
+import entity.Book;
+import entity.BookState;
+import exception.EntityNotFoundException;
+import manage.file.TestFileManager;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class BookListManagerTest {
+    private static final int PROCESSING_TIME_MILLIS = 5 * 60 * 1_000;
+    private static final int NEVER_REVERTED = -1;
+
+    @Test
+    void registerOneBook(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+        Book book =
+                new Book(1, "title", "author", 100, BookState.AVAILABLE, NEVER_REVERTED);
+        // when
+        bookManager.register(book);
+        // then
+        assertEquals(bookManager.searchAll().size(), 1);
+    }
+
+    @Test
+    void searchForAllUndeletedBooks(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+        List<Book> books = List.of(
+                new Book(1, "title1", "author1", 120, BookState.AVAILABLE, NEVER_REVERTED),
+                new Book(2, "title2", "author2", 140, BookState.DELETED, NEVER_REVERTED),
+                new Book(3, "title3", "author3", 150, BookState.RENTED, NEVER_REVERTED),
+                new Book(4, "title4", "author4", 10, BookState.LOST, NEVER_REVERTED),
+                new Book(5, "title5", "author5", 1502, BookState.PROCESSING, 21384711)
+        );
+        books.forEach(bookManager::register);
+        // when
+        List<Book> searchList = bookManager.searchAll();
+        // then
+        assertEquals(searchList.size(), 4);
+    }
+
+    @Test
+    void searchBooksByTitleContainedText(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+        List<Book> books = List.of(
+                new Book(1, "t_itle1", "author1", 120, BookState.AVAILABLE, NEVER_REVERTED),
+                new Book(2, "titl_e2", "author2", 140, BookState.DELETED, NEVER_REVERTED),
+                new Book(3, "title3", "author3", 150, BookState.RENTED, NEVER_REVERTED)
+        );
+        books.forEach(bookManager::register);
+        // when
+        List<Book> searchList = bookManager.search("tle");
+        // then
+        assertEquals(searchList.size(), 2);
+    }
+
+    @Test
+    void rentBooksInAllStates(){
+        // given
+        BookState[] expected = {BookState.AVAILABLE, BookState.AVAILABLE, BookState.PROCESSING, BookState.RENTED, BookState.LOST};
+
+        BookManager bookManager = new BookListManager(new TestFileManager());
+
+        bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
+        bookManager.register(new Book(2, "title2", "author2",
+                200, BookState.PROCESSING, System.currentTimeMillis() - PROCESSING_TIME_MILLIS));
+        bookManager.register(new Book(3, "title3", "author3", 400, BookState.PROCESSING, System.currentTimeMillis()));
+        bookManager.register(new Book(4, "title4", "author4", 400, BookState.RENTED, NEVER_REVERTED));
+        bookManager.register(new Book(5, "title5", "author5", 400, BookState.LOST, NEVER_REVERTED));
+        bookManager.register(new Book(6, "title6", "author6", 400, BookState.DELETED, NEVER_REVERTED));
+
+        // when
+        List<BookState> list = IntStream.rangeClosed(1, 5).mapToObj(bookManager::rent).toList();
+
+        // then
+        IntStream.range(0, 5).forEach(i -> assertEquals(list.get(i), expected[i]));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.rent(6));
+    }
+
+    @Test
+    void returnBook(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+
+        bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
+        bookManager.register(new Book(2, "title2", "author2", 100, BookState.RENTED, NEVER_REVERTED));
+        bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
+        // when
+        // then
+        assertEquals(BookState.AVAILABLE, bookManager.revert(1));
+        assertEquals(BookState.RENTED, bookManager.revert(2));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.revert(3));
+    }
+
+    @Test
+    void lost(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+
+        bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
+        bookManager.register(new Book(2, "title2", "author2", 100, BookState.LOST, NEVER_REVERTED));
+        bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
+        // when
+        // then
+        assertEquals(BookState.AVAILABLE, bookManager.lost(1));
+        assertEquals(BookState.LOST, bookManager.lost(2));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.lost(3));
+    }
+
+    @Test
+    void delete(){
+        // given
+        BookManager bookManager = new BookListManager(new TestFileManager());
+
+        bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
+        bookManager.register(new Book(2, "title2", "author2", 100, BookState.LOST, NEVER_REVERTED));
+        bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
+        // when
+        // then
+        assertEquals(BookState.AVAILABLE, bookManager.delete(1));
+        assertEquals(BookState.LOST, bookManager.delete(2));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.delete(3));
+    }
+}
