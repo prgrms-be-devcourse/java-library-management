@@ -114,13 +114,7 @@ public class CommunicationAgent {
         System.out.println(e.getMessage());
     }
 
-    public void askUserReEnter(Exception e) {
-        printError(e);
-        System.out.println("[System] 다시 입력해주세요.");
-    }
-
-    public void printConfigError(Exception e) {
-        printError(e);
+    public void printConfigError() {
         System.out.println("Failed to read file. App running Test Mode");
     }
 }

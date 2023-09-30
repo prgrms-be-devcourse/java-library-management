@@ -23,8 +23,7 @@ public class ModeSelector {
                         throw new InvalidInputException();
                 }
             } catch (InvalidInputException e) {
-                //would like to manage this with another object
-                communicationAgent.askUserReEnter(e);
+                communicationAgent.printError(e);
             }
         }
     }

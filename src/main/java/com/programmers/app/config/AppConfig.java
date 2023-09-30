@@ -70,7 +70,7 @@ public class AppConfig {
                 return new NormalBookRepository(generateBookFileManager());
             } catch (Exception e) {
                 e.printStackTrace();
-                this.initialConfig.getCommunicationAgent().printConfigError(e);
+                this.initialConfig.getCommunicationAgent().printConfigError();
             }
         }
         return new TestBookRepository();
@@ -82,7 +82,7 @@ public class AppConfig {
                 return new NormalTimerManager(generateTimerFileManager());
             } catch (Exception e) {
                 e.printStackTrace();
-                this.initialConfig.getCommunicationAgent().printConfigError(e);
+                this.initialConfig.getCommunicationAgent().printConfigError();
             }
         }
 
@@ -94,7 +94,7 @@ public class AppConfig {
             return new BookServiceImpl(generateBookRepository(mode), generateTimerManager(mode));
         } catch (Exception e) {
             e.printStackTrace();
-            this.initialConfig.getCommunicationAgent().printConfigError(e);
+            this.initialConfig.getCommunicationAgent().printConfigError();
         }
 
         return new BookServiceImpl(new TestBookRepository(), new TestTimerManager());

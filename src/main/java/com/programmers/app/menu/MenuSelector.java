@@ -21,8 +21,7 @@ public class MenuSelector {
                         .findFirst()
                         .orElseThrow(InvalidInputException::new);
             } catch (RuntimeException e) {
-                //same as mode selector
-                communicationAgent.askUserReEnter(e);
+                communicationAgent.printError(e);
             }
         }
     }
