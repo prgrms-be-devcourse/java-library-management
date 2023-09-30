@@ -48,7 +48,7 @@ public class Book {
         return "도서 번호 : " + bookNumber + "\n" +
                 "제목 : " + title + '\n' +
                 "작가 이름 : " + author + '\n' +
-                "페이지 수 : " + totalPages + "\n" +
+                "페이지 수 : " + totalPages + " 페이지\n" +
                 "상태 : " + status.getStatus() + "\n" +
                 "------------------------------";
     }

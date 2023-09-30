@@ -27,6 +27,7 @@ public class CommunicationAgent {
     public int instructMenuSelection() {
         System.out.println(
                 "Q. 사용할 기능을 선택해주세요.\n" +
+                "0. 시스템 종료\n" +
                 "1. 도서 등록\n" +
                 "2. 전체 도서 목록 조회\n" +
                 "3. 제목으로 도서 검색\n" +
@@ -92,7 +93,7 @@ public class CommunicationAgent {
         }
 
         else {
-            System.out.println("[System] 도서가" + operation + "처리 되었습니다.");
+            System.out.println("[System] 도서가 " + operation + " 처리 되었습니다.");
         }
     }
 

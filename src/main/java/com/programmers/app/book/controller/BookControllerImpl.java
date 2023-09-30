@@ -24,8 +24,7 @@ public class BookControllerImpl implements BookController {
     @Override
     public void register() {
         bookService.register(communicationAgent.instructRegister());
-        communicationAgent.printOperationCompleted("대여");
-        //todo: when totalPages is not number
+        communicationAgent.printOperationCompleted("등록");
     }
 
     @Override
