@@ -2,9 +2,9 @@ package manage.file;
 
 import entity.Book;
 
-import java.util.List;
+import java.util.HashMap;
 
 public interface FileManager {
-    List<Book> read();
-    void write(List<Book> bookList);
+    HashMap<Integer, Book> read();
+    void write(HashMap<Integer, Book> bookList);
 }
