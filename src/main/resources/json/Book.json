@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "title": "객체지향의 사실과 오해",
+    "author": "조영호",
+    "page": 527,
+    "state": "분실됨",
+    "organizingTime": null
+  },
+  {
+    "id": 2,
+    "title": "오브젝트",
+    "author": "조영호",
+    "page": 23,
+    "state": "대여 가능",
+    "organizingTime": null
+  },
+  {
+    "id": 3,
+    "title": "River flows in you",
+    "author": "이루마",
+    "page": 837,
+    "state": "대여 가능",
+    "organizingTime": null
+  },
+  {
+    "id": 4,
+    "title": "비밀번호486",
+    "author": "윤하",
+    "page": 486,
+    "state": "도서 정리중",
+    "organizingTime": "2023-09-30 18:29:48"
+  }
+]
