@@ -5,7 +5,6 @@ import com.programmers.domain.Book;
 import com.programmers.repository.FileBookRepository;
 import com.programmers.repository.MemBookRepository;
 import com.programmers.service.BookService;
-import com.programmers.view.command.BookCommand;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleUI {
-    private final Map<Integer, BookCommand> functionMap = new HashMap<>();
+    private final Map<Integer, Runnable> functionMap = new HashMap<>();
     private final BookService bookService;
 
     public ConsoleUI() {
@@ -37,7 +36,7 @@ public class ConsoleUI {
             try {
                 Scanner scanner = new Scanner(System.in);
                 System.out.print(Messages.BOOK_MANAGEMENT_FEATURE_MESSAGE);
-                functionMap.get(scanner.nextInt()).execute();
+                functionMap.get(scanner.nextInt()).run();
             } catch (NullPointerException npe) {
                 System.out.println(Messages.INVALID_INPUT);
             } catch (Exception e) {
