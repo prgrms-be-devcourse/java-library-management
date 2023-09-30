@@ -47,16 +47,17 @@ public class FileRepositoryTest {
 
     @Test
     void 도서_번호로_도서_검색() {
-        Book result = fileRepository.findById(1L);
-        assertEquals(getBooks().get(0), result);
+        Book someBook = fileRepository.getBooks().stream().findAny().orElseThrow();
+        Book result = fileRepository.findById(someBook.getId());
+        assertEquals(someBook, result);
     }
 
     @Test
     void 도서_번호로_도서_삭제() {
         // deleteById() 메서드를 호출합니다.
-        fileRepository.deleteById(1L);
-        // id이가 1이었던 [이펙티브 자바]가 삭제 되었는지 검증
-        assertFalse(fileRepository.getBooks().contains(getBooks().get(0)));
+        Book someBook = fileRepository.getBooks().stream().findAny().orElseThrow();
+        fileRepository.deleteById(someBook.getId());
+        assertFalse(fileRepository.getBooks().contains(someBook));
     }
 
     @Test
