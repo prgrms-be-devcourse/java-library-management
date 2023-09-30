@@ -2,17 +2,16 @@ package manage.file;
 
 import entity.Book;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class TestFileManager implements FileManager {
     @Override
-    public List<Book> read() {
-        return new ArrayList<>();
+    public HashMap<Integer, Book> read() {
+        return new HashMap<>();
     }
 
     @Override
-    public void write(List<Book> bookList) {
+    public void write(HashMap<Integer, Book> bookList) {
         return;
     }
 }
