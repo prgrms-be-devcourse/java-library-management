@@ -7,10 +7,10 @@ import org.example.server.exception.EmptyLibraryException;
 import java.util.Optional;
 
 // 일반 모드용 레포지토리. fileStorage라는 DB에서 데이터를 불러오고 저장.
-public class FileBookRepository implements Repository {
+public class FileRepository implements Repository {
     private final FileStorage fileStorage;
 
-    public FileBookRepository() {
+    public FileRepository() {
         fileStorage = new FileStorage();
     }
 
