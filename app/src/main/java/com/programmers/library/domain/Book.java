@@ -1,5 +1,7 @@
 package com.programmers.library.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,6 +14,9 @@ public class Book {
     private int pageCount;
     private BookStatus status;
     private LocalDateTime returnedAt;
+
+    public Book() {
+    }
 
     public Book(int id, String name, String author, int pageCount, BookStatus status) {
         this.id = id;
@@ -66,6 +71,7 @@ public class Book {
         this.status = BookStatus.LOST;
     }
 
+    @JsonIgnore
     public boolean isOverFiveMinutesSinceReturned() {
         if (returnedAt == null) {
             return true;
@@ -99,6 +105,32 @@ public class Book {
 
     public LocalDateTime getReturnedAt() {
         return returnedAt;
+    }
+
+    //! json 매퍼용 Setter
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    public void setStatus(BookStatus status) {
+        this.status = status;
+    }
+
+    public void setReturnedAt(LocalDateTime returnedAt) {
+        this.returnedAt = returnedAt;
     }
 
     @Override

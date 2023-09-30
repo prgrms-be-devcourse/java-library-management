@@ -14,6 +14,7 @@ public class TestRepository implements Repository {
 
     @Override
     public int generateId() {
+        //TODO: 사이즈로 지정 시 삭제 시 버그 있음, 수정 필요
         return storage.size() + 1;
     }
 

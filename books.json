@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Sample Book 1",
+    "author": "Author A",
+    "pageCount": 320,
+    "status": "BORROWABLE",
+    "returnedAt": "2023-09-29T14:30:37"
+  },
+  {
+    "id": 2,
+    "name": "Sample Book 2",
+    "author": "Author B",
+    "pageCount": 450,
+    "status": "BORROWED",
+    "returnedAt": "2023-09-28T10:15:25"
+  },
+  {
+    "id": 3,
+    "name": "Sample Book 3",
+    "author": "Author C",
+    "pageCount": 210,
+    "status": "ORGANIZING",
+    "returnedAt": null
+  },
+  {
+    "id": 4,
+    "name": "Sample Book 4",
+    "author": "Author D",
+    "pageCount": 150,
+    "status": "LOST",
+    "returnedAt": "2023-09-27T18:45:00"
+  }
+]
