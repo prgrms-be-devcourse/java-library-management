@@ -142,7 +142,7 @@ public class Controller {
         System.out.print("> ");
         int id = scanner.nextInt();
 
-        service.returnBook(id);
+        service.reportLostBook(id);
 
         System.out.println("[System] 도서가 분실 처리 되었습니다.");
     }
@@ -154,7 +154,7 @@ public class Controller {
         System.out.print("> ");
         int id = scanner.nextInt();
 
-        service.returnBook(id);
+        service.deleteBook(id);
 
         System.out.println("[System] 도서가 삭제 처리 되었습니다.");
     }
