@@ -12,10 +12,11 @@ import java.util.Scanner;
 
 public class GeneralService implements Service{
 
-    Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+
+    Repository repository = new GeneralRepository();
 
     private List<Book> list = new ArrayList<>();
-    Repository repository = new GeneralRepository();
     private int id;
 
     public GeneralService() {

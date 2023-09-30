@@ -11,7 +11,7 @@ import static io.Mode.*;
 
 public class Console {
 
-    private Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     private Service service;
 
@@ -24,7 +24,10 @@ public class Console {
         System.out.print("> ");
 
         int input = scanner.nextInt();
+
         printMode(input);
+
+        scanner.close();
     }
 
     public void printMode(int input) {

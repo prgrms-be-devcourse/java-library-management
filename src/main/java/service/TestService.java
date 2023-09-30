@@ -11,8 +11,10 @@ import java.util.Scanner;
 
 public class TestService implements Service {
 
-    Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+
     Repository repository = new TestRepository();
+
     private List<Book> list = new ArrayList<>();
     private int id;
 
