@@ -5,9 +5,11 @@ import com.dev_course.book.Book;
 import java.util.List;
 
 public interface DataManager {
-    List<Book> load();
+    void load();
 
-    void save();
+    void save(int seed, List<Book> books);
 
     int getSeed();
+
+    List<Book> getBooks();
 }

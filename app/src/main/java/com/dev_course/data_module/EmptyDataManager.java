@@ -7,16 +7,20 @@ import java.util.List;
 
 public class EmptyDataManager implements DataManager {
     @Override
-    public List<Book> load() {
-        return new ArrayList<>();
+    public void load() {
     }
 
     @Override
-    public void save() {
+    public void save(int seed, List<Book> books) {
     }
 
     @Override
     public int getSeed() {
         return 0;
+    }
+
+    @Override
+    public List<Book> getBooks() {
+        return new ArrayList<>();
     }
 }
