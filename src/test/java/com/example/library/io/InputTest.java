@@ -1,9 +1,8 @@
 package com.example.library.io;
 
-import com.example.library.validation.InputCheck;
+import com.example.library.validation.InputValidator;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,7 +17,7 @@ public class InputTest {
     @DisplayName("모드 선택 입력값에 1,2만 성공한다.")
     void successModeNumber(String input,int result) {
 
-        int modeNumber = InputCheck.isModeNumber(input);
+        int modeNumber = InputValidator.isModeNumber(input);
 
         assertThat(modeNumber).isEqualTo(result);
     }
@@ -29,7 +28,7 @@ public class InputTest {
     void failModeNumber(String input) {
 
         assertThrows(NumberFormatException.class,
-                () -> InputCheck.isModeNumber(input));
+                () -> InputValidator.isModeNumber(input));
     }
 
     @ParameterizedTest
@@ -37,7 +36,7 @@ public class InputTest {
     @DisplayName("메뉴 선택 입력값에 0~7만 성공한다.")
     void successMenuNumber(String input,int result) {
 
-        int menuNumber = InputCheck.isMenuNumber(input);
+        int menuNumber = InputValidator.isMenuNumber(input);
 
         assertThat(menuNumber).isEqualTo(result);
     }
@@ -47,7 +46,7 @@ public class InputTest {
     void failMenuNumber(String input) {
 
         assertThrows(NumberFormatException.class,
-                () -> InputCheck.isMenuNumber(input));
+                () -> InputValidator.isMenuNumber(input));
     }
 
 }

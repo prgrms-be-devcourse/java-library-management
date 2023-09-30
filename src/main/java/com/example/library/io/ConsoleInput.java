@@ -1,6 +1,6 @@
 package com.example.library.io;
 
-import com.example.library.validation.InputCheck;
+import com.example.library.validation.InputValidator;
 
 import java.util.Scanner;
 
@@ -23,11 +23,11 @@ public class ConsoleInput {
 
     //모드 선택
     public int selectMode() {
-        return InputCheck.isModeNumber(scanner.nextLine());
+        return InputValidator.isModeNumber(scanner.nextLine());
     }
 
     public int selectMenu() {
-        return InputCheck.isMenuNumber(scanner.nextLine());
+        return InputValidator.isMenuNumber(scanner.nextLine());
     }
 
     public String enterTitle() {
@@ -43,7 +43,7 @@ public class ConsoleInput {
     }
 
     public int enterBookId() {
-        return InputCheck.isNumber(scanner.nextLine());
+        return InputValidator.isNumber(scanner.nextLine());
     }
 
 }
