@@ -12,10 +12,10 @@ public class LibraryMemoryRepository implements LibraryRepository{
     private static int sequence = 0;
 
     @Override
-    public Book save(Book book) {
+    public int save(Book book) {
         book.setBookId(++sequence);
         books.add(book);
-        return book;
+        return book.getBookId();
     }
 
     @Override

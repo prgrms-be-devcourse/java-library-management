@@ -46,10 +46,10 @@ public class LibraryFileRepository implements LibraryRepository {
     }
 
     @Override
-    public Book save(Book book) {
+    public int save(Book book) {
         book.setBookId(++sequence);
         books.add(book);
-        return book;
+        return book.getBookId();
     }
 
     @Override
