@@ -50,18 +50,6 @@ public class Book {
             return false;
     }
 
-    public void setId(long number) {
-        this.id = number;
-    }
-
-
-    public boolean equalsBook(int bookId) {
-
-        if (this.id == bookId) {
-            return true;
-        }
-        return false;
-    }
     public void borrowBook() {
         if (BookStatusValidator.borrowBook(this.bookStatusType))
             this.bookStatusType = BookStatusType.대여중;
