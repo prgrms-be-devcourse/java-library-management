@@ -16,9 +16,6 @@ public enum Menu {
     private final String description;
     private final int num;
 
-    /**
-     * Q. viewer가 직관적인 이름인가?
-     */
     private final Runnable viewer;
 
     Menu(int num, String description, Runnable viewer) {
