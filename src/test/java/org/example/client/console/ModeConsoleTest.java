@@ -8,7 +8,7 @@ class ModeConsoleTest {
 
     @Test
     @DisplayName("모드 설정 입력에서 숫자 외 입력값 예외처리")
-    void checkNumberValidationExcaption() {
+    void scanTypeNumberExceptionTest() {
         Assertions.assertThrows(ValidateException.class, () -> {
             Validator.validateSelectNum(ModeConsole.ModeType.values().length, "%%");
         });
@@ -16,7 +16,7 @@ class ModeConsoleTest {
 
     @Test
     @DisplayName("모드 설정 입력에서 모드 번호 외 입력값 예외처리")
-    void checkModeNumberValidationExcaption() {
+    void scanTypeNumberSelectExceptionTest() {
         Assertions.assertThrows(ValidateException.class, () -> {
             Validator.validateSelectNum(ModeConsole.ModeType.values().length, "100");
         });
