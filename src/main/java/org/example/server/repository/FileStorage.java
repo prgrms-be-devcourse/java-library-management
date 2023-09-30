@@ -66,7 +66,6 @@ public class FileStorage {
         /* JSON 파일 저장 */
         try (FileWriter fileWriter = new FileWriter(jsonFile)) {
             String jsonStr = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonMap);
-            System.out.println(jsonStr);
             fileWriter.write(jsonStr);
             fileWriter.flush();
         } catch (Exception e) {

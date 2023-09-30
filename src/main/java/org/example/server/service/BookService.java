@@ -59,8 +59,11 @@ public class BookService implements Service {
     public void lost(int bookId) {
         Book book = repository.getById(bookId);
         BookState bookState = BookState.valueOf(book.state);
-        if (bookState.equals(BookState.LOADING) || bookState.equals(BookState.LOST))
+        if (bookState.equals(BookState.LOST))
             throw bookState.throwStatusException();
+        if (bookState.equals(BookState.LOADING)) {
+            book.endLoadTime = "";
+        }
         book.state = BookState.LOST.name();
         repository.save();
     }
