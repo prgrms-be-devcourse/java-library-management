@@ -7,11 +7,12 @@ import service.TestService;
 
 import java.util.Scanner;
 
-import static io.Mode.*;
-
 public class Console {
 
     private static final Scanner scanner = new Scanner(System.in);
+
+    private static final int GENERAL = 1;
+    private static final int TEST = 2;
 
     private Service service;
 
@@ -31,10 +32,10 @@ public class Console {
     }
 
     public void printMode(int input) {
-        if (input == GENERAL.getType()) {
+        if (input == GENERAL) {
             System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.");
             service = new GeneralService();
-        } else if (input == TEST.getType()) {
+        } else if (input == TEST) {
             System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
             service = new TestService();
         } else {
