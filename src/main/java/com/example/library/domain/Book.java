@@ -20,7 +20,7 @@ public class Book {
 
     private final static int ORGANAZING_TIME = 300;
 
-    public Book(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
+    private Book(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -28,6 +28,11 @@ public class Book {
         this.bookStatusType = bookStatusType;
         this.bookReturnTime = bookReturnTime;
     }
+
+    public static Book newInstance(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
+        return new Book(id, title, writer, pageNumber, bookStatusType, bookReturnTime);
+    }
+
 
     public void printBook() {
         System.out.println("도서번호 : " + this.id + "\n" +
