@@ -1,6 +1,7 @@
 package service;
 
 import domain.Book;
+import exception.InputFormatException;
 import repository.Repository;
 import repository.TestRepository;
 
@@ -59,7 +60,7 @@ public class TestService implements Service {
             case 6 -> lostBook();
             case 7 -> deleteBook();
             case 8 -> exit();
-            default -> throw new RuntimeException("잘못된 입력입니다.");
+            default -> throw new InputFormatException("잘못된 입력입니다");
         }
     }
 

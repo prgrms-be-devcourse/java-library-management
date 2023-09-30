@@ -4,6 +4,8 @@ import domain.Book;
 import repository.GeneralRepository;
 import repository.Repository;
 
+import exception.InputFormatException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,7 +62,7 @@ public class GeneralService implements Service{
             case 6 -> lostBook();
             case 7 -> deleteBook();
             case 8 -> exit();
-            default -> throw new RuntimeException("잘못된 입력입니다.");
+            default -> throw new InputFormatException("잘못된 입력입니다.");
         }
     }
 

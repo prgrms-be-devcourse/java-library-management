@@ -1,5 +1,6 @@
 package io;
 
+import exception.InputFormatException;
 import service.GeneralService;
 import service.Service;
 import service.TestService;
@@ -32,7 +33,7 @@ public class Console {
             System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
             service = new TestService();
         } else {
-            throw new RuntimeException("[System] 잘못된 입력입니다.");
+            throw new InputFormatException("잘못된 입력입니다.");
         }
     }
 }
