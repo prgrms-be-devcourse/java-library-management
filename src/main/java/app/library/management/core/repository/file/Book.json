@@ -4,14 +4,14 @@
   "author" : "토비",
   "pages" : 100,
   "status" : "AVAILABLE",
-  "lastModifiedTime" : [ 2023, 9, 29, 4, 15, 27, 490646000 ]
+  "lastModifiedTime" : [ 2023, 9, 30, 13, 15, 29, 279506000 ]
 }, {
   "id" : 1,
   "title" : "자바의 정석2",
   "author" : "토비2",
   "pages" : 200,
   "status" : "AVAILABLE",
-  "lastModifiedTime" : [ 2023, 9, 29, 4, 16, 44, 348111000 ]
+  "lastModifiedTime" : [ 2023, 9, 30, 13, 15, 31, 263114000 ]
 }, {
   "id" : 2,
   "title" : "자바의 정석3",
@@ -25,12 +25,12 @@
   "author" : "sujin",
   "pages" : 100,
   "status" : "AVAILABLE",
-  "lastModifiedTime" : [ 2023, 9, 29, 5, 5, 37, 4827000 ]
+  "lastModifiedTime" : [ 2023, 9, 30, 13, 5, 31, 307298000 ]
 }, {
   "id" : 4,
   "title" : "c++",
   "author" : "sujin",
   "pages" : 3,
   "status" : "AVAILABLE",
-  "lastModifiedTime" : [ 2023, 9, 29, 5, 6, 10, 81110000 ]
+  "lastModifiedTime" : [ 2023, 9, 30, 13, 19, 41, 857292000 ]
 } ]

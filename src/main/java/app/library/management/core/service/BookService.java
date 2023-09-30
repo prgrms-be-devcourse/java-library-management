@@ -2,10 +2,10 @@ package app.library.management.core.service;
 
 import app.library.management.core.domain.Book;
 import app.library.management.core.domain.BookStatus;
+import app.library.management.core.domain.util.BookStatusManager;
 import app.library.management.core.service.response.dto.status.Stage;
 import app.library.management.infra.port.dto.request.BookRequestDto;
 import app.library.management.infra.port.dto.response.BookResponseDto;
-import app.library.management.core.domain.util.FileStatusManager;
 import app.library.management.core.repository.BookRepository;
 import app.library.management.core.service.response.dto.BookServiceResponse;
 import app.library.management.core.service.response.dto.status.ResponseState;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final FileStatusManager fileStatusManager;
+    private final BookStatusManager bookStatusManager;
 
-    public BookService(BookRepository bookRepository, FileStatusManager fileStatusManager) {
+    public BookService(BookRepository bookRepository, BookStatusManager bookStatusManager) {
         this.bookRepository = bookRepository;
-        this.fileStatusManager = fileStatusManager;
+        this.bookStatusManager = bookStatusManager;
     }
 
     /**
@@ -101,7 +101,7 @@ public class BookService {
         }
         book.returnBook();
         bookRepository.update(book);
-        fileStatusManager.execute(book);
+        bookStatusManager.execute(book);
         return new BookServiceResponse(ResponseState.SUCCESS, Stage.RETURN, book.getStatus());
     }
 
