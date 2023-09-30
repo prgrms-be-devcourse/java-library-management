@@ -82,7 +82,7 @@ public class MethodConsole {
             request.requestData = clientMethod.scanInfo(io);
         } // 메뉴 선택 후 각 메뉴에서 받는 입력 정보가 유효하지 않은 경우 예외 발생
         return request;
-    }
+    } // 아래 메서드를 이용하면서 메뉴를 선택하게 하고, 메뉴에 맞는 정보를 스캔하는 메서드
 
     public static Request setClientMethod(IO io) {
         io.print(ClientMethod.MENU_CONSOLE);
@@ -92,7 +92,7 @@ public class MethodConsole {
         return new Request(clientMethod.name());
     } // 메뉴 리스트를 띄우고, 메뉴 번호를 입력받는 기능
 
-    /* ----------------- ↓ 메뉴에 맞는 정보 입력 받는 메서드 ↓ ---------------------------------- */
+    /* ----------------- ↓ 메뉴에 맞는 정보 스캔 메서드 ↓ ---------------------------------- */
     public static RequestData scanAndSetBookInfo(IO io) {
         RequestData requestData = new RequestData();
         String[] bookInfo = clientMethod.getQuestions().stream().map(question -> {
@@ -100,19 +100,19 @@ public class MethodConsole {
             return io.scanLine();
         }).toArray(String[]::new);
         return Validator.validateBook(requestData, bookInfo);
-    }
+    } // 도서 등록에만 필요한 메서드
 
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.name = Validator.validateName(io.scanLine());
+        requestData.name = Validator.validateNameAndAuthor(io.scanLine());
         return requestData;
-    }
+    } // 도서 이름 검색에만 필요한 메서드
 
     public static RequestData scanAndSetBookId(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        requestData.id = Validator.validateId(io.scanLine());
+        requestData.id = Validator.validateIdAndPages(io.scanLine());
         return requestData;
-    }
+    } // 등록, 전체 조회, 검색을 제외한 메뉴에 필요한 메서드
 }
