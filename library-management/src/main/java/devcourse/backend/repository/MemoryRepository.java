@@ -5,9 +5,18 @@ import devcourse.backend.medel.BookStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MemoryRepository implements Repository {
     List<Book> books = new ArrayList<>();
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
 
     @Override
     public List<Book> findAll() {
