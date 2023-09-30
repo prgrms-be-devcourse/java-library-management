@@ -22,16 +22,15 @@ public class Service {
     }
 
     private Book getBook() throws IOException {
-        Book book = new Book();
         System.out.println(QuestionMessage.REGISTER_TITLE.getMessage());
-        book.setTitle(bf.readLine());
+        String title = bf.readLine();
 
         System.out.println(QuestionMessage.REGISTER_WRITER.getMessage());
-        book.setWriter(bf.readLine());
+        String writer = bf.readLine();
 
         System.out.println(QuestionMessage.REGISTER_PAGE.getMessage());
-        book.setPage(Integer.parseInt(bf.readLine()));
-        return book;
+        int page = Integer.parseInt(bf.readLine());
+        return new Book(title, writer, page);
     }
 
     public void list() {

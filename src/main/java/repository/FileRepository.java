@@ -130,8 +130,7 @@ public class FileRepository implements Repository {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         books.forEach(book -> {
             try {
-                bw.write(String.valueOf(book.getId()) + "," + book.getTitle() + ","
-                        + book.getWriter() + "," + String.valueOf(book.getPage()) + "," + book.getState().getState() + "\n");
+                bw.write(book.fileLine());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -145,13 +144,8 @@ public class FileRepository implements Repository {
 
         while((line = bf.readLine()) != null) {
             String[] split = line.split(",");
-            Book tmpBook = new Book();
-
-            tmpBook.setId(Integer.parseInt(split[0]));
-            tmpBook.setTitle(split[1]);
-            tmpBook.setWriter(split[2]);
-            tmpBook.setPage(Integer.parseInt(split[3]));
-            tmpBook.setState(BookState.valueOfState(split[4]));
+            Book tmpBook = new Book(Integer.parseInt(split[0]), split[1],
+                    split[2], Integer.parseInt(split[3]), BookState.valueOfState(split[4]));
 
             books.add(tmpBook);
         }

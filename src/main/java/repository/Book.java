@@ -4,15 +4,26 @@ import domain.BookState;
 
 public class Book {
     static int countId;
-    int id;
-    String title;
-    String writer;
-    int page;
-    BookState state;
+    private int id;
+    private String title;
+    private String writer;
+    private int page;
+    private BookState state;
 
-    public Book() {
+    public Book(String title, String writer, int page) {
         this.id = countId++;
+        this.title = title;
+        this.writer = writer;
+        this.page = page;
         this.state = BookState.AVAILABLE;
+    }
+
+    public Book(int id, String title, String writer, int page, BookState state) {
+        this.id = id;
+        this.title = title;
+        this.writer = writer;
+        this.page = page;
+        this.state = state;
     }
 
     public String toString() {
@@ -24,14 +35,14 @@ public class Book {
                 + "\n\n------------------------------";
     }
 
+    public String fileLine() {
+        return String.valueOf(id) + "," + title + ","
+                + writer + "," + page + "," + state.getState() + "\n";
+    }
+
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public BookState getState() {
         return state;
     }
@@ -42,25 +53,5 @@ public class Book {
 
     public String getTitle() {
         return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 }
