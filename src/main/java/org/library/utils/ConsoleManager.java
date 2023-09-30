@@ -1,7 +1,7 @@
 package org.library.utils;
 
 import org.library.entity.Book;
-import org.library.entity.Code;
+import org.library.entity.Func;
 import org.library.entity.Message;
 import org.library.vo.BookVo;
 
@@ -68,7 +68,7 @@ public class ConsoleManager {
 
     public int inputFunctionNum(){
         System.out.println(Message.INPUT_USE_FUNCTION.getMessage());
-        Arrays.stream(Code.values()).forEach(code -> System.out.println(code.toString()));
+        Arrays.stream(Func.values()).forEach(func -> System.out.println(func.toString()));
         return inputManager.inputInt();
     }
 }

@@ -1,10 +1,12 @@
 package org.library.entity;
 
+import org.library.error.InvalidFuncError;
 import org.library.utils.Executor;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
-public enum Code{
+public enum Func {
     ONE(1, "도서 등록", Executor::register),
     TWO(2, "전체 도서 목록 조회", Executor::showAll),
     THREE(3, "제목으로 도서 검색", Executor::findBookByTitle),
@@ -20,7 +22,7 @@ public enum Code{
     private final Consumer<Executor> func;
 
 
-    Code(int value, String name, Consumer<Executor> func) {
+    Func(int value, String name, Consumer<Executor> func) {
         this.value = value;
         this.name = name;
         this.func = func;
@@ -37,5 +39,11 @@ public enum Code{
     @Override
     public String toString() {
         return value + ". " + name;
+    }
+
+    public static Func of(int value){
+        return Arrays.stream(values()).filter(f-> f.isValueEqual(value))
+                .findAny()
+                .orElseThrow(InvalidFuncError::new);
     }
 }

@@ -1,7 +1,7 @@
 package org.library.utils;
 
 import org.library.entity.Book;
-import org.library.entity.Code;
+import org.library.entity.Func;
 import org.library.entity.Message;
 import org.library.error.InvalidFuncError;
 import org.library.service.BookService;
@@ -75,10 +75,7 @@ public class Executor {
 
     public void run(){
         int functionNum = consoleManager.inputFunctionNum();
-        Code code = Arrays.stream(Code.values())
-                .filter(c -> c.isValueEqual(functionNum))
-                .findAny()
-                .orElseThrow(InvalidFuncError::new);
-        code.call(this);
+        Func func = Func.of(functionNum);
+        func.call(this);
     }
 }
