@@ -15,7 +15,7 @@ public class LibraryManagementService {
     }
 
     public void addBook(String title, String writer, int pageNumber) {
-        Book newBook = Book.newBookOf(bookRepository.generateBookNumber(), title, writer, pageNumber);
+        Book newBook = Book.newBookOf(bookRepository.generateBookId(), title, writer, pageNumber);
         for (Book book : bookRepository.findByTitle(title)) {
             if (book.equals(newBook)) {
                 throw new CBookAlreadyExistException();
@@ -24,8 +24,8 @@ public class LibraryManagementService {
         bookRepository.save(newBook);
     }
 
-    public void rantBook(int bookNumber) {
-        Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
+    public void rantBook(int id) {
+        Book book = bookRepository.findById(id).orElseThrow(CBookIdNotExistException::new);
         switch (book.getStatus()) {
             case Ranted -> throw new CBookAlreadyRantedException();
             case Lost -> throw new CBookAlreadyLostException();
@@ -39,8 +39,8 @@ public class LibraryManagementService {
         bookRepository.save(book);
     }
 
-    public void returnBook(int bookNumber) {
-        Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
+    public void returnBook(int id) {
+        Book book = bookRepository.findById(id).orElseThrow(CBookIdNotExistException::new);
         switch (book.getStatus()) {
             case Organized, Available -> throw new CBookAlreadyReturnedException();
         }
@@ -48,8 +48,8 @@ public class LibraryManagementService {
         bookRepository.save(book);
     }
 
-    public void lostBook(int bookNumber) {
-        Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
+    public void lostBook(int id) {
+        Book book = bookRepository.findById(id).orElseThrow(CBookIdNotExistException::new);
         if (book.getStatus().equals(StatusType.Lost)) {
             throw new CBookAlreadyLostException();
         }
@@ -57,8 +57,8 @@ public class LibraryManagementService {
         bookRepository.save(book);
     }
 
-    public void deleteBook(int bookNumber) {
-        Book book = bookRepository.findByBookNumber(bookNumber).orElseThrow(CBookNumberNotExistException::new);
+    public void deleteBook(int id) {
+        Book book = bookRepository.findById(id).orElseThrow(CBookIdNotExistException::new);
         bookRepository.delete(book);
     }
 

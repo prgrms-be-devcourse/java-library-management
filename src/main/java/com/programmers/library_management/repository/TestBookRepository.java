@@ -6,7 +6,7 @@ import java.util.*;
 
 public class TestBookRepository implements BookRepository {
 
-    private final Map<Integer, Book> bookMemory;
+    private Map<Integer, Book> bookMemory;
 
     public TestBookRepository() {
         this.bookMemory = new HashMap<>();
@@ -18,8 +18,8 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findByBookNumber(int bookNumber) {
-        return Optional.ofNullable(bookMemory.get(bookNumber));
+    public Optional<Book> findById(int id) {
+        return Optional.ofNullable(bookMemory.get(id));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public int generateBookNumber() {
+    public int generateBookId() {
         int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
         for (int i = 1; i <= max; i++) {
             if (!bookMemory.containsKey(i)) {
@@ -60,5 +60,10 @@ public class TestBookRepository implements BookRepository {
             }
         }
         return max + 1;
+    }
+
+    @Override
+    public void deleteAll() {
+        bookMemory = new HashMap<>();
     }
 }

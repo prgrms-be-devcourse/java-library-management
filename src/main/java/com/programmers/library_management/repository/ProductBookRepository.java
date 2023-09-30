@@ -3,12 +3,13 @@ package com.programmers.library_management.repository;
 import com.programmers.library_management.domain.Book;
 import com.programmers.library_management.utils.CsvFileManager;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class ProductBookRepository implements BookRepository {
-    private final Map<Integer, Book> bookMemory;
+    private Map<Integer, Book> bookMemory;
     private final CsvFileManager csvFileManager;
 
     public ProductBookRepository() {
@@ -23,8 +24,8 @@ public class ProductBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findByBookNumber(int bookNumber) {
-        return Optional.ofNullable(bookMemory.get(bookNumber));
+    public Optional<Book> findById(int id) {
+        return Optional.ofNullable(bookMemory.get(id));
     }
 
     @Override
@@ -59,7 +60,7 @@ public class ProductBookRepository implements BookRepository {
     }
 
     @Override
-    public int generateBookNumber() {
+    public int generateBookId() {
         int max = bookMemory.keySet().stream().max(Integer::compareTo).orElse(0);
         for (int i = 1; i <= max; i++) {
             if (!bookMemory.containsKey(i)) {
@@ -67,5 +68,11 @@ public class ProductBookRepository implements BookRepository {
             }
         }
         return max + 1;
+    }
+
+    @Override
+    public void deleteAll() {
+        bookMemory = new HashMap<>();
+        csvFileManager.saveMemoryToCsv(bookMemory);
     }
 }
