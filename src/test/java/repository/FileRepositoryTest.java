@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-class NormalRepositoryTest {
+class FileRepositoryTest {
 
-    Repository repository = new NormalRepository();
+    Repository repository = new FileRepository();
     private static ByteArrayOutputStream outputMessage;
     File file = new File("C:/데브코스/java-library-management/app/src/main/resources/library.csv");
     BufferedReader bf = new BufferedReader(new FileReader(file));
 
     String original = "";
-    NormalRepositoryTest() throws IOException {
+    FileRepositoryTest() throws IOException {
         original = "";
         String line = "";
         while((line = bf.readLine()) != null) {

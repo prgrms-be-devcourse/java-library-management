@@ -1,11 +1,10 @@
 package service;
 
 import domain.SelectMenu;
-import message.ExecuteMessage;
 import domain.ModeType;
 import message.SelectMessage;
-import repository.NormalRepository;
-import repository.TestRepository;
+import repository.FileRepository;
+import repository.MemoryRepository;
 
 import java.io.*;
 
@@ -13,8 +12,8 @@ public class Mode {
     BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
     Service service;
     public Mode(ModeType mode) throws IOException {
-        if(mode == ModeType.NORMAL_MODE) service = new Service(new NormalRepository());
-        else if(mode == ModeType.TEST_MODE) service = new Service(new TestRepository());
+        if(mode == ModeType.NORMAL_MODE) service = new Service(new FileRepository());
+        else if(mode == ModeType.TEST_MODE) service = new Service(new MemoryRepository());
     }
 
     public boolean run() throws IOException {

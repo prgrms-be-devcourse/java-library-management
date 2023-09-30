@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static repository.NormalRepository.updateFile;
+import static repository.FileRepository.updateFile;
 
 public class NormalChangeStateThread extends Thread {
     private Book book;

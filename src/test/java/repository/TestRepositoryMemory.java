@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 
-class TestRepositoryTest {
-    TestRepository repository = new TestRepository();
+class TestRepositoryMemory {
+    MemoryRepository repository = new MemoryRepository();
     private static ByteArrayOutputStream outputMessage;
 
     @BeforeEach
