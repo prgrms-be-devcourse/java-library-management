@@ -22,7 +22,7 @@ public class Client {
             return ModeConsole.scanType(io);
         } catch (ValidateException e) {
             io.println(e.getMessage());
-            return ModeConsole.scanType(io);
+            return ModeConsole.scanType(io); // 한 번 더 시도
         }
     }// 사용자로부터 받은 모드 번호에 따라 모드명 매핑 후 서버에 모드명 전송
 
@@ -31,7 +31,7 @@ public class Client {
             return MethodConsole.scanTypeAndInfo(io);
         } catch (ValidateException e) {
             io.println(e.getMessage());
-            return MethodConsole.scanTypeAndInfo(io);
+            return MethodConsole.scanTypeAndInfo(io); // 한 번 더 시도
         }
     }// 사용자로부터 받은 메뉴 번호에 따라 정보 수집 후 Request 인스턴스(메뉴명 + 메뉴에 따른 필요한 데이터)에 담아 서버에 전송
 
