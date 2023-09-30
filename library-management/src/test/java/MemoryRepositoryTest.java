@@ -1,6 +1,5 @@
 import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
-import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.MemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,16 +45,17 @@ public class MemoryRepositoryTest {
 
     @Test
     void 도서_번호로_도서_검색() {
-        Book result = memoryRepository.findById(1L);
-        assertEquals(getBooks().get(0), result);
+        Book someBook = memoryRepository.getBooks().stream().findAny().orElseThrow();
+        Book result = memoryRepository.findById(someBook.getId());
+        assertEquals(someBook, result);
     }
 
     @Test
     void 도서_번호로_도서_삭제() {
         // deleteById() 메서드를 호출합니다.
-        memoryRepository.deleteById(1L);
-        // id이가 1이었던 [이펙티브 자바]가 삭제 되었는지 검증
-        assertFalse(memoryRepository.getBooks().contains(getBooks().get(0)));
+        Book someBook = memoryRepository.getBooks().stream().findAny().orElseThrow();
+        memoryRepository.deleteById(someBook.getId());
+        assertFalse(memoryRepository.getBooks().contains(someBook));
     }
 
     @Test

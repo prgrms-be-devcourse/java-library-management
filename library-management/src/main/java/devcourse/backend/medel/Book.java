@@ -28,10 +28,9 @@ public class Book {
         }
 
         public Builder id(long id) {
+            if(id < sequence) return this;
             this.id = id;
-            if (sequence < id) {
-                sequence = id;
-            }
+            if (sequence < id) sequence = id;
             return this;
         }
 
