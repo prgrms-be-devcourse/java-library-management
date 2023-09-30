@@ -5,6 +5,8 @@ import com.opencsv.exceptions.CsvException;
 
 import domain.Book;
 
+import exception.LoadException;
+import exception.SaveException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -15,11 +17,10 @@ import java.util.*;
 
 public class GeneralRepository implements Repository{
 
-    private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
+    private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
 
     @Override
     public void load(List<Book> list) {
-        list.clear();
         try {
             // CSV 파일을 읽어오는 CSVReader 객체 생성
             CSVReader csvReader = new CSVReader(new FileReader(csvFileName));
@@ -37,20 +38,19 @@ public class GeneralRepository implements Repository{
             }
             csvReader.close();
         } catch (IOException | CsvException e) {
-            e.printStackTrace();
+            throw new LoadException("CSV 파일을 읽어올 수 없습니다");
         }
     }
 
     @Override
     public void save(int id, String title, String author, int page, List<Book> list) {
-
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName, true), CSVFormat.DEFAULT)) {
 
             list.add(new Book(id, title, author, page, "대여 가능"));
             csvPrinter.printRecord(id, title, author, page, "대여 가능");
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SaveException("CSV 파일에 저장할 수 없습니다.");
         }
     }
 
@@ -194,7 +194,7 @@ public class GeneralRepository implements Repository{
                 csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SaveException("CSV 파일에 저장할 수 없습니다.");
         }
     }
 
@@ -205,7 +205,7 @@ public class GeneralRepository implements Repository{
                 csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SaveException("CSV 파일에 저장할 수 없습니다.");
         }
     }
 
