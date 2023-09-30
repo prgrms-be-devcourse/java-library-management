@@ -13,18 +13,18 @@ public class Book {
     private String title;
     private String writer;
     private String pageNumber;
-    private BookStatus bookStatus;
+    private BookStatusType bookStatusType;
 
     private LocalDateTime bookReturnTime;
 
     private final static int ORGANAZING_TIME = 300;
 
-    public Book(long id, String title, String writer, String pageNumber, BookStatus bookStatus, LocalDateTime bookReturnTime) {
+    public Book(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.pageNumber = pageNumber;
-        this.bookStatus = bookStatus;
+        this.bookStatusType = bookStatusType;
         this.bookReturnTime = bookReturnTime;
     }
 
@@ -33,7 +33,7 @@ public class Book {
                 "제목 : " + this.title + "\n" +
                 "작가 이름 : " + this.writer + "\n" +
                 "페이지 수 : " + this.pageNumber + "\n" +
-                "상태 : " + this.bookStatus + "\n\n" +
+                "상태 : " + this.bookStatusType + "\n\n" +
                 "------------------------------\n");
     }
 
@@ -48,9 +48,6 @@ public class Book {
         this.id = number;
     }
 
-    public long getId() {
-        return this.id;
-    }
 
     public boolean equalsBook(int bookId) {
 
@@ -60,45 +57,34 @@ public class Book {
         return false;
     }
     public void borrowBook() {
-        if (this.bookStatus.borrowBook())
-            this.bookStatus = BookStatus.대여중;
+        if (this.bookStatusType.borrowBook())
+            this.bookStatusType = BookStatusType.대여중;
     }
 
 
     public void returnBook() {
-        if (this.bookStatus.returnBook()) {
-            this.bookStatus = BookStatus.도서정리중;
+        if (this.bookStatusType.returnBook()) {
+            this.bookStatusType = BookStatusType.도서정리중;
             this.bookReturnTime = LocalDateTime.now();
         }
     }
 
     public void loseBook() {
-        if (this.bookStatus.loseBook()) {
-            this.bookStatus = BookStatus.분실됨;
+        if (this.bookStatusType.loseBook()) {
+            this.bookStatusType = BookStatusType.분실됨;
         }
     }
 
     public boolean isExceededfiveMinute() {
-        if (this.bookStatus == BookStatus.도서정리중) {
+        if (this.bookStatusType == BookStatusType.도서정리중) {
             Duration duration = Duration.between(this.bookReturnTime, LocalDateTime.now());
 
             if (duration.getSeconds() >= 300) {
-                this.bookStatus = BookStatus.대여가능;
+                this.bookStatusType = BookStatusType.대여가능;
                 return true;
             }
         }
         return false;
-    }
-
-    public JSONObject convertJson() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", Long.toString(this.id));
-        jsonObject.put("title", this.title);
-        jsonObject.put("writer", this.writer);
-        jsonObject.put("pageNumber", this.pageNumber);
-        jsonObject.put("bookStatus", this.bookStatus.name());
-        jsonObject.put("bookReturnTime", Converter.convertLocalDateTimeToString(this.bookReturnTime));
-        return jsonObject;
     }
 
 }

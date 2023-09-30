@@ -17,7 +17,7 @@ public class BookTest {
 
     @BeforeEach
     public void initBook() {
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatus.대여가능, LocalDateTime.now());
+        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
     }
 
     @ParameterizedTest
@@ -48,7 +48,7 @@ public class BookTest {
     @DisplayName("정리중인 도서가 5분이 지나면 대여 가능으로 바뀐다.")
     public void successChangeBookStatus() {
 
-        Book testBook1 = new Book(1, "test1", "writer1", "111", BookStatus.도서정리중, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 111));
+        Book testBook1 = new Book(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 111));
 
         assertThat(testBook1.isExceededfiveMinute()).isTrue();
     }
@@ -56,7 +56,7 @@ public class BookTest {
     @DisplayName("정리중인 도서가 5분이 지나지 않으면 상태가 바뀌지 않는다.")
     public void failChangeBookStatus() {
 
-        Book testBook2 = new Book(1, "test1", "writer1", "111", BookStatus.도서정리중, LocalDateTime.now());
+        Book testBook2 = new Book(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.now());
 
         assertThat(testBook2.isExceededfiveMinute()).isFalse();
     }

@@ -1,7 +1,7 @@
 package com.example.library.repository;
 
 import com.example.library.domain.Book;
-import com.example.library.domain.BookStatus;
+import com.example.library.domain.BookStatusType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class MemoryRepositoryTest {
     @BeforeEach
     public void initBook() {
 
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatus.대여가능, LocalDateTime.now());
+        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
         bookRepository = new BookMemoryRepository();
 
     }
@@ -42,7 +42,7 @@ public class MemoryRepositoryTest {
     @Test
     @DisplayName("존재하는 도서 번호를 입력하면 도서를 삭제한다.")
     public void successDeleteBook() {
-        bookRepository.addBook(new Book(1L,"test","kim","999 페이지",BookStatus.대여가능,LocalDateTime.now()));
+        bookRepository.addBook(new Book(1L,"test","kim","999 페이지", BookStatusType.대여가능,LocalDateTime.now()));
         assertThat(bookRepository.deleteBook(1)).isTrue();
 
     }

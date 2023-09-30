@@ -1,7 +1,7 @@
 package com.example.library.service;
 
 import com.example.library.domain.Book;
-import com.example.library.domain.BookStatus;
+import com.example.library.domain.BookStatusType;
 import com.example.library.io.ConsoleInput;
 import com.example.library.io.ConsoleOutput;
 import com.example.library.repository.BookFileRepository;
@@ -91,7 +91,7 @@ public class LibraryService {
         String pageNumber = consoleInput.enterPageNumber();
         consoleOutput.printAddComplete();
 
-        bookRepository.addBook(new Book(DEFAULT, title, writer, pageNumber, BookStatus.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
+        bookRepository.addBook(new Book(DEFAULT, title, writer, pageNumber, BookStatusType.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
 
     }
 
