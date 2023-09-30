@@ -21,6 +21,8 @@ dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation 'org.projectlombok:lombok:1.18.22'
     testImplementation("org.assertj:assertj-core:3.23.1")
+    annotationProcessor 'org.projectlombok:lombok'
+
 
 }
 

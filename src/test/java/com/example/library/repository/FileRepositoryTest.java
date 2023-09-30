@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +21,7 @@ public class FileRepositoryTest {
     @BeforeEach
     public void initBook() {
 
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
+        book = Book.newInstance(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
         bookRepository = new BookFileRepository();
 
     }
@@ -28,7 +29,7 @@ public class FileRepositoryTest {
     @Test
     @DisplayName("json파일을 BookList로 파싱(초기화)한 Repository의 size가 3이상이다.")
     public void convertJsonToBookList() {
-        List<Book> books = FileInit.initializeRepository();
+        Map<Long, Book> books = FileInit.initializeRepository();
         assertThat(books.size()).isGreaterThan(3);
     }
 

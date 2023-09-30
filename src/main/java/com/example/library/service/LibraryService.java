@@ -93,7 +93,7 @@ public class LibraryService {
 
         long bookId = generateRandomNumber();
 
-        bookRepository.addBook(new Book(bookId, title, writer, pageNumber, BookStatusType.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
+        bookRepository.addBook(Book.newInstance(bookId, title, writer, pageNumber, BookStatusType.대여가능, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 666)));
 
     }
 

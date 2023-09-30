@@ -18,7 +18,7 @@ public class MemoryRepositoryTest {
     @BeforeEach
     public void initBook() {
 
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
+        book = Book.newInstance(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
         bookRepository = new BookMemoryRepository();
 
     }
@@ -42,7 +42,7 @@ public class MemoryRepositoryTest {
     @Test
     @DisplayName("존재하는 도서 번호를 입력하면 도서를 삭제한다.")
     public void successDeleteBook() {
-        bookRepository.addBook(new Book(1L,"test","kim","999 페이지", BookStatusType.대여가능,LocalDateTime.now()));
+        bookRepository.addBook(Book.newInstance(1L,"test","kim","999 페이지", BookStatusType.대여가능,LocalDateTime.now()));
         assertThat(bookRepository.deleteBook(1)).isTrue();
 
     }

@@ -1,5 +1,6 @@
 package com.example.library.domain;
 
+import com.example.library.convert.Converter;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +19,7 @@ public class BookTest {
 
     @BeforeEach
     public void initBook() {
-        book = new Book(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
+        book = Book.newInstance(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
     }
 
     @ParameterizedTest
@@ -39,8 +41,9 @@ public class BookTest {
     @Test
     @DisplayName("Book객체를 JsonObject타입으로 변경에 성공한다")
     public void convertBookToJson(){
+        List<Book>list = List.of(book);
 
-        assertThat(book.convertJson()).isInstanceOf(JSONObject.class);
+        assertThat(Converter.convertBookToJson(list)).isInstanceOf(JSONObject.class);
 
     }
 
@@ -48,7 +51,7 @@ public class BookTest {
     @DisplayName("정리중인 도서가 5분이 지나면 대여 가능으로 바뀐다.")
     public void successChangeBookStatus() {
 
-        Book testBook1 = new Book(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 111));
+        Book testBook1 = Book.newInstance(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 111));
 
         assertThat(testBook1.isExceededfiveMinute()).isTrue();
     }
@@ -56,7 +59,7 @@ public class BookTest {
     @DisplayName("정리중인 도서가 5분이 지나지 않으면 상태가 바뀌지 않는다.")
     public void failChangeBookStatus() {
 
-        Book testBook2 = new Book(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.now());
+        Book testBook2 = Book.newInstance(1, "test1", "writer1", "111", BookStatusType.도서정리중, LocalDateTime.now());
 
         assertThat(testBook2.isExceededfiveMinute()).isFalse();
     }
