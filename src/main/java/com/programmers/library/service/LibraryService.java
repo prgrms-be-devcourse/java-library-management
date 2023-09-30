@@ -21,6 +21,7 @@ public class LibraryService {
     public void addBook(String title, String author, int pages) {
         Book book = new Book(title, author, pages);
         libraryRepository.save(book);
+        libraryRepository.saveAll();    // CSV 파일 덮어쓰기
         System.out.println("\n[System] 도서 등록이 완료되었습니다.\n");
     }
 
@@ -68,6 +69,7 @@ public class LibraryService {
             switch (bookStatus) {
                 case AVAILABLE -> {
                     book.setStatus(BookStatus.RENTING);
+                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
                     System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
                 }
                 case RENTING -> System.out.println("[System] 이미 대여중인 도서입니다.\n");
@@ -90,7 +92,9 @@ public class LibraryService {
             switch (bookStatus) {
                 case RENTING, LOST -> {
                     book.setStatus(BookStatus.ORGANIZING);
+                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
                     System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
+
                     Timer timer = new Timer();  // 5분 뒤 '대여 가능' 설정
                     TimerTask timerTask = new TimerTask() {
                         @Override
@@ -99,6 +103,7 @@ public class LibraryService {
                         }
                     };
                     timer.schedule(timerTask, 5 * 60 * 1000);
+                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
                 }
                 case AVAILABLE, ORGANIZING -> System.out.println("[System] 해당 도서는 " + bookStatus.getDescription() + "으로 반납할 수 없습니다.\n");
             }
@@ -119,6 +124,7 @@ public class LibraryService {
             switch (bookStatus) {
                 case AVAILABLE, RENTING, ORGANIZING -> {
                     book.setStatus(BookStatus.LOST);
+                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
                     System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
                 }
                 case LOST -> System.out.println("[System] 이미 분실 처리된 도서입니다.\n");
@@ -135,6 +141,7 @@ public class LibraryService {
 
         if(book.isPresent()) {
             libraryRepository.delete(bookId);
+            libraryRepository.saveAll();    // CSV 파일 덮어쓰기
             System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
         } else {
             System.out.println("[System] 존재하지 않는 도서번호 입니다.\n");

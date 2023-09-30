@@ -3,10 +3,7 @@ package com.programmers.library.repository;
 import com.programmers.library.domain.Book;
 import com.programmers.library.utils.BookStatus;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -78,5 +75,31 @@ public class LibraryFileRepository implements LibraryRepository {
     @Override
     public void delete(int bookId) {
         books.removeIf(book -> book.getBookId() == bookId);
+    }
+
+    String booksToString(Book book) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(book.getTitle()).append(",");
+        sb.append(book.getAuthor()).append(",");
+        sb.append(book.getPages()).append(",");
+        sb.append(book.getStatus().getDescription());
+        return sb.toString();
+    }
+
+    @Override
+    public void saveAll() { // CSV 파일 덮어쓰기 (= writeBooksToCSV)
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+
+            bw.write("title, author, pages, status");   // 헤더
+            bw.newLine();
+
+            for (Book book :books) {
+                String csvLine = booksToString(book);
+                bw.write(csvLine);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -42,4 +42,7 @@ public class LibraryMemoryRepository implements LibraryRepository{
     public void delete(int bookId) {
         books.removeIf(book -> book.getBookId() == bookId);
     }
+
+    @Override
+    public void saveAll() {}    // 파일 덮어쓰기 기능 사용 안 함
 }

@@ -11,4 +11,5 @@ public interface LibraryRepository {
     List<Book> findByTitle(String title);   // 제목으로 도서 검색
     Optional<Book> findById(int bookId);    // 도서 번호로 도서 검색
     void delete(int bookId);    // 도서 삭제
+    void saveAll();   // 파일 덮어쓰기
 }
