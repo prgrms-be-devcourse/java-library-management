@@ -1,5 +1,9 @@
 package domain;
 
+
+import lombok.Getter;
+
+@Getter
 public class Book {
     private final Integer id;
     private final String title;
@@ -15,34 +19,15 @@ public class Book {
         this.status = status;
     }
 
+
     public void printBookInfo() {
         System.out.println("\n" +"도서번호 : "+ id +"\n"
                 +"제목 : " + title + "\n"
                 +"작가 이름 : " + author + "\n"
                 +"페이지 수 : " + page + "\n"
-                +"상태 : " + status+ "\n\n"
+                +"상태 : " + status.getLabel()+ "\n\n"
                 +"-------------------------------------"
         );
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public Integer getPage() {
-        return page;
-    }
-
-    public Status getStatus() {
-        return status;
     }
 
     //책 상태 관련 함수
@@ -58,5 +43,4 @@ public class Book {
     public void report(){
         status = Status.LOST;
     }
-
 }

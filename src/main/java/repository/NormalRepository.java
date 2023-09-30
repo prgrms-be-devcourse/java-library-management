@@ -42,7 +42,7 @@ public class NormalRepository{
     public void updateFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
             for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus().getLabel());
+                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
                 bw.newLine();
             }
         } catch(IOException e){
@@ -53,7 +53,7 @@ public class NormalRepository{
     // [1] 도서 등록
     public void register(Book book) {
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH,true))){
-            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus().getLabel());
+            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
             bw.newLine();
             bw.flush();
             bookList.add(book);
@@ -102,6 +102,7 @@ public class NormalRepository{
         return Optional.empty();
     }
 
+    // 도서 아이디 생성
     public Integer createId(){
         if (bookList.isEmpty()) return 1;
         return bookList.get(bookList.size()-1).getId()+1;
