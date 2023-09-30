@@ -72,6 +72,18 @@ public class Book {
         return title;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public State getState() {
+        return state;
+    }
+
     public Long getId(){
         return id;
     }
