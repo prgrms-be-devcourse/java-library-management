@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,13 +24,6 @@ public class CsvFileManagerTest {
 
     @BeforeEach
     void setUp() {
-        File csvFile = new File(FILE_PATH);
-        try {
-            csvFile.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException("파일 생성/읽기 중 에러가 일어났습니다.", e);
-        }
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))){
             bw.write("도서번호,도서 제목,작가,페이지 수, 상태, 마지막으로 반납한 시간");
             bw.newLine();
@@ -45,9 +37,10 @@ public class CsvFileManagerTest {
     void readBooksFromCsv(){
         // given
         // when
-        HashMap<Integer, Book> bookList = fileManager.read();
+        HashMap<Integer, Book> books = fileManager.read();
         // then
-        assertEquals(bookList.size(), 1);
+        assertEquals(books.size(), 1);
+        assertEquals(books.get(3).getAuthor(), "최강록");
     }
 
     @Test
