@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public enum Status {
     AVAILABLE("대여 가능"),
     BORROWED("대여중"),
@@ -12,16 +14,15 @@ public enum Status {
     Status(String status) {
         this.status = status;
     }
+
     public String getStatus() {
         return status;
     }
 
     public static Status findStatusByString(String statusString) {
-        for (Status status : Status.values()) {
-            if (status.getStatus().equals(statusString)) {
-                return status;
-            }
-        }
-        return null;
+        return Arrays.stream(Status.values())
+                .filter(status -> status.getStatus().equals(statusString))
+                .findFirst()
+                .orElseThrow(() -> new NullPointerException("정확한 상태를 입력해주세요"));
     }
 }
