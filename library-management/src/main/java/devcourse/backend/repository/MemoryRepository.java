@@ -29,15 +29,8 @@ public class MemoryRepository implements Repository {
     @Override
     public Book findById(long id) {
         return books.stream()
-                .filter(b -> b.isMatched(id))
+                .filter(b -> b.getId() == id)
                 .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
-    }
-
-    @Override
-    public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
-        return books.stream()
-                .filter(b -> b.isMatched(title, author, totalPages))
-                .findAny().orElseThrow().copy();
     }
 
     @Override

@@ -13,13 +13,18 @@ import java.util.*;
 public class FileRepository implements Repository {
     private Set<Book> books;
     private final Path FILE_PATH;
-    private String columns = "도서 번호;도서명;작가;총 페이지 수;상태";
+    private final String COLUMNS = "도서 번호;도서명;작가;총 페이지 수;상태";
 
     public FileRepository(String path, String fileName) {
         this.FILE_PATH = Paths.get(path.concat(fileName));
         createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
         this.books = loadBooks();
         flush();
+    }
+
+    // 테스트 코드를 위한 메서드
+    public Set<Book> getBooks() {
+        return books;
     }
 
     @Override
@@ -42,15 +47,8 @@ public class FileRepository implements Repository {
     @Override
     public Book findById(long id) {
         return books.stream()
-                .filter(b -> b.isMatched(id))
+                .filter(b -> b.getId() == id)
                 .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
-    }
-
-    @Override
-    public Book findByTitleAndAuthorAndTotalPages(String title, String author, int totalPages) {
-        return books.stream()
-                .filter(b -> b.isMatched(title, author, totalPages))
-                .findAny().orElseThrow().copy();
     }
 
     @Override
@@ -84,7 +82,7 @@ public class FileRepository implements Repository {
     }
 
     public String getColumns() {
-        return columns;
+        return COLUMNS;
     }
 
     private void createFileIfNotExist(String path, String name) {
@@ -95,7 +93,7 @@ public class FileRepository implements Repository {
             } catch (IOException e) { e.printStackTrace(); }
 
             try(BufferedWriter writer = getWriter()) {
-                    writer.write(columns);
+                    writer.write(COLUMNS);
                     writer.newLine();
             } catch (IOException e) { e.printStackTrace(); }
         }
@@ -104,7 +102,7 @@ public class FileRepository implements Repository {
     public Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
         try (BufferedReader reader = getReader()) {
-            columns = reader.readLine();
+            String header = reader.readLine();
             reader.lines()
                     .map(s -> s.split("[;,]"))
                     .forEach(data -> {
@@ -120,7 +118,7 @@ public class FileRepository implements Repository {
 
     public void flush() {
         try (BufferedWriter writer = getWriter()) {
-            writer.write(columns);
+            writer.write(COLUMNS);
             writer.newLine();
             books.stream().sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
                     .forEach(book -> {

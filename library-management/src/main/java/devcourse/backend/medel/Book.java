@@ -1,5 +1,7 @@
 package devcourse.backend.medel;
 
+import devcourse.backend.view.BookDto;
+
 import java.awt.*;
 import java.util.Objects;
 
@@ -78,20 +80,10 @@ public class Book {
         return title.contains(keyword);
     }
 
-    public boolean isMatched(String title, String author, int totalPages) {
-        if (this.title.equals(title) &&
-                this.author.equals(author) &&
-                this.totalPages == totalPages) return true;
-        return false;
-    }
-
-    public boolean isMatched(long id) {
-        return this.id == id;
-    }
-
     public long getId() {
         return id;
     }
+    public BookStatus getStatus() { return status; }
 
     public void changeStatus(BookStatus status) {
         if (BookStatus.canSwitch(this.status, status)) this.status = status;
@@ -103,12 +95,12 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id && totalPages == book.totalPages && Objects.equals(title, book.title) && Objects.equals(author, book.author) && status == book.status;
+        return totalPages == book.totalPages && Objects.equals(title, book.title) && Objects.equals(author, book.author);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, author, totalPages, status);
+        return Objects.hash(title, author, totalPages);
     }
 
     public Book copy() {
