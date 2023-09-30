@@ -8,19 +8,24 @@ import java.io.InputStreamReader;
 public class UserConsole {
     private final BookService bookService = new BookService();
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    public void selectMode() throws Exception {
+    public void selectMode(){
 
         System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
-        String mode = getInput();
+        String mode = "";
+        try {
+            mode = getInput();
+        } catch (Exception e){
+            System.out.println(e.getMessage()); return;
+        }
 
-        if (mode.equals("1")){
-            selectFunction();
-        } else if (mode.equals("2")){
-            runTestMode();
+        switch (mode){
+            case "1"->selectFunction();
+            case "2"->runTestMode();
+            default->System.out.println("잘못된 입력입니다.");
         }
     }
 
-    public void selectFunction() throws Exception {
+    public void selectFunction(){
         System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
         String function="";
         while (!function.equals("8")){
@@ -33,10 +38,8 @@ public class UserConsole {
                     "6. 도서 분실\n" +
                     "7. 도서 삭제\n" +
                     "8. 종료\n");
-
-            function = getInput();
-
             try {
+                function = getInput();
                 switch (function) {
                     case "1" -> saveBook();
                     case "2" -> showBookList();
