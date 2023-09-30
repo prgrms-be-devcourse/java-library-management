@@ -16,14 +16,11 @@ public class Book {
     @Override
     public String toString() {
         String NEWLINE = System.lineSeparator();
-        return NEWLINE +
-                "도서번호 : " + id + NEWLINE +
+        return "도서번호 : " + id + NEWLINE +
                 "제목 : " + title + NEWLINE +
                 "작가 이름 : " + author + NEWLINE +
                 "페이지 수 : " + pages + NEWLINE +
-                "상태 : " + state.getMessage() + NEWLINE + NEWLINE +
-                "------------------------------"
-                + NEWLINE;
+                "상태 : " + state.getMessage() + NEWLINE;
     }
 
     @Override
@@ -69,18 +66,6 @@ public class Book {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
     public BookState getState() {
         return state;
     }
@@ -89,36 +74,47 @@ public class Book {
         this.state = state;
     }
 
+    public String joinInfo(String separator) {
+        return this.id + separator
+                + this.title + separator
+                + this.author + separator
+                + this.pages + separator
+                + this.state;
+    }
+
+    public boolean isSameId(int id) {
+        return this.id == id;
+    }
+
+    public boolean containsInTitle(String string) {
+        return this.title.contains(string);
+    }
+
     public boolean isRentable() {
         switch (this.state) {
             case AVAILABLE -> {
                 return true;
             }
-            case RENTED -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_RENTED.getMessage());
-            case ORGANIZING -> throw new RuntimeException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
-            case LOST -> throw new RuntimeException(ErrorMessages.BOOK_NOW_LOST.getMessage());
+            case RENTED -> throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_RENTED.getMessage());
+            case ORGANIZING -> throw new IllegalStateException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
+            case LOST -> throw new IllegalStateException(ErrorMessages.BOOK_NOW_LOST.getMessage());
         }
         return false;
     }
 
     public boolean isReturnable() {
-        switch (this.state) {
-            case RENTED, LOST -> {
-                return true;
-            }
-            case AVAILABLE -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_AVAILABLE.getMessage());
-            case ORGANIZING -> throw new RuntimeException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
+        if (this.state == BookState.AVAILABLE) {
+            throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_AVAILABLE.getMessage());
+        } else if (this.state == BookState.ORGANIZING) {
+            throw new IllegalStateException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
         }
-        return false;
+        return this.state == BookState.RENTED || this.state == BookState.LOST;
     }
 
     public boolean isReportableAsLost() {
-        switch (this.state) {
-            case RENTED, AVAILABLE, ORGANIZING -> {
-                return true;
-            }
-            case LOST -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_LOST.getMessage());
+        if (this.state == BookState.LOST) {
+            throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_LOST.getMessage());
         }
-        return false;
+        return this.state == BookState.RENTED || this.state == BookState.AVAILABLE || this.state == BookState.ORGANIZING;
     }
 }

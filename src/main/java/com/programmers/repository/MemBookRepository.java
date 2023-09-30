@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MemBookRepository implements BookRepository {
-    private final List<Book> books = new ArrayList<>();
+    private static final List<Book> books = new ArrayList<>();
 
     private MemBookRepository() {
         BookIdProvider.initBookId(books);
@@ -35,13 +35,16 @@ public class MemBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findBookById(int id) {
-        return books.stream().filter(book -> book.getId() == id).findAny();
+        return books.stream()
+                .filter(book -> book.isSameId(id))
+                .findAny();
     }
 
     @Override
     public List<Book> findBookByTitle(String title) {
         return books.stream()
-                .filter(book -> book.getTitle().contains(title)).toList();
+                .filter(book -> book.containsInTitle(title))
+                .toList();
     }
 
     @Override

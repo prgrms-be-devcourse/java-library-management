@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
-    private final List<Book> books = new ArrayList<>();
-    private final String csvFile = "./src/main/resources/data.csv";
+    private static final List<Book> books = new ArrayList<>();
+    private static final String csvFile = "./src/main/resources/data.csv";
+    public static final String csvSeparator = ",";
 
     private FileBookRepository() {
     }
@@ -39,13 +40,16 @@ public class FileBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findBookById(int id) {
-        return books.stream().filter(book -> book.getId() == id).findAny();
+        return books.stream()
+                .filter(book -> book.isSameId(id))
+                .findAny();
     }
 
     @Override
     public List<Book> findBookByTitle(String title) {
         return books.stream()
-                .filter(book -> book.getTitle().contains(title)).toList();
+                .filter(book -> book.containsInTitle(title))
+                .toList();
     }
 
     @Override
@@ -69,7 +73,7 @@ public class FileBookRepository implements BookRepository {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(",");
+                String[] values = line.split(csvSeparator);
                 Book book = new Book(values);
                 books.add(book);
                 //System.out.println(book);
@@ -84,7 +88,7 @@ public class FileBookRepository implements BookRepository {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile))) {
             // 각 Book 객체의 정보를 CSV 형식으로 변환
             books.stream()
-                    .map(book -> book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPages() + "," + book.getState())
+                    .map(book -> book.joinInfo(csvSeparator))
                     .forEach(line -> {
                         try {
                             bw.write(line);
