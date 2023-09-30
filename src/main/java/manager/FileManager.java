@@ -1,4 +1,4 @@
-package repository;
+package manager;
 
 import domain.Book;
 import domain.Status;

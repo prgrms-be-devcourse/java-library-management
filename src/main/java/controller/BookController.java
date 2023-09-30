@@ -1,3 +1,5 @@
+package controller;
+
 import exception.EmptyInputException;
 import repository.FileRepository;
 import repository.TestRepository;
@@ -7,12 +9,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class UserConsole {
+public class BookController {
     private BookService bookService;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     public void selectMode(){
-
-        System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
+        printSelectMode();
         String mode = "";
         try {
             mode = getInput();
@@ -38,15 +39,7 @@ public class UserConsole {
     public void selectFunction(){
         String function="";
         while (!function.equals("8")){
-            System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
-                    "1. 도서 등록\n" +
-                    "2. 전체 도서 목록 조회\n" +
-                    "3. 제목으로 도서 검색\n" +
-                    "4. 도서 대여\n" +
-                    "5. 도서 반납\n" +
-                    "6. 도서 분실\n" +
-                    "7. 도서 삭제\n" +
-                    "8. 종료\n");
+            printSelectFunction();
             try {
                 function = getInput();
                 switch (function) {
@@ -129,14 +122,25 @@ public class UserConsole {
         System.out.println("[System] 도서가 삭제 처리 되었습니다.");
     }
 
-    public void runTestMode(){
-        System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
-    }
-
     public String getInput() throws Exception {
         System.out.print("> ");
         String value = br.readLine().strip();
         if (value.isBlank()) throw new EmptyInputException();
         return value;
+    }
+
+    public void printSelectMode(){
+        System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
+    }
+    public void printSelectFunction(){
+        System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
+                "1. 도서 등록\n" +
+                "2. 전체 도서 목록 조회\n" +
+                "3. 제목으로 도서 검색\n" +
+                "4. 도서 대여\n" +
+                "5. 도서 반납\n" +
+                "6. 도서 분실\n" +
+                "7. 도서 삭제\n" +
+                "8. 종료\n");
     }
 }

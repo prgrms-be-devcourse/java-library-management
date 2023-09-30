@@ -1,6 +1,8 @@
+import controller.BookController;
+
 public class ManageLibraryApplication {
     public static void main(String[] args){
-        UserConsole userConsole = new UserConsole();
-        userConsole.selectMode();
+        BookController bookController = new BookController();
+        bookController.selectMode();
     }
 }
