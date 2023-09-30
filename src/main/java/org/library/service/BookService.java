@@ -1,6 +1,7 @@
 package org.library.service;
 
 import org.library.entity.Book;
+import org.library.entity.Error;
 import org.library.entity.Message;
 import org.library.repository.Repository;
 
@@ -22,6 +23,15 @@ public class BookService {
 
     // 1. 도서 등록
     public void save(Book book){
+        if(book.getTitle().isBlank()){
+            throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
+        }
+        if(book.getAuthor().isBlank()){
+            throw new IllegalArgumentException(Error.INVALID_AUTHOR.getMessage());
+        }
+        if(book.getPage() < 0){
+            throw new IllegalArgumentException(Error.INVALID_PAGE.getMessage());
+        }
         repository.save(book);
     }
 
@@ -32,6 +42,9 @@ public class BookService {
 
     // 3. 제목으로 도서 검색
     public List<Book> findByTitle(String title){
+        if(title.isBlank()){
+            throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
+        }
         try{
             return repository.findByTitle(title);
         }catch(NoSuchElementException e){
