@@ -1,5 +1,6 @@
 package domain;
 
+import message.ExecuteMessage;
 import service.Mode;
 
 import java.io.IOException;
@@ -11,14 +12,14 @@ public enum SelectMode {
     NORMAL_MODE("1") {
         @Override
         public Mode run() throws IOException {
-            System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.");
+            System.out.println(ExecuteMessage.NORMAL_MODE);
             return new Mode(ModeType.NORMAL_MODE);
         }
     },
     TEST_MODE("2") {
         @Override
         public Mode run() throws IOException {
-            System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
+            System.out.println(ExecuteMessage.TEST_MODE);
             return new Mode(ModeType.TEST_MODE);
         }
     };

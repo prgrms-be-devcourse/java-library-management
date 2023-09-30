@@ -12,6 +12,9 @@ public class Main {
         System.out.println(SelectMessage.MODE_SELECT_MESSAGE.getMessage());
         String selectNum = bf.readLine();
         Mode mode = SelectMode.valueOfSelectNum(selectNum).run();
-        while(true) mode.run();
+        while(true) {
+            if(!mode.run()) break;
+        }
+        System.out.println(ExecuteMessage.FINISH.getMessage());
     }
 }
