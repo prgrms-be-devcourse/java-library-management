@@ -6,10 +6,10 @@ import com.programmers.app.timer.Timer;
 
 public class TimerJson {
 
-    private long bookNumber;
+    private int bookNumber;
     private String arrangementBegunAt;
 
-    public TimerJson(long bookNumber, LocalDateTime localDateTime) {
+    public TimerJson(int bookNumber, LocalDateTime localDateTime) {
         this.bookNumber = bookNumber;
         this.arrangementBegunAt = localDateTime.toString();
     }

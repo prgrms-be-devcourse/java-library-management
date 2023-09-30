@@ -51,24 +51,24 @@ public class CommunicationAgent {
         return consoleReader.readString();
     }
 
-    public long instructBorrow() {
+    public int instructBorrow() {
         System.out.println("Q. 대여할 도서번호를 입력하세요");
-        return consoleReader.readLong();
+        return consoleReader.readInt();
     }
 
-    public long instructReturn() {
+    public int instructReturn() {
         System.out.println("Q. 반납할 도서번호를 입력하세요");
-        return consoleReader.readLong();
+        return consoleReader.readInt();
     }
 
-    public long instructReportLost() {
+    public int instructReportLost() {
         System.out.println("Q. 분실 신고할 도서번호를 입력하세요");
-        return consoleReader.readLong();
+        return consoleReader.readInt();
     }
 
-    public long instructDelete() {
+    public int instructDelete() {
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
-        return consoleReader.readLong();
+        return consoleReader.readInt();
     }
 
     public void print(String message) {

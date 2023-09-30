@@ -9,13 +9,13 @@ public interface BookRepository {
 
      void add(Book book);
 
-     long getLastBookNumber();
+     int getLastBookNumber();
 
      Optional<List<Book>> findAllBooks();
 
     Optional<List<Book>> findByTitle(String title);
 
-    Optional<Book> findByBookNumber(long bookNumber);
+    Optional<Book> findByBookNumber(int bookNumber);
 
     void delete(Book book);
 

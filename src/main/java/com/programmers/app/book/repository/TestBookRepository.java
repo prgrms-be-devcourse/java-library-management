@@ -2,6 +2,7 @@ package com.programmers.app.book.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 import com.programmers.app.book.domain.Book;
 
 public class TestBookRepository implements BookRepository {
-    private Map<Long, Book> books;
+    private Map<Integer, Book> books;
 
     public TestBookRepository () {
         books = new HashMap<>();
@@ -23,7 +24,7 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public long getLastBookNumber() {
+    public int getLastBookNumber() {
         if (books.isEmpty()) return 0;
         return Collections.max(books.keySet());
     }
@@ -33,7 +34,7 @@ public class TestBookRepository implements BookRepository {
         if (books.isEmpty()) return Optional.empty();
 
         List<Book> bookList = new ArrayList<>(books.values());
-        bookList.sort((b1, b2) -> (int) (b1.getBookNumber() - b2.getBookNumber()));
+        bookList.sort(Comparator.comparingInt(Book::getBookNumber));
         return Optional.of(bookList);
     }
 
@@ -49,7 +50,7 @@ public class TestBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findByBookNumber(long bookNumber) {
+    public Optional<Book> findByBookNumber(int bookNumber) {
         return Optional.ofNullable(books.get(bookNumber));
     }
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.programmers.app.book.domain.Book;
 
-public class BookFileManager implements FileManager<Map<Long, Book>, List<Book>> {
+public class BookFileManager implements FileManager<Map<Integer, Book>, List<Book>> {
     private final String filePath;
     private final Gson gson;
 
@@ -22,10 +22,10 @@ public class BookFileManager implements FileManager<Map<Long, Book>, List<Book>>
     }
 
     @Override
-    public Map<Long, Book> loadDataFromFile() throws IOException {
+    public Map<Integer, Book> loadDataFromFile() throws IOException {
         FileReader fileReader = new FileReader(filePath);
 
-        Map<Long, Book> loadedBooks = new HashMap<>();
+        Map<Integer, Book> loadedBooks = new HashMap<>();
         Book[] booksFromFile = Optional.ofNullable(gson.fromJson(fileReader, Book[].class))
                 .orElse(new Book[]{});
 
@@ -42,7 +42,9 @@ public class BookFileManager implements FileManager<Map<Long, Book>, List<Book>>
             FileWriter fileWriter = new FileWriter(filePath);
             gson.toJson(books.toArray(), Book[].class, fileWriter);
             fileWriter.flush();
+            fileWriter.close();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Failed to write books.json. System exits");
             System.exit(1);
         }

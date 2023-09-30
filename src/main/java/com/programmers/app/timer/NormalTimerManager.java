@@ -24,8 +24,8 @@ public class NormalTimerManager implements TimerManger {
     }
 
     @Override
-    public List<Long> popArrangedBooks(LocalDateTime now) {
-        List<Long> arrangedBooks = new ArrayList<>();
+    public List<Integer> popArrangedBooks(LocalDateTime now) {
+        List<Integer> arrangedBooks = new ArrayList<>();
 
         while(!arrangementTimers.isEmpty() && arrangementTimers.peek().isCompleted(now)) {
             arrangedBooks.add(arrangementTimers.remove().getBookNumber());
@@ -35,7 +35,7 @@ public class NormalTimerManager implements TimerManger {
     }
 
     @Override
-    public boolean remove(long bookNumber) {
+    public boolean remove(int bookNumber) {
         return arrangementTimers.removeIf(timer -> timer.isMatching(bookNumber));
     }
 

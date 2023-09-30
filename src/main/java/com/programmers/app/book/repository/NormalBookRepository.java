@@ -3,6 +3,7 @@ package com.programmers.app.book.repository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,10 +14,10 @@ import com.programmers.app.file.FileManager;
 
 public class NormalBookRepository implements BookRepository {
 
-    private final FileManager<Map<Long, Book>, List<Book>> fileManager;
-    private Map<Long, Book> books;
+    private final FileManager<Map<Integer, Book>, List<Book>> fileManager;
+    private Map<Integer, Book> books;
 
-    public NormalBookRepository(FileManager<Map<Long, Book>, List<Book>> fileManager) throws IOException {
+    public NormalBookRepository(FileManager<Map<Integer, Book>, List<Book>> fileManager) throws IOException {
         this.fileManager = fileManager;
         this.books = fileManager.loadDataFromFile();
     }
@@ -27,7 +28,7 @@ public class NormalBookRepository implements BookRepository {
     }
 
     @Override
-    public long getLastBookNumber() {
+    public int getLastBookNumber() {
         if (books.isEmpty()) return 0;
         return Collections.max(books.keySet());
     }
@@ -37,7 +38,7 @@ public class NormalBookRepository implements BookRepository {
         if (books.isEmpty()) return Optional.empty();
 
         List<Book> bookList = new ArrayList<>(books.values());
-        bookList.sort((b1, b2) -> (int) (b1.getBookNumber() - b2.getBookNumber()));
+        bookList.sort(Comparator.comparingInt(Book::getBookNumber));
         return Optional.of(bookList);
     }
 
@@ -53,7 +54,7 @@ public class NormalBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findByBookNumber(long bookNumber) {
+    public Optional<Book> findByBookNumber(int bookNumber) {
         return Optional.ofNullable(books.get(bookNumber));
     }
 

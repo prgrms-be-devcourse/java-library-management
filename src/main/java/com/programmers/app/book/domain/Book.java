@@ -1,13 +1,13 @@
 package com.programmers.app.book.domain;
 
 public class Book {
-    private long bookNumber;
+    private int bookNumber;
     private String title;
     private String author;
     private int totalPages;
     private BookStatus status;
 
-    public Book(long bookNumber, String title, String author, int totalPages) {
+    public Book(int bookNumber, String title, String author, int totalPages) {
         this.bookNumber = bookNumber;
         this.title = title;
         this.author = author;
@@ -15,7 +15,7 @@ public class Book {
         this.status = BookStatus.IN_PLACE;
     }
 
-    public long getBookNumber() {
+    public int getBookNumber() {
         return bookNumber;
     }
 

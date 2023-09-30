@@ -11,11 +11,14 @@ public class ConsoleReader {
     }
 
     int readInt() {
-        return sc.nextInt();
-    }
-
-    long readLong() {
-        return sc.nextLong();
+        while (true) {
+            try {
+                return Integer.parseInt(sc.nextLine());
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                System.out.println("다시 입력해주세요.");
+            }
+        }
     }
 
     String readString() {

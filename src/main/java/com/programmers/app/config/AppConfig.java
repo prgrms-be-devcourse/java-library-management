@@ -47,7 +47,7 @@ public class AppConfig {
         return menuSelector;
     }
 
-    private FileManager<Map<Long, Book>, List<Book>> generateBookFileManager() {
+    private FileManager<Map<Integer, Book>, List<Book>> generateBookFileManager() {
         String booksFilePath = "src/main/resources/books.json";
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()

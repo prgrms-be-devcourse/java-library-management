@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void register(BookRequest bookRequest) {
-        long newBookNumber = bookRepository.getLastBookNumber() + 1L;
+        int newBookNumber = bookRepository.getLastBookNumber() + 1;
         bookRepository.add(bookRequest.toBook(newBookNumber));
 
         bookRepository.save();
@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void borrowBook(long bookNumber) {
+    public void borrowBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
                 .orElseThrow(BookNotFoundException::new);
 
@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void returnBook(long bookNumber) {
+    public void returnBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
                 .orElseThrow(BookNotFoundException::new);
 
@@ -88,7 +88,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBook(long bookNumber) {
+    public void deleteBook(int bookNumber) {
         bookRepository.delete(bookRepository.findByBookNumber(bookNumber)
                         .orElseThrow(BookNotFoundException::new));
 
@@ -99,7 +99,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void reportLost(long bookNumber) {
+    public void reportLost(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
                 .orElseThrow(BookNotFoundException::new);
 

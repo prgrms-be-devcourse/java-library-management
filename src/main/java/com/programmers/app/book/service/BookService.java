@@ -13,13 +13,13 @@ public interface BookService {
 
     List<Book> findByTitle(String title);
 
-    void borrowBook(long bookNumber);
+    void borrowBook(int bookNumber);
 
-    void returnBook(long bookNumber);
+    void returnBook(int bookNumber);
 
-    void deleteBook(long bookNumber);
+    void deleteBook(int bookNumber);
 
-    void reportLost(long bookNumber);
+    void reportLost(int bookNumber);
 
     boolean updateArrangementCompleted();
 }

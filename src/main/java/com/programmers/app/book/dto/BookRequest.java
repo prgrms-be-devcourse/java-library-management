@@ -13,7 +13,7 @@ public class BookRequest {
         this.totalPages = totalPages;
     }
 
-    public Book toBook(long bookNumber) {
+    public Book toBook(int bookNumber) {
         return new Book(bookNumber, title, author, totalPages);
     }
 }
