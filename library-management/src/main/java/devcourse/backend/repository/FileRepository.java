@@ -10,9 +10,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-/**
- * Repository가 model 레이어에 들어가는 것이 맞는가?
- */
 public class FileRepository implements Repository {
     private Set<Book> books;
     private final Path FILE_PATH;
@@ -22,6 +19,7 @@ public class FileRepository implements Repository {
         this.FILE_PATH = Paths.get(path.concat(fileName));
         createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
         this.books = loadBooks();
+        flush();
     }
 
     @Override
@@ -103,7 +101,7 @@ public class FileRepository implements Repository {
         }
     }
 
-    private Set<Book> loadBooks() {
+    public Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
         try (BufferedReader reader = getReader()) {
             columns = reader.readLine();
@@ -117,11 +115,10 @@ public class FileRepository implements Repository {
                                 .build());
                     });
         } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
-
         return books;
     }
 
-    private void flush() {
+    public void flush() {
         try (BufferedWriter writer = getWriter()) {
             writer.write(columns);
             writer.newLine();
