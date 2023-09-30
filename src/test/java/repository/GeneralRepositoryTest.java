@@ -2,6 +2,7 @@ package repository;
 
 import domain.Book;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,17 +17,17 @@ import static org.assertj.core.api.Assertions.*;
 
 class GeneralRepositoryTest {
 
-    private final static String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
+    private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvTestFile.csv";
     Repository repository = new GeneralRepository();
 
-    @AfterEach
+    @BeforeEach
     @DisplayName("테스트 전에 CSV파일을 초기화")
-    void afterEach() {
+    void beforeEach() {
         try {
             clearCSV(csvFileName);
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            throw new RuntimeException();
+        } // csv 파일 초기화
     }
 
     @Test
@@ -37,6 +38,8 @@ class GeneralRepositoryTest {
         repository.load(list);
 
         assertThat(list).isNotNull();
+
+        list.clear();
     }
 
     @Test
@@ -49,26 +52,27 @@ class GeneralRepositoryTest {
         int afterSize = list.size();
 
         assertThat(beforeSize).isNotEqualTo(afterSize);
+
+        list.clear();
     }
 
     @Test
     @DisplayName("정상적으로 매개변수의 일부가 검색이 되는지 테스트")
     void findByTitle() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
         repository.save(2, "title2", "author2", 2000, list);
 
         assertThat(repository.findByTitle("title", list).size()).isEqualTo(2);
 
+        list.clear();
     }
 
     @Test
     @DisplayName("대여 성공 테스트 대여 가능 -> 대여 중")
     void rentById() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
 
@@ -76,60 +80,64 @@ class GeneralRepositoryTest {
 
         assertThat(list.get(0).getCondition()).isEqualTo("대여 중");
 
+        list.clear();
     }
 
     @Test
-    @DisplayName("반납 성공 테스트1 대여 중 -> 대여 가능 ")
+    @DisplayName("반납 성공 테스트1 대여 중 -> 도서 정리중")
     void returnById1() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
         list.get(0).setCondition("대여 중");
 
         repository.returnById(1, list);
 
-        assertThat(list.get(0).getCondition()).isEqualTo("대여 가능");
+        assertThat(list.get(0).getCondition()).isEqualTo("도서 정리중");
+        list.clear();
     }
 
     @Test
-    @DisplayName("반납 성공 테스트2 분실됨 -> 대여 가능 ")
+    @DisplayName("반납 성공 테스트2 분실됨 -> 도서 정리중")
     void returnById2() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
         list.get(0).setCondition("분실됨");
 
         repository.returnById(1, list);
 
-        assertThat(list.get(0).getCondition()).isEqualTo("대여 가능");
+        assertThat(list.get(0).getCondition()).isEqualTo("도서 정리중");
+
+        list.clear();
     }
 
     @Test
     @DisplayName("분실 성공 테스트")
     void lostById() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
 
         repository.lostById(1, list);
 
         assertThat(list.get(0).getCondition()).isEqualTo("분실됨");
+
+        list.clear();
     }
 
     @Test
     @DisplayName("삭제 성공 테스트")
     void deleteById() {
         List<Book> list = new ArrayList<>();
-        repository.load(list);
 
         repository.save(1, "title1", "author1", 1000, list);
 
         repository.deleteById(1, list);
 
         assertThat(list.size()).isEqualTo(0);
+
+        list.clear();
     }
 
     private void clearCSV(String filePath) throws IOException {
