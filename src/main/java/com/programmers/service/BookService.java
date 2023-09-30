@@ -5,10 +5,7 @@ import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.repository.BookRepository;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class BookService {
     private static BookRepository bookRepository;
@@ -34,8 +31,8 @@ public class BookService {
         bookRepository.addBook(book);
     }
 
-    public void showAllBooks() {
-        bookRepository.getAllBooks().forEach(book -> System.out.println(book.toString()));
+    public List<Book> getAllBooks() {
+        return bookRepository.getAllBooks();
     }
 
     public void searchBookByTitle(String title) {

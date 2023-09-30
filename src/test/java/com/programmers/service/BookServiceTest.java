@@ -52,7 +52,10 @@ class BookServiceTest {
 
     @Test
     void 전체조회() {
-        bookService.showAllBooks();
+        Assertions.assertEquals(bookService.getAllBooks(), bookRepository.getAllBooks());
+        Book book = new Book(BookIdProvider.generateBookId(), "새로운도서", "작가", 100, BookState.AVAILABLE);
+        bookService.registerBook(book);
+        Assertions.assertEquals(bookService.getAllBooks(), bookRepository.getAllBooks());
     }
 
     @Test

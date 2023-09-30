@@ -74,7 +74,10 @@ public class ConsoleUI {
 
     public void displayAllBooks() {
         System.out.println(InfoMessages.BOOK_LIST_START.getMessage());
-        bookService.showAllBooks();
+        bookService.getAllBooks().forEach(book -> {
+            System.out.println(book);
+            System.out.println("-----------------------" + System.lineSeparator());
+        });
         System.out.println(InfoMessages.BOOK_LIST_FINISH.getMessage());
     }
 
