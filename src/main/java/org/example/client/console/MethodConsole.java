@@ -95,8 +95,14 @@ public class MethodConsole {
     /* ----------------- ↓ 2. 메뉴에 맞는 정보 스캔 메서드 ↓ ---------------------------------- */
     public static RequestData scanAndSetBookInfo(IO io) {
         String[] bookInfo = clientMethod.getQuestions().stream().map(question -> {
-            io.print(question);
-            return io.scanLine();
+            try {
+                io.print(question);
+                return Validator.validateNameAndAuthor(io.scanLine());
+            } catch (ValidateException e) {
+                io.println(e.getMessage());
+                io.print(question);
+                return Validator.validateNameAndAuthor(io.scanLine());
+            } // 각각 질문에 잘못 답별할 경우 다시 시도
         }).toArray(String[]::new);
         return Validator.validateBook(bookInfo);
     } // 도서 등록에만 필요한 메서드
@@ -104,7 +110,7 @@ public class MethodConsole {
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
         io.print(clientMethod.getQuestion());
-        String name = Validator.validateNameAndAuthor(io.scanLine());
+        String name = Validator.validateNameAndAuthor(io.scanLine()); 
         return new RequestData(name);
     } // 도서 이름 검색에만 필요한 메서드
 
