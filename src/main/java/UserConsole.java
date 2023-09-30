@@ -1,4 +1,6 @@
 import exception.EmptyInputException;
+import repository.FileRepository;
+import repository.TestRepository;
 import service.BookService;
 
 import java.io.BufferedReader;
@@ -6,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class UserConsole {
-    private final BookService bookService = new BookService();
+    private BookService bookService;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     public void selectMode(){
 
@@ -19,14 +21,21 @@ public class UserConsole {
         }
 
         switch (mode){
-            case "1"->selectFunction();
-            case "2"->runTestMode();
+            case "1"->{
+                bookService = new BookService(new FileRepository());
+                System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
+                selectFunction();
+            }
+            case "2"->{
+                bookService = new BookService(new TestRepository());
+                System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
+                selectFunction();
+            }
             default->System.out.println("잘못된 입력입니다.");
         }
     }
 
     public void selectFunction(){
-        System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
         String function="";
         while (!function.equals("8")){
             System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
