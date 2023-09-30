@@ -9,7 +9,11 @@ public enum Error {
     ALREADY_ORGANIZING("이미 정리중인 도서입니다."),
     NOT_EXIST("존재하지 않는 도서입니다."),
     NOT_AVAILABLE("대여할 수 없는 상태입니다."),
-    NOT_RETURNS("반납할 수 없는 상태입니다.");
+    NOT_RETURNS("반납할 수 없는 상태입니다."),
+
+    INVALID_TITLE("빈 제목을 입력할 수 없습니다."),
+    INVALID_AUTHOR("빈 작가 이름을 입력할 수 없습니다."),
+    INVALID_PAGE("페이지는 음수일 수 없습니다.");
 
     private final String message;
 
