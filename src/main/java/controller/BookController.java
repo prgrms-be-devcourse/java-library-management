@@ -47,7 +47,7 @@ public class BookController {
 
     public void runApplication() {
         int functionIdx = -1;
-        do {
+        while (functionIdx != 0) {
             output.printSelection(FUNCTION);
             {
                 try {
@@ -66,7 +66,8 @@ public class BookController {
                     output.printException(e.getMessage());
                 }
             }
-        } while (functionIdx != 0);
+        }
+        System.exit(0);
     }
 
     public void saveBook() {
@@ -99,7 +100,7 @@ public class BookController {
         output.printGuide(Guide.FIND_BY_TITLE_END);
     }
 
-    public void borrowBook() throws Exception {
+    public void borrowBook() {
         output.printGuide(Guide.BORROW_START);
         output.printQuestion(Question.BORROW_BY_BOOK_NO);
         Long bookNo = input.inputLong();

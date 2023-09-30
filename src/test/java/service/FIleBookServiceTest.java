@@ -1,6 +1,5 @@
 package service;
 
-import exception.*;
 import model.Book;
 import model.Status;
 import org.junit.jupiter.api.*;
@@ -11,17 +10,17 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-class FIleBookServiceTest {
 
+class FIleBookServiceTest {
     private BookService bookService;
 
     @BeforeEach
     void setUp() {
         FileRepository fileRepository = new FileRepository("test.csv");
         bookService = new BookService(fileRepository);
-        fileRepository.saveBook( new Book(fileRepository.createBookNo(), "대여 가능 책", "작가1", 123, Status.AVAILABLE));
-        fileRepository.saveBook( new Book(fileRepository.createBookNo(), "대여 중인 책", "작가2", 123, Status.BORROWED));
-        fileRepository.saveBook(new  Book(fileRepository.createBookNo(), "분실된 책", "작가3", 123, Status.LOST));
+        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "대여 가능 책", "작가1", 123, Status.AVAILABLE));
+        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "대여 중인 책", "작가2", 123, Status.BORROWED));
+        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "분실된 책", "작가3", 123, Status.LOST));
     }
 
     @Test
@@ -43,13 +42,9 @@ class FIleBookServiceTest {
 
     @Test
     @DisplayName("도서 삭제 테스트")
-    void borrowBookByBookNo() throws Exception {
-        Assertions.assertThrows(BookBorrowedException.class, () -> {
-            bookService.borrowBookByBookNo(2L);
-        });
-        Assertions.assertThrows(BookLostException.class, () -> {
-            bookService.borrowBookByBookNo(3L);
-        });
+    void borrowBookByBookNo() {
+        Assertions.assertThrows(IllegalStateException.class, () -> bookService.borrowBookByBookNo(2L));
+        Assertions.assertThrows(IllegalStateException.class, () -> bookService.borrowBookByBookNo(3L));
         bookService.borrowBookByBookNo(1L);
         List<Book> books = bookService.findAllBook();
         assertThat(books.get(0).getStatus()).isEqualTo(Status.BORROWED);
@@ -57,21 +52,19 @@ class FIleBookServiceTest {
 
     @Test
     @DisplayName("도서 반납 테스트")
-    void returnBookByBookNo() throws Exception{
-        Assertions.assertThrows(BookReturnFailException.class, () -> {
-            bookService.returnBookByBookNo(1L);
-        });
-        bookService.returnBookByBookNo(2L);
-        bookService.returnBookByBookNo(3L);
+    void returnBookByBookNo() {
+        Assertions.assertThrows(IllegalStateException.class, () -> bookService.returnBookByBookNo(1L, 5000));
+        bookService.returnBookByBookNo(2L, 5000);
+        bookService.returnBookByBookNo(3L, 5000);
         List<Book> books = bookService.findAllBook();
         assertThat(books.get(1).getStatus()).isEqualTo(Status.ORGANIZING);
         assertThat(books.get(2).getStatus()).isEqualTo(Status.ORGANIZING);
 
         try {
-            Thread.sleep(20000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             assertThat(books.get(1).getStatus()).isEqualTo(Status.AVAILABLE);
             assertThat(books.get(2).getStatus()).isEqualTo(Status.AVAILABLE);
         }
@@ -79,7 +72,7 @@ class FIleBookServiceTest {
 
     @Test
     @DisplayName("도서 분실 테스트")
-    void lostBookByBookNo() throws BookNotExistException, BookAlreadyLostException {
+    void lostBookByBookNo() {
         bookService.lostBookByBookNo(1L);
         List<Book> books = bookService.findAllBook();
         assertThat(books.get(0).getStatus()).isEqualTo(Status.LOST);
@@ -87,7 +80,7 @@ class FIleBookServiceTest {
 
     @Test
     @DisplayName("도서 삭제 테스트")
-    void deleteBookByBookNo() throws BookNotExistException {
+    void deleteBookByBookNo() {
         bookService.deleteBookByBookNo(1L);
         List<Book> books = bookService.findAllBook();
         assertThat(books.size()).isEqualTo(2);

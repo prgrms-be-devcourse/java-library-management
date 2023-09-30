@@ -1,7 +1,6 @@
 package constant;
 
 public enum Question {
-
     REGISTER_TITLE("Q. 등록할 도서 제목을 입력하세요."),
     REGISTER_AUTHOR("Q. 작가 이름을 입력하세요."),
     REGISTER_PAGE_NUM("Q. 페이지 수를 입력하세요."),

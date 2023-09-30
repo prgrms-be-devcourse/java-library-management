@@ -1,6 +1,6 @@
 package service;
 
-import exception.*;
+import constant.ExceptionMsg;
 import model.Book;
 import model.Status;
 import repository.Repository;
@@ -10,83 +10,78 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BookService {
-
     private final Repository repository;
 
     public BookService(Repository repository) {
         this.repository = repository;
     }
 
-    // 도서 등록
     public void saveBook(String title, String author, int pageNum) {
         Book book = new Book(repository.createBookNo(), title, author, pageNum, Status.AVAILABLE);
         repository.saveBook(book);
     }
 
-    // 도서 전체 목록 조회
     public List<Book> findAllBook() {
         return repository.findAllBook();
     }
 
-    // 특정 도서 제목으로 조회
     public List<Book> findBooksByTitle(String title) {
         return repository.findBookByTitle(title);
     }
 
-    // 도서 대여
-    public void borrowBookByBookNo(Long bookNo) throws Exception {
+    public void borrowBookByBookNo(Long bookNo) {
         Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(BookNotExistException::new);
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
 
-        switch (book.getStatus()) {
-            case BORROWED -> throw new BookBorrowedException();
-            case LOST -> throw new BookLostException();
-            case ORGANIZING -> throw new BookOrganizingException();
+        if (book.isAvailableToBorrow()) {
+            book.toBorrowed();
+            repository.saveBook(book);
         }
-        book.toBorrowed();
-        repository.saveBook(book);
     }
 
-    // 도서 반납
-    public void returnBookByBookNo(Long bookNo) throws BookNotExistException {
+    public void returnBookByBookNo(Long bookNo, int time) {
         Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(BookNotExistException::new);
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
 
         switch (book.getStatus()) {
-            case AVAILABLE, ORGANIZING -> throw new BookReturnFailException();
+            case AVAILABLE, ORGANIZING -> throw new IllegalStateException(ExceptionMsg.RETURN_FAIL.getMessage());
         }
         book.toOrganizing();
         repository.saveBook(book);
-        scheduleTask(book);
+        scheduleTask(book, time);
     }
 
-    // 도서 분실
-    public void lostBookByBookNo(Long bookNo) throws BookNotExistException, BookAlreadyLostException {
+    public void lostBookByBookNo(Long bookNo) {
         Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(BookNotExistException::new);
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
         if (book.getStatus().equals(Status.LOST)) {
-            throw new BookAlreadyLostException();
+            throw new IllegalStateException(ExceptionMsg.ALREADY_LOST.getMessage());
         }
         book.toLost();
         repository.saveBook(book);
     }
 
-    // 도서 삭제
-    public void deleteBookByBookNo(Long bookNo) throws BookNotExistException {
+    public void deleteBookByBookNo(Long bookNo) {
         Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(BookNotExistException::new);
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
         repository.deleteBook(bookNo);
     }
 
-    private void scheduleTask(Book book) {
-        TimerTask timerTask = new TimerTask() {
+    private TimerTask wrap(Runnable runnable) {
+        return new TimerTask() {
             @Override
             public void run() {
-                book.toAvailable();
-                repository.saveBook(book);
+                runnable.run();
             }
         };
+    }
+
+    private void scheduleTask(Book book, int time) {
+        Runnable bookTask = () -> {
+            book.toAvailable();
+            repository.saveBook(book);
+        };
         Timer timer = new Timer(true);
-        timer.schedule(timerTask, 10000);   // 테스트코드 실행을 위해 짧게 설정
+        timer.schedule(wrap(bookTask), time);
     }
 }

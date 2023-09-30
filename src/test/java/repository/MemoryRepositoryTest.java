@@ -26,11 +26,12 @@ class MemoryRepositoryTest {
         Book book = new Book(1L, "도서1", "작가1", 255, Status.AVAILABLE);
         memoryRepository.saveBook(book);
 
-        List<Book> bookList = memoryRepository.findAllBook();
+        List<Book> books = memoryRepository.findAllBook();
 
-        assertEquals(1, bookList.size());
-        assertEquals(book, bookList.get(0));
+        assertEquals(1, books.size());
+        assertEquals(book, books.get(0));
     }
+
     @Test
     @DisplayName("상태 변경 된 도서 저장 테스트")
     void testSaveBookChangedStatus() {
@@ -40,8 +41,8 @@ class MemoryRepositoryTest {
         Book book2 = new Book(1L, "도서1", "작가1", 255, Status.AVAILABLE);
         memoryRepository.saveBook(book2);
 
-        List<Book> bookList = memoryRepository.findAllBook();
-        assertEquals(1, bookList.size());
+        List<Book> books = memoryRepository.findAllBook();
+        assertEquals(1, books.size());
     }
 
     @Test
@@ -62,7 +63,7 @@ class MemoryRepositoryTest {
     @Test
     @DisplayName("도서 삭제 테스트")
     void testDeleteBook() {
-        Book book = new Book(1L, "Test Book", "Test Author",255, Status.AVAILABLE);
+        Book book = new Book(1L, "Test Book", "Test Author", 255, Status.AVAILABLE);
         memoryRepository.saveBook(book);
 
         memoryRepository.deleteBook(book.getBookNo());
@@ -73,7 +74,7 @@ class MemoryRepositoryTest {
     @Test
     @DisplayName("도서 번호로 도서 조회 테스트")
     void findBookByBookNo() {
-        Book book = new Book(1L, "Test Book", "Test Author",255, Status.AVAILABLE);
+        Book book = new Book(1L, "Test Book", "Test Author", 255, Status.AVAILABLE);
         memoryRepository.saveBook(book);
 
         Book bookFound = memoryRepository.findBookByBookNo(1L)
