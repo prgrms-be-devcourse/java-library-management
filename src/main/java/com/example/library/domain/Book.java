@@ -1,11 +1,13 @@
 package com.example.library.domain;
 
 import com.example.library.convert.Converter;
+import lombok.Getter;
 import org.json.simple.JSONObject;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+@Getter
 public class Book {
     private long id;
     private String title;
@@ -14,6 +16,8 @@ public class Book {
     private BookStatus bookStatus;
 
     private LocalDateTime bookReturnTime;
+
+    private final static int ORGANAZING_TIME = 300;
 
     public Book(long id, String title, String writer, String pageNumber, BookStatus bookStatus, LocalDateTime bookReturnTime) {
         this.id = id;
