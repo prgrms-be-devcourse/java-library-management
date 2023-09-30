@@ -35,6 +35,7 @@ public class AppConfig {
 
     public AppConfig(InitialConfig initialConfig, Mode mode) {
         this.initialConfig = initialConfig;
+        mode.printSelected(initialConfig.getCommunicationAgent());
         this.menuSelector = generateMenuSelector();
         this.menuExecuter = generateMenuExecuter(mode);
     }
@@ -69,7 +70,7 @@ public class AppConfig {
                 return new NormalBookRepository(generateBookFileManager());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Failed to read file. App running test mode.");
+                this.initialConfig.getCommunicationAgent().printConfigError(e);
             }
         }
         return new TestBookRepository();
@@ -81,7 +82,7 @@ public class AppConfig {
                 return new NormalTimerManager(generateTimerFileManager());
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Failed to read file. Timer manager begins test mode");
+                this.initialConfig.getCommunicationAgent().printConfigError(e);
             }
         }
 
@@ -93,7 +94,7 @@ public class AppConfig {
             return new BookServiceImpl(generateBookRepository(mode), generateTimerManager(mode));
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Failed to load files. App running test mode.");
+            this.initialConfig.getCommunicationAgent().printConfigError(e);
         }
 
         return new BookServiceImpl(new TestBookRepository(), new TestTimerManager());

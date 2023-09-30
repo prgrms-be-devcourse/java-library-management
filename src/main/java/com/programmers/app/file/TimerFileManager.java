@@ -54,6 +54,7 @@ public class TimerFileManager implements FileManager<Queue<Timer>, Queue<Timer>>
             gson.toJson(timerJsons, type, fileWriter);
             fileWriter.flush();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("File writer is not generated. System exits");
             System.exit(1);
         }

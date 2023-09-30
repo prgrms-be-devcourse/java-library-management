@@ -22,8 +22,7 @@ public class MenuSelector {
                         .orElseThrow(InvalidInputException::new);
             } catch (RuntimeException e) {
                 //same as mode selector
-                System.out.println(e.getMessage());
-                System.out.println("다시 입력해주세요.");
+                communicationAgent.askUserReEnter(e);
             }
         }
     }

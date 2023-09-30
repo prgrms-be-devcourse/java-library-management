@@ -24,8 +24,7 @@ public class ModeSelector {
                 }
             } catch (InvalidInputException e) {
                 //would like to manage this with another object
-                System.out.println(e.getMessage());
-                System.out.println("다시 입력해주세요.");
+                communicationAgent.askUserReEnter(e);
             }
         }
     }

@@ -17,14 +17,14 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void exit() {
-        communicationAgent.print("[System] 시스템을 종료합니다.");
+        communicationAgent.printExitMessage();
         System.exit(0);
     }
 
     @Override
     public void register() {
         bookService.register(communicationAgent.instructRegister());
-        communicationAgent.print("[System] 도서 등록이 완료되었습니다.");
+        communicationAgent.printOperationCompleted("대여");
         //todo: when totalPages is not number
     }
 
@@ -32,10 +32,9 @@ public class BookControllerImpl implements BookController {
     public void findAllBooks() {
         try {
             List<Book> books = bookService.findAllBooks();
-            //todo: output view
-            books.forEach(b -> communicationAgent.print((b.toString())));
+            communicationAgent.printFindResult(books);
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 
@@ -43,9 +42,9 @@ public class BookControllerImpl implements BookController {
     public void searchBookByTitle() {
         try {
             List<Book> books = bookService.findByTitle(communicationAgent.instructFindTitle());
-            books.forEach(book -> communicationAgent.print(book.toString()));
+            communicationAgent.printSearchResult(books);
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 
@@ -53,9 +52,9 @@ public class BookControllerImpl implements BookController {
     public void borrowBook() {
         try {
             bookService.borrowBook(communicationAgent.instructBorrow());
-            communicationAgent.print("[System] 도서가 대여 처리 되었습니다.");
+            communicationAgent.printOperationCompleted("대여");
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 
@@ -63,9 +62,9 @@ public class BookControllerImpl implements BookController {
     public void returnBook() {
         try {
             bookService.returnBook(communicationAgent.instructReturn());
-            communicationAgent.print("[System] 도서가 반납 처리 되었습니다.");
+            communicationAgent.printOperationCompleted("반납");
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 
@@ -73,9 +72,9 @@ public class BookControllerImpl implements BookController {
     public void reportLostBook() {
         try {
             bookService.reportLost(communicationAgent.instructReportLost());
-            communicationAgent.print("[System] 도서가 분실 처리 되었습니다.");
+            communicationAgent.printOperationCompleted("분실");
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 
@@ -83,9 +82,9 @@ public class BookControllerImpl implements BookController {
     public void deleteBook() {
         try {
             bookService.deleteBook(communicationAgent.instructDelete());
-            communicationAgent.print("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
+            communicationAgent.printOperationCompleted("삭제");
         } catch (RuntimeException e) {
-            communicationAgent.print(e.getMessage());
+            communicationAgent.printError(e);
         }
     }
 }

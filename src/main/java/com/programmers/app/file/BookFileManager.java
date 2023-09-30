@@ -22,10 +22,10 @@ public class BookFileManager implements FileManager<Map<Integer, Book>, List<Boo
     }
 
     @Override
-    public Map<Integer, Book> loadDataFromFile() throws IOException {
+    public HashMap<Integer, Book> loadDataFromFile() throws IOException {
         FileReader fileReader = new FileReader(filePath);
 
-        Map<Integer, Book> loadedBooks = new HashMap<>();
+        HashMap<Integer, Book> loadedBooks = new HashMap<>();
         Book[] booksFromFile = Optional.ofNullable(gson.fromJson(fileReader, Book[].class))
                 .orElse(new Book[]{});
 
