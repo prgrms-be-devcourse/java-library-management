@@ -42,7 +42,7 @@ public class ServiceTest {
         assertEquals("제목", books.get(0).getName());
         assertEquals("작가 이름", books.get(0).getAuthor());
         assertEquals(10, books.get(0).getPageCount());
-        assertEquals(BookStatus.AVAILABLE, books.get(0).getStatus());
+        assertEquals(BookStatus.BORROWABLE, books.get(0).getStatus());
         assertEquals(null, books.get(0).getReturnedAt());
     }
 
@@ -56,14 +56,14 @@ public class ServiceTest {
                 request1.getName(),
                 request1.getAuthor(),
                 request1.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
         repository.save(new Book(
                 repository.generateId(),
                 request2.getName(),
                 request2.getAuthor(),
                 request2.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
 
         List<Book> books = service.getBooks();
@@ -81,14 +81,14 @@ public class ServiceTest {
                 request1.getName(),
                 request1.getAuthor(),
                 request1.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
         repository.save(new Book(
                 2,
                 "도서 검색",
                 request2.getAuthor(),
                 request2.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
 
         List<Book> books = service.getBooksByName("도서 검색");
@@ -107,7 +107,7 @@ public class ServiceTest {
                 request.getName(),
                 request.getAuthor(),
                 request.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
 
         service.borrowBook(1);
@@ -144,7 +144,7 @@ public class ServiceTest {
                 request.getName(),
                 request.getAuthor(),
                 request.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
 
         service.reportLostBook(1);
@@ -162,7 +162,7 @@ public class ServiceTest {
                 request.getName(),
                 request.getAuthor(),
                 request.getPageCount(),
-                BookStatus.AVAILABLE)
+                BookStatus.BORROWABLE)
         );
 
         service.deleteBook(1);

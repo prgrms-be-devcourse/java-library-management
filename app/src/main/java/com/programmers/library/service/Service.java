@@ -21,7 +21,7 @@ public class Service {
                 request.getName(),
                 request.getAuthor(),
                 request.getPageCount(),
-                BookStatus.AVAILABLE
+                BookStatus.BORROWABLE
         ));
     }
 

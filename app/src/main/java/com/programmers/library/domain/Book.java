@@ -46,11 +46,11 @@ public class Book {
     }
 
     public void returned() {
-        if (status == BookStatus.AVAILABLE) {
+        if (status == BookStatus.BORROWABLE) {
             throw new IllegalStateException("[System] 원래 대여가 가능한 도서입니다.");
         }
 
-        if (status == BookStatus.AVAILABLE || !isOverFiveMinutesSinceReturned()) {
+        if (status == BookStatus.BORROWABLE || !isOverFiveMinutesSinceReturned()) {
             throw new IllegalStateException("[System] 이미 반납된 도서입니다.");
         }
 
