@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 // 매핑 후 사용자가 선택한 모드 타입을 반환하는 역할
 public class ModeConsole {
     public enum ModeType {
-        COMMON(1, "1. 일반 모드\n", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n\n"),
-        TEST(2, "2. 테스트 모드\n", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n\n");
+        COMMON(1, "1. 일반 모드", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n"),
+        TEST(2, "2. 테스트 모드", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
 
         private static final Map<Integer, ModeType> BY_NUMBER =
                 Stream.of(values()).collect(Collectors.toMap(ModeType::getNum, Function.identity()));
@@ -29,7 +29,7 @@ public class ModeConsole {
         }
 
         public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n"
-                + String.join("", Stream.of(values()).map(type -> type.name).toArray(String[]::new)) + "\n> ";
+                + String.join("", Stream.of(values()).map(type -> type.name + "\n").toArray(String[]::new)) + "\n> ";
 
         private final int num;
         private final String name;
@@ -53,7 +53,7 @@ public class ModeConsole {
         io.print(ModeType.MODE_CONSOLE);
         int selectNum = Validator.validateSelectNum(ModeType.values().length, io.scanLine()); //숫자 & 범위 체크
         ModeType modeType = ModeType.valueOfNumber(selectNum);
-        io.print(modeType.alert);
+        io.println(modeType.alert);
         return modeType.name();
     }
 }
