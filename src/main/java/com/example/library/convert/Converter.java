@@ -1,7 +1,7 @@
 package com.example.library.convert;
 
 import com.example.library.domain.Book;
-import com.example.library.domain.BookStatus;
+import com.example.library.domain.BookStatusType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -25,8 +25,16 @@ public class Converter {
     public static JSONObject convertBookToJson(List<Book> books) {
         JSONArray jsonArray = new JSONArray();
 
-        books.stream()
-                .forEach(book -> jsonArray.add(book.convertJson()));
+        for (Book book : books) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", Long.toString(book.getId()));
+            jsonObject.put("title", book.getTitle());
+            jsonObject.put("writer", book.getWriter());
+            jsonObject.put("pageNumber", book.getPageNumber());
+            jsonObject.put("bookStatusType", book.getBookStatusType());
+            jsonObject.put("bookReturnTime", Converter.convertLocalDateTimeToString(book.getBookReturnTime()));
+            jsonArray.add(jsonObject);
+        }
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("books", jsonArray);
@@ -42,21 +50,21 @@ public class Converter {
     }
 
 
-    private static BookStatus convertStringToBookStatus(String status) {
+    private static BookStatusType convertStringToBookStatus(String status) {
         if (status.equals("대여중")) {
 
-            return BookStatus.대여중;
+            return BookStatusType.대여중;
 
         } else if (status.equals("대여가능")) {
 
-            return BookStatus.대여가능;
+            return BookStatusType.대여가능;
 
         } else if (status.equals("도서 정리중")) {
 
-            return BookStatus.도서정리중;
+            return BookStatusType.도서정리중;
 
         } else
-            return BookStatus.분실됨;
+            return BookStatusType.분실됨;
     }
 
     private static LocalDateTime convertStringToLocalDateTime(String time) {
