@@ -1,7 +1,7 @@
 package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
-import com.dev_course.data.DataManager;
+import com.dev_course.data.LibraryDataManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
@@ -10,45 +10,43 @@ import static com.dev_course.library.LibraryMessage.*;
 public class LibrarySystem {
     LibraryReader reader;
     LibraryWriter writer;
-    DataManager dataManager;
+    LibraryDataManager dataManager;
     BookManager bookManager;
 
 
-    public LibrarySystem(LibraryReader reader, LibraryWriter writer, BookManager bookManager) {
+    public LibrarySystem(LibraryReader reader, LibraryWriter writer) {
         this.reader = reader;
         this.writer = writer;
-        this.bookManager = bookManager;
     }
 
     public void run() {
-        setMode();
+        LibraryMode mode = selectMode();
+
+        init(mode);
 
         selectFunction();
 
         exit();
     }
 
-    private void setMode() {
+    private LibraryMode selectMode() {
         writer.println(MOD_SCREEN.msg());
-
-        // TODO : SystemMode 따른 도서관 앱의 로드, 저장 기능 변경
 
         String input = reader.read();
 
-        switch (input) {
-            case "0" -> init(LibraryMode.TEST);
-            case "1" -> init(LibraryMode.NORMAL);
+        return switch (input) {
+            case "0" -> LibraryMode.TEST;
+            case "1" -> LibraryMode.NORMAL;
             default -> {
                 writer.println(INVALID_MODE.msg());
-                setMode();
+                yield selectMode();
             }
-        }
+        };
     }
 
     private void init(LibraryMode mode) {
         dataManager = mode.getDataManager();
-
-        dataManager.load();
+        bookManager = mode.getBookManager();
     }
 
     private void selectFunction() {

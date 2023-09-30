@@ -1,5 +1,7 @@
 package com.dev_course.book;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,11 +10,11 @@ import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
     private static final int PROCESSING_COST = 300_000;
-    private final List<Book> bookList;
+    private final List<Book> bookList = new ArrayList<>();
     private int id;
 
-    public ListBookManager(List<Book> bookList, int seed) {
-        this.bookList = bookList;
+    public ListBookManager(Collection<Book> data, int seed) {
+        bookList.addAll(data);
         this.id = seed;
     }
 
