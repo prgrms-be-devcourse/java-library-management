@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-// 실제 DB의 역할
+// 일반모드에서 사용할 파일을 불러오고, 업데이트 된 정보를 쓰는 역할을 담당
 public class FileStorage {
     public int newId; //  생성 예정인 id 값, 1부터 생성, JSON에 저장되어 있다.
     public final LinkedHashMap<Integer, Book> data; // 프로그램 실행 시에는 파일 변경은 없고 해당 Map 데이터가 변경

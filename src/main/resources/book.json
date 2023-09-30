@@ -1,10 +1,17 @@
 {
-  "new_id" : 2,
+  "new_id" : 3,
   "data" : [ {
     "id" : 1,
-    "name" : "111",
-    "author" : "111",
-    "pages" : 111,
+    "name" : "테스트 책이름1",
+    "author" : "테스트 책저자",
+    "pages" : 100,
+    "state" : "CAN_BORROW",
+    "endLoadTime" : ""
+  }, {
+    "id" : 2,
+    "name" : "테스트 책이름2",
+    "author" : "테스트 책저자",
+    "pages" : 100,
     "state" : "CAN_BORROW",
     "endLoadTime" : ""
   } ]

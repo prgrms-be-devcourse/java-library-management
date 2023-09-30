@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 // 통과하면 이 메서드를 사용하는 입장에서 간결해보이기 위해 다시 그대로 검사한 데이터를 내보낸다.
 // int는 제외) String으로 받고 int로 내보낸다.
 public class Validator {
-    public static RequestData validateBook(RequestData requestData, String[] input) {
-        requestData.name = validateNameAndAuthor(input[0]);
-        requestData.author = validateNameAndAuthor(input[1]);
-        requestData.pages = validateIdAndPages(input[2]);
-        return requestData;
+    public static RequestData validateBook(String[] input) {
+        String name = validateNameAndAuthor(input[0]);
+        String author = validateNameAndAuthor(input[1]);
+        int pages = validateIdAndPages(input[2]);
+        return new RequestData(name, author, pages);
     }
 
     public static String validateNameAndAuthor(String input) {

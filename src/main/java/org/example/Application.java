@@ -8,8 +8,8 @@ import org.example.server.Server;
 public class Application {
     public static void main(String[] args) {
         try {
-            Server.setServer(Client.scanMode());
-            while (true) {
+            Server.setServer(Client.scanMode()); // 1. 모드를 설정하고
+            while (true) { // 2. 지속적으로 Reqeust, String(응답) 객체를 이용하여 데이터를 교환(HTTP 통신 비스무리하게 구현)
                 Request request = Client.scanMenu();
                 String response = Server.requestMethod(request);
                 Client.printResponse(response);

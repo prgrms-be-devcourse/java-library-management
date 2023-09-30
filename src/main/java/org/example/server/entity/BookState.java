@@ -3,7 +3,7 @@ package org.example.server.entity;
 import org.example.server.exception.ServerException;
 
 // 도서 상태를 관리
-// Service 레이어에서 도서 상태별로 던져야할 예외도 쉽게 매핑
+// Service에서 도서 상태별 던져야 할 예외도 쉽게 매핑
 public enum BookState {
     CAN_BORROW("대여 가능", new ServerException() {
         @Override
@@ -40,5 +40,5 @@ public enum BookState {
 
     public ServerException throwStatusException() {
         return statusException;
-    } // 도서 상태별 던져야할 예외 반환
+    } // 도서 상태별 던져야 할 예외 매핑
 }
