@@ -8,10 +8,7 @@ import com.programmers.repository.FileBookRepository;
 import com.programmers.repository.MemBookRepository;
 import com.programmers.service.BookService;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class ConsoleUI {
     private final Map<Integer, Runnable> functionMap = new HashMap<>();
@@ -39,7 +36,7 @@ public class ConsoleUI {
                 Scanner scanner = new Scanner(System.in);
                 System.out.print(PromptMessages.BOOK_MANAGEMENT_FEATURE_MESSAGE.getMessage());
                 functionMap.get(scanner.nextInt()).run();
-            } catch (NullPointerException npe) {
+            } catch (NullPointerException | InputMismatchException e) {
                 System.out.println(ErrorMessages.INVALID_INPUT.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -62,8 +59,16 @@ public class ConsoleUI {
     }
 
     public void promptForRegisterBook() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(PromptMessages.BOOK_REGISTER_TITLE_PROMPT.getMessage());
+        String title = scanner.nextLine();
+        System.out.print(PromptMessages.BOOK_REGISTER_AUTHOR_PROMPT.getMessage());
+        String author = scanner.nextLine();
+        System.out.print(PromptMessages.BOOK_REGISTER_PAGES_PROMPT.getMessage());
+        int pages = scanner.nextInt();
+
         System.out.println(InfoMessages.MOVE_TO_BOOK_REGISTER.getMessage());
-        bookService.registerBook(new Book());
+        bookService.registerBook(new Book(title, author, pages));
         System.out.println(InfoMessages.BOOK_REGISTER_SUCCESS.getMessage());
     }
 
@@ -76,7 +81,7 @@ public class ConsoleUI {
     public void promptForSearchBookByTitle() {
         Scanner scanner = new Scanner(System.in);
         System.out.println(InfoMessages.MOVE_TO_BOOK_SEARCH.getMessage());
-        System.out.print(PromptMessages.BOOK_TITLE_PROMPT.getMessage());
+        System.out.print(PromptMessages.BOOK_TITLE_SEARCH_PROMPT.getMessage());
         bookService.searchBookByTitle(scanner.nextLine());
         System.out.println(InfoMessages.BOOK_SEARCH_FINISH.getMessage());
     }

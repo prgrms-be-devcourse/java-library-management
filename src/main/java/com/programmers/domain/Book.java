@@ -4,7 +4,6 @@ import com.programmers.common.ErrorMessages;
 import com.programmers.provider.BookIdProvider;
 
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Book {
 
@@ -40,17 +39,20 @@ public class Book {
         return Objects.hash(id);
     }
 
-    //
-    public Book() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nQ. 등록할 도서 제목을 입력하세요.\n\n> ");
-        this.title = scanner.nextLine();
-        System.out.print("\nQ. 작가 이름을 입력하세요.\n\n> ");
-        this.author = scanner.nextLine();
-        System.out.print("\nQ. 페이지 수를 입력하세요.\n\n> ");
-        this.pages = scanner.nextInt();
-        this.state = BookState.AVAILABLE;
+    public Book(String title, String author, int pages) {
         this.id = BookIdProvider.generateBookId();
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.state = BookState.AVAILABLE;
+    }
+
+    public Book(int id, String title, String author, int pages, BookState state) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.state = state;
     }
 
     public Book(String[] bookArr) {
@@ -61,14 +63,6 @@ public class Book {
         this.pages = Integer.parseInt(bookArr[3]);
         this.state = BookState.valueOf(bookArr[4]);
         if (this.state == BookState.ORGANIZING) this.state = BookState.AVAILABLE;
-    }
-
-    public Book(int id, String title, String author, int pages, BookState state) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
-        this.state = state;
     }
 
     public int getId() {
