@@ -41,4 +41,9 @@ public class FileRepository implements Repository {
     public void delete(int id) {
 
     }
+
+    @Override
+    public void deleteAll() {
+
+    }
 }

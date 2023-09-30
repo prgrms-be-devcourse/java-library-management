@@ -56,4 +56,9 @@ public class TestRepository implements Repository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteAll() {
+        storage.clear();
+    }
+
 }

@@ -19,4 +19,6 @@ public interface Repository {
     public void update(int id, Book updatedBook);
 
     public void delete(int id);
+
+    public void deleteAll();
 }

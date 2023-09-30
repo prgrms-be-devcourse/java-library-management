@@ -28,4 +28,12 @@ public class CreateBookRequestDto {
     public void setPageCount(int pageCount) {
         this.pageCount = pageCount;
     }
+
+    public static CreateBookRequestDto fixture() {
+        CreateBookRequestDto fixture = new CreateBookRequestDto();
+        fixture.setName("제목");
+        fixture.setAuthor("작가 이름");
+        fixture.setPageCount(10);
+        return fixture;
+    }
 }
