@@ -9,7 +9,7 @@ import java.util.Optional;
 
 // 서버의 테스트 모드 레포지토리를 담당하는 부분
 public class TestBookRepository implements Repository {
-    private int count; //  생성 예정인 id 값
+    private int newId; //  생성 예정인 id 값, 1부터 생성
     private LinkedHashMap<Integer, Book> data; // 저장한 순서대로 저장
 
     public TestBookRepository() {
@@ -18,13 +18,13 @@ public class TestBookRepository implements Repository {
 
     @Override
     public void loadData() {
-        count = 0;
+        newId = 1;
         data = new LinkedHashMap<>();
     }
 
     @Override
     public void create(Book book) {
-        int bookId = count++;
+        int bookId = newId++;
         book.id = bookId;
         data.put(bookId, book);
     }

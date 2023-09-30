@@ -10,7 +10,7 @@ import java.util.Optional;
 // 일반 모드용 레포지토리.
 public class FileBookRepository implements Repository {
     private FileStorage fileStorage; // 어댑터 패턴을 배운 후 적용하려 노력했다.
-    private int count; //  생성 예정인 id 값, JSON에 저장되어 있다.
+    private int newId; //  생성 예정인 id 값, 1부터 생성, JSON에 저장되어 있다.
     private LinkedHashMap<Integer, Book> data; // 데이터에서 불러온 파일들 바로 쓸 수 있도록 저장(캐싱)
 
     public FileBookRepository() {
@@ -20,12 +20,13 @@ public class FileBookRepository implements Repository {
     @Override
     public void loadData() {
         // 파일에서 데이터 로드하기.
-        // count, data 로드
+        // newId, data 로드(파일이 비어있다면 newId = 1)
+//        fileStorage
     }
 
     @Override
     public void create(Book book) {
-        int bookId = count++;
+        int bookId = newId++;
         book.id = bookId;
         data.put(bookId, book);
     }
