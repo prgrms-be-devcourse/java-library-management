@@ -1,6 +1,8 @@
 package com.programmers.view;
 
-import com.programmers.common.Messages;
+import com.programmers.common.ErrorMessages;
+import com.programmers.common.InfoMessages;
+import com.programmers.common.PromptMessages;
 import com.programmers.domain.Book;
 import com.programmers.repository.FileBookRepository;
 import com.programmers.repository.MemBookRepository;
@@ -35,10 +37,10 @@ public class ConsoleUI {
         while (true) {
             try {
                 Scanner scanner = new Scanner(System.in);
-                System.out.print(Messages.BOOK_MANAGEMENT_FEATURE_MESSAGE);
+                System.out.print(PromptMessages.BOOK_MANAGEMENT_FEATURE_MESSAGE.getMessage());
                 functionMap.get(scanner.nextInt()).run();
             } catch (NullPointerException npe) {
-                System.out.println(Messages.INVALID_INPUT);
+                System.out.println(ErrorMessages.INVALID_INPUT.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -46,65 +48,65 @@ public class ConsoleUI {
     }
 
     public void setMode() {
-        System.out.print(Messages.MODE_CHOICE_MESSAGE);
+        System.out.print(PromptMessages.MODE_CHOICE_MESSAGE.getMessage());
         int mode = getIntFromInput();
         if (mode == 1) {
-            System.out.println(Messages.NORMAL_MODE_EXECUTION);
+            System.out.println(InfoMessages.NORMAL_MODE_EXECUTION.getMessage());
             BookService.setBookRepository(FileBookRepository.getInstance());
         } else if (mode == 2) {
-            System.out.println(Messages.TEST_MODE_EXECUTION);
+            System.out.println(InfoMessages.TEST_MODE_EXECUTION.getMessage());
             BookService.setBookRepository(MemBookRepository.getInstance());
         } else {
-            System.out.println(Messages.INVALID_INPUT);
+            System.out.println(ErrorMessages.INVALID_INPUT.getMessage());
         }
     }
 
     public void promptForRegisterBook() {
-        System.out.println(Messages.MOVE_TO_BOOK_REGISTER);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_REGISTER.getMessage());
         bookService.registerBook(new Book());
-        System.out.println(Messages.BOOK_REGISTER_SUCCESS);
+        System.out.println(InfoMessages.BOOK_REGISTER_SUCCESS.getMessage());
     }
 
     public void displayAllBooks() {
-        System.out.println(Messages.BOOK_LIST_START);
+        System.out.println(InfoMessages.BOOK_LIST_START.getMessage());
         bookService.showAllBooks();
-        System.out.println(Messages.BOOK_LIST_FINISH);
+        System.out.println(InfoMessages.BOOK_LIST_FINISH.getMessage());
     }
 
     public void promptForSearchBookByTitle() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(Messages.MOVE_TO_BOOK_SEARCH);
-        System.out.print(Messages.BOOK_TITLE_PROMPT);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_SEARCH.getMessage());
+        System.out.print(PromptMessages.BOOK_TITLE_PROMPT.getMessage());
         bookService.searchBookByTitle(scanner.nextLine());
-        System.out.println(Messages.BOOK_SEARCH_FINISH);
+        System.out.println(InfoMessages.BOOK_SEARCH_FINISH.getMessage());
     }
 
     public void promptForRent() {
-        System.out.println(Messages.MOVE_TO_BOOK_RENT);
-        System.out.print(Messages.BOOK_RENT_PROMPT);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_RENT.getMessage());
+        System.out.print(PromptMessages.BOOK_RENT_PROMPT.getMessage());
         bookService.rentBook(getIntFromInput());
-        System.out.println(Messages.BOOK_RENT_SUCCESS);
+        System.out.println(InfoMessages.BOOK_RENT_SUCCESS.getMessage());
     }
 
     public void promptForReturn() {
-        System.out.println(Messages.MOVE_TO_BOOK_RETURN);
-        System.out.print(Messages.BOOK_RETURN_PROMPT);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_RETURN.getMessage());
+        System.out.print(PromptMessages.BOOK_RETURN_PROMPT.getMessage());
         bookService.returnBook(getIntFromInput());
-        System.out.println(Messages.BOOK_RETURN_SUCCESS);
+        System.out.println(InfoMessages.BOOK_RETURN_SUCCESS.getMessage());
     }
 
     public void promptForReportAsLost() {
-        System.out.println(Messages.MOVE_TO_BOOK_LOST);
-        System.out.print(Messages.BOOK_LOST_PROMPT);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_LOST.getMessage());
+        System.out.print(PromptMessages.BOOK_LOST_PROMPT.getMessage());
         bookService.lostBook(getIntFromInput());
-        System.out.println(Messages.BOOK_LOST_SUCCESS);
+        System.out.println(InfoMessages.BOOK_LOST_SUCCESS.getMessage());
     }
 
     public void promptForDelete() {
-        System.out.println(Messages.MOVE_TO_BOOK_DELETE);
-        System.out.print(Messages.BOOK_DELETE_PROMPT);
+        System.out.println(InfoMessages.MOVE_TO_BOOK_DELETE.getMessage());
+        System.out.print(PromptMessages.BOOK_DELETE_PROMPT.getMessage());
         bookService.deleteBook(getIntFromInput());
-        System.out.println(Messages.BOOK_DELETE_SUCCESS);
+        System.out.println(InfoMessages.BOOK_DELETE_SUCCESS.getMessage());
 
     }
 
@@ -114,7 +116,7 @@ public class ConsoleUI {
         try {
             input = scanner.nextInt();
         } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException(Messages.INVALID_INPUT.toString());
+            throw new IllegalArgumentException(ErrorMessages.INVALID_INPUT.getMessage());
         }
         return input;
     }

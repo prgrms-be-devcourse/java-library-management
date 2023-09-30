@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
     private final List<Book> books = new ArrayList<>();
-    private final String csvFile = "./app/src/main/resources/data.csv";
+    private final String csvFile = "./src/main/resources/data.csv";
 
     private FileBookRepository() {
     }

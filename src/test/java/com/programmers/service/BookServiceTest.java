@@ -1,6 +1,6 @@
 package com.programmers.service;
 
-import com.programmers.common.Messages;
+import com.programmers.common.ErrorMessages;
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.provider.BookIdProvider;
@@ -69,7 +69,7 @@ class BookServiceTest {
     @Test
     void 대여기능_실패_대여중인도서() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(rentedBook.getId()));
-        String expectedMessage = Messages.BOOK_ALREADY_RENTED.toString();
+        String expectedMessage = ErrorMessages.BOOK_ALREADY_RENTED.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -78,7 +78,7 @@ class BookServiceTest {
     @Test
     void 대여기능_실패_분실된도서() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(lostBook.getId()));
-        String expectedMessage = Messages.BOOK_NOW_LOST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOW_LOST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -87,7 +87,7 @@ class BookServiceTest {
     @Test
     void 대여기능_실패_없는도서() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(123));
-        String expectedMessage = Messages.BOOK_NOT_EXIST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -120,7 +120,7 @@ class BookServiceTest {
     @Test
     void 반납기능_실패_대여가능한경우() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.returnBook(availableBook.getId()));
-        String expectedMessage = Messages.BOOK_RETURN_FAILED.toString();
+        String expectedMessage = ErrorMessages.BOOK_ALREADY_AVAILABLE.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -130,7 +130,7 @@ class BookServiceTest {
     void 반납기능_실패_반납중인경우() {
         bookService.returnBook(rentedBook.getId());
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.returnBook(rentedBook.getId()));
-        String expectedMessage = Messages.BOOK_BEING_ORGANIZED.toString();
+        String expectedMessage = ErrorMessages.BOOK_BEING_ORGANIZED.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -149,7 +149,7 @@ class BookServiceTest {
     @Test
     void 분실처리_실패() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.lostBook(lostBook.getId()));
-        String expectedMessage = Messages.BOOK_LOST_FAILED.toString();
+        String expectedMessage = ErrorMessages.BOOK_ALREADY_LOST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -159,7 +159,7 @@ class BookServiceTest {
     void 도서삭제_성공_대여가능한도서() {
         bookService.deleteBook(availableBook.getId());
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(availableBook.getId()));
-        String expectedMessage = Messages.BOOK_NOT_EXIST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -169,7 +169,7 @@ class BookServiceTest {
     void 도서삭제_성공_대여중인도서() {
         bookService.deleteBook(rentedBook.getId());
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(rentedBook.getId()));
-        String expectedMessage = Messages.BOOK_NOT_EXIST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
         Assertions.assertEquals(expectedMessage, actualMessage);
     }
@@ -178,7 +178,7 @@ class BookServiceTest {
     void 도서삭제_성공_분실된도서() {
         bookService.deleteBook(lostBook.getId());
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(lostBook.getId()));
-        String expectedMessage = Messages.BOOK_NOT_EXIST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
@@ -188,7 +188,7 @@ class BookServiceTest {
     @Test
     void 도서삭제_실패_없는도서() {
         Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(123));
-        String expectedMessage = Messages.BOOK_NOT_EXIST.toString();
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);

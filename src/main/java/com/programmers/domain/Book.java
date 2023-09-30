@@ -1,6 +1,6 @@
 package com.programmers.domain;
 
-import com.programmers.common.Messages;
+import com.programmers.common.ErrorMessages;
 import com.programmers.provider.BookIdProvider;
 
 import java.util.Objects;
@@ -16,12 +16,15 @@ public class Book {
 
     @Override
     public String toString() {
-        return "\n도서번호 : " + id + '\n' +
-                "제목 : " + title + '\n' +
-                "작가 이름 : " + author + '\n' +
-                "페이지 수 : " + pages + '\n' +
-                "상태 : " + state.getMessage() + "\n\n" +
-                "------------------------------\n";
+        String NEWLINE = System.lineSeparator();
+        return NEWLINE +
+                "도서번호 : " + id + NEWLINE +
+                "제목 : " + title + NEWLINE +
+                "작가 이름 : " + author + NEWLINE +
+                "페이지 수 : " + pages + NEWLINE +
+                "상태 : " + state.getMessage() + NEWLINE + NEWLINE +
+                "------------------------------"
+                + NEWLINE;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class Book {
     }
 
     public Book(String[] bookArr) {
-        if (bookArr.length != 5) throw new IllegalArgumentException(Messages.CSV_FORMAT_ERROR.toString());
+        if (bookArr.length != 5) throw new IllegalArgumentException(ErrorMessages.CSV_FORMAT_ERROR.toString());
         this.id = Integer.parseInt(bookArr[0]);
         this.title = bookArr[1];
         this.author = bookArr[2];
@@ -97,9 +100,9 @@ public class Book {
             case AVAILABLE -> {
                 return true;
             }
-            case RENTED -> throw new RuntimeException(Messages.BOOK_ALREADY_RENTED.toString());
-            case ORGANIZING -> throw new RuntimeException(Messages.BOOK_BEING_ORGANIZED.toString());
-            case LOST -> throw new RuntimeException(Messages.BOOK_NOW_LOST.toString());
+            case RENTED -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_RENTED.getMessage());
+            case ORGANIZING -> throw new RuntimeException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
+            case LOST -> throw new RuntimeException(ErrorMessages.BOOK_NOW_LOST.getMessage());
         }
         return false;
     }
@@ -109,8 +112,8 @@ public class Book {
             case RENTED, LOST -> {
                 return true;
             }
-            case AVAILABLE -> throw new RuntimeException(Messages.BOOK_RETURN_FAILED.toString());
-            case ORGANIZING -> throw new RuntimeException(Messages.BOOK_BEING_ORGANIZED.toString());
+            case AVAILABLE -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_AVAILABLE.getMessage());
+            case ORGANIZING -> throw new RuntimeException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
         }
         return false;
     }
@@ -120,7 +123,7 @@ public class Book {
             case RENTED, AVAILABLE, ORGANIZING -> {
                 return true;
             }
-            case LOST -> throw new RuntimeException(Messages.BOOK_LOST_FAILED.toString());
+            case LOST -> throw new RuntimeException(ErrorMessages.BOOK_ALREADY_LOST.getMessage());
         }
         return false;
     }

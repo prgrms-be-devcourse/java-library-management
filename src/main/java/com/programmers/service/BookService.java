@@ -1,6 +1,6 @@
 package com.programmers.service;
 
-import com.programmers.common.Messages;
+import com.programmers.common.ErrorMessages;
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.repository.BookRepository;
@@ -45,13 +45,13 @@ public class BookService {
 
     public void rentBook(int bookId) {
         Book book = bookRepository.findBookById(bookId)
-                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+                .orElseThrow(() -> new NoSuchElementException(ErrorMessages.BOOK_NOT_EXIST.getMessage()));
         if (book.isRentable()) bookRepository.updateBookState(book, BookState.RENTED);
     }
 
     public void returnBook(int bookId) {
         Book book = bookRepository.findBookById(bookId)
-                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+                .orElseThrow(() -> new NoSuchElementException(ErrorMessages.BOOK_NOT_EXIST.getMessage()));
         if (book.isReturnable()) {
             bookRepository.updateBookState(book, BookState.ORGANIZING);
             startOrganizing(book);
@@ -60,13 +60,13 @@ public class BookService {
 
     public void lostBook(int bookId) {
         Book book = bookRepository.findBookById(bookId)
-                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+                .orElseThrow(() -> new NoSuchElementException(ErrorMessages.BOOK_NOT_EXIST.getMessage()));
         if (book.isReportableAsLost()) bookRepository.updateBookState(book, BookState.LOST);
     }
 
     public void deleteBook(int bookId) {
         Book book = bookRepository.findBookById(bookId)
-                .orElseThrow(() -> new NoSuchElementException(Messages.BOOK_NOT_EXIST.toString()));
+                .orElseThrow(() -> new NoSuchElementException(ErrorMessages.BOOK_NOT_EXIST.getMessage()));
         bookRepository.deleteBook(book);
     }
 
