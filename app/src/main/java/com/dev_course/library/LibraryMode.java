@@ -3,22 +3,22 @@ package com.dev_course.library;
 import com.dev_course.book.Book;
 import com.dev_course.book.BookManager;
 import com.dev_course.book.ListBookManager;
-import com.dev_course.data.EmptyLibraryDataManager;
-import com.dev_course.data.LibraryDataManager;
+import com.dev_course.data_module.EmptyDataManager;
+import com.dev_course.data_module.DataManager;
 
 import java.util.List;
 
 public enum LibraryMode {
-    TEST(new EmptyLibraryDataManager()),
-    NORMAL(new EmptyLibraryDataManager());
+    TEST(new EmptyDataManager()),
+    NORMAL(new EmptyDataManager());
 
-    private final LibraryDataManager dataManager;
+    private final DataManager dataManager;
 
-    LibraryMode(LibraryDataManager dataManager) {
+    LibraryMode(DataManager dataManager) {
         this.dataManager = dataManager;
     }
 
-    LibraryDataManager getDataManager() {
+    DataManager getDataManager() {
         return this.dataManager;
     }
 

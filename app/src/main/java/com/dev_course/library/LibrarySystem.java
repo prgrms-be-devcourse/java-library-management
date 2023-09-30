@@ -1,7 +1,7 @@
 package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
-import com.dev_course.data.LibraryDataManager;
+import com.dev_course.data_module.DataManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
@@ -10,7 +10,7 @@ import static com.dev_course.library.LibraryMessage.*;
 public class LibrarySystem {
     LibraryReader reader;
     LibraryWriter writer;
-    LibraryDataManager dataManager;
+    DataManager dataManager;
     BookManager bookManager;
 
 
