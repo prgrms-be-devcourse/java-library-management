@@ -15,6 +15,7 @@ public class Application {
                 Client.printResponse(response);
             }
         } catch (RuntimeException e) {
+            Server.saveData();
             System.err.print("\n>> 시스템 에러 발생! 프로그램을 종료합니다.\n");
         }
     }

@@ -34,9 +34,10 @@ public class Server {
     }
 
     private static Controller controller;
+    private static Repository repository;
 
     public static void setServer(String mode) {
-        Repository repository = ServerMode.valueOf(mode).getRepository();
+        repository = ServerMode.valueOf(mode).getRepository();
         Service service = new BookService(repository);
         controller = new BookController(service);
     } // 모드에 따라 서버 레이어 세팅. 외부(Server)에서 레이어 클래스 의존성을 주입하고자 했습니다.
@@ -48,4 +49,10 @@ public class Server {
             return e.getMessage(); // 요청 실패 응답
         }
     } // 클라이언트로부터 받은 요청 수행 후 String으로 응답
+
+    public static void saveData() {
+        if (repository instanceof FileBookRepository) {
+            repository.save();
+        } // 프로그램 에러 발생해서 종료시 데이터 저장(일반 모드)
+    }
 }
