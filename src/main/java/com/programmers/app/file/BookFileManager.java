@@ -44,8 +44,7 @@ public class BookFileManager implements FileManager<Map<Integer, Book>, List<Boo
             fileWriter.flush();
             fileWriter.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Failed to write books.json. System exits");
+            System.out.println("Failed to write books.json for some reason. System exits");
             System.exit(1);
         }
     }

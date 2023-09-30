@@ -15,8 +15,7 @@ public class ConsoleReader {
             try {
                 return Integer.parseInt(sc.nextLine());
             } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
-                System.out.println("다시 입력해주세요.");
+                System.out.println("[System] 숫자를 입력해주세요.");
             }
         }
     }

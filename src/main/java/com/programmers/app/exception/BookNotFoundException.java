@@ -1,8 +1,10 @@
 package com.programmers.app.exception;
 
+import com.programmers.app.exception.messages.ExceptionMessages;
+
 public class BookNotFoundException extends RuntimeException {
 
-    public BookNotFoundException() {
-        super("[System] 보관된 책이 없습니다");
+    public BookNotFoundException(ExceptionMessages exceptionMessages) {
+        super(exceptionMessages.getExceptionMessage());
     }
 }

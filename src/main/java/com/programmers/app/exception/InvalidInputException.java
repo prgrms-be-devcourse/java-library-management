@@ -1,7 +1,9 @@
 package com.programmers.app.exception;
 
+import com.programmers.app.exception.messages.ExceptionMessages;
+
 public class InvalidInputException extends RuntimeException {
     public InvalidInputException() {
-        super("[System] 잘못된 입력입니다.");
+        super(ExceptionMessages.INCORRECT_INPUT_NUMBER.getExceptionMessage());
     }
 }
