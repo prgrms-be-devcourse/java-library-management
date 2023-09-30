@@ -10,6 +10,7 @@ import com.programmers.app.book.repository.BookRepository;
 import com.programmers.app.book.dto.BookRequest;
 import com.programmers.app.exception.ActionNotAllowedException;
 import com.programmers.app.exception.BookNotFoundException;
+import com.programmers.app.exception.messages.ExceptionMessages;
 import com.programmers.app.timer.Timer;
 import com.programmers.app.timer.TimerManger;
 
@@ -37,7 +38,7 @@ public class BookServiceImpl implements BookService {
         }
 
         return bookRepository.findAllBooks()
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.NO_BOOK_LOADED));
     }
 
     @Override
@@ -47,25 +48,15 @@ public class BookServiceImpl implements BookService {
         }
 
         return bookRepository.findByTitle(title)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.TITLE_NONEXISTENT));
     }
 
     @Override
     public void borrowBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.BOOK_NUMBER_NONEXISTENT));
 
-        if (book.getStatus().equals(BookStatus.ON_LOAN)) {
-            throw new ActionNotAllowedException("[System] 이미 대여중인 도서입니다.");
-        }
-
-        if (book.getStatus().equals(BookStatus.LOST)) {
-            throw new ActionNotAllowedException("[System] 분실 처리된 도서입니다.");
-        }
-
-        if (book.getStatus().equals(BookStatus.ON_ARRANGEMENT)) {
-            throw new ActionNotAllowedException("[System] 정리중인 도서입니다.");
-        }
+        validateBorrowable(book);
 
         book.setStatus(BookStatus.ON_LOAN);
         bookRepository.save();
@@ -74,11 +65,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void returnBook(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.BOOK_NUMBER_NONEXISTENT));
 
-        if (book.getStatus().equals(BookStatus.IN_PLACE) || book.getStatus().equals(BookStatus.ON_ARRANGEMENT)) {
-            throw new ActionNotAllowedException("[System] 이미 반납된 도서입니다.");
-        }
+        validateReturnable(book);
 
         book.setStatus(BookStatus.ON_ARRANGEMENT);
         timerManger.add(new Timer(bookNumber, LocalDateTime.now()));
@@ -90,7 +79,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(int bookNumber) {
         bookRepository.delete(bookRepository.findByBookNumber(bookNumber)
-                        .orElseThrow(BookNotFoundException::new));
+                        .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.BOOK_NUMBER_NONEXISTENT)));
 
         bookRepository.save();
         if (timerManger.remove(bookNumber)) {
@@ -101,11 +90,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void reportLost(int bookNumber) {
         Book book = bookRepository.findByBookNumber(bookNumber)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.BOOK_NUMBER_NONEXISTENT));
 
-        if (book.getStatus().equals(BookStatus.LOST)) {
-            throw new ActionNotAllowedException("[System] 분실 처리된 도서입니다.");
-        }
+        validateReportable(book);
 
         book.setStatus(BookStatus.LOST);
 
@@ -123,12 +110,38 @@ public class BookServiceImpl implements BookService {
         timerManger.popArrangedBooks(LocalDateTime.now())
                 .stream()
                 .map(bookNumber -> bookRepository.findByBookNumber(bookNumber)
-                        .orElseThrow(BookNotFoundException::new)) //todo: proper exception to be raised
+                        .orElseThrow(() -> new BookNotFoundException(ExceptionMessages.BOOK_NUMBER_NONEXISTENT)))
                 .forEach(book -> {
                     book.setStatus(BookStatus.IN_PLACE);
                     changed.set(true);
                 });
 
         return changed.get();
+    }
+
+    private void validateBorrowable(Book book) {
+        if (book.isOnLoan()) {
+            throw new ActionNotAllowedException(ExceptionMessages.ALREADY_BORROWED);
+        }
+
+        if (book.isLost()) {
+            throw new ActionNotAllowedException(ExceptionMessages.BOOK_LOSS_REPORTED);
+        }
+
+        if (book.isOnArrangement()) {
+            throw new ActionNotAllowedException(ExceptionMessages.BOOK_ON_ARRANGEMENT);
+        }
+    }
+
+    private void validateReturnable(Book book) {
+        if (book.isInPlace() || book.isOnArrangement()) {
+            throw new ActionNotAllowedException(ExceptionMessages.ALREADY_RETURNED);
+        }
+    }
+
+    private void validateReportable(Book book) {
+        if (book.isLost()) {
+            throw new ActionNotAllowedException(ExceptionMessages.ALREADY_REPORTED_LOST);
+        }
     }
 }

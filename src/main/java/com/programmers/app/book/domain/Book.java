@@ -23,8 +23,20 @@ public class Book {
         return this.title.contains(title);
     }
 
-    public BookStatus getStatus() {
-        return this.status;
+    public boolean isInPlace() {
+        return status.equals(BookStatus.IN_PLACE);
+    }
+
+    public boolean isOnLoan() {
+        return status.equals(BookStatus.ON_LOAN);
+    }
+
+    public boolean isLost() {
+        return status.equals(BookStatus.LOST);
+    }
+
+    public boolean isOnArrangement() {
+        return status.equals(BookStatus.ON_ARRANGEMENT);
     }
 
     public void setStatus(BookStatus bookStatus) {
