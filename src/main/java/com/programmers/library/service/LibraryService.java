@@ -47,6 +47,7 @@ public class LibraryService {
 
         if(books.isEmpty()) {
             System.out.println("[System] 검색된 도서가 없습니다.\n");
+            return;
         }
 
         for (Book book : books) {
