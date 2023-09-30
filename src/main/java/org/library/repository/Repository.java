@@ -4,7 +4,6 @@ package org.library.repository;
 import org.library.entity.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface Repository {
     Long generatedId();
@@ -14,4 +13,6 @@ public interface Repository {
     Book findById(Long id);
     void delete(Book book);
     void processAvailable();
+
+    void saveFile();
 }

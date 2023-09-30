@@ -69,4 +69,8 @@ public class TestRepository implements Repository{
     public void add(Book targetBook){
         bookMap.put(targetBook.getId(), targetBook);
     }
+
+    @Override
+    public void saveFile() {
+    }
 }
