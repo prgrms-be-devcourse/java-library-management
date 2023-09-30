@@ -9,19 +9,21 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileInit {
 
-    public static List<Book> initializeRepository() {
+    public static Map<Long,Book> initializeRepository() {
 
         Reader reader = readFile();
 
         JSONObject object = parseJson(reader);
 
-        List<Book> bookList = convertJsonToBook(object);
+        Map<Long,Book>books = convertJsonToBook(object);
 
-        return bookList;
+        return books;
     }
 
     private static Reader readFile() {
@@ -49,10 +51,10 @@ public class FileInit {
         return object;
     }
 
-    private static List<Book> convertJsonToBook(JSONObject object) {
+    private static Map<Long,Book> convertJsonToBook(JSONObject object) {
         JSONArray books = (JSONArray) object.get("books");
 
-        List<Book> bookList = new ArrayList<>();
+        Map<Long, Book> bookMap = new HashMap<>();
 
         for (int i = 0; i < books.size(); i++) {
 
@@ -60,9 +62,9 @@ public class FileInit {
 
             Book book = Converter.convertJsonToBook(jsonObject);
 
-            bookList.add(book);
+            bookMap.put(book.getId(),book);
         }
-        return bookList;
+        return bookMap;
     }
 
 }

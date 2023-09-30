@@ -1,101 +1,113 @@
 package com.example.library.repository;
 
 import com.example.library.domain.Book;
+import com.example.library.file.FileSave;
+import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class BookMemoryRepository implements BookRepository{
+@Getter
+public class BookMemoryRepository implements BookRepository {
 
-    private List<Book>books ;
-    private static int lastId;
+    private Map<Long, Book> books;
 
-    public BookMemoryRepository()
-    {
-        books = new ArrayList<>();
-        lastId = 0;
+
+    public BookMemoryRepository() {
+        books = new HashMap<>();
     }
 
 
     @Override
     public void addBook(Book book) {
-        lastId++;
-        book.setId(lastId);
-        books.add(book);
+
+        books.put(book.getId(),book);
     }
 
     @Override
     public void printAll() {
-        books.stream().forEach(book -> book.printBook());
+        for (Book book:books.values()){
+            book.printBook();
+        }
     }
 
     @Override
     public void printByTitle(String bookName) {
-        books.stream()
-                .filter(book -> book.isSame(bookName))
-                .forEach(book -> book.printBook());
-
+        for (Book book:books.values()) {
+            if (book.isSame(bookName)) {
+                book.printBook();
+            }
+        }
     }
 
     @Override
     public boolean borrowBook(int bookId) {
-        for (Book book : books) {
-            if (book.equalsBook(bookId)){
-                book.borrowBook();
-                return true;
-            }
+
+        long id = (long)bookId;
+        if (books.containsKey(id)) {
+            books.get(id).borrowBook();
+            return true;
         }
         return false;
+
     }
 
     @Override
     public boolean returnBook(int bookId) {
-        for (Book book : books) {
-            if (book.equalsBook(bookId)) {
-                book.returnBook();
-                return true ;
-            }
+
+        long id = (long)bookId;
+        if (books.containsKey(id)) {
+            books.get(id).returnBook();
+            return true;
         }
         return false;
+
     }
 
     @Override
     public boolean loseBook(int bookId) {
-        for (Book book : books) {
-            if (book.equalsBook(bookId)) {
-                book.loseBook();
-                return true;
-            }
+
+        long id = (long)bookId;
+        if (books.containsKey(id)) {
+            books.get(id).loseBook();
+            return true;
         }
         return false;
+
     }
 
     @Override
     public boolean deleteBook(int bookId) {
 
-        for (int i=0;i<books.size();i++) {
-            if (books.get(i).equalsBook(bookId)) {
-                books.remove(i);
-                return true;
-            }
+        long id = (long)bookId;
+        if (books.containsKey(id)) {
+            books.remove(id);
+            return true;
         }
         return false;
+
     }
 
     @Override
     public void arrangeBookStatus() {
-        for (Book book : books) {
+        for (Book book : books.values()) {
             book.isExceededfiveMinute();
         }
     }
-
-    @Override
     public void saveBookList() {
+        FileSave.saveBookList((List)books.values());
     }
 
-    @Override
     public int size() {
         return this.books.size();
     }
+
+    @Override
+    public boolean isContainsKey(long number) {
+        if (books.containsKey(number)) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
