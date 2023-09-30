@@ -2,6 +2,7 @@ package com.programmers.library.domain;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Book {
 
@@ -25,7 +26,7 @@ public class Book {
     }
 
     public boolean isNameContains(String name) {
-        return name.contains(name);
+        return this.name.contains(name);
     }
 
     public void borrowed() {
@@ -74,6 +75,32 @@ public class Book {
         return minutesElapsed > 5;
     }
 
+    //! 테스트용 Getter
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public BookStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getReturnedAt() {
+        return returnedAt;
+    }
+
     @Override
     public String toString() {
         return "도서번호 : " + id + '\n' +
@@ -83,4 +110,16 @@ public class Book {
                 "상태 : " + status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && pageCount == book.pageCount && Objects.equals(name, book.name) && Objects.equals(author, book.author) && status == book.status && Objects.equals(returnedAt, book.returnedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, author, pageCount, status, returnedAt);
+    }
 }
