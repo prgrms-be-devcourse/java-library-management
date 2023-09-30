@@ -24,8 +24,8 @@ class CsvFileManagerTest {
     void testSaveMemoryToCsv(){
         // Arrange
         Map<Integer, Book> tempMemory = new HashMap<>();
-        Book tempBook = new Book(1, "test", "test", 10);
-        tempMemory.put(tempBook.getBookNumber(), tempBook);
+        Book tempBook = Book.newBookOf(1, "test", "test", 10);
+        tempMemory.put(tempBook.getId(), tempBook);
         // Act
         csvFileManager.saveMemoryToCsv(tempMemory);
     }
@@ -36,8 +36,8 @@ class CsvFileManagerTest {
     void testLoadMemoryFromCsv(){
         // Arrange
         Map<Integer, Book> expectedResult = new HashMap<>();
-        Book tempBook = new Book(1, "test", "test", 10);
-        expectedResult.put(tempBook.getBookNumber(), tempBook);
+        Book tempBook = Book.newBookOf(1, "test", "test", 10);
+        expectedResult.put(tempBook.getId(), tempBook);
         // Act
         Map<Integer, Book> actualResult = csvFileManager.loadMemoryFromCsv();
         // Assert

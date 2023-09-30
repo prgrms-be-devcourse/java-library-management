@@ -14,7 +14,7 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public void save(Book book) {
-        bookMemory.put(book.getBookNumber(), book);
+        bookMemory.put(book.getId(), book);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public void delete(Book book) {
-        bookMemory.remove(book.getBookNumber());
+        bookMemory.remove(book.getId());
     }
 
     @Override

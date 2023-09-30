@@ -1,7 +1,7 @@
 package com.programmers.library_management.service;
 
 import com.programmers.library_management.domain.Book;
-import com.programmers.library_management.domain.Status;
+import com.programmers.library_management.domain.StatusType;
 import com.programmers.library_management.exception.CBookAlreadyExistException;
 import com.programmers.library_management.exception.CBookAlreadyLostException;
 import com.programmers.library_management.exception.CBookAlreadyRantedException;
@@ -34,7 +34,7 @@ class ProductLibraryManagementServiceTest {
         libraryManagementService.addBook(expectedBookTitle, expectedBookWriter, expectedBookPageNumber);
         // Assert
         Book actualResult = libraryManagementService.searchBook(expectedBookTitle).get(0);
-        assertEquals(new Book(0, expectedBookTitle, expectedBookWriter, expectedBookPageNumber),
+        assertEquals(Book.newBookOf(0, expectedBookTitle, expectedBookWriter, expectedBookPageNumber),
                 actualResult);
     }
 
@@ -57,9 +57,9 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act
-        libraryManagementService.rantBook(expectedResult.getBookNumber());
+        libraryManagementService.rantBook(expectedResult.getId());
         // Assert
-        assertEquals(Status.Ranted, libraryManagementService.showAllBooks().get(0).getStatus());
+        assertEquals(StatusType.Ranted, libraryManagementService.showAllBooks().get(0).getStatus());
     }
 
     @DisplayName("test rantBook Failure")
@@ -69,7 +69,7 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act & Assert
-        assertThrows(CBookAlreadyRantedException.class, ()-> libraryManagementService.rantBook(expectedResult.getBookNumber()));
+        assertThrows(CBookAlreadyRantedException.class, ()-> libraryManagementService.rantBook(expectedResult.getId()));
     }
 
     @DisplayName("test returnBook Success")
@@ -79,9 +79,9 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act
-        libraryManagementService.returnBook(expectedResult.getBookNumber());
+        libraryManagementService.returnBook(expectedResult.getId());
         // Assert
-        assertEquals(Status.Organized, libraryManagementService.showAllBooks().get(0).getStatus());
+        assertEquals(StatusType.Organized, libraryManagementService.showAllBooks().get(0).getStatus());
     }
 
     @DisplayName("test returnBook Failure")
@@ -91,7 +91,7 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act & Assert
-        assertThrows(CBookAlreadyReturnedException.class, ()-> libraryManagementService.returnBook(expectedResult.getBookNumber()));
+        assertThrows(CBookAlreadyReturnedException.class, ()-> libraryManagementService.returnBook(expectedResult.getId()));
     }
 
     @DisplayName("test lostBook Success")
@@ -101,9 +101,9 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act
-        libraryManagementService.lostBook(expectedResult.getBookNumber());
+        libraryManagementService.lostBook(expectedResult.getId());
         // Assert
-        assertEquals(Status.Lost, libraryManagementService.showAllBooks().get(0).getStatus());
+        assertEquals(StatusType.Lost, libraryManagementService.showAllBooks().get(0).getStatus());
     }
 
     @DisplayName("test lostBook Failure")
@@ -113,7 +113,7 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act & Assert
-        assertThrows(CBookAlreadyLostException.class, ()-> libraryManagementService.lostBook(expectedResult.getBookNumber()));
+        assertThrows(CBookAlreadyLostException.class, ()-> libraryManagementService.lostBook(expectedResult.getId()));
     }
 
     @DisplayName("test deleteBook Success")
@@ -123,7 +123,7 @@ class ProductLibraryManagementServiceTest {
         // Arrange
         Book expectedResult = libraryManagementService.showAllBooks().get(0);
         // Act
-        libraryManagementService.deleteBook(expectedResult.getBookNumber());
+        libraryManagementService.deleteBook(expectedResult.getId());
         // Assert
         assertEquals(0, libraryManagementService.showAllBooks().size());
     }
