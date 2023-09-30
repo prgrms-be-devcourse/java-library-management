@@ -69,6 +69,7 @@ public class BookService implements Service {
     }
 
     public void delete(int bookId) {
+        repository.getById(bookId);
         repository.delete(bookId);
         repository.save();
     }

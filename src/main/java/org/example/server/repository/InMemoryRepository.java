@@ -9,8 +9,8 @@ import java.util.Optional;
 
 // 서버의 테스트 모드 레포지토리를 담당하는 부분
 public class InMemoryRepository implements Repository {
-    private int newId = 1; //  생성 예정인 id 값, 1부터 생성
-    private final LinkedHashMap<Integer, Book> data = new LinkedHashMap<>(); // 저장한 순서대로 저장
+    public int newId = 1; //  생성 예정인 id 값, 1부터 생성
+    public final LinkedHashMap<Integer, Book> data = new LinkedHashMap<>(); // 저장한 순서대로 저장
 
     @Override
     public void create(Book book) {
