@@ -11,6 +11,7 @@ import java.util.List;
 public class BookService {
     private final NormalRepository normalRepository = new NormalRepository();
 
+
     // [1] 도서 저장
     public void saveBook(String title, String author, Integer page){
         Book book = new Book(normalRepository.createId(), title, author, page);
@@ -46,7 +47,6 @@ public class BookService {
             }
         }
         normalRepository.borrow(book);
-        normalRepository.updateFile();
     }
 
     // [5] 도서 반납
@@ -60,7 +60,6 @@ public class BookService {
             }
         }
         normalRepository.returnBook(book);
-        normalRepository.updateFile();
     }
 
     // [6] 분실 처리
@@ -68,13 +67,11 @@ public class BookService {
         Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
         if (book.getStatus()== Status.LOST) throw new UnableStatusException("이미 분실처리된 도서입니다.");
         normalRepository.report(book);
-        normalRepository.updateFile();
     }
 
     // [7] 도서 삭제
     public void removeBook(Integer id) throws Exception {
         Book book = normalRepository.findById(id).orElseThrow(NotExistBookIdException::new);
         normalRepository.remove(book);
-        normalRepository.updateFile();
     }
 }

@@ -1,69 +1,24 @@
 package repository;
 
 import domain.Book;
-import domain.Status;
 
-import java.io.*;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class NormalRepository{
-    private final String PATH = System.getProperty("user.dir")+ "/src/main/resources/book_data.csv";
-    private List<Book> bookList= new ArrayList<>();
+    private final FileManager fileManager = new FileManager();
+    private List<Book> bookList;
 
     public NormalRepository() {
-        loadData();
-    }
-
-    // file -> list
-    private void loadData() {
-        bookList.clear();
-        try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
-            String line="";
-            while ((line = br.readLine())!=null){
-                String[] split = line.split(",");
-                String title = split[1];
-                String author = split[2];
-                Integer page = Integer.valueOf(split[3]);
-                Status status = Status.valueOf(split[4]);
-                Instant returnTime = null;
-                if (!split[5].equals("null"))
-                    returnTime = Instant.parse(split[5]);
-                Book book = new Book(createId(),title,author,page, status,returnTime);
-
-                bookList.add(book);
-            }
-        } catch(IOException e) {
-            throw new RuntimeException();
-        }
-    }
-
-    // list -> file
-    public void updateFile(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
-            for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus()+","+book.getReturnTime());
-                bw.newLine();
-            }
-        } catch(IOException e){
-            throw new RuntimeException();
-        }
+        bookList = fileManager.loadData();
     }
 
     // [1] 도서 등록
     public void register(Book book) {
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH,true))){
-            bw.write(createId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus());
-            bw.newLine();
-            bw.flush();
-            bookList.add(book);
-        } catch(IOException e){
-            throw new RuntimeException();
-        }
+        bookList.add(book);
+        fileManager.updateFile(bookList);
     }
 
     // [2] 도서 목록 조회
@@ -79,21 +34,25 @@ public class NormalRepository{
     // [4] 도서 대여
     public void borrow(Book book) {
         book.borrow();
+        fileManager.updateFile(bookList);
     }
 
     // [5] 도서 반납
     public void returnBook(Book book) {
         book.doReturn();
+        fileManager.updateFile(bookList);
     }
 
     // [6] 분실 처리
     public void report(Book book) {
         book.report();
+        fileManager.updateFile(bookList);
     }
 
     // [7] 도서 삭제
     public void remove(Book book){
         bookList.remove(book);
+        fileManager.updateFile(bookList);
     }
 
     // 아이디로 도서 조회
