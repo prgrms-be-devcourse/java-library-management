@@ -71,7 +71,7 @@ public class FileStorage {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-    } // 프로그램 종료시 실행
+    }
 
     private void putBookDataToObjects(ArrayList<LinkedHashMap<String, Object>> objects) {
         data.values().stream().forEach(
