@@ -1,20 +1,19 @@
 package manage;
 
 import entity.Book;
-import entity.State;
+import entity.BookState;
 import exception.EntityNotFoundException;
 import manage.book.BookManager;
 
 import java.util.List;
-import java.util.Scanner;
+
+import static common.Util.sc;
 
 public class TotalManager {
     private final BookManager bookManager;
-    private final Scanner sc;
 
-    public TotalManager(BookManager bookManager, Scanner sc) {
+    public TotalManager(BookManager bookManager) {
         this.bookManager = bookManager;
-        this.sc = sc;
     }
 
     public void run(){
@@ -35,22 +34,17 @@ public class TotalManager {
             try {
                 cmd = Integer.parseInt(sc.nextLine().trim());
 
-                if (cmd == 1)
-                    register();
-                else if (cmd == 2)
-                    searchAll();
-                else if (cmd == 3)
-                    search();
-                else if (cmd == 4)
-                    rent();
-                else if (cmd == 5)
-                    returnBook();
-                else if (cmd == 6)
-                    lost();
-                else if (cmd == 7)
-                    delete();
+                switch (cmd){
+                    case 1 -> register();
+                    case 2 -> searchAll();
+                    case 3 -> search();
+                    case 4 -> rent();
+                    case 5 -> returnBook();
+                    case 6 -> lost();
+                    case 7 -> delete();
+                }
             }catch (IllegalArgumentException e){
-                System.out.println("잘못된 입력입니다. 최초 선택으로 이동합니다.\n");
+                System.out.println("잘못된 입력입니다. 최초 선택으로 이동합니다." + System.lineSeparator());
             }catch (EntityNotFoundException e){
                 System.out.println("존재하지 않는 도서입니다. 이미 삭제된 도서일 수 있습니다. 최초 선택으로 이동합니다.\n");
             }
@@ -59,23 +53,24 @@ public class TotalManager {
     }
 
     private void register(){
-        System.out.print("등록 도서 정보를 입력합니다.\n도서 제목을 입력해 주세요.\n> ");
+        System.out.print("등록 도서 정보를 입력합니다." + System.lineSeparator() +
+                "도서 제목을 입력해 주세요." + System.lineSeparator() + "> ");
 
         String[] bookInfo = new String[3];
         bookInfo[0] = sc.nextLine().trim();
 
-        System.out.print("작가 이름을 입력해 주세요.\n> ");
+        System.out.print("작가 이름을 입력해 주세요." + System.lineSeparator() + "> ");
 
         bookInfo[1] = sc.nextLine().trim();
 
-        System.out.print("페이지 수를 입력해 주세요.(숫자만 입력해 주세요!)\n> ");
+        System.out.print("페이지 수를 입력해 주세요.(숫자만 입력해 주세요!)" + System.lineSeparator() + "> ");
 
         bookInfo[2] = sc.nextLine().trim();
 
         Book createdBook = new Book(bookInfo[0], bookInfo[1], Integer.parseInt(bookInfo[2]));
         bookManager.register(createdBook);
 
-        System.out.println("정상 등록 되었습니다!\n");
+        System.out.println("정상 등록 되었습니다!" + System.lineSeparator());
     }
 
     private void searchAll(){
@@ -98,56 +93,57 @@ public class TotalManager {
     private void printingBookList(List<Book> books){
         System.out.println();
 
-        books.stream().forEach(book -> {
-            System.out.println(book.printInfo());
+        books.forEach(book -> {
+            System.out.println(book);
             System.out.println();
         });
 
-        System.out.println("총 " + books.size() + "개의 도서가 조회되었습니다!\n");
+        System.out.println("총 " + books.size() + "개의 도서가 조회되었습니다!" + System.lineSeparator());
     }
 
     private void rent(){
-        System.out.print("대여할 도서 번호를 입력해주세요.\n> ");
+        System.out.print("대여할 도서 번호를 입력해주세요." + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(sc.nextLine().trim());
-        State initState = bookManager.rent(number);
+        BookState initState = bookManager.rent(number);
 
-        if (initState != State.AVAILABLE)
-            System.out.println("도서가 " + initState.getKoreanState() + " 상태이기 때문에 대여할 수 없습니다.\n");
+        if (initState != BookState.AVAILABLE)
+            System.out.println("도서가 " + initState.getDisplayName() + " 상태이기 때문에 대여할 수 없습니다." + System.lineSeparator());
         else
-            System.out.println("도서가 대여되었습니다!\n");
+            System.out.println("도서가 대여되었습니다!" + System.lineSeparator());
     }
 
     private void returnBook(){
-        System.out.print("반납할 도서 번호를 입력해 주세요\n> ");
+        System.out.print("반납할 도서 번호를 입력해 주세요." + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(sc.nextLine().trim());
-        State initState = bookManager.returnBook(number);
+        BookState initState = bookManager.revert(number);
 
-        if (initState == State.RENTED)
-            System.out.println("정상 반납되었습니다.\n");
+        if (initState == BookState.RENTED)
+            System.out.println("정상 반납되었습니다." + System.lineSeparator());
         else
-            System.out.println("반납 대상 도서가 아닙니다!\n해당 도서 상태:" + initState.getKoreanState() + "\n");
+            System.out.println("반납 대상 도서가 아닙니다!" + System.lineSeparator() +
+                    "해당 도서 상태:" + initState.getDisplayName() + System.lineSeparator());
     }
 
     private void lost(){
-        System.out.print("분실 처리할 도서 번호를 입력해 주세요\n> ");
+        System.out.print("분실 처리할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(sc.nextLine().trim());
-        State initState = bookManager.lost(number);
+        BookState initState = bookManager.lost(number);
 
-        if (initState != State.LOST)
-            System.out.println("분실 처리되었습니다.\n");
+        if (initState != BookState.LOST)
+            System.out.println("분실 처리되었습니다." + System.lineSeparator());
         else
-            System.out.println("이미 분실된 도서입니다.\n");
+            System.out.println("이미 분실된 도서입니다." + System.lineSeparator());
     }
 
     private void delete(){
-        System.out.print("삭제할 도서 번호를 입력해 주세요\n> ");
+        System.out.print("삭제할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(sc.nextLine().trim());
         bookManager.delete(number);
 
-        System.out.println("정상 삭제되었습니다.\n");
+        System.out.println("정상 삭제되었습니다." + System.lineSeparator());
     }
 }
