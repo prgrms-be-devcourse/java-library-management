@@ -1,14 +1,18 @@
 package entity;
 
+import java.util.List;
+
 public class Book {
+    private static final List<String> FIELD_DISPLAY_NAMES = List.of("도서번호", "제목", "작가", "페이지 수", "상태");
+    private static final int PROCESSING_TIME_MILLIS = 5 * 60 * 1_000;
+    private static final int NEVER_REVERTED = -1;
+
     private static int numberCnt = 1;
-    private static String[] fieldKoreanName = {"도서번호", "제목", "작가", "페이지 수", "상태"};
-    private static final int PROCESSING_TIME = 5 * 60 * 1000;
     private final int number;
     private final String title;
     private final String author;
     private final int pageNum;
-    private State state;
+    private BookState bookState;
     private long lastReturn;
 
     public Book(String title, String author, int pageNum) {
@@ -16,40 +20,22 @@ public class Book {
         this.title = title;
         this.author = author;
         this.pageNum = pageNum;
-        this.state = State.AVAILABLE;
-        this.lastReturn = -1;
+        this.bookState = BookState.AVAILABLE;
+        this.lastReturn = NEVER_REVERTED;
     }
 
-    public Book(int number, String title, String author, int pageNum, State state, long lastReturn) {
+    public Book(int number, String title, String author, int pageNum, BookState bookState, long lastReturn) {
         this.number = number;
         this.title = title;
         this.author = author;
         this.pageNum = pageNum;
-        this.state = state;
+        this.bookState = bookState;
         this.lastReturn = lastReturn;
         numberCnt = Math.max(numberCnt, number) + 1;
     }
 
-    public String printInfo(){
-        String[] fields = {
-                String.valueOf(this.number),
-                this.title, this.author,
-                String.valueOf(this.pageNum),
-                this.state.getKoreanState()
-        };
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < fields.length; i++) {
-            sb.append(fieldKoreanName[i]);
-            sb.append(": ");
-            sb.append(fields[i]);
-            sb.append("\n");
-        }
-
-        return sb.toString();
-    }
-
-    public void setState(State state) {
-        this.state = state;
+    public void setBookState(BookState bookState) {
+        this.bookState = bookState;
     }
 
     public void setLastReturn(long lastReturn) {
@@ -60,8 +46,8 @@ public class Book {
         return number;
     }
 
-    public State getState() {
-        return state;
+    public BookState getBookState() {
+        return bookState;
     }
 
     public String getTitle() {
@@ -81,15 +67,34 @@ public class Book {
     }
 
     public boolean isDeleted(){
-        return this.state.equals(State.DELETED);
+        return this.bookState.equals(BookState.DELETED);
     }
 
     public boolean hasText(String text){
         return this.title.contains(text) && !this.isDeleted();
     }
 
-    public void isOver5Minutes(){
-        if(this.state == State.PROCESSING && System.currentTimeMillis() - this.lastReturn >= PROCESSING_TIME)
-            this.state = State.AVAILABLE;
+    public void changeStateAfter5Minutes(){
+        if(this.bookState == BookState.PROCESSING && System.currentTimeMillis() - this.lastReturn >= PROCESSING_TIME_MILLIS)
+            this.bookState = BookState.AVAILABLE;
+    }
+
+    @Override
+    public String toString(){
+        String[] fields = {
+                String.valueOf(this.number),
+                this.title, this.author,
+                String.valueOf(this.pageNum),
+                this.bookState.getDisplayName()
+        };
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < fields.length; i++) {
+            sb.append(FIELD_DISPLAY_NAMES.get(i));
+            sb.append(": ");
+            sb.append(fields[i]);
+            sb.append(System.lineSeparator());
+        }
+
+        return sb.toString();
     }
 }
