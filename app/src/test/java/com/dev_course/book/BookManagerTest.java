@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.dev_course.book.BookManagerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -93,6 +94,34 @@ abstract class BookManagerTest {
             long idCount = bookList.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(5);
+        }
+
+        @Test
+        @DisplayName("도서 생성에 성공하면 성공 메시지를 반환해야 한다")
+        void testCreateSuccess() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            // when
+            String msg = bookManager.create("test1", "tester", 11);
+
+            // then
+            assertThat(msg).isEqualTo(SUCCESS_CREATE_BOOK.msg());
+        }
+
+        @Test
+        @DisplayName("이미 추가된 제목의 도서 생성 시 실패 메시지를 반환해야 한다")
+        void testCreateFailExistTitle() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            bookManager.create("test1", "tester", 11);
+
+            // when
+            String msg = bookManager.create("test1", "tester", 22);
+
+            // then
+            assertThat(msg).isEqualTo(ALREADY_EXIST_TITLE.msg());
         }
     }
 
