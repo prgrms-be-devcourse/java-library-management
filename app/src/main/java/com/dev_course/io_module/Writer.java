@@ -6,8 +6,4 @@ public interface Writer {
     void println();
 
     void println(Object o);
-
-    void append(Object o);
-
-    void flush();
 }
