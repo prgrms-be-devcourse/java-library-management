@@ -15,7 +15,7 @@ abstract class BookManagerTest {
 
     @Nested
     @Order(1)
-    @DisplayName("도서 리스트 테스트")
+    @DisplayName("초기 생성, 데이터 로드 테스트")
     class TestGetBookList {
         @Test
         @DisplayName("초기 생성 시 도서 리스트는 비어 있어야 한다.")
@@ -353,6 +353,94 @@ abstract class BookManagerTest {
             // then
             assertThat(availableReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
             assertThat(processingReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
+        }
+    }
+
+    @Nested
+    @Order(7)
+    @DisplayName("도서 분실 테스트")
+    class TestLossById {
+        @Test
+        @DisplayName("도서 분실 시 해당 도서는 분실로 상태가 변경돼야 한다")
+        void testLossByIdChangeState() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
+            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
+            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+
+            bookManager.init(List.of(availableBook, processingBook, loanBook));
+            availableBook.setState(BookState.AVAILABLE);
+            processingBook.setState(BookState.PROCESSING);
+            loanBook.setState(BookState.LOAN);
+
+            // when
+            bookManager.lossById(availableBook.getId());
+            bookManager.lossById(processingBook.getId());
+            bookManager.lossById(loanBook.getId());
+
+            // then
+            assertThat(availableBook.getState()).isEqualTo(BookState.LOST);
+            assertThat(processingBook.getState()).isEqualTo(BookState.LOST);
+            assertThat(loanBook.getState()).isEqualTo(BookState.LOST);
+        }
+
+        @Test
+        @DisplayName("도서 분실 시 성공 메시지를 반환해야 한다.")
+        void testLossByIdSuccess() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
+            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
+            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+
+            bookManager.init(List.of(availableBook, processingBook, loanBook));
+            availableBook.setState(BookState.AVAILABLE);
+            processingBook.setState(BookState.PROCESSING);
+            loanBook.setState(BookState.LOAN);
+
+            // when
+            String availableLossMsg = bookManager.lossById(availableBook.getId());
+            String processingLossMsg = bookManager.lossById(processingBook.getId());
+            String loanLossMsg = bookManager.lossById(loanBook.getId());
+
+            // then
+            assertThat(availableLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
+            assertThat(processingLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
+            assertThat(loanLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
+        }
+
+        @Test
+        @DisplayName("등록되지 않은 id의 도서 분실 시 실패 메시지를 반환해야 한다.")
+        void testLossByIdFailNotExistId() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book book = new Book(1, "test1", "tester", 11, 1111L);
+
+            bookManager.init(List.of(book));
+
+            // when
+            String msg = bookManager.lossById(book.getId() + 1);
+
+            // then
+            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
+        }
+
+        @Test
+        @DisplayName("이미 분실된 도서를 분실할 때 실패 메시지를 반환해야 한다.")
+        void testLossByIdFailAlreadyLost() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book lostBook = new Book(1, "test1", "tester", 111, 1L);
+
+            bookManager.init(List.of(lostBook));
+            lostBook.setState(BookState.LOST);
+
+            // when
+            String msg = bookManager.lossById(lostBook.getId());
+
+            // then
+            assertThat(msg).isEqualTo(ALREADY_LOST_BOOK.msg());
         }
     }
 }
