@@ -3,20 +3,20 @@ package com.dev_course.library;
 import com.dev_course.book.BookManager;
 import com.dev_course.data_module.DataManager;
 import com.dev_course.io_module.EmptyInputException;
-import com.dev_course.io_module.LibraryReader;
-import com.dev_course.io_module.LibraryWriter;
+import com.dev_course.io_module.Reader;
+import com.dev_course.io_module.Writer;
 
 import static com.dev_course.library.LibraryMessage.*;
 import static java.lang.Integer.parseInt;
 
 public class LibrarySystem {
-    private final LibraryReader reader;
-    private final LibraryWriter writer;
+    private final Reader reader;
+    private final Writer writer;
     private DataManager dataManager;
     private BookManager bookManager;
 
 
-    public LibrarySystem(LibraryReader reader, LibraryWriter writer) {
+    public LibrarySystem(Reader reader, Writer writer) {
         this.reader = reader;
         this.writer = writer;
     }

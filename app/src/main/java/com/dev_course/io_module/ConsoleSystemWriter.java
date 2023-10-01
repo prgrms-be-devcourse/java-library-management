@@ -1,6 +1,6 @@
 package com.dev_course.io_module;
 
-public class ConsoleLibraryWriter implements LibraryWriter {
+public class ConsoleSystemWriter implements Writer {
     StringBuilder sb = new StringBuilder();
 
     @Override

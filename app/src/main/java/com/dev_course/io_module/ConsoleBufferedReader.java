@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleLibraryReader implements LibraryReader {
+public class ConsoleBufferedReader implements Reader {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     @Override

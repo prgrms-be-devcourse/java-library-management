@@ -1,17 +1,17 @@
 package com.dev_course;
 
-import com.dev_course.io_module.ConsoleLibraryReader;
-import com.dev_course.io_module.ConsoleLibraryWriter;
-import com.dev_course.io_module.LibraryReader;
-import com.dev_course.io_module.LibraryWriter;
+import com.dev_course.io_module.ConsoleBufferedReader;
+import com.dev_course.io_module.ConsoleSystemWriter;
+import com.dev_course.io_module.Reader;
+import com.dev_course.io_module.Writer;
 import com.dev_course.library.LibrarySystem;
 
 public class Main {
     public static void main(String[] args) {
-        LibraryReader libraryReader = new ConsoleLibraryReader();
-        LibraryWriter libraryWriter = new ConsoleLibraryWriter();
+        Reader reader = new ConsoleBufferedReader();
+        Writer writer = new ConsoleSystemWriter();
 
-        LibrarySystem library = new LibrarySystem(libraryReader, libraryWriter);
+        LibrarySystem library = new LibrarySystem(reader, writer);
 
         library.run();
     }
