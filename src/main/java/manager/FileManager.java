@@ -9,8 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-    private final String PATH = System.getProperty("user.dir")+ "/src/main/resources/book_data.csv";
+    private String PATH = System.getProperty("user.dir");
     // file -> list
+
+    public FileManager(String PATH) {
+        this.PATH += PATH;
+    }
+
     public List<Book> loadData() {
         List<Book> bookList = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(PATH))){

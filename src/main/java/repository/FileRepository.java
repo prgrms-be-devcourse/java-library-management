@@ -9,10 +9,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FileRepository implements BookRepository {
-    private final FileManager fileManager = new FileManager();
+    private final FileManager fileManager;
     private List<Book> bookList;
 
-    public FileRepository() {
+    public FileRepository(String path) {
+        fileManager = new FileManager(path);
         bookList = fileManager.loadData();
     }
 
@@ -78,5 +79,10 @@ public class FileRepository implements BookRepository {
     public Integer createId(){
         if (bookList.isEmpty()) return 1;
         return bookList.get(bookList.size()-1).getId()+1;
+    }
+
+    public void clear(){
+        bookList.clear();
+        fileManager.updateFile(bookList);
     }
 }

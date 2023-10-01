@@ -11,8 +11,9 @@ import java.io.InputStreamReader;
 
 public class BookController {
     private BookService bookService;
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PrintManager pm = new PrintManager();
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final PrintManager pm = new PrintManager();
+
     public void selectMode(){
         pm.printSelectMode();
         String mode = "";
@@ -24,7 +25,8 @@ public class BookController {
 
         switch (mode){
             case "1"->{
-                bookService = new BookService(new FileRepository());
+                String path = "/src/main/resources/book_data.csv";
+                bookService = new BookService(new FileRepository(path));
                 pm.printSystem("일반 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
