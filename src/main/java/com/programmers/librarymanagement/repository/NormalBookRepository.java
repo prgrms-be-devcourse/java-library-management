@@ -7,7 +7,7 @@ import com.programmers.librarymanagement.utils.CsvFileIo;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class NormalBookRepository implements BookRepository{
+public class NormalBookRepository implements BookRepository {
 
     private final CsvFileIo csvFileIo = new CsvFileIo();
     private final Map<Long, Book> libraryStorage = addBookByFile(csvFileIo.readCsv());
