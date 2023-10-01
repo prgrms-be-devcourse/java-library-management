@@ -1,45 +1,46 @@
 package controller;
 
 import exception.EmptyInputException;
+import manager.PrintManager;
 import repository.FileRepository;
 import repository.TestRepository;
 import service.BookService;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class BookController {
     private BookService bookService;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintManager pm = new PrintManager();
     public void selectMode(){
-        printSelectMode();
+        pm.printSelectMode();
         String mode = "";
         try {
             mode = getInput();
         } catch (Exception e){
-            System.out.println(e.getMessage()); return;
+            pm.printSystem(e.getMessage()); return;
         }
 
         switch (mode){
             case "1"->{
                 bookService = new BookService(new FileRepository());
-                System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
+                pm.printSystem("일반 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
             case "2"->{
                 bookService = new BookService(new TestRepository());
-                System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
+                pm.printSystem("테스트 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
-            default->System.out.println("잘못된 입력입니다.");
+            default->pm.printSystem("잘못된 입력입니다.");
         }
     }
 
     public void selectFunction(){
         String function="";
         while (!function.equals("8")){
-            printSelectFunction();
+            pm.printSelectFunction();
             try {
                 function = getInput();
                 switch (function) {
@@ -53,73 +54,70 @@ public class BookController {
                 }
             }
             catch (NumberFormatException e){
-                System.out.println("숫자를 입력해주세요.");
+                pm.printSystem("숫자를 입력해주세요.");
             }
-            catch (IOException e){
-                e.printStackTrace();
-            }
+
             catch (Exception e){
-                System.out.println(e.getMessage());
+                pm.printSystem(e.getMessage());
             }
         }
     }
     private void reportLostBook() throws Exception {
-        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n");
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요\n");
+        pm.printSystem("도서 분실 처리 메뉴로 넘어갑니다.");
+        pm.printQuestion("분실 처리할 도서번호를 입력하세요.");
         bookService.reportLostBook(Integer.valueOf(getInput()));
-        System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
+        pm.printSystem("도서가 분실 처리 되었습니다.");
     }
 
     private void returnBook() throws Exception {
-        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n");
-        System.out.println("Q. 반납할 도서번호를 입력하세요\n");
+        pm.printSystem("도서 반납 메뉴로 넘어갑니다.");
+        pm.printQuestion("반납할 도서번호를 입력하세요.");
         bookService.returnBook(Integer.valueOf(getInput()));
-        System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
+        pm.printSystem("도서가 반납 처리 되었습니다.");
     }
 
     private void borrowBook() throws Exception {
-        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n");
-        System.out.println("Q. 대여할 도서번호를 입력하세요\n");
+        pm.printSystem("도서 대여 메뉴로 넘어갑니다.");
+        pm.printQuestion("대여할 도서번호를 입력하세요.");
         bookService.borrowBook(Integer.valueOf(getInput()));
-        System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
+        pm.printSystem("도서가 대여 처리 되었습니다.");
     }
 
     private void searchBook() throws Exception {
-        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n");
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.\n");
+        pm.printSystem("제목으로 도서 검색 메뉴로 넘어갑니다.");
+        pm.printQuestion("검색할 도서 제목 일부를 입력하세요.");
         bookService.findBookByTitle(getInput());
-        System.out.println("[System] 검색된 도서 끝\n");
+        pm.printSystem("검색된 도서 끝");
     }
 
     private void showBookList() {
-        System.out.println("[System] 전체 도서 목록입니다.\n");
+        pm.printSystem("전체 도서 목록입니다.");
         bookService.showBookList();
-        System.out.println("[System] 도서 목록 끝\n");
+        pm.printSystem("도서 목록 끝");
     }
 
     private void saveBook() throws Exception {
-        System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
-
-        System.out.println("등록할 도서 제목을 입력하세요.\n");
+        pm.printSystem("도서 등록 메뉴로 넘어갑니다.");
+        pm.printQuestion("등록할 도서 제목을 입력하세요.");
         String title = getInput();
 
-        System.out.println("\n작가 이름을 입력하세요.\n");
+        pm.printQuestion("작가 이름을 입력하세요.");
         String author = getInput();
 
-        System.out.println("\n페이지 수를 입력하세요.\n");
+        pm.printQuestion("페이지 수를 입력하세요.");
         Integer page = Integer.parseInt(getInput());
 
         bookService.saveBook(title,author,page);
 
-        System.out.println("[System] 도서 등록이 완료되었습니다.\n");
+        pm.printSystem("도서 등록이 완료되었습니다.");
     }
 
     private void deleteBook() throws Exception {
-        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요\n");
+        pm.printSystem("도서 삭제 처리 메뉴로 넘어갑니다.");
+        pm.printQuestion("삭제 처리할 도서번호를 입력하세요.");
         Integer id =Integer.valueOf(getInput());
         bookService.removeBook(id);
-        System.out.println("[System] 도서가 삭제 처리 되었습니다.");
+        pm.printSystem("도서가 삭제 처리 되었습니다.");
     }
 
     public String getInput() throws Exception {
@@ -127,20 +125,5 @@ public class BookController {
         String value = br.readLine().strip();
         if (value.isBlank()) throw new EmptyInputException();
         return value;
-    }
-
-    public void printSelectMode(){
-        System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
-    }
-    public void printSelectFunction(){
-        System.out.println("Q. 사용할 기능을 선택해주세요.\n" +
-                "1. 도서 등록\n" +
-                "2. 전체 도서 목록 조회\n" +
-                "3. 제목으로 도서 검색\n" +
-                "4. 도서 대여\n" +
-                "5. 도서 반납\n" +
-                "6. 도서 분실\n" +
-                "7. 도서 삭제\n" +
-                "8. 종료\n");
     }
 }

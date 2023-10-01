@@ -56,9 +56,9 @@ public class Book {
 
     public boolean isCleaning(){
         if (Duration.between(returnTime, Instant.now()).toMinutes()<5) {
-            status = Status.AVAILABLE;
             return true;
         }
+        status = Status.AVAILABLE;
         return false;
     }
 
