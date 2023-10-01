@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +18,7 @@ abstract class BookManagerTest {
     class TestGetBookList {
         @Test
         @DisplayName("초기 생성 시 도서 리스트는 비어 있어야 한다.")
-        void getBookListBeforeInit() {
+        void testGetBookListBeforeInit() {
             // given
             BookManager bookManager = createBookManager();
 
@@ -30,7 +31,7 @@ abstract class BookManagerTest {
 
         @Test
         @DisplayName("init() 메서드 호출 시 도서 리스트는 init 데이터가 반영돼야 한다.")
-        void getBookListAfterInit() {
+        void testGetBookListAfterInit() {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
@@ -55,7 +56,7 @@ abstract class BookManagerTest {
     class TestCreateBook {
         @Test
         @DisplayName("도서 생성 시 유일한 id의 도서가 추가돼야 한다")
-        void createWithUniqueId() {
+        void testCreateWithUniqueId() {
             // given
             BookManager bookManager = createBookManager();
 
@@ -72,7 +73,7 @@ abstract class BookManagerTest {
 
         @Test
         @DisplayName("데이터 로드 후 도서 생성 시 모든 도서는 유일한 id를 갖고 있어야 한다.")
-        void createWitUniqueIdAfterInit() {
+        void testCreateWitUniqueIdAfterInit() {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
@@ -92,6 +93,34 @@ abstract class BookManagerTest {
             long idCount = bookList.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(5);
+        }
+    }
+
+    @Nested
+    @Order(3)
+    @DisplayName("도서 목록 정보 테스트")
+    class TestGetInfo {
+        @Test
+        @DisplayName("도서 목록 조회 시 요구된 형식을 동일해야 한다")
+        void testGetInfo() {
+            // given
+            BookManager bookManager = createBookManager();
+            List<Book> initData = new ArrayList<>();
+
+            initData.add(new Book(1, "test1", "tester", 111, 1L));
+            initData.add(new Book(5, "test2", "tester", 222, 2L));
+            initData.add(new Book(10, "test3", "tester", 333, 3L));
+
+            // when
+            bookManager.init(initData);
+            String info = bookManager.getInfo();
+
+            // then
+            String requiredFormat = initData.stream()
+                    .map(Book::toString)
+                    .collect(Collectors.joining("\n------------------------------\n"));
+
+            assertThat(info).isEqualTo(requiredFormat);
         }
     }
 }
