@@ -1,6 +1,7 @@
 package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
+import com.dev_course.data_module.DataManager;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
@@ -9,31 +10,49 @@ import static com.dev_course.library.LibraryMessage.*;
 public class LibrarySystem {
     LibraryReader reader;
     LibraryWriter writer;
+    DataManager dataManager;
     BookManager bookManager;
 
 
-    public LibrarySystem(LibraryReader reader, LibraryWriter writer, BookManager bookManager) {
+    public LibrarySystem(LibraryReader reader, LibraryWriter writer) {
         this.reader = reader;
         this.writer = writer;
-        this.bookManager = bookManager;
     }
 
     public void run() {
-        setMode();
+        LibraryMode mode = selectMode();
+
+        init(mode);
 
         selectFunction();
 
         exit();
     }
 
-    private void setMode() {
+    private LibraryMode selectMode() {
         writer.println(MOD_SCREEN.msg());
 
-        // TODO : SystemMode 따른 도서관 앱의 로드, 저장 기능 변경
+        String input = reader.read();
+
+        return switch (input) {
+            case "0" -> LibraryMode.TEST;
+            case "1" -> LibraryMode.NORMAL;
+            default -> {
+                writer.println(INVALID_MODE.msg());
+                yield selectMode();
+            }
+        };
+    }
+
+    private void init(LibraryMode mode) {
+        dataManager = mode.getDataManager();
+        bookManager = mode.getBookManager();
     }
 
     private void selectFunction() {
         writer.println(FUNCTION_SCREEN.msg());
+
+        bookManager.updateStates();
 
         String input = reader.readOrDefault("-1");
 
@@ -45,6 +64,8 @@ public class LibrarySystem {
             case "2" -> listBooks();
             case "3" -> findBookByTitle();
             case "4" -> rentBookById();
+            case "5" -> returnBookById();
+            case "6" -> lossBookById();
             case "7" -> deleteBookById();
             default -> writer.println(INVALID_FUNCTION.msg());
         }
@@ -53,6 +74,8 @@ public class LibrarySystem {
     }
 
     private void exit() {
+        dataManager.save(bookManager.getBookList());
+
         writer.println(EXIT.msg());
     }
 
@@ -98,6 +121,34 @@ public class LibrarySystem {
             int id = writeAndReadInt(READ_RENT_BOOK_BY_ID.msg());
 
             writer.append(bookManager.rentById(id));
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
+        writer.flush();
+    }
+
+    private void returnBookById() {
+        writer.println(RETURN_BOOK_BY_ID.msg());
+
+        try {
+            int id = writeAndReadInt(READ_RETURN_BOOK_BY_ID.msg());
+
+            writer.append(bookManager.returnById(id));
+        } catch (NumberFormatException e) {
+            writer.append(INVALID_INPUT.msg());
+        }
+
+        writer.flush();
+    }
+
+    private void lossBookById() {
+        writer.println(LOSS_BOOK_BY_ID.msg());
+
+        try {
+            int id = writeAndReadInt(READ_LOSS_BOOK_BY_ID.msg());
+
+            writer.append(bookManager.lossById(id));
         } catch (NumberFormatException e) {
             writer.append(INVALID_INPUT.msg());
         }
