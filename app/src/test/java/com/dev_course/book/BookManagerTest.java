@@ -16,7 +16,7 @@ abstract class BookManagerTest {
     @DisplayName("도서 리스트 테스트")
     class TestGetBookList {
         @Test
-        @DisplayName("초기 생성 시 도서 리스트는 비어있어야한다.")
+        @DisplayName("초기 생성 시 도서 리스트는 비어 있어야 한다.")
         void getBookListBeforeInit() {
             // given
             BookManager bookManager = createBookManager();
@@ -29,7 +29,7 @@ abstract class BookManagerTest {
         }
 
         @Test
-        @DisplayName("init() 메서드 호출 시 도서 리스트는 init 데이터가 반영되야한다.")
+        @DisplayName("init() 메서드 호출 시 도서 리스트는 init 데이터가 반영돼야 한다.")
         void getBookListAfterInit() {
             // given
             BookManager bookManager = createBookManager();
