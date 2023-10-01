@@ -1,7 +1,5 @@
 package app.library.management.core.domain;
 
-import java.util.function.Function;
-
 /**
  * 도서 상태를 나타냄
  *
