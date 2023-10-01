@@ -1,6 +1,7 @@
 package repository;
 
 import domain.BookState;
+import exception.FileWriteException;
 import message.ExecuteMessage;
 import thread.NormalChangeStateThread;
 
@@ -134,12 +135,12 @@ public class FileRepository implements Repository {
                 try {
                     bw.write(book.fileLine());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new FileWriteException();
                 }
             });
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FileWriteException();
         }
     }
 
