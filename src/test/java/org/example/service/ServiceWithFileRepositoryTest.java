@@ -57,7 +57,7 @@ class ServiceWithFileRepositoryTest {
         }
 
         //when
-        List<Book> books = libraryManagementService.searchBooks();
+        List<Book> books = libraryManagementService.searchAllBooks();
 
         //then
         assertEquals(repository.findAllBooks().size(), 6);
@@ -74,7 +74,7 @@ class ServiceWithFileRepositoryTest {
         libraryManagementService.registerBook(createBook("ghi"));
 
         //when
-        List<Book> books = libraryManagementService.searchBookByTitle("a");
+        List<Book> books = libraryManagementService.searchBookBy("a");
 
         //then
         assertEquals(books.size(), 2);

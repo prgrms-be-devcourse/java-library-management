@@ -21,12 +21,12 @@ public class LibraryManagementService {
     }
 
     // 전체 도서 목록 조회
-    public List<Book> searchBooks() {
+    public List<Book> searchAllBooks() {
         return repository.findAllBooks();
     }
 
     // 제목으로 도서 검색
-    public List<Book> searchBookByTitle(String title) {
+    public List<Book> searchBookBy(String title) {
         return repository.findBookByTitle(title);
     }
 
