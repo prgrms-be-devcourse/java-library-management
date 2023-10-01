@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.programmers.app.timer.Timer;
-import com.programmers.app.timer.dto.TimerJson;
+import com.programmers.app.timer.dto.TimerJSON;
 
 public class TimerFileManager implements FileManager<Queue<Timer>, Queue<Timer>> {
 
@@ -29,13 +29,13 @@ public class TimerFileManager implements FileManager<Queue<Timer>, Queue<Timer>>
     public Queue<Timer> loadDataFromFile() throws IOException {
         FileReader fileReader = new FileReader(filePath);
 
-        TimerJson[] timersFromFile = Optional.ofNullable(gson.fromJson(fileReader, TimerJson[].class))
-                .orElse(new TimerJson[]{});
+        TimerJSON[] timersFromFile = Optional.ofNullable(gson.fromJson(fileReader, TimerJSON[].class))
+                .orElse(new TimerJSON[]{});
 
         fileReader.close();
 
         return Arrays.stream(timersFromFile)
-                .map(TimerJson::toTimer)
+                .map(TimerJSON::toTimer)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -44,14 +44,14 @@ public class TimerFileManager implements FileManager<Queue<Timer>, Queue<Timer>>
         try {
             FileWriter fileWriter = new FileWriter(filePath);
 
-            Queue<TimerJson> timerJsons = timers
+            Queue<TimerJSON> timerJSONS = timers
                     .stream()
                     .map(Timer::toTimerJson)
                     .collect(Collectors.toCollection(LinkedList::new));
 
-            Type type = new TypeToken<Queue<TimerJson>>(){}.getType();
+            Type type = new TypeToken<Queue<TimerJSON>>(){}.getType();
 
-            gson.toJson(timerJsons, type, fileWriter);
+            gson.toJson(timerJSONS, type, fileWriter);
             fileWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();

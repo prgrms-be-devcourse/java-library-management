@@ -4,7 +4,7 @@ import static com.programmers.app.config.AppConfig.MINUTES_FOR_BOOK_ARRANGEMENT;
 
 import java.time.LocalDateTime;
 
-import com.programmers.app.timer.dto.TimerJson;
+import com.programmers.app.timer.dto.TimerJSON;
 
 public class Timer {
 
@@ -29,7 +29,7 @@ public class Timer {
         return this.bookNumber == bookNumber;
     }
 
-    public TimerJson toTimerJson() {
-        return new TimerJson(bookNumber, arrangementBegunAt);
+    public TimerJSON toTimerJson() {
+        return new TimerJSON(bookNumber, arrangementBegunAt);
     }
 }
