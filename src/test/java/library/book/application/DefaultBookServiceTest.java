@@ -126,7 +126,7 @@ class DefaultBookServiceTest {
 			() -> assertThat(actual.title()).isEqualTo(expected.getTitle()),
 			() -> assertThat(actual.authorName()).isEqualTo(expected.getAuthorName()),
 			() -> assertThat(actual.pages()).isEqualTo(expected.getPages()),
-			() -> assertThat(actual.bookStatus()).isEqualTo(expected.getBookStatus().getDescription())
+			() -> assertThat(actual.bookStatus()).isEqualTo(expected.getBookState().getDescription())
 		);
 	}
 }

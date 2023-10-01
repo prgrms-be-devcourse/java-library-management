@@ -39,7 +39,7 @@ public class DefaultBookService implements BookService {
 					book.getTitle(),
 					book.getAuthorName(),
 					book.getPages(),
-					book.getBookStatus().getDescription()
+					book.getBookState().getDescription()
 				)).toList();
 	}
 
@@ -53,7 +53,7 @@ public class DefaultBookService implements BookService {
 					book.getTitle(),
 					book.getAuthorName(),
 					book.getPages(),
-					book.getBookStatus().getDescription()
+					book.getBookState().getDescription()
 				)).toList();
 	}
 

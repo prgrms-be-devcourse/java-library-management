@@ -68,7 +68,7 @@ class IoBookRepositoryTest {
 			Book book = findBook.get();
 			assertAll(
 				() -> assertThat(book.getId()).isEqualTo(1L),
-				() -> assertThat(book.getBookStatus()).isEqualTo(RENTED),
+				() -> assertThat(book.getBookState()).isEqualTo(RENTED),
 				() -> assertThat(book.getTitle()).isEqualTo("hello"),
 				() -> assertThat(book.getAuthorName()).isEqualTo("hello")
 			);
@@ -228,7 +228,7 @@ class IoBookRepositoryTest {
 			() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
 			() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
 			() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
-			() -> assertThat(actual.getBookStatus()).isEqualTo(expected.getBookStatus())
+			() -> assertThat(actual.getBookState()).isEqualTo(expected.getBookState())
 		);
 	}
 

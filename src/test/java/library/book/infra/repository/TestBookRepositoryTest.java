@@ -155,7 +155,7 @@ class TestBookRepositoryTest {
 			() -> assertThat(actual.getTitle()).isEqualTo(expected.getTitle()),
 			() -> assertThat(actual.getAuthorName()).isEqualTo(expected.getAuthorName()),
 			() -> assertThat(actual.getPages()).isEqualTo(expected.getPages()),
-			() -> assertThat(actual.getBookStatus()).isEqualTo(expected.getBookStatus())
+			() -> assertThat(actual.getBookState()).isEqualTo(expected.getBookState())
 		);
 	}
 
