@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static domain.BookCondition.*;
 
@@ -23,24 +24,10 @@ public class TestRepository implements Repository {
 
     @Override
     public List<Book> findByTitle(String searchTitle, List<Book> bookList) {
-        List<Book> foundBooks = new ArrayList<>();
-
-        Iterator<Book> bookIterator = bookList.iterator();
-
-        while (bookIterator.hasNext()) {
-            Book book = bookIterator.next();
-            String title = book.getTitle();
-            // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
-            if (title.toLowerCase().contains(searchTitle)) {
-                int id = book.getId();
-                String author = book.getAuthor();
-                int page = book.getPage();
-                String condition = book.getCondition();
-
-                foundBooks.add(new Book(id, title, author, page, condition));
-            }
-        }
-        return foundBooks;
+        return bookList.stream()
+                .filter(book -> book.getTitle().toLowerCase().contains(searchTitle))
+                .map(book -> new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,14 +40,7 @@ public class TestRepository implements Repository {
             Book book = bookIterator.next();
             if (book.getId() == rentId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
-                    book.setCondition(RENTED.getCondition());
-                    message = "도서가 대여 처리 되었습니다.";
-                }
-                else if (Objects.equals(book.getCondition(), RENTED.getCondition())) {
-                    message = "이미 대여중인 도서입니다.";
-                }
-                else message = "현재 대여가 불가능한 도서입니다.";
+                message = checkRent(book);
                 break; // ID를 찾았으므로 루프 종료
             }
         }
@@ -80,12 +60,7 @@ public class TestRepository implements Repository {
             Book book = bookIterator.next();
             if (book.getId() == returnId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
-                    book.setCondition(ORGANIZING.getCondition());
-                    message = "도서가 반납 처리 되었습니다";
-                } else { // 대여 가능
-                    message = "원래 대여가 가능한 도서입니다.";
-                }
+                message = checkReturn(book);
                 break;
             }
         }
@@ -106,12 +81,7 @@ public class TestRepository implements Repository {
             Book book = bookIterator.next();
             if (book.getId() == lostId) {
                 isBookExist = true;
-                if(Objects.equals(book.getCondition(), LOST.getCondition())) {
-                    message = "이미 분실 처리된 도서입니다.";
-                } else {
-                    book.setCondition(LOST.getCondition());
-                    message = "도서가 분실 처리 되었습니다.";
-                }
+                message = checkLost(book);
                 break;
             }
         }
@@ -139,6 +109,44 @@ public class TestRepository implements Repository {
 
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
+        return message;
+    }
+
+    //대여 가능한 도서인지 확인하는 메서드
+    private static String checkRent(Book book) {
+        String message;
+        if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
+            book.setCondition(RENTED.getCondition());
+            message = "도서가 대여 처리 되었습니다.";
+        }
+        else if (Objects.equals(book.getCondition(), RENTED.getCondition())) {
+            message = "이미 대여중인 도서입니다.";
+        }
+        else message = "현재 대여가 불가능한 도서입니다.";
+        return message;
+    }
+
+    //반납 가능한 도서인지 확인하는 메서드
+    private static String checkReturn(Book book) {
+        String message;
+        if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
+            book.setCondition(ORGANIZING.getCondition());
+            message = "도서가 반납 처리 되었습니다";
+        } else { // 대여 가능
+            message = "원래 대여가 가능한 도서입니다.";
+        }
+        return message;
+    }
+
+    //분실 처리 도서인지 확인하는 메서드
+    private static String checkLost(Book book) {
+        String message;
+        if(Objects.equals(book.getCondition(), LOST.getCondition())) {
+            message = "이미 분실 처리된 도서입니다.";
+        } else {
+            book.setCondition(LOST.getCondition());
+            message = "도서가 분실 처리 되었습니다.";
+        }
         return message;
     }
 }
