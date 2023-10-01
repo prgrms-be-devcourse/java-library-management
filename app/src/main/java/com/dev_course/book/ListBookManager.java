@@ -8,12 +8,13 @@ import java.util.stream.Collectors;
 import static com.dev_course.book.BookManagerMessage.*;
 import static com.dev_course.book.BookState.*;
 
-public class ListBookManager implements BookManager {
+public class ListBookManager implements LoadableBookManager {
     private static final int PROCESSING_COST = 300_000;
     private final List<Book> bookList = new ArrayList<>();
     private int id;
 
-    public ListBookManager(Collection<Book> data) {
+    @Override
+    public void init(Collection<Book> data) {
         bookList.addAll(data);
 
         id = bookList.stream()

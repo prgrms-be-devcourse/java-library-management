@@ -1,7 +1,6 @@
 package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
-import com.dev_course.data_module.DataManager;
 import com.dev_course.io_module.EmptyInputException;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
@@ -10,10 +9,10 @@ import static com.dev_course.library.LibraryMessage.*;
 import static java.lang.Integer.parseInt;
 
 public class LibrarySystem {
-    LibraryReader reader;
-    LibraryWriter writer;
-    DataManager dataManager;
-    BookManager bookManager;
+    private final LibraryReader reader;
+    private final LibraryWriter writer;
+    private LibraryMode mode;
+    private BookManager bookManager;
 
 
     public LibrarySystem(LibraryReader reader, LibraryWriter writer) {
@@ -31,7 +30,7 @@ public class LibrarySystem {
         } catch (NumberFormatException ne) {
             writer.println(INVALID_INPUT_MESSAGE);
             selectFunction();
-        } catch(EmptyInputException e) {
+        } catch (EmptyInputException e) {
             writer.println(EMPTY_INPUT_MESSAGE);
         }
 
@@ -54,8 +53,10 @@ public class LibrarySystem {
     }
 
     private void init(LibraryMode mode) {
-        dataManager = mode.getDataManager();
-        bookManager = mode.getBookManager();
+        this.mode = mode;
+        this.bookManager = mode.getBookManager();
+
+        mode.init();
     }
 
     private void selectFunction() {
@@ -83,7 +84,7 @@ public class LibrarySystem {
     }
 
     private void exit() {
-        dataManager.save(bookManager.getBookList());
+        mode.close();
 
         writer.println(EXIT_MESSAGE);
     }

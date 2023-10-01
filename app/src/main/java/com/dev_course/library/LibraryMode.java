@@ -1,33 +1,38 @@
 package com.dev_course.library;
 
-import com.dev_course.book.Book;
 import com.dev_course.book.BookManager;
+import com.dev_course.book.LoadableBookManager;
 import com.dev_course.book.ListBookManager;
 import com.dev_course.data_module.DataManager;
 import com.dev_course.data_module.EmptyDataManager;
 import com.dev_course.data_module.JSONDataManager;
 
-import java.util.List;
-
 public enum LibraryMode {
-    TEST(new EmptyDataManager()),
-    NORMAL(new JSONDataManager());
+    TEST, NORMAL;
 
     private final DataManager dataManager;
+    private final LoadableBookManager bookManager;
 
-    LibraryMode(DataManager dataManager) {
-        this.dataManager = dataManager;
-    }
-
-    DataManager getDataManager() {
-        return this.dataManager;
-    }
-
-    BookManager getBookManager() {
-        List<Book> data = dataManager.load();
-
-        return switch (this) {
-            case TEST, NORMAL -> new ListBookManager(data);
+    LibraryMode() {
+        dataManager = switch (this) {
+            case TEST -> new EmptyDataManager();
+            case NORMAL -> new JSONDataManager();
         };
+
+        bookManager = switch (this) {
+            case TEST, NORMAL -> new ListBookManager();
+        };
+    }
+
+    public void init() {
+        bookManager.init(dataManager.load());
+    }
+
+    public void close() {
+        dataManager.save(bookManager.getBookList());
+    }
+
+    public BookManager getBookManager() {
+        return bookManager;
     }
 }

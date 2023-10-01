@@ -1,7 +1,5 @@
 package com.dev_course.book;
 
-import java.util.List;
-
 public interface BookManager {
     void updateStates();
 
@@ -18,6 +16,4 @@ public interface BookManager {
     String lossById(int id);
 
     String deleteById(int id);
-
-    List<Book> getBookList();
 }
