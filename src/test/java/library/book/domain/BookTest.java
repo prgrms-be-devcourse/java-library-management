@@ -1,6 +1,6 @@
 package library.book.domain;
 
-import static library.book.domain.Status.BookStatus.*;
+import static library.book.domain.constants.BookState.*;
 import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
