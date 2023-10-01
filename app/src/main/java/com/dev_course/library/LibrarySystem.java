@@ -2,10 +2,12 @@ package com.dev_course.library;
 
 import com.dev_course.book.BookManager;
 import com.dev_course.data_module.DataManager;
+import com.dev_course.io_module.EmptyInputException;
 import com.dev_course.io_module.LibraryReader;
 import com.dev_course.io_module.LibraryWriter;
 
 import static com.dev_course.library.LibraryMessage.*;
+import static java.lang.Integer.parseInt;
 
 public class LibrarySystem {
     LibraryReader reader;
@@ -24,7 +26,14 @@ public class LibrarySystem {
 
         init(mode);
 
-        selectFunction();
+        try {
+            selectFunction();
+        } catch (NumberFormatException ne) {
+            writer.println(INVALID_INPUT_MESSAGE);
+            selectFunction();
+        } catch(EmptyInputException e) {
+            writer.println(EMPTY_INPUT_MESSAGE);
+        }
 
         exit();
     }
@@ -32,7 +41,7 @@ public class LibrarySystem {
     private LibraryMode selectMode() {
         writer.println(MOD_SCREEN_MESSAGE);
 
-        String input = reader.read();
+        String input = readInput();
 
         return switch (input) {
             case "0" -> LibraryMode.TEST;
@@ -52,9 +61,9 @@ public class LibrarySystem {
     private void selectFunction() {
         writer.println(FUNCTION_SCREEN_MESSAGE);
 
-        bookManager.updateStates();
+        String input = readInput();
 
-        String input = reader.readOrDefault("-1");
+        bookManager.updateStates();
 
         switch (input) {
             case "0" -> {
@@ -82,18 +91,11 @@ public class LibrarySystem {
     private void createBook() {
         writer.println(CREATE_BOOK_MESSAGE);
 
-        String title = writeAndRead(READ_CREATE_BOOK_TITLE_MESSAGE);
-        String author = writeAndRead(READ_CREATE_BOOK_AUTHOR_MESSAGE);
+        String title = printAndReadInput(READ_CREATE_BOOK_TITLE_MESSAGE);
+        String author = printAndReadInput(READ_CREATE_BOOK_AUTHOR_MESSAGE);
+        int pages = parseInt(printAndReadInput(READ_CREATE_BOOK_PAGES_MESSAGE));
 
-        try {
-            int pages = Integer.parseInt(writeAndRead(READ_CREATE_BOOK_PAGES_MESSAGE));
-
-            writer.append(bookManager.create(title, author, pages));
-        } catch (NumberFormatException e) {
-            writer.append(INVALID_INPUT_MESSAGE);
-        }
-
-        writer.flush();
+        writer.println(bookManager.create(title, author, pages));
     }
 
     private void listBooks() {
@@ -107,7 +109,7 @@ public class LibrarySystem {
     private void findBookByTitle() {
         writer.println(FIND_BOOK_BY_TITLE_MESSAGE);
 
-        String title = writeAndRead(READ_FIND_BY_TITLE_MESSAGE);
+        String title = printAndReadInput(READ_FIND_BY_TITLE_MESSAGE);
 
         writer.append(bookManager.getInfoByTitle(title));
         writer.append(END_FIND_BOOK_BY_TITLE_MESSAGE);
@@ -117,65 +119,46 @@ public class LibrarySystem {
     private void rentBookById() {
         writer.println(RENT_BOOK_BY_ID_MESSAGE);
 
-        try {
-            int id = writeAndReadInt(READ_RENT_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_RENT_BOOK_BY_ID_MESSAGE);
+        int id = parseInt(input);
 
-            writer.append(bookManager.rentById(id));
-        } catch (NumberFormatException e) {
-            writer.append(INVALID_INPUT_MESSAGE);
-        }
-
-        writer.flush();
+        writer.println(bookManager.rentById(id));
     }
 
     private void returnBookById() {
         writer.println(RETURN_BOOK_BY_ID_MESSAGE);
 
-        try {
-            int id = writeAndReadInt(READ_RETURN_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_RETURN_BOOK_BY_ID_MESSAGE);
+        int id = parseInt(input);
 
-            writer.append(bookManager.returnById(id));
-        } catch (NumberFormatException e) {
-            writer.append(INVALID_INPUT_MESSAGE);
-        }
-
-        writer.flush();
+        writer.println(bookManager.returnById(id));
     }
 
     private void lossBookById() {
         writer.println(LOSS_BOOK_BY_ID_MESSAGE);
 
-        try {
-            int id = writeAndReadInt(READ_LOSS_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_LOSS_BOOK_BY_ID_MESSAGE);
+        int id = parseInt(input);
 
-            writer.append(bookManager.lossById(id));
-        } catch (NumberFormatException e) {
-            writer.append(INVALID_INPUT_MESSAGE);
-        }
-
-        writer.flush();
+        writer.println(bookManager.lossById(id));
     }
 
     private void deleteBookById() {
         writer.println(DELETE_BOOK_MESSAGE);
 
-        try {
-            int id = writeAndReadInt(READ_DELETE_BOOK_ID_MESSAGE);
+        String input = printAndReadInput(READ_DELETE_BOOK_ID_MESSAGE);
+        int id = parseInt(input);
 
-            writer.append(bookManager.deleteById(id));
-        } catch (NumberFormatException e) {
-            writer.append(INVALID_INPUT_MESSAGE);
-        }
-
-        writer.flush();
+        writer.println(bookManager.deleteById(id));
     }
 
-    private String writeAndRead(LibraryMessage msg) {
+    private String readInput() {
+        writer.print("> ");
+        return reader.readLine();
+    }
+
+    private String printAndReadInput(LibraryMessage msg) {
         writer.println(msg);
-        return reader.read();
-    }
-
-    private int writeAndReadInt(LibraryMessage msg) {
-        return Integer.parseInt(writeAndRead(msg));
+        return readInput();
     }
 }

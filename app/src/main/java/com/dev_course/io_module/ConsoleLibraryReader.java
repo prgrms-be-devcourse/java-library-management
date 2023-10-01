@@ -6,29 +6,14 @@ import java.io.InputStreamReader;
 
 public class ConsoleLibraryReader implements LibraryReader {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    private String sVal;
 
-    private void next() {
+    @Override
+    public String readLine() {
         try {
-            sVal = br.readLine();
+            return br.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public String read() {
-        next();
-        return sVal;
-    }
-
-    @Override
-    public String readOrDefault(String defaultValue) {
-        try {
-            next();
-            return sVal;
-        } catch (RuntimeException e) {
-            return defaultValue;
+            // EOF 같은 값에 대한 예외
+            throw new EmptyInputException("다음 입력을 읽을 수 없습니다.");
         }
     }
 }
