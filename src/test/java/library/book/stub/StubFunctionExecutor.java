@@ -1,16 +1,16 @@
 package library.book.stub;
 
 import library.book.application.BookService;
-import library.book.presentation.utils.ConsoleProcessor;
+import library.book.presentation.utils.InOutProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 
 public class StubFunctionExecutor extends FunctionExecutor {
 
 	public StubFunctionExecutor(
 		final BookService bookService,
-		final ConsoleProcessor consoleProcessor
+		final InOutProcessor inOutProcessor
 	) {
-		super(bookService, consoleProcessor);
+		super(bookService, inOutProcessor);
 	}
 
 	@Override

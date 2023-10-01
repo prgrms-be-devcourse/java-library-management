@@ -4,21 +4,21 @@ import static library.book.exception.ErrorCode.*;
 
 import library.book.exception.BookException;
 import library.book.infra.console.output.OutputHandler;
-import library.book.presentation.utils.ConsoleProcessor;
+import library.book.presentation.utils.InOutProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 import library.book.presentation.utils.FunctionManger;
 
 public class BookController {
 
 	private final FunctionExecutor executor;
-	private final ConsoleProcessor consoleProcessor;
+	private final InOutProcessor inOutProcessor;
 
 	public BookController(
 		final FunctionExecutor executor,
-		final ConsoleProcessor consoleProcessor
+		final InOutProcessor inOutProcessor
 	) {
 		this.executor = executor;
-		this.consoleProcessor = consoleProcessor;
+		this.inOutProcessor = inOutProcessor;
 	}
 
 	public void run() {
@@ -29,7 +29,7 @@ public class BookController {
 
 	private String inputFunction() {
 		try {
-			return consoleProcessor.inputNumber(OutputHandler::showSelectFunction);
+			return inOutProcessor.inputNumber(OutputHandler::showSelectFunction);
 		} catch (IllegalArgumentException e) {
 			throw BookException.of(NOT_SUPPORT_FUNCTION);
 		}

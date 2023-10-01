@@ -10,7 +10,7 @@ import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.BookController;
 import library.book.presentation.converter.InputConverter;
-import library.book.presentation.utils.ConsoleProcessor;
+import library.book.presentation.utils.InOutProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 
 public class BookClient extends BookController {
@@ -25,20 +25,20 @@ public class BookClient extends BookController {
 
 		InputConverter converter = new InputConverter();
 
-		ConsoleProcessor consoleProcessor = new ConsoleProcessor(inputHandler, outputHandler, converter);
+		InOutProcessor inOutProcessor = new InOutProcessor(inputHandler, outputHandler, converter);
 
-		String mode = inputMode(consoleProcessor);
+		String mode = inputMode(inOutProcessor);
 
 		BookRepository bookRepository = ModeManager.valueOf(mode).getRepository();
 		BookService bookService = new DefaultBookService(bookRepository);
 
-		FunctionExecutor executor = new FunctionExecutor(bookService, consoleProcessor);
-		this.target = new BookController(executor, consoleProcessor);
+		FunctionExecutor executor = new FunctionExecutor(bookService, inOutProcessor);
+		this.target = new BookController(executor, inOutProcessor);
 	}
 
-	private String inputMode(final ConsoleProcessor consoleProcessor) {
+	private String inputMode(final InOutProcessor inOutProcessor) {
 		try {
-			return consoleProcessor.inputNumber(OutputHandler::showSelectMode);
+			return inOutProcessor.inputNumber(OutputHandler::showSelectMode);
 		} catch (IllegalArgumentException e) {
 			throw BookException.of(NOT_SUPPORT_FUNCTION);
 		}

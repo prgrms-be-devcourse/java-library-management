@@ -12,13 +12,13 @@ import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
-public class ConsoleProcessor {
+public class InOutProcessor {
 
 	private final InputHandler inputHandler;
 	private final OutputHandler outputHandler;
 	private final InputConverter converter;
 
-	public ConsoleProcessor(
+	public InOutProcessor(
 		final InputHandler inputHandler,
 		final OutputHandler outputHandler,
 		final InputConverter converter
