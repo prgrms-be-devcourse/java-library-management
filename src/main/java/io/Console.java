@@ -1,9 +1,12 @@
 package io;
 
 import exception.InputFormatException;
+import repository.GeneralRepository;
+import repository.TestRepository;
 import service.GeneralService;
 import service.Service;
 import service.TestService;
+import service.TotalService;
 
 import java.util.Scanner;
 
@@ -34,11 +37,11 @@ public class Console {
     public void printMode(int input) {
         if (input == GENERAL) {
             System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.");
-            service = new GeneralService();
+            service = new TotalService(new GeneralRepository());
             service.load();
         } else if (input == TEST) {
             System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
-            service = new TestService();
+            service = new TotalService(new TestRepository());
             service.load();
         } else {
             throw new InputFormatException("잘못된 입력입니다.");
