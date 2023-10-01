@@ -52,7 +52,11 @@ public class NormalBookRepository implements BookRepository{
     public Long createId() {
 
         Set<Long> keys = libraryStorage.keySet();
-        Long maxId = Collections.max(keys);
+
+        Long maxId = 0L;
+        if (!keys.isEmpty()) {
+            maxId = Collections.max(keys);
+        }
 
         return maxId + 1;
     }
