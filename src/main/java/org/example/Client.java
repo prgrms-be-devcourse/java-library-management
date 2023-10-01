@@ -93,7 +93,7 @@ public class Client {
 
     private void searchAllBooks() {
         System.out.println("[System] 전체 도서 목록입니다.");
-        libraryManagementService.searchBooks()
+        libraryManagementService.searchAllBooks()
                 .stream()
                 .forEach(book -> {
                     System.out.println("\n-------------------------------\n\n" + book);
@@ -106,7 +106,7 @@ public class Client {
                 [System] 제목으로 도서 검색 메뉴로 넘어갑니다.
                 Q. 검색할 도서 제목 일부를 입력하세요.-""");
         String title = scan.nextLine();
-        libraryManagementService.searchBookByTitle(title)
+        libraryManagementService.searchBookBy(title)
                 .stream()
                 .forEach(book -> {
                     System.out.println("\n-------------------------------\n\n" + book);
