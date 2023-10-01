@@ -3,9 +3,7 @@ package io;
 import exception.InputFormatException;
 import repository.GeneralRepository;
 import repository.TestRepository;
-import service.GeneralService;
 import service.Service;
-import service.TestService;
 import service.TotalService;
 
 import java.util.Scanner;

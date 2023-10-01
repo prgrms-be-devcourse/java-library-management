@@ -1,7 +1,6 @@
 package repository;
 
 import domain.Book;
-import domain.BookCondition;
 
 import java.util.ArrayList;
 import java.util.Iterator;

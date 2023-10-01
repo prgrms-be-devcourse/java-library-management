@@ -5,7 +5,6 @@ import com.opencsv.exceptions.CsvException;
 
 import domain.Book;
 
-import domain.BookCondition;
 import exception.LoadException;
 import exception.SaveException;
 import org.apache.commons.csv.CSVFormat;
