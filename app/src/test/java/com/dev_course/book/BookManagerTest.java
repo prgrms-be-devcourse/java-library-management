@@ -123,4 +123,35 @@ abstract class BookManagerTest {
             assertThat(info).isEqualTo(requiredFormat);
         }
     }
+
+    @Nested
+    @Order(4)
+    @DisplayName("도서 제목 검색 테스트")
+    class TestGetInfoByTitle {
+        @Test
+        @DisplayName("검색 시 주어진 단어를 포함하는 모든 도서를 반환해야 한다.")
+        void testGetInfoByTitle() {
+            // given
+            BookManager bookManager = createBookManager();
+            List<Book> initData = new ArrayList<>();
+
+            initData.add(new Book(1, "banabana", "tester", 111, 1L));
+            initData.add(new Book(2, "bana", "tester", 222, 2L));
+            initData.add(new Book(3, "anab", "tester", 333, 3L));
+            initData.add(new Book(4, "banan", "tester", 444, 4L));
+            initData.add(new Book(5, "banana", "tester", 555, 5L));
+
+            // when
+            bookManager.init(initData);
+            String infoByTitle = bookManager.getInfoByTitle("bana");
+
+            // then
+            String requiredData = initData.stream()
+                    .filter(book -> book.getTitle().contains("bana"))
+                    .map(Book::toString)
+                    .collect(Collectors.joining("\n------------------------------\n"));
+
+            assertThat(infoByTitle).isEqualTo(requiredData);
+        }
+    }
 }
