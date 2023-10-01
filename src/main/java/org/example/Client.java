@@ -19,7 +19,10 @@ public class Client {
     }
 
     private void selectMode() {
-        System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드");
+        System.out.println("""
+                Q. 모드를 선택해주세요.
+                1. 일반 모드
+                2. 테스트 모드""");
         int mode = scan.nextInt();
         if (mode == 1) {
             System.out.println("일반 모드를 입력하셨습니다.");
@@ -32,7 +35,15 @@ public class Client {
     }
 
     private void selectLibraryFunction() {
-        System.out.println("Q. 사용할 기능을 선택해주세요.\n1. 도서 등록\n2. 전체 도서 목록 조회\n3. 제목으로 도서 검색\n4. 도서 대여\n5. 도서 반납\n6. 도서 분실\n7. 도서 삭제");
+        System.out.println("""
+                Q. 사용할 기능을 선택해주세요.
+                1. 도서 등록
+                2. 전체 도서 목록 조회
+                3. 제목으로 도서 검색
+                4. 도서 대여
+                5. 도서 반납
+                6. 도서 분실
+                7. 도서 삭제""");
 
         int functionNumber = scan.nextInt();
         scan.nextLine();
@@ -68,8 +79,9 @@ public class Client {
     }
 
     private void registerBook() {
-        System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.");
-        System.out.println("Q. 등록할 도서 제목을 입력하세요.");
+        System.out.println("""
+                [System] 도서 등록 메뉴로 넘어갑니다.
+                Q. 등록할 도서 제목을 입력하세요.""");
         String title = scan.nextLine();
         System.out.println("Q. 작가 이름을 입력하세요.");
         String author = scan.nextLine();
@@ -90,8 +102,9 @@ public class Client {
     }
 
     private void searchBooksByTitle() {
-        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.");
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
+        System.out.println("""
+                [System] 제목으로 도서 검색 메뉴로 넘어갑니다.
+                Q. 검색할 도서 제목 일부를 입력하세요.-""");
         String title = scan.nextLine();
         libraryManagementService.searchBookByTitle(title)
                 .stream()
@@ -102,8 +115,9 @@ public class Client {
     }
 
     private void borrowBook() {
-        System.out.println("[System] 제목으로 도서 대여 메뉴로 넘어갑니다.");
-        System.out.println("Q. 대여할 도서번호를 입력하세요.");
+        System.out.println("""
+                [System] 제목으로 도서 대여 메뉴로 넘어갑니다.
+                Q. 대여할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
         libraryManagementService.borrowBook(bookId)
                 .ifPresentOrElse(
@@ -113,8 +127,9 @@ public class Client {
     }
 
     private void returnBook() {
-        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.");
-        System.out.println("Q. 반납할 도서번호를 입력하세요");
+        System.out.println("""
+                [System] 도서 반납 메뉴로 넘어갑니다.
+                Q. 반납할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
         libraryManagementService.returnBook(bookId)
                 .ifPresentOrElse(
@@ -124,8 +139,9 @@ public class Client {
     }
 
     private void lostBook() {
-        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요");
+        System.out.println("""
+                [System] 도서 분실 처리 메뉴로 넘어갑니다.
+                Q. 분실 처리할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
         libraryManagementService.lostBook(bookId)
                 .ifPresentOrElse(
@@ -135,8 +151,9 @@ public class Client {
     }
 
     private void deleteBook() {
-        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
+        System.out.println("""
+                [System] 도서 삭제 처리 메뉴로 넘어갑니다.
+                Q. 삭제 처리할 도서번호를 입력하세요""");
         Integer bookId = scan.nextInt();
         libraryManagementService.deleteBook(bookId)
                 .ifPresentOrElse(
