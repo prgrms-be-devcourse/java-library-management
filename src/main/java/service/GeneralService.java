@@ -186,7 +186,7 @@ public class GeneralService implements Service{
     public void exit() {
         messagePrinter.printExitStart();
 
-        GeneralRepository.endApplication(bookList);
+//        GeneralRepository.endApplication(bookList);
 
         System.exit(0);
     }

@@ -185,8 +185,6 @@ public class TotalService implements Service{
     public void exit() {
         messagePrinter.printExitStart();
 
-        GeneralRepository.endApplication(bookList);
-
         System.exit(0);
     }
 }

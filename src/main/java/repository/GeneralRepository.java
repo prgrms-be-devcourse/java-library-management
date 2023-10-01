@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvException;
 
 import domain.Book;
 
+import domain.BookCondition;
 import exception.LoadException;
 import exception.SaveException;
 import org.apache.commons.csv.CSVFormat;
@@ -36,6 +37,8 @@ public class GeneralRepository implements Repository{
                 String author = record[2];
                 int page = Integer.parseInt(record[3]);
                 String condition = record[4];
+                //도서를 가져오던 중 도서 정리중이면 대여 가능으로 변경
+                if(Objects.equals(condition, ORGANIZING.getCondition())) condition = AVAILABLE.getCondition();
                 bookList.add(new Book(id, title, author, page, condition));
             }
             csvReader.close();
@@ -186,18 +189,6 @@ public class GeneralRepository implements Repository{
         saveToCSV(bookList);
 
         return message;
-    }
-
-    //애플리케이션 종료 시 도서 관리중을 바꾸기 위한 메서드
-    public static void endApplication(List<Book> bookList) {
-        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
-            for(Book book : bookList) {
-                if(Objects.equals(book.getCondition(), ORGANIZING.getCondition())) book.setCondition(AVAILABLE.getCondition());
-                csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
-            }
-        } catch (IOException e) {
-            throw new SaveException("CSV 파일에 저장할 수 없습니다.");
-        }
     }
 
     // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
