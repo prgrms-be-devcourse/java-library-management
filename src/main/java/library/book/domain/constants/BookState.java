@@ -27,7 +27,7 @@ public enum BookState {
 		return description;
 	}
 
-	public State getStateSupplier() {
+	public State getState() {
 		return stateSupplier.get();
 	}
 }

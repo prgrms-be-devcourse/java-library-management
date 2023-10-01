@@ -1,10 +1,6 @@
 package library.book.infra.repository.dto;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.*;
-
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import library.book.domain.Book;
 import library.book.domain.State;
@@ -17,17 +13,14 @@ public record BookInfo(
 	String authorName,
 	int pages,
 	String bookState,
-	@JsonFormat(
-		shape = STRING,
-		pattern = "yyyy-MM-dd a HH:mm")
-	LocalDateTime cleaningEndTime
+	LocalDateTime cleaningEndAt
 ) {
 	public Book toBook() {
 		BookState bookState = BookState.valueOf(this.bookState);
+		State state = bookState.getState();
 
-		State state = bookState.getStateSupplier();
 		if (state instanceof Cleaning cleaning) {
-			cleaning.resetState(cleaningEndTime);
+			cleaning.reset(cleaningEndAt);
 		}
 
 		return new Book(
