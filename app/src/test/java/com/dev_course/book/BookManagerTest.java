@@ -97,7 +97,7 @@ abstract class BookManagerTest {
         }
 
         @Test
-        @DisplayName("도서 생성에 성공하면 성공 메시지를 반환해야 한다")
+        @DisplayName("도서 생성에 성공하면 성공 메시지를 반환해야 한다.")
         void testCreateSuccess() {
             // given
             BookManager bookManager = createBookManager();
@@ -110,7 +110,7 @@ abstract class BookManagerTest {
         }
 
         @Test
-        @DisplayName("이미 추가된 제목의 도서 생성 시 실패 메시지를 반환해야 한다")
+        @DisplayName("이미 추가된 제목의 도서 생성 시 실패 메시지를 반환해야 한다.")
         void testCreateFailExistTitle() {
             // given
             BookManager bookManager = createBookManager();
@@ -130,7 +130,7 @@ abstract class BookManagerTest {
     @DisplayName("도서 목록 정보 테스트")
     class TestGetInfo {
         @Test
-        @DisplayName("도서 목록 조회 시 요구된 형식을 동일해야 한다")
+        @DisplayName("도서 목록 조회 시 요구된 형식을 동일해야 한다.")
         void testGetInfo() {
             // given
             BookManager bookManager = createBookManager();
@@ -181,6 +181,92 @@ abstract class BookManagerTest {
                     .collect(Collectors.joining("\n------------------------------\n"));
 
             assertThat(infoByTitle).isEqualTo(requiredData);
+        }
+    }
+
+    @Nested
+    @Order(5)
+    @DisplayName("도서 대여 테스트")
+    class TestRentById {
+        @Test
+        @DisplayName("도서 대여 시 해당 도서는 대여 중으로 상태가 변경돼야 한다")
+        void testRentByIdChangeState() {
+            // given
+            BookManager bookManager = createBookManager();
+            List<Book> initData = new ArrayList<>();
+            Book book = new Book(1, "test1", "tester", 111, 1L);
+
+            initData.add(book);
+            bookManager.init(initData);
+
+            // when
+            bookManager.rentById(1);
+
+            // then
+            assertThat(book.getState()).isEqualTo(BookState.LOAN);
+        }
+
+        @Test
+        @DisplayName("도서 대여 시 성공 메시지를 반환해야 한다.")
+        void testRentByIdSuccess() {
+            // given
+            BookManager bookManager = createBookManager();
+            List<Book> initData = new ArrayList<>();
+
+            initData.add(new Book(1, "test1", "tester", 111, 1L));
+            bookManager.init(initData);
+
+            // when
+            String msg = bookManager.rentById(1);
+
+            // then
+            assertThat(msg).isEqualTo(SUCCESS_RENT_BOOK.msg());
+        }
+
+        @Test
+        @DisplayName("등록되지 않은 id의 도서를 대여 시 실패 메시지를 반환해야 한다.")
+        void testRentByIdFailNotExistId() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            bookManager.create("test1", "tester", 11);
+
+            // when
+            String msg = bookManager.rentById(1000);
+
+            // then
+            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
+        }
+
+        @Test
+        @DisplayName("대여할 수 없는 도서를 대여할 때 상태에 맞는 실패 메시지를 반환해야 한다.")
+        void testRentByIdFailNonAvailable() {
+            // given
+            BookManager bookManager = createBookManager();
+            List<Book> initData = new ArrayList<>();
+            Book book = new Book(1, "test1", "tester", 111, 1L);
+
+            initData.add(book);
+            bookManager.init(initData);
+
+            // when
+            List<String> msgList = new ArrayList<>();
+            List<String> requiredMsgList = new ArrayList<>();
+
+            book.setState(BookState.LOAN);
+            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
+            msgList.add(bookManager.rentById(1));
+
+            book.setState(BookState.LOST);
+            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
+            msgList.add(bookManager.rentById(1));
+
+            book.setState(BookState.PROCESSING);
+            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
+            msgList.add(bookManager.rentById(1));
+
+            // then
+            assertThat(msgList).isEqualTo(requiredMsgList);
         }
     }
 }
