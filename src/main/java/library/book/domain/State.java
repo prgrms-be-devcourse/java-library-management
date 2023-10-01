@@ -6,5 +6,5 @@ public interface State {
 
 	BookState getBookState();
 
-	void validateIsAbleToRent();
+	default void validateIsAbleToRent() {}
 }
