@@ -22,7 +22,7 @@ class StateTest {
 	class validateIsAbleToRent {
 
 		@Test
-		@DisplayName("[정리중 상태여서 검증에 실패한다]")
+		@DisplayName("[정리중 상태이고 아직 정리가 끝나지 않아서 검증에 실패한다]")
 		void failWhenStateIsCleaning() {
 			//given
 			State state = new Cleaning();

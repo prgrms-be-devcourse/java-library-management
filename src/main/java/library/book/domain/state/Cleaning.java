@@ -37,6 +37,8 @@ public class Cleaning implements State {
 
 	@Override
 	public void validateIsAbleToRent() {
-		throw BookException.of(NOW_CLEANING);
+		if (cleaningEndAt.isAfter(LocalDateTime.now())) {
+			throw BookException.of(NOW_CLEANING);
+		}
 	}
 }
