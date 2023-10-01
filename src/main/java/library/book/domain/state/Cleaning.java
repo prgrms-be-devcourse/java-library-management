@@ -51,4 +51,9 @@ public class Cleaning implements State {
 			throw BookException.of(NOW_CLEANING);
 		}
 	}
+
+	@Override
+	public void validateIsAbleToReturn() {
+		throw BookException.of(NOW_CLEANING);
+	}
 }

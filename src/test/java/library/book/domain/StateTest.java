@@ -85,6 +85,20 @@ class StateTest {
 				.isInstanceOf(BookException.class)
 				.hasMessageContaining(ALREADY_AVAILABLE_RENT.getMessage());
 		}
+
+		@Test
+		@DisplayName("[정리중 상태여서 검증에 실패한다]")
+		void failWhenStateIsCleaning() {
+			State state = new Cleaning();
+
+			//when
+			ThrowingCallable when = state::validateIsAbleToReturn;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(NOW_CLEANING.getMessage());
+		}
 	}
 
 	@Nested
