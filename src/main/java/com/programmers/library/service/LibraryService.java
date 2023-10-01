@@ -83,6 +83,17 @@ public class LibraryService {
     }
 
     // 도서 반납
+    private void set5MinuteTimer(int bookId) {  // 5분 뒤 '대여 가능' 설정
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                libraryRepository.updateStatus(bookId, StatusType.AVAILABLE);
+            }
+        };
+        timer.schedule(timerTask, 5 * 60 * 1000);
+    }
+
     public void returnBook(int bookId) {
         libraryRepository.findById(bookId)
                 .ifPresentOrElse(
@@ -93,15 +104,7 @@ public class LibraryService {
                                 case RENTING, LOST -> {
                                     libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
                                     printMessage(MessageType.RETURN_SUCCESS.getMessage(), "\n");
-
-                                    Timer timer = new Timer();  // 5분 뒤 '대여 가능' 설정
-                                    TimerTask timerTask = new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            libraryRepository.updateStatus(bookId, StatusType.AVAILABLE);
-                                        }
-                                    };
-                                    timer.schedule(timerTask, 5 * 60 * 1000);
+                                    set5MinuteTimer(bookId);
                                 }
                                 case AVAILABLE, ORGANIZING -> printMessage(MessageType.CANNOT_RETURN.getMessage(), "( *사유: " + status.getDescription() + " )\n");
                             }
