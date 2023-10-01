@@ -48,31 +48,18 @@ public class Client {
         int functionNumber = scan.nextInt();
         scan.nextLine();
 
-        switch (functionNumber) {
-            case 1:
-                registerBook();
-                break;
-            case 2:
-                searchAllBooks();
-                break;
-            case 3:
-                searchBooksByTitle();
-                break;
-            case 4:
-                borrowBook();
-                break;
-            case 5:
-                returnBook();
-                break;
-            case 6:
-                lostBook();
-                break;
-            case 7:
-                deleteBook();
-                break;
-            default:
-                System.out.println("1부터 7까지의 정수 중 하나를 입력해주세요.\n");
-                break;
+        try {
+            switch (LibraryFunctionType.getValueByNumber(functionNumber)) {
+                case REGISTER_BOOK -> registerBook();
+                case SEARCH_ALL_BOOKS -> searchAllBooks();
+                case SEARCH_BOOKS_BY_TITLE -> searchBooksByTitle();
+                case BORROW_BOOK -> borrowBook();
+                case RETURN_BOOK -> returnBook();
+                case LOST_BOOK -> lostBook();
+                case DELETE_BOOK -> deleteBook();
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
 
         selectLibraryFunction();
