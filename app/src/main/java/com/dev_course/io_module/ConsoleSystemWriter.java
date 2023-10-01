@@ -1,8 +1,6 @@
 package com.dev_course.io_module;
 
 public class ConsoleSystemWriter implements Writer {
-    StringBuilder sb = new StringBuilder();
-
     @Override
     public void print(Object o) {
         System.out.print(o);

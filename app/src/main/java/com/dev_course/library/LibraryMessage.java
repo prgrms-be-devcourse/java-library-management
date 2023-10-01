@@ -38,7 +38,6 @@ public enum LibraryMessage {
     READ_LOSS_BOOK_BY_ID_MESSAGE("Q. 분실 처리할 도서번호를 입력하세요."),
     READ_DELETE_BOOK_ID_MESSAGE("Q. 삭제 처리할 도서번호를 입력하세요");
 
-
     private final String msg;
 
     LibraryMessage(String msg) {
