@@ -13,9 +13,13 @@ public class ListBookManager implements BookManager {
     private final List<Book> bookList = new ArrayList<>();
     private int id;
 
-    public ListBookManager(Collection<Book> data, int seed) {
+    public ListBookManager(Collection<Book> data) {
         bookList.addAll(data);
-        this.id = seed;
+
+        id = bookList.stream()
+                .mapToInt(Book::getId)
+                .max()
+                .orElse(0);
     }
 
     @Override
@@ -133,6 +137,11 @@ public class ListBookManager implements BookManager {
         bookList.removeIf(book -> book.getId() == id);
 
         return SUCCESS_DELETE_BOOK.msg();
+    }
+
+    @Override
+    public List<Book> getBookList() {
+        return bookList.stream().toList();
     }
 
     private long getCurrentTime() {

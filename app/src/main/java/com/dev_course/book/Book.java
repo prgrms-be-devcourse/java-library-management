@@ -1,21 +1,24 @@
 package com.dev_course.book;
 
-import static com.dev_course.book.BookState.AVAILABLE;
 
 public class Book {
-    private final int id;
-    private final String title;
-    private final String author;
-    private final int pages;
+    private int id;
+    private String title;
+    private String author;
+    private int pages;
     private BookState state;
     private long updateAt;
+
+    // for deserialize from object value
+    public Book() {
+    }
 
     public Book(int id, String title, String author, int pages, long time) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.pages = pages;
-        this.state = AVAILABLE;
+        this.state = BookState.AVAILABLE;
         this.updateAt = time;
     }
 
@@ -25,6 +28,14 @@ public class Book {
 
     public int getId() {
         return id;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPages() {
+        return pages;
     }
 
     public BookState getState() {
