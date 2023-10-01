@@ -106,11 +106,12 @@ public class Client {
                 [System] 제목으로 도서 대여 메뉴로 넘어갑니다.
                 Q. 대여할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
-        libraryManagementService.borrowBook(bookId)
-                .ifPresentOrElse(
-                        exception -> System.out.println(exception.getMessage() + "\n"),
-                        () -> System.out.println("[System] 도서가 대여 처리 되었습니다.\n")
-                );
+        try {
+            libraryManagementService.borrowBook(bookId);
+            System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void returnBook() {
@@ -118,11 +119,12 @@ public class Client {
                 [System] 도서 반납 메뉴로 넘어갑니다.
                 Q. 반납할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
-        libraryManagementService.returnBook(bookId)
-                .ifPresentOrElse(
-                        exception -> System.out.println(exception.getMessage() + "\n"),
-                        () -> System.out.println("[System] 도서가 반납 처리 되었습니다.\n")
-                );
+        try {
+            libraryManagementService.returnBook(bookId);
+            System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void lostBook() {
@@ -130,11 +132,12 @@ public class Client {
                 [System] 도서 분실 처리 메뉴로 넘어갑니다.
                 Q. 분실 처리할 도서번호를 입력하세요.""");
         Integer bookId = scan.nextInt();
-        libraryManagementService.lostBook(bookId)
-                .ifPresentOrElse(
-                        exception -> System.out.println(exception.getMessage() + "\n"),
-                        () -> System.out.println("[System] 도서가 분실 처리 되었습니다.\n")
-                );
+        try {
+            libraryManagementService.lostBook(bookId);
+            System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteBook() {
@@ -142,10 +145,11 @@ public class Client {
                 [System] 도서 삭제 처리 메뉴로 넘어갑니다.
                 Q. 삭제 처리할 도서번호를 입력하세요""");
         Integer bookId = scan.nextInt();
-        libraryManagementService.deleteBook(bookId)
-                .ifPresentOrElse(
-                        exception -> System.out.println(exception.getMessage() + "\n"),
-                        () -> System.out.println("[System] 도서가 삭제 처리 되었습니다.\n")
-                );
+        try {
+            libraryManagementService.deleteBook(bookId);
+            System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
