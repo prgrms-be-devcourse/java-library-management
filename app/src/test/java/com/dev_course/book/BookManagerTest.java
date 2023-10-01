@@ -56,6 +56,22 @@ abstract class BookManagerTest {
     @DisplayName("도서 생성 테스트")
     class TestCreateBook {
         @Test
+        @DisplayName("생성된 도서는 대여 가능 상태여야 한다")
+        void testCreateAvailableState() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            // when
+            bookManager.create("test1", "tester", 11);
+            bookManager.create("test2", "tester", 22);
+
+            // then
+            List<Book> bookList = bookManager.getBookList();
+
+            assertThat(bookList).allMatch(book -> book.getState() == BookState.AVAILABLE);
+        }
+
+        @Test
         @DisplayName("도서 생성 시 유일한 id의 도서가 추가돼야 한다")
         void testCreateWithUniqueId() {
             // given
