@@ -8,8 +8,8 @@ import org.example.service.LibraryManagementService;
 import java.util.Scanner;
 
 public class Client {
-    LibraryManagementService libraryManagementService;
-    Scanner scan = new Scanner(System.in);
+    private LibraryManagementService libraryManagementService;
+    private Scanner scan = new Scanner(System.in);
     private Integer nextBookId;
     private final String bookInfoCsvPath = "data/bookInfo.csv";
 
