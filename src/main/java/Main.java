@@ -9,7 +9,7 @@ import java.io.*;
 import static domain.Reader.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println(SelectMessage.MODE_SELECT_MESSAGE.getMessage());
         int selectNum = sc.nextInt();
         Mode mode = SelectMode.valueOfSelectNum(selectNum).run();

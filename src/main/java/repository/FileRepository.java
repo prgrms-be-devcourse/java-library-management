@@ -15,7 +15,7 @@ public class FileRepository implements Repository {
     File file = new File("src/main/resources/library.csv");
     List<Book> books = new ArrayList<>();
 
-    public FileRepository() throws IOException {
+    public FileRepository() {
         fileToList(books, file);
         countId = books.get(books.size() - 1).getId() + 1;
         organizeState(books);
@@ -23,7 +23,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void register(Book book) throws IOException {
+    public void register(Book book) {
         books.add(book);
         updateFile(books, file);
     }
@@ -91,7 +91,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void lostBook(int id) throws IOException {
+    public void lostBook(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .orElse(null);
@@ -112,7 +112,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void deleteBook(int id) throws IOException {
+    public void deleteBook(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .orElse(null);
@@ -127,19 +127,23 @@ public class FileRepository implements Repository {
         }
     }
 
-    public static void updateFile(List<Book> books, File file) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        books.forEach(book -> {
-            try {
-                bw.write(book.fileLine());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        bw.close();
+    public static void updateFile(List<Book> books, File file) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            books.forEach(book -> {
+                try {
+                    bw.write(book.fileLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void fileToList(List<Book> books, File file) throws IOException {
+    private void fileToList(List<Book> books, File file) {
         String line = "";
 
         while((line = sc.nextLine()) != null) {

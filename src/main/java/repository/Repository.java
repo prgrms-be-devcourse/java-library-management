@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Repository {
 
-    public void register(Book book) throws IOException;
+    public void register(Book book);
 
     public void printList();
     public void search(String titleWord);

@@ -16,7 +16,7 @@ public class Service {
         this.repository = repository;
     }
 
-    public void register() throws IOException {
+    public void register() {
         Book book = getBook();
         repository.register(book);
         System.out.println(ExecuteMessage.COMPLETE_REGISTER.getMessage());
@@ -58,13 +58,13 @@ public class Service {
         repository.returnBook(id);
     }
 
-    public void lostBook() throws IOException {
+    public void lostBook() {
         System.out.println(QuestionMessage.LOST_ID.getMessage());
         int id = sc.nextInt();
         repository.lostBook(id);
     }
 
-    public void deleteBook() throws IOException {
+    public void deleteBook() {
         System.out.println(QuestionMessage.DELETE_ID.getMessage());
         int id = sc.nextInt();
         repository.deleteBook(id);
