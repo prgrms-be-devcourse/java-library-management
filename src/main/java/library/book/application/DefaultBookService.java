@@ -60,22 +60,25 @@ public class DefaultBookService implements BookService {
 	@Override
 	public void rentBook(long id) {
 		Book book = bookRepository.getById(id);
-
 		book.rent();
+
+		bookRepository.save(book);
 	}
 
 	@Override
 	public void returnBook(long id) {
 		Book book = bookRepository.getById(id);
-
 		book.returnBook();
+
+		bookRepository.save(book);
 	}
 
 	@Override
 	public void registerAsLost(long id) {
 		Book book = bookRepository.getById(id);
-
 		book.registerAsLost();
+
+		bookRepository.save(book);
 	}
 
 	@Override
