@@ -18,12 +18,10 @@ public class FileRepository implements Repository {
     private static int sequance;
     private List<Book> storage = new ArrayList<>();
 
-    private static File DB;
-    private final ObjectMapper mapper;
+    private final File DB = new File(System.getProperty("user.dir") + "/books.json");
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public FileRepository() {
-        DB = new File(System.getProperty("user.dir") + "/books.json");
-        mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
         try {
