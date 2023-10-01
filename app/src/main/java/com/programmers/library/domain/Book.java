@@ -26,6 +26,15 @@ public class Book {
         this.status = status;
     }
 
+    public Book(int id, String name, String author, int pageCount, BookStatus status, LocalDateTime returnedAt) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.pageCount = pageCount;
+        this.status = status;
+        this.returnedAt = returnedAt;
+    }
+
     public boolean isIdEqualTo(int id) {
         return this.id == id;
     }
@@ -43,11 +52,11 @@ public class Book {
             throw new IllegalStateException("[System] 분실된 도서입니다.");
         }
 
-        if (!isOverFiveMinutesSinceReturned()) {
+        if (!isBorrowable()) {
             throw new IllegalStateException("[System] 정리중인 도서입니다.");
         }
 
-        this.status = BookStatus.BORROWED;
+        status = BookStatus.BORROWED;
     }
 
     public void returned() {
@@ -55,12 +64,12 @@ public class Book {
             throw new IllegalStateException("[System] 원래 대여가 가능한 도서입니다.");
         }
 
-        if (status == BookStatus.BORROWABLE || !isOverFiveMinutesSinceReturned()) {
+        if (status == BookStatus.BORROWABLE || !isBorrowable()) {
             throw new IllegalStateException("[System] 이미 반납된 도서입니다.");
         }
 
-        this.returnedAt = LocalDateTime.now();
-        this.status = BookStatus.ORGANIZING;
+        returnedAt = LocalDateTime.now();
+        status = BookStatus.ORGANIZING;
     }
 
     public void lost() {
@@ -68,24 +77,27 @@ public class Book {
             throw new IllegalStateException("[System] 이미 분실 처리된 도서입니다.");
         }
 
-        this.status = BookStatus.LOST;
+        status = BookStatus.LOST;
+    }
+
+    public void borrowable() {
+        status = BookStatus.BORROWABLE;
     }
 
     @JsonIgnore
-    public boolean isOverFiveMinutesSinceReturned() {
+    public boolean isBorrowable() {
         if (returnedAt == null) {
             return true;
         }
-
         long minutesElapsed = Duration.between(returnedAt, LocalDateTime.now()).toMinutes();
         return minutesElapsed > 5;
     }
 
-    //! 테스트용 Getter
-
     public int getId() {
         return id;
     }
+
+    //! 테스트용 Getter
 
     public String getName() {
         return name;

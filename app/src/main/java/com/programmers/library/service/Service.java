@@ -25,14 +25,23 @@ public class Service {
         ));
     }
 
-    //TODO 정리됐는지 체크
-    public List<Book> getBooks() {
-        return repository.findAll();
+    private void updateStatusIfBorrowable(Book book) {
+        if (book.isBorrowable()) {
+            book.borrowable();
+            repository.update(book.getId(), book);
+        }
     }
 
-    //TODO 정리됐는지 체크
+    public List<Book> getBooks() {
+        List<Book> books = repository.findAll();
+        books.forEach(this::updateStatusIfBorrowable);
+        return books;
+    }
+
     public List<Book> getBooksByName(String name) {
-        return repository.findAllByName(name);
+        List<Book> books = repository.findAllByName(name);
+        books.forEach(this::updateStatusIfBorrowable);
+        return books;
     }
 
     private Book getBook(int id) {

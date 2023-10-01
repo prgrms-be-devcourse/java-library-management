@@ -10,6 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -169,5 +171,38 @@ public class ServiceTest {
 
         Optional<Book> book = repository.findOneById(1);
         assertTrue(book.isEmpty());
+    }
+
+    @Test
+    @DisplayName("도서 전체 목록 조회 시 반납된 지 5분이 지난 도서는 대여 가능해야 합니다")
+    public void testGetBooks() {
+        CreateBookRequestDto request1 = CreateBookRequestDto.fixture();
+        CreateBookRequestDto request2 = CreateBookRequestDto.fixture();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tenMinutesAgo = now.minus(10, ChronoUnit.MINUTES);
+        repository.save(new Book(
+                1,
+                request1.getName(),
+                request1.getAuthor(),
+                request1.getPageCount(),
+                BookStatus.ORGANIZING,
+                LocalDateTime.now())
+        );
+        repository.save(new Book(
+                2,
+                "도서 검색",
+                request2.getAuthor(),
+                request2.getPageCount(),
+                BookStatus.ORGANIZING,
+                tenMinutesAgo)
+        );
+
+        List<Book> books = service.getBooks();
+
+        assertEquals(2, books.size());
+        assertEquals(1, books.get(0).getId());
+        assertEquals(BookStatus.ORGANIZING, books.get(0).getStatus());
+        assertEquals(2, books.get(1).getId());
+        assertEquals(BookStatus.BORROWABLE, books.get(1).getStatus());
     }
 }
