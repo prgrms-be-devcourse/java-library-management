@@ -205,7 +205,7 @@ abstract class BookManagerTest {
     @DisplayName("도서 대여 테스트")
     class TestRentById {
         @Test
-        @DisplayName("도서 대여 시 해당 도서는 대여 중으로 상태가 변경돼야 한다")
+        @DisplayName("도서 대여 시 해당 도서는 대여 중으로 상태가 변경돼야 한다.")
         void testRentByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
@@ -292,7 +292,7 @@ abstract class BookManagerTest {
     @DisplayName("도서 반납 테스트")
     class TestReturnById {
         @Test
-        @DisplayName("도서 반납 시 해당 도서는 도서 정리 중으로 상태가 변경돼야 한다")
+        @DisplayName("도서 반납 시 해당 도서는 도서 정리 중으로 상태가 변경돼야 한다.")
         void testReturnByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
@@ -377,7 +377,7 @@ abstract class BookManagerTest {
     @DisplayName("도서 분실 테스트")
     class TestLossById {
         @Test
-        @DisplayName("도서 분실 시 해당 도서는 분실로 상태가 변경돼야 한다")
+        @DisplayName("도서 분실 시 해당 도서는 분실로 상태가 변경돼야 한다.")
         void testLossByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
@@ -457,6 +457,86 @@ abstract class BookManagerTest {
 
             // then
             assertThat(msg).isEqualTo(ALREADY_LOST_BOOK.msg());
+        }
+    }
+
+    @Nested
+    @Order(8)
+    @DisplayName("도서 삭제 테스트")
+    class TestDeleteById {
+        @Test
+        @DisplayName("상태에 상관없이 삭제 시 도서 리스트에서 삭제돼야 한다.")
+        void testDeleteByIdChangeState() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
+            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
+            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+            Book lostBook = new Book(4, "test4", "tester", 444, 4L);
+
+            List<Book> initData = List.of(availableBook, processingBook, loanBook, lostBook);
+
+            bookManager.init(initData);
+
+            availableBook.setState(BookState.AVAILABLE);
+            processingBook.setState(BookState.PROCESSING);
+            loanBook.setState(BookState.LOAN);
+            lostBook.setState(BookState.LOST);
+
+            // when
+            bookManager.deleteById(availableBook.getId());
+            bookManager.deleteById(processingBook.getId());
+            bookManager.deleteById(loanBook.getId());
+            bookManager.deleteById(lostBook.getId());
+
+            // then
+            List<Book> bookList = bookManager.getBookList();
+
+            assertThat(bookList).doesNotContainAnyElementsOf(initData);
+        }
+
+        @Test
+        @DisplayName("도서 삭제 시 성공 메시지를 반환해야 한다.")
+        void testDeleteByIdSuccess() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
+            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
+            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+            Book lostBook = new Book(4, "test4", "tester", 444, 4L);
+
+            List<Book> initData = List.of(availableBook, processingBook, loanBook, lostBook);
+
+            bookManager.init(initData);
+
+            availableBook.setState(BookState.AVAILABLE);
+            processingBook.setState(BookState.PROCESSING);
+            loanBook.setState(BookState.LOAN);
+            lostBook.setState(BookState.LOST);
+
+            // when
+            List<String> msgList = initData.stream()
+                    .map(book -> bookManager.deleteById(book.getId()))
+                    .toList();
+
+            // then
+            assertThat(msgList).allMatch(SUCCESS_DELETE_BOOK.msg()::equals);
+        }
+
+        @Test
+        @DisplayName("등록되지 않은 id의 도서 삭제 시 실패 메시지를 반환해야 한다.")
+        void testDeleteByIdFailNotExistId() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book book = new Book(1, "test1", "tester", 11, 1111L);
+
+            bookManager.init(List.of(book));
+
+            // when
+            String msg = bookManager.deleteById(book.getId() + 1);
+
+            // then
+            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
         }
     }
 }
