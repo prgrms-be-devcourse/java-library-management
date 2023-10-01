@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 @DisplayName("[Book Test] - Domain")
 class BookTest {
@@ -46,10 +45,10 @@ class BookTest {
 		Book book = A.toEntity();
 
 		//when
-		Executable when = book::rent;
+		book.rent();
 
 		//then
-		assertDoesNotThrow(when);
+		assertThat(book.getBookState()).isEqualTo(RENTED);
 	}
 
 	@Test
@@ -60,10 +59,11 @@ class BookTest {
 		book.rent();
 
 		//when
-		Executable when = book::returnBook;
+		book.returnBook();
 
 		//then
-		assertDoesNotThrow(when);
+		assertThat(book.getBookState()).isEqualTo(CLEANING);
+		assertThat(book.getCleaningEndAt()).isNotNull();
 	}
 
 	@Test
@@ -73,9 +73,9 @@ class BookTest {
 		Book book = A.toEntity();
 
 		//when
-		Executable when = book::registerAsLost;
+		book.registerAsLost();
 
 		//then
-		assertDoesNotThrow(when);
+		assertThat(book.getBookState()).isEqualTo(LOST);
 	}
 }
