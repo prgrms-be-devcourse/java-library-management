@@ -24,9 +24,8 @@ public class GeneralRepository implements Repository{
 
     @Override
     public void load(List<Book> bookList) {
-        try {
-            // CSV 파일을 읽어오는 CSVReader 객체 생성
-            CSVReader csvReader = new CSVReader(new FileReader(csvFileName));
+        // CSV 파일을 읽어오는 CSVReader 객체 생성
+        try(CSVReader csvReader = new CSVReader(new FileReader(csvFileName));) {
 
             // CSV 파일 내용을 읽어오기
             List<String[]> records = csvReader.readAll();
@@ -41,7 +40,6 @@ public class GeneralRepository implements Repository{
                 if(Objects.equals(condition, ORGANIZING.getCondition())) condition = AVAILABLE.getCondition();
                 bookList.add(new Book(id, title, author, page, condition));
             }
-            csvReader.close();
         } catch (IOException | CsvException e) {
             throw new LoadException("CSV 파일을 읽어올 수 없습니다");
         }
