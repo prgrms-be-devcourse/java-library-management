@@ -82,7 +82,7 @@ public class TestRepository implements Repository {
             if (book.getId() == returnId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
-                    book.setCondition(AVAILABLE.getCondition());
+                    book.setCondition(ORGANIZING.getCondition());
                     message = "도서가 반납 처리 되었습니다";
                 } else { // 대여 가능
                     message = "원래 대여가 가능한 도서입니다.";
