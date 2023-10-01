@@ -11,9 +11,12 @@ import static com.dev_course.book.BookState.*;
 public class ListBookManager implements BookManager {
     private static final int PROCESSING_COST = 300_000;
     private final List<Book> bookList = new ArrayList<>();
+    // TODO : BookManager 와 Message 문자열을 분리
+    private final String infoDelim = "\n------------------------------\n";
     private int id;
 
-    public ListBookManager(Collection<Book> data) {
+    @Override
+    public void init(Collection<Book> data) {
         bookList.addAll(data);
 
         id = bookList.stream()
@@ -52,7 +55,7 @@ public class ListBookManager implements BookManager {
     public String getInfo() {
         return bookList.stream()
                 .map(Book::toString)
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining(infoDelim));
     }
 
     @Override
@@ -60,7 +63,7 @@ public class ListBookManager implements BookManager {
         return bookList.stream()
                 .filter(book -> book.getTitle().contains(title))
                 .map(Book::toString)
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining(infoDelim));
     }
 
     @Override

@@ -61,8 +61,6 @@ public class Book {
                 제목 : %s
                 작가 이름 : %s
                 페이지 수 : %s 페이지
-                상태 : %s
-                ------------------------------
-                """, id, title, author, pages, state.label());
+                상태 : %s""", id, title, author, pages, state.label());
     }
 }
