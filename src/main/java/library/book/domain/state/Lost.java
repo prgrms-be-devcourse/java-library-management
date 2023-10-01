@@ -20,4 +20,9 @@ public class Lost implements State {
 	public void validateIsAbleToRent() {
 		throw BookException.of(NOW_LOST);
 	}
+
+	@Override
+	public void validateIsAbleToLost() {
+		throw BookException.of(ALREADY_LOST);
+	}
 }

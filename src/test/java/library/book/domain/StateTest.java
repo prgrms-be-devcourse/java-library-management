@@ -86,4 +86,24 @@ class StateTest {
 				.hasMessageContaining(ALREADY_AVAILABLE_RENT.getMessage());
 		}
 	}
+
+	@Nested
+	@DisplayName("[분실처리 가능한지 검증한다]")
+	class validateIsAbleToLost {
+
+		@Test
+		@DisplayName("[이미 분실처리 상태여서 검증에 실패한다]")
+		void failWhenStateIsAvailableRent() {
+			//given
+			State state = new Lost();
+
+			//when
+			ThrowingCallable when = state::validateIsAbleToLost;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(ALREADY_LOST.getMessage());
+		}
+	}
 }
