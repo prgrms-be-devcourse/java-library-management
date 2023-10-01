@@ -11,7 +11,6 @@ import static com.dev_course.book.BookState.*;
 public class ListBookManager implements BookManager {
     private static final int PROCESSING_COST = 300_000;
     private final List<Book> bookList = new ArrayList<>();
-    // TODO : BookManager 와 Message 문자열을 분리
     private final String infoDelim = "\n------------------------------\n";
     private int id;
 
