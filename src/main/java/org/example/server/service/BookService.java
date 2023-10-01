@@ -22,7 +22,6 @@ public class BookService implements Service {
     public void register(String name, String author, int pages) {
         Book book = new Book(name, author, pages);
         repository.create(book);
-        repository.save();
     }
 
     public String readAll() {
@@ -39,7 +38,6 @@ public class BookService implements Service {
         if (bookState.equals(BookState.BORROWED) || bookState.equals(BookState.LOADING) || bookState.equals(BookState.LOST))
             throw bookState.throwStatusException();
         book.state = BookState.BORROWED.name();
-        repository.save();
     }
 
     public void restore(int bookId) {
@@ -53,7 +51,6 @@ public class BookService implements Service {
         Book.calendar.setTime(curr);
         Book.calendar.add(Calendar.MINUTE, 5);
         book.endLoadTime = Book.format.format(new Date(Book.calendar.getTimeInMillis()));
-        repository.save();
     }
 
     public void lost(int bookId) {
@@ -65,12 +62,10 @@ public class BookService implements Service {
             book.endLoadTime = "";
         }
         book.state = BookState.LOST.name();
-        repository.save();
     }
 
     public void delete(int bookId) {
         repository.getById(bookId);
         repository.delete(bookId);
-        repository.save();
     }
 }

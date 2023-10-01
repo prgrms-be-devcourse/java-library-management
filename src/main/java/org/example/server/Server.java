@@ -35,15 +35,21 @@ public class Server {
 
     private static Controller controller;
     private static Repository repository;
+    private static int saveTimer; // 요청이 5번 들어오면 기존 데이터를 저장하고 초기화
 
     public static void setServer(String mode) {
         repository = ModeType.valueOf(mode).getRepository();
         Service service = new BookService(repository);
         controller = new BookController(service);
+        saveTimer = 0;
     } // 모드에 따라 레포지토리 결정. 외부(Server)에서 레이어 클래스 의존성을 주입하고자 했습니다.
 
     public static String requestMethod(Request request) {
         try {
+            if (++saveTimer == 5) { // 5번씩 요청을 받으면 파일에 데이터 저장
+                saveTimer = 0;
+                saveData();
+            }
             return controller.mapController(request); // 요청 성공 응답
         } catch (RuntimeException e) {
             return e.getMessage(); // 요청 실패 응답

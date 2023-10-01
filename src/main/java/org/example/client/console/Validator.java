@@ -8,14 +8,14 @@ import java.util.regex.Pattern;
 // 통과하면 이 메서드를 사용하는 입장에서 간결해보이기 위해 다시 그대로 검사한 데이터를 내보낸다.
 // int는 제외) String으로 받고 int로 내보낸다.
 public class Validator {
-    public static RequestData validateBook(String[] input) {
+    protected static RequestData validateBook(String[] input) {
         String name = validateNameAndAuthor(input[0]);
         String author = validateNameAndAuthor(input[1]);
         int pages = validateIdAndPages(input[2]);
         return new RequestData(name, author, pages);
     }
 
-    public static String validateNameAndAuthor(String input) {
+    protected static String validateNameAndAuthor(String input) {
         if (Pattern.matches("[a-zA-Z0-9]*$", input) && !input.isEmpty() && input.length() < 100) {
             return input;
         }
@@ -27,7 +27,7 @@ public class Validator {
         };
     }
 
-    public static int validateIdAndPages(String inputStr) {
+    protected static int validateIdAndPages(String inputStr) {
         if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input < 5000) {
@@ -42,7 +42,7 @@ public class Validator {
         };
     }
 
-    public static int validateSelectNum(int selectCount, String inputStr) {
+    protected static int validateSelectNum(int selectCount, String inputStr) {
         if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input <= selectCount) {
