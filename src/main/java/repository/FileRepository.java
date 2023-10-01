@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class FileRepository implements BookRepository {
     private final FileManager fileManager;
-    private List<Book> bookList;
+    private final List<Book> bookList;
 
     public FileRepository(String path) {
         fileManager = new FileManager(path);

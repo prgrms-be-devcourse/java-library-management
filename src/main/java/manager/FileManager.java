@@ -19,7 +19,7 @@ public class FileManager {
     public List<Book> loadData() {
         List<Book> bookList = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
-            String line="";
+            String line;
             while ((line = br.readLine())!=null){
                 String[] data = line.split(",");
                 LocalDateTime returnTime = null;

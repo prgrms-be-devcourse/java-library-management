@@ -9,5 +9,4 @@ public enum Status {
     public String getLabel(){
         return label;
     }
-
 }

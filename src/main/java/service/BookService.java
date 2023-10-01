@@ -7,6 +7,7 @@ import repository.BookRepository;
 
 import java.util.List;
 
+import static domain.Status.CLEANING;
 import static domain.Status.LOST;
 
 public class BookService {
@@ -25,20 +26,13 @@ public class BookService {
     // [2] 도서 목록 조회
     public void showBookList() {
         List<Book> bookList = repository.getBookList();
-        for (Book book:bookList) {
-            book.isCleaning();
-            book.printBookInfo();
-        }
+        printBookList(bookList);
     }
 
     // [3] 도서 검색
     public void findBookByTitle(String title){
         List<Book> bookList = repository.findByTitle(title);
-
-        for (Book book:bookList) {
-            book.isCleaning();
-            book.printBookInfo();
-        }
+        printBookList(bookList);
     }
 
     // [4] 도서 대여
@@ -79,5 +73,13 @@ public class BookService {
     public void removeBook(Integer id){
         Book book = repository.findById(id).orElseThrow(NotExistBookIdException::new);
         repository.remove(book);
+    }
+
+    private void printBookList(List<Book> bookList) {
+        for (Book book: bookList) {
+            if (book.getStatus()==CLEANING)
+                book.isCleaning();
+            book.printBookInfo();
+        }
     }
 }

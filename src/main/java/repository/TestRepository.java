@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestRepository implements BookRepository {
-    private List<Book> bookList = new ArrayList<>();
+    private final List<Book> bookList = new ArrayList<>();
     @Override
     public void register(Book book) {
         bookList.add(book);
