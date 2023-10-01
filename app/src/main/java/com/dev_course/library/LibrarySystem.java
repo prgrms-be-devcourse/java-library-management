@@ -74,7 +74,7 @@ public class LibrarySystem {
     }
 
     private void exit() {
-        dataManager.save();
+        dataManager.save(bookManager.getBookList());
 
         writer.println(EXIT.msg());
     }
