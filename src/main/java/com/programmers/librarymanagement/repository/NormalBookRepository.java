@@ -9,8 +9,8 @@ import java.util.*;
 
 public class NormalBookRepository implements BookRepository{
 
-    private static final CsvFileIo csvFileIo = new CsvFileIo();
-    private static final Map<Long, Book> libraryStorage = addBookByFile(csvFileIo.readCsv());
+    private final CsvFileIo csvFileIo = new CsvFileIo();
+    private final Map<Long, Book> libraryStorage = addBookByFile(csvFileIo.readCsv());
 
     @Override
     public void addBook(Book book) {
