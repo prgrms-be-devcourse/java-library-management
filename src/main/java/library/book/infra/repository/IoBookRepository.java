@@ -46,6 +46,7 @@ public class IoBookRepository implements BookRepository {
 	@Override
 	public void save(final Book book) {
 		bookStorage.put(String.valueOf(book.getId()), book);
+		updateJsonFile();
 	}
 
 	@Override
@@ -86,10 +87,7 @@ public class IoBookRepository implements BookRepository {
 				() -> {
 					throw BookException.of(NOT_FOUND);
 				});
-	}
 
-	@Override
-	public void updateData() {
 		updateJsonFile();
 	}
 

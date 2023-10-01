@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -26,10 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
-import library.book.domain.State;
-import library.book.domain.constants.BookState;
-import library.book.domain.state.Cleaning;
-import library.book.domain.state.Rented;
 import library.book.exception.BookException;
 import library.book.fixture.BookFixture;
 
@@ -69,9 +65,6 @@ class IoBookRepositoryTest {
 			Optional<Book> findBook = ioBookRepository.findById(1L);
 			assertThat(findBook).isPresent();
 
-			State go = new Rented();
-			BookState bookState = go.getBookState();
-
 			Book book = findBook.get();
 			assertAll(
 				() -> assertThat(book.getId()).isEqualTo(1L),
@@ -103,7 +96,7 @@ class IoBookRepositoryTest {
 
 		@Test
 		@DisplayName("[Success]")
-		void success() {
+		void success() throws IOException {
 			//given
 			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
 			Book book = A.toEntity();
@@ -114,6 +107,7 @@ class IoBookRepositoryTest {
 			//then
 			Optional<Book> findBook = bookRepository.findById(A.getId());
 			assertThat(findBook).contains(book);
+			assertJsonFile(script -> assertThat(script).isNotEqualTo("{}"));
 		}
 	}
 
@@ -192,55 +186,12 @@ class IoBookRepositoryTest {
 	}
 
 	@Nested
-	@DisplayName("[updateData 테스트]")
-	class updateDataTest {
-
-		@Test
-		@DisplayName("[Success]")
-		void success() throws IOException {
-			//given
-			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
-			Book book = A.toEntity();
-			bookRepository.save(book);
-
-			//when
-			bookRepository.updateData();
-
-			//then
-			ObjectMapper objectMapper = new ObjectMapper();
-			FileInputStream inputStream = new FileInputStream(FILE_PATH);
-			Object json = objectMapper.readValue(inputStream, Object.class);
-
-			String actual = json.toString();
-			assertThat(actual).isNotEqualTo("{}");
-
-			inputStream.close();
-		}
-
-		@Test
-		@DisplayName("[Fail] 올바르지 않은 파일 경로로 실패한다")
-		void failWhenWrongFilePath() throws Exception {
-			//given
-			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
-			setWrongFilePath(bookRepository);
-
-			//when
-			ThrowingCallable when = bookRepository::updateData;
-
-			//then
-			assertThatThrownBy(when)
-				.isInstanceOf(BookException.class)
-				.hasMessageContaining(FILE_WRITE_FAIL.getMessage());
-		}
-	}
-
-	@Nested
 	@DisplayName("[deleteById 테스트]")
 	class deleteByIdTest {
 
 		@Test
 		@DisplayName("[Success]")
-		void success() {
+		void success() throws IOException {
 			//given
 			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
 			bookRepository.save(A.toEntity());
@@ -251,6 +202,7 @@ class IoBookRepositoryTest {
 			//then
 			Optional<Book> findBook = bookRepository.findById(A.getId());
 			assertThat(findBook).isNotPresent();
+			assertJsonFile(script -> assertThat(script).isEqualTo("{}"));
 		}
 
 		@Test
@@ -267,6 +219,7 @@ class IoBookRepositoryTest {
 				.isInstanceOf(BookException.class)
 				.hasMessageContaining(NOT_FOUND.getMessage());
 		}
+
 	}
 
 	private void assertBook(Book actual, Book expected) {
@@ -284,9 +237,11 @@ class IoBookRepositoryTest {
 			.forEach(fixture -> bookRepository.save(fixture.toEntity()));
 	}
 
-	private void setWrongFilePath(BookRepository bookRepository) throws NoSuchFieldException, IllegalAccessException {
-		Field field = bookRepository.getClass().getDeclaredField("filePath");
-		field.setAccessible(true);
-		field.set(bookRepository, "/hello/hello.json");
+	private void assertJsonFile(final Consumer<String> asserter) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		try (FileInputStream inputStream = new FileInputStream(FILE_PATH)) {
+			Object script = objectMapper.readValue(inputStream, Object.class);
+			asserter.accept(script.toString());
+		}
 	}
 }
