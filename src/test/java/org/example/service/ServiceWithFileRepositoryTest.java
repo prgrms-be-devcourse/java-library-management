@@ -87,11 +87,10 @@ class ServiceWithFileRepositoryTest {
         libraryManagementService.registerBook(createBook());
 
         //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
+        libraryManagementService.borrowBook(1);
 
         //then
         assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.BORROWING);
-        assertEquals(exceptionCode, Optional.empty());
     }
 
     @Test
@@ -100,11 +99,12 @@ class ServiceWithFileRepositoryTest {
         //given
         libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.ALREADY_BORROWED.getMessage());
+        //when, then
+        try {
+            libraryManagementService.borrowBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.ALREADY_BORROWED.getMessage());
+        }
     }
 
     @Test
@@ -113,11 +113,12 @@ class ServiceWithFileRepositoryTest {
         //given
         libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING, LocalDateTime.now()));
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.BEING_ORGANIZED.getMessage());
+        //when, then
+        try {
+            libraryManagementService.borrowBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.BEING_ORGANIZED.getMessage());
+        }
     }
 
     @Test
@@ -126,11 +127,12 @@ class ServiceWithFileRepositoryTest {
         //given
         libraryManagementService.registerBook(createBook(BookStatusType.LOST));
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.LOST.getMessage());
+        //when, then
+        try {
+            libraryManagementService.borrowBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.LOST.getMessage());
+        }
     }
 
     @Test
@@ -140,11 +142,10 @@ class ServiceWithFileRepositoryTest {
         libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
 
         //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.returnBook(1);
+        libraryManagementService.returnBook(1);
 
         //then
         assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.ORGANIZING);
-        assertEquals(exceptionCode, Optional.empty());
     }
 
     @Test
@@ -153,11 +154,12 @@ class ServiceWithFileRepositoryTest {
         //given
         libraryManagementService.registerBook(createBook(BookStatusType.BORROW_AVAILABE));
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.returnBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.AVAILABLE_FOR_BORROW.getMessage());
+        //when, then
+        try {
+            libraryManagementService.returnBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.AVAILABLE_FOR_BORROW.getMessage());
+        }
     }
 
     @Test
@@ -167,11 +169,10 @@ class ServiceWithFileRepositoryTest {
         libraryManagementService.registerBook(createBook());
 
         //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.lostBook(1);
+        libraryManagementService.lostBook(1);
 
         //then
         assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.LOST);
-        assertEquals(exceptionCode, Optional.empty());
     }
 
     @Test
@@ -180,11 +181,12 @@ class ServiceWithFileRepositoryTest {
         //given
         libraryManagementService.registerBook(createBook(BookStatusType.LOST));
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.lostBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.LOST.getMessage());
+        //when, then
+        try {
+            libraryManagementService.lostBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.LOST.getMessage());
+        }
     }
 
     @Test
@@ -194,11 +196,10 @@ class ServiceWithFileRepositoryTest {
         libraryManagementService.registerBook(createBook());
 
         //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.deleteBook(1);
+        libraryManagementService.deleteBook(1);
 
         //then
         assertFalse(repository.findBookById(1).isPresent());
-        assertEquals(exceptionCode, Optional.empty());
     }
 
     @Test
@@ -206,11 +207,12 @@ class ServiceWithFileRepositoryTest {
     void deleteBook_Fail_NotExist() {
         //given
 
-        //when
-        Optional<ExceptionCode> exceptionCode = libraryManagementService.lostBook(1);
-
-        //then
-        assertEquals(exceptionCode.get().getMessage(), ExceptionCode.INVALID_BOOK.getMessage());
+        //when, then
+        try {
+            libraryManagementService.deleteBook(1);
+        } catch (IllegalArgumentException e) {
+            assertEquals(e.getMessage(), ExceptionCode.INVALID_BOOK.getMessage());
+        }
     }
 
     private Book createBook() {

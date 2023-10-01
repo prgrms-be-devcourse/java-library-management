@@ -31,51 +31,52 @@ public class LibraryManagementService {
     }
 
     // 도서 대여
-    public Optional<ExceptionCode> borrowBook(Integer bookId) {
+    public void borrowBook(Integer bookId) {
         Optional<Book> bookToBorrow = repository.findBookById(bookId);
-        return bookToBorrow.map(book -> {
+        bookToBorrow.ifPresent(book -> {
             if (book.canBorrow()) {
                 repository.updateBookStatus(bookId, BookStatusType.BORROWING);
-                return Optional.<ExceptionCode>empty();
             } else {
-                return Optional.of(ExceptionCode.getException(book.getStatus()));
+                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
             }
-        }).orElse(Optional.of(ExceptionCode.INVALID_BOOK));
+        });
+        bookToBorrow.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
     }
 
     // 도서 반납
-    public Optional<ExceptionCode> returnBook(Integer bookId) {
+    public void returnBook(Integer bookId) {
         Optional<Book> bookToReturn = repository.findBookById(bookId);
-        return bookToReturn.map(book -> {
+        bookToReturn.ifPresent(book -> {
             if (book.canReturn()) {
                 repository.updateBookStatus(bookId, BookStatusType.ORGANIZING);
-                return Optional.<ExceptionCode>empty();
             } else {
-                return Optional.of(ExceptionCode.getException(book.getStatus()));
+                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
             }
-        }).orElse(Optional.of(ExceptionCode.INVALID_BOOK));
+        });
+        bookToReturn.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
     }
 
     // 도서 분실
-    public Optional<ExceptionCode> lostBook(Integer bookId) {
+    public void lostBook(Integer bookId) {
         Optional<Book> lostBook = repository.findBookById(bookId);
-        return lostBook.map(book -> {
+        lostBook.ifPresent(book -> {
             if (book.canLost()) {
                 repository.updateBookStatus(bookId, BookStatusType.LOST);
-                return Optional.<ExceptionCode>empty();
             } else {
-                return Optional.of(ExceptionCode.getException(book.getStatus()));
+                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
             }
-        }).orElse(Optional.of(ExceptionCode.INVALID_BOOK));
+        });
+        lostBook.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+
     }
 
     // 도서 삭제
-    public Optional<ExceptionCode> deleteBook(Integer bookId) {
+    public void deleteBook(Integer bookId) {
         Optional<Book> bookToDelete = repository.findBookById(bookId);
-        return bookToDelete.map(book -> {
+        bookToDelete.ifPresent(book -> {
             repository.deleteBookById(bookId);
-            return Optional.<ExceptionCode>empty();
-        }).orElse(Optional.of(ExceptionCode.INVALID_BOOK));
+        });
+        bookToDelete.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
     }
 
     public Integer getNextBookId() {
