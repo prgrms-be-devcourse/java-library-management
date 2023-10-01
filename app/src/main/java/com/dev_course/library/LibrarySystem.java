@@ -159,7 +159,12 @@ public class LibrarySystem {
 
     private String readInput() {
         writer.print("> ");
-        return reader.readLine();
+
+        String input = reader.readLine();
+
+        writer.println();
+
+        return input;
     }
 
     private String printAndReadInput(LibraryMessage msg) {
