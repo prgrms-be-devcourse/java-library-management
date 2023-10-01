@@ -119,32 +119,6 @@ public class Book {
         return returnedAt;
     }
 
-    //! json 매퍼용 Setter
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setPageCount(int pageCount) {
-        this.pageCount = pageCount;
-    }
-
-    public void setStatus(BookStatus status) {
-        this.status = status;
-    }
-
-    public void setReturnedAt(LocalDateTime returnedAt) {
-        this.returnedAt = returnedAt;
-    }
-
     @Override
     public String toString() {
         return "도서번호 : " + id + '\n' +

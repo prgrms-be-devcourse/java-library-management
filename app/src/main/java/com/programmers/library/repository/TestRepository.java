@@ -9,13 +9,12 @@ import java.util.stream.Collectors;
 
 public class TestRepository implements Repository {
 
-    private int sequance = 0;
+    private static int sequance = 0;
     private List<Book> storage = new ArrayList<>();
 
     @Override
     public int generateId() {
-        //TODO: 사이즈로 지정 시 삭제 시 버그 있음, 수정 필요
-        return storage.size() + 1;
+        return ++sequance;
     }
 
     @Override

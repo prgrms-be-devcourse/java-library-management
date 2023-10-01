@@ -4,16 +4,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.programmers.library.domain.Book;
+import com.programmers.library.dto.JsonBookDto;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FileRepository implements Repository {
 
-    private List<Book> storage;
+    private static int sequance;
+    private List<Book> storage = new ArrayList<>();
 
     private static File DB;
     private final ObjectMapper mapper;
@@ -24,8 +27,21 @@ public class FileRepository implements Repository {
         mapper.registerModule(new JavaTimeModule());
 
         try {
-            storage = mapper.readValue(DB, new TypeReference<List<Book>>() {
+            List<JsonBookDto> books = mapper.readValue(DB, new TypeReference<List<JsonBookDto>>() {
             });
+
+            for (JsonBookDto book : books) {
+                storage.add(new Book(
+                        book.getId(),
+                        book.getName(),
+                        book.getAuthor(),
+                        book.getPageCount(),
+                        book.getStatus(),
+                        book.getReturnedAt()
+                ));
+            }
+
+            sequance = books.size();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +49,7 @@ public class FileRepository implements Repository {
 
     private void saveToFile() {
         try {
-            mapper.writeValue(DB, mapper.writeValueAsString(storage));
+            mapper.writeValue(DB, storage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,8 +57,7 @@ public class FileRepository implements Repository {
 
     @Override
     public int generateId() {
-        //TODO: 수정 필요
-        return storage.size() + 1;
+        return ++sequance;
     }
 
     @Override
