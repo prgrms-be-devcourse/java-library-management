@@ -10,7 +10,7 @@ import java.util.Optional;
 public class TestBookRepository implements BookRepository {
 
     private static final List<Book> testStorage = new ArrayList<>();
-    private static long sequence = 0L;
+    private static long sequence = 1L;
 
     @Override
     public void addBook(Book book) {
