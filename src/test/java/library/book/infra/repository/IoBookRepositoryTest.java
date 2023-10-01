@@ -36,11 +36,10 @@ class IoBookRepositoryTest {
 
 	@AfterEach
 	void clearFile() throws IOException {
-		FileWriter fileWriter = new FileWriter(FILE_PATH);
-		fileWriter.write("{}");
-
-		fileWriter.flush();
-		fileWriter.close();
+		try (FileWriter fileWriter = new FileWriter(FILE_PATH)) {
+			fileWriter.write("{}");
+			fileWriter.flush();
+		}
 	}
 
 	@Nested
@@ -51,12 +50,10 @@ class IoBookRepositoryTest {
 		@DisplayName("[Success]")
 		void success() throws IOException {
 			//given
-			FileWriter fileWriter = new FileWriter(FILE_PATH);
-			fileWriter.write(
-				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookState\":\"RENTED\"}}");
-
-			fileWriter.flush();
-			fileWriter.close();
+			try (FileWriter fileWriter = new FileWriter(FILE_PATH)) {
+				fileWriter.write("{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookState\":\"RENTED\"}}");
+				fileWriter.flush();
+			}
 
 			//when
 			IoBookRepository ioBookRepository = new IoBookRepository(FILE_PATH);
