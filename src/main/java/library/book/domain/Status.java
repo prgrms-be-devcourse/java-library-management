@@ -34,12 +34,11 @@ public class Status {
 
 	}
 
-	public Status(BookStatus bookStatus, LocalDateTime cleaningEndTime) {
+	public Status(final BookStatus bookStatus, final LocalDateTime cleaningEndTime) {
 		this.bookStatus = bookStatus;
 		this.cleaningEndTime = cleaningEndTime;
 	}
 
-	//== Factory 메소드 ==//
 	public Status() {
 		this.bookStatus = AVAILABLE_RENT;
 		this.cleaningEndTime = null;
