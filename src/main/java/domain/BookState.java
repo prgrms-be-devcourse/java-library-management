@@ -13,8 +13,10 @@ public enum BookState {
     ORGANIZING("도서 정리중");
 
     private static final Map<String, BookState> BY_STRING =
-            Stream.of(values()).collect(Collectors.toMap(BookState::getState, e -> e));
+            Stream.of(values())
+                    .collect(Collectors.toMap(BookState::getState, stateEnum -> stateEnum));
     private final String state;
+
     BookState(String state) {
         this.state = state;
     }

@@ -64,6 +64,7 @@ public enum SelectMenu {
             Stream.of(values())
                     .collect(Collectors.toMap(SelectMenu :: getSelectNum, e -> e));
     private int selectNum;
+
     SelectMenu(int selectNum) {
         this.selectNum = selectNum;
     }

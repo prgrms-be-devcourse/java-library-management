@@ -1,6 +1,7 @@
 package thread;
 
 import domain.BookState;
+import exception.ThreadInterruptException;
 import repository.Book;
 
 import java.io.File;
@@ -24,8 +25,8 @@ public class NormalChangeStateThread extends Thread {
             Thread.sleep(300000);
             book.setState(BookState.AVAILABLE);
             updateFile(books, file);
-        } catch (InterruptedException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new ThreadInterruptException();
         }
     }
 }

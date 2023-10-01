@@ -12,14 +12,14 @@ public enum SelectMode {
     NORMAL_MODE(1) {
         @Override
         public Mode run() {
-            System.out.println(ExecuteMessage.NORMAL_MODE);
+            System.out.println(ExecuteMessage.NORMAL_MODE.getMessage());
             return new Mode(ModeType.NORMAL_MODE);
         }
     },
     TEST_MODE(2) {
         @Override
         public Mode run() {
-            System.out.println(ExecuteMessage.TEST_MODE);
+            System.out.println(ExecuteMessage.TEST_MODE.getMessage());
             return new Mode(ModeType.TEST_MODE);
         }
     };

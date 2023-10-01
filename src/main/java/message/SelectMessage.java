@@ -1,9 +1,11 @@
 package message;
 
 public enum SelectMessage {
-    MODE_SELECT_MESSAGE("Q. 모드를 선택해주세요.\r\n" +
-            "1. 일반 모드\r\n" +
-            "2. 테스트 모드\r\n"),
+    MODE_SELECT_MESSAGE("""
+            Q. 모드를 선택해주세요.
+            1. 일반 모드
+            2. 테스트 모드
+            """),
     FUNCTION_SELECT_MESSAGE("Q. 사용할 기능을 선택해주세요.\n" +
             "1. 도서 등록\n" +
             "2. 전체 도서 목록 조회\n" +
