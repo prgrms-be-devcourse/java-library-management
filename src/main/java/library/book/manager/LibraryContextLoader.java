@@ -6,9 +6,9 @@ import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.BookController;
 
-public abstract class LibraryLoader {
+public abstract class LibraryContextLoader {
 
-	private LibraryLoader() {}
+	private LibraryContextLoader() {}
 
 	public static BookController assembleBookController() {
 		InputHandler inputHandler = new ConsoleInputHandler();
