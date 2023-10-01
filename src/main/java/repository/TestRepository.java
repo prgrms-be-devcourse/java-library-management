@@ -10,26 +10,26 @@ import java.util.Objects;
 
 import static domain.BookCondition.*;
 
-public class TestRepository implements Repository{
+public class TestRepository implements Repository {
 
     @Override
-    public void load(List<Book> list) {
-        list.clear();
+    public void load(List<Book> bookList) {
+        bookList.clear();
     }
 
     @Override
-    public void save(int id, String title, String author, int page, List<Book> list) {
-        list.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
+    public void save(int id, String title, String author, int page, List<Book> bookList) {
+        bookList.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
     }
 
     @Override
-    public List<Book> findByTitle(String searchTitle, List<Book> list) {
+    public List<Book> findByTitle(String searchTitle, List<Book> bookList) {
         List<Book> foundBooks = new ArrayList<>();
 
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             String title = book.getTitle();
             // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
             if (title.toLowerCase().contains(searchTitle)) {
@@ -45,13 +45,13 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public String rentById(int rentId, List<Book> list) {
+    public String rentById(int rentId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == rentId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
@@ -72,13 +72,13 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public String returnById(int returnId, List<Book> list) {
+    public String returnById(int returnId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == returnId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
@@ -97,14 +97,14 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public String lostById(int lostId, List<Book> list) {
+    public String lostById(int lostId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
 
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == lostId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), LOST.getCondition())) {
@@ -123,15 +123,15 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public String deleteById(int deleteId, List<Book> list) {
+    public String deleteById(int deleteId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
 
-        Iterator<Book> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        Iterator<Book> bookIterator = bookList.iterator();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == deleteId) {
-                iterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs iterator 결정 이유
+                bookIterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs bookIterator 결정 이유
                 isBookExist = true;
                 message = "도서가 삭제 처리 되었습니다.";
                 break;

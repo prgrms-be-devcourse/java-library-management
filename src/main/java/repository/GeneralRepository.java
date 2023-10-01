@@ -22,7 +22,7 @@ public class GeneralRepository implements Repository{
     private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
 
     @Override
-    public void load(List<Book> list) {
+    public void load(List<Book> bookList) {
         try {
             // CSV 파일을 읽어오는 CSVReader 객체 생성
             CSVReader csvReader = new CSVReader(new FileReader(csvFileName));
@@ -36,7 +36,7 @@ public class GeneralRepository implements Repository{
                 String author = record[2];
                 int page = Integer.parseInt(record[3]);
                 String condition = record[4];
-                list.add(new Book(id, title, author, page, condition));
+                bookList.add(new Book(id, title, author, page, condition));
             }
             csvReader.close();
         } catch (IOException | CsvException e) {
@@ -45,10 +45,10 @@ public class GeneralRepository implements Repository{
     }
 
     @Override
-    public void save(int id, String title, String author, int page, List<Book> list) {
+    public void save(int id, String title, String author, int page, List<Book> bookList) {
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName, true), CSVFormat.DEFAULT)) {
 
-            list.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
+            bookList.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
             csvPrinter.printRecord(id, title, author, page, AVAILABLE.getCondition());
 
         } catch (IOException e) {
@@ -57,13 +57,13 @@ public class GeneralRepository implements Repository{
     }
 
     @Override
-    public List<Book> findByTitle(String searchTitle, List<Book> list) {
+    public List<Book> findByTitle(String searchTitle, List<Book> bookList) {
         List<Book> foundBooks = new ArrayList<>();
 
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             String title = book.getTitle();
             // title에서 검색어가 포함되어 있는지 확인 (대소문자 무시)
             if (title.toLowerCase().contains(searchTitle)) {
@@ -79,13 +79,13 @@ public class GeneralRepository implements Repository{
     }
 
     @Override
-    public String rentById(int rentId, List<Book> list) {
+    public String rentById(int rentId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == rentId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), AVAILABLE.getCondition())){
@@ -102,20 +102,20 @@ public class GeneralRepository implements Repository{
 
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
-        saveToCSV(list);
+        saveToCSV(bookList);
 
         return message;
     }
 
     //반납 하면 5분 동안 대여 불가능 한 상태로
     @Override
-    public String returnById(int returnId, List<Book> list) {
+    public String returnById(int returnId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == returnId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), RENTED.getCondition()) || Objects.equals(book.getCondition(), LOST.getCondition())) { //대여 중 or 분실됨이면 반납 가능
@@ -130,22 +130,22 @@ public class GeneralRepository implements Repository{
 
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
-        saveToCSV(list);
+        saveToCSV(bookList);
 
-        returnCondition(returnId, list);
+        returnCondition(returnId, bookList);
 
         return message;
     }
 
     @Override
-    public String lostById(int lostId, List<Book> list) {
+    public String lostById(int lostId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
 
-        Iterator<Book> iterator = list.iterator();
+        Iterator<Book> bookIterator = bookList.iterator();
 
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == lostId) {
                 isBookExist = true;
                 if(Objects.equals(book.getCondition(), LOST.getCondition())) {
@@ -160,21 +160,21 @@ public class GeneralRepository implements Repository{
 
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
-        saveToCSV(list);
+        saveToCSV(bookList);
 
         return message;
     }
 
     @Override
-    public String deleteById(int deleteId, List<Book> list) {
+    public String deleteById(int deleteId, List<Book> bookList) {
         String message = "";
         boolean isBookExist = false;
 
-        Iterator<Book> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Book book = iterator.next();
+        Iterator<Book> bookIterator = bookList.iterator();
+        while (bookIterator.hasNext()) {
+            Book book = bookIterator.next();
             if (book.getId() == deleteId) {
-                iterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs iterator 결정 이유
+                bookIterator.remove(); // delete Id를 가진 레코드를 삭제 -> enhanced for vs bookIterator 결정 이유
                 isBookExist = true;
                 message = "도서가 삭제 처리 되었습니다.";
                 break;
@@ -183,15 +183,15 @@ public class GeneralRepository implements Repository{
 
         if(!isBookExist) message = "존재하지 않는 도서번호 입니다.";
 
-        saveToCSV(list);
+        saveToCSV(bookList);
 
         return message;
     }
 
     //애플리케이션 종료 시 도서 관리중을 바꾸기 위한 메서드
-    public static void endApplication(List<Book> list) {
+    public static void endApplication(List<Book> bookList) {
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
-            for(Book book : list) {
+            for(Book book : bookList) {
                 if(Objects.equals(book.getCondition(), ORGANIZING.getCondition())) book.setCondition(AVAILABLE.getCondition());
                 csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
@@ -201,9 +201,9 @@ public class GeneralRepository implements Repository{
     }
 
     // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
-    private static void saveToCSV(List<Book> list) {
+    private static void saveToCSV(List<Book> bookList) {
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
-            for(Book book : list) {
+            for(Book book : bookList) {
                 csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
             }
         } catch (IOException e) {
@@ -212,13 +212,13 @@ public class GeneralRepository implements Repository{
     }
 
     //도서 정리중에서 대여 가능으로 바꾸는 메서드
-    private static void returnCondition(int returnId, List<Book> list) {
+    private static void returnCondition(int returnId, List<Book> bookList) {
         Timer m_timer = new Timer(true);
         TimerTask m_task = new TimerTask() {
             @Override
             public void run() {
-                list.get(returnId-1).setCondition(AVAILABLE.getCondition());
-                saveToCSV(list);
+                bookList.get(returnId-1).setCondition(AVAILABLE.getCondition());
+                saveToCSV(bookList);
             }
         };
         m_timer.schedule(m_task, 300000);
