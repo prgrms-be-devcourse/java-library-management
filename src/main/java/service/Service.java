@@ -7,9 +7,10 @@ import repository.Repository;
 
 import java.io.*;
 
+import static domain.Reader.bf;
+
 public class Service {
-    private static Repository repository;
-    BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private static Repository repository;g
 
     public Service(Repository repository) {
         this.repository = repository;

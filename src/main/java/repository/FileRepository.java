@@ -37,7 +37,7 @@ public class FileRepository implements Repository {
         books.forEach(book -> {
             String title = book.getTitle();
             if(title.contains(titleWord)) {
-                System.out.println(book.toString());;
+                System.out.println(book.toString());
             }
         });
     }

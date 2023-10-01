@@ -21,14 +21,14 @@ public class MemoryRepository implements Repository {
     }
 
     public void printList() {
-        books.forEach(this::printBookInfo);
+        books.forEach(book -> System.out.println(book.toString()));
     }
 
     public void search(String titleWord) {
         books.forEach(book -> {
             String title = book.getTitle();
             if(title.contains(titleWord)) {
-                    printBookInfo(book);
+                System.out.println(book.toString());
             }
         });
     }
