@@ -21,8 +21,6 @@ public interface BookRepository {
 
 	void deleteById(final long id);
 
-	default void updateData() {}
-
 	default Book getById(final Long id) {
 		return findById(id)
 			.orElseThrow(() -> BookException.of(NOT_FOUND));
