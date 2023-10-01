@@ -9,4 +9,6 @@ public interface State {
 	default void validateIsAbleToRent() {}
 
 	default void validateIsAbleToReturn() {}
+
+	default void validateIsAbleToLost() {}
 }
