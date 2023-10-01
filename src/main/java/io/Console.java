@@ -35,9 +35,11 @@ public class Console {
         if (input == GENERAL) {
             System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.");
             service = new GeneralService();
+            service.load();
         } else if (input == TEST) {
             System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.");
             service = new TestService();
+            service.load();
         } else {
             throw new InputFormatException("잘못된 입력입니다.");
         }
