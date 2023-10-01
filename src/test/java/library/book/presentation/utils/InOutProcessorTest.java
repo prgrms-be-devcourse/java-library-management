@@ -19,10 +19,10 @@ import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.converter.InputConverter;
 import library.book.stub.StubInputHandler;
 
-@DisplayName("[ConsoleProcessor Test] - Presentation")
-class ConsoleProcessorTest {
+@DisplayName("[InOutProcessor Test] - Presentation")
+class InOutProcessorTest {
 
-	private final ConsoleProcessor consoleProcessor = new ConsoleProcessor(
+	private final InOutProcessor inOutProcessor = new InOutProcessor(
 		new StubInputHandler(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
@@ -30,7 +30,7 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputString 테스트]")
 	void inputStringTest() {
 		//when
-		String result = consoleProcessor.inputString();
+		String result = inOutProcessor.inputString();
 
 		//then
 		assertThat(result).isEqualTo("hello");
@@ -40,7 +40,7 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputNumber 테스트]")
 	void inputModeNumberTest() {
 		//when
-		String result = consoleProcessor.inputNumber(OutputHandler::showSelectFunction);
+		String result = inOutProcessor.inputNumber(OutputHandler::showSelectFunction);
 
 		//then
 		assertThat(result).isEqualTo("ONE");
@@ -50,7 +50,7 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputBookInfo 테스트]")
 	void inputBookInfoTest() {
 		//when
-		RegisterBookRequest result = consoleProcessor.inputBookInfo();
+		RegisterBookRequest result = inOutProcessor.inputBookInfo();
 
 		//then
 		assertAll(
@@ -69,7 +69,7 @@ class ConsoleProcessorTest {
 			.toList();
 
 		//when
-		Executable when = () -> consoleProcessor.outputBookInfo(
+		Executable when = () -> inOutProcessor.outputBookInfo(
 			responses, ENTRY_SEARCH_ALL_BOOKS.getValue(), COMPLETE_SEARCH_ALL_BOOKS.getValue()
 		);
 
@@ -81,7 +81,7 @@ class ConsoleProcessorTest {
 	@DisplayName("[inputBookId 테스트]")
 	void inputBookId() {
 		//when
-		Executable when = () -> consoleProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
+		Executable when = () -> inOutProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
 
 		//then
 		assertDoesNotThrow(when);
@@ -91,7 +91,7 @@ class ConsoleProcessorTest {
 	@DisplayName("[outputCompleteMessage 테스트]")
 	void outputCompleteMessageTest() {
 		//when
-		Executable when = () -> consoleProcessor.outputCompleteMessage(COMPLETE_RENT);
+		Executable when = () -> inOutProcessor.outputCompleteMessage(COMPLETE_RENT);
 
 		//then
 		assertDoesNotThrow(when);

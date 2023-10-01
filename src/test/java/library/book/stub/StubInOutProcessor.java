@@ -9,11 +9,11 @@ import library.book.infra.console.input.InputHandler;
 import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
-import library.book.presentation.utils.ConsoleProcessor;
+import library.book.presentation.utils.InOutProcessor;
 
-public class StubConsoleProcessor extends ConsoleProcessor {
+public class StubInOutProcessor extends InOutProcessor {
 
-	public StubConsoleProcessor(
+	public StubInOutProcessor(
 		InputHandler inputHandler,
 		OutputHandler outputHandler,
 		InputConverter converter
