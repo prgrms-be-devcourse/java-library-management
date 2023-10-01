@@ -146,6 +146,17 @@ public class TestServiceTest {
     }
 
     @Test
+    @DisplayName("대여 가능한 책 반납 불가")
+    public void canNotReturnAvailableBook(){
+        //given
+        service.saveBook("개인주의자 선언", "문유석", 111);
+        Book book = repository.getBookList().get(0);
+        //when then
+        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
+        assertEquals("원래 대여가 가능한 도서입니다.",e.getMessage());
+    }
+
+    @Test
     @DisplayName("반납 후 5분 뒤에 대여 가능")
     public void checkCleaning() throws InterruptedException {
         //given
@@ -159,16 +170,6 @@ public class TestServiceTest {
         service.borrowBook(book.getId());
     }
 
-    @Test
-    @DisplayName("대여 가능한 책 반납 불가")
-    public void canNotReturnAvailableBook(){
-        //given
-        service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
-        //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
-        assertEquals("원래 대여가 가능한 도서입니다.",e.getMessage());
-    }
 
     @Test
     @DisplayName("이미 분실된 책 분실 신고 불가")

@@ -4,27 +4,27 @@ import domain.Book;
 import domain.Status;
 
 import java.io.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
     private String PATH = System.getProperty("user.dir");
-    // file -> list
 
     public FileManager(String PATH) {
         this.PATH += PATH;
     }
 
+    // file -> list
     public List<Book> loadData() {
         List<Book> bookList = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
             String line="";
             while ((line = br.readLine())!=null){
                 String[] data = line.split(",");
-                Instant returnTime = null;
+                LocalDateTime returnTime = null;
                 if (!data[5].equals("null"))
-                    returnTime = Instant.parse(data[5]);
+                    returnTime = LocalDateTime.parse(data[5]);
 
                 Book book = Book.builder()
                         .id(Integer.valueOf(data[0]))

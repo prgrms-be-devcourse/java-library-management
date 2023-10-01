@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static domain.Status.*;
 
@@ -15,10 +15,10 @@ public class Book {
     private final String author;
     private final Integer page;
     private Status status;
-    private Instant returnTime;
+    private LocalDateTime returnTime;
 
     @Builder
-    public Book(Integer id, String title, String author, int page, Status status, Instant returnTime) {
+    public Book(Integer id, String title, String author, int page, Status status, LocalDateTime returnTime) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -53,12 +53,12 @@ public class Book {
     }
 
     public void doReturn() {
-        returnTime = Instant.now();
+        returnTime = LocalDateTime.now();
         status = CLEANING;
     }
 
     public boolean isCleaning(){
-        if (Duration.between(returnTime, Instant.now()).toMinutes()<5) {
+        if (Duration.between(returnTime, LocalDateTime.now()).toMinutes()<5) {
             return true;
         }
         status = AVAILABLE;

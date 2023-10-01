@@ -105,8 +105,8 @@ public class FileServiceTest {
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
         //when
-        book.report();
-        book.doReturn();
+        service.reportLostBook(book.getId());
+        service.returnBook(book.getId());
         //then
         assertEquals(Status.CLEANING,book.getStatus());
     }
@@ -125,13 +125,14 @@ public class FileServiceTest {
         assertThrows(NotExistBookIdException.class, () -> service.borrowBook(book.getId()));
     }
 
+
     @Test
     @DisplayName("분실한 책 대여 불가")
     public void canNotBorrowLostBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
-        book.report(); //엔티티 내 함수
+        service.reportLostBook(book.getId());
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.borrowBook(book.getId()));
         assertEquals("분실된 도서입니다.",e.getMessage());
@@ -143,7 +144,8 @@ public class FileServiceTest {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
-        book.doReturn();
+        service.borrowBook(book.getId());
+        service.returnBook(book.getId());
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
         assertEquals("이미 반납되어 정리 중인 도서입니다.",e.getMessage());
@@ -161,12 +163,26 @@ public class FileServiceTest {
     }
 
     @Test
+    @DisplayName("반납 후 5분 뒤에 대여 가능")
+    public void checkCleaning() throws InterruptedException {
+        //given
+        service.saveBook("개인주의자 선언", "문유석", 111);
+        Book book = repository.getBookList().get(0);
+        service.borrowBook(book.getId());
+        service.returnBook(book.getId());
+        Thread.sleep(1000*60*5);
+
+        //when then
+        service.borrowBook(book.getId());
+    }
+
+    @Test
     @DisplayName("이미 분실된 책 분실 신고 불가")
     public void canNotReportTwice(){
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
-        book.report();
+        service.reportLostBook(book.getId());
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
         assertEquals("이미 분실처리된 도서입니다.", e.getMessage());
