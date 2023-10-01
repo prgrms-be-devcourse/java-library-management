@@ -8,6 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static domain.Reader.sc;
 import static repository.Book.countId;
 
 public class FileRepository implements Repository {
@@ -43,7 +44,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void rental(int id) throws IOException {
+    public void rental(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .orElse(null);
@@ -65,7 +66,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void returnBook(int id) throws IOException {
+    public void returnBook(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
                 .findAny()
                 .orElse(null);
@@ -139,10 +140,9 @@ public class FileRepository implements Repository {
     }
 
     private void fileToList(List<Book> books, File file) throws IOException {
-        BufferedReader bf = new BufferedReader(new FileReader(file));
         String line = "";
 
-        while((line = bf.readLine()) != null) {
+        while((line = sc.nextLine()) != null) {
             String[] split = line.split(",");
             Book tmpBook = new Book(Integer.parseInt(split[0]), split[1],
                     split[2], Integer.parseInt(split[3]), BookState.valueOfState(split[4]));

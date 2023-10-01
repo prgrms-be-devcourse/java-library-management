@@ -7,8 +7,7 @@ import repository.FileRepository;
 import repository.MemoryRepository;
 
 import java.io.*;
-
-import static domain.Reader.bf;
+import static domain.Reader.sc;
 
 public class Mode {
     Service service;
@@ -20,7 +19,7 @@ public class Mode {
     public boolean run() throws IOException {
         System.out.println(SelectMessage.FUNCTION_SELECT_MESSAGE.getMessage());
 
-        String selectNum = bf.readLine();
+        int selectNum = sc.nextInt();
         SelectMenu.valueOfSelectNum(selectNum).run(service);
         return false;
     }

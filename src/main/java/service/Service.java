@@ -7,10 +7,10 @@ import repository.Repository;
 
 import java.io.*;
 
-import static domain.Reader.bf;
+import static domain.Reader.sc;
 
 public class Service {
-    private static Repository repository;g
+    private static Repository repository;
 
     public Service(Repository repository) {
         this.repository = repository;
@@ -22,15 +22,15 @@ public class Service {
         System.out.println(ExecuteMessage.COMPLETE_REGISTER.getMessage());
     }
 
-    private Book getBook() throws IOException {
+    private Book getBook() {
         System.out.println(QuestionMessage.REGISTER_TITLE.getMessage());
-        String title = bf.readLine();
+        String title = sc.nextLine();
 
         System.out.println(QuestionMessage.REGISTER_WRITER.getMessage());
-        String writer = bf.readLine();
+        String writer = sc.nextLine();
 
         System.out.println(QuestionMessage.REGISTER_PAGE.getMessage());
-        int page = Integer.parseInt(bf.readLine());
+        int page = sc.nextInt();
         return new Book(title, writer, page);
     }
 
@@ -39,34 +39,34 @@ public class Service {
         System.out.println(ExecuteMessage.LIST_FINISH.getMessage());
     }
 
-    public void search() throws IOException {
+    public void search() {
         System.out.println(QuestionMessage.SEARCH_TITLE.getMessage());
-        String titleWord = bf.readLine();
+        String titleWord = sc.nextLine();
         repository.search(titleWord);
         System.out.println(ExecuteMessage.SEARCH_FINISH.getMessage());
     }
 
-    public void rental() throws IOException {
+    public void rental() {
         System.out.println(QuestionMessage.RENTAL_ID.getMessage());
-        int id = Integer.parseInt(bf.readLine());
+        int id = sc.nextInt();
         repository.rental(id);
     }
 
-    public void returnBook() throws IOException {
+    public void returnBook() {
         System.out.println(QuestionMessage.RETURN_ID.getMessage());
-        int id = Integer.parseInt(bf.readLine());
+        int id = sc.nextInt();
         repository.returnBook(id);
     }
 
     public void lostBook() throws IOException {
         System.out.println(QuestionMessage.LOST_ID.getMessage());
-        int id = Integer.parseInt(bf.readLine());
+        int id = sc.nextInt();
         repository.lostBook(id);
     }
 
     public void deleteBook() throws IOException {
         System.out.println(QuestionMessage.DELETE_ID.getMessage());
-        int id = Integer.parseInt(bf.readLine());
+        int id = sc.nextInt();
         repository.deleteBook(id);
     }
 }

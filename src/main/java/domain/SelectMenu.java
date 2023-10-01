@@ -9,49 +9,49 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum SelectMenu {
-    REGISTER("1") {
+    REGISTER(1) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.REGISTER.getMessage());
             service.register();
             return true;
         }
-    },LIST("2") {
+    },LIST(2) {
         @Override
         public boolean run(Service service) {
             System.out.println(ExecuteMessage.LIST.getMessage());
             service.list();
             return true;
         }
-    }, SEARCH("3") {
+    }, SEARCH(3) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.SEARCH.getMessage());
             service.search();
             return true;
         }
-    }, RENTAL("4") {
+    }, RENTAL(4) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.RENTAL.getMessage());
             service.rental();
             return true;
         }
-    }, RETURN("5") {
+    }, RETURN(5) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.RETURN.getMessage());
             service.returnBook();
             return true;
         }
-    }, LOST("6") {
+    }, LOST(6) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.LOST.getMessage());
             service.lostBook();
             return true;
         }
-    }, DELETE("7") {
+    }, DELETE(7) {
         @Override
         public boolean run(Service service) throws IOException {
             System.out.println(ExecuteMessage.DELETE.getMessage());
@@ -60,11 +60,11 @@ public enum SelectMenu {
         }
     };
 
-    private static Map<String, SelectMenu> BY_STRING =
+    private static Map<Integer, SelectMenu> BY_STRING =
             Stream.of(values())
                     .collect(Collectors.toMap(SelectMenu :: getSelectNum, e -> e));
-    private String selectNum;
-    SelectMenu(String selectNum) {
+    private int selectNum;
+    SelectMenu(int selectNum) {
         this.selectNum = selectNum;
     }
 
@@ -72,11 +72,11 @@ public enum SelectMenu {
         return false;
     }
 
-    public String getSelectNum() {
+    public int getSelectNum() {
         return this.selectNum;
     }
 
-    public static SelectMenu valueOfSelectNum(String selectNum) {
+    public static SelectMenu valueOfSelectNum(int selectNum) {
         return BY_STRING.get(selectNum);
     }
 }

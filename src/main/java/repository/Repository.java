@@ -12,11 +12,11 @@ public interface Repository {
     public void printList();
     public void search(String titleWord);
 
-    public void rental(int id) throws IOException;
+    public void rental(int id);
 
-    public void returnBook(int id) throws IOException;
-    public void lostBook(int id) throws IOException;
-    public void deleteBook(int id) throws IOException;
+    public void returnBook(int id);
+    public void lostBook(int id);
+    public void deleteBook(int id);
     
     default public void organizeState(List<Book> books) {
         books.forEach(book -> {

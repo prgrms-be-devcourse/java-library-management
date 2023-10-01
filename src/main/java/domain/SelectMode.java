@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum SelectMode {
-    NORMAL_MODE("1") {
+    NORMAL_MODE(1) {
         @Override
         public Mode run() throws IOException {
             System.out.println(ExecuteMessage.NORMAL_MODE);
             return new Mode(ModeType.NORMAL_MODE);
         }
     },
-    TEST_MODE("2") {
+    TEST_MODE(2) {
         @Override
         public Mode run() throws IOException {
             System.out.println(ExecuteMessage.TEST_MODE);
@@ -24,19 +24,19 @@ public enum SelectMode {
         }
     };
 
-    private static final Map<String, SelectMode> BY_STRING =
+    private static final Map<Integer, SelectMode> BY_STRING =
             Stream.of(values())
                     .collect(Collectors.toMap(SelectMode :: getSelectNum, e -> e));
-    private final String selectNum;
-    SelectMode(String selectNum) {
+    private final int selectNum;
+    SelectMode(int selectNum) {
         this.selectNum = selectNum;
     }
 
-    public String getSelectNum() {
+    public int getSelectNum() {
         return this.selectNum;
     }
 
-    public static SelectMode valueOfSelectNum(String selectNum) {
+    public static SelectMode valueOfSelectNum(int selectNum) {
         return BY_STRING.get(selectNum);
     }
 
