@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 public enum BookState {
 
-    AVAILABLE("대여 가능"),
-    LOAN("대여중"),
+    RENTAL_AVAILABLE("대여 가능"),
+    RENTING("대여중"),
     ARRANGEMENT("도서 정리중"),
     LOST("분실됨");
 

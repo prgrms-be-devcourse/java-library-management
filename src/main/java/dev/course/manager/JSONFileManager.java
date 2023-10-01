@@ -14,16 +14,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-/**
- * JSON 파일에 접근해서 파일을 읽어오고, 작성하는 책임을 담당하는 클래스
- */
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class JSONFileManager {
 
     private FileReader fileReader;
+    private FileWriter fileWriter;
     private final JSONParser jsonParser;
     private final Gson gson;
 
@@ -34,27 +31,26 @@ public class JSONFileManager {
                 .create();
     }
 
-    public void readFile(Map<Integer, Book> map, String filePath, BiConsumer<Map<Integer, Book>, Book> addCallback) {
-
+    public void readFile(String filePath, Consumer<Book> addCallback) {
 
         try {
             fileReader = new FileReader(filePath);
-            JSONObject jsonObject = getJSONObect(filePath);
+            JSONObject jsonObject = getJSONObject(filePath);
             JSONArray jsonArray = getJSONArray(jsonObject, "book");
 
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject object = getJSONObject(jsonArray, i);
                 Book elem = parseJSONObject(object);
-                addCallback.accept(map, elem);
+                addCallback.accept(elem);
             }
 
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } catch (NullPointerException e) {}
     }
 
-    public JSONObject getJSONObect(String filePath) {
+    public JSONObject getJSONObject(String filePath) {
 
         try {
             fileReader = new FileReader(filePath);
@@ -76,7 +72,7 @@ public class JSONFileManager {
 
     public JSONArray getJSON(String filePath) {
 
-        JSONObject jsonObject = getJSONObect(filePath);
+        JSONObject jsonObject = getJSONObject(filePath);
         if (jsonObject == null) return null;
         JSONArray jsonArray = getJSONArray(jsonObject, "book");
         if (jsonArray == null) return null;
@@ -84,18 +80,18 @@ public class JSONFileManager {
     }
 
     public Book parseJSONObject(JSONObject object) {
-        int book_id = Integer.parseInt(String.valueOf(object.get("book_id")));
+        Long bookId = Long.parseLong(String.valueOf(object.get("book_id")));
         String title = String.valueOf(object.get("title"));
         String author = String.valueOf(object.get("author"));
         int page_num = Integer.parseInt(String.valueOf(object.get("page_num")));
-        BookState state = BookState.valueOfState(String.valueOf(object.get("state")));
-        return new Book(book_id, title, author, page_num, state);
+        BookState state = BookState.valueOf(String.valueOf(object.get("state")));
+        return new Book(bookId, title, author, page_num, state);
     }
 
-    public void writeFile(Map<Integer, Book> map, String filePath) {
+    public void writeFile(Map<Long, Book> map, String filePath) {
 
         try {
-            FileWriter fileWriter = new FileWriter(filePath);
+            fileWriter = new FileWriter(filePath);
             fileWriter.write("{\n");
             fileWriter.write(" \"book\" : [\n");
 

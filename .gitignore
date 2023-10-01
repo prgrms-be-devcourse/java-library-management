@@ -27,6 +27,4 @@ replay_pid*
 .idea
 *.iml
 out/
-build
 build/
-README.md

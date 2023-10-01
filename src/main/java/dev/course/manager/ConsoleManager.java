@@ -1,12 +1,10 @@
 package dev.course.manager;
 
+import dev.course.exception.ConsoleIOFailureException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-/**
- * 콘솔에 입력을 받는 책임을 담당하는 클래스
- */
 
 public class ConsoleManager {
 
@@ -20,12 +18,20 @@ public class ConsoleManager {
         return this.bufferedReader;
     }
 
-    public int getInteger() throws IOException {
+    public int getInteger() {
         return Integer.parseInt(getString());
     }
 
-    public String getString() throws IOException {
-        return getBufferedReader().readLine();
+    public String getString() {
+        try {
+            return getBufferedReader().readLine();
+        } catch (IOException e) {
+            throw new ConsoleIOFailureException("[System] 콘솔에 입력된 값을 받아오는데 실패했습니다.\n");
+        }
+    }
+
+    public Long getLong() {
+        return Long.parseLong(getString());
     }
 
     public void printMode() {

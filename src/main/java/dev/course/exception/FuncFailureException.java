@@ -6,6 +6,7 @@ package dev.course.exception;
  */
 
 public class FuncFailureException extends RuntimeException {
+
     public FuncFailureException(String msg) {
         super(msg);
     }
