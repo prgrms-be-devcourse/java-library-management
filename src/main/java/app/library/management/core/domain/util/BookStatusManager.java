@@ -22,7 +22,6 @@ public class BookStatusManager {
         scheduler.schedule(() -> {
             book.available();
             bookRepository.update(book);
-            System.out.println("상태 변경 완료");
-        }, 10, TimeUnit.SECONDS);
+        }, 5, TimeUnit.MINUTES);
     }
 }
