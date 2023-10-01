@@ -1,6 +1,7 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
+import com.programmers.library.utils.StatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +45,8 @@ public class LibraryMemoryRepository implements LibraryRepository{
     }
 
     @Override
-    public void saveAll() {}    // 파일 덮어쓰기 기능 사용 안 함
+    public void updateStatus(int bookId, StatusType status) {
+        Book book = findById(bookId).get();
+        book.setStatus(status);
+    }
 }

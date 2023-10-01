@@ -1,9 +1,9 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
+import com.programmers.library.utils.CSVFileHandler;
 import com.programmers.library.utils.StatusType;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,44 +11,20 @@ import java.util.stream.Collectors;
 
 public class LibraryFileRepository implements LibraryRepository {
     private static List<Book> books = new ArrayList<>();
-    private static int sequence = 0;
-
-    private static String resourceName = "\\library.csv";
-    private static String filePath = System.getProperty("user.dir") + resourceName; // 파일 경로
+    private static int sequence;
+    private static CSVFileHandler csvFileHandler;
 
     public LibraryFileRepository() {
-        readBooksFromCSV();
-    }
-
-    void readBooksFromCSV() {   // CSV 파일 읽기
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            br.readLine();  // 헤더
-
-            while((line = br.readLine()) != null) {
-                String[] data = line.split(",");
-                if(data.length == 4) {
-                    int bookId = ++sequence;
-                    String title = data[0];
-                    String author = data[1];
-                    int pages = Integer.parseInt(data[2]);
-                    StatusType status = StatusType.getStatus(data[3]);
-
-                    Book book = new Book(bookId, title, author, pages, status);
-                    books.add(book);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        csvFileHandler = new CSVFileHandler();
+        books = csvFileHandler.readBooksFromCSV();
+        sequence = this.books.size();
     }
 
     @Override
     public int save(Book book) {
         book.setBookId(++sequence);
         books.add(book);
+        csvFileHandler.appendBookToCSV(book);   // CSV 파일 이어쓰기
         return book.getBookId();
     }
 
@@ -71,35 +47,16 @@ public class LibraryFileRepository implements LibraryRepository {
                 .findFirst();
     }
 
-
     @Override
     public void delete(int bookId) {
         books.removeIf(book -> book.getBookId() == bookId);
-    }
-
-    String booksToString(Book book) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(book.getTitle()).append(",");
-        sb.append(book.getAuthor()).append(",");
-        sb.append(book.getPages()).append(",");
-        sb.append(book.getStatus().getDescription());
-        return sb.toString();
+        csvFileHandler.writeBooksToCSV(books);
     }
 
     @Override
-    public void saveAll() { // CSV 파일 덮어쓰기 (= writeBooksToCSV)
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-
-            bw.write("title, author, pages, status");   // 헤더
-            bw.newLine();
-
-            for (Book book :books) {
-                String csvLine = booksToString(book);
-                bw.write(csvLine);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void updateStatus(int bookId, StatusType status) {
+        Book book = findById(bookId).get();
+        book.setStatus(status);
+        csvFileHandler.writeBooksToCSV(books);   // CSV 파일 덮어쓰기
     }
 }

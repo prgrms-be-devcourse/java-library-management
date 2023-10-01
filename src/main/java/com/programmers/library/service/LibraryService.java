@@ -6,7 +6,6 @@ import com.programmers.library.repository.LibraryRepository;
 import com.programmers.library.utils.MessageType;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,7 +26,6 @@ public class LibraryService {
     public void addBook(String title, String author, int pages) {
         Book book = new Book(title, author, pages);
         libraryRepository.save(book);
-        libraryRepository.saveAll();    // CSV 파일 덮어쓰기
         printMessage(MessageType.ADD_SUCCESS.getMessage(), "\n");
     }
 
@@ -66,92 +64,81 @@ public class LibraryService {
 
     // 도서 대여
     public void rentBook(int bookId) {
-        Optional<Book> optionalBook = libraryRepository.findById(bookId);
+        libraryRepository.findById(bookId)
+                .ifPresentOrElse(
+                        book -> {
+                            StatusType status = book.getStatus();
 
-        if(optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            StatusType bookStatus = book.getStatus();
-
-            switch (bookStatus) {
-                case AVAILABLE -> {
-                    book.setStatus(StatusType.RENTING);
-                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(MessageType.RENT_SUCCESS.getMessage(), "\n");
-                }
-                case RENTING -> printMessage(MessageType.ALREADY_RENTED.getMessage(), "\n");
-                case ORGANIZING, LOST -> printMessage(MessageType.NOT_AVAILABLE.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
-            }
-        }
-        else {
-            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
-        }
+                            switch (status) {
+                                case AVAILABLE -> {
+                                    libraryRepository.updateStatus(bookId, StatusType.RENTING);
+                                    printMessage(MessageType.RENT_SUCCESS.getMessage(), "\n");
+                                }
+                                case RENTING -> printMessage(MessageType.ALREADY_RENTED.getMessage(), "\n");
+                                case ORGANIZING, LOST -> printMessage(MessageType.NOT_AVAILABLE.getMessage(), "( *사유: " + status.getDescription() + " )\n");
+                            }
+                        },
+                        () -> printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n")
+                );
     }
 
     // 도서 반납
     public void returnBook(int bookId) {
-        Optional<Book> optionalBook = libraryRepository.findById(bookId);
+        libraryRepository.findById(bookId)
+                .ifPresentOrElse(
+                        book -> {
+                            StatusType status = book.getStatus();
 
-        if(optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            StatusType bookStatus = book.getStatus();
+                            switch (status) {
+                                case RENTING, LOST -> {
+                                    libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
+                                    printMessage(MessageType.RETURN_SUCCESS.getMessage(), "\n");
 
-            switch (bookStatus) {
-                case RENTING, LOST -> {
-                    book.setStatus(StatusType.ORGANIZING);
-                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(MessageType.RETURN_SUCCESS.getMessage(), "\n");
-
-                    Timer timer = new Timer();  // 5분 뒤 '대여 가능' 설정
-                    TimerTask timerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            book.setStatus(StatusType.AVAILABLE);
-                        }
-                    };
-                    timer.schedule(timerTask, 5 * 60 * 1000);
-                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                }
-                case AVAILABLE, ORGANIZING -> printMessage(MessageType.CANNOT_RETURN.getMessage(), "( *사유: " + bookStatus.getDescription() + " )\n");
-            }
-        }
-        else {
-            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
-        }
+                                    Timer timer = new Timer();  // 5분 뒤 '대여 가능' 설정
+                                    TimerTask timerTask = new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            libraryRepository.updateStatus(bookId, StatusType.AVAILABLE);
+                                        }
+                                    };
+                                    timer.schedule(timerTask, 5 * 60 * 1000);
+                                }
+                                case AVAILABLE, ORGANIZING -> printMessage(MessageType.CANNOT_RETURN.getMessage(), "( *사유: " + status.getDescription() + " )\n");
+                            }
+                        },
+                        () -> printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n")
+                );
     }
 
     // 도서 분실 처리
     public void lostBook(int bookId) {
-        Optional<Book> optionalBook = libraryRepository.findById(bookId);
+        libraryRepository.findById(bookId)
+                .ifPresentOrElse(
+                        book -> {
+                            StatusType bookStatus = book.getStatus();
 
-        if(optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            StatusType bookStatus = book.getStatus();
-
-            switch (bookStatus) {
-                case AVAILABLE, RENTING, ORGANIZING -> {
-                    book.setStatus(StatusType.LOST);
-                    libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-                    printMessage(MessageType.LOST_SUCCESS.getMessage(), "\n");
-                }
-                case LOST -> printMessage(MessageType.ALREADY_LOST.getMessage(), "\n");
-            }
-        }
-        else {
-            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
-        }
+                            switch (bookStatus) {
+                                case AVAILABLE, RENTING, ORGANIZING -> {
+                                    libraryRepository.updateStatus(bookId, StatusType.LOST);
+                                    printMessage(MessageType.LOST_SUCCESS.getMessage(), "\n");
+                                }
+                                case LOST -> printMessage(MessageType.ALREADY_LOST.getMessage(), "\n");
+                            }
+                        },
+                        () -> printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n")
+                );
     }
 
     // 도서 삭제
     public void deleteBook(int bookId) {
-        Optional<Book> book = libraryRepository.findById(bookId);
-
-        if(book.isPresent()) {
-            libraryRepository.delete(bookId);
-            libraryRepository.saveAll();    // CSV 파일 덮어쓰기
-            printMessage(MessageType.DELETE_SUCCESS.getMessage(), "\n");
-        } else {
-            printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n");
-        }
+        libraryRepository.findById(bookId)
+                .ifPresentOrElse(
+                        book -> {
+                            libraryRepository.delete(bookId);
+                            printMessage(MessageType.DELETE_SUCCESS.getMessage(), "\n");
+                        },
+                        () -> printMessage(MessageType.BOOK_NOT_FOUND.getMessage(), "\n")
+                );
     }
 
 }
