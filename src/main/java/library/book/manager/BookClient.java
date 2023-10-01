@@ -3,6 +3,7 @@ package library.book.manager;
 import static library.book.exception.ErrorCode.*;
 
 import library.book.application.BookService;
+import library.book.application.DefaultBookService;
 import library.book.domain.BookRepository;
 import library.book.exception.BookException;
 import library.book.infra.console.input.InputHandler;
@@ -29,7 +30,7 @@ public class BookClient extends BookController {
 		String mode = inputMode(consoleProcessor);
 
 		BookRepository bookRepository = ModeManager.valueOf(mode).getRepository();
-		BookService bookService = ModeManager.valueOf(mode).getService(bookRepository);
+		BookService bookService = new DefaultBookService(bookRepository);
 
 		FunctionExecutor executor = new FunctionExecutor(bookService, consoleProcessor);
 		this.target = new BookController(executor, consoleProcessor);
