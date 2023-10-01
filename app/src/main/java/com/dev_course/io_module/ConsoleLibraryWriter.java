@@ -9,6 +9,11 @@ public class ConsoleLibraryWriter implements LibraryWriter {
     }
 
     @Override
+    public void println() {
+        System.out.println();
+    }
+
+    @Override
     public void println(Object o) {
         System.out.println(o);
     }
