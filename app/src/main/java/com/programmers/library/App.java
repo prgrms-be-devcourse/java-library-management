@@ -3,6 +3,8 @@
  */
 package com.programmers.library;
 
+import com.programmers.library.util.ScannerUtil;
+
 import java.util.Scanner;
 
 public class App {
@@ -10,7 +12,8 @@ public class App {
         Mode.showModes();
 
         Scanner scanner = new Scanner(System.in);
-        int modeId = scanner.nextInt();
+        int modeId = ScannerUtil.inputInt(scanner);
+
 
         Mode mode = Mode.selectMode(modeId);
         mode.run();
