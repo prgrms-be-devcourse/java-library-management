@@ -47,15 +47,15 @@ public class LibraryManagementService {
         // 도서가 대여 가능할 경우, 대여중으로 상태 변경
         switch (book.getStatus()) {
             case CAN_RENT -> {
-                Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CANNOT_RENT, book.getReturnDateTime());
+                Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ALREADY_RENT, book.getReturnDateTime());
                 bookRepository.updateBook(rentBook);
             }
 
-            case CANNOT_RENT -> result = "[System] 이미 대여중인 도서입니다. \n";
+            case ALREADY_RENT -> result = "[System] 이미 대여중인 도서입니다. \n";
 
             case ARRANGE -> {
                 if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isAfter(LocalDateTime.now())) {
-                    Book arrangeBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CANNOT_RENT, book.getReturnDateTime());
+                    Book arrangeBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ALREADY_RENT, book.getReturnDateTime());
                     bookRepository.updateBook(arrangeBook);
                 } else {
                     result = "[System] 정리 중인 도서입니다. \n";
@@ -78,7 +78,7 @@ public class LibraryManagementService {
         switch (book.getStatus()) {
             case CAN_RENT -> result = "[System] 원래 대여가 가능한 도서입니다. \n";
 
-            case CANNOT_RENT, LOST -> {
+            case ALREADY_RENT, LOST -> {
                 Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ARRANGE, LocalDateTime.now());
                 bookRepository.updateBook(rentBook);
             }
@@ -105,7 +105,7 @@ public class LibraryManagementService {
 
         // 도서가 분실 처리 가능할 경우, 분실됨으로 상태 변경
         switch (book.getStatus()) {
-            case CAN_RENT, CANNOT_RENT, ARRANGE -> {
+            case CAN_RENT, ALREADY_RENT, ARRANGE -> {
                 Book missBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.LOST, book.getReturnDateTime());
                 bookRepository.updateBook(missBook);
             }
@@ -137,7 +137,7 @@ public class LibraryManagementService {
                     + "제목 : " + book.getTitle() + "\n"
                     + "작가 이름 : " + book.getAuthor() + "\n"
                     + "페이지 수 : " + book.getPage() + " 페이지 \n"
-                    + "상태 : " + book.getStatus().getValue() + "\n");
+                    + "상태 : " + book.getStatus().getDisplayName() + "\n");
 
             System.out.println("------------------------------ \n");
         }

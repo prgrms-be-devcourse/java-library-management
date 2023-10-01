@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class CsvFileIo {
 
-    private final BufferedReader br;
+    private static final String PATH = System.getProperty("user.dir") + "/src/main/resources/data.csv";
 
-    String PATH = System.getProperty("user.dir") + "/src/main/resources/data.csv";
+    private final BufferedReader br;
 
     public CsvFileIo() {
         try {
