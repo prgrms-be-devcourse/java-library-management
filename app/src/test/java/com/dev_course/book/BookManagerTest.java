@@ -224,15 +224,16 @@ abstract class BookManagerTest {
         }
 
         @Test
-        @DisplayName("등록되지 않은 id의 도서를 대여 시 실패 메시지를 반환해야 한다.")
+        @DisplayName("등록되지 않은 id의 도서 대여 시 실패 메시지를 반환해야 한다.")
         void testRentByIdFailNotExistId() {
             // given
             BookManager bookManager = createBookManager();
+            Book book = new Book(1, "test1", "tester", 11, 1111L);
 
-            bookManager.create("test1", "tester", 11);
+            bookManager.init(List.of(book));
 
             // when
-            String msg = bookManager.rentById(1000);
+            String msg = bookManager.rentById(book.getId() + 1);
 
             // then
             assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
@@ -267,6 +268,91 @@ abstract class BookManagerTest {
 
             // then
             assertThat(msgList).isEqualTo(requiredMsgList);
+        }
+    }
+
+    @Nested
+    @Order(6)
+    @DisplayName("도서 반납 테스트")
+    class TestReturnById {
+        @Test
+        @DisplayName("도서 반납 시 해당 도서는 도서 정리 중으로 상태가 변경돼야 한다")
+        void testReturnByIdChangeState() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book loanBook = new Book(1, "test1", "tester", 111, 1L);
+            Book lostBook = new Book(2, "test2", "tester", 222, 2L);
+
+            bookManager.init(List.of(loanBook, lostBook));
+            loanBook.setState(BookState.LOAN);
+            lostBook.setState(BookState.LOST);
+
+            // when
+            bookManager.returnById(loanBook.getId());
+            bookManager.returnById(lostBook.getId());
+
+            // then
+            assertThat(loanBook.getState()).isEqualTo(BookState.PROCESSING);
+            assertThat(lostBook.getState()).isEqualTo(BookState.PROCESSING);
+        }
+
+        @Test
+        @DisplayName("도서 반납 시 성공 메시지를 반환해야 한다.")
+        void testReturnByIdSuccess() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book loanBook = new Book(1, "test1", "tester", 111, 1L);
+            Book lostBook = new Book(2, "test2", "tester", 222, 2L);
+
+            bookManager.init(List.of(loanBook, lostBook));
+            loanBook.setState(BookState.LOAN);
+            lostBook.setState(BookState.LOST);
+
+            // when
+            String loanReturnMsg = bookManager.returnById(loanBook.getId());
+            String lostReturnMsg = bookManager.returnById(lostBook.getId());
+
+            // then
+            assertThat(loanReturnMsg).isEqualTo(SUCCESS_RETURN_BOOK.msg());
+            assertThat(lostReturnMsg).isEqualTo(SUCCESS_RETURN_BOOK.msg());
+        }
+
+        @Test
+        @DisplayName("등록되지 않은 id의 도서 반납 시 실패 메시지를 반환해야 한다.")
+        void testReturnByIdFailNotExistId() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book book = new Book(1, "test1", "tester", 11, 1111L);
+
+            bookManager.init(List.of(book));
+            book.setState(BookState.LOAN);
+
+            // when
+            String msg = bookManager.returnById(book.getId() + 1);
+
+            // then
+            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
+        }
+
+        @Test
+        @DisplayName("반납할 수 없는 도서를 반납할 때 실패 메시지를 반환해야 한다.")
+        void testReturnByIdFailNonReturnable() {
+            // given
+            BookManager bookManager = createBookManager();
+            Book book = new Book(1, "test1", "tester", 111, 1L);
+
+            bookManager.init(List.of(book));
+
+            // when
+            book.setState(BookState.AVAILABLE);
+            String availableReturnMsg = bookManager.returnById(book.getId());
+
+            book.setState(BookState.PROCESSING);
+            String processingReturnMsg = bookManager.returnById(book.getId());
+
+            // then
+            assertThat(availableReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
+            assertThat(processingReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
         }
     }
 }
