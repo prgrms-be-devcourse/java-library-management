@@ -1,10 +1,10 @@
 package org.example.repository;
 
 import org.example.domain.Book;
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 
 import java.io.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,13 +45,13 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void updateBookStatus(Integer bookId, BookStatus status) {
+    public void updateBookStatus(Integer bookId, BookStatusType status) {
         List<Book> updatedBooks = getAllBooksFromCSV().stream()
                 .map(book -> {
                     if (book.getId().equals(bookId)) {
                         book.setStatus(status);
-                        if (BookStatus.ORGANIZING == status)
-                            book.setReturnTime(Instant.now());
+                        if (BookStatusType.ORGANIZING == status)
+                            book.setReturnTime(LocalDateTime.now());
                         else
                             book.setReturnTime(null);
                     }
@@ -100,10 +100,10 @@ public class FileRepository implements Repository {
                 String title = bookInfo[1];
                 String author = bookInfo[2];
                 Integer pageSize = Integer.parseInt(bookInfo[3]);
-                BookStatus status = BookStatus.getValueByKoreanName(bookInfo[4]);
-                Instant returnTime = null;
+                BookStatusType status = BookStatusType.getValueByName(bookInfo[4]);
+                LocalDateTime returnTime = null;
                 if (!bookInfo[5].equals("null")) {
-                    returnTime = Instant.parse(bookInfo[5]);
+                    returnTime = LocalDateTime.parse(bookInfo[5]);
                 }
 
                 Book book = new Book(id, title, author, pageSize, status, returnTime);
@@ -111,6 +111,8 @@ public class FileRepository implements Repository {
             }
         } catch (IOException e) {
             System.out.println("파일 읽기 에러");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
 
         return books;
@@ -121,7 +123,7 @@ public class FileRepository implements Repository {
             bw.write("id, title, author, pageSize, status, returnTime");
             bw.newLine();
             for (Book book : books) {
-                bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getKoreanName() + ", " + book.getReturnTime());
+                bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName() + ", " + book.getReturnTime());
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -131,7 +133,7 @@ public class FileRepository implements Repository {
 
     private void writeBookInfoOnCSV(Book book) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(bookInfoCsv, true))) {
-            bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getKoreanName() + ", " + book.getReturnTime());
+            bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName() + ", " + book.getReturnTime());
             bw.newLine();
         } catch (IOException ioException) {
             System.out.println("파일 쓰기 에러");

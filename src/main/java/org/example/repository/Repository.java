@@ -1,7 +1,7 @@
 package org.example.repository;
 
 import org.example.domain.Book;
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,7 @@ public interface Repository {
 
     Optional<Book> findBookById(Integer bookId);
 
-    void updateBookStatus(Integer bookId, BookStatus status);
+    void updateBookStatus(Integer bookId, BookStatusType status);
 
     void deleteBookById(Integer bookId);
 

@@ -1,6 +1,6 @@
 package org.example.exception;
 
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 
 public enum ExceptionCode {
     AVAILABLE_FOR_BORROW("[System] 원래 대여가 가능한 도서입니다."),
@@ -15,7 +15,7 @@ public enum ExceptionCode {
         this.message = message;
     }
 
-    public static ExceptionCode getException(BookStatus bookStatus) {
+    public static ExceptionCode getException(BookStatusType bookStatus) {
         switch (bookStatus) {
             case BORROW_AVAILABE:
                 return AVAILABLE_FOR_BORROW;
