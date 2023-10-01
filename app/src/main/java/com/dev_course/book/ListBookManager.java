@@ -78,7 +78,7 @@ public class ListBookManager implements BookManager {
                 .orElseThrow();
 
         if (target.getState() != AVAILABLE) {
-            return "%s (%s)\n".formatted(FAIL_RENT_BOOK.msg(), target.getState().label());
+            return "%s (%s)".formatted(FAIL_RENT_BOOK.msg(), target.getState().label());
         }
 
         target.setState(LOAN);
