@@ -10,6 +10,8 @@ import java.util.List;
 
 public class LibraryManagementService {
 
+    private static final int BOOK_ARRANGE_TIME = 5;
+
     private final BookRepository bookRepository;
 
     public LibraryManagementService(BookRepository bookRepository) {
@@ -52,7 +54,7 @@ public class LibraryManagementService {
             case CANNOT_RENT -> result = "[System] 이미 대여중인 도서입니다. \n";
 
             case ARRANGE -> {
-                if (book.getReturnDateTime().plusMinutes(5).isAfter(LocalDateTime.now())) {
+                if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isAfter(LocalDateTime.now())) {
                     Book arrangeBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CANNOT_RENT, book.getReturnDateTime());
                     bookRepository.updateBook(arrangeBook);
                 } else {
@@ -84,7 +86,7 @@ public class LibraryManagementService {
             case ARRANGE -> {
 
                 // 도서 반납 후 5분이 지났다면 대여 가능
-                if (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now())) {
+                if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isAfter(LocalDateTime.now())) {
                     result = "[System] 원래 대여가 가능한 도서입니다. \n";
                 } else {
                     result = "[System] 정리 중인 도서입니다. \n";
@@ -147,7 +149,7 @@ public class LibraryManagementService {
         for (Book book : bookList) {
 
             // 도서 반납 후 5분이 지났다면 대여 가능으로 상태 변경
-            if ((book.getStatus() == Status.ARRANGE) && (book.getReturnDateTime().plusMinutes(5).isBefore(LocalDateTime.now()))) {
+            if ((book.getStatus() == Status.ARRANGE) && (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isAfter(LocalDateTime.now()))) {
 
                 Book statusBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CAN_RENT, book.getReturnDateTime());
                 bookRepository.updateBook(statusBook);
