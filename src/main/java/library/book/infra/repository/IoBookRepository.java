@@ -6,11 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -25,7 +25,7 @@ public class IoBookRepository implements BookRepository {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	private final Map<String, Book> bookStorage = new HashMap<>();
+	private final Map<String, Book> bookStorage = new ConcurrentHashMap<>();
 
 	public IoBookRepository(final String filePath) {
 		this.filePath = filePath;
