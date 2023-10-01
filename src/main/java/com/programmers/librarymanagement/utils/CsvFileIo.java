@@ -81,9 +81,12 @@ public class CsvFileIo {
                 bw.newLine();
             }
 
-            bw.flush();
-            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+        try {
+            bw.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
