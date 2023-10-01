@@ -26,6 +26,7 @@ public class BookService {
     public void showBookList() {
         List<Book> bookList = repository.getBookList();
         for (Book book:bookList) {
+            book.isCleaning();
             book.printBookInfo();
         }
     }
@@ -35,6 +36,7 @@ public class BookService {
         List<Book> bookList = repository.findByTitle(title);
 
         for (Book book:bookList) {
+            book.isCleaning();
             book.printBookInfo();
         }
     }
