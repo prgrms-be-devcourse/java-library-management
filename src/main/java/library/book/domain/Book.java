@@ -14,7 +14,6 @@ public class Book {
 
 	private Status status;
 
-	//json 데이터 매핑용
 	public Book(long id, String title, String authorName, int pages, Status status) {
 		this.id = id;
 		this.title = title;
@@ -23,7 +22,6 @@ public class Book {
 		this.status = status;
 	}
 
-	//== Factory 메소드 ==//
 	private Book(
 		final long id,
 		final String title,
@@ -37,6 +35,7 @@ public class Book {
 		this.status = new Status();
 	}
 
+	//== Factory 메소드 ==//
 	public static Book createBook(
 		final long id,
 		final String title,
