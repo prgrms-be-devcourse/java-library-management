@@ -66,7 +66,7 @@ public class Book {
 		return pages;
 	}
 
-	public BookState getBookStatus() {
+	public BookState getBookState() {
 		return this.state.getBookState();
 	}
 
