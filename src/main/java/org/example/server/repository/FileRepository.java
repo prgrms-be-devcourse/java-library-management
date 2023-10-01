@@ -36,8 +36,12 @@ public class FileRepository implements Repository {
     @Override
     public String searchByName(String bookName) {
         StringBuilder sb = new StringBuilder();
-        fileStorage.data.values().forEach(this::checkLoadTime); // 정리 완료 시간 체크 후 업데이트
-        fileStorage.data.values().stream().filter(book -> book.name.contains(bookName)).forEach(sb::append);
+        fileStorage.data.values().forEach(
+                book -> {
+                    checkLoadTime(book);
+                    if (book.name.contains(bookName)) sb.append(book);
+                }
+        ); // 정리 완료 시간 체크 후 업데이트
         if (sb.isEmpty())
             throw new EmptyLibraryException();
         sb.append("\n");
