@@ -17,7 +17,7 @@ public class LibraryFileRepository implements LibraryRepository {
     public LibraryFileRepository() {
         csvFileHandler = new CSVFileHandler();
         books = csvFileHandler.readBooksFromCSV();
-        sequence = this.books.size();
+        sequence = books.size();
     }
 
     @Override
@@ -58,5 +58,11 @@ public class LibraryFileRepository implements LibraryRepository {
         Book book = findById(bookId).get();
         book.setStatus(status);
         csvFileHandler.writeBooksToCSV(books);   // CSV 파일 덮어쓰기
+    }
+
+    @Override
+    public void clearAll() {
+        books.clear();  // 메모리 내의 데이터 초기화
+        csvFileHandler.clearCSV();  // CSV 파일 초기화
     }
 }

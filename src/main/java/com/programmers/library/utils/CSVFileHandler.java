@@ -8,8 +8,8 @@ import java.util.List;
 
 
 public class CSVFileHandler {
-    private static final String resourceName = "\\library.csv";
-    private static final String filePath = System.getProperty("user.dir") + resourceName;   // 파일 경로
+    private static final String resourceName = "library.csv";
+    private static final String filePath = System.getProperty("user.dir") + File.separator + resourceName;   // 파일 경로
 
     public List<Book> readBooksFromCSV() {
         List<Book> books = new ArrayList<>();
@@ -68,6 +68,19 @@ public class CSVFileHandler {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
             String csvLine = booksToString(book);
             bw.write(csvLine);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearCSV() {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write("title, author, pages, status");   // 헤더
             bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();

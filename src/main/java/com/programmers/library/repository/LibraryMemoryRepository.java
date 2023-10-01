@@ -49,4 +49,9 @@ public class LibraryMemoryRepository implements LibraryRepository{
         Book book = findById(bookId).get();
         book.setStatus(status);
     }
+
+    @Override
+    public void clearAll() {
+        books.clear();
+    }
 }
