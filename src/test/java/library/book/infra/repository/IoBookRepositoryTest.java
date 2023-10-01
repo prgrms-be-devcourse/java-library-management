@@ -1,6 +1,6 @@
 package library.book.infra.repository;
 
-import static library.book.domain.Status.BookStatus.*;
+import static library.book.domain.constants.BookState.*;
 import static library.book.exception.ErrorCode.*;
 import static library.book.fixture.BookFixture.*;
 import static org.assertj.core.api.Assertions.*;
@@ -26,6 +26,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
+import library.book.domain.State;
+import library.book.domain.constants.BookState;
+import library.book.domain.state.Cleaning;
+import library.book.domain.state.Rented;
 import library.book.exception.BookException;
 import library.book.fixture.BookFixture;
 
@@ -53,7 +57,7 @@ class IoBookRepositoryTest {
 			//given
 			FileWriter fileWriter = new FileWriter(FILE_PATH);
 			fileWriter.write(
-				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookStatus\":\"RENTED\"}}");
+				"{\"1\":{\"id\":1,\"title\":\"hello\",\"authorName\":\"hello\",\"pages\":20,\"bookState\":\"RENTED\"}}");
 
 			fileWriter.flush();
 			fileWriter.close();
@@ -64,6 +68,9 @@ class IoBookRepositoryTest {
 			//then
 			Optional<Book> findBook = ioBookRepository.findById(1L);
 			assertThat(findBook).isPresent();
+
+			State go = new Rented();
+			BookState bookState = go.getBookState();
 
 			Book book = findBook.get();
 			assertAll(

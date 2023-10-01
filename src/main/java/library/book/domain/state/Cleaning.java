@@ -12,11 +12,15 @@ import library.book.exception.BookException;
 public class Cleaning implements State {
 
 	private final BookState bookState;
-	private final LocalDateTime cleaningEndAt;
+	private LocalDateTime cleaningEndAt;
 
 	public Cleaning() {
 		this.bookState = CLEANING;
 		this.cleaningEndAt = LocalDateTime.now().plusMinutes(5);
+	}
+
+	public void resetState(final LocalDateTime cleaningEndAt) {
+		this.cleaningEndAt = cleaningEndAt;
 	}
 
 	@Override

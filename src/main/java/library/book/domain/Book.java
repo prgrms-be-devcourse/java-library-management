@@ -1,6 +1,10 @@
 package library.book.domain;
 
-import library.book.domain.Status.BookStatus;
+import library.book.domain.constants.BookState;
+import library.book.domain.state.AvailableRent;
+import library.book.domain.state.Cleaning;
+import library.book.domain.state.Lost;
+import library.book.domain.state.Rented;
 
 public class Book {
 
@@ -12,14 +16,14 @@ public class Book {
 
 	private int pages;
 
-	private Status status;
+	private State state;
 
-	public Book(long id, String title, String authorName, int pages, Status status) {
+	public Book(long id, String title, String authorName, int pages, State state) {
 		this.id = id;
 		this.title = title;
 		this.authorName = authorName;
 		this.pages = pages;
-		this.status = status;
+		this.state = state;
 	}
 
 	private Book(
@@ -32,7 +36,7 @@ public class Book {
 		this.title = title;
 		this.authorName = authorName;
 		this.pages = pages;
-		this.status = new Status();
+		this.state = new AvailableRent();
 	}
 
 	//== Factory 메소드 ==//
@@ -62,20 +66,23 @@ public class Book {
 		return pages;
 	}
 
-	public BookStatus getBookStatus() {
-		return this.status.getBookStatus();
+	public BookState getBookStatus() {
+		return this.state.getBookState();
 	}
 
 	//== Business 메소드 ==//
 	public void rent() {
-		this.status.rent();
+		state.validateIsAbleToRent();
+		state = new Rented();
 	}
 
 	public void returnBook() {
-		this.status.returnBook();
+		state.validateIsAbleToReturn();
+		state = new Cleaning();
 	}
 
 	public void registerAsLost() {
-		this.status.registerAsLost();
+		state.validateIsAbleToLost();
+		state = new Lost();
 	}
 }
