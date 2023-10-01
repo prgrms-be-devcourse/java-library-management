@@ -1,9 +1,9 @@
 package org.example.repository;
 
 import org.example.domain.Book;
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,15 +37,15 @@ public class InMemoryRepository implements Repository {
     }
 
     @Override
-    public void updateBookStatus(Integer bookId, BookStatus status) {
+    public void updateBookStatus(Integer bookId, BookStatusType status) {
         Optional<Book> bookToUpdate = books.stream()
                 .filter(book -> book.getId().equals(bookId))
                 .findFirst();
         bookToUpdate.ifPresent(
                 book -> {
                     book.setStatus(status);
-                    if (status == BookStatus.ORGANIZING)
-                        book.setReturnTime(Instant.now());
+                    if (status == BookStatusType.ORGANIZING)
+                        book.setReturnTime(LocalDateTime.now());
                     else
                         book.setReturnTime(null);
                 }

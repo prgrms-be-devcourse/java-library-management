@@ -1,26 +1,26 @@
 package org.example.domain;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class Book {
     private Integer id;
     private String title;
     private String author;
     private Integer pageSize;
-    private BookStatus status;
-    private Instant returnTime;
+    private BookStatusType status;
+    private LocalDateTime returnTime;
 
     public Book(Integer id, String title, String author, Integer pageSize) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.pageSize = pageSize;
-        this.status = BookStatus.BORROW_AVAILABE;
+        this.status = BookStatusType.BORROW_AVAILABE;
         this.returnTime = null;
     }
 
-    public Book(Integer id, String title, String author, Integer pageSize, BookStatus status) {
+    public Book(Integer id, String title, String author, Integer pageSize, BookStatusType status) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -29,7 +29,7 @@ public class Book {
         this.returnTime = null;
     }
 
-    public Book(Integer id, String title, String author, Integer pageSize, BookStatus status, Instant returnTime) {
+    public Book(Integer id, String title, String author, Integer pageSize, BookStatusType status, LocalDateTime returnTime) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -41,10 +41,10 @@ public class Book {
     @Override
     public String toString() {
         return "도서번호: " + id + "\n" +
-                "제목: " + title + "\n" +
-                "작가 이름: " + author + "\n" +
-                "페이지 수: " + pageSize + "페이지" + "\n" +
-                "상태: " + status.getKoreanName();
+               "제목: " + title + "\n" +
+               "작가 이름: " + author + "\n" +
+               "페이지 수: " + pageSize + "페이지" + "\n" +
+               "상태: " + status.getName();
     }
 
     public Integer getId() {
@@ -63,32 +63,32 @@ public class Book {
         return pageSize;
     }
 
-    public BookStatus getStatus() {
+    public BookStatusType getStatus() {
         return status;
     }
 
-    public void setStatus(BookStatus status) {
+    public void setStatus(BookStatusType status) {
         this.status = status;
     }
 
-    public void setReturnTime(Instant returnTime) {
+    public void setReturnTime(LocalDateTime returnTime) {
         this.returnTime = returnTime;
     }
 
-    public Instant getReturnTime() {
+    public LocalDateTime getReturnTime() {
         return returnTime;
     }
 
     public boolean canBorrow() {
-        return status == BookStatus.BORROW_AVAILABE ||
-                (status == BookStatus.ORGANIZING && Duration.between(returnTime, Instant.now()).toMinutes() >= 5);
+        return status == BookStatusType.BORROW_AVAILABE ||
+               (status == BookStatusType.ORGANIZING && Duration.between(returnTime, LocalDateTime.now()).toMinutes() >= 5);
     }
 
     public boolean canReturn() {
-        return status == BookStatus.BORROWING || status == BookStatus.LOST;
+        return status == BookStatusType.BORROWING || status == BookStatusType.LOST;
     }
 
     public boolean canLost() {
-        return status != BookStatus.LOST;
+        return status != BookStatusType.LOST;
     }
 }

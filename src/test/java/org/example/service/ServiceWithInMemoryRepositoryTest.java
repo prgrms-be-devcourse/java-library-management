@@ -1,17 +1,15 @@
 package org.example.service;
 
 import org.example.domain.Book;
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 import org.example.exception.ExceptionCode;
-import org.example.repository.FileRepository;
 import org.example.repository.InMemoryRepository;
 import org.example.repository.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +87,7 @@ class ServiceWithInMemoryRepositoryTest {
         Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
 
         //then
-        assertEquals(repository.findBookById(1).get().getStatus(), BookStatus.BORROWING);
+        assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.BORROWING);
         assertEquals(exceptionCode, Optional.empty());
     }
 
@@ -97,7 +95,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 대여중인 도서인 경우")
     void borrowBook_Fail_Borrowing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.BORROWING));
+        libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
@@ -110,7 +108,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 정리중인 도서인 경우")
     void borrowBook_Fail_Organizing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.ORGANIZING, Instant.now()));
+        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING, LocalDateTime.now()));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
@@ -123,7 +121,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 분실된 도서인 경우")
     void borrowBook_Fail_Lost() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.LOST));
+        libraryManagementService.registerBook(createBook(BookStatusType.LOST));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.borrowBook(1);
@@ -136,13 +134,13 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 반납 성공")
     void returnBook_Success() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.BORROWING));
+        libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.returnBook(1);
 
         //then
-        assertEquals(repository.findBookById(1).get().getStatus(), BookStatus.ORGANIZING);
+        assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.ORGANIZING);
         assertEquals(exceptionCode, Optional.empty());
     }
 
@@ -150,7 +148,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 반납 실패 - 원래 대여가 가능한 도서인 경우")
     void returnBook_Fail_BorrrowAvailable() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.BORROW_AVAILABE));
+        libraryManagementService.registerBook(createBook(BookStatusType.BORROW_AVAILABE));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.returnBook(1);
@@ -169,7 +167,7 @@ class ServiceWithInMemoryRepositoryTest {
         Optional<ExceptionCode> exceptionCode = libraryManagementService.lostBook(1);
 
         //then
-        assertEquals(repository.findBookById(1).get().getStatus(), BookStatus.LOST);
+        assertEquals(repository.findBookById(1).get().getStatus(), BookStatusType.LOST);
         assertEquals(exceptionCode, Optional.empty());
     }
 
@@ -177,7 +175,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 분실 실패 - 이미 분실 처리된 도서인 경우")
     void lostBook_Fail_Lost() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatus.LOST));
+        libraryManagementService.registerBook(createBook(BookStatusType.LOST));
 
         //when
         Optional<ExceptionCode> exceptionCode = libraryManagementService.lostBook(1);
@@ -220,11 +218,11 @@ class ServiceWithInMemoryRepositoryTest {
         return new Book(nextBookId++, title, "testAuthor", 123);
     }
 
-    private Book createBook(BookStatus status) {
+    private Book createBook(BookStatusType status) {
         return new Book(nextBookId++, "testTitle", "testAuthor", 123, status);
     }
 
-    private Book createBook(BookStatus status, Instant returnTime) {
-        return new Book(nextBookId++, "testTitle", "testAuthor", 123, status, Instant.now());
+    private Book createBook(BookStatusType status, LocalDateTime returnTime) {
+        return new Book(nextBookId++, "testTitle", "testAuthor", 123, status, returnTime);
     }
 }

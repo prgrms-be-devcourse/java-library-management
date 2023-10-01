@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.domain.Book;
-import org.example.domain.BookStatus;
+import org.example.domain.BookStatusType;
 import org.example.exception.ExceptionCode;
 import org.example.repository.Repository;
 
@@ -35,7 +35,7 @@ public class LibraryManagementService {
         Optional<Book> bookToBorrow = repository.findBookById(bookId);
         return bookToBorrow.map(book -> {
             if (book.canBorrow()) {
-                repository.updateBookStatus(bookId, BookStatus.BORROWING);
+                repository.updateBookStatus(bookId, BookStatusType.BORROWING);
                 return Optional.<ExceptionCode>empty();
             } else {
                 return Optional.of(ExceptionCode.getException(book.getStatus()));
@@ -48,7 +48,7 @@ public class LibraryManagementService {
         Optional<Book> bookToReturn = repository.findBookById(bookId);
         return bookToReturn.map(book -> {
             if (book.canReturn()) {
-                repository.updateBookStatus(bookId, BookStatus.ORGANIZING);
+                repository.updateBookStatus(bookId, BookStatusType.ORGANIZING);
                 return Optional.<ExceptionCode>empty();
             } else {
                 return Optional.of(ExceptionCode.getException(book.getStatus()));
@@ -61,7 +61,7 @@ public class LibraryManagementService {
         Optional<Book> lostBook = repository.findBookById(bookId);
         return lostBook.map(book -> {
             if (book.canLost()) {
-                repository.updateBookStatus(bookId, BookStatus.LOST);
+                repository.updateBookStatus(bookId, BookStatusType.LOST);
                 return Optional.<ExceptionCode>empty();
             } else {
                 return Optional.of(ExceptionCode.getException(book.getStatus()));
