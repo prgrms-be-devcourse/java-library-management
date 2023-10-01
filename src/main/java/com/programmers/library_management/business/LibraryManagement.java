@@ -4,15 +4,18 @@ import com.programmers.library_management.repository.ProductBookRepository;
 import com.programmers.library_management.repository.TestBookRepository;
 import com.programmers.library_management.service.LibraryManagementService;
 import com.programmers.library_management.utils.ConsoleIOManager;
+import com.programmers.library_management.utils.UpdateScheduler;
 
 import java.io.IOException;
 
 public class LibraryManagement {
     private final ConsoleIOManager consoleIOManager;
     private LibraryManagementService libraryManagementService;
+    private final UpdateScheduler updateScheduler;
 
     public LibraryManagement(ConsoleIOManager consoleIOManager) {
         this.consoleIOManager = consoleIOManager;
+        this.updateScheduler = new UpdateScheduler();
     }
 
     public boolean selectManagementMode() {
@@ -37,6 +40,7 @@ public class LibraryManagement {
             consoleIOManager.printIOExceptionMsg();
             return false;
         }
+        updateScheduler.execute(() -> libraryManagementService.updateBookStatus());
         return true;
     }
 
@@ -56,6 +60,7 @@ public class LibraryManagement {
                 consoleIOManager.printSystemMsg(e.getMessage());
             }
         } while (!input.equals("0"));
+        updateScheduler.shutdown();
     }
 
 }

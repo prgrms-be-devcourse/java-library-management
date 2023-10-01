@@ -63,13 +63,15 @@ public class LibraryManagementService {
     }
 
     public List<Book> showAllBooks() {
-        bookRepository.updateAllBookStatus();
         return bookRepository.findAll();
     }
 
     public List<Book> searchBook(String text) {
-        bookRepository.updateAllBookStatus();
         return bookRepository.findByTitle(text);
+    }
+
+    public void updateBookStatus(){
+        bookRepository.updateAllBookStatus();
     }
 
 }
