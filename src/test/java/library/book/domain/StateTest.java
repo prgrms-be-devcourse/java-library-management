@@ -2,13 +2,11 @@ package library.book.domain;
 
 import static library.book.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import library.book.domain.state.AvailableRent;
 import library.book.domain.state.Cleaning;
@@ -22,19 +20,6 @@ class StateTest {
 	@Nested
 	@DisplayName("[대여 가능한지 검증한다]")
 	class validateIsAbleToRent {
-
-		@Test
-		@DisplayName("[대여 가능한 상태여서 검증에 통과한다]")
-		void success() {
-			//given
-			State state = new AvailableRent();
-
-			//when
-			Executable when = state::validateIsAbleToRent;
-
-			//then
-			assertDoesNotThrow(when);
-		}
 
 		@Test
 		@DisplayName("[정리중 상태여서 검증에 실패한다]")
@@ -79,6 +64,26 @@ class StateTest {
 			assertThatThrownBy(when)
 				.isInstanceOf(BookException.class)
 				.hasMessageContaining(ALREADY_RENTED.getMessage());
+		}
+	}
+
+	@Nested
+	@DisplayName("[반납 가능한지 검증한다]")
+	class validateIsAbleToReturn {
+
+		@Test
+		@DisplayName("[이미 대여가 가능한 상태여서 검증에 실패한다]")
+		void failWhenStateIsAvailableRent() {
+			//given
+			State state = new AvailableRent();
+
+			//when
+			ThrowingCallable when = state::validateIsAbleToReturn;
+
+			//then
+			assertThatThrownBy(when)
+				.isInstanceOf(BookException.class)
+				.hasMessageContaining(ALREADY_AVAILABLE_RENT.getMessage());
 		}
 	}
 }
