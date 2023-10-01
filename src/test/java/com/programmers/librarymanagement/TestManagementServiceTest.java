@@ -2,30 +2,31 @@ package com.programmers.librarymanagement;
 
 import com.programmers.librarymanagement.application.LibraryManagementService;
 import com.programmers.librarymanagement.domain.Book;
+import com.programmers.librarymanagement.domain.ReturnResult;
+import com.programmers.librarymanagement.domain.Status;
 import com.programmers.librarymanagement.repository.TestBookRepository;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
 
-import static com.programmers.librarymanagement.domain.Status.CANNOT_RENT;
+import static com.programmers.librarymanagement.domain.Status.ALREADY_RENT;
 
 @DisplayName("Service test for TestBookRepository")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestManagementServiceTest {
 
-    static LibraryManagementService libraryManagementService;
-    static TestBookRepository testBookRepository;
+    static TestBookRepository testBookRepository = new TestBookRepository();
+    static LibraryManagementService libraryManagementService = new LibraryManagementService(testBookRepository);
 
-    @BeforeAll
-    static void injectRepository() {
-        testBookRepository = new TestBookRepository();
-        libraryManagementService = new LibraryManagementService(testBookRepository);
+    @AfterEach
+    void clearRepository() {
+        List<Book> bookList = testBookRepository.findAll();
+        while (!bookList.isEmpty()) {
+            testBookRepository.deleteBook(bookList.get(0));
+        }
     }
 
-    @Order(1)
     @Test
-    void successAddBookAndFindByTitle() {
+    void successAddBook() {
 
         // given
         String title = "데브코스에서 살아남기";
@@ -42,25 +43,28 @@ public class TestManagementServiceTest {
         Assertions.assertEquals(page, book.getPage());
     }
 
-    @Order(2)
     @Test
     void successGetAllBooks() {
 
         // given
-        String title = "신촌 맛집 탐방기";
-        String author = "쿠쿠";
-        int page = 100;
+        String title1 = "신촌 맛집 탐방기";
+        String author1 = "쿠쿠";
+        int page1 = 100;
+
+        String title2 = "오늘 뭐 먹지";
+        String author2 = "뫄뫄";
+        int page2 = 200;
 
         // when
-        libraryManagementService.addBook(title, author, page);
+        libraryManagementService.addBook(title1, author1, page1);
+        libraryManagementService.addBook(title2, author2, page2);
 
         // then
         List<Book> bookList = testBookRepository.findAll();
-        Assertions.assertEquals("스펜서", bookList.get(0).getAuthor());
-        Assertions.assertEquals("쿠쿠", bookList.get(1).getAuthor());
+        Assertions.assertEquals("쿠쿠", bookList.get(0).getAuthor());
+        Assertions.assertEquals("뫄뫄", bookList.get(1).getAuthor());
     }
 
-    @Order(3)
     @Test
     void successFindByTitle() {
 
@@ -75,11 +79,10 @@ public class TestManagementServiceTest {
         libraryManagementService.addBook(title2, author, page);
 
         // then
-        List<Book> bookList = testBookRepository.findByTitle("살아남기"); // 데브코스에서 살아남기, 인프런에서 살아남기 1, 인포런에서 살아남기 2
-        Assertions.assertEquals(3, bookList.size());
+        List<Book> bookList = testBookRepository.findByTitle("살아남기"); // 인프런에서 살아남기 1, 인포런에서 살아남기 2
+        Assertions.assertEquals(2, bookList.size());
     }
 
-    @Order(4)
     @Test
     void successRentBook() {
 
@@ -92,25 +95,24 @@ public class TestManagementServiceTest {
 
         // then
         Book book = testBookRepository.findByTitle("패턴").get(0);
-        Assertions.assertEquals(CANNOT_RENT, book.getStatus());
+        Assertions.assertEquals(ALREADY_RENT, book.getStatus());
     }
 
-    @Order(5)
     @Test
     void failRentBook() {
 
         // given
+        libraryManagementService.addBook("쉽게 알아보는 디자인 패턴", "푸", 521);
         Long bookNum = testBookRepository.findByTitle("패턴").get(0).getId();
         libraryManagementService.rentBook(bookNum);
 
         // when
-        String result = libraryManagementService.rentBook(bookNum);
+        Status result = libraryManagementService.rentBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 이미 대여중인 도서입니다. \n", result);
+        Assertions.assertEquals(ALREADY_RENT, result);
     }
 
-    @Order(6)
     @Test
     void successReturnBook() {
 
@@ -120,27 +122,26 @@ public class TestManagementServiceTest {
         libraryManagementService.rentBook(bookNum);
 
         // when
-        String result = libraryManagementService.returnBook(bookNum);
+        ReturnResult result = libraryManagementService.returnBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 도서가 반납 처리 되었습니다. \n", result);
+        Assertions.assertEquals(ReturnResult.SUCCESS_RETURN, result);
     }
 
-    @Order(7)
     @Test
     void failReturnBook() {
 
         // given
+        libraryManagementService.addBook("종이접기 100선", "빙봉", 521);
         Long bookNum = testBookRepository.findByTitle("종이접기").get(0).getId();
 
         // when
-        String result = libraryManagementService.returnBook(bookNum);
+        ReturnResult result = libraryManagementService.returnBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 정리 중인 도서입니다. \n", result);
+        Assertions.assertEquals(ReturnResult.ALREADY_RETURN, result);
     }
 
-    @Order(8)
     @Test
     void successLostBook() {
 
@@ -149,27 +150,27 @@ public class TestManagementServiceTest {
         Long bookNum = testBookRepository.findByTitle("정석").get(0).getId();
 
         // when
-        String result = libraryManagementService.lostBook(bookNum);
+        Boolean result = libraryManagementService.lostBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 도서가 분실 처리 되었습니다. \n", result);
+        Assertions.assertEquals(true, result);
     }
 
-    @Order(9)
     @Test
     void failLostBook() {
 
         // given
+        libraryManagementService.addBook("자바의 정석", "남궁성", 521);
         Long bookNum = testBookRepository.findByTitle("정석").get(0).getId();
+        libraryManagementService.lostBook(bookNum);
 
         // when
-        String result = libraryManagementService.lostBook(bookNum);
+        Boolean result = libraryManagementService.lostBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 이미 분실 처리된 도서입니다. \n", result);
+        Assertions.assertEquals(false, result);
     }
 
-    @Order(10)
     @Test
     void successDeleteBook() {
 
@@ -178,13 +179,12 @@ public class TestManagementServiceTest {
         Long bookNum = testBookRepository.findByTitle("프로그래밍").get(0).getId();
 
         // when
-        String result = libraryManagementService.deleteBook(bookNum);
+        Boolean result = libraryManagementService.deleteBook(bookNum);
 
         // then
-        Assertions.assertEquals("[System] 도서가 삭제 처리 되었습니다. \n", result);
+        Assertions.assertEquals(true, result);
     }
 
-    @Order(11)
     @Test
     void failDeleteBook() {
 
@@ -193,9 +193,9 @@ public class TestManagementServiceTest {
         Long bookNum = testBookRepository.findByTitle("프로그래밍").get(0).getId();
 
         // when
-        String result = libraryManagementService.deleteBook(bookNum + 1);
+        Boolean result = libraryManagementService.deleteBook(bookNum + 1);
 
         // then
-        Assertions.assertEquals("[System] 존재하지 않는 도서번호 입니다. \n", result);
+        Assertions.assertEquals(false, result);
     }
 }
