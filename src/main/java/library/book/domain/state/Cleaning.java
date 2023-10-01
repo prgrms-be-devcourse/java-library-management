@@ -11,12 +11,28 @@ import library.book.exception.BookException;
 
 public class Cleaning implements State {
 
-	private final BookState bookState = CLEANING;
-	private LocalDateTime cleaningEndAt;
+	private final BookState bookState;
+	private final LocalDateTime cleaningEndAt;
+
+	public Cleaning() {
+		this.bookState = CLEANING;
+		this.cleaningEndAt = LocalDateTime.now().plusMinutes(5);
+	}
 
 	@Override
 	public BookState getBookState() {
+		validateCleaningEndAtIsNotNull();
+
+		if (cleaningEndAt.isBefore(LocalDateTime.now())) {
+			return AVAILABLE_RENT;
+		}
 		return bookState;
+	}
+
+	private void validateCleaningEndAtIsNotNull() {
+		if (cleaningEndAt == null) {
+			throw BookException.of(INVALID_CLEANING_END_TIME);
+		}
 	}
 
 	@Override
