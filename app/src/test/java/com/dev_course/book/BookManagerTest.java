@@ -539,4 +539,47 @@ abstract class BookManagerTest {
             assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
         }
     }
+
+    @Nested
+    @Order(9)
+    @DisplayName("도서 상태 업데이트 테스트")
+    class TestUpdateStates {
+        @Test
+        @DisplayName("5분 이상 정리 중인 도서는 대여 가능으로 상태가 변경돼야 한다.")
+        void testUpdateStatesChangeToAvailable() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            long processAt = System.currentTimeMillis() - 300_000;
+            Book processedBook = new Book(1, "test1", "tester", 111, processAt);
+
+            bookManager.init(List.of(processedBook));
+            processedBook.setState(BookState.PROCESSING);
+
+            // when
+            bookManager.updateStates();
+
+            // then
+            assertThat(processedBook.getState()).isEqualTo(BookState.AVAILABLE);
+        }
+
+        @Test
+        @DisplayName("5분 이상 정리한 도서가 아니면 상태가 변경되면 안된다.")
+        void testUpdateStatesNotChange() {
+            // given
+            BookManager bookManager = createBookManager();
+
+            long currentTime = System.currentTimeMillis();
+            Book processingBook = new Book(1, "test1", "tester", 111, currentTime);
+
+            bookManager.init(List.of(processingBook));
+            processingBook.setState(BookState.PROCESSING);
+
+            // when
+            bookManager.updateStates();
+
+            // then
+            assertThat(processingBook.getState()).isNotEqualTo(BookState.AVAILABLE);
+        }
+    }
 }
