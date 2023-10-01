@@ -16,16 +16,19 @@ public class FileManager {
         try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
             String line="";
             while ((line = br.readLine())!=null){
-                String[] split = line.split(",");
-                Integer id = Integer.valueOf(split[0]);
-                String title = split[1];
-                String author = split[2];
-                Integer page = Integer.valueOf(split[3]);
-                Status status = Status.valueOf(split[4]);
+                String[] data = line.split(",");
                 Instant returnTime = null;
-                if (!split[5].equals("null"))
-                    returnTime = Instant.parse(split[5]);
-                Book book = new Book(id,title,author,page, status,returnTime);
+                if (!data[5].equals("null"))
+                    returnTime = Instant.parse(data[5]);
+
+                Book book = Book.builder()
+                        .id(Integer.valueOf(data[0]))
+                        .title(data[1])
+                        .author(data[2])
+                        .page(Integer.parseInt(data[3]))
+                        .status(Status.valueOf(data[4]))
+                        .returnTime(returnTime)
+                        .build();
                 bookList.add(book);
             }
         } catch(IOException e) {

@@ -1,17 +1,18 @@
 package service;
 
 import domain.Book;
-import domain.Status;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import repository.Repository;
+import repository.BookRepository;
 
 import java.util.List;
 
-public class BookService {
-    private final Repository repository;
+import static domain.Status.LOST;
 
-    public BookService(Repository repository) {
+public class BookService {
+    private final BookRepository repository;
+
+    public BookService(BookRepository repository) {
         this.repository = repository;
     }
 
@@ -68,7 +69,7 @@ public class BookService {
     // [6] 분실 처리
     public void reportLostBook(Integer id){
         Book book = repository.findById(id).orElseThrow(NotExistBookIdException::new);
-        if (book.getStatus()== Status.LOST) throw new UnchangeableStatusException("이미 분실처리된 도서입니다.");
+        if (book.getStatus()== LOST) throw new UnchangeableStatusException("이미 분실처리된 도서입니다.");
         repository.report(book);
     }
 

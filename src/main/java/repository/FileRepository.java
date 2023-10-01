@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FileRepository implements Repository{
+public class FileRepository implements BookRepository {
     private final FileManager fileManager = new FileManager();
     private List<Book> bookList;
 

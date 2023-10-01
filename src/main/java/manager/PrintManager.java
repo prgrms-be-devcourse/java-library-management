@@ -2,7 +2,7 @@ package manager;
 
 public class PrintManager {
     public void printSelectMode(){
-        System.out.println("Q. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
+        System.out.println("\nQ. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
     }
     public void printSelectFunction(){
         System.out.println("\nQ. 사용할 기능을 선택해주세요.\n" +

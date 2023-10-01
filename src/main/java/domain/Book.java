@@ -1,10 +1,12 @@
 package domain;
 
-
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.Duration;
 import java.time.Instant;
+
+import static domain.Status.*;
 
 @Getter
 public class Book {
@@ -15,6 +17,7 @@ public class Book {
     private Status status;
     private Instant returnTime;
 
+    @Builder
     public Book(Integer id, String title, String author, int page, Status status, Instant returnTime) {
         this.id = id;
         this.title = title;
@@ -29,7 +32,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.page = page;
-        this.status = Status.AVAILABLE;
+        this.status = AVAILABLE;
         this.returnTime = null;
     }
 
@@ -46,23 +49,23 @@ public class Book {
 
     //책 상태 관련 함수
     public void borrow(){
-        status = Status.BORROWED;
+        status = BORROWED;
     }
 
     public void doReturn() {
         returnTime = Instant.now();
-        status = Status.CLEANING;
+        status = CLEANING;
     }
 
     public boolean isCleaning(){
         if (Duration.between(returnTime, Instant.now()).toMinutes()<5) {
             return true;
         }
-        status = Status.AVAILABLE;
+        status = AVAILABLE;
         return false;
     }
 
     public void report(){
-        status = Status.LOST;
+        status = LOST;
     }
 }

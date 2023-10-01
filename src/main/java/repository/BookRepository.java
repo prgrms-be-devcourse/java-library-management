@@ -5,7 +5,7 @@ import domain.Book;
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository {
+public interface BookRepository {
     void register(Book book);
     List<Book> getBookList();
     List<Book> findByTitle(String title);
