@@ -88,7 +88,7 @@ public class LibraryService {
         consoleOutput.printWrtierQuestion();
         String writer = consoleInput.enterWriter();
         consoleOutput.printPageNumberQuestion();
-        String pageNumber = consoleInput.enterPageNumber();
+        int pageNumber = consoleInput.enterPageNumber();
         consoleOutput.printAddComplete();
 
         long bookId = generateRandomNumber();
