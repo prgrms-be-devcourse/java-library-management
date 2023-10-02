@@ -1,7 +1,7 @@
 package com.programmers.library.mock;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.repository.Repository;
 
 import java.util.*;
@@ -43,7 +43,7 @@ public class MockRepository implements Repository {
     }
 
     @Override
-    public void updateStatus(Book book, BookStatus bookStatus) {
+    public void updateStatus(Book book, BookStatusType bookStatus) {
         book.updateBookStatus(bookStatus);
     }
 

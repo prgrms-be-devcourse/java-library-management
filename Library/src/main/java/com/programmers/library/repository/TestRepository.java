@@ -1,7 +1,7 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,7 +40,7 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public void updateStatus(Book book, BookStatus bookStatus) {
+    public void updateStatus(Book book, BookStatusType bookStatus) {
         book.updateBookStatus(bookStatus);
     }
 

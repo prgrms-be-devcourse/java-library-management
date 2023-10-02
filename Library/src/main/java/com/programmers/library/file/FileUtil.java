@@ -1,7 +1,7 @@
 package com.programmers.library.file;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 
@@ -51,7 +51,7 @@ public class FileUtil {
                     String title = parts[1];
                     String author = parts[2];
                     Integer page = Integer.parseInt(parts[3]);
-                    BookStatus bookStatus = BookStatus.valueOf(parts[4]);
+                    BookStatusType bookStatus = BookStatusType.valueOf(parts[4]);
                     Book book = new Book(bookId, title, author, page, bookStatus);
                     bookMap.put(bookId, book);
                 }

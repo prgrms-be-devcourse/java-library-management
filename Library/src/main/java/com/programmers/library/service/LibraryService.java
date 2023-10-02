@@ -1,7 +1,7 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.repository.Repository;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.programmers.library.domain.BookStatus.RENTABLE;
+import static com.programmers.library.domain.BookStatusType.RENTABLE;
 
 public class LibraryService {
     private final Repository repository;
@@ -27,7 +27,7 @@ public class LibraryService {
         repository.register(book);
     }
 
-    public void updateStatus(Book book, BookStatus bookStatus){
+    public void updateStatus(Book book, BookStatusType bookStatus){
         repository.updateStatus(book, bookStatus);
     }
 

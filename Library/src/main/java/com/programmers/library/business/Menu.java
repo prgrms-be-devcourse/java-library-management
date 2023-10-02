@@ -8,7 +8,7 @@ import com.programmers.library.view.Output;
 
 import java.util.List;
 
-import static com.programmers.library.domain.BookStatus.*;
+import static com.programmers.library.domain.BookStatusType.*;
 
 public class Menu {
     private static final int EMPTY = 0;
@@ -168,7 +168,7 @@ public class Menu {
     상태 : %s
 
     ------------------------------
-    """.formatted(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getBookStatus().getStatusDescription());
+    """.formatted(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getBookStatus().getDescription());
 
     }
 }

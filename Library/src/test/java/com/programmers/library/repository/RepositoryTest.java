@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.programmers.library.domain.BookStatus.ORGANIZING;
-import static com.programmers.library.domain.BookStatus.RENTABLE;
+import static com.programmers.library.domain.BookStatusType.ORGANIZING;
+import static com.programmers.library.domain.BookStatusType.RENTABLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RepositoryTest {
@@ -101,7 +101,7 @@ class RepositoryTest {
         repository.updateStatus(findBook, ORGANIZING);
 
         // Then
-        assertEquals(findBook.getBookStatus().getStatusDescription(), "정리중");
+        assertEquals(findBook.getBookStatus().getDescription(), "정리중");
     }
 
     @Test

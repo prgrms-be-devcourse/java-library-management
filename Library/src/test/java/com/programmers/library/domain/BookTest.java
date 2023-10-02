@@ -31,13 +31,13 @@ public class BookTest {
         String title = "제목1";
         String author = "작가1";
         Integer page = 100;
-        BookStatus status = BookStatus.LOST;
+        BookStatusType status = BookStatusType.LOST;
 
         // When
         Book book = new Book(bookId, title, author, page, status);
 
         // Then
-        BookStatus bookStatus = book.getBookStatus();
-        assertEquals(bookStatus.getStatusDescription(), "분실");
+        BookStatusType bookStatus = book.getBookStatus();
+        assertEquals(bookStatus.getDescription(), "분실");
     }
 }
