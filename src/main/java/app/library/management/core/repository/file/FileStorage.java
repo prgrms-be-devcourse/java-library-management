@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class FileStorage {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public FileStorage() {
         objectMapper.registerModule(new JavaTimeModule());
