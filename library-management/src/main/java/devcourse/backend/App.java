@@ -1,14 +1,12 @@
 package devcourse.backend;
 
 import devcourse.backend.business.BookService;
-import devcourse.backend.repository.Repository;
+import devcourse.backend.business.ModeType;
 import devcourse.backend.view.Console;
 
 public class App {
     public static void main(String[] args) {
-        int mode = Console.selectMode();
-        Repository repository = Mode.getRepository(mode);
-        BookService service = new BookService(repository);
+        BookService service = new BookService(ModeType.getByNumber(Console.selectMode()));
         Console view = new Console(service);
 
         view.run();
