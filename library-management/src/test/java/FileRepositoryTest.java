@@ -12,12 +12,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
+import static devcourse.backend.FileSetting.TEST_FILE_NAME;
+import static devcourse.backend.FileSetting.TEST_FILE_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-public class FileRepositoryTest {
-    private static final String TEST_FILE_PATH = "src/test/resources/";
-    private static final String TEST_FILE_NAME = "도서 목록.csv";
+public class FileRepositoryTest { ;
     private FileRepository fileRepository;
 
     @BeforeEach
@@ -25,7 +25,7 @@ public class FileRepositoryTest {
         // 테스트 파일에 데이터 삽입
         addDataToTestFile();
         // 각 테스트 전에 FileRepository 초기화
-        fileRepository = new FileRepository(TEST_FILE_PATH, TEST_FILE_NAME);
+        fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class FileRepositoryTest {
         fileRepository.flush();
 
         // 파일에서 저장한 데이터 찾기
-        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
+        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
         try (BufferedReader reader = Files.newBufferedReader(filePath)) {
             String header = reader.readLine();
             assertEquals(fileRepository.getColumns(), header);
@@ -137,7 +137,7 @@ public class FileRepositoryTest {
 
     private void addDataToTestFile() throws IOException {
         // 파일에 테스트 데이터 추가
-        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
+        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
         try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("도서 번호;도서명;작가;총 페이지 수;상태");
             writer.newLine();

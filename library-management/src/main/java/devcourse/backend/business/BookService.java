@@ -1,7 +1,10 @@
 package devcourse.backend.business;
 
+import devcourse.backend.FileSetting;
 import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
+import devcourse.backend.repository.FileRepository;
+import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.BookDto;
 
@@ -9,11 +12,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static devcourse.backend.FileSetting.*;
+
 public class BookService {
     private final Repository repository;
 
-    public BookService(Repository repository) {
-        this.repository = repository;
+    public BookService(ModeType mode) {
+        if(mode == ModeType.TEST_MODE) {
+            this.repository = new MemoryRepository();
+        } else this.repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
     }
 
     public void registerBook(BookDto data) {
