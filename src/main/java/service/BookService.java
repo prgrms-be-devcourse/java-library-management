@@ -8,7 +8,6 @@ import repository.BookRepository;
 import java.util.List;
 
 import static domain.Status.CLEANING;
-import static domain.Status.LOST;
 
 public class BookService {
     private final BookRepository repository;
