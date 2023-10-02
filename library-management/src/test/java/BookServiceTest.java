@@ -26,16 +26,10 @@ public class BookServiceTest {
     private static List<BookDto> getBookDtos() {
         List<BookDto> dtos = new ArrayList<>();
 
-        BookDto book = new BookDto();
-        book.setTitle("이펙티브 자바");
-        book.setAuthor("조슈아 블로크");
-        book.setTotalPages(520);
+        BookDto book = new BookDto("이펙티브 자바", "조슈아 블로크", 520);
         dtos.add(book);
 
-        BookDto book2 = new BookDto();
-        book2.setTitle("친절한 SQL 튜닝");
-        book2.setAuthor("조시형");
-        book2.setTotalPages(560);
+        BookDto book2 = new BookDto("친절한 SQL 튜닝", "조시형", 560);
         dtos.add(book2);
 
         return dtos;
