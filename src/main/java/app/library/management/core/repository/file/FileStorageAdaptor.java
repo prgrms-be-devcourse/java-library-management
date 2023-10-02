@@ -19,7 +19,7 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         int nextId = fileStorage.readFile(file).size();
         book.setId(nextId);
         fileStorage.saveFile(file, new BookVO(nextId, book.getTitle(), book.getAuthor(), book.getPages()));
@@ -28,7 +28,7 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         List<BookVO> bookVOs = fileStorage.readFile(file);
         return bookVOs.stream()
                 .map(it -> new Book(it.getId(), it.getTitle(), it.getAuthor(), it.getPages(), it.getStatus(), it.getLastModifiedTime()))
@@ -37,7 +37,7 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public List<Book> findByTitle(String title) {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         List<BookVO> bookVOs = fileStorage.readFile(file);
         return bookVOs.stream()
                 .filter(bookVO -> bookVO.getTitle().contains(title))
@@ -47,7 +47,7 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         List<BookVO> bookVOs = fileStorage.readFile(file);
         return bookVOs.stream()
                 .filter(bookVO -> bookVO.getId() == id)
@@ -57,13 +57,18 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public void delete(Book book) {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         fileStorage.deleteFile(file, new BookVO(book.getId(), book.getTitle(), book.getAuthor(), book.getPages()));
     }
 
     @Override
     public void update(Book book) {
-        File file = fileStorage.openFile(filePath);
+        File file = getFile();
         fileStorage.updateFile(file, new BookVO(book.getId(), book.getTitle(), book.getAuthor(), book.getPages(), book.getStatus(), book.getLastModifiedTime()));
+    }
+
+    private File getFile() {
+        File file = fileStorage.openFile(filePath);
+        return file;
     }
 }
