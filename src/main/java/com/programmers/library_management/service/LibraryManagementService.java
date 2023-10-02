@@ -15,7 +15,7 @@ public class LibraryManagementService {
     }
 
     public void addBook(String title, String writer, int pageNumber) {
-        Book newBook = Book.newBookOf(bookRepository.generateBookId(), title, writer, pageNumber);
+        Book newBook = Book.of(bookRepository.generateBookId(), title, writer, pageNumber);
         for (Book book : bookRepository.findByTitle(title)) {
             if (book.equals(newBook)) {
                 throw new CBookAlreadyExistException();
@@ -29,7 +29,7 @@ public class LibraryManagementService {
         switch (book.getStatus()) {
             case Ranted -> throw new CBookAlreadyRantedException();
             case Lost -> throw new CBookAlreadyLostException();
-            case Organized -> {
+            case Organize -> {
                 if (!book.isOrganized()) {
                     throw new CBookInOrganizeException();
                 }
@@ -42,7 +42,7 @@ public class LibraryManagementService {
     public void returnBook(int id) {
         Book book = bookRepository.findById(id).orElseThrow(CBookIdNotExistException::new);
         switch (book.getStatus()) {
-            case Organized, Available -> throw new CBookAlreadyReturnedException();
+            case Organize, Available -> throw new CBookAlreadyReturnedException();
         }
         book.returned();
         bookRepository.save(book);

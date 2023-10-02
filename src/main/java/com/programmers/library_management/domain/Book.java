@@ -12,11 +12,11 @@ public class Book {
     private StatusType statusType;
     private LocalDateTime returnDateTime;
 
-    public static Book newBookOf(int id, String title, String writer, int pageNumber){
+    public static Book of(int id, String title, String writer, int pageNumber){
         return new Book(id, title, writer, pageNumber, StatusType.Available, "null");
     }
 
-    public static Book loadBookOf(int id, String title, String writer, int pageNumber, StatusType statusType, String returnDateTime){
+    public static Book of(int id, String title, String writer, int pageNumber, StatusType statusType, String returnDateTime){
         return new Book(id, title, writer, pageNumber, statusType, returnDateTime);
     }
 
@@ -68,7 +68,7 @@ public class Book {
     }
 
     public boolean isOrganized() {
-        if (statusType.equals(StatusType.Organized)) {
+        if (statusType.equals(StatusType.Organize)) {
             int ORGANIZE_TIME = 5;
             return returnDateTime.plusMinutes(ORGANIZE_TIME).isBefore(LocalDateTime.now());
         }
@@ -88,7 +88,7 @@ public class Book {
     }
 
     public void returned() {
-        this.statusType = StatusType.Organized;
+        this.statusType = StatusType.Organize;
         this.returnDateTime = LocalDateTime.now();
     }
 }

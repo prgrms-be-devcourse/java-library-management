@@ -2,7 +2,10 @@ package com.programmers.library_management.repository;
 
 import com.programmers.library_management.domain.Book;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class TestBookRepository implements BookRepository {
 
@@ -44,11 +47,10 @@ public class TestBookRepository implements BookRepository {
 
     @Override
     public void updateAllBookStatus() {
-        for (Book book : bookMemory.values()) {
-            if (book.isOrganized()) {
-                book.available();
-            }
-        }
+        bookMemory.values()
+                .stream()
+                .filter(Book::isOrganized)
+                .forEach(Book::available);
     }
 
     @Override

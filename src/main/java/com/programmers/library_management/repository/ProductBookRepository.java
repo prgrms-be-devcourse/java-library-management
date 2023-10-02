@@ -13,7 +13,7 @@ public class ProductBookRepository implements BookRepository {
     private final CsvFileManager csvFileManager;
 
     public ProductBookRepository() {
-        csvFileManager = new CsvFileManager();
+        csvFileManager = new CsvFileManager("book_list");
         this.bookMemory = csvFileManager.loadMemoryFromCsv();
     }
 
@@ -51,11 +51,10 @@ public class ProductBookRepository implements BookRepository {
 
     @Override
     public void updateAllBookStatus() {
-        for (Book book : bookMemory.values()) {
-            if (book.isOrganized()) {
-                book.available();
-            }
-        }
+        bookMemory.values()
+                .stream()
+                .filter(Book::isOrganized)
+                .forEach(Book::available);
         csvFileManager.saveMemoryToCsv(bookMemory);
     }
 

@@ -9,27 +9,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CsvFileManager {
-    private String RESOURCES = System.getProperty("user.dir") + "/data";
+    private static final String FOLDER_PATH =  System.getProperty("user.dir") + "/data";
+    private final String FILE_PATH;
 
-    public CsvFileManager(){
+    public CsvFileManager(String fileName) {
         createDataFolder();
-        RESOURCES += "/book_list.csv";
-    }
-    public CsvFileManager(String file_name) {
-        createDataFolder();
-        RESOURCES += "/"+file_name+".csv";
+        FILE_PATH = FOLDER_PATH + "/"+fileName+".csv";
     }
 
     private void createDataFolder() {
-        File file = new File(RESOURCES);
+        File file = new File(FOLDER_PATH);
         if (!file.exists()) {
             file.mkdir();
         }
     }
 
-    public void saveMemoryToCsv(Map<Integer, Book> bookList) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(RESOURCES, false), StandardCharsets.UTF_8))) {
-            for (Book book : bookList.values()) {
+    public void saveMemoryToCsv(Map<Integer, Book> bookMemory) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE_PATH, false), StandardCharsets.UTF_8))) {
+            for (Book book : bookMemory.values()) {
                 bufferedWriter.write(book.toCsvString());
             }
         } catch (IOException e) {
@@ -39,21 +36,21 @@ public class CsvFileManager {
 
     public Map<Integer, Book> loadMemoryFromCsv() {
         Map<Integer, Book> bookMemory = new HashMap<>();
-        File file = new File(RESOURCES);
+        File file = new File(FILE_PATH);
         if (file.exists()) {
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(RESOURCES), StandardCharsets.UTF_8))) {
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_PATH), StandardCharsets.UTF_8))) {
                 String tempData;
                 while ((tempData = bufferedReader.readLine()) != null) {
-                    String[] bookRawData = tempData.split(",");
-                    Book book = Book.loadBookOf(
-                            Integer.parseInt(bookRawData[0]),
-                            bookRawData[1],
-                            bookRawData[2],
-                            Integer.parseInt(bookRawData[3]),
-                            StatusType.valueOf(bookRawData[4]),
-                            bookRawData[5]
+                    String[] rawBookData = tempData.split(",");
+                    Book book = Book.of(
+                            Integer.parseInt(rawBookData[0]),
+                            rawBookData[1],
+                            rawBookData[2],
+                            Integer.parseInt(rawBookData[3]),
+                            StatusType.valueOf(rawBookData[4]),
+                            rawBookData[5]
                     );
-                    bookMemory.put(Integer.parseInt(bookRawData[0]), book);
+                    bookMemory.put(Integer.parseInt(rawBookData[0]), book);
                 }
             } catch (IOException ignore) {
                 System.out.println("[System] 잘못된 파일 접근입니다.\n");
