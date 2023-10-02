@@ -8,6 +8,8 @@ import com.programmers.library.repository.Repository;
 
 import java.util.List;
 
+import static com.programmers.library.domain.Book.*;
+
 public class LibraryService {
     private final Repository repository;
 
@@ -18,7 +20,7 @@ public class LibraryService {
     public void registerBook(String title, String author, Integer page) {
         Long lastId = repository.findLastId() + 1;
 
-        repository.register(new Book(lastId, title, author, page));
+        repository.register(createRentableBook(lastId, title, author, page));
     }
 
     public void updateStatus(Book book, BookStatusType bookStatus){
