@@ -19,7 +19,8 @@ public class BookExceptionHandler extends BookController {
 		try {
 			target.run();
 		} catch (BookException e) {
-			System.out.println("\n[System] " + e.getMessage() + "\n");
+			String newLine = System.lineSeparator();
+			System.out.println(newLine + "[System] " + e.getMessage() + newLine);
 		}
 	}
 }

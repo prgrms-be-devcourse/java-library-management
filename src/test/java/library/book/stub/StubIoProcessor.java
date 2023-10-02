@@ -41,8 +41,8 @@ public class StubIoProcessor extends IoProcessor {
 	@Override
 	public void outputBookInfo(
 		final List<BookSearchResponse> responses,
-		final String entryMessage,
-		final String completeMessage
+		final Message entryMessage,
+		final Message completeMessage
 	) {
 		System.out.println("[call outputBookInfo()]");
 	}

@@ -32,8 +32,8 @@ public class FunctionExecutor {
 		List<BookSearchResponse> responses = bookService.searchBooks();
 		ioProcessor.outputBookInfo(
 			responses,
-			ENTRY_SEARCH_ALL_BOOKS.getValue(),
-			COMPLETE_SEARCH_ALL_BOOKS.getValue()
+			ENTRY_SEARCH_ALL_BOOKS,
+			COMPLETE_SEARCH_ALL_BOOKS
 		);
 	}
 
@@ -43,8 +43,8 @@ public class FunctionExecutor {
 		List<BookSearchResponse> responses = bookService.searchBooks(title);
 		ioProcessor.outputBookInfo(
 			responses,
-			ENTRY_SEARCH_BOOKS_BY_TITLE.getValue(),
-			COMPLETE_SEARCH_ALL_BOOKS.getValue()
+			ENTRY_SEARCH_BOOKS_BY_TITLE,
+			COMPLETE_SEARCH_ALL_BOOKS
 		);
 	}
 
