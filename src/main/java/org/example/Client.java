@@ -77,7 +77,7 @@ public class Client {
         String author = scan.nextLine();
         System.out.println("Q. 페이지 수를 입력하세요.");
         Integer pageSize = scan.nextInt();
-        libraryManagementService.registerBook(new Book(nextBookId++, title, author, pageSize));
+        libraryManagementService.registerBook(Book.createWithoutStatus(nextBookId++, title, author, pageSize));
         System.out.println("[System] 도서 등록이 완료되었습니다.\n");
     }
 

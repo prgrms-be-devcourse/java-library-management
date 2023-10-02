@@ -83,7 +83,7 @@ public class FileRepository implements Repository {
                 Integer pageSize = Integer.parseInt(bookInfo[3]);
                 BookStatusType status = BookStatusType.getValueByName(bookInfo[4]);
 
-                Book book = new Book(id, title, author, pageSize, status);
+                Book book = Book.createWithStatus(id, title, author, pageSize, status);
                 books.put(id, book);
             }
         } catch (IOException e) {
