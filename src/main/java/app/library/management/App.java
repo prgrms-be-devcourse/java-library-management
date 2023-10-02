@@ -7,13 +7,21 @@ import app.library.management.infra.mode.ExecutionMode;
 
 public class App {
 
-    public void logic () {
+    private final Console console;
+    private final ExecutionMode executionMode;
+    private final Configuration configuration;
 
-        Console console = new Console();
+    private final BookController bookController;
+
+    public App() {
+        this.console = new Console();
         console.selectMode();
-        ExecutionMode executionMode = ExecutionMode.fromNum(console.inputInt());
-        Configuration configuration = new Configuration(executionMode);
-        BookController bookController = configuration.bookController();
+        this.executionMode = ExecutionMode.fromNum(console.inputInt());
+        this.configuration = new Configuration(executionMode);
+        this.bookController = configuration.bookController();
+    }
+
+    public void logic () {
 
         while(true) {
             console.selectMenu();
