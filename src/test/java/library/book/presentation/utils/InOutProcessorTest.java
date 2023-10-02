@@ -27,7 +27,7 @@ class InOutProcessorTest {
 	);
 
 	@Test
-	@DisplayName("[inputString 테스트]")
+	@DisplayName("[문자열을 입력받는다]")
 	void inputStringTest() {
 		//when
 		String result = inOutProcessor.inputString();
@@ -37,7 +37,7 @@ class InOutProcessorTest {
 	}
 
 	@Test
-	@DisplayName("[inputNumber 테스트]")
+	@DisplayName("[숫자를 입력받아 정해진 문자열로 변환한다]")
 	void inputModeNumberTest() {
 		//when
 		String result = inOutProcessor.inputNumber(OutputHandler::showSelectFunction);
@@ -47,7 +47,7 @@ class InOutProcessorTest {
 	}
 
 	@Test
-	@DisplayName("[inputBookInfo 테스트]")
+	@DisplayName("[도서 정보를 입력받는다]")
 	void inputBookInfoTest() {
 		//when
 		RegisterBookRequest result = inOutProcessor.inputBookInfo();
@@ -61,7 +61,7 @@ class InOutProcessorTest {
 	}
 
 	@Test
-	@DisplayName("[outputBookInfo 테스트]")
+	@DisplayName("[도서 정보를 출력한다]")
 	void outputBookInfoTest() {
 		//given
 		List<BookSearchResponse> responses = Arrays.stream(BookFixture.values())
@@ -73,12 +73,12 @@ class InOutProcessorTest {
 			responses, ENTRY_SEARCH_ALL_BOOKS.getValue(), COMPLETE_SEARCH_ALL_BOOKS.getValue()
 		);
 
-		//
+		//then
 		assertDoesNotThrow(when);
 	}
 
 	@Test
-	@DisplayName("[inputBookId 테스트]")
+	@DisplayName("[도서 번호를 입력받는다]")
 	void inputBookId() {
 		//when
 		Executable when = () -> inOutProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
@@ -88,7 +88,7 @@ class InOutProcessorTest {
 	}
 
 	@Test
-	@DisplayName("[outputCompleteMessage 테스트]")
+	@DisplayName("[완료 메세지를 출력한다]")
 	void outputCompleteMessageTest() {
 		//when
 		Executable when = () -> inOutProcessor.outputCompleteMessage(COMPLETE_RENT);

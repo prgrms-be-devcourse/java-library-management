@@ -19,7 +19,7 @@ class ModeManagerTest {
 	class getRepositoryTest {
 
 		@Test
-		@DisplayName("[ONE]")
+		@DisplayName("[Io 저장소를 생성하여 리턴한다]")
 		void ONE() {
 			//given
 			ModeManager one = ModeManager.ONE;
@@ -32,7 +32,7 @@ class ModeManagerTest {
 		}
 
 		@Test
-		@DisplayName("[TWO]")
+		@DisplayName("[테스트 저장소를 생성하여 리턴한다]")
 		void TWO() {
 			//given
 			ModeManager two = ModeManager.TWO;

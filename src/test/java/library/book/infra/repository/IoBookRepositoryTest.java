@@ -43,11 +43,11 @@ class IoBookRepositoryTest {
 	}
 
 	@Nested
-	@DisplayName("[생성자 테스트]")
+	@DisplayName("[json 파일을 읽어 레포지토리를 초기화한다]")
 	class constructorTest {
 
 		@Test
-		@DisplayName("[Success]")
+		@DisplayName("[성공적으로 파일을 읽어 레포지토리를 초기화한다]")
 		void success() throws IOException {
 			//given
 			try (FileWriter fileWriter = new FileWriter(FILE_PATH)) {
@@ -72,7 +72,7 @@ class IoBookRepositoryTest {
 		}
 
 		@Test
-		@DisplayName("[Fail] filePath 에 파일이 존재하지 않아 실패한다")
+		@DisplayName("파일 경로에 파일이 존재하지 않아 실패한다")
 		void failWhenNotExistFile() {
 			//given
 			final String filePath = "no.json";
@@ -88,7 +88,7 @@ class IoBookRepositoryTest {
 	}
 
 	@Nested
-	@DisplayName("[save 테스트]")
+	@DisplayName("[도서를 저장한다]")
 	class saveTest {
 
 		@Test
@@ -109,7 +109,7 @@ class IoBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[generateNewId 테스트]")
+	@DisplayName("[새로운 도서 번호를 만들어낸다]")
 	void generateNewIdTest() {
 		//given
 		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
@@ -125,7 +125,7 @@ class IoBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findAll 테스트]")
+	@DisplayName("[저장소의 모든 도서를 조회한다]")
 	void findAllTest() {
 		//given
 		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
@@ -152,7 +152,7 @@ class IoBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findByTitle 테스트]")
+	@DisplayName("[저장소에서 제목으로 도서를 조회한다]")
 	void findByTitleTest() {
 		//given
 		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
@@ -168,7 +168,7 @@ class IoBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findById 테스트]")
+	@DisplayName("[저장소에서 도서 번호로 도서를 조회한다]")
 	void findByIdTest() {
 		//given
 		BookRepository bookRepository = new IoBookRepository(FILE_PATH);
@@ -183,11 +183,11 @@ class IoBookRepositoryTest {
 	}
 
 	@Nested
-	@DisplayName("[deleteById 테스트]")
+	@DisplayName("[저장소에서 도서 번호로 도서를 삭제한다]")
 	class deleteByIdTest {
 
 		@Test
-		@DisplayName("[Success]")
+		@DisplayName("[저장소에서 도서를 성공적으로 삭제한다]")
 		void success() throws IOException {
 			//given
 			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
@@ -203,7 +203,7 @@ class IoBookRepositoryTest {
 		}
 
 		@Test
-		@DisplayName("[Fail] id 에 대한 Book 이 존재하지 않아 실패한다.")
+		@DisplayName("저장소에 도서번호에 대한 대한 도서가 존재하지 않아 실패한다")
 		void failWhenNotFoundById() {
 			//given
 			BookRepository bookRepository = new IoBookRepository(FILE_PATH);
