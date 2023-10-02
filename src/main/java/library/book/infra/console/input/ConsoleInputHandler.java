@@ -6,8 +6,9 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import library.book.exception.BookException;
+import library.book.presentation.io.InputHandler;
 
-public class ConsoleInputHandler implements InputHandler{
+public class ConsoleInputHandler implements InputHandler {
 
 	public int inputNumber() {
 		try {

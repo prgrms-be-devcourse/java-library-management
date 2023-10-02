@@ -2,6 +2,8 @@ package library.book.infra.console.output;
 
 import java.io.PrintStream;
 
+import library.book.presentation.io.OutputHandler;
+
 public class ConsoleOutputHandler implements OutputHandler {
 
 	private static final PrintStream out = System.out;

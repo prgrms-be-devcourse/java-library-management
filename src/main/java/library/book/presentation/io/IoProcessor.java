@@ -1,4 +1,4 @@
-package library.book.presentation.utils;
+package library.book.presentation.io;
 
 import static library.book.presentation.constant.Message.*;
 
@@ -7,18 +7,16 @@ import java.util.function.Consumer;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
-import library.book.infra.console.input.InputHandler;
-import library.book.infra.console.output.OutputHandler;
 import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
 
-public class InOutProcessor {
+public class IoProcessor {
 
 	private final InputHandler inputHandler;
 	private final OutputHandler outputHandler;
 	private final InputConverter converter;
 
-	public InOutProcessor(
+	public IoProcessor(
 		final InputHandler inputHandler,
 		final OutputHandler outputHandler,
 		final InputConverter converter
@@ -74,7 +72,7 @@ public class InOutProcessor {
 	) {
 		outputHandler.showSystemMessage(entryMessage);
 
-		responses.forEach(response ->{
+		responses.forEach(response -> {
 			outputHandler.showSystemMessage("도서번호 : " + response.id());
 			outputHandler.showSystemMessage("제목 : " + response.title());
 			outputHandler.showSystemMessage("작가 이름 : " + response.authorName());

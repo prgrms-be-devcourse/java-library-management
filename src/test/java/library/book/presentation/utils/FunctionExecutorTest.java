@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import library.book.stub.StubBookService;
-import library.book.stub.StubInOutProcessor;
+import library.book.stub.StubIoProcessor;
 
 @DisplayName("[FunctionExecutor Test] - Presentation")
 class FunctionExecutorTest {
 
 	private final FunctionExecutor functionExecutor = new FunctionExecutor(
-		new StubBookService(), new StubInOutProcessor(null, null, null)
+		new StubBookService(), new StubIoProcessor(null, null, null)
 	);
 
 	@Test

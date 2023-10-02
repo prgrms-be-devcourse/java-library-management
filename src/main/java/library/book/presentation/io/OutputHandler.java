@@ -1,4 +1,4 @@
-package library.book.infra.console.output;
+package library.book.presentation.io;
 
 public interface OutputHandler {
 

@@ -5,15 +5,15 @@ import java.util.function.Consumer;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
-import library.book.infra.console.input.InputHandler;
-import library.book.infra.console.output.OutputHandler;
+import library.book.presentation.io.InputHandler;
+import library.book.presentation.io.IoProcessor;
+import library.book.presentation.io.OutputHandler;
 import library.book.presentation.constant.Message;
 import library.book.presentation.converter.InputConverter;
-import library.book.presentation.utils.InOutProcessor;
 
-public class StubInOutProcessor extends InOutProcessor {
+public class StubIoProcessor extends IoProcessor {
 
-	public StubInOutProcessor(
+	public StubIoProcessor(
 		InputHandler inputHandler,
 		OutputHandler outputHandler,
 		InputConverter converter

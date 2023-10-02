@@ -1,4 +1,4 @@
-package library.book.infra.console.input;
+package library.book.presentation.io;
 
 public interface InputHandler {
 
