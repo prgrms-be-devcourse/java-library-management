@@ -1,6 +1,7 @@
 package com.programmers.library.business;
 
 import com.programmers.library.domain.Book;
+import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.service.LibraryService;
 import com.programmers.library.view.Input;
 import com.programmers.library.view.Output;
@@ -71,54 +72,69 @@ public class Menu {
         output.write("\n[System] 도서 대여 메뉴로 넘어갑니다.\n\nQ. 대여할 도서번호를 입력하세요.\n\n> ");
         Long bookId = input.selectNumber();
 
-        Book rentalBook = libraryService.findBookById(bookId);
+        try{
+            Book rentalBook = libraryService.findBookById(bookId);
 
-        switch (rentalBook.getBookStatus()) {
-            case RENTABLE -> {
-                output.write("\n[System] 도서가 대여 처리 되었습니다.\n");
-                libraryService.updateStatus(rentalBook, RENTED);
+            switch (rentalBook.getBookStatus()) {
+                case RENTABLE -> {
+                    output.write("\n[System] 도서가 대여 처리 되었습니다.\n");
+                    libraryService.updateStatus(rentalBook, RENTED);
+                }
+                case RENTED -> output.write("\n[System] 이미 대여중인 도서입니다.\n");
+                case ORGANIZING -> {
+                    output.write("\n[System] 도서가 정리중입니다. 잠시 후 다시 시도해주세요.\n");
+                    libraryService.completeOrganizing(rentalBook);
+                }
+                case LOST -> output.write("\n[System] 분실 처리된 도서로 대여가 불가능합니다.\n");
             }
-            case RENTED -> output.write("\n[System] 이미 대여중인 도서입니다.\n");
-            case ORGANIZING -> {
-                output.write("\n[System] 도서가 정리중입니다. 잠시 후 다시 시도해주세요.\n");
-                libraryService.completeOrganizing(rentalBook);
-            }
-            case LOST -> output.write("\n[System] 분실 처리된 도서로 대여가 불가능합니다.\n");
+        }catch (ExceptionHandler e){
+            output.write(System.lineSeparator() + e.getMessage());
         }
     }
 
     public void returnBook(){
         output.write("\n[System] 도서 반납 메뉴로 넘어갑니다.\n\nQ.반납할 도서번호를 입력하세요\n\n> ");
+
         Long bookId = input.selectNumber();
-        Book returnBook = libraryService.findBookById(bookId);
 
-        switch (returnBook.getBookStatus()) {
-            case RENTED, LOST -> {
-                libraryService.updateStatus(returnBook, ORGANIZING);
-                libraryService.completeOrganizing(returnBook);
-                output.write("\n[System] 도서가 반납 처리 되었습니다.");
-            }
-            case RENTABLE -> output.write("\n[System] 원래 대여가 가능한 도서입니다.");
-            case ORGANIZING -> {
-                output.write("\n[System] 이미 반납되어 정리중인 도서입니다.");
-                libraryService.completeOrganizing(returnBook);
-            }
+        try{
+            Book returnBook = libraryService.findBookById(bookId);
 
+            switch (returnBook.getBookStatus()) {
+                case RENTED, LOST -> {
+                    libraryService.updateStatus(returnBook, ORGANIZING);
+                    libraryService.completeOrganizing(returnBook);
+                    output.write("\n[System] 도서가 반납 처리 되었습니다.");
+                }
+                case RENTABLE -> output.write("\n[System] 원래 대여가 가능한 도서입니다.");
+                case ORGANIZING -> {
+                    output.write("\n[System] 이미 반납되어 정리중인 도서입니다.");
+                    libraryService.completeOrganizing(returnBook);
+                }
+            }
+        }catch (ExceptionHandler e){
+            output.write(System.lineSeparator() + e.getMessage());
         }
     }
 
     public void lostBook(){
         output.write("\n[System] 도서 분실 처리 메뉴로 넘어갑니다.\n\nQ. 분실 처리할 도서번호를 입력하세요.\n\n> ");
-        Long bookId = input.selectNumber();
-        Book lostBook = libraryService.findBookById(bookId);
 
-        switch (lostBook.getBookStatus()) {
-            case RENTED -> {
-                libraryService.updateStatus(lostBook, LOST);
-                output.write("\n[System] 도서가 분실 처리 되었습니다.\n");
+        Long bookId = input.selectNumber();
+
+        try{
+            Book lostBook = libraryService.findBookById(bookId);
+
+            switch (lostBook.getBookStatus()) {
+                case RENTED -> {
+                    libraryService.updateStatus(lostBook, LOST);
+                    output.write("\n[System] 도서가 분실 처리 되었습니다.\n");
+                }
+                case RENTABLE, ORGANIZING -> output.write("\n[System] 분실 처리할 수 없는 도서입니다.");
+                case LOST -> output.write("\n[System] 이미 분실 처리된 도서입니다.");
             }
-            case RENTABLE, ORGANIZING -> output.write("\n[System] 분실 처리할 수 없는 도서입니다.");
-            case LOST -> output.write("\n[System] 이미 분실 처리된 도서입니다.");
+        }catch (ExceptionHandler e){
+            output.write(System.lineSeparator() + e.getMessage());
         }
     }
 
@@ -126,9 +142,13 @@ public class Menu {
         output.write("\n[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n\nQ. 삭제 처리할 도서번호를 입력하세요.\n\n> ");
 
         Long bookId = input.selectNumber();
-        libraryService.deleteBook(bookId);
 
-        output.write("\n[System] 도서가 삭제 처리 되었습니다.\n");
+        try{
+            libraryService.deleteBook(bookId);
+            output.write("\n[System] 도서가 삭제 처리 되었습니다.\n");
+        }catch (ExceptionHandler e){
+            output.write(System.lineSeparator() + e.getMessage());
+        }
     }
 
     public void exit(){
