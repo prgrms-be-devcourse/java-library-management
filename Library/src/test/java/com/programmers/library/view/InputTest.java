@@ -28,7 +28,7 @@ class InputTest {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(byteArrayInputStream);
 
-        Input input = new ConsoleInput();
+        ConsoleInput input = new ConsoleInput();
 
         // When
         Long number = input.selectNumber();
@@ -46,7 +46,7 @@ class InputTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(inputStream);
 
-        Input input = new ConsoleInput();
+        ConsoleInput input = new ConsoleInput();
 
         // When
         String result = input.inputString();

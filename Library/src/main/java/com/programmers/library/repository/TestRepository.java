@@ -46,7 +46,6 @@ public class TestRepository implements Repository{
 
     @Override
     public Long findLastId() {
-        Long maxId = map.keySet().stream().max(Long::compareTo).orElse(0L);
-        return maxId;
+        return map.keySet().stream().max(Long::compareTo).orElse(0L);
     }
 }

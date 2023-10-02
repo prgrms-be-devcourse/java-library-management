@@ -1,11 +1,10 @@
 package com.programmers.library.view.console;
 
-import com.programmers.library.validation.ValidateInput;
-import com.programmers.library.view.Input;
+import com.programmers.library.validation.InputValidator;
 
 import java.util.Scanner;
 
-public class ConsoleInput implements Input {
+public class ConsoleInput  {
 
     private final Scanner scanner;
 
@@ -13,12 +12,12 @@ public class ConsoleInput implements Input {
         this.scanner = new Scanner(System.in);
     }
 
-    @Override
+
     public Long selectNumber() {
-        return ValidateInput.checkNumberValidate(scanner);
+        return InputValidator.checkNumberValidate(scanner);
     }
 
-    @Override
+
     public String inputString() {
         return scanner.nextLine();
     }
