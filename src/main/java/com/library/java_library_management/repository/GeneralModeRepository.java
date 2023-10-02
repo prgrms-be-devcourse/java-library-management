@@ -1,6 +1,5 @@
 package com.library.java_library_management.repository;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.dto.JsonInfo;
@@ -22,22 +21,7 @@ public class GeneralModeRepository implements Repository{
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final FileControl fileControl = new FileControl();
-    private String bookNumPath;
-    private int value;
-    private String filePath;
-    private String fileName;
-
-
-    public GeneralModeRepository() throws IOException{
-        this.bookNumPath = "D:\\Users\\java_library_management\\bookcnt.json";
-//        this.bookNumPath = "java_library_management\\bookcnt.json";
-        JsonNode jsonNode = objectMapper.readTree(new File(bookNumPath));
-        this.value = Integer.parseInt(jsonNode.get("count").asText());
-
-        this.filePath = "D:\\Users\\java_library_management\\";
-//        this.filePath = "java_library_management\\";
-        this.fileName = value + ". book.json";
-    }
+    private final FileInfo fileInfo = new FileInfo();
 
 
 
@@ -47,11 +31,13 @@ public class GeneralModeRepository implements Repository{
     public void registerBook(String title, String author, int pageSize) {
         try{
             String jsonStatus = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
-            fileControl.writeFile(filePath + fileName,
-                            new JsonInfo(Integer.parseInt(fileControl.readFile(bookNumPath, "count")),
+            fileControl.writeFile(fileInfo.getFilePath() + fileInfo.getFileName(),
+                            new JsonInfo(Integer.parseInt(fileControl.readFile(fileInfo.getBookNumPath(), "count")),
                             title, author, pageSize, jsonStatus));
-            fileControl.modifyFile(bookNumPath, "count", String.valueOf(++value));
-        }catch (Exception e){
+            fileInfo.setValue(fileInfo.getValue()+1);
+            fileControl.modifyFile(fileInfo.getBookNumPath(), "count", String.valueOf(fileInfo.getValue()));
+            System.out.println("도서가 등록 되었습니다.");
+        }catch (IOException e){
             e.printStackTrace();
         }
 
@@ -60,8 +46,7 @@ public class GeneralModeRepository implements Repository{
     //전체 목록 조회
     @Override
     public List<BookInfo> getTotalBook() {
-        List<File> allFile = fileControl.getAllFile(filePath);
-        System.out.println("리스트 사이즈 : " + allFile.size());
+        List<File> allFile = fileControl.getAllFile(fileInfo.getFilePath());
         List<BookInfo> books = new ArrayList<>();
         try{
             for(File file : allFile){
@@ -87,8 +72,9 @@ public class GeneralModeRepository implements Repository{
 
     @Override
     public String rentBook(int book_id) {
-        File file = new File(filePath + book_id + ". book.json");
+
         try{
+            File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             BookInfo book = getBookFromFile(file);
             if(book.getStatus() == BookStatus.RENT)
                 return "현재 대여중인 도서입니다.";
@@ -102,21 +88,18 @@ public class GeneralModeRepository implements Repository{
                 return book.getStatus().rentBook(book);
             }
         }catch (IOException e){
-            e.printStackTrace();
+            return "존재하지 않는 도서입니다.";
         }
-        return "";
     }
 
     @Override
     public void returnBook(int book_id) {
-        List<File> allFile = fileControl.getAllFile(filePath);
-        File file = new File(filePath + book_id + ". book.json");
+        File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
         try{
             BookInfo book = getBookFromFile(file);
-            if (book.getBook_id() == book_id && book.getStatus() == BookStatus.AVAILABLE) {
-                System.out.println("파일의 상태 : " + book.getStatus());
-                throw new RuntimeException("원래 대여 가능한 도서입니다");
-            } else if (book.getBook_id() == book_id) {
+            if (book.getStatus() == BookStatus.AVAILABLE) {
+                throw new RuntimeException();
+            } else{
                 String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
                 fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
                 scheduler.schedule(() -> {
@@ -127,43 +110,45 @@ public class GeneralModeRepository implements Repository{
                         e.printStackTrace();
                     }
                 }, 5, TimeUnit.MINUTES);
-
-
+                System.out.println("반납 처리 완료 되었습니다.");
             }
         }catch (IOException e){
             e.printStackTrace();
+        }catch (RuntimeException e){
+            System.out.println("원래 대여 가능한 도서입니다");
         }
     }
 
 
     @Override
     public void missBook(int book_id) {
-        File file = new File(filePath + book_id + ". book.json");
         try{
+            File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             BookInfo book = getBookFromFile(file);
-            if(book_id == book.getBook_id() && book.getStatus() == BookStatus.LOST)
-                throw new RuntimeException("이미 분실 처리된 도서입니다.");
-            else if(book_id == book.getBook_id()){
+            if(book.getStatus() == BookStatus.LOST)
+                throw new RuntimeException();
+            else{
                 String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
                 fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+                System.out.println("분실 처리 완료 되었습니다.");
             }
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("존재하지 않는 도서입니다.");
+        }
+        catch (RuntimeException e){
+            System.out.println("이미 분실 처리된 도서입니다.");
         }
     }
 
     @Override
     public void deleteById(int book_id) {
-        File file = new File(filePath + book_id + ". book.json");
+
         try{
-            BookInfo book = getBookFromFile(file);
-            if (book.getBook_id() == book_id) {
-                Files.delete(Paths.get(file.getAbsolutePath()));
-                return;
-            }
-            throw new RuntimeException("존재하지 않는 도서번호입니다.");
+            File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
+            Files.delete(Paths.get(file.getAbsolutePath()));
+            System.out.println("삭제처리 되었습니다.");
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("존재하지 않는 도서입니다.");
         }
     }
 
@@ -184,6 +169,13 @@ public class GeneralModeRepository implements Repository{
     //2번 모드 구현 때, 테스트 코드 작성용 메소드
     @Override
     public Optional<BookInfo> findSameBook(String title) {
+        List<BookInfo> totalBook = getTotalBook();
+        for(BookInfo book : totalBook){
+            if(book.getTitle().equals(title)){
+                return Optional.ofNullable(book);
+
+            }
+        }
         return Optional.empty();
     }
 }

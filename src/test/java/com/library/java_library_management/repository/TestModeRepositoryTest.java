@@ -6,13 +6,12 @@ import com.library.java_library_management.status.BookStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
 
 
-@SpringBootTest
+
 class TestModeRepositoryTest {
     Repository repository = new TestModeRepository();
     Service service = new Service(new TestModeRepository());

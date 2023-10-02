@@ -34,7 +34,7 @@ public class Service {
     //전체 목록 조회
     public void getBook() {
         List<BookInfo> totalBook = repository.getTotalBook();
-        System.out.println(totalBook.size());
+
         for (BookInfo book : totalBook) {
             System.out.println("도서번호 : " + book.getBook_id() + "\n" + "제목 : " + book.getTitle() + "\n" + "작가 : " + book.getAuthor() + "\n" + "페이지 수 : " + book.getPage_size() + "\n" + "상태 : " + book.getStatus());
             System.out.println("\n" + "------------------------------\n" + "\n");
@@ -69,12 +69,9 @@ public class Service {
     public void returnBook() throws IOException {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n" + "\n" + "Q. 반납할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-        try {
-            repository.returnBook(book_id);
-            System.out.println("[System] 반납 처리 되었습니다.");
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-        }
+
+        repository.returnBook(book_id);
+
     }
 
 
@@ -82,24 +79,16 @@ public class Service {
     public void missBook() throws IOException {
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n" + "\n" + "Q. 분실 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-        try {
-            repository.missBook(number);
-            System.out.println("[System] 도서가 분실 처리 되었습니다.");
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-        }
-
+        repository.missBook(number);
     }
 
     //도서 삭제처리
     public void deleteBook() throws IOException {
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n" + "\n" + "Q. 삭제 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-        try {
-            repository.deleteById(number);
-            System.out.println("[System] 삭제 처리 되었습니다.");
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-        }
+
+        repository.deleteById(number);
+
+
     }
 }

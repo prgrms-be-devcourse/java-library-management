@@ -4,14 +4,14 @@ import com.library.java_library_management.status.BookStatus;
 
 public class BookInfo {
     private final int book_id;
-    private final String author;
     private final String title;
+    private final String author;
     private final int page_size;
     private BookStatus status;
-    public BookInfo(int book_id, String author, String title, int page_size, BookStatus status) {
+    public BookInfo(int book_id, String title, String author, int page_size, BookStatus status) {
         this.book_id = book_id;
-        this.author = author;
         this.title = title;
+        this.author = author;
         this.page_size = page_size;
         this.status = status;
     }

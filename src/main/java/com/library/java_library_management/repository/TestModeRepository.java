@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 
 public class TestModeRepository implements Repository{
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    HashMap<Integer, BookInfo> bookMap = new HashMap<>();
+    private HashMap<Integer, BookInfo> bookMap = new HashMap<>();
     private int book_number_cnt = 1;
 
 
     @Override
     public void registerBook(String title, String author, int pageSize) {
-        bookMap.put(book_number_cnt, new BookInfo(book_number_cnt, author, title, pageSize, BookStatus.AVAILABLE));
+        bookMap.put(book_number_cnt, new BookInfo(book_number_cnt, title, author, pageSize, BookStatus.AVAILABLE));
         book_number_cnt++;
 
     }
@@ -56,6 +56,7 @@ public class TestModeRepository implements Repository{
                 scheduler.schedule(() -> {
                     book.setStatus(BookStatus.AVAILABLE);
                 }, 5, TimeUnit.MINUTES);
+                System.out.println("반납 처리 되었습니다.");
             } else {
                 System.out.println("원래 대여 가능한 도서입니다");
             }
@@ -70,8 +71,15 @@ public class TestModeRepository implements Repository{
             BookInfo book = bookMap.get(book_id);
             if(book.getStatus() != BookStatus.LOST){
                 book.setStatus(BookStatus.LOST);
+                System.out.println("[System] 도서가 분실 처리 되었습니다.");
+            }
+            else{
+                throw new RuntimeException();
             }
         }catch (NullPointerException e){
+            System.out.println("존재하지 않는 도서번호입니다.");
+        }
+        catch (RuntimeException e){
             System.out.println("이미 분실 처리된 도서입니다.");
         }
     }

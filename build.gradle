@@ -17,9 +17,15 @@ repositories {
 
 dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0' // Replace with the desired version
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+test {
+	useJUnitPlatform()
+}
+
