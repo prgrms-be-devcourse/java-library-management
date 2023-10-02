@@ -11,6 +11,9 @@ import com.programmers.service.BookService;
 import java.util.*;
 
 public class ConsoleUI {
+
+    private static final int NORMAL_MODE = 1;
+    private static final int TEST_MODE = 2;
     private final Map<Integer, Runnable> functionMap = new HashMap<>();
     private final BookService bookService;
 
@@ -47,10 +50,10 @@ public class ConsoleUI {
     public void setMode() {
         System.out.print(PromptMessages.MODE_CHOICE_MESSAGE.getMessage());
         int mode = getIntFromInput();
-        if (mode == 1) {
+        if (mode == NORMAL_MODE) {
             System.out.println(InfoMessages.NORMAL_MODE_EXECUTION.getMessage());
             BookService.setBookRepository(FileBookRepository.getInstance());
-        } else if (mode == 2) {
+        } else if (mode == TEST_MODE) {
             System.out.println(InfoMessages.TEST_MODE_EXECUTION.getMessage());
             BookService.setBookRepository(MemBookRepository.getInstance());
         } else {

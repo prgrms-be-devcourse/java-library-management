@@ -9,7 +9,8 @@ public enum ErrorMessages {
     BOOK_BEING_ORGANIZED("[System] 현재 도서가 정리중입니다."),
     BOOK_NOW_LOST("[System] 이 도서는 분실되었습니다."),
     BOOK_ALREADY_AVAILABLE("[System] 원래 대여가 가능한 도서입니다."),
-    BOOK_ALREADY_LOST("[System] 이미 분실 처리된 도서입니다.");
+    BOOK_ALREADY_LOST("[System] 이미 분실 처리된 도서입니다."),
+    FILE_NOT_FOUND("[System] 읽어올 데이터가 존재하지 않습니다. 빈 파일에 새로운 데이터가 저장됩니다.");
 
     private final String message;
 

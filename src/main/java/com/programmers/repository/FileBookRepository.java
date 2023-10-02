@@ -1,5 +1,6 @@
 package com.programmers.repository;
 
+import com.programmers.common.ErrorMessages;
 import com.programmers.domain.Book;
 import com.programmers.domain.BookState;
 import com.programmers.provider.BookIdProvider;
@@ -7,6 +8,7 @@ import com.programmers.provider.BookIdProvider;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
@@ -23,8 +25,13 @@ public class FileBookRepository implements BookRepository {
 
     public static FileBookRepository getInstance() {
         FileBookRepository fileBookRepository = FileBookRepository.Holder.INSTANCE;
-        fileBookRepository.loadDataFromFile();
-        return fileBookRepository;
+        try {
+            fileBookRepository.loadDataFromFile();
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            return fileBookRepository;
+        }
     }
 
     @Override
@@ -79,7 +86,7 @@ public class FileBookRepository implements BookRepository {
                 //System.out.println(book);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new NoSuchElementException(ErrorMessages.FILE_NOT_FOUND.getMessage());
         }
         BookIdProvider.initBookId(books);
     }
