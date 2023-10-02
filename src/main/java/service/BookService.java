@@ -30,8 +30,7 @@ public class BookService {
     }
 
     public void borrowBookByBookNo(Long bookNo) {
-        Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
+        Book book = findBookByBookNo(bookNo);
 
         if (book.isAvailableToBorrow()) {
             book.toBorrowed();
@@ -40,31 +39,32 @@ public class BookService {
     }
 
     public void returnBookByBookNo(Long bookNo, int time) {
-        Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
+        Book book = findBookByBookNo(bookNo);
 
-        switch (book.getStatus()) {
-            case AVAILABLE, ORGANIZING -> throw new IllegalStateException(ExceptionMsg.RETURN_FAIL.getMessage());
+        if (book.isAvailableToReturn()) {
+            book.toOrganizing();
+            repository.saveBook(book);
+            scheduleTask(book, time);
         }
-        book.toOrganizing();
-        repository.saveBook(book);
-        scheduleTask(book, time);
     }
 
     public void lostBookByBookNo(Long bookNo) {
-        Book book = repository.findBookByBookNo(bookNo)
-                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
-        if (book.getStatus().equals(Status.LOST)) {
-            throw new IllegalStateException(ExceptionMsg.ALREADY_LOST.getMessage());
+        Book book = findBookByBookNo(bookNo);
+        if (book.isAvailableToChangeLost()) {
+            book.toLost();
+            repository.saveBook(book);
         }
-        book.toLost();
-        repository.saveBook(book);
     }
 
     public void deleteBookByBookNo(Long bookNo) {
-        Book book = repository.findBookByBookNo(bookNo)
+        if (findBookByBookNo(bookNo) != null) {
+            repository.deleteBook(bookNo);
+        }
+    }
+
+    private Book findBookByBookNo(Long bookNo) {
+        return repository.findBookByBookNo(bookNo)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
-        repository.deleteBook(bookNo);
     }
 
     private TimerTask wrap(Runnable runnable) {

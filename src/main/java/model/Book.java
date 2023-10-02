@@ -5,7 +5,6 @@ import constant.ExceptionMsg;
 import java.util.Objects;
 
 public class Book {
-
     private final Long bookNo;
     private final String title;
     private final String author;
@@ -38,6 +37,20 @@ public class Book {
             }
         }
         return false;
+    }
+
+    public boolean isAvailableToReturn() {
+        if (this.status.equals(Status.AVAILABLE) || this.status.equals(Status.ORGANIZING)) {
+            throw new IllegalStateException(ExceptionMsg.RETURN_FAIL.getMessage());
+        }
+        return true;
+    }
+
+    public boolean isAvailableToChangeLost() {
+        if (this.status.equals(Status.LOST)) {
+            throw new IllegalStateException(ExceptionMsg.ALREADY_LOST.getMessage());
+        }
+        return true;
     }
 
     public void toBorrowed() {
