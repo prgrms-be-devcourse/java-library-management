@@ -2,6 +2,7 @@ package app.library.management.config;
 
 import app.library.management.config.util.BookRepositoryFactory;
 import app.library.management.core.domain.util.BookStatusManager;
+import app.library.management.core.domain.util.SchedulerManager;
 import app.library.management.infra.port.Request;
 import app.library.management.infra.console.Input;
 import app.library.management.infra.console.Output;
@@ -15,10 +16,12 @@ public class Configuration {
 
     private final ExecutionMode executionMode;
     private final BookRepositoryFactory bookRepositoryFactory;
+    private final SchedulerManager schedulerManager;
 
     public Configuration(ExecutionMode executionMode) {
         this.executionMode = executionMode;
         this.bookRepositoryFactory = new BookRepositoryFactory();
+        this.schedulerManager = new SchedulerManager();
     }
 
     private BookRepository bookRepository() {
@@ -26,7 +29,7 @@ public class Configuration {
     }
 
     private BookStatusManager statusManager() {
-        return new BookStatusManager(bookRepository());
+        return new BookStatusManager(bookRepository(), schedulerManager.getScheduler());
     }
 
     private BookService bookService() {
