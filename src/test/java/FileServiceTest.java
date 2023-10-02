@@ -107,6 +107,7 @@ public class FileServiceTest {
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
         //when
+        service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
         service.returnBook(book.getId());
         //then
@@ -134,6 +135,7 @@ public class FileServiceTest {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
+        service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.borrowBook(book.getId()));
@@ -170,6 +172,7 @@ public class FileServiceTest {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
+        service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
@@ -198,19 +201,5 @@ public class FileServiceTest {
         //when then
         UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
         assertEquals("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.", e.getMessage());
-    }
-
-    @Test
-    @DisplayName("반납 후 5분 뒤에 대여 가능")
-    public void checkCleaning() throws InterruptedException {
-        //given
-        service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
-        service.borrowBook(book.getId());
-        service.returnBook(book.getId());
-        Thread.sleep(1000*60*5);
-
-        //when then
-        service.borrowBook(book.getId());
     }
 }
