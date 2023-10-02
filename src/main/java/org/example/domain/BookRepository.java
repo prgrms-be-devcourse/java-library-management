@@ -29,15 +29,10 @@ public class BookRepository {
     }
 
     public Book findById(int id) {
-        try {
-            Book findBook = bookList.stream().filter(book -> book.getId() == id).findAny()
-                    .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
+        Book findBook = bookList.stream().filter(book -> book.getId() == id).findAny()
+                .orElseThrow(() -> new NoSuchElementException("해당 책이 존재하지 않습니다."));
 
-            return findBook;
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return findBook;
     }
     public void updateListId(int bookId) {
         bookList.stream().filter(book -> book.getId() > bookId)

@@ -86,11 +86,11 @@ class BookServiceTest {
 
     @Test
     @DisplayName("도서 대여")
-    void rentBook() throws IOException {
+    void rentBook() {
         //given
         List<Book> bookList = new ArrayList<>();
-        bookList.add(new Book(1, "Possible", "writer1", 123, BookState.POSSIBLE));
-        bookList.add(new Book(2, "Renting", "writer2", 13, BookState.RENTING));
+        bookList.add(new Book(1, "Possible Book", "writer1", 123, BookState.POSSIBLE));
+        bookList.add(new Book(2, "Renting Book", "writer2", 13, BookState.RENTING));
         bookService.updateBooks(bookList);
 
         //when

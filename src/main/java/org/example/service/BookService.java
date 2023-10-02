@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.*;
 
 public class BookService {
-    //private List<Book> books = new ArrayList<>();
     private BookRepository bookRepository;
 
     public BookService() {
@@ -42,8 +41,8 @@ public class BookService {
 
     public Book rentBook(int bookId) {
         Book findBook = bookRepository.findById(bookId);
-
         BookState findBookState = findBook.getState();
+
         if(findBookState.equals(BookState.POSSIBLE)) {
             findBookState.showChangeState();
             findBook.setState(BookState.RENTING);
@@ -55,6 +54,7 @@ public class BookService {
     public Book returnBook(int bookId) {
         Book findBook = bookRepository.findById(bookId);
         BookState findBookState = findBook.getState();
+
         if (findBookState.equals(BookState.RENTING) || findBookState.equals(BookState.LOST)) {
             BookState.RENTING.showChangeState();
             findBook.setState(BookState.ORGANIZING);
@@ -64,12 +64,14 @@ public class BookService {
         } else {
             findBookState.showState();
         }
+
         return findBook;
     }
 
     public Book lostBook(int bookId) {
         Book findBook = bookRepository.findById(bookId);
         BookState findBookState = findBook.getState();
+
         if (!findBookState.equals(BookState.LOST)) {
             BookState.LOST.showChangeState();
             findBook.setState(BookState.LOST);
