@@ -9,6 +9,7 @@ import dev.course.repository.BookRepository;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -68,12 +69,26 @@ public class LibraryManagement {
 
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
+
         if (book.getState().equals(BookState.RENTAL_AVAILABLE)) {
             throw new FuncFailureException("[System] 대여 가능한 도서로 반납이 불가합니다.\n");
         } else if (book.getState().equals(BookState.RENTING) || book.getState().equals(BookState.LOST)) {
             Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.ARRANGEMENT);
             this.bookRepository.add(returned);
-            afterDelayArrangementComplete(returned, 300000);
+
+            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() ->
+                        afterDelayArrangementComplete(returned, 300000))
+                    .thenRunAsync(() ->
+                        System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (!completableFuture.isDone()) {
+                    Book availableBook = new Book(returned.getBookId(), returned.getTitle(), returned.getAuthor(), returned.getPage_num(), BookState.RENTAL_AVAILABLE);
+                    this.bookRepository.add(availableBook);
+                    System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
+                }
+            }));
+
         } else {
             throw new FuncFailureException("[System] 정리중인 도서로 반납이 불가합니다.\n");
         }
@@ -108,11 +123,13 @@ public class LibraryManagement {
 
     public void afterDelayArrangementComplete(Book book, long delay) {
 
-        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-        service.schedule(() -> {
+        try {
+            TimeUnit.MILLISECONDS.sleep(delay);
             Book arranged = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
             this.bookRepository.add(arranged);
-        }, delay, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public Book createBook(String title, String author, int pageNum) {
