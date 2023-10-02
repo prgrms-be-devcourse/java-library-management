@@ -146,6 +146,7 @@ public class Menu {
         try{
             libraryService.deleteBook(bookId);
             output.write("\n[System] 도서가 삭제 처리 되었습니다.\n");
+
         }catch (ExceptionHandler e){
             output.write(System.lineSeparator() + e.getMessage());
         }
@@ -159,11 +160,15 @@ public class Menu {
     }
 
     private static String printBook(Book book) {
-        return "\n도서번호 : " + book.getBookId()
-                + "\n제목 : " + book.getTitle()
-                + "\n작가 이름 : " + book.getAuthor()
-                + "\n페이지 수 : " + book.getPage() + " 페이지"
-                + "\n상태 : " + book.getBookStatus().getStatusDescription()
-                + "\n\n------------------------------\n";
+        return """
+    도서번호 : %s
+    제목 : %s
+    작가 이름 : %s
+    페이지 수 : %d 페이지
+    상태 : %s
+
+    ------------------------------
+    """.formatted(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getBookStatus().getStatusDescription());
+
     }
 }
