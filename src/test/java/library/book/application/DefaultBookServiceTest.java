@@ -29,7 +29,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[registerBook 테스트]")
+	@DisplayName("[도서를 등록한다]")
 	void registerBookTest() {
 		//given
 		RegisterBookRequest request = A.toRegisterRequest();
@@ -42,7 +42,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[searchBooks 테스트]")
+	@DisplayName("[전체 도서를 검색한다]")
 	void searchBooksTest() {
 		//when
 		List<BookSearchResponse> result = bookService.searchBooks();
@@ -63,7 +63,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[searchBooks(title) 테스트]")
+	@DisplayName("[제목으로 도서를 검색한다]")
 	void searchBooksByTitleTest() {
 		//when
 		List<BookSearchResponse> result = bookService.searchBooks("titleB");
@@ -74,7 +74,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[rentBook 테스트]")
+	@DisplayName("[도서를 대여한다]")
 	void rentBookTest() {
 		//when
 		Executable when = () -> bookService.rentBook(1L);
@@ -84,7 +84,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[returnBook 테스트]")
+	@DisplayName("[도서를 반납한다]")
 	void returnBookTest() {
 		//when
 		Executable when = () -> bookService.returnBook(2L);
@@ -94,7 +94,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[registerAsLost 테스트]")
+	@DisplayName("[도서를 분실처리한다]")
 	void registerAsLostTest() {
 		//when
 		Executable when = () -> bookService.registerAsLost(1L);
@@ -104,7 +104,7 @@ class DefaultBookServiceTest {
 	}
 
 	@Test
-	@DisplayName("[deleteBook 테스트]")
+	@DisplayName("[도서를 삭제한다]")
 	void deleteBookTest() {
 		//when
 		Executable when = () -> bookService.deleteBook(1L);

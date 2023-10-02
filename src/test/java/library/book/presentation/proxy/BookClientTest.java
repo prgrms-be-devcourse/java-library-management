@@ -12,7 +12,6 @@ import library.book.infra.console.output.ConsoleOutputHandler;
 import library.book.manager.BookClient;
 import library.book.stub.StubBookController;
 import library.book.stub.StubInputHandler;
-import library.book.presentation.converter.InputConverter;
 
 @DisplayName("[BookClient Test] - Presentation")
 class BookClientTest {
@@ -22,7 +21,7 @@ class BookClientTest {
 	);
 
 	@Test
-	@DisplayName("[run 테스트]")
+	@DisplayName("[실제 도서 기능을 실행시킨다]")
 	void runTest() throws Exception {
 		//given
 		Field field = bookClient.getClass().getDeclaredField("target");

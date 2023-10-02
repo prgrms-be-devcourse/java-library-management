@@ -17,11 +17,11 @@ class BookExceptionHandlerTest {
 	private BookExceptionHandler bookExceptionHandler;
 
 	@Nested
-	@DisplayName("[run 테스트]")
+	@DisplayName("[도서 관리 프로그램에서 발생한 커스텀 예외를 핸들링한다]")
 	class runTest {
 
 		@Test
-		@DisplayName("[Success] 예외가 발생할 경우 예외를 잡아서 콘솔로 메세지를 출력한다.")
+		@DisplayName("[성공적으로 예외를 잡아 예외 메세지를 출력한다]")
 		void successWhenException() {
 			//given
 			bookExceptionHandler = new BookExceptionHandler(new StubExceptionBookController());
@@ -34,7 +34,7 @@ class BookExceptionHandlerTest {
 		}
 
 		@Test
-		@DisplayName("[Success] 예외가 발생하지 않을 경우 통과한다.")
+		@DisplayName("[예외가 발생하지 않아 통과한다]")
 		void successWhenNoException() {
 			//given
 			bookExceptionHandler = new BookExceptionHandler(new StubBookController());

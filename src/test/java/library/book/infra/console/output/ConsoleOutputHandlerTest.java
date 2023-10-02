@@ -12,7 +12,7 @@ public class ConsoleOutputHandlerTest {
 	private final ConsoleOutputHandler consoleOutputHandler = new ConsoleOutputHandler();
 
 	@Test
-	@DisplayName("[showSelectMode 테스트]")
+	@DisplayName("[모드 선택창을 출력한다]")
 	void showSelectModeTest() {
 		//when
 		Executable when = consoleOutputHandler::showSelectMode;
@@ -22,7 +22,7 @@ public class ConsoleOutputHandlerTest {
 	}
 
 	@Test
-	@DisplayName("[showSystemMessage 테스트]")
+	@DisplayName("[시스템 메세지를 출력한다]")
 	void showSystemMessageTest() {
 		//given
 		final String message = "hello";
@@ -35,7 +35,7 @@ public class ConsoleOutputHandlerTest {
 	}
 
 	@Test
-	@DisplayName("[showSelectFunction 테스트]")
+	@DisplayName("[기능 선택창을 출력한다]")
 	void showSelectFunctionTest() {
 		//when
 		Executable when = consoleOutputHandler::showSelectFunction;
@@ -45,7 +45,7 @@ public class ConsoleOutputHandlerTest {
 	}
 
 	@Test
-	@DisplayName("[showInputPrefix 테스트]")
+	@DisplayName("[입력 prefix 를 출력한다]")
 	void showInputPrefixTest() {
 		//when
 		Executable when = consoleOutputHandler::showInputPrefix;
@@ -55,7 +55,7 @@ public class ConsoleOutputHandlerTest {
 	}
 
 	@Test
-	@DisplayName("[showHorizontalLine 테스트]")
+	@DisplayName("[수평 구분선을 출력한다]")
 	void showHorizontalLineTest() {
 		//when
 		Executable when = consoleOutputHandler::showHorizontalLine;

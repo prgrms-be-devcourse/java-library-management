@@ -18,11 +18,11 @@ class InputConsoleTest {
 	private final ConsoleInputHandler inputConsole = new ConsoleInputHandler();
 
 	@Nested
-	@DisplayName("[inputNumber 테스트]")
+	@DisplayName("[숫자를 입력받는다]")
 	class inputNumberTest {
 
 		@Test
-		@DisplayName("[Success]")
+		@DisplayName("[숫자를 성공적으로 입력받는다]")
 		void success() {
 			//given
 			final String input = "2";
@@ -36,7 +36,7 @@ class InputConsoleTest {
 		}
 
 		@Test
-		@DisplayName("[Fail] 문자를 입력하여 실패한다")
+		@DisplayName("문자를 입력하여 실패한다")
 		void failWhenInputString() {
 			//given
 			final String input = "2two";
@@ -53,7 +53,7 @@ class InputConsoleTest {
 	}
 
 	@Test
-	@DisplayName("[inputString 테스트]")
+	@DisplayName("[문자열을 입력받는다]")
 	void inputStringTest() {
 		//given
 		final String input = "hello";

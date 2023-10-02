@@ -18,7 +18,7 @@ public class InputConverterTest {
 	private final InputConverter inputConverter = new InputConverter();
 
 	@Test
-	@DisplayName("[convertNumberToString 테스트]")
+	@DisplayName("[숫자(번호)를 정해진 문자열로 변환한다]")
 	void convertNumberToString() {
 		//given
 		final int number = 2;
@@ -31,11 +31,11 @@ public class InputConverterTest {
 	}
 
 	@Nested
-	@DisplayName("[convertStringToRegisterRequest 테스트]")
+	@DisplayName("[도서 정보를 담은 문자열을 도서 등록요청 객체로 변환한다]")
 	class convertStringToRegisterRequestTest {
 
 		@Test
-		@DisplayName("[Success]")
+		@DisplayName("[성공적으로 변환한다]")
 		void success() {
 			//given
 			final String bookInfo = "hello|||hello|||100";
@@ -52,7 +52,7 @@ public class InputConverterTest {
 		}
 
 		@Test
-		@DisplayName("[Fail] 잘못된 도서 정보 입력형식으로 실패한다")
+		@DisplayName("[도서 정보를 담은 문자열의 형식이 잘못되어 실패한다]")
 		void failWhenInvalidBookInfoFormat() {
 			//given
 			final String invalidBookInfo = "hello|||he|||llo|||100";

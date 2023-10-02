@@ -25,7 +25,7 @@ import library.book.fixture.BookFixture;
 class TestBookRepositoryTest {
 
 	@Test
-	@DisplayName("[save 테스트]")
+	@DisplayName("[도서를 저장한다]")
 	void success() {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
@@ -41,7 +41,7 @@ class TestBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[generateNewId 테스트]")
+	@DisplayName("[새로운 도서 번호를 만들어낸다]")
 	void generateNewIdTest() {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
@@ -57,7 +57,7 @@ class TestBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findAll 테스트]")
+	@DisplayName("[저장소의 모든 도서를 조회한다]")
 	void findAllTest() {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
@@ -84,7 +84,7 @@ class TestBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findByTitle 테스트]")
+	@DisplayName("[저장소에서 제목으로 도서를 조회한다]")
 	void findByTitleTest() {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
@@ -100,7 +100,7 @@ class TestBookRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("[findById 테스트]")
+	@DisplayName("[저장소에서 도서 번호로 도서를 조회한다]")
 	void findByIdTest() {
 		//given
 		BookRepository bookRepository = new TestBookRepository();
@@ -115,11 +115,11 @@ class TestBookRepositoryTest {
 	}
 
 	@Nested
-	@DisplayName("[deleteById 테스트]")
+	@DisplayName("[저장소에서 도서 번호로 도서를 삭제한다]")
 	class deleteByIdTest {
 
 		@Test
-		@DisplayName("[Success]")
+		@DisplayName("[저장소에서 도서를 성공적으로 삭제한다]")
 		void success() {
 			//given
 			BookRepository bookRepository = new TestBookRepository();
@@ -134,7 +134,7 @@ class TestBookRepositoryTest {
 		}
 
 		@Test
-		@DisplayName("[Fail] id 에 대한 Book 이 존재하지 않아 실패한다.")
+		@DisplayName("저장소에 도서번호에 대한 대한 도서가 존재하지 않아 실패한다")
 		void failWhenNotFoundById() {
 			//given
 			BookRepository bookRepository = new TestBookRepository();

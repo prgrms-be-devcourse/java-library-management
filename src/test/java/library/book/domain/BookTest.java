@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class BookTest {
 
 	@Test
-	@DisplayName("[createBook 테스트]")
+	@DisplayName("[도서를 생성한다]")
 	void createBookTest() {
 		//given
 		final long id = 1L;
@@ -39,7 +39,7 @@ class BookTest {
 	}
 
 	@Test
-	@DisplayName("[rent 테스트]")
+	@DisplayName("[도서를 대여 상태로 바꾼다]")
 	void rentTest() {
 		//given
 		Book book = A.toEntity();
@@ -52,7 +52,7 @@ class BookTest {
 	}
 
 	@Test
-	@DisplayName("[returnBook 테스트]")
+	@DisplayName("[도서를 반납 상태로 바꾼다]")
 	void returnBookTest() {
 		//given
 		Book book = A.toEntity();
@@ -67,7 +67,7 @@ class BookTest {
 	}
 
 	@Test
-	@DisplayName("[registerAsLost 테스트]")
+	@DisplayName("[도서를 분실처리 상태로 바꾼다]")
 	void registerAsLostTest() {
 		//given
 		Book book = A.toEntity();

@@ -18,7 +18,7 @@ public class BookControllerTest {
 	);
 
 	@Test
-	@DisplayName("[run 테스트]")
+	@DisplayName("[도서 관리 프로그램을 실행시킨다]")
 	void runTest() {
 		//when
 		Executable when = bookController::run;
