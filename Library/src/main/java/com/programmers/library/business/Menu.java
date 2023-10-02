@@ -3,20 +3,21 @@ package com.programmers.library.business;
 import com.programmers.library.domain.Book;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.service.LibraryService;
-import com.programmers.library.view.Input;
-import com.programmers.library.view.Output;
+import com.programmers.library.view.console.ConsoleInput;
+import com.programmers.library.view.console.ConsoleOutput;
 
 import java.util.List;
 
 import static com.programmers.library.domain.BookStatusType.*;
+import static java.lang.System.*;
 
 public class Menu {
     private static final int EMPTY = 0;
     private final LibraryService libraryService;
-    private final Output output;
-    private final Input input;
+    private final ConsoleOutput output;
+    private final ConsoleInput input;
 
-    public Menu(LibraryService libraryService, Output output, Input input) {
+    public Menu(LibraryService libraryService, ConsoleOutput output, ConsoleInput input) {
         this.libraryService = libraryService;
         this.output = output;
         this.input = input;
@@ -88,7 +89,7 @@ public class Menu {
                 case LOST -> output.write("\n[System] 분실 처리된 도서로 대여가 불가능합니다.\n");
             }
         }catch (ExceptionHandler e){
-            output.write(System.lineSeparator() + e.getMessage());
+            output.write(lineSeparator() + e.getMessage());
         }
     }
 
@@ -113,7 +114,7 @@ public class Menu {
                 }
             }
         }catch (ExceptionHandler e){
-            output.write(System.lineSeparator() + e.getMessage());
+            output.write(lineSeparator() + e.getMessage());
         }
     }
 
@@ -134,7 +135,7 @@ public class Menu {
                 case LOST -> output.write("\n[System] 이미 분실 처리된 도서입니다.");
             }
         }catch (ExceptionHandler e){
-            output.write(System.lineSeparator() + e.getMessage());
+            output.write(lineSeparator() + e.getMessage());
         }
     }
 
@@ -148,7 +149,7 @@ public class Menu {
             output.write("\n[System] 도서가 삭제 처리 되었습니다.\n");
 
         }catch (ExceptionHandler e){
-            output.write(System.lineSeparator() + e.getMessage());
+            output.write(lineSeparator() + e.getMessage());
         }
     }
 

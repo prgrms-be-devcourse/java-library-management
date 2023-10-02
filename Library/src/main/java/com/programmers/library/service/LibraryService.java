@@ -23,8 +23,7 @@ public class LibraryService {
     public void registerBook(String title, String author, Integer page) {
         Long lastId = repository.findLastId() + 1;
 
-        Book book = new Book(lastId, title, author, page);
-        repository.register(book);
+        repository.register(new Book(lastId, title, author, page));
     }
 
     public void updateStatus(Book book, BookStatusType bookStatus){
