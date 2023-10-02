@@ -38,7 +38,11 @@ public class StubBookRepository implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(Long id) {
-		return Optional.of(A.toEntity());
+		Book book = A.toEntity();
+		if (id == 2L) {
+			book.rent();
+		}
+		return Optional.of(book);
 	}
 
 	@Override

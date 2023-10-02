@@ -17,7 +17,6 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.domain.Book;
 import library.book.fixture.BookFixture;
-import library.book.stub.OnlyRentedBookStubBookRepository;
 import library.book.stub.StubBookRepository;
 
 @DisplayName("[DefaultBookService Test] - Application")
@@ -87,11 +86,8 @@ class DefaultBookServiceTest {
 	@Test
 	@DisplayName("[returnBook 테스트]")
 	void returnBookTest() {
-		//given
-		BookService returnBookService = new DefaultBookService(new OnlyRentedBookStubBookRepository());
-
 		//when
-		Executable when = () -> returnBookService.returnBook(1L);
+		Executable when = () -> bookService.returnBook(2L);
 
 		//then
 		assertDoesNotThrow(when);
