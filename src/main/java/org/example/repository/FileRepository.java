@@ -5,76 +5,63 @@ import org.example.domain.BookStatusType;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileRepository implements Repository {
+    private Map<Integer, Book> books;
     private final File bookInfoCsv;
 
     public FileRepository(String bookInfoCSVPath) {
         bookInfoCsv = new File(bookInfoCSVPath);
         prepareCsv();
+        books = getAllBooksFromCSV();
     }
 
     @Override
     public void saveBook(Book book) {
-        writeBookInfoOnCSV(book);
+        books.put(book.getId(), book);
+        updateBooksInfoOnCsv();
     }
 
     @Override
     public List<Book> findAllBooks() {
-        return getAllBooksFromCSV();
+        return new ArrayList<>(books.values());
     }
 
     @Override
     public List<Book> findBookByTitle(String title) {
-        List<Book> books = getAllBooksFromCSV();
-        return books.stream()
+        return books.values().stream()
                 .filter(book -> book.getTitle().contains(title))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Book> findBookById(Integer bookId) {
-        List<Book> books = getAllBooksFromCSV();
-        return books.stream()
-                .filter(book -> book.getId().equals(bookId))
-                .findFirst();
+        return Optional.ofNullable(books.get(bookId));
     }
 
     @Override
     public void updateBookStatus(Integer bookId, BookStatusType status) {
-        List<Book> updatedBooks = getAllBooksFromCSV().stream()
-                .map(book -> {
-                    if (book.getId().equals(bookId)) {
-                        book.setStatus(status);
-                        if (BookStatusType.ORGANIZING == status)
-                            book.setReturnTime(LocalDateTime.now());
-                        else
-                            book.setReturnTime(null);
-                    }
-                    return book;
-                }).collect(Collectors.toList());
-        updateBooksInfoOnCsv(updatedBooks);
+        Book bookToUpdate = books.get(bookId);
+        bookToUpdate.setStatus(status);
+        if (BookStatusType.ORGANIZING == status) {
+            bookToUpdate.setReturnTime(LocalDateTime.now());
+        } else {
+            bookToUpdate.setReturnTime(null);
+        }
+        updateBooksInfoOnCsv();
     }
 
     @Override
     public void deleteBookById(Integer bookId) {
-        List<Book> books = getAllBooksFromCSV();
-        books.removeIf(book -> book.getId().equals(bookId));
-        updateBooksInfoOnCsv(books);
+        books.remove(bookId);
+        updateBooksInfoOnCsv();
     }
 
     @Override
     public Integer getNextBookId() {
-        Integer lastBookId = 0;
-
-        List<Book> books = getAllBooksFromCSV();
-        if (books.size() > 0) lastBookId = books.get(books.size() - 1).getId();
-
-        return lastBookId + 1;
+        return books.keySet().stream().max(Integer::compareTo).orElse(1);
     }
 
     private void prepareCsv() {
@@ -88,8 +75,8 @@ public class FileRepository implements Repository {
         }
     }
 
-    private List<Book> getAllBooksFromCSV() {
-        List<Book> books = new ArrayList<>();
+    private Map<Integer, Book> getAllBooksFromCSV() {
+        Map<Integer, Book> books = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(bookInfoCsv))) {
             String line;
@@ -107,7 +94,7 @@ public class FileRepository implements Repository {
                 }
 
                 Book book = new Book(id, title, author, pageSize, status, returnTime);
-                books.add(book);
+                books.put(id, book);
             }
         } catch (IOException e) {
             System.out.println("파일 읽기 에러");
@@ -118,24 +105,15 @@ public class FileRepository implements Repository {
         return books;
     }
 
-    private void updateBooksInfoOnCsv(List<Book> books) {
+    private void updateBooksInfoOnCsv() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(bookInfoCsv))) {
             bw.write("id, title, author, pageSize, status, returnTime");
             bw.newLine();
-            for (Book book : books) {
+            for (Book book : new ArrayList<>(this.books.values())) {
                 bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName() + ", " + book.getReturnTime());
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("파일 쓰기 에러");
-        }
-    }
-
-    private void writeBookInfoOnCSV(Book book) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(bookInfoCsv, true))) {
-            bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName() + ", " + book.getReturnTime());
-            bw.newLine();
-        } catch (IOException ioException) {
             System.out.println("파일 쓰기 에러");
         }
     }
