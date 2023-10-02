@@ -2,7 +2,6 @@ import domain.Book;
 import domain.Status;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,10 +21,6 @@ public class FileServiceTest {
     public void beforeEach(){
         repository = new FileRepository("/src/test/resources/test_book_data.csv");
         service = new BookService(repository);
-    }
-
-    @AfterEach
-    public void rollback(){
         repository.clear();
     }
 
@@ -92,6 +87,7 @@ public class FileServiceTest {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
+        service.borrowBook(book.getId());
         //when
         service.reportLostBook(book.getId());
         //then

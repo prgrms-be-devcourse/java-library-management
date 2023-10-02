@@ -87,6 +87,7 @@ public class TestServiceTest {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
         Book book = repository.getBookList().get(0);
+        service.borrowBook(book.getId());
         //when
         service.reportLostBook(book.getId());
         //then
