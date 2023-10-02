@@ -1,4 +1,4 @@
-package org.example;
+package org.example.app;
 
 import org.example.domain.Book;
 import org.example.repository.FileRepository;
