@@ -71,7 +71,7 @@ class IoProcessorTest {
 
 		//when
 		Executable when = () -> ioProcessor.outputBookInfo(
-			responses, ENTRY_SEARCH_ALL_BOOKS.getValue(), COMPLETE_SEARCH_ALL_BOOKS.getValue()
+			responses, ENTRY_SEARCH_ALL_BOOKS, COMPLETE_SEARCH_ALL_BOOKS
 		);
 
 		//then

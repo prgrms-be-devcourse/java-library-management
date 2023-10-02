@@ -12,6 +12,8 @@ import library.book.presentation.converter.InputConverter;
 
 public class IoProcessor {
 
+	private static final String NEW_LINE = System.lineSeparator();
+
 	private final InputHandler inputHandler;
 	private final OutputHandler outputHandler;
 	private final InputConverter converter;
@@ -27,8 +29,8 @@ public class IoProcessor {
 	}
 
 	public String inputString() {
-		outputHandler.showSystemMessage(ENTRY_SEARCH_BOOKS_BY_TITLE.getValue());
-		outputHandler.showSystemMessage(INPUT_TITLE.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(ENTRY_SEARCH_BOOKS_BY_TITLE.getValue()));
+		outputHandler.showSystemMessage(addNewLine(INPUT_TITLE.getValue()));
 		outputHandler.showInputPrefix();
 		return inputHandler.inputString();
 	}
@@ -45,21 +47,21 @@ public class IoProcessor {
 	public RegisterBookRequest inputBookInfo() {
 		StringBuilder stringBuilder = new StringBuilder();
 
-		outputHandler.showSystemMessage(ENTRY_REGISTER.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(ENTRY_REGISTER.getValue()));
 
-		outputHandler.showSystemMessage(INPUT_BOOK_NAME.getValue());
+		outputHandler.showSystemMessage(addNewLine(INPUT_BOOK_NAME.getValue()));
 		outputHandler.showInputPrefix();
 		appendStringInput(stringBuilder);
 
-		outputHandler.showSystemMessage(INPUT_AUTHOR_NAME.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(INPUT_AUTHOR_NAME.getValue()));
 		outputHandler.showInputPrefix();
 		appendStringInput(stringBuilder);
 
-		outputHandler.showSystemMessage(INPUT_PAGES.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(INPUT_PAGES.getValue()));
 		outputHandler.showInputPrefix();
 		appendIntegerInput(stringBuilder);
 
-		outputHandler.showSystemMessage(COMPLETE_REGISTER.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(COMPLETE_REGISTER.getValue()));
 
 		String input = stringBuilder.toString();
 		return converter.convertStringToRegisterRequest(input);
@@ -67,10 +69,10 @@ public class IoProcessor {
 
 	public void outputBookInfo(
 		final List<BookSearchResponse> responses,
-		final String entryMessage,
-		final String completeMessage
+		final Message entryMessage,
+		final Message completeMessage
 	) {
-		outputHandler.showSystemMessage(entryMessage);
+		outputHandler.showSystemMessage(wrapWithNewlines(entryMessage.getValue()));
 
 		responses.forEach(response -> {
 			outputHandler.showSystemMessage("도서번호 : " + response.id());
@@ -82,22 +84,22 @@ public class IoProcessor {
 			outputHandler.showHorizontalLine();
 		});
 
-		outputHandler.showSystemMessage(completeMessage);
+		outputHandler.showSystemMessage(completeMessage.getValue());
 	}
 
 	public long inputBookId(
 		final Message entryMessage,
 		final Message inputMessage
 	) {
-		outputHandler.showSystemMessage(entryMessage.getValue());
-		outputHandler.showSystemMessage(inputMessage.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(entryMessage.getValue()));
+		outputHandler.showSystemMessage(addNewLine(inputMessage.getValue()));
 
 		outputHandler.showInputPrefix();
 		return inputHandler.inputNumber();
 	}
 
 	public void outputCompleteMessage(final Message message) {
-		outputHandler.showSystemMessage(message.getValue());
+		outputHandler.showSystemMessage(wrapWithNewlines(message.getValue()));
 	}
 
 	private void appendStringInput(StringBuilder stringBuilder) {
@@ -112,5 +114,13 @@ public class IoProcessor {
 
 	private void appendDelimiter(StringBuilder stringBuilder) {
 		stringBuilder.append("|||");
+	}
+
+	private String wrapWithNewlines(final String message) {
+		return NEW_LINE + message + NEW_LINE;
+	}
+
+	private String addNewLine(final String message) {
+		return message + NEW_LINE;
 	}
 }
