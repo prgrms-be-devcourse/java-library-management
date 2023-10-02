@@ -1,4 +1,4 @@
-package com.programmers.library.view.console;
+package com.programmers.library.view;
 
 import com.programmers.library.validation.InputValidator;
 

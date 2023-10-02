@@ -3,8 +3,8 @@ package com.programmers.library.config;
 import com.programmers.library.business.LibraryExecutor;
 import com.programmers.library.business.Menu;
 import com.programmers.library.service.LibraryService;
-import com.programmers.library.view.console.ConsoleInput;
-import com.programmers.library.view.console.ConsoleOutput;
+import com.programmers.library.view.ConsoleInput;
+import com.programmers.library.view.ConsoleOutput;
 
 public class InitialConfig {
 

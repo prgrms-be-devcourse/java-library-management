@@ -1,6 +1,5 @@
 package com.programmers.library.view;
 
-import com.programmers.library.view.console.ConsoleInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

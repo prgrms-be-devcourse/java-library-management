@@ -3,8 +3,8 @@ package com.programmers.library.business;
 import com.programmers.library.domain.Book;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.service.LibraryService;
-import com.programmers.library.view.console.ConsoleInput;
-import com.programmers.library.view.console.ConsoleOutput;
+import com.programmers.library.view.ConsoleInput;
+import com.programmers.library.view.ConsoleOutput;
 
 import java.util.List;
 
@@ -16,11 +16,13 @@ public class Menu {
     private final LibraryService libraryService;
     private final ConsoleOutput output;
     private final ConsoleInput input;
+    private final Scheduler scheduler;
 
     public Menu(LibraryService libraryService, ConsoleOutput output, ConsoleInput input) {
         this.libraryService = libraryService;
         this.output = output;
         this.input = input;
+        this.scheduler = new Scheduler(libraryService);
     }
 
     public int selectMenu() {
@@ -84,7 +86,7 @@ public class Menu {
                 case RENTED -> output.write("\n[System] 이미 대여중인 도서입니다.\n");
                 case ORGANIZING -> {
                     output.write("\n[System] 도서가 정리중입니다. 잠시 후 다시 시도해주세요.\n");
-                    libraryService.completeOrganizing(rentalBook);
+                    scheduler.completeOrganizing(rentalBook);
                 }
                 case LOST -> output.write("\n[System] 분실 처리된 도서로 대여가 불가능합니다.\n");
             }
@@ -104,13 +106,13 @@ public class Menu {
             switch (returnBook.getBookStatus()) {
                 case RENTED, LOST -> {
                     libraryService.updateStatus(returnBook, ORGANIZING);
-                    libraryService.completeOrganizing(returnBook);
+                    scheduler.completeOrganizing(returnBook);
                     output.write("\n[System] 도서가 반납 처리 되었습니다.");
                 }
                 case RENTABLE -> output.write("\n[System] 원래 대여가 가능한 도서입니다.");
                 case ORGANIZING -> {
                     output.write("\n[System] 이미 반납되어 정리중인 도서입니다.");
-                    libraryService.completeOrganizing(returnBook);
+                    scheduler.completeOrganizing(returnBook);
                 }
             }
         }catch (ExceptionHandler e){
