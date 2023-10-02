@@ -57,4 +57,8 @@ public class BookService {
         return bookRepository.findByBookId(Long.valueOf(bookId))
                 .orElseThrow(() -> new LibraryException(ErrorCode.BOOK_NOT_FOUND));
     }
+
+    public void reset() {
+        bookRepository.clear();
+    }
 }

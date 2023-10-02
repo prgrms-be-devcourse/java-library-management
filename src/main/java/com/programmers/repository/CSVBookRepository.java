@@ -77,4 +77,12 @@ public class CSVBookRepository implements BookRepository {
         }
     }
 
+    public void clear() {
+        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(fileName), CSVFormat.DEFAULT)) {
+            csvPrinter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sequence = 0L;
+    }
 }

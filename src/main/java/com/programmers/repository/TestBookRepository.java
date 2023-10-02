@@ -37,4 +37,10 @@ public class TestBookRepository implements BookRepository{
         bookList.add(book);
     }
 
+    @Override
+    public void clear() {
+        bookList.clear();
+        sequence = 0L;
+    }
+
 }
