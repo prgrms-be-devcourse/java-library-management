@@ -26,4 +26,13 @@ class GeneralModeRepositoryTest {
         Assertions.assertEquals(bookList.get(0).getAuthor(), "Injun");
     }
 
+    @Test
+    public void rentBook(){
+        String s = repository.rentBook(5);
+        Assertions.assertEquals(s, "도서가 대여 처리 되었습니다.");
+
+        String s2 = repository.rentBook(5);
+        Assertions.assertEquals(s2, "현재 대여중인 도서입니다.");
+    }
+
 }
