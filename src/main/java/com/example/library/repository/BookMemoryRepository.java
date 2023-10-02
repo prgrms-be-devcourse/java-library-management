@@ -94,7 +94,6 @@ public class BookMemoryRepository implements BookRepository {
         }
     }
     public void saveBookList() {
-        FileSave.saveBookList((List)books.values());
     }
 
     public int size() {
