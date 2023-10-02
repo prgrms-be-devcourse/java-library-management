@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
-    private static List<Book> bookArrayList = new ArrayList<>();
+    private static final List<Book> bookArrayList = new ArrayList<>();
     private static long nextId = 0L;
 
     @Override
