@@ -6,11 +6,11 @@ import library.book.application.BookService;
 import library.book.application.DefaultBookService;
 import library.book.domain.BookRepository;
 import library.book.exception.BookException;
-import library.book.infra.console.input.InputHandler;
-import library.book.infra.console.output.OutputHandler;
+import library.book.presentation.io.InputHandler;
+import library.book.presentation.io.OutputHandler;
 import library.book.presentation.BookController;
 import library.book.presentation.converter.InputConverter;
-import library.book.presentation.utils.InOutProcessor;
+import library.book.presentation.io.IoProcessor;
 import library.book.presentation.utils.FunctionExecutor;
 
 public class BookClient extends BookController {
@@ -25,20 +25,20 @@ public class BookClient extends BookController {
 
 		InputConverter converter = new InputConverter();
 
-		InOutProcessor inOutProcessor = new InOutProcessor(inputHandler, outputHandler, converter);
+		IoProcessor ioProcessor = new IoProcessor(inputHandler, outputHandler, converter);
 
-		String mode = inputMode(inOutProcessor);
+		String mode = inputMode(ioProcessor);
 
 		BookRepository bookRepository = ModeManager.valueOf(mode).getRepository();
 		BookService bookService = new DefaultBookService(bookRepository);
 
-		FunctionExecutor executor = new FunctionExecutor(bookService, inOutProcessor);
-		this.target = new BookController(executor, inOutProcessor);
+		FunctionExecutor executor = new FunctionExecutor(bookService, ioProcessor);
+		this.target = new BookController(executor, ioProcessor);
 	}
 
-	private String inputMode(final InOutProcessor inOutProcessor) {
+	private String inputMode(final IoProcessor ioProcessor) {
 		try {
-			return inOutProcessor.inputNumber(OutputHandler::showSelectMode);
+			return ioProcessor.inputNumber(OutputHandler::showSelectMode);
 		} catch (IllegalArgumentException e) {
 			throw BookException.of(NOT_SUPPORT_FUNCTION);
 		}

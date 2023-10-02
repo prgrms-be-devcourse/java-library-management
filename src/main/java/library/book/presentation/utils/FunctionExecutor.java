@@ -7,29 +7,30 @@ import java.util.List;
 import library.book.application.BookService;
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
+import library.book.presentation.io.IoProcessor;
 
 public class FunctionExecutor {
 
 	private final BookService bookService;
-	private final InOutProcessor inOutProcessor;
+	private final IoProcessor ioProcessor;
 
 	public FunctionExecutor(
 		final BookService bookService,
-		final InOutProcessor inOutProcessor
+		final IoProcessor ioProcessor
 	) {
 		this.bookService = bookService;
-		this.inOutProcessor = inOutProcessor;
+		this.ioProcessor = ioProcessor;
 	}
 
 	public void executeRegisterBook() {
-		RegisterBookRequest request = inOutProcessor.inputBookInfo();
+		RegisterBookRequest request = ioProcessor.inputBookInfo();
 
 		bookService.registerBook(request);
 	}
 
 	public void executeSearchAllBooks() {
 		List<BookSearchResponse> responses = bookService.searchBooks();
-		inOutProcessor.outputBookInfo(
+		ioProcessor.outputBookInfo(
 			responses,
 			ENTRY_SEARCH_ALL_BOOKS.getValue(),
 			COMPLETE_SEARCH_ALL_BOOKS.getValue()
@@ -37,10 +38,10 @@ public class FunctionExecutor {
 	}
 
 	public void executeSearchBooksByTitle() {
-		String title = inOutProcessor.inputString();
+		String title = ioProcessor.inputString();
 
 		List<BookSearchResponse> responses = bookService.searchBooks(title);
-		inOutProcessor.outputBookInfo(
+		ioProcessor.outputBookInfo(
 			responses,
 			ENTRY_SEARCH_BOOKS_BY_TITLE.getValue(),
 			COMPLETE_SEARCH_ALL_BOOKS.getValue()
@@ -48,30 +49,30 @@ public class FunctionExecutor {
 	}
 
 	public void executeRentBook() {
-		long id = inOutProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
+		long id = ioProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
 
 		bookService.rentBook(id);
-		inOutProcessor.outputCompleteMessage(COMPLETE_RENT);
+		ioProcessor.outputCompleteMessage(COMPLETE_RENT);
 	}
 
 	public void executeReturnBook() {
-		long id = inOutProcessor.inputBookId(ENTRY_RETURN_BOOK, INPUT_RETURN_BOOK_ID);
+		long id = ioProcessor.inputBookId(ENTRY_RETURN_BOOK, INPUT_RETURN_BOOK_ID);
 
 		bookService.returnBook(id);
-		inOutProcessor.outputCompleteMessage(COMPLETE_RETURN);
+		ioProcessor.outputCompleteMessage(COMPLETE_RETURN);
 	}
 
 	public void executeRegisterAsLost() {
-		long id = inOutProcessor.inputBookId(ENTRY_LOST_BOOK, INPUT_LOST_BOOK_ID);
+		long id = ioProcessor.inputBookId(ENTRY_LOST_BOOK, INPUT_LOST_BOOK_ID);
 
 		bookService.registerAsLost(id);
-		inOutProcessor.outputCompleteMessage(COMPLETE_LOST);
+		ioProcessor.outputCompleteMessage(COMPLETE_LOST);
 	}
 
 	public void executeDeleteBook() {
-		long id = inOutProcessor.inputBookId(ENTRY_DELETE, INPUT_LOST_BOOK_ID);
+		long id = ioProcessor.inputBookId(ENTRY_DELETE, INPUT_LOST_BOOK_ID);
 
 		bookService.deleteBook(id);
-		inOutProcessor.outputCompleteMessage(COMPLETE_DELETE);
+		ioProcessor.outputCompleteMessage(COMPLETE_DELETE);
 	}
 }

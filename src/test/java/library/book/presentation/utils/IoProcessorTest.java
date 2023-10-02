@@ -15,14 +15,15 @@ import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
 import library.book.fixture.BookFixture;
 import library.book.infra.console.output.ConsoleOutputHandler;
-import library.book.infra.console.output.OutputHandler;
+import library.book.presentation.io.IoProcessor;
+import library.book.presentation.io.OutputHandler;
 import library.book.presentation.converter.InputConverter;
 import library.book.stub.StubInputHandler;
 
-@DisplayName("[InOutProcessor Test] - Presentation")
-class InOutProcessorTest {
+@DisplayName("[IoProcessor Test] - Presentation")
+class IoProcessorTest {
 
-	private final InOutProcessor inOutProcessor = new InOutProcessor(
+	private final IoProcessor ioProcessor = new IoProcessor(
 		new StubInputHandler(), new ConsoleOutputHandler(), new InputConverter()
 	);
 
@@ -30,7 +31,7 @@ class InOutProcessorTest {
 	@DisplayName("[문자열을 입력받는다]")
 	void inputStringTest() {
 		//when
-		String result = inOutProcessor.inputString();
+		String result = ioProcessor.inputString();
 
 		//then
 		assertThat(result).isEqualTo("hello");
@@ -40,7 +41,7 @@ class InOutProcessorTest {
 	@DisplayName("[숫자를 입력받아 정해진 문자열로 변환한다]")
 	void inputModeNumberTest() {
 		//when
-		String result = inOutProcessor.inputNumber(OutputHandler::showSelectFunction);
+		String result = ioProcessor.inputNumber(OutputHandler::showSelectFunction);
 
 		//then
 		assertThat(result).isEqualTo("ONE");
@@ -50,7 +51,7 @@ class InOutProcessorTest {
 	@DisplayName("[도서 정보를 입력받는다]")
 	void inputBookInfoTest() {
 		//when
-		RegisterBookRequest result = inOutProcessor.inputBookInfo();
+		RegisterBookRequest result = ioProcessor.inputBookInfo();
 
 		//then
 		assertAll(
@@ -69,7 +70,7 @@ class InOutProcessorTest {
 			.toList();
 
 		//when
-		Executable when = () -> inOutProcessor.outputBookInfo(
+		Executable when = () -> ioProcessor.outputBookInfo(
 			responses, ENTRY_SEARCH_ALL_BOOKS.getValue(), COMPLETE_SEARCH_ALL_BOOKS.getValue()
 		);
 
@@ -81,7 +82,7 @@ class InOutProcessorTest {
 	@DisplayName("[도서 번호를 입력받는다]")
 	void inputBookId() {
 		//when
-		Executable when = () -> inOutProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
+		Executable when = () -> ioProcessor.inputBookId(ENTRY_RENT_BOOK, INPUT_RENT_BOOK_ID);
 
 		//then
 		assertDoesNotThrow(when);
@@ -91,7 +92,7 @@ class InOutProcessorTest {
 	@DisplayName("[완료 메세지를 출력한다]")
 	void outputCompleteMessageTest() {
 		//when
-		Executable when = () -> inOutProcessor.outputCompleteMessage(COMPLETE_RENT);
+		Executable when = () -> ioProcessor.outputCompleteMessage(COMPLETE_RENT);
 
 		//then
 		assertDoesNotThrow(when);

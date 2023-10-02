@@ -3,22 +3,22 @@ package library.book.presentation;
 import static library.book.exception.ErrorCode.*;
 
 import library.book.exception.BookException;
-import library.book.infra.console.output.OutputHandler;
-import library.book.presentation.utils.InOutProcessor;
+import library.book.presentation.io.IoProcessor;
+import library.book.presentation.io.OutputHandler;
 import library.book.presentation.utils.FunctionExecutor;
 import library.book.presentation.utils.FunctionManger;
 
 public class BookController {
 
 	private final FunctionExecutor executor;
-	private final InOutProcessor inOutProcessor;
+	private final IoProcessor ioProcessor;
 
 	public BookController(
 		final FunctionExecutor executor,
-		final InOutProcessor inOutProcessor
+		final IoProcessor ioProcessor
 	) {
 		this.executor = executor;
-		this.inOutProcessor = inOutProcessor;
+		this.ioProcessor = ioProcessor;
 	}
 
 	public void run() {
@@ -29,7 +29,7 @@ public class BookController {
 
 	private String inputFunction() {
 		try {
-			return inOutProcessor.inputNumber(OutputHandler::showSelectFunction);
+			return ioProcessor.inputNumber(OutputHandler::showSelectFunction);
 		} catch (IllegalArgumentException e) {
 			throw BookException.of(NOT_SUPPORT_FUNCTION);
 		}

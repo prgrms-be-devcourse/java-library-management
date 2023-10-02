@@ -1,6 +1,6 @@
 package library.book.stub;
 
-import library.book.infra.console.input.InputHandler;
+import library.book.presentation.io.InputHandler;
 
 public class StubInputHandler implements InputHandler {
 
