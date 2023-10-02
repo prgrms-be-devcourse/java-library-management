@@ -3,10 +3,11 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public enum Console {
 
-    START {
+    START (-1){
         @Override
         public String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,7 +28,7 @@ public enum Console {
             return ar;
         }
     },
-    CREATE_BOOK {
+    CREATE_BOOK (1){
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -53,7 +54,7 @@ public enum Console {
             return ar;
         }
     },
-    GET_ALL_BOOKS {
+    GET_ALL_BOOKS(2) {
         @Override
         String[] getConsolePrint() throws IOException {
             System.out.println("[System] 전체 도서 목록입니다.\n");
@@ -61,7 +62,7 @@ public enum Console {
         }
 
     },
-    GET_BY_TITLE {
+    GET_BY_TITLE(3) {
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -76,7 +77,7 @@ public enum Console {
             return word;
         }
     },
-    RENT_BOOK {
+    RENT_BOOK(4) {
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -91,7 +92,7 @@ public enum Console {
             return word;
         }
     },
-    RETURN_BOOK {
+    RETURN_BOOK(5) {
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -106,7 +107,7 @@ public enum Console {
             return word;
         }
     },
-    LOST_BOOK {
+    LOST_BOOK(6) {
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -121,7 +122,7 @@ public enum Console {
             return word;
         }
     },
-    DELETE_BOOK {
+    DELETE_BOOK(7) {
         @Override
         String[] getConsolePrint() throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -137,26 +138,43 @@ public enum Console {
         }
     };
 
-    public static Console getByNumber(int number) {
-        switch (number) {
-            case 1:
-                return CREATE_BOOK;
-            case 2:
-                return GET_ALL_BOOKS;
-            case 3:
-                return GET_BY_TITLE;
-            case 4:
-                return RENT_BOOK;
-            case 5:
-                return RETURN_BOOK;
-            case 6:
-                return LOST_BOOK;
-            case 7:
-                return DELETE_BOOK;
-            default:
-                return START;
-        }
+    private final int value;
+
+    Console(int value) {
+        this.value = value;
     }
+
+    public boolean isTextFunction(int inputFunction) {
+        return value==inputFunction;
+    }
+
+    public static Console of(final int value) {
+        return Arrays.stream(values())
+                .filter(operator -> operator.isTextFunction(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("1~7 사이의 값을 입력하세요. (0 입력 시 종료)"));
+    }
+
+//    public static Console getByNumber(int number) {
+//        switch (number) {
+//            case 1:
+//                return CREATE_BOOK;
+//            case 2:
+//                return GET_ALL_BOOKS;
+//            case 3:
+//                return GET_BY_TITLE;
+//            case 4:
+//                return RENT_BOOK;
+//            case 5:
+//                return RETURN_BOOK;
+//            case 6:
+//                return LOST_BOOK;
+//            case 7:
+//                return DELETE_BOOK;
+//            default:
+//                return START;
+//        }
+//    }
 
     abstract String[] getConsolePrint() throws IOException;
 

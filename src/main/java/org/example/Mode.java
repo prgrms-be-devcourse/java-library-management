@@ -33,6 +33,7 @@ public class Mode {
             int fun; String[] id; List<Book> bookList;
 
             fun = Integer.parseInt(START.getConsolePrint()[0]);
+
             // 0 입력 시 종료
             if(fun==0) {
                 if(i==1) fileService.endProgram();
@@ -40,39 +41,46 @@ public class Mode {
                 break;
             }
 
-            Console console = Console.getByNumber(fun);
-            switch (console) {
-                case CREATE_BOOK:
-                    String[] ar = CREATE_BOOK.getConsolePrint();
-                    bookService.createBook(ar[0], ar[1], Integer.parseInt(ar[2]));
-                    break;
-                case GET_ALL_BOOKS:
-                    GET_ALL_BOOKS.getConsolePrint();
-                    bookList = bookService.getAllBooks();
-                    bookService.printAllBooks(bookList);
-                    break;
-                case GET_BY_TITLE:
-                    id = GET_BY_TITLE.getConsolePrint();
-                    bookList = bookService.findByTitle(id[0]);
-                    bookService.printAllBooks(bookList);
-                    break;
-                case RENT_BOOK:
-                    id = RENT_BOOK.getConsolePrint();
-                    bookService.rentBook(Integer.parseInt(id[0]));
-                    break;
-                case RETURN_BOOK:
-                    id = RETURN_BOOK.getConsolePrint();
-                    bookService.returnBook(Integer.parseInt(id[0]));
-                    break;
-                case LOST_BOOK:
-                    id = LOST_BOOK.getConsolePrint();
-                    bookService.lostBook(Integer.parseInt(id[0]));
-                    break;
-                case DELETE_BOOK:
-                    id = DELETE_BOOK.getConsolePrint();
-                    bookService.deleteBook(Integer.parseInt(id[0]));
-                    break;
+            try {
+                Console console = Console.of(fun);
+                switch (console) {
+                    case CREATE_BOOK:
+                        String[] ar = CREATE_BOOK.getConsolePrint();
+                        bookService.createBook(ar[0], ar[1], Integer.parseInt(ar[2]));
+                        break;
+                    case GET_ALL_BOOKS:
+                        GET_ALL_BOOKS.getConsolePrint();
+                        bookList = bookService.getAllBooks();
+                        bookService.printAllBooks(bookList);
+                        break;
+                    case GET_BY_TITLE:
+                        id = GET_BY_TITLE.getConsolePrint();
+                        bookList = bookService.findByTitle(id[0]);
+                        bookService.printAllBooks(bookList);
+                        break;
+                    case RENT_BOOK:
+                        id = RENT_BOOK.getConsolePrint();
+                        bookService.rentBook(Integer.parseInt(id[0]));
+                        break;
+                    case RETURN_BOOK:
+                        id = RETURN_BOOK.getConsolePrint();
+                        bookService.returnBook(Integer.parseInt(id[0]));
+                        break;
+                    case LOST_BOOK:
+                        id = LOST_BOOK.getConsolePrint();
+                        bookService.lostBook(Integer.parseInt(id[0]));
+                        break;
+                    case DELETE_BOOK:
+                        id = DELETE_BOOK.getConsolePrint();
+                        bookService.deleteBook(Integer.parseInt(id[0]));
+                        break;
+                }
             }
+            catch (IllegalArgumentException e) {
+                System.out.println("[INPUT ERROR] :" + e.getMessage());
+                System.out.println();
+            }
+
         }
     }
 }
