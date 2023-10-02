@@ -9,7 +9,15 @@ public enum ErrorCode {
     WRITE_FILE_FAILED_EXCEPTION("[System] 파일 쓰기 중 문제가 발생했습니다."),
     READ_FILE_FAILED_EXCEPTION("[System] 파일 읽기 중 문제가 발생했습니다."),
     UPDATE_FILE_FAILED_EXCEPTION("[System] 파일 수정 중 문제가 발생했습니다."),
-    CREATE_FILE_FAILED_EXCEPTION("[System] 파일 생성에 실패했습니다.");
+    CREATE_FILE_FAILED_EXCEPTION("[System] 파일 생성에 실패했습니다."),
+    RENTAL_FAILED_ALREADY_RENTED_EXCEPTION("[System] 이미 대여중인 도서입니다."),
+    RENTAL_FAILED_ORGANIZING_BOOK_EXCEPTION("[System] 도서가 정리중입니다. 잠시 후 다시 시도해주세요."),
+    RENTAL_FAILED_LOST_BOOK_EXCEPTION("[System] 분실 처리된 도서로 대여가 불가능합니다."),
+    ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION("[System] 원래 대여가 가능한 도서입니다."),
+    ALREADY_RETURN_ORGANIZING_BOOK_EXCEPTION("[System] 이미 반납되어 정리중인 도서입니다."),
+    LOST_FAILED_EXCEPTION("[System] 분실 처리할 수 없는 도서입니다."),
+    ALREADY_LOST_EXCEPTION("[System] 이미 분실 처리된 도서입니다.")
+    ;
 
     private final String message;
 
