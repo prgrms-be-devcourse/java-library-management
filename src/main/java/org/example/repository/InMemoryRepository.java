@@ -3,7 +3,6 @@ package org.example.repository;
 import org.example.domain.Book;
 import org.example.domain.BookStatusType;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,11 +35,6 @@ public class InMemoryRepository implements Repository {
     public void updateBookStatus(Integer bookId, BookStatusType status) {
         Book bookToUpdate = books.get(bookId);
         bookToUpdate.setStatus(status);
-        if (BookStatusType.ORGANIZING == status) {
-            bookToUpdate.setReturnTime(LocalDateTime.now());
-        } else {
-            bookToUpdate.setReturnTime(null);
-        }
     }
 
     @Override

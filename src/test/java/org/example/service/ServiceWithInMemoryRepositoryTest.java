@@ -9,9 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -108,7 +106,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 정리중인 도서인 경우")
     void borrowBook_Fail_Organizing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING, LocalDateTime.now()));
+        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING));
 
         //when, then
         try {
@@ -222,9 +220,5 @@ class ServiceWithInMemoryRepositoryTest {
 
     private Book createBook(BookStatusType status) {
         return new Book(nextBookId++, "testTitle", "testAuthor", 123, status);
-    }
-
-    private Book createBook(BookStatusType status, LocalDateTime returnTime) {
-        return new Book(nextBookId++, "testTitle", "testAuthor", 123, status, returnTime);
     }
 }

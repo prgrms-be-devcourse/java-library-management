@@ -4,7 +4,6 @@ import org.example.domain.Book;
 import org.example.domain.BookStatusType;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,11 +44,6 @@ public class FileRepository implements Repository {
     public void updateBookStatus(Integer bookId, BookStatusType status) {
         Book bookToUpdate = books.get(bookId);
         bookToUpdate.setStatus(status);
-        if (BookStatusType.ORGANIZING == status) {
-            bookToUpdate.setReturnTime(LocalDateTime.now());
-        } else {
-            bookToUpdate.setReturnTime(null);
-        }
         updateBooksInfoOnCsv();
     }
 
@@ -88,12 +82,8 @@ public class FileRepository implements Repository {
                 String author = bookInfo[2];
                 Integer pageSize = Integer.parseInt(bookInfo[3]);
                 BookStatusType status = BookStatusType.getValueByName(bookInfo[4]);
-                LocalDateTime returnTime = null;
-                if (!bookInfo[5].equals("null")) {
-                    returnTime = LocalDateTime.parse(bookInfo[5]);
-                }
 
-                Book book = new Book(id, title, author, pageSize, status, returnTime);
+                Book book = new Book(id, title, author, pageSize, status);
                 books.put(id, book);
             }
         } catch (IOException e) {
@@ -107,10 +97,10 @@ public class FileRepository implements Repository {
 
     private void updateBooksInfoOnCsv() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(bookInfoCsv))) {
-            bw.write("id, title, author, pageSize, status, returnTime");
+            bw.write("id, title, author, pageSize, status");
             bw.newLine();
             for (Book book : new ArrayList<>(this.books.values())) {
-                bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName() + ", " + book.getReturnTime());
+                bw.write(book.getId() + ", " + book.getTitle() + ", " + book.getAuthor() + ", " + book.getPageSize() + ", " + book.getStatus().getName());
                 bw.newLine();
             }
         } catch (IOException e) {
