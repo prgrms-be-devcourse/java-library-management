@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 public class MemoryRepositoryTest {
 
     BookRepository bookRepository;
@@ -43,7 +44,7 @@ public class MemoryRepositoryTest {
     @DisplayName("존재하는 도서 번호를 입력하면 도서를 삭제한다.")
     public void successDeleteBook() {
         bookRepository.addBook(Book.newInstance(1L,"test","kim",7987, BookStatusType.대여가능,LocalDateTime.now()));
-        assertThat(bookRepository.deleteBook(1)).isTrue();
+        assertTrue(bookRepository.deleteBook(1));
 
     }
 
@@ -51,7 +52,7 @@ public class MemoryRepositoryTest {
     @DisplayName("존재하지 않는 도서 번호를 입력하면 삭제 실패한다.")
     public void failDeleteBook() {
 
-        assertThat(bookRepository.deleteBook(1124)).isFalse();
+        assertFalse(bookRepository.deleteBook(1124));
 
     }
 }
