@@ -14,10 +14,16 @@ class GeneralModeRepositoryTest {
 
         repository.registerBook("test1", "Injun", 456);
         List<BookInfo> totalBook = repository.getTotalBook();
-        Assertions.assertEquals(totalBook.size(), 1);
+        Assertions.assertEquals(totalBook.size(), 4);
     }
 
     @Test
-    public
+    public void findByTitle(){
+        repository.registerBook("test5", "Injun", 456);
+        List<BookInfo> bookList = repository.findByTitle("t5");
+
+
+        Assertions.assertEquals(bookList.get(0).getAuthor(), "Injun");
+    }
 
 }

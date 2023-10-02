@@ -162,7 +162,7 @@ public class GeneralModeRepository implements Repository{
         String author = fileControl.readFile(file.getAbsolutePath(), "author");
         int page_size = Integer.parseInt(fileControl.readFile(file.getAbsolutePath(), "page_size"));
 
-        BookInfo book = new BookInfo(book_id, author, title, page_size, bookStatus);
+        BookInfo book = new BookInfo(book_id, title, author, page_size, bookStatus);
         return book;
     }
 
