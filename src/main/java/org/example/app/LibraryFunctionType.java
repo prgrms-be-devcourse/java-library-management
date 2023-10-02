@@ -1,4 +1,4 @@
-package org.example;
+package org.example.app;
 
 public enum LibraryFunctionType {
     REGISTER_BOOK(1, "Register Book"),
