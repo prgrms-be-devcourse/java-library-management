@@ -13,14 +13,14 @@ public class Book {
     private long id;
     private String title;
     private String writer;
-    private String pageNumber;
+    private int pageNumber;
     private BookStatusType bookStatusType;
 
     private LocalDateTime bookReturnTime;
 
     private final static int ORGANAZING_TIME = 300;
 
-    private Book(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
+    private Book(long id, String title, String writer, int pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -29,7 +29,7 @@ public class Book {
         this.bookReturnTime = bookReturnTime;
     }
 
-    public static Book newInstance(long id, String title, String writer, String pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
+    public static Book newInstance(long id, String title, String writer, int pageNumber, BookStatusType bookStatusType, LocalDateTime bookReturnTime) {
         return new Book(id, title, writer, pageNumber, bookStatusType, bookReturnTime);
     }
 
@@ -73,7 +73,7 @@ public class Book {
         if (this.bookStatusType == BookStatusType.도서정리중) {
             Duration duration = Duration.between(this.bookReturnTime, LocalDateTime.now());
 
-            if (duration.getSeconds() >= 300) {
+            if (duration.getSeconds() >= ORGANAZING_TIME) {
                 this.bookStatusType = BookStatusType.대여가능;
                 return true;
             }

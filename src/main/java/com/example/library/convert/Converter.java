@@ -18,7 +18,7 @@ public class Converter {
         String bookStatus = (String) jsonObject.get("bookStatus");
         String bookReturnTime = (String) jsonObject.get("bookReturnTime");
 
-        return Book.newInstance(Long.parseLong(id), title, writer, pageNumber,
+        return Book.newInstance(Long.parseLong(id), title, writer, Integer.parseInt(pageNumber),
                 convertStringToBookStatus(bookStatus), convertStringToLocalDateTime(bookReturnTime));
     }
 
@@ -30,7 +30,7 @@ public class Converter {
             jsonObject.put("id", Long.toString(book.getId()));
             jsonObject.put("title", book.getTitle());
             jsonObject.put("writer", book.getWriter());
-            jsonObject.put("pageNumber", book.getPageNumber());
+            jsonObject.put("pageNumber", Integer.toString(book.getPageNumber()));
             jsonObject.put("bookStatusType", book.getBookStatusType());
             jsonObject.put("bookReturnTime", Converter.convertLocalDateTimeToString(book.getBookReturnTime()));
             jsonArray.add(jsonObject);

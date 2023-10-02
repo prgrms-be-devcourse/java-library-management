@@ -28,8 +28,8 @@ public class ConsoleInput {
         return scanner.nextLine();
     }
 
-    public String enterPageNumber() {
-        return scanner.nextLine();
+    public int enterPageNumber() {
+        return InputValidator.isNumber(scanner.nextLine());
     }
 
     public int enterBookId() {

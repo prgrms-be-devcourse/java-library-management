@@ -21,7 +21,7 @@ public class FileRepositoryTest {
     @BeforeEach
     public void initBook() {
 
-        book = Book.newInstance(9999L, "Java", "kim", "999 페이지", BookStatusType.대여가능, LocalDateTime.now());
+        book = Book.newInstance(9999L, "Java", "kim", 1214, BookStatusType.대여가능, LocalDateTime.now());
         bookRepository = new BookFileRepository();
 
     }
