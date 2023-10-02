@@ -37,6 +37,10 @@ class BookControllerTest {
     }
 
 
+    @AfterEach
+    public void clear(){
+        bookRepository.clear();
+    }
 
 //    @Test
 //    @DisplayName("Controller: 책을 정상적으로 등록하는 컨트롤러 요청 테스트")
@@ -78,7 +82,7 @@ class BookControllerTest {
                 "------------------------------ \n" +
                 "\n" +
                 "도서번호 : 2\n" +
-                "제목 : test2\n" +
+                "제목 : test21\n" +
                 "작가 이름 : author\n" +
                 "페이지 수 : 344\n" +
                 "상태 : 대여 가능\n" +
@@ -86,7 +90,7 @@ class BookControllerTest {
                 "------------------------------ \n" +
                 "\n" +
                 "도서번호 : 3\n" +
-                "제목 : test3\n" +
+                "제목 : test312\n" +
                 "작가 이름 : author\n" +
                 "페이지 수 : 344\n" +
                 "상태 : 대여 가능\n" +

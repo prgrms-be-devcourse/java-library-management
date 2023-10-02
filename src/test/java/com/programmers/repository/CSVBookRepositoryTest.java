@@ -1,7 +1,6 @@
 package com.programmers.repository;
 
 import com.programmers.domain.Book;
-import com.programmers.front.BookConsole;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-class TestBookRepositoryTest {
+class CSVBookRepositoryTest {
 
-    private final BookRepository bookRepository = new TestBookRepository();
+    private final BookRepository bookRepository = new CSVBookRepository();
 
 
     @BeforeEach
@@ -26,10 +25,9 @@ class TestBookRepositoryTest {
     }
 
     @AfterEach
-    public void clear(){
+    public void clearUp(){
         bookRepository.clear();
     }
-
 
     @Test
     @DisplayName("Repository: 정상적으로 책 등록하는 경우")
@@ -44,7 +42,7 @@ class TestBookRepositoryTest {
         //then
         assertThat(findBook.getBookId()).isEqualTo(Long.valueOf(list.size()));
         assertThat(findBook.getBookId()).isEqualTo(4L);
-        assertThat(book).isEqualTo(findBook);
+        assertThat(book.toString()).isEqualTo(findBook.toString());
     }
 
     @Test
@@ -63,7 +61,7 @@ class TestBookRepositoryTest {
 
         //then
         Assertions.assertThat(bookList.size()).isEqualTo(4);
-        Assertions.assertThat(book).isEqualTo(bookList.get(bookList.size()-1));
+        Assertions.assertThat(book.toString()).isEqualTo(bookList.get(bookList.size()-1).toString());
 //        BookConsole.showAllBooks(bookList);
 
     }

@@ -3,6 +3,7 @@ package com.programmers.service;
 import com.programmers.domain.Book;
 import com.programmers.repository.TestBookRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,11 @@ class BookServiceTest {
         bookService.enrollBook(new Book("test1", "author", 344));
         bookService.enrollBook(new Book("test21", "author", 344));
         bookService.enrollBook(new Book("test312", "author", 344));
+    }
+
+    @AfterEach
+    public void clear(){
+        bookService.reset();
     }
 
     @Test
