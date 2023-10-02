@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 class GeneralModeRepositoryTest {
+
     Repository repository = new GeneralModeRepository();
     @Test
     public void registerBook() throws IOException {
@@ -33,6 +34,17 @@ class GeneralModeRepositoryTest {
 
         String s2 = repository.rentBook(5);
         Assertions.assertEquals(s2, "현재 대여중인 도서입니다.");
+    }
+
+    @Test
+    public void missBook(){
+        repository.missBook(1);
+
+        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class,
+                () -> {
+                    repository.missBook(1);
+                });
+        Assertions.assertEquals(runtimeException.getMessage(), "이미 분실 처리된 도서입니다.");
     }
 
 }

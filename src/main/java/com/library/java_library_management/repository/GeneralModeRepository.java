@@ -77,7 +77,7 @@ public class GeneralModeRepository implements Repository{
             File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             BookInfo book = getBookFromFile(file);
             if(book.getStatus() == BookStatus.RENT)
-                return "현재 대여중인 도서입니다.";
+                return "이미 대여중인 도서입니다.";
             else if(book.getStatus() == BookStatus.LOST)
                 return "현재 분실상태인 도서입니다.";
             else if(book.getStatus() == BookStatus.CLEANING)
