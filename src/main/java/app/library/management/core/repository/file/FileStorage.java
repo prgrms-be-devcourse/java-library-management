@@ -13,30 +13,22 @@ import java.util.Optional;
 
 public class FileStorage {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+    private final File file;
 
-    public FileStorage() {
+    public FileStorage(String filePath) {
+        this.file = new File(filePath);
+        objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
     }
 
     /**
-     * 파일 열기
-     *
-     * @return
-     */
-    public File openFile(String filePath) {
-        File file = new File(filePath);
-        return file;
-    }
-
-    /**
      * 파일 읽기
      *
-     * @param file
      * @return
      */
-    public List<BookVO> readFile(File file) {
+    public List<BookVO> readFile() {
         List<BookVO> list = new ArrayList<>();
         try {
             list = objectMapper.readValue(file, new TypeReference<List<BookVO>>(){});
@@ -49,10 +41,9 @@ public class FileStorage {
     /**
      * 파일에 저장
      *
-     * @param file
      * @param bookVO
      */
-    public void saveFile(File file, BookVO bookVO) {
+    public void saveFile(BookVO bookVO) {
         try {
             List<BookVO> list = objectMapper.readValue(file, new TypeReference<List<BookVO>>(){});
             list.add(bookVO);
@@ -65,10 +56,9 @@ public class FileStorage {
     /**
      * 파일에서 삭제
      *
-     * @param file
      * @param bookVO
      */
-    public void deleteFile(File file, BookVO bookVO) {
+    public void deleteFile(BookVO bookVO) {
         try {
             List<BookVO> list = objectMapper.readValue(file, new TypeReference<List<BookVO>>(){});
             list.remove(bookVO);
@@ -81,10 +71,9 @@ public class FileStorage {
     /**
      * 파일에 갱신
      *
-     * @param file
      * @param bookVO
      */
-    public void updateFile(File file, BookVO bookVO) {
+    public void updateFile(BookVO bookVO) {
         try {
             List<BookVO> list = objectMapper.readValue(file, new TypeReference<List<BookVO>>(){});
             Optional<BookVO> optional = list.stream().filter(b -> b.getId() == bookVO.getId())
