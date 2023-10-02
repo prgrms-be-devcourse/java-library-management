@@ -2,6 +2,7 @@ import domain.Book;
 import domain.Status;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,11 @@ public class FileServiceTest {
     public void beforeEach(){
         repository = new FileRepository("/src/test/resources/test_book_data.csv");
         service = new BookService(repository);
+        repository.clear();
+    }
+
+    @AfterEach
+    public void afterEach(){
         repository.clear();
     }
 
