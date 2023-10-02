@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 class GeneralModeRepositoryTest {
 
@@ -45,6 +46,13 @@ class GeneralModeRepositoryTest {
                     repository.missBook(1);
                 });
         Assertions.assertEquals(runtimeException.getMessage(), "이미 분실 처리된 도서입니다.");
+    }
+
+    @Test
+    public void deleteById(){
+        repository.deleteById(4);
+        Optional<BookInfo> book = repository.findSameBook("test4");
+        Assertions.assertEquals(book, Optional.empty());
     }
 
 }
