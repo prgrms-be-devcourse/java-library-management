@@ -154,7 +154,7 @@ public enum Console {
             case 7:
                 return DELETE_BOOK;
             default:
-                throw new IllegalArgumentException("1부터 7까지의 숫자를 입력하세요.");
+                return START;
         }
     }
 

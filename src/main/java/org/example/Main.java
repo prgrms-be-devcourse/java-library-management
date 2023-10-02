@@ -22,9 +22,13 @@ public class Main {
 
             try {
                 if (modeNum == 1) {
+                    System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
                     mode.normalMode(1);
+                    break;
                 } else if (modeNum == 2) {
+                    System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
                     mode.normalMode(2);
+                    break;
                 } else {
                     throw new IllegalArgumentException("1 또는 2만 입력해주세요.");
                 }

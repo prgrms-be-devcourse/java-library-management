@@ -26,9 +26,6 @@ public class Mode {
     }
 
     public void normalMode(int i) throws IOException {
-        if(i==1) System.out.println("[System] 일반 모드로 애플리케이션을 실행합니다.\n");
-        else System.out.println("[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
-
         // 파일에 있는 책 목록 불러오기
         if(i==1) bookService.updateBooks(fileService.readFile());
 
@@ -36,6 +33,13 @@ public class Mode {
             int fun; String[] id; List<Book> bookList;
 
             fun = Integer.parseInt(START.getConsolePrint()[0]);
+            // 0 입력 시 종료
+            if(fun==0) {
+                if(i==1) fileService.endProgram();
+                System.out.println("[System] 시스템이 종료됩니다.");
+                break;
+            }
+
             Console console = Console.getByNumber(fun);
             switch (console) {
                 case CREATE_BOOK:
@@ -68,19 +72,7 @@ public class Mode {
                     id = DELETE_BOOK.getConsolePrint();
                     bookService.deleteBook(Integer.parseInt(id[0]));
                     break;
-                default:
-                    if(i==1) {
-                        fileService.deleteFile();
-
-                        List<Book> books = bookService.getAllBooks();
-                        fileService.writeFiles(books);
-                    }
-
-                    System.out.println("[System] 시스템이 종료됩니다.");
-                    break;
             }
-
-            if(fun < 1 || fun > 7) break;
         }
     }
 }

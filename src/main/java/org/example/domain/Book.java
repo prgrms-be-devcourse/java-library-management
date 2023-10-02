@@ -27,6 +27,11 @@ public class Book {
         return "도서번호 : " + this.getId() + "\n제목 : " + this.getTitle()+"\n작가 이름 : " + this.getAuthor()
         + "\n페이지 수 : " + this.getPageNum() +" 페이지" + "\n상태 : " + this.getState() + "\n------------------------------\n";
     }
+
+    public boolean isOrganizing() {
+        if(this.state == BookState.ORGANIZING) return true;
+        else return false;
+    }
     public Integer getId() {
         return id;
     }

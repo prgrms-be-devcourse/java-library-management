@@ -12,11 +12,13 @@ import java.util.List;
 public class FileService {
     private File csv;
     private final String filePath;
+    private final BookService bookService;
     BufferedReader br = null;
 
     public FileService() throws FileNotFoundException {
         filePath = "src/main/resources/book.csv";
         csv = new File(filePath);
+        bookService = new BookService();
     }
 
     public List<Book> readFile() {
@@ -70,6 +72,12 @@ public class FileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void endProgram() {
+        deleteFile();
+        List<Book> books = bookService.getAllBooks();
+        writeFiles(books);
     }
 
 }
