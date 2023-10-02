@@ -8,7 +8,7 @@ public enum ExecutionMode {
         return ExecutionMode.TEST;
     }
 
-    private int num;
+    private final int num;
 
     ExecutionMode(int num) {
         this.num = num;

@@ -6,9 +6,9 @@ import app.library.management.core.service.response.dto.status.ResponseState;
 
 public class BookServiceResponse {
 
-    private ResponseState responseState;
-    private Stage stage;
-    private BookStatus bookStatus;
+    private final ResponseState responseState;
+    private final Stage stage;
+    private final BookStatus bookStatus;
 
     public BookServiceResponse(ResponseState responseState, Stage stage, BookStatus bookStatus) {
         this.responseState = responseState;

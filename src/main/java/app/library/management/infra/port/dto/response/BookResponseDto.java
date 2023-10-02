@@ -4,11 +4,11 @@ import app.library.management.core.domain.BookStatus;
 
 public class BookResponseDto {
 
-    private long id;
-    private String title;
-    private String author;
-    private int pages;
-    private BookStatus status;
+    private final long id;
+    private final String title;
+    private final String author;
+    private final int pages;
+    private final BookStatus status;
 
     public BookResponseDto(long id, String title, String author, int pages, BookStatus status) {
         this.id = id;

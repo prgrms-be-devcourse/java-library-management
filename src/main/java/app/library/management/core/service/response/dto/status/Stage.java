@@ -6,7 +6,7 @@ public enum Stage {
     LOST("분실"),
     DELETE("삭제");
 
-    private String title;
+    private final String title;
 
     Stage(String title) {
         this.title = title;
