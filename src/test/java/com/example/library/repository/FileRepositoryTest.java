@@ -8,10 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FileRepositoryTest {
 
@@ -47,7 +48,7 @@ public class FileRepositoryTest {
     @DisplayName("존재하는 도서 번호를 입력하면 도서를 삭제한다.")
     public void successDeleteBook() {
 
-        assertThat(bookRepository.deleteBook(1)).isTrue();
+        assertTrue(bookRepository.deleteBook(1));
 
     }
 
@@ -55,7 +56,7 @@ public class FileRepositoryTest {
     @DisplayName("존재하지 않는 도서 번호를 입력하면 삭제 실패한다.")
     public void failDeleteBook() {
 
-        assertThat(bookRepository.deleteBook(1124)).isFalse();
+        assertFalse(bookRepository.deleteBook(1124));
 
     }
 }

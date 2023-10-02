@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 public class BookTest {
 
     Book book;
@@ -27,7 +28,7 @@ public class BookTest {
     @DisplayName("객체 book의 이름에 파라미터 bookName이 포함된다.")
     public void isContainTrue(String bookName) {
 
-        assertThat(book.isSame(bookName)).isTrue();
+        assertTrue(book.isSame(bookName));
     }
 
     @ParameterizedTest
@@ -35,7 +36,7 @@ public class BookTest {
     @DisplayName("객체 book의 이름에 파라미터 bookName이 포함되는지 않는다.")
     public void isContainFalse(String bookName) {
 
-        assertThat(book.isSame(bookName)).isFalse();
+        assertFalse(book.isSame(bookName));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class BookTest {
 
         Book testBook1 = Book.newInstance(1, "test1", "writer1", 421, BookStatusType.도서정리중, LocalDateTime.of(2023, 1, 1, 1, 1, 1, 111));
 
-        assertThat(testBook1.isExceededfiveMinute()).isTrue();
+        assertTrue(testBook1.isExceededfiveMinute());
     }
     @Test
     @DisplayName("정리중인 도서가 5분이 지나지 않으면 상태가 바뀌지 않는다.")
@@ -61,6 +62,6 @@ public class BookTest {
 
         Book testBook2 = Book.newInstance(1, "test1", "writer1", 124, BookStatusType.도서정리중, LocalDateTime.now());
 
-        assertThat(testBook2.isExceededfiveMinute()).isFalse();
+        assertFalse(testBook2.isExceededfiveMinute());
     }
 }
