@@ -1,7 +1,7 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.mock.MockRepository;
 import com.programmers.library.repository.Repository;
@@ -94,10 +94,10 @@ class LibraryServiceTest {
         libraryService.registerBook(title,author,page);
 
         // When
-        libraryService.updateStatus(book, BookStatus.LOST);
+        libraryService.updateStatus(book, BookStatusType.LOST);
 
         // Then
-        assertEquals(book.getBookStatus().getStatusDescription(), "분실");
+        assertEquals(book.getBookStatus().getDescription(), "분실");
     }
 
     @Test
