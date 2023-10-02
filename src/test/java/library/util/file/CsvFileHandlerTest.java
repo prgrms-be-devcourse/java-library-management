@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CsvFileHandlerTest {
 
-    static private final String testFilePath = "src/main/resources/books.csv";
+    private static final String testFilePath = "src/main/resources/books.csv";
     private CsvFileHandler fileHandler;
 
     @BeforeEach
