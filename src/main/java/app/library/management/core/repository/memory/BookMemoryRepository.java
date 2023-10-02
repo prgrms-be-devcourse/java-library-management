@@ -3,13 +3,13 @@ package app.library.management.core.repository.memory;
 import app.library.management.core.domain.Book;
 import app.library.management.core.repository.BookRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
-    private static final List<Book> bookArrayList = new ArrayList<>();
+    private static final List<Book> bookArrayList = new CopyOnWriteArrayList<>();
     private static long nextId = 0L;
 
     @Override
