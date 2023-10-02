@@ -65,7 +65,10 @@ public class BookService {
     // [6] 분실 처리
     public void reportLostBook(Integer id){
         Book book = repository.findById(id).orElseThrow(NotExistBookIdException::new);
-        if (book.getStatus()== LOST) throw new UnchangeableStatusException("이미 분실처리된 도서입니다.");
+        switch (book.getStatus()){
+            case AVAILABLE, CLEANING -> throw new UnchangeableStatusException("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.");
+            case LOST -> throw new UnchangeableStatusException("이미 분실처리된 도서입니다.");
+        }
         repository.report(book);
     }
 
