@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static domain.Status.*;
 
@@ -59,7 +58,7 @@ public class Book {
         status = CLEANING;
     }
 
-    public boolean isCleaning(){
+    public boolean isStillCleaning(){
         if (Duration.between(returnTime, LocalDateTime.now()).toMinutes()<5) {
             return true;
         }

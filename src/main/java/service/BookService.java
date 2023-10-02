@@ -42,7 +42,7 @@ public class BookService {
             case BORROWED -> throw new UnchangeableStatusException("이미 대여 중인 도서입니다.");
             case LOST ->    throw new UnchangeableStatusException("분실된 도서입니다.");
             case CLEANING -> {
-                if (book.isCleaning())
+                if (book.isStillCleaning())
                     throw new UnchangeableStatusException("정리 중인 도서입니다.");
             }
         }
@@ -55,7 +55,7 @@ public class BookService {
         switch (book.getStatus()){
             case AVAILABLE -> throw new UnchangeableStatusException("원래 대여가 가능한 도서입니다.");
             case CLEANING -> {
-                if (book.isCleaning())
+                if (book.isStillCleaning())
                     throw new UnchangeableStatusException("이미 반납되어 정리 중인 도서입니다.");
             }
         }
@@ -78,7 +78,7 @@ public class BookService {
     private void printBookList(List<Book> bookList) {
         for (Book book: bookList) {
             if (book.getStatus()==CLEANING)
-                book.isCleaning();
+                book.isStillCleaning();
             book.printBookInfo();
         }
     }
