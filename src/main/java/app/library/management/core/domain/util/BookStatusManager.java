@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class BookStatusManager {
 
     private static final int POOL_SIZE = 256;
-    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(POOL_SIZE);
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(POOL_SIZE);
 
     private final BookRepository bookRepository;
 
