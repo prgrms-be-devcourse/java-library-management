@@ -1,5 +1,6 @@
 package app.library.management.core.repository.file;
 
+import app.library.management.config.util.PropertiesUtil;
 import app.library.management.core.domain.Book;
 import app.library.management.core.repository.BookRepository;
 
@@ -11,10 +12,11 @@ import java.util.stream.Collectors;
 public class FileStorageAdaptor implements BookRepository {
 
     private final FileStorage fileStorage;
-    private final String filePath = "src/main/java/app/library/management/core/repository/file/Book.json";
+    private final String filePath;
 
     public FileStorageAdaptor(FileStorage fileStorage) {
         this.fileStorage = fileStorage;
+        this.filePath = PropertiesUtil.getProperty("book.repository.path");
     }
 
     @Override

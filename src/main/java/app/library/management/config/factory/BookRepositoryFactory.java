@@ -1,4 +1,4 @@
-package app.library.management.config.util;
+package app.library.management.config.factory;
 
 import app.library.management.core.repository.BookRepository;
 import app.library.management.core.repository.file.FileStorage;
