@@ -58,13 +58,6 @@ public class LibraryAppFeatureTest {
     private TestBookRepositoryConfig testBookRepositoryConfig;
     private JSONFileManager jsonFileManager;
 
-    /**
-     * 테스트용 JSON 파일을 사용해서 테스트를 진행했음
-     * 테스트 상에서는 도서가 반납처리된 후, 5분 뒤에 대여가 가능하다는 검증을 간단히 10초로 진행했음
-     * 도서 제목으로 검색을 하는 로직 상에서, 일반 모드와 테스트 모드의 차이가 없기 때문에 하나의 테스트로 검증했음
-     * 대부분의 일반 모드와 테스트 모드의 로직은 비슷하나, JSON 파일에서 읽어오고 (load), JSON 파일에 작성되는지 (update) 추가로 검증했음
-     */
-
     static class TestBookRepositoryConfig extends BookRepositoryConfig {
 
         private BookRepository bookRepository;
@@ -73,8 +66,8 @@ public class LibraryAppFeatureTest {
             super(BookRepositoryId);
         }
 
-        public void setBookRepository(BookRepository BookRepository) {
-            this.bookRepository = BookRepository;
+        public void setBookRepository(BookRepository bookRepository) {
+            this.bookRepository = bookRepository;
         }
 
         public BookRepository getBookRepository() {
@@ -169,7 +162,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 JSON 파일의 자동 등록 기능 검증")
     @Test
-    public void generalAutoRegister() {
+    public void loadInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -184,7 +177,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 도서 등록, 조회 기능 검증")
     @Test
-    public void generalAddNGet() {
+    public void addNGetInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -239,7 +232,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 도서 등록, 조회 기능 검증")
     @Test
-    public void validTestAddNGet() {
+    public void addNGetInTest() {
 
         BookRepository bookRepository  = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -278,7 +271,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 '대여 가능' 상태의 도서 대여 성공 검증")
     @Test
-    public void validGeneralBorrowSuccess1() throws FuncFailureException {
+    public void borrowAvailableBookInGeneral() throws FuncFailureException {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -304,7 +297,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 존재하지 않는 도서 대여 실패 검증")
     @Test
-    public void validGeneralBorrowFailure1() throws FuncFailureException {
+    public void borrowBookThatDoesNotExistInGeneral() throws FuncFailureException {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -319,7 +312,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 '대여중' 상태의 도서 대여 실패 검증")
     @Test
-    public void validGeneralBorrowFailure2() throws FuncFailureException {
+    public void borrowRentedBookInGeneral() throws FuncFailureException {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -343,7 +336,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 '분실됨' 상태의 도서 대여 실패 검증")
     @Test
-    public void validGeneralBorrowFailure3() throws FuncFailureException {
+    public void borrowLostBookInGeneral() throws FuncFailureException {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -367,7 +360,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 정리중인 도서 대여 실패 검증")
     @Test
-    public void validGeneralBorrowFailure4() throws FuncFailureException {
+    public void borrowArrangingBookInGeneral() throws FuncFailureException {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -389,9 +382,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
     }
 
-    @DisplayName("일반 모드에서 정리중인 도서 대여 5분 뒤 성공 검증")
+    @DisplayName("일반 모드에서 정리중인 도서 대여 10초 뒤 성공 검증")
     @Test
-    public void validGeneralBorrowSuccess2() throws FuncFailureException {
+    public void borrowBookBeingArrangingAfter10SecInGeneral() throws FuncFailureException {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -426,7 +419,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여 가능한 도서 대여 성공 검증")
     @Test
-    public void validTestBorrowSuccess() {
+    public void borrowAvailableBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -447,7 +440,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 존재하지 않는 도서 대여 실패 검증")
     @Test
-    public void validTestBorrowFailure1() {
+    public void borrowBookThatDoesNotExistInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -462,7 +455,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여중인 도서 대여 실패 검증")
     @Test
-    public void validTestBorrowFailure2() {
+    public void borrowRentedBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -486,7 +479,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 분실된 도서 대여 실패 검증")
     @Test
-    public void validTestBorrowFailure3() {
+    public void borrowLostBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -510,7 +503,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 정리중인 도서 대여 실패 검증")
     @Test
-    public void validTestBorrowFailure4() {
+    public void borrowBookBeingArrangingInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -532,9 +525,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
     }
 
-    @DisplayName("테스트 모드에서 정리중인 도서 5분 뒤 도서 대여 성공 검증")
+    @DisplayName("테스트 모드에서 정리중인 도서 10초 뒤 도서 대여 성공 검증")
     @Test
-    public void validTestBorrowSuccess2() {
+    public void borrowBookBeingArrangingAfter10SecInTest() {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -565,7 +558,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여중인 도서 반납 성공 검증")
     @Test
-    public void validGeneralReturnSuccess1() {
+    public void returnRentedBookInGeneral() {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -612,7 +605,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 존재하지 않는 도서 반납 실패 검증")
     @Test
-    public void validGeneralReturnFailure1() {
+    public void returnBookThatDoesNotExistInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -627,7 +620,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여 가능한 도서 반납 실패 검증")
     @Test
-    public void validGeneralReturnFailure2() {
+    public void returnAvailableBookInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -651,7 +644,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 분실된 도서 반납 성공 검증")
     @Test
-    public void validGeneralReturnSuccess2() {
+    public void returnLostBookInGeneral() {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -697,7 +690,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 정리중인 도서 반납 실패 검증")
     @Test
-    public void validGeneralReturnFailure3() {
+    public void returnBookBeingArrangingInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -721,7 +714,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 존재하지 않은 도서 반납 실패 검증")
     @Test
-    public void validTestReturnFailure1() {
+    public void returnBookThatDoesNotExistInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -736,7 +729,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 정리중인 도서 반납 실패 검증")
     @Test
-    public void validTestReturnFailure() {
+    public void returnBookBeingArrangingInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -760,7 +753,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여 가능한 도서 반납 실패 검증")
     @Test
-    public void validTestReturnFailure2() {
+    public void returnAvailableBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -784,7 +777,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여중인 도서 반납 성공 검증")
     @Test
-    public void validTestReturnSuccess1() {
+    public void returnRentedBookInTest() {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -821,7 +814,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 분실중인 도서 반납 성공 검증")
     @Test
-    public void validTestReturnSuccess2() {
+    public void returnLostBookInTest() {
 
         CountDownLatch lock = new CountDownLatch(1);
 
@@ -858,7 +851,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여 가능한 도서 분실 성공 검증")
     @Test
-    public void validGeneralLostSuccess1() {
+    public void repostLostBookThatAvailableInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -886,7 +879,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여중인 도서 분실 성공 검증")
     @Test
-    public void validGeneralLostSuccess2() {
+    public void reportLostBookThatBeingRentedInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -914,7 +907,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 정리중인 도서 분실 성공 검증")
     @Test
-    public void validGeneralLostSuccess3() {
+    public void repostLostBookThatBeingArrangingInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -942,7 +935,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 존재하지 않는 도서 분실 실패 검증")
     @Test
-    public void validGeneralLostFailure1() {
+    public void repostLostBookThatDoesNotExistInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -986,7 +979,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여 가능한 도서 분실 성공 검증")
     @Test
-    public void validTestLostSuccess1() {
+    public void repostLostBookThatAvailableInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1007,7 +1000,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여중인 도서 분실 성공 검증")
     @Test
-    public void validTestLostSuccess2() {
+    public void repostLostBookBeingRentedInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1028,7 +1021,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 정리중인 도서 분실 성공 검증")
     @Test
-    public void validTestLostSuccess3() {
+    public void repostLostBookBeingArrangingInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1049,7 +1042,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 존재하지 않는 도서 분실 실패 검증")
     @Test
-    public void validTestLostFailure1() {
+    public void repostLostBookThatDoesNotExistInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1064,7 +1057,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 분실된 도서 분실 실패 검증")
     @Test
-    public void validTestLostFailure2() {
+    public void repostLostBookThatBeingLostInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1082,7 +1075,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여 가능한 도서 삭제 성공 검증")
     @Test
-    public void validGeneralDeleteSuccess1() {
+    public void deleteAvailableBookInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1109,7 +1102,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 대여중인 도서 삭제 성공 검증")
     @Test
-    public void validGeneralDeleteSuccess2() {
+    public void deleteBookBeingRentedInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1136,7 +1129,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 정리중인 도서 삭제 성공 검증")
     @Test
-    public void validGeneralDeleteSuccess3() {
+    public void deleteBookBeingArrangingInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1163,7 +1156,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 분실된 도서 삭제 성공 검증")
     @Test
-    public void validGeneralDeleteSuccess4() {
+    public void deleteLostBookInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1190,7 +1183,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("일반 모드에서 존재하지 않는 도서 삭제 실패 검증")
     @Test
-    public void validGeneralDeleteFailure() {
+    public void deleteBookThatDoesNotExistInGeneral() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1209,7 +1202,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여 가능한 도서 삭제 성공 검증")
     @Test
-    public void validTestDeleteSuccess1() {
+    public void deleteAvailableBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1227,7 +1220,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 대여중인 도서 삭제 성공 검증")
     @Test
-    public void validTestDeleteSuccess2() {
+    public void deleteBookBeingRentedInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1245,7 +1238,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 정리중인 도서 삭제 성공 검증")
     @Test
-    public void validTestDeleteSuccess3() {
+    public void deleteBookBeingArrangingInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1263,7 +1256,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 분실된 도서 삭제 성공 검증")
     @Test
-    public void validTestDeleteSuccess4() {
+    public void deleteLostBookInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1281,7 +1274,7 @@ public class LibraryAppFeatureTest {
 
     @DisplayName("테스트 모드에서 존재하지 않는 도서 삭제 실패 검증")
     @Test
-    public void validTestDeleteFailure() {
+    public void deleteBookThatDoesNotExistInTest() {
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1298,9 +1291,9 @@ public class LibraryAppFeatureTest {
         assertThat(bookRepository.getSize()).isEqualTo(0);
     }
 
-    @DisplayName("Mock 객체인 MockBookRepository를 이용한 도서 검색 성공과 존재하지 않는 도서 검색 실패 검증")
+    @DisplayName("TestService 클래스를 이용한 도서 검색 성공 검증")
     @Test
-    public void testFindByTitle() {
+    public void findByTitleUsingTestService() {
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -1323,7 +1316,6 @@ public class LibraryAppFeatureTest {
         assertThat(searched.get(1).getTitle()).isEqualTo(book3.getTitle());
 
         searched.clear();
-
         testLibrary.findByTitle("멍청이");
 
         searched = testLibrary.getSearched();
