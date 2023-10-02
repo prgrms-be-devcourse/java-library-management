@@ -3,6 +3,7 @@ package com.programmers.library.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.programmers.library.domain.Book.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BookTest {
@@ -17,7 +18,7 @@ public class BookTest {
         Integer page = 100;
 
         // When
-        Book book = new Book(bookId, title, author, page);
+        Book book = createRentableBook(bookId, title, author, page);
 
         // Then
         assertEquals(book.getTitle(), title);
@@ -34,7 +35,7 @@ public class BookTest {
         BookStatusType status = BookStatusType.LOST;
 
         // When
-        Book book = new Book(bookId, title, author, page, status);
+        Book book = createBookWithStatus(bookId, title, author, page, status);
 
         // Then
         BookStatusType bookStatus = book.getBookStatus();
