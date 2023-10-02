@@ -7,15 +7,11 @@ import app.library.management.infra.mode.ExecutionMode;
 
 public class App {
 
-    private final ExecutionMode executionMode;
-
-    public App(ExecutionMode executionMode) {
-        this.executionMode = executionMode;
-    }
-
     public void logic () {
 
         Console console = new Console();
+        console.selectMode();
+        ExecutionMode executionMode = ExecutionMode.fromNum(console.inputInt());
         Configuration configuration = new Configuration(executionMode);
         BookController bookController = configuration.bookController();
 
