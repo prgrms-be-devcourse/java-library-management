@@ -7,9 +7,13 @@ import org.example.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class LibraryManagementService {
     private Repository repository;
+    private final Integer organizingMinutes = 5;
 
     public LibraryManagementService(Repository repository) {
         this.repository = repository;
@@ -49,6 +53,11 @@ public class LibraryManagementService {
         bookToReturn.ifPresent(book -> {
             if (book.canReturn()) {
                 repository.updateBookStatus(bookId, BookStatusType.ORGANIZING);
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.schedule(() -> {
+                    repository.updateBookStatus(bookId, BookStatusType.BORROW_AVAILABE);
+                    scheduler.shutdown();
+                }, organizingMinutes, TimeUnit.MINUTES);
             } else {
                 throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
             }

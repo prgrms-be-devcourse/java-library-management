@@ -111,7 +111,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 대여 실패 - 정리중인 도서인 경우")
     void borrowBook_Fail_Organizing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING, LocalDateTime.now()));
+        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING));
 
         //when, then
         try {
@@ -225,9 +225,5 @@ class ServiceWithFileRepositoryTest {
 
     private Book createBook(BookStatusType status) {
         return new Book(nextBookId++, "testTitle", "testAuthor", 123, status);
-    }
-
-    private Book createBook(BookStatusType status, LocalDateTime returnTime) {
-        return new Book(nextBookId++, "testTitle", "testAuthor", 123, status, returnTime);
     }
 }
