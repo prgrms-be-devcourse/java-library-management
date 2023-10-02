@@ -23,31 +23,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-/**
- * 도서 관리 애플리케이션의 일반 모드와 테스트 모드 테스트
- * 사용할 모드를 선택하는 과정에서, setter 메서드의 사용을 최대한 지양하고 싶었으나,,
- * 일반 모드에서 입력받는 BookRepositoryId 값을 통해 각 모드의 구현체를 사용하도록 구현했기 때문에
- * 현재의 설계 상에서는 테스트를 위해 setter 메서드로 값을 전달하는 것이 최선이라고 생각했습니다.
- *
- * 이 부분에 대해서 궁금한 점이
- * 1. 실무에서는 실제 서비스 환경과 테스트 환경이 다른 경우에, 매우 불가피한 상황이 아니라면 테스트 환경에서도 setter 사용을 무조건 지양하는 편인가요?
- *    테스트 환경에서드 사용을 지양한다면 그 이유는 좋은 객체지향 설계가 아니기 때문일까요?
- *
- * 2. 테스트 코드를 작성하면서 가장 어려움을 겪었던 부분은, BookRepository의 구현체를 적용하여 LibraryManagement 인스턴스를 객체지향적으로 설계하고 받아오는 부분이었습니다.
- *    만약 제가 구현한 아키텍처에서 테스트를 위해 무조건 setter 메서드를 사용해야 한다면, 이는 아키텍처 설계가 객체지향적이지 않기 떄문일까요?
- *
- * 3. 테스트 코드를 작성하면서, 한 번에 테스트하고자 하는 로직(?)의 범위가 작을수록 좋다는 것을 적용하고자 했습니다.
- *    그런데 작성하다보니, 도서의 기능에 비해 너무 많은 테스트 코드가 만들어진 것 같다는 생각을 했습니다.
- *    테스트 코드를 작성할 때 테스트하고자 하는 번위를 어떤 식으로 설정하는 것이 좋은지에 대한 멘토님의 기준이 궁금합니다.
- */
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 public class LibraryAppFeatureTest {
 
@@ -101,7 +87,20 @@ public class LibraryAppFeatureTest {
             } else if (book.getState().equals(BookState.RENTING) || book.getState().equals(BookState.LOST)) {
                 Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.ARRANGEMENT);
                 this.bookRepository.add(returned);
-                afterDelayArrangementComplete(returned, 10000);
+
+                CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                    afterDelayArrangementComplete(returned, 10000);
+                }).thenRunAsync(() ->
+                    System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
+
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    if (!completableFuture.isDone()) {
+                        Book availableBook = new Book(returned.getBookId(), returned.getTitle(), returned.getAuthor(), returned.getPage_num(), BookState.RENTAL_AVAILABLE);
+                        this.bookRepository.add(availableBook);
+                        System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
+                    }
+                }));
+
             } else {
                 throw new FuncFailureException("[System] 정리중인 도서로 반납이 불가합니다.\n");
             }
@@ -386,8 +385,6 @@ public class LibraryAppFeatureTest {
     @Test
     public void borrowBookBeingArrangingAfter10SecInGeneral() throws FuncFailureException {
 
-        CountDownLatch lock = new CountDownLatch(1);
-
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -401,20 +398,29 @@ public class LibraryAppFeatureTest {
                 .isInstanceOf(FuncFailureException.class)
                 .hasMessageContaining("[System] 정리중인 도서로 대여가 불가합니다.");
 
-        library.afterDelayArrangementComplete(book, 10000);
+        afterDelayArrangementCompleteTest(bookRepository, book);
+    }
 
-        try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
-            assertThat(bookRepository.findById(book.getBookId()))
-                    .isPresent()
-                    .get()
-                    .extracting(Book::getState)
-                    .isEqualTo(BookState.RENTAL_AVAILABLE);
+    public void afterDelayArrangementCompleteTest(BookRepository bookRepository, Book book) {
 
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            library.afterDelayArrangementComplete(book, 10000);
+        });
+
+        assertThat(bookRepository.findById(book.getBookId()))
+                .isPresent()
+                .get()
+                .extracting(Book::getState)
+                .isEqualTo(BookState.ARRANGEMENT);
+
+        assertTimeout(Duration.ofSeconds(11), () -> future.get());
+        assertThat(future.isDone()).isTrue();
+
+        assertThat(bookRepository.findById(book.getBookId()))
+                .isPresent()
+                .get()
+                .extracting(Book::getState)
+                .isEqualTo(BookState.RENTAL_AVAILABLE);
     }
 
     @DisplayName("테스트 모드에서 대여 가능한 도서 대여 성공 검증")
@@ -529,8 +535,6 @@ public class LibraryAppFeatureTest {
     @Test
     public void borrowBookBeingArrangingAfter10SecInTest() {
 
-        CountDownLatch lock = new CountDownLatch(1);
-
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -539,28 +543,23 @@ public class LibraryAppFeatureTest {
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
         library.add(book);
-        library.afterDelayArrangementComplete(book, 10000);
 
-        try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
+        assertTimeout(Duration.ofSeconds(11), () -> {
+            CompletableFuture.runAsync(() -> {
+                library.afterDelayArrangementComplete(book, 10000);
+            }).get();
+        });
 
-            assertThat(bookRepository.findById(book.getBookId()))
-            .isPresent()
-            .get()
-            .extracting(Book::getState)
-            .isEqualTo(BookState.RENTAL_AVAILABLE);
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(bookRepository.findById(book.getBookId()))
+                .isPresent()
+                .get()
+                .extracting(Book::getState)
+                .isEqualTo(BookState.RENTAL_AVAILABLE);
     }
 
     @DisplayName("일반 모드에서 대여중인 도서 반납 성공 검증")
     @Test
     public void returnRentedBookInGeneral() {
-
-        CountDownLatch lock = new CountDownLatch(1);
 
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -586,12 +585,16 @@ public class LibraryAppFeatureTest {
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.toString());
 
         try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
-
+            TimeUnit.MILLISECONDS.sleep(11000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+
+        assertThat(bookRepository.findById(book.getBookId()))
+                .isPresent()
+                .get()
+                .extracting(Book::getState)
+                .isEqualTo(BookState.RENTAL_AVAILABLE);
 
         Book elem = bookRepository.findById(book.getBookId())
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다."));
@@ -646,8 +649,6 @@ public class LibraryAppFeatureTest {
     @Test
     public void returnLostBookInGeneral() {
 
-        CountDownLatch lock = new CountDownLatch(1);
-
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -672,10 +673,9 @@ public class LibraryAppFeatureTest {
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.toString());
 
         try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
+            Thread.sleep(11000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         Book elem = bookRepository.findById(book.getBookId())
@@ -779,8 +779,6 @@ public class LibraryAppFeatureTest {
     @Test
     public void returnRentedBookInTest() {
 
-        CountDownLatch lock = new CountDownLatch(1);
-
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -798,11 +796,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
 
         try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
-
+            Thread.sleep(11000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -815,8 +811,6 @@ public class LibraryAppFeatureTest {
     @DisplayName("테스트 모드에서 분실중인 도서 반납 성공 검증")
     @Test
     public void returnLostBookInTest() {
-
-        CountDownLatch lock = new CountDownLatch(1);
 
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
@@ -835,11 +829,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
 
         try {
-            lock.await(11000, TimeUnit.MILLISECONDS);
-            lock.countDown();
-
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         assertThat(bookRepository.findById(book.getBookId()))
