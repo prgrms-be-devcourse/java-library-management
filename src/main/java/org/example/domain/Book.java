@@ -7,15 +7,15 @@ public class Book {
     private Integer pageSize;
     private BookStatusType status;
 
-    public Book(Integer id, String title, String author, Integer pageSize) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.pageSize = pageSize;
-        this.status = BookStatusType.BORROW_AVAILABE;
+    public static Book createWithoutStatus(Integer id, String title, String author, Integer pageSize) {
+        return new Book(id, title, author, pageSize, BookStatusType.BORROW_AVAILABE);
     }
 
-    public Book(Integer id, String title, String author, Integer pageSize, BookStatusType status) {
+    public static Book createWithStatus(Integer id, String title, String author, Integer pageSize, BookStatusType status) {
+        return new Book(id, title, author, pageSize, status);
+    }
+
+    private Book(Integer id, String title, String author, Integer pageSize, BookStatusType status) {
         this.id = id;
         this.title = title;
         this.author = author;

@@ -34,7 +34,7 @@ class ServiceWithInMemoryRepositoryTest {
 
         //when
         for (int i = 1; i <= 6; i++) {
-            libraryManagementService.registerBook(createBook());
+            libraryManagementService.registerBook(createTestBook());
         }
 
         //then
@@ -48,7 +48,7 @@ class ServiceWithInMemoryRepositoryTest {
         //given
         Integer initialNextBookId = nextBookId;
         for (int i = 1; i <= 6; i++) {
-            libraryManagementService.registerBook(createBook());
+            libraryManagementService.registerBook(createTestBook());
         }
 
         //when
@@ -63,10 +63,10 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("제목으로 도서 검색 성공")
     void searchBookByTitle_Success() {
         //given
-        libraryManagementService.registerBook(createBook("abc"));
-        libraryManagementService.registerBook(createBook("cka"));
-        libraryManagementService.registerBook(createBook("def"));
-        libraryManagementService.registerBook(createBook("ghi"));
+        libraryManagementService.registerBook(createTestBookWithTitle("abc"));
+        libraryManagementService.registerBook(createTestBookWithTitle("cka"));
+        libraryManagementService.registerBook(createTestBookWithTitle("def"));
+        libraryManagementService.registerBook(createTestBookWithTitle("ghi"));
 
         //when
         List<Book> books = libraryManagementService.searchBookBy("a");
@@ -79,7 +79,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 성공")
     void borrowBook_Success() {
         //given
-        libraryManagementService.registerBook(createBook());
+        libraryManagementService.registerBook(createTestBook());
 
         //when
         libraryManagementService.borrowBook(1);
@@ -92,7 +92,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 대여중인 도서인 경우")
     void borrowBook_Fail_Borrowing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.BORROWING));
 
         //when, then
         try {
@@ -106,7 +106,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 정리중인 도서인 경우")
     void borrowBook_Fail_Organizing() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.ORGANIZING));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.ORGANIZING));
 
         //when, then
         try {
@@ -120,7 +120,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 대여 실패 - 분실된 도서인 경우")
     void borrowBook_Fail_Lost() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.LOST));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.LOST));
 
         //when, then
         try {
@@ -134,7 +134,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 반납 성공")
     void returnBook_Success() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.BORROWING));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.BORROWING));
 
         //when
         libraryManagementService.returnBook(1);
@@ -147,7 +147,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 반납 실패 - 원래 대여가 가능한 도서인 경우")
     void returnBook_Fail_BorrrowAvailable() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.BORROW_AVAILABE));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.BORROW_AVAILABE));
 
         //when, then
         try {
@@ -161,7 +161,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 분실 성공")
     void lostBook_Success() {
         //given
-        libraryManagementService.registerBook(createBook());
+        libraryManagementService.registerBook(createTestBook());
 
         //when
         libraryManagementService.lostBook(1);
@@ -174,7 +174,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 분실 실패 - 이미 분실 처리된 도서인 경우")
     void lostBook_Fail_Lost() {
         //given
-        libraryManagementService.registerBook(createBook(BookStatusType.LOST));
+        libraryManagementService.registerBook(createTestBookWithStatus(BookStatusType.LOST));
 
         //when, then
         try {
@@ -188,7 +188,7 @@ class ServiceWithInMemoryRepositoryTest {
     @DisplayName("도서 삭제 성공")
     void deleteBook_Success() {
         //given
-        libraryManagementService.registerBook(createBook());
+        libraryManagementService.registerBook(createTestBook());
 
         //when
         libraryManagementService.deleteBook(1);
@@ -210,15 +210,15 @@ class ServiceWithInMemoryRepositoryTest {
         }
     }
 
-    private Book createBook() {
-        return new Book(nextBookId++, "testTitle", "testAuthor", 123);
+    private Book createTestBook() {
+        return Book.createWithoutStatus(nextBookId++, "testTitle", "testAuthor", 123);
     }
 
-    private Book createBook(String title) {
-        return new Book(nextBookId++, title, "testAuthor", 123);
+    private Book createTestBookWithTitle(String title) {
+        return Book.createWithoutStatus(nextBookId++, title, "testAuthor", 123);
     }
 
-    private Book createBook(BookStatusType status) {
-        return new Book(nextBookId++, "testTitle", "testAuthor", 123, status);
+    private Book createTestBookWithStatus(BookStatusType status) {
+        return Book.createWithStatus(nextBookId++, "testTitle", "testAuthor", 123, status);
     }
 }
