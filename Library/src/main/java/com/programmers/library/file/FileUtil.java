@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.programmers.library.domain.Book.*;
+
 public class FileUtil {
         private static final String FILE_PATH = System.getProperty("user.home") + "/book.csv";
         private static final String DELIMITER = ",";
@@ -52,7 +54,7 @@ public class FileUtil {
                     String author = parts[2];
                     Integer page = Integer.parseInt(parts[3]);
                     BookStatusType bookStatus = BookStatusType.valueOf(parts[4]);
-                    Book book = new Book(bookId, title, author, page, bookStatus);
+                    Book book = createBookWithStatus(bookId, title, author, page, bookStatus);
                     bookMap.put(bookId, book);
                 }
             } catch (IOException e) {
