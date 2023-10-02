@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Book {
-    private static long sequence = 1;
     private final long id;
     private String title;
     private String author;
@@ -22,6 +21,10 @@ public class Book {
         private BookStatus status = BookStatus.AVAILABLE;
 
         public Builder(String title, String author, int totalPages) {
+            if (title.equals("")) throw new IllegalArgumentException("제목은 빈칸일 수 없습니다.");
+            if (author.equals("")) throw new IllegalArgumentException("작가 이름은 빈칸일 수 없습니다.");
+            if (totalPages <= 0) throw new IllegalArgumentException("페이지 수는 0보다 커야 합니다.");
+
             this.title = Objects.requireNonNull(title);
             this.author = Objects.requireNonNull(author);
             this.totalPages = Objects.requireNonNull(totalPages);
@@ -29,8 +32,7 @@ public class Book {
 
         public Builder id(long id) {
             if(id < sequence) return this;
-            this.id = id;
-            if (sequence < id) sequence = id;
+            this.id = sequence = id;
             return this;
         }
 
@@ -41,25 +43,16 @@ public class Book {
 
         public Book build() {
             sequence++;
-            return new Book(this);
+            return new Book(id, title, author, totalPages, status);
         }
     }
 
-    public Book(Builder builder) {
-        sequence = Builder.sequence;
-        id = builder.id;
-        title = builder.title;
-        author = builder.author;
-        totalPages = builder.totalPages;
-        status = builder.status;
-    }
-
-    private Book(Book book) {
-        id = book.id;
-        title = book.title;
-        author = book.author;
-        totalPages = book.totalPages;
-        status = book.status;
+    private Book(long id, String title, String author, int totalPages, BookStatus status) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.totalPages = totalPages;
+        this.status = status;
     }
 
     public String toRecord() {
@@ -103,6 +96,6 @@ public class Book {
     }
 
     public Book copy() {
-        return new Book(this);
+        return new Book(id, title, author, totalPages, status);
     }
 }
