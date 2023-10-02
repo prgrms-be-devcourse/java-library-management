@@ -25,13 +25,13 @@ public class Console implements Runnable {
     }
 
     public static void registerMenu() {
-        BookDto data = new BookDto();
-
         system("도서 등록 메뉴로 넘어갑니다.");
         try {
-            data.setTitle(stringInput("등록할 도서 제목을 입력하세요."));
-            data.setAuthor(stringInput("작가 이름을 입력하세요."));
-            data.setTotalPages(intInput("페이지 수를 입력하세요."));
+            String title = stringInput("등록할 도서 제목을 입력하세요.");
+            String author = stringInput("작가 이름을 입력하세요.");
+            int totalPages = intInput("페이지 수를 입력하세요.");
+
+            BookDto data = new BookDto(title, author, totalPages);
 
             service.registerBook(data);
         } catch (IllegalArgumentException e) {
