@@ -143,7 +143,7 @@ public class ListBookManager implements BookManager {
 
     @Override
     public List<Book> getBookList() {
-        return bookList.stream().toList();
+        return bookList;
     }
 
     private long getCurrentTime() {
