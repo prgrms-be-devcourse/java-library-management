@@ -2,16 +2,13 @@ package com.library.java_library_management.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.library.java_library_management.controller.Controller;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.dto.JsonInfo;
 import com.library.java_library_management.status.BookStatus;
 
-import java.awt.print.Book;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +20,8 @@ import java.util.stream.Collectors;
 
 public class GeneralModeRepository implements Repository{
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    ObjectMapper objectMapper = new ObjectMapper();
-    FileControl fileControl = new FileControl();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final FileControl fileControl = new FileControl();
     private String bookNumPath;
     private int value;
     private String filePath;
@@ -33,10 +30,12 @@ public class GeneralModeRepository implements Repository{
 
     public GeneralModeRepository() throws IOException{
         this.bookNumPath = "D:\\Users\\java_library_management\\bookcnt.json";
+//        this.bookNumPath = "java_library_management\\bookcnt.json";
         JsonNode jsonNode = objectMapper.readTree(new File(bookNumPath));
         this.value = Integer.parseInt(jsonNode.get("count").asText());
 
         this.filePath = "D:\\Users\\java_library_management\\";
+//        this.filePath = "java_library_management\\";
         this.fileName = value + ". book.json";
     }
 
@@ -88,56 +87,48 @@ public class GeneralModeRepository implements Repository{
 
     @Override
     public String rentBook(int book_id) {
-        List<File> allFile = fileControl.getAllFile(filePath);
+        File file = new File(filePath + book_id + ". book.json");
         try{
-            for (File file : allFile) {
-                BookInfo book = getBookFromFile(file);
-                if(book.getBook_id() == book_id){
-                    if(book.getStatus() == BookStatus.RENT)
-                        return "현재 대여중인 도서입니다.";
-                    else if(book.getStatus() == BookStatus.LOST)
-                        return "현재 분실상태인 도서입니다.";
-                    else if(book.getStatus() == BookStatus.CLEANING)
-                        return "현재 정리중인 도서입니다.";
-                    else{
-                        String jsonStatus = objectMapper.writeValueAsString(BookStatus.RENT);
-                        fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                        return book.getStatus().rentBook(book);
-                    }
-                }
+            BookInfo book = getBookFromFile(file);
+            if(book.getStatus() == BookStatus.RENT)
+                return "현재 대여중인 도서입니다.";
+            else if(book.getStatus() == BookStatus.LOST)
+                return "현재 분실상태인 도서입니다.";
+            else if(book.getStatus() == BookStatus.CLEANING)
+                return "현재 정리중인 도서입니다.";
+            else{
+                String jsonStatus = objectMapper.writeValueAsString(BookStatus.RENT);
+                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+                return book.getStatus().rentBook(book);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
-
-
         return "";
     }
 
     @Override
     public void returnBook(int book_id) {
         List<File> allFile = fileControl.getAllFile(filePath);
+        File file = new File(filePath + book_id + ". book.json");
         try{
-            for(File file : allFile){
-                BookInfo book = getBookFromFile(file);
-                if(book.getBook_id() == book_id && book.getStatus() == BookStatus.AVAILABLE){
-                    System.out.println("파일의 상태 : " + book.getStatus());
-                    throw new RuntimeException("원래 대여 가능한 도서입니다");
-                }
-                else if(book.getBook_id() == book_id){
-                    String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
-                    fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                    scheduler.schedule(() -> {
-                        try {
-                            String statusAfterFive = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
-                            fileControl.modifyFile(file.getAbsolutePath(), "status", statusAfterFive);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }, 5, TimeUnit.MINUTES);
+            BookInfo book = getBookFromFile(file);
+            if (book.getBook_id() == book_id && book.getStatus() == BookStatus.AVAILABLE) {
+                System.out.println("파일의 상태 : " + book.getStatus());
+                throw new RuntimeException("원래 대여 가능한 도서입니다");
+            } else if (book.getBook_id() == book_id) {
+                String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
+                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+                scheduler.schedule(() -> {
+                    try {
+                        String statusAfterFive = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
+                        fileControl.modifyFile(file.getAbsolutePath(), "status", statusAfterFive);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }, 5, TimeUnit.MINUTES);
 
 
-                }
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -147,37 +138,35 @@ public class GeneralModeRepository implements Repository{
 
     @Override
     public void missBook(int book_id) {
-        List<File> allFile = fileControl.getAllFile(filePath);
+        File file = new File(filePath + book_id + ". book.json");
         try{
-            for(File file : allFile){
-                BookInfo book = getBookFromFile(file);
-                if(book_id == book.getBook_id() && book.getStatus() == BookStatus.LOST)
-                    throw new RuntimeException("이미 분실 처리된 도서입니다.");
-                else if(book_id == book.getBook_id()){
-                    String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
-                    fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                }
+            BookInfo book = getBookFromFile(file);
+            if(book_id == book.getBook_id() && book.getStatus() == BookStatus.LOST)
+                throw new RuntimeException("이미 분실 처리된 도서입니다.");
+            else if(book_id == book.getBook_id()){
+                String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
+                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
             }
         }catch (IOException e){
             e.printStackTrace();
         }
     }
+
     @Override
     public void deleteById(int book_id) {
-        List<File> allFile = fileControl.getAllFile(filePath);
+        File file = new File(filePath + book_id + ". book.json");
         try{
-            for(File file : allFile){
-                BookInfo book = getBookFromFile(file);
-                if(book.getBook_id() == book_id) {
-                    Files.delete(Paths.get(file.getAbsolutePath()));
-                    return;
-                }
+            BookInfo book = getBookFromFile(file);
+            if (book.getBook_id() == book_id) {
+                Files.delete(Paths.get(file.getAbsolutePath()));
+                return;
             }
             throw new RuntimeException("존재하지 않는 도서번호입니다.");
         }catch (IOException e){
             e.printStackTrace();
         }
     }
+
 
     private BookInfo getBookFromFile(File file) throws IOException {
         String status = fileControl.readFile(file.getAbsolutePath(), "status");

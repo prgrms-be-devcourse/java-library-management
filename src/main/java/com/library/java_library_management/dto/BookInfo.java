@@ -2,14 +2,11 @@ package com.library.java_library_management.dto;
 
 import com.library.java_library_management.status.BookStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BookInfo {
-    private int book_id;
-    private String author;
-    private String title;
-    private int page_size;
+    private final int book_id;
+    private final String author;
+    private final String title;
+    private final int page_size;
     private BookStatus status;
     public BookInfo(int book_id, String author, String title, int page_size, BookStatus status) {
         this.book_id = book_id;
@@ -37,22 +34,6 @@ public class BookInfo {
 
     public BookStatus getStatus() {
         return status;
-    }
-
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setPage_size(int page_size) {
-        this.page_size = page_size;
     }
 
     public void setStatus(BookStatus status) {

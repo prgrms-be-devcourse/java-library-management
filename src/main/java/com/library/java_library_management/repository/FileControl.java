@@ -15,7 +15,6 @@ public class FileControl {
     ObjectMapper objectMapper = new ObjectMapper();
 
     public String readFile(String filePath, String key) throws IOException{
-            ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(new File(filePath));
 
             String value = jsonNode.get(key).asText();
@@ -32,12 +31,12 @@ public class FileControl {
     public void modifyFile(String filePath, String key, String value) throws IOException{
         JsonNode jsonNode = objectMapper.readTree(new File(filePath));
 
-        // Modify the JSON object as needed
+
         if (jsonNode instanceof ObjectNode) {
             ObjectNode objectNode = (ObjectNode) jsonNode;
             objectNode.put(key, value);
         }
-        // Write the modified JSON object back to the file
+
         objectMapper.writeValue(new File(filePath), jsonNode);
     }
 
@@ -49,7 +48,6 @@ public class FileControl {
 
         if (files != null) {
             for (File file : files) {
-                // Check if the file is a JSON file (has a .json extension)
                 if (file.isFile() && file.getName().endsWith(".json") && !file.getName().equals("bookcnt.json")) {
                     jsonFiles.add(file);
                 }
