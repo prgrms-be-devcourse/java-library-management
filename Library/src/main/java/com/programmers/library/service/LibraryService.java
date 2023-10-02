@@ -9,6 +9,7 @@ import com.programmers.library.repository.Repository;
 import java.util.List;
 
 import static com.programmers.library.domain.Book.*;
+import static com.programmers.library.domain.BookStatusType.*;
 
 public class LibraryService {
     private final Repository repository;
@@ -42,5 +43,58 @@ public class LibraryService {
     public void deleteBook(Long id) {
         repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
         repository.deleteBook(id);
+    }
+
+    public void rentalBook(Long id){
+        Book rentalBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (rentalBook.getBookStatus()) {
+            case RENTABLE -> {
+                repository.updateStatus(rentalBook, RENTED);
+            }
+            case RENTED -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ALREADY_RENTED_EXCEPTION);
+            }
+            case ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ORGANIZING_BOOK_EXCEPTION);
+            }
+            case LOST -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_LOST_BOOK_EXCEPTION);
+            }
+        }
+    }
+
+    public Book returnBook(Long id){
+        Book returnBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (returnBook.getBookStatus()) {
+            case RENTED, LOST -> {
+                repository.updateStatus(returnBook, ORGANIZING);
+            }
+            case RENTABLE -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION);
+            }
+            case ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_RETURN_ORGANIZING_BOOK_EXCEPTION);
+            }
+        }
+
+        return returnBook;
+    }
+
+    public void lostBook(Long id){
+        Book lostBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (lostBook.getBookStatus()) {
+            case RENTED -> {
+                repository.updateStatus(lostBook, LOST);
+            }
+            case RENTABLE, ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.LOST_FAILED_EXCEPTION);
+            }
+            case LOST -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_LOST_EXCEPTION);
+            }
+        }
     }
 }
