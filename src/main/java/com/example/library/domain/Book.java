@@ -75,6 +75,7 @@ public class Book {
 
             if (duration.getSeconds() >= ORGANAZING_TIME) {
                 this.bookStatusType = BookStatusType.대여가능;
+                this.bookReturnTime = null;
                 return true;
             }
         }
