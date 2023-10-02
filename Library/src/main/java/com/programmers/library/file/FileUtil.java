@@ -1,7 +1,7 @@
 package com.programmers.library.file;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 
@@ -13,6 +13,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.programmers.library.domain.Book.*;
 
 public class FileUtil {
         private static final String FILE_PATH = System.getProperty("user.home") + "/book.csv";
@@ -51,8 +53,8 @@ public class FileUtil {
                     String title = parts[1];
                     String author = parts[2];
                     Integer page = Integer.parseInt(parts[3]);
-                    BookStatus bookStatus = BookStatus.valueOf(parts[4]);
-                    Book book = new Book(bookId, title, author, page, bookStatus);
+                    BookStatusType bookStatus = BookStatusType.valueOf(parts[4]);
+                    Book book = createBookWithStatus(bookId, title, author, page, bookStatus);
                     bookMap.put(bookId, book);
                 }
             } catch (IOException e) {

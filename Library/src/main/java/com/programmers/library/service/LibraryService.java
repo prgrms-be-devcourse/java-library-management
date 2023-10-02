@@ -1,20 +1,18 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.repository.Repository;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import static com.programmers.library.domain.BookStatus.RENTABLE;
+import static com.programmers.library.domain.Book.*;
+import static com.programmers.library.domain.BookStatusType.*;
 
 public class LibraryService {
     private final Repository repository;
-    private static final int ORGANIZING_TIME = 5 * 60 * 1000;
 
     public LibraryService(Repository repository) {
         this.repository = repository;
@@ -23,11 +21,10 @@ public class LibraryService {
     public void registerBook(String title, String author, Integer page) {
         Long lastId = repository.findLastId() + 1;
 
-        Book book = new Book(lastId, title, author, page);
-        repository.register(book);
+        repository.register(createRentableBook(lastId, title, author, page));
     }
 
-    public void updateStatus(Book book, BookStatus bookStatus){
+    public void updateStatus(Book book, BookStatusType bookStatus){
         repository.updateStatus(book, bookStatus);
     }
 
@@ -48,15 +45,56 @@ public class LibraryService {
         repository.deleteBook(id);
     }
 
-    public void completeOrganizing(Book book) {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // 5분 후에 실행되는 코드
-                repository.updateStatus(book, RENTABLE);
+    public void rentalBook(Long id){
+        Book rentalBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (rentalBook.getBookStatus()) {
+            case RENTABLE -> {
+                repository.updateStatus(rentalBook, RENTED);
             }
-        }, ORGANIZING_TIME); // 5분(밀리초 단위)
+            case RENTED -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ALREADY_RENTED_EXCEPTION);
+            }
+            case ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ORGANIZING_BOOK_EXCEPTION);
+            }
+            case LOST -> {
+                throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_LOST_BOOK_EXCEPTION);
+            }
+        }
     }
 
+    public Book returnBook(Long id){
+        Book returnBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (returnBook.getBookStatus()) {
+            case RENTED, LOST -> {
+                repository.updateStatus(returnBook, ORGANIZING);
+            }
+            case RENTABLE -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION);
+            }
+            case ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_RETURN_ORGANIZING_BOOK_EXCEPTION);
+            }
+        }
+
+        return returnBook;
+    }
+
+    public void lostBook(Long id){
+        Book lostBook = repository.findBookById(id).orElseThrow(() -> ExceptionHandler.err(ErrorCode.BOOK_NOT_FOUND));
+
+        switch (lostBook.getBookStatus()) {
+            case RENTED -> {
+                repository.updateStatus(lostBook, LOST);
+            }
+            case RENTABLE, ORGANIZING -> {
+                throw ExceptionHandler.err(ErrorCode.LOST_FAILED_EXCEPTION);
+            }
+            case LOST -> {
+                throw ExceptionHandler.err(ErrorCode.ALREADY_LOST_EXCEPTION);
+            }
+        }
+    }
 }

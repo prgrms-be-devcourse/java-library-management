@@ -1,7 +1,7 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatus;
+import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.file.FileHandler;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class FileRepository implements Repository{
         return fileHandler.init();
     }
 
-    public void updateStatus(Book book, BookStatus bookStatus){
+    public void updateStatus(Book book, BookStatusType bookStatus){
         book.updateBookStatus(bookStatus);
         fileHandler.updateFile(book);
     }
@@ -57,7 +57,6 @@ public class FileRepository implements Repository{
 
     @Override
     public Long findLastId() {
-        Long maxId = map.keySet().stream().max(Long::compareTo).orElse(0L);
-        return maxId;
+        return map.keySet().stream().max(Long::compareTo).orElse(0L);
     }
 }

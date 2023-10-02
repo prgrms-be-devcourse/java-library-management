@@ -1,6 +1,5 @@
 package com.programmers.library.view;
 
-import com.programmers.library.view.console.ConsoleInput;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ class InputTest {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(byteArrayInputStream);
 
-        Input input = new ConsoleInput();
+        ConsoleInput input = new ConsoleInput();
 
         // When
         Long number = input.selectNumber();
@@ -46,7 +45,7 @@ class InputTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(inputStream);
 
-        Input input = new ConsoleInput();
+        ConsoleInput input = new ConsoleInput();
 
         // When
         String result = input.inputString();
