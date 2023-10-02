@@ -1,9 +1,11 @@
+import devcourse.backend.business.ModeType;
 import devcourse.backend.business.BookService;
-import devcourse.backend.medel.Book;
 import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.BookDto;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,7 @@ public class BookServiceTest {
     void BookService_초기화() {
         // Mock Repository를 생성
         repository = mock(Repository.class);
-        bookService = new BookService(repository);
+        bookService = new BookService(ModeType.TEST_MODE);
     }
 
     private static List<BookDto> getBookDtos() {
