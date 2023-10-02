@@ -15,17 +15,17 @@ public class Book {
     /**
      * title: 도서 제목
      */
-    private String title;
+    private final String title;
 
     /**
      * author: 작가 이름
      */
-    private String author;
+    private final String author;
 
     /**
      * pages: 페이지 수
      */
-    private int pages;
+    private final int pages;
 
     /**
      * status: 도서 상태
