@@ -52,7 +52,7 @@ class TestBookRepositoryTest {
     public void findAllBookRepositoryTest() throws Exception {
         //given
         List<Book> bookList = bookRepository.findAll();
-        Assertions.assertThat(bookList.size()).isEqualTo(3);
+        Assertions.assertThat(bookList).hasSize(3);
 
         //when
 //        BookConsole.showAllBooks(bookList);
@@ -62,7 +62,7 @@ class TestBookRepositoryTest {
         bookList = bookRepository.findAll();
 
         //then
-        Assertions.assertThat(bookList.size()).isEqualTo(4);
+        Assertions.assertThat(bookList).hasSize(4);
         Assertions.assertThat(book).isEqualTo(bookList.get(bookList.size()-1));
 //        BookConsole.showAllBooks(bookList);
 
@@ -85,9 +85,9 @@ class TestBookRepositoryTest {
 
 
         //then
-        Assertions.assertThat(byBookTitle1.size()).isEqualTo(3);
-        Assertions.assertThat(byBookTitle2.size()).isEqualTo(2);
-        Assertions.assertThat(byBookTitle3.size()).isEqualTo(1);
-        Assertions.assertThat(byBookTitle4.size()).isEqualTo(3);
+        Assertions.assertThat(byBookTitle1).hasSize(3);
+        Assertions.assertThat(byBookTitle2).hasSize(2);
+        Assertions.assertThat(byBookTitle3).hasSize(1);
+        Assertions.assertThat(byBookTitle4).hasSize(3);
     }
 }
