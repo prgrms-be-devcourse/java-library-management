@@ -1,33 +1,46 @@
 package repository;
 
-import domain.Books;
+import domain.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TestRepository implements Repository{
-    @Override
-    public void addBook(Books book) {
+    private static final List<Book> bookList = new ArrayList<>();
+    // Map
 
+    private static Long bookNoSeq = 1L;
+
+    private void addBookNoSeq(){
+        bookNoSeq++;
     }
 
     @Override
-    public void deleteBook(Books book) {
-
+    public void addBook(Book book) {
+        book.setId(bookNoSeq);
+        addBookNoSeq();
+        bookList.add(book);
     }
 
     @Override
-    public Optional<Books> findById(Long bookNo) {
-        return Optional.empty();
+    public void deleteBook(Book book) {
+        bookList.remove(book);
     }
 
     @Override
-    public List<Books> findByTitle(String title) {
-        return null;
+    public Optional<Book> findById(Long bookNo) {
+        return bookList.stream().filter(book -> book.getId().equals(bookNo)).findAny();
     }
 
     @Override
-    public List<Books> bookList() {
-        return null;
+    public List<Book> findByTitle(String title) {
+        return bookList.stream().filter(book -> book.getTitle().equals(title)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> bookList() {
+        return this.bookList;
     }
 }
