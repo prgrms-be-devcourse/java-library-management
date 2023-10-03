@@ -11,7 +11,7 @@ public class Book {
     private int totalPageNumber;
     private BookStatus bookStatus;
 
-    public Book(String title, String author, int totalPageNumber) {
+    private Book(String title, String author, int totalPageNumber) {
         this(null, title, author, totalPageNumber, BookStatus.AVAILABLE);
     }
 
