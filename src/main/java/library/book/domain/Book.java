@@ -85,4 +85,10 @@ public class Book {
 		state.validateIsAbleToLost();
 		state = new Lost();
 	}
+
+	public void finishCleaning() {
+		if (state instanceof Cleaning) {
+			state = new AvailableRent();
+		}
+	}
 }
