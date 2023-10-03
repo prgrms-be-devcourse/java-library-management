@@ -31,11 +31,15 @@ public class Book {
     public Long getId() {
         return id;
     }
+
     public String getName(){
         return name;
     }
+
     public String getAuthor(){ return author; }
+
     public int getPage(){ return page; }
+
     public Status getStatus(){
         return status;
     }
@@ -43,7 +47,6 @@ public class Book {
     public void setId(Long id){
         this.id = id;
     }
-
 
     //대여
     public void rentalBook(){
