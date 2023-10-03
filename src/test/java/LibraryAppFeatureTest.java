@@ -4,10 +4,8 @@ import dev.course.domain.AppConstants;
 import dev.course.domain.Book;
 import dev.course.domain.BookState;
 import dev.course.exception.FuncFailureException;
-import dev.course.manager.ConsoleManager;
 import dev.course.manager.JSONFileManager;
 import dev.course.repository.BookRepository;
-
 
 import dev.course.repository.GeneralBookRepository;
 import dev.course.repository.TestBookRepository;
@@ -79,27 +77,18 @@ public class LibraryAppFeatureTest {
             Book book = this.bookRepository.findById(bookId)
                     .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-            if (book.getState().equals(BookState.RENTAL_AVAILABLE)) {
-                throw new FuncFailureException("[System] 대여 가능한 도서로 반납이 불가합니다.\n");
-            } else if (book.getState().equals(BookState.RENTING) || book.getState().equals(BookState.LOST)) {
-                Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.ARRANGEMENT);
-                this.bookRepository.add(returned);
+            Book elem = book.getState().handleReturn(bookRepository, book);
+            if (elem.equalState(BookState.ARRANGEMENT)) {
 
-                CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
-                    afterDelayArrangementComplete(returned, 10000);
-                }).thenRunAsync(() ->
-                        System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
+                CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 10000);
 
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (!completableFuture.isDone()) {
-                        Book availableBook = new Book(returned.getBookId(), returned.getTitle(), returned.getAuthor(), returned.getPage_num(), BookState.RENTAL_AVAILABLE);
+                        Book availableBook = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
                         this.bookRepository.add(availableBook);
                         System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
                     }
                 }));
-
-            } else {
-                throw new FuncFailureException("[System] 정리중인 도서로 반납이 불가합니다.\n");
             }
 
             System.out.println("[System] 도서 반납 처리가 완료되었습니다.\n");
@@ -154,10 +143,9 @@ public class LibraryAppFeatureTest {
                 .build();
     }
 
-    public LibraryConfig buildConfig(BookRepositoryConfig bookRepositoryConfig, ConsoleManager consoleManager) {
+    public LibraryConfig buildConfig(BookRepositoryConfig bookRepositoryConfig) {
         return LibraryConfig.builder()
                 .bookRepositoryConfig(bookRepositoryConfig)
-                .consoleManager(consoleManager)
                 .build();
     }
 
@@ -168,7 +156,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         JSONArray jsonArray = jsonFileManager.getJSON(AppConstants.FILEPATH);
@@ -183,7 +171,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookRepository.getSize()).isEqualTo(0);
@@ -238,7 +226,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository  = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookRepository.getSize()).isEqualTo(0);
@@ -277,7 +265,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -303,7 +291,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.borrow(10L))
@@ -318,7 +306,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -342,7 +330,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -366,7 +354,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -390,7 +378,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -419,7 +407,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -440,7 +428,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.borrow(10L))
@@ -455,7 +443,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -479,7 +467,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -503,7 +491,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -527,7 +515,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -551,7 +539,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         TestLibraryManagement testLibrary = new TestLibraryManagement(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -615,7 +603,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.returns( 10L))
@@ -630,7 +618,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -654,7 +642,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         TestLibraryManagement testLibrary = new TestLibraryManagement(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -711,7 +699,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -735,7 +723,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.returns( 10L))
@@ -750,7 +738,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -774,7 +762,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -800,7 +788,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         TestLibraryManagement testLibrary = new TestLibraryManagement(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -846,7 +834,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         TestLibraryManagement testLibrary = new TestLibraryManagement(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -890,7 +878,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -918,7 +906,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -946,7 +934,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -974,7 +962,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.lost( 10L))
@@ -989,7 +977,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1018,7 +1006,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -1039,7 +1027,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -1060,7 +1048,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1081,7 +1069,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.lost( 10L))
@@ -1096,7 +1084,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1114,7 +1102,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -1141,7 +1129,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -1168,7 +1156,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1195,7 +1183,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1222,7 +1210,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThatThrownBy(() -> library.delete( 10L))
@@ -1241,7 +1229,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
@@ -1259,7 +1247,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
@@ -1277,7 +1265,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
@@ -1295,7 +1283,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
@@ -1313,7 +1301,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         library = buildLibrary(libraryConfig);
 
         assertThat(bookRepository.getSize()).isEqualTo(0);
@@ -1332,7 +1320,7 @@ public class LibraryAppFeatureTest {
         BookRepository bookRepository = new GeneralBookRepository(jsonFileManager, AppConstants.TEST_FILEPATH);
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
-        libraryConfig = buildConfig(testBookRepositoryConfig, null);
+        libraryConfig = buildConfig(testBookRepositoryConfig);
         TestLibraryManagement testLibrary = new TestLibraryManagement(libraryConfig);
 
         Book book1 = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTAL_AVAILABLE);
