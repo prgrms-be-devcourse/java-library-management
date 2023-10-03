@@ -16,7 +16,7 @@ public class Validator {
     }
 
     protected static String validateNameAndAuthor(String input) {
-        if (Pattern.matches("[a-zA-Z0-9]*$", input) && !input.isEmpty() && input.length() < 100) {
+        if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣]*$", input) && !input.isEmpty() && input.length() < 100) {
             return input;
         }
         throw new ValidateException() {
