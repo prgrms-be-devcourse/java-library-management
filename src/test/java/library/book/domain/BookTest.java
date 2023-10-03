@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("[Book Test] - Domain")
@@ -76,5 +77,39 @@ class BookTest {
 
 		//then
 		assertThat(book.getBookState()).isEqualTo(LOST);
+	}
+
+	@Nested
+	@DisplayName("[정리중 상태의 도서를 대여가능 상태로 바꾼다]")
+	class finishCleaning {
+
+		@Test
+		@DisplayName("[정리중 상태가 아니어서 대여가능 상태로 바뀌지 않는다]")
+		void doNothingWhenStateIsNotCleaning() {
+			//given
+			Book book = A.toEntity();
+			book.registerAsLost();
+
+			//when
+			book.finishCleaning();
+
+			//then
+			assertThat(book.getBookState()).isEqualTo(LOST);
+		}
+
+		@Test
+		@DisplayName("[정리중 상태에서 대여가능 상태로 바뀐다]")
+		void changeStateToAvailableRent() {
+			//given
+			Book book = A.toEntity();
+			book.rent();
+			book.returnBook();
+
+			//when
+			book.finishCleaning();
+
+			//then
+			assertThat(book.getBookState()).isEqualTo(AVAILABLE_RENT);
+		}
 	}
 }
