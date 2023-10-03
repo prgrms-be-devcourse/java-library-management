@@ -14,7 +14,6 @@ public class FileRepository implements Repository{
     private final List<Book> bookList = new ArrayList<>();
 
     public FileRepository(){
-        File repository = new File(path);
         loadFile();
     }
 
