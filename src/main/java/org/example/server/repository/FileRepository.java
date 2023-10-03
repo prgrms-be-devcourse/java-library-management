@@ -6,7 +6,6 @@ import org.example.server.exception.EmptyLibraryException;
 
 import java.util.Optional;
 
-// 일반 모드용 레포지토리. fileStorage라는 DB에서 데이터를 불러오고 저장.
 public class FileRepository implements Repository {
     private final FileStorage fileStorage;
 
@@ -28,7 +27,7 @@ public class FileRepository implements Repository {
         StringBuilder sb = new StringBuilder();
         fileStorage.data.values().forEach((book) -> {
             sb.append(checkLoadTime(book));
-        }); // 정리 완료 시간 체크 후 업데이트 후 append
+        });
         sb.append("\n");
         return sb.toString();
     }
@@ -41,7 +40,7 @@ public class FileRepository implements Repository {
                     checkLoadTime(book);
                     if (book.name.contains(bookName)) sb.append(book);
                 }
-        ); // 정리 완료 시간 체크 후 업데이트
+        );
         if (sb.isEmpty())
             throw new EmptyLibraryException();
         sb.append("\n");
@@ -53,7 +52,7 @@ public class FileRepository implements Repository {
         Optional<Book> bookOpt = Optional.ofNullable(fileStorage.data.get(bookId));
         if (bookOpt.isEmpty())
             throw new BookNotFoundException();
-        return checkLoadTime(bookOpt.get()); // 정리 완료 시간 체크 후 업데이트
+        return checkLoadTime(bookOpt.get());
     }
 
     @Override

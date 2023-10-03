@@ -4,9 +4,6 @@ import org.example.packet.RequestData;
 
 import java.util.regex.Pattern;
 
-// 값의 유효성을 체크하고 유효하지 않으면 예외를 던지는 역할
-// 통과하면 이 메서드를 사용하는 입장에서 간결해보이기 위해 다시 그대로 검사한 데이터를 내보낸다.
-// int는 제외) String으로 받고 int로 내보낸다.
 public class Validator {
     protected static RequestData validateBook(String[] input) {
         String name = validateNameAndAuthor(input[0]);
