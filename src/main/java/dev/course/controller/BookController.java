@@ -21,29 +21,35 @@ public class BookController {
 
     public void start() {
 
-        int modeId;
-        boolean flag = false;
+        String input;
+        int modeId = 0;
+        boolean flag = true;
 
         try {
-            while (true) {
+            while (flag) {
 
                 consoleManager.printMode();
-                modeId = consoleManager.getInteger();
+                input = consoleManager.getInput();
+
+                try {
+                    modeId = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    System.out.println("[System] 숫자를 입력해주세요.\n");
+                    continue;
+                }
 
                 switch (modeId) {
                     case AppConstants.GENERAL:
                         System.out.println("[System] 일반 모드 애플리케이션을 실행합니다.\n");
-                        flag = true;
+                        flag = false;
                         break;
                     case AppConstants.TEST:
                         System.out.println("[System] 테스트 모드 애플리케이션을 실행합니다.\n");
-                        flag = true;
+                        flag = false;
                         break;
                     default:
                         System.out.println("[System] 잘못된 모드의 접근입니다.\n");
                 }
-
-                if (flag) break;
             }
 
             this.library = appConfig.getLibrary(modeId);
@@ -56,17 +62,26 @@ public class BookController {
 
     public void play() {
 
-        boolean quit = false;
+        String input;
+        int func = 0;
+        boolean flag = true;
 
-        while (true) {
+        while (flag) {
 
             consoleManager.printMenu();
+            input = consoleManager.getInput();
 
             try {
-                switch (consoleManager.getInteger()) {
+                func = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("[System] 숫자를 입력해주세요.\n");
+            }
+
+            try {
+                switch (func) {
                     case 1:
                         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.\n");
-                        library.add(consoleAboutBookInfo());
+                        library.add(createBookUsingConsole());
                         break;
                     case 2:
                         System.out.println("[System] 전체 도서 목록입니다.\n");
@@ -75,7 +90,7 @@ public class BookController {
                     case 3:
                         System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n");
                         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
-                        library.findByTitle(consoleManager.getString());
+                        library.findByTitle(consoleManager.getInput());
                         break;
                     case 4:
                         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n");
@@ -99,23 +114,25 @@ public class BookController {
                         break;
                     case 8:
                         System.out.println("[System] 시스템이 종료되었습니다.\n");
-                        quit = true;
+                        flag = false;
                         break;
                 }
-                if (quit) break;
             } catch (FuncFailureException | ConsoleIOFailureException e) {
                 System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("[System] Unexpected Exception Occurred: ");
+                e.printStackTrace();
             }
         }
     }
 
-    public Book consoleAboutBookInfo() {
+    public Book createBookUsingConsole() {
 
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
-        String title = consoleManager.getString();
+        String title = consoleManager.getInput();
 
         System.out.println("Q. 작가 이름을 입력하세요.");
-        String author = consoleManager.getString();
+        String author = consoleManager.getInput();
 
         System.out.println("Q. 페이지 수를 입력하세요.");
         int pageNum = consoleManager.getInteger();
