@@ -3,7 +3,7 @@ package repository;
 import domain.BookState;
 import exception.FileWriteException;
 import message.ExecuteMessage;
-import thread.NormalChangeStateThread;
+import view.FileConsolePrint;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static domain.Reader.fc;
-import static domain.Reader.sc;
 import static repository.Book.countId;
 
 public class FileRepository implements Repository {
-    File file = new File("src/main/resources/library.csv");
-    private List<Book> books = new ArrayList<>();
+    public static File file = new File("src/main/resources/library.csv");
+    public static List<Book> books = new ArrayList<>();
 
     public FileRepository() {
         fileToList(books, file);
@@ -33,16 +32,13 @@ public class FileRepository implements Repository {
 
     @Override
     public void printList() {
-        books.forEach(book -> System.out.println(book.toString()));
+        FileConsolePrint.printListView();
     }
 
     @Override
     public void search(String titleWord) {
         books.forEach(book -> {
-            String title = book.getTitle();
-            if(title.contains(titleWord)) {
-                System.out.println(book.toString());
-            }
+            FileConsolePrint.searchView(titleWord, book);
         });
     }
 
@@ -53,18 +49,7 @@ public class FileRepository implements Repository {
                 .findFirst();
 
         selectedBookOptional.ifPresentOrElse(
-                selectedBook -> {
-                    switch (selectedBook.getState()) {
-                        case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING.getMessage());
-                        case AVAILABLE -> {
-                            selectedBook.setState(BookState.RENTING);
-                            updateFile(books, file);
-                            System.out.println(ExecuteMessage.RENTAL_AVAILABLE.getMessage());
-                        }
-                        case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING.getMessage());
-                        case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST.getMessage());
-                    }
-                },
+                FileConsolePrint::rentalView,
                 () -> {
                     System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
                 }
@@ -76,25 +61,10 @@ public class FileRepository implements Repository {
         Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
                 .findFirst();
         selectedBookOptional.ifPresentOrElse(
-                selectedBook -> {
-                    NormalChangeStateThread thread = new NormalChangeStateThread(selectedBook, file, books);
-
-                    if (selectedBook.getState() == BookState.RENTING || selectedBook.getState() == BookState.LOST) {
-                        selectedBook.setState(BookState.ORGANIZING);
-                        updateFile(books, file);
-                        thread.setDaemon(true);
-                        thread.start();
-
-                        System.out.println(ExecuteMessage.RETURN_COMPLETE.getMessage());
-                    } else if (selectedBook.getState() == BookState.AVAILABLE) {
-                        System.out.println(ExecuteMessage.RETURN_AVAILABLE.getMessage());
-                    } else {
-                        System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE.getMessage());
-                    }
-                },
-                    () -> {
-                        System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                    }
+                FileConsolePrint::returnView,
+                () -> {
+                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
+                }
         );
     }
 
@@ -103,17 +73,7 @@ public class FileRepository implements Repository {
         Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
                 .findFirst();
         selectedBookOptional.ifPresentOrElse(
-                selectedBook -> {
-                    switch (selectedBook.getState()) {
-                        case RENTING -> {
-                            selectedBook.setState(BookState.LOST);
-                            updateFile(books, file);
-                            System.out.println(ExecuteMessage.LOST_COMPLETE.getMessage());
-                        }
-                        case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE.getMessage());
-                        case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY.getMessage());
-                    }
-                },
+                FileConsolePrint::lostView,
                 () -> {
                     System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
                 }
@@ -125,11 +85,7 @@ public class FileRepository implements Repository {
         Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
                 .findFirst();
         selectedBookOptional.ifPresentOrElse(
-                selectedBook -> {
-                    books.remove(selectedBook);
-                    updateFile(books, file);
-                    System.out.println(ExecuteMessage.DELETE_COMPLETE.getMessage());
-                },
+                FileConsolePrint::deleteView,
                 () -> {
                     System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
                 }

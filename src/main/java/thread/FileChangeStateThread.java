@@ -5,16 +5,15 @@ import exception.ThreadInterruptException;
 import repository.Book;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import static repository.FileRepository.updateFile;
 
-public class NormalChangeStateThread extends Thread {
+public class FileChangeStateThread extends Thread {
     private Book book;
     private File file;
     private List<Book> books;
-    public NormalChangeStateThread(Book book, File file, List<Book> books) {
+    public FileChangeStateThread(Book book, File file, List<Book> books) {
         this.book = book;
         this.file = file;
         this.books = books;
