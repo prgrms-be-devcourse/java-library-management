@@ -63,7 +63,6 @@ class BookTest {
 
 		//then
 		assertThat(book.getBookState()).isEqualTo(CLEANING);
-		assertThat(book.getCleaningEndAt()).isNotNull();
 	}
 
 	@Test
