@@ -4,30 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Book {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Book book)) return false;
-        return totalPageNumber == book.totalPageNumber && bookId.equals(book.bookId) && title.equals(book.title) && author.equals(book.author) && bookStatus == book.bookStatus;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(bookId, title, author, totalPageNumber, bookStatus);
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "bookId=" + bookId +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", totalPageNumber=" + totalPageNumber +
-                ", bookStatus=" + bookStatus +
-                '}';
-    }
-
     private Long bookId;
+
     private String title;
     private String author;
     private int totalPageNumber;
@@ -48,11 +26,11 @@ public class Book {
         this.bookStatus = bookStatus;
     }
 
-    public static Book enrollingBook(String title, String author, int totalPageNumber){
+    public static Book enrollingBook(String title, String author, int totalPageNumber) {
         return new Book(title, author, totalPageNumber);
     }
 
-    public boolean searchByTitle(String title){
+    public boolean searchByTitle(String title) {
         return this.title.contains(title);
     }
 
@@ -76,11 +54,11 @@ public class Book {
         return bookStatus;
     }
 
-    public void rentBook(){
+    public void rentBook() {
         this.bookStatus = BookStatus.ONGOING;
     }
 
-    public void loseBook(){
+    public void loseBook() {
         this.bookStatus = BookStatus.LOST;
     }
 
@@ -93,7 +71,7 @@ public class Book {
     }
 
     public void returnBook() {
-        if(!(this.bookStatus == BookStatus.ONGOING)) throw new RuntimeException("[System] 대여중인 가능한 도서입니다.");
+        if (!(this.bookStatus == BookStatus.ONGOING)) throw new RuntimeException("[System] 대여중인 가능한 도서입니다.");
         this.bookStatus = BookStatus.AVAILABLE;
     }
 
@@ -111,5 +89,28 @@ public class Book {
 
     public boolean checkingAlreadyDeleted() {
         return this.bookStatus == BookStatus.DELETED;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book book)) return false;
+        return totalPageNumber == book.totalPageNumber && bookId.equals(book.bookId) && title.equals(book.title) && author.equals(book.author) && bookStatus == book.bookStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookId, title, author, totalPageNumber, bookStatus);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", totalPageNumber=" + totalPageNumber +
+                ", bookStatus=" + bookStatus +
+                '}';
     }
 }
