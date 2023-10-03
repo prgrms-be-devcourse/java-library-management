@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TestRepository implements Repository{
 
-    private List<Book> bookRepository;
+    private final List<Book> bookRepository;
 
     public TestRepository(){
         bookRepository = new ArrayList<>();

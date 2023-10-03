@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Service{
 
-    private Repository repository;
+    private final Repository repository;
 
     public Service(Repository repository) {
         this.repository = repository;
@@ -47,7 +47,7 @@ public class Service{
     }
 
     private static class BackGround extends Thread{
-        private Book book;
+        private final Book book;
 
         BackGround(Book book){
             this.book = book;

@@ -9,8 +9,7 @@ import java.util.List;
 
 public class ConsoleManager {
 
-    BufferedReader br;
-
+    private final BufferedReader br;
 
     public ConsoleManager(){
         br = new BufferedReader(new InputStreamReader(System.in));

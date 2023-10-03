@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Client {
 
-    private ConsoleManager consoleManager;
+    private final ConsoleManager consoleManager;
     private Service service;
 
     public Client(ConsoleManager consoleManager) {
