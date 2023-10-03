@@ -7,13 +7,9 @@ import org.example.client.io.IO;
 import org.example.packet.Request;
 
 public class Client {
-    private static final IO io = new IO();
+    private final IO io = new IO();
 
-    private Client() {
-
-    }
-
-    public static String scanMode() {
+    public String scanMode() {
         try {
             return ModeConsole.scanType(io);
         } catch (ValidateException e) {
@@ -22,7 +18,7 @@ public class Client {
         }
     }
 
-    public static Request scanMenu() {
+    public Request scanMenu() {
         try {
             return MethodConsole.scanTypeAndInfo(io);
         } catch (ValidateException e) {
@@ -31,7 +27,7 @@ public class Client {
         }
     }
 
-    public static void printResponse(String response) {
+    public void printResponse(String response) {
         io.println(response);
     }
 }

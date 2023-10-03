@@ -6,16 +6,19 @@ import org.example.server.Server;
 
 public class Application {
     public static void main(String[] args) {
+        Client client = new Client();
+        Server server = new Server();
         try {
-            Server.setServer(Client.scanMode());
+            server.setServer(client.scanMode());
             while (true) {
-                Request request = Client.scanMenu();
-                String response = Server.requestMethod(request);
-                Client.printResponse(response);
+                Request request = client.scanMenu();
+                String response = server.requestMethod(request);
+                client.printResponse(response);
             }
         } catch (RuntimeException e) {
-            Server.saveData();
+            server.saveData();
             System.err.print("\n>> 시스템 에러 발생! 프로그램을 종료합니다.\n");
+            System.err.println(e);
         }
     }
 }

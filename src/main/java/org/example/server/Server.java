@@ -12,20 +12,18 @@ import org.example.server.service.Service;
 import java.util.function.Supplier;
 
 public class Server {
-    private static Controller controller;
-    private static Repository repository;
-    private static int saveTimer;
-    private Server() {
-    }
+    private Controller controller;
+    private Repository repository;
+    private int saveTimer;
 
-    public static void setServer(String mode) {
+    public void setServer(String mode) {
         repository = ModeType.valueOf(mode).getRepository();
         Service service = new BookService(repository);
         controller = new BookController(service);
         saveTimer = 0;
     }
 
-    public static String requestMethod(Request request) {
+    public String requestMethod(Request request) {
         try {
             if (++saveTimer == 5) {
                 saveTimer = 0;
@@ -37,7 +35,7 @@ public class Server {
         }
     }
 
-    public static void saveData() {
+    public void saveData() {
         if (repository instanceof FileRepository) {
             repository.save();
         }
