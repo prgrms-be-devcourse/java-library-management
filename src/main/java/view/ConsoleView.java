@@ -52,7 +52,7 @@ public class ConsoleView implements View{
     public void listBooks(List<Book> bookList) {
         System.out.println("\n[System] 전체 도서 목록입니다.");
         bookList.stream().forEach(book -> {
-            System.out.println("도서번호 : " + book.getBookNo() +
+            System.out.println("도서번호 : " + book.getId() +
                     "\n제목 : " + book.getTitle() +
                     "\n작가 이름 : " + book.getAuthor() +
                     "\n페이지 수 : " + book.getPageNum() +
@@ -73,7 +73,7 @@ public class ConsoleView implements View{
     @Override
     public void searchList(List<Book> searchList) {
         searchList.stream().forEach(book -> {
-            System.out.println("도서번호 : " + book.getBookNo() +
+            System.out.println("도서번호 : " + book.getId() +
                     "\n제목 : " + book.getTitle() +
                     "\n작가 이름 : " + book.getAuthor() +
                     "\n페이지 수 : " + book.getPageNum() +

@@ -6,14 +6,14 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Book {
-    private Long bookNo;
+    private Long id;
     private String title;
     private String author;
     private Integer pageNum;
     private BookStatusType bookStatusType;
 
-    public void setBookNo(Long bookNo){
-        this.bookNo = bookNo;
+    public void setId(Long id){
+        this.id = id;
     }
 
     public void toAvailable(){

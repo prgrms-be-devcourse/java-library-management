@@ -19,7 +19,7 @@ public class TestRepository implements Repository{
 
     @Override
     public void addBook(Book book) {
-        book.setBookNo(bookNoSeq);
+        book.setId(bookNoSeq);
         addBookNoSeq();
         bookList.add(book);
     }
@@ -31,7 +31,7 @@ public class TestRepository implements Repository{
 
     @Override
     public Optional<Book> findById(Long bookNo) {
-        return bookList.stream().filter(book -> book.getBookNo().equals(bookNo)).findAny();
+        return bookList.stream().filter(book -> book.getId().equals(bookNo)).findAny();
     }
 
     @Override
