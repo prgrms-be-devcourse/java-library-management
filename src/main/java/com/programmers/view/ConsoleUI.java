@@ -52,8 +52,8 @@ public class ConsoleUI {
         int mode = getIntFromInput();
         if (mode == NORMAL_MODE) {
             System.out.println(InfoMessages.NORMAL_MODE_EXECUTION.getMessage());
-            BookService.setBookRepository(FileBookRepository.getInstance());
             FileBookRepository.setCsvFilePath("./src/main/resources/data.csv");
+            BookService.setBookRepository(FileBookRepository.getInstance());
         } else if (mode == TEST_MODE) {
             System.out.println(InfoMessages.TEST_MODE_EXECUTION.getMessage());
             BookService.setBookRepository(MemBookRepository.getInstance());
