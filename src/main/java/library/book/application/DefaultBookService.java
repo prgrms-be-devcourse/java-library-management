@@ -1,9 +1,12 @@
 package library.book.application;
 
+import static library.book.domain.state.Cleaning.*;
+
 import java.util.List;
 
 import library.book.application.dto.request.RegisterBookRequest;
 import library.book.application.dto.response.BookSearchResponse;
+import library.book.application.utils.BookScheduler;
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
 
@@ -71,6 +74,8 @@ public class DefaultBookService implements BookService {
 		book.returnBook();
 
 		bookRepository.save(book);
+
+		registerFinishCleaningTask(id);
 	}
 
 	@Override
@@ -84,5 +89,16 @@ public class DefaultBookService implements BookService {
 	@Override
 	public void deleteBook(Long id) {
 		bookRepository.deleteById(id);
+	}
+
+	private void registerFinishCleaningTask(long id) {
+		Runnable finishCleaningTask = () ->
+			bookRepository.findById(id)
+				.ifPresent(findBook -> {
+					findBook.finishCleaning();
+					bookRepository.save(findBook);
+				});
+
+		BookScheduler.registerTask(finishCleaningTask, CLEANING_END_AT);
 	}
 }
