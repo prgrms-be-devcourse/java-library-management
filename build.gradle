@@ -2,8 +2,17 @@ plugins {
     id 'java'
 }
 
+java {
+    sourceCompatibility = '17'
+    targetComptibility = '17'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 group = 'org.java-library-management'
 version = '1.0-SNAPSHOT'
+
 
 repositories {
     mavenCentral()
