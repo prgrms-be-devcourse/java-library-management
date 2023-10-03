@@ -43,4 +43,8 @@ public class Book implements Comparable {
     public BookState getState() {
         return state;
     }
+
+    public boolean equalState(BookState state) {
+        return this.state.equals(state);
+    }
 }
