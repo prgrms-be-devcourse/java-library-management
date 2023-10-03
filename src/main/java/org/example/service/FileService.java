@@ -30,7 +30,8 @@ public class FileService {
             while ((line = br.readLine()) != null) {
                 String[] lineArr = line.split(",");
                 Book book = new Book(id++, lineArr[1], lineArr[2],
-                        Integer.parseInt(lineArr[3]), BookState.valueOf(lineArr[4]));
+                        Integer.parseInt(lineArr[3]),
+                        BookState.valueOf(bookService.getByText(lineArr[4])));
                 bookList.add(book);
             }
         } catch (FileNotFoundException e) {
@@ -71,13 +72,6 @@ public class FileService {
             Files.deleteIfExists(Paths.get(filePath));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void endProgram() {
-        deleteFile();
-        List<Book> books = bookService.getAllBooks();
-        writeFiles(books);
-    }
+        }    }
 
 }

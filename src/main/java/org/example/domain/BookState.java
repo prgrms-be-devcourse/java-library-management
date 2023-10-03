@@ -1,5 +1,7 @@
 package org.example.domain;
 
+import java.util.Arrays;
+
 public enum BookState {
     POSSIBLE("대여가능") {
         public void showState() {

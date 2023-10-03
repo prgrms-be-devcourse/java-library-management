@@ -28,6 +28,13 @@ public enum Console {
             return ar;
         }
     },
+    END (0) {
+        @Override
+        String[] getConsolePrint() throws IOException {
+            System.out.println("[System] 시스템이 종료됩니다.");
+            return null;
+        }
+    },
     CREATE_BOOK (1){
         @Override
         String[] getConsolePrint() throws IOException {
@@ -154,27 +161,6 @@ public enum Console {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("1~7 사이의 값을 입력하세요. (0 입력 시 종료)"));
     }
-
-//    public static Console getByNumber(int number) {
-//        switch (number) {
-//            case 1:
-//                return CREATE_BOOK;
-//            case 2:
-//                return GET_ALL_BOOKS;
-//            case 3:
-//                return GET_BY_TITLE;
-//            case 4:
-//                return RENT_BOOK;
-//            case 5:
-//                return RETURN_BOOK;
-//            case 6:
-//                return LOST_BOOK;
-//            case 7:
-//                return DELETE_BOOK;
-//            default:
-//                return START;
-//        }
-//    }
 
     abstract String[] getConsolePrint() throws IOException;
 

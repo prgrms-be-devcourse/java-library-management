@@ -14,12 +14,13 @@ import static org.example.Console.*;
 
 public class Mode {
 
-    private static final BookService bookService = new BookService();
-    private static final FileService fileService;
+    private final BookService bookService;
+    private final FileService fileService;
 
-    static {
+    public Mode() {
+        this.bookService = new BookService();
         try {
-            fileService = new FileService();
+            this.fileService = new FileService();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -33,13 +34,6 @@ public class Mode {
             int fun; String[] id; List<Book> bookList;
 
             fun = Integer.parseInt(START.getConsolePrint()[0]);
-
-            // 0 입력 시 종료
-            if(fun==0) {
-                if(i==1) fileService.endProgram();
-                System.out.println("[System] 시스템이 종료됩니다.");
-                break;
-            }
 
             try {
                 Console console = Console.of(fun);
@@ -74,13 +68,21 @@ public class Mode {
                         id = DELETE_BOOK.getConsolePrint();
                         bookService.deleteBook(Integer.parseInt(id[0]));
                         break;
+                    case END:
+                        if(i==1) {
+                            fileService.deleteFile();
+                            List<Book> books = bookService.getAllBooks();
+                            fileService.writeFiles(books);
+                        }
+                        System.out.println("[System] 시스템이 종료됩니다.");
+                        break;
                 }
+                if(console.equals(END)) break;
             }
             catch (IllegalArgumentException e) {
                 System.out.println("[INPUT ERROR] :" + e.getMessage());
                 System.out.println();
             }
-
         }
     }
 }

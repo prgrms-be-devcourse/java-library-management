@@ -4,7 +4,6 @@ import org.example.domain.Book;
 import org.example.domain.BookRepository;
 import org.example.domain.BookState;
 
-import java.io.*;
 import java.util.*;
 
 public class BookService {
@@ -93,5 +92,11 @@ public class BookService {
             System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
             return deleteBook;
         }
+    }
+
+    public String getByText(String text) {
+        BookState bookState = Arrays.stream(BookState.values()).filter(state -> state.toString().equals(text))
+                .findFirst().orElseThrow(() -> new RuntimeException());
+        return bookState.name();
     }
 }
