@@ -13,19 +13,19 @@ public class Validator {
     }
 
     protected static String validateNameAndAuthor(String input) {
-        if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣]*$", input) && !input.isEmpty() && input.length() < 100) {
+        if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,99}$", input)) {
             return input;
         }
         throw new ValidateException() {
             @Override
             public String getMessage() {
-                return "\n[System] 유효하지 않은 문자열입니다.(빈 문자열/특수문자 불가능)\n";
+                return "\n[System] 유효하지 않은 문자열입니다.(빈 문자열/특수문자 불가능, 1~99자 문자열만 가능)\n";
             }
         };
     }
 
     protected static int validateIdAndPages(String inputStr) {
-        if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
+        if (Pattern.matches("^[0-9]{1,4}$", inputStr)) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input < 5000) {
                 return input;
@@ -40,9 +40,9 @@ public class Validator {
     }
 
     protected static int validateSelectNum(int selectCount, String inputStr) {
-        if (Pattern.matches("^[0-9]*$", inputStr) && !inputStr.isEmpty()) {
+        if (Pattern.matches("[1-9]", inputStr)) {
             int input = Integer.parseInt(inputStr);
-            if (0 < input && input <= selectCount) {
+            if (input <= selectCount) {
                 return input;
             }
         }
