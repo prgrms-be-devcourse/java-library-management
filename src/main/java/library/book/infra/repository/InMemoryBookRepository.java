@@ -12,7 +12,7 @@ import library.book.domain.Book;
 import library.book.domain.BookRepository;
 import library.book.exception.BookException;
 
-public class TestBookRepository implements BookRepository {
+public class InMemoryBookRepository implements BookRepository {
 
 	private static final Map<Long, Book> bookStorage = new ConcurrentHashMap<>();
 

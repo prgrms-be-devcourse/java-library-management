@@ -21,14 +21,14 @@ import library.book.domain.BookRepository;
 import library.book.exception.BookException;
 import library.book.fixture.BookFixture;
 
-@DisplayName("[TestBookRepository Test] - Infra")
-class TestBookRepositoryTest {
+@DisplayName("[InMemoryBookRepository Test] - Infra")
+class TestBookRepositoryInMemory {
 
 	@Test
 	@DisplayName("[도서를 저장한다]")
 	void success() {
 		//given
-		BookRepository bookRepository = new TestBookRepository();
+		BookRepository bookRepository = new InMemoryBookRepository();
 
 		Book book = A.toEntity();
 
@@ -44,7 +44,7 @@ class TestBookRepositoryTest {
 	@DisplayName("[새로운 도서 번호를 만들어낸다]")
 	void generateNewIdTest() {
 		//given
-		BookRepository bookRepository = new TestBookRepository();
+		BookRepository bookRepository = new InMemoryBookRepository();
 
 		saveFixtures(bookRepository);
 
@@ -60,7 +60,7 @@ class TestBookRepositoryTest {
 	@DisplayName("[저장소의 모든 도서를 조회한다]")
 	void findAllTest() {
 		//given
-		BookRepository bookRepository = new TestBookRepository();
+		BookRepository bookRepository = new InMemoryBookRepository();
 
 		saveFixtures(bookRepository);
 
@@ -87,7 +87,7 @@ class TestBookRepositoryTest {
 	@DisplayName("[저장소에서 제목으로 도서를 조회한다]")
 	void findByTitleTest() {
 		//given
-		BookRepository bookRepository = new TestBookRepository();
+		BookRepository bookRepository = new InMemoryBookRepository();
 
 		saveFixtures(bookRepository);
 
@@ -103,7 +103,7 @@ class TestBookRepositoryTest {
 	@DisplayName("[저장소에서 도서 번호로 도서를 조회한다]")
 	void findByIdTest() {
 		//given
-		BookRepository bookRepository = new TestBookRepository();
+		BookRepository bookRepository = new InMemoryBookRepository();
 		Book book = A.toEntity();
 		bookRepository.save(book);
 
@@ -122,7 +122,7 @@ class TestBookRepositoryTest {
 		@DisplayName("[저장소에서 도서를 성공적으로 삭제한다]")
 		void success() {
 			//given
-			BookRepository bookRepository = new TestBookRepository();
+			BookRepository bookRepository = new InMemoryBookRepository();
 			bookRepository.save(A.toEntity());
 
 			//when
@@ -137,7 +137,7 @@ class TestBookRepositoryTest {
 		@DisplayName("저장소에 도서번호에 대한 대한 도서가 존재하지 않아 실패한다")
 		void failWhenNotFoundById() {
 			//given
-			BookRepository bookRepository = new TestBookRepository();
+			BookRepository bookRepository = new InMemoryBookRepository();
 
 			//when
 			ThrowableAssert.ThrowingCallable when = () -> bookRepository.deleteById(A.getId());

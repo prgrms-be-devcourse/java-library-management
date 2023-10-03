@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import library.book.domain.BookRepository;
+import library.book.infra.repository.InMemoryBookRepository;
 import library.book.infra.repository.IoBookRepository;
-import library.book.infra.repository.TestBookRepository;
 import library.book.manager.ModeManager;
 
 @DisplayName("[ModeManager Test] - Presentation")
@@ -41,7 +41,7 @@ class ModeManagerTest {
 			BookRepository result = two.getRepository();
 
 			//then
-			assertThat(result).isInstanceOf(TestBookRepository.class);
+			assertThat(result).isInstanceOf(InMemoryBookRepository.class);
 		}
 	}
 }
