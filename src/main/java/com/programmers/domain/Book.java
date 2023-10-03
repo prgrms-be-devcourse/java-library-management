@@ -6,9 +6,9 @@ import java.util.Objects;
 public class Book {
     private Long bookId;
 
-    private String title;
-    private String author;
-    private int totalPageNumber;
+    private final String title;
+    private final String author;
+    private final int totalPageNumber;
     private BookStatus bookStatus;
 
     private Book(String title, String author, int totalPageNumber) {
