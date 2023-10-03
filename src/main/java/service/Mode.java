@@ -14,11 +14,16 @@ public class Mode {
         else if(mode == ModeType.TEST_MODE) service = new Service(new MemoryRepository());
     }
 
+
     public boolean run() {
         System.out.println(SelectMessage.FUNCTION_SELECT_MESSAGE.getMessage());
 
         int selectNum = sc.nextInt();
-        SelectMenu.valueOfSelectNum(selectNum).run(service);
+        sc.nextLine();
+        if(selectNum <= 7 && selectNum >= 1) {
+            SelectMenu.valueOfSelectNum(selectNum).run(service);
+            return true;
+        }
         return false;
     }
 }

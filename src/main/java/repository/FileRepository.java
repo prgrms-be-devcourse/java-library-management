@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static domain.Reader.fc;
 import static domain.Reader.sc;
 import static repository.Book.countId;
 
@@ -147,7 +148,8 @@ public class FileRepository implements Repository {
     private void fileToList(List<Book> books, File file) {
         String line = "";
 
-        while((line = sc.nextLine()) != null) {
+        while(fc.hasNextLine()) {
+            line = fc.nextLine();
             String[] split = line.split(",");
             Book tmpBook = new Book(Integer.parseInt(split[0]), split[1],
                     split[2], Integer.parseInt(split[3]), BookState.valueOfState(split[4]));

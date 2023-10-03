@@ -31,6 +31,7 @@ public class Service {
 
         System.out.println(QuestionMessage.REGISTER_PAGE.getMessage());
         int page = sc.nextInt();
+        sc.nextLine();
         return new Book(title, writer, page);
     }
 
@@ -49,24 +50,28 @@ public class Service {
     public void rental() {
         System.out.println(QuestionMessage.RENTAL_ID.getMessage());
         int id = sc.nextInt();
+        sc.nextLine();
         repository.rental(id);
     }
 
     public void returnBook() {
         System.out.println(QuestionMessage.RETURN_ID.getMessage());
         int id = sc.nextInt();
+        sc.nextLine();
         repository.returnBook(id);
     }
 
     public void lostBook() {
         System.out.println(QuestionMessage.LOST_ID.getMessage());
         int id = sc.nextInt();
+        sc.nextLine();
         repository.lostBook(id);
     }
 
     public void deleteBook() {
         System.out.println(QuestionMessage.DELETE_ID.getMessage());
         int id = sc.nextInt();
+        sc.nextLine();
         repository.deleteBook(id);
     }
 }
