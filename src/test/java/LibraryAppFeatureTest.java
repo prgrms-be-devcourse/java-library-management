@@ -26,14 +26,11 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 public class LibraryAppFeatureTest {
 
@@ -91,7 +88,7 @@ public class LibraryAppFeatureTest {
                 CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
                     afterDelayArrangementComplete(returned, 10000);
                 }).thenRunAsync(() ->
-                    System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
+                        System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
 
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (!completableFuture.isDone()) {
@@ -106,6 +103,11 @@ public class LibraryAppFeatureTest {
             }
 
             System.out.println("[System] 도서 반납 처리가 완료되었습니다.\n");
+        }
+
+        @Override
+        public CompletableFuture<Void> runAsyncToWaitArrangement(Book book, long delay) {
+            return super.runAsyncToWaitArrangement(book, delay);
         }
 
         @Override
@@ -398,22 +400,9 @@ public class LibraryAppFeatureTest {
                 .isInstanceOf(FuncFailureException.class)
                 .hasMessageContaining("[System] 정리중인 도서로 대여가 불가합니다.");
 
-        afterDelayArrangementCompleteTest(bookRepository, book);
-    }
+        CompletableFuture<Void> future = library.runAsyncToWaitArrangement(book, 10000);
 
-    public void afterDelayArrangementCompleteTest(BookRepository bookRepository, Book book) {
-
-        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-            library.afterDelayArrangementComplete(book, 10000);
-        });
-
-        assertThat(bookRepository.findById(book.getBookId()))
-                .isPresent()
-                .get()
-                .extracting(Book::getState)
-                .isEqualTo(BookState.ARRANGEMENT);
-
-        assertTimeout(Duration.ofSeconds(11), () -> future.get());
+        assertTimeout(Duration.ofMillis(11000), () -> future.get());
         assertThat(future.isDone()).isTrue();
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -544,10 +533,8 @@ public class LibraryAppFeatureTest {
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
         library.add(book);
 
-        assertTimeout(Duration.ofSeconds(11), () -> {
-            CompletableFuture.runAsync(() -> {
-                library.afterDelayArrangementComplete(book, 10000);
-            }).get();
+        assertTimeout(Duration.ofMillis(11000), () -> {
+            library.runAsyncToWaitArrangement(book, 10000).get();
         });
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -569,7 +556,22 @@ public class LibraryAppFeatureTest {
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.RENTING);
         testLibrary.add(book);
+
+        CountDownLatch latch = new CountDownLatch(1);
+
         testLibrary.returns(book.getBookId());
+
+        // wait 10 sec because of waiting to complete arrangement
+        CompletableFuture.runAsync(() -> {
+            try {
+                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.countDown();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).thenRunAsync(() -> {
+            System.out.println("Async is Complete");
+        });
 
         assertThat(bookRepository.findById(book.getBookId()))
                 .isPresent()
@@ -585,9 +587,9 @@ public class LibraryAppFeatureTest {
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.toString());
 
         try {
-            TimeUnit.MILLISECONDS.sleep(11000);
+            latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -657,7 +659,21 @@ public class LibraryAppFeatureTest {
 
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.LOST);
         testLibrary.add(book);
+
+        CountDownLatch latch = new CountDownLatch(1);
+
         testLibrary.returns(book.getBookId());
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.countDown();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).thenRunAsync(() -> {
+            System.out.println("Async is Complete");
+        });
 
         assertThat(bookRepository.findById(book.getBookId()))
                 .isPresent()
@@ -673,9 +689,9 @@ public class LibraryAppFeatureTest {
         assertThat(jsonObject.get("state")).isEqualTo(BookState.ARRANGEMENT.toString());
 
         try {
-            Thread.sleep(11000);
+            latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         Book elem = bookRepository.findById(book.getBookId())
@@ -779,6 +795,8 @@ public class LibraryAppFeatureTest {
     @Test
     public void returnRentedBookInTest() {
 
+        CountDownLatch latch = new CountDownLatch(1);
+
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -789,6 +807,17 @@ public class LibraryAppFeatureTest {
         testLibrary.add(book);
         testLibrary.returns(book.getBookId());
 
+        CompletableFuture.runAsync(() -> {
+            try {
+                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.countDown();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).thenRunAsync(() -> {
+            System.out.println("Async is Complete");
+        });
+
         assertThat(bookRepository.findById(book.getBookId()))
                 .isPresent()
                 .get()
@@ -796,9 +825,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
 
         try {
-            Thread.sleep(11000);
+            latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -812,6 +841,8 @@ public class LibraryAppFeatureTest {
     @Test
     public void returnLostBookInTest() {
 
+        CountDownLatch latch = new CountDownLatch(1);
+
         BookRepository bookRepository = new TestBookRepository();
         testBookRepositoryConfig.setBookRepository(bookRepository);
 
@@ -822,6 +853,17 @@ public class LibraryAppFeatureTest {
         testLibrary.add(book);
         testLibrary.returns(book.getBookId());
 
+        CompletableFuture.runAsync(() -> {
+            try {
+                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.countDown();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).thenRunAsync(() -> {
+            System.out.println("Async is Complete");
+        });
+
         assertThat(bookRepository.findById(book.getBookId()))
                 .isPresent()
                 .get()
@@ -829,9 +871,9 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
 
         try {
-            Thread.sleep(10000);
+            latch.await();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         assertThat(bookRepository.findById(book.getBookId()))
