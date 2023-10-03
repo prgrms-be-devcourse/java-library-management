@@ -10,15 +10,15 @@ import java.util.Map;
 
 public class CsvFileUtil {
 
-    private final String FILE_PATH;
+    private final String filePath;
 
-    public CsvFileUtil(String FILE_PATH) {
-        this.FILE_PATH = FILE_PATH;
+    public CsvFileUtil(String filePath) {
+        this.filePath = filePath;
     }
 
     public Map<Long, Book> readAllBooksFromCsv() {
         Map<Long, Book> bookMemory = new HashMap<>();
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (file.exists()) {
             return readAllBooksFromCsv(bookMemory);
         }
@@ -26,7 +26,7 @@ public class CsvFileUtil {
     }
 
     private Map<Long, Book> readAllBooksFromCsv(Map<Long, Book> bookMemory) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -46,7 +46,7 @@ public class CsvFileUtil {
     }
 
     public void writeFile(Map<Long, Book> bookMemory) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
 
             for (Book book : bookMemory.values()) {
                 String csvLine = String.format("%d,%s,%s,%d,%s",

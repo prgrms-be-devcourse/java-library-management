@@ -1,19 +1,22 @@
 package constant;
 
-public enum Mode {
-    NORMAL_MODE,
-    TEST_MODE,
-    WRONG_MODE;
+import java.util.Arrays;
 
-    public static Mode chosenMode(int mode) {
-        switch (mode) {
-            case 1 -> {
-                return NORMAL_MODE;
-            }
-            case 2 -> {
-                return TEST_MODE;
-            }
-            default -> throw new IllegalArgumentException(ExceptionMsg.WRONG_MODE.getMessage());
-        }
+public enum Mode {
+    NORMAL_MODE(1),
+    TEST_MODE(2),
+    ;
+
+    private final int number;
+
+    Mode(int number) {
+        this.number = number;
+    }
+
+    public static Mode chosenMode(int modeNumber) {
+        return Arrays.stream(Mode.values())
+                .filter(mode -> mode.number == modeNumber)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.WRONG_MODE.getMessage()));
     }
 }

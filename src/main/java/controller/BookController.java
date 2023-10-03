@@ -1,9 +1,6 @@
 package controller;
 
-import constant.Function;
-import constant.Guide;
-import constant.Mode;
-import constant.Question;
+import constant.*;
 import io.Input;
 import io.Output;
 import repository.FileRepository;
@@ -15,8 +12,8 @@ public class BookController {
     private BookService bookService;
     private final Input input;
     private final Output output;
-    private final String MODE = "MODE";
-    private final String FUNCTION = "FUNCTION";
+    private static final String PRINT_SELECTION_MODE = "MODE";
+    private static final String PRINT_SELECTION_FUNCTION = "FUNCTION";
 
     public BookController(Input input, Output output) {
         this.input = input;
@@ -24,10 +21,10 @@ public class BookController {
     }
 
     public boolean chooseMode() {
-        output.printSelection(MODE);
+        output.printSelection(PRINT_SELECTION_MODE);
         try {
-            int inputMode = input.inputNumber();
-            switch (Mode.chosenMode(inputMode)) {
+            int modeNumber = input.inputNumber();
+            switch (Mode.chosenMode(modeNumber)) {
                 case NORMAL_MODE -> {
                     output.printGuide(Guide.START_NORMAL_MODE);
                     this.bookService = new BookService(new FileRepository("book.csv"));
@@ -36,6 +33,7 @@ public class BookController {
                     output.printGuide(Guide.START_TEST_MODE);
                     this.bookService = new BookService(new MemoryRepository());
                 }
+                default -> throw new IllegalArgumentException(ExceptionMsg.WRONG_MODE.getMessage());
             }
             runApplication();
         } catch (Exception e) {
@@ -46,28 +44,27 @@ public class BookController {
     }
 
     public void runApplication() {
-        int functionIdx = -1;
-        while (functionIdx != 0) {
-            output.printSelection(FUNCTION);
-            {
-                try {
-                    functionIdx = input.inputNumber();
-                    switch (Function.getFunctionByIdx(functionIdx)) {
-                        case SYSTEM_END -> output.printGuide(Guide.SYSTEM_END);
-                        case SAVE -> saveBook();
-                        case FIND_ALL -> findAllBook();
-                        case FIND_BY_TITLE -> findBooksByTitle();
-                        case BORROW -> borrowBook();
-                        case RETURN -> returnBook();
-                        case LOST -> lostBook();
-                        case DELETE -> deleteBook();
+        {
+            try {
+                output.printSelection(PRINT_SELECTION_FUNCTION);
+                int functionNumber = input.inputNumber();
+                switch (Function.getFunctionByIdx(functionNumber)) {
+                    case SYSTEM_END -> {
+                        output.printGuide(Guide.SYSTEM_END);
+                        System.exit(0);
                     }
-                } catch (Exception e) {
-                    output.printException(e.getMessage());
+                    case SAVE -> saveBook();
+                    case FIND_ALL -> findAllBook();
+                    case FIND_BY_TITLE -> findBooksByTitle();
+                    case BORROW -> borrowBook();
+                    case RETURN -> returnBook();
+                    case LOST -> lostBook();
+                    case DELETE -> deleteBook();
                 }
+            } catch (Exception e) {
+                output.printException(e.getMessage());
             }
         }
-        System.exit(0);
     }
 
     public void saveBook() {
