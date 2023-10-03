@@ -3,9 +3,17 @@ package com.programmers.domain;
 import com.programmers.common.ErrorMessages;
 import com.programmers.provider.BookIdProvider;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class Book {
+    private static final int ID_INDEX = 0;
+    private static final int TITLE_INDEX = 1;
+    private static final int AUTHOR_INDEX = 2;
+    private static final int PAGES_INDEX = 3;
+    private static final int STATE_INDEX = 4;
+    private static final int INFO_COUNT = 5;
+
     private final int id;
     private final String title;
     private final String author;
@@ -51,14 +59,18 @@ public class Book {
         this.state = state;
     }
 
-    public Book(String[] bookArr) {
-        if (bookArr.length != 5) throw new IllegalArgumentException(ErrorMessages.CSV_FORMAT_ERROR.toString());
-        this.id = Integer.parseInt(bookArr[0]);
-        this.title = bookArr[1];
-        this.author = bookArr[2];
-        this.pages = Integer.parseInt(bookArr[3]);
-        this.state = BookState.valueOf(bookArr[4]);
-        if (this.state == BookState.ORGANIZING) this.state = BookState.AVAILABLE;
+    public Book(String[] bookInfo) {
+        if (bookInfo == null || bookInfo.length < INFO_COUNT) {
+            throw new NoSuchElementException(ErrorMessages.CSV_FORMAT_ERROR.toString());
+        }
+        this.id = parseId(bookInfo[ID_INDEX]);
+        this.title = bookInfo[TITLE_INDEX];
+        this.author = bookInfo[AUTHOR_INDEX];
+        this.pages = parsePages(bookInfo[PAGES_INDEX]);
+        this.state = parseState(bookInfo[STATE_INDEX]);
+        if (this.state == BookState.ORGANIZING) {
+            this.state = BookState.AVAILABLE;
+        }
     }
 
     public int getId() {
@@ -126,5 +138,29 @@ public class Book {
             throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_LOST.getMessage());
         }
         return this.state == BookState.RENTED || this.state == BookState.AVAILABLE || this.state == BookState.ORGANIZING;
+    }
+
+    private int parseId(String idStr) {
+        try {
+            return Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(ErrorMessages.CSV_FORMAT_ERROR.toString());
+        }
+    }
+
+    private int parsePages(String pagesStr) {
+        try {
+            return Integer.parseInt(pagesStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(ErrorMessages.CSV_FORMAT_ERROR.toString());
+        }
+    }
+
+    private BookState parseState(String stateStr) {
+        try {
+            return BookState.valueOf(stateStr);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(ErrorMessages.CSV_FORMAT_ERROR.toString());
+        }
     }
 }
