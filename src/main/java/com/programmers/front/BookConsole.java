@@ -104,44 +104,26 @@ public class BookConsole {
         System.out.println();
         System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.");
         System.out.println();
-        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요. \n");
+        System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         System.out.print("> ");
         return scanner.nextLine();
     }
-
-    public static String rentBookMode() {
-        System.out.println();
-        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.");
-        System.out.println();
-        System.out.println("Q. 대여할 도서번호를 입력하세요 \n");
-        System.out.println();
-        System.out.print("> ");
-        return scanner.next();
-    }
+    
 
     public static void rentSuccess() {
         System.out.println("[System] 도서가 대여 처리 되었습니다.");
     }
 
-    public static String returnBookMode() {
-        System.out.println();
-        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.");
-        System.out.println();
-        System.out.println("Q. 반납할 도서번호를 입력하세요 \n");
-        System.out.println();
-        System.out.print("> ");
-        return scanner.next();
-    }
 
     public static void returnSuccess() {
         System.out.println("[System] 도서가 반납 처리 되었습니다.");
     }
 
-    public static String loseBookMode() {
+    public static String bookMode(String mode){
         System.out.println();
-        System.out.println("[System] 도서 분실 메뉴로 넘어갑니다.");
+        System.out.println("[System] 도서 " + mode + " 메뉴로 넘어갑니다.");
         System.out.println();
-        System.out.println("Q. 분실 처리할 도서번호를 입력하세요 \n");
+        System.out.println("Q. " + mode + " 처리할 도서번호를 입력하세요. ");
         System.out.println();
         System.out.print("> ");
         return scanner.next();
@@ -150,15 +132,6 @@ public class BookConsole {
     public static void loseBookFinished() {
         System.out.println("[System] 도서가 분실 처리 되었습니다. ");
     }
-
-    public static String deleteBookMode() {
-        System.out.println();
-        System.out.println("[System] 도서 삭제 메뉴로 넘어갑니다.");
-        System.out.println();
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요 \n");
-        System.out.println();
-        System.out.print("> ");
-        return scanner.next();    }
 
     public static void deleteBookFinished() {
         System.out.println("[System] 도서가 삭제 처리 되었습니다. ");

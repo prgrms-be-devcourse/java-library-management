@@ -53,7 +53,7 @@ public class BookController {
      * 4. 도서 대여
      */
     public void rentBook() throws LibraryException{
-        String bookId = BookConsole.rentBookMode();
+        String bookId = BookConsole.bookMode("대여");
         bookService.rentBook(bookId);
         BookConsole.rentSuccess();
     }
@@ -62,7 +62,7 @@ public class BookController {
      *  5. 도서 반납
      */
     public void returnBook() throws LibraryException{
-        String bookId = BookConsole.returnBookMode();
+        String bookId = BookConsole.bookMode("반납");
         bookService.returnBook(bookId);
         BookConsole.returnSuccess();
     }
@@ -71,7 +71,7 @@ public class BookController {
      * 6. 도서 분실
      */
     public void loseBook() throws LibraryException{
-        String bookId = BookConsole.loseBookMode();
+        String bookId = BookConsole.bookMode("분실");
         bookService.loseBook(bookId);
         BookConsole.loseBookFinished();
     }
@@ -80,7 +80,7 @@ public class BookController {
      * 7. 도서 삭제
      */
     public void deleteBook() throws LibraryException{
-        String bookId = BookConsole.deleteBookMode();
+        String bookId = BookConsole.bookMode("삭제");
         bookService.deleteBook(bookId);
         BookConsole.deleteBookFinished();
     }
