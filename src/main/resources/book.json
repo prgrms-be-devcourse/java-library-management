@@ -1,32 +1,4 @@
 {
-  "new_id" : 5,
-  "data" : [ {
-    "id" : 1,
-    "name" : "테스트 책이름1",
-    "author" : "테스트 책저자",
-    "pages" : 100,
-    "state" : "LOADING",
-    "endLoadTime" : "2023-09-30 22:43:48"
-  }, {
-    "id" : 2,
-    "name" : "테스트 책이름2",
-    "author" : "테스트 책저자",
-    "pages" : 100,
-    "state" : "CAN_BORROW",
-    "endLoadTime" : ""
-  }, {
-    "id" : 3,
-    "name" : "321",
-    "author" : "321",
-    "pages" : 321,
-    "state" : "LOST",
-    "endLoadTime" : ""
-  }, {
-    "id" : 4,
-    "name" : "444",
-    "author" : "444",
-    "pages" : 444,
-    "state" : "CAN_BORROW",
-    "endLoadTime" : ""
-  } ]
+  "new_id": 1,
+  "data": []
 }
