@@ -9,7 +9,7 @@ import java.util.*;
 
 public class BookService {
     private static BookRepository bookRepository;
-    private static final int organizingMilliseconds = 1000 * 10; // 10초
+    private static int organizingMilliseconds = 1000 * 60 * 5; // 기본 5분
 
     private BookService() {
     }
@@ -25,6 +25,10 @@ public class BookService {
 
     public static void setBookRepository(BookRepository _bookRepository) {
         bookRepository = _bookRepository;
+    }
+
+    public static void setOrganizingMilliseconds(int milliseconds) {
+        organizingMilliseconds = milliseconds;
     }
 
     public void registerBook(Book book) {
