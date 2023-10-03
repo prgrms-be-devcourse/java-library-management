@@ -12,6 +12,7 @@ import util.BookTaskScheduler;
 
 public class BookController {
     private BookService bookService;
+    private final BookScheduler bookScheduler;
     private final Input input;
     private final Output output;
     private static final String PRINT_SELECTION_MODE = "MODE";
@@ -20,6 +21,7 @@ public class BookController {
     public BookController(Input input, Output output) {
         this.input = input;
         this.output = output;
+        this.bookScheduler = new BookTaskScheduler();
     }
 
     public boolean chooseMode() {
@@ -111,7 +113,6 @@ public class BookController {
         output.printGuide(Guide.RETURN_START);
         output.printQuestion(Question.RETURN_BY_BOOK_NO);
         Long bookNo = input.inputLong();
-        BookScheduler bookScheduler = new BookTaskScheduler();
         bookService.returnBookByBookNo(bookNo, bookScheduler);
         output.printGuide(Guide.RETURN_COMPLETE);
     }
