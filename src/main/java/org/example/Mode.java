@@ -80,7 +80,7 @@ public class Mode {
                 if(console.equals(END)) break;
             }
             catch (IllegalArgumentException e) {
-                System.out.println("[INPUT ERROR] :" + e.getMessage());
+                System.out.println("[INPUT ERROR] : " + e.getMessage());
                 System.out.println();
             }
         }

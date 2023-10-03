@@ -47,7 +47,7 @@ class BookServiceTest {
         //then
         Assertions.assertThat(book.getTitle()).isEqualTo(title);
         Assertions.assertThat(book.getAuthor()).isEqualTo(author);
-        Assertions.assertThat(book.getPageNum()).isEqualTo(pageNum);
+        Assertions.assertThat(book.getPage()).isEqualTo(pageNum);
     }
 
     @Test

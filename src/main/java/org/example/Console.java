@@ -30,7 +30,7 @@ public enum Console {
     },
     END (0) {
         @Override
-        String[] getConsolePrint() throws IOException {
+        String[] getConsolePrint() {
             System.out.println("[System] 시스템이 종료됩니다.");
             return null;
         }
@@ -63,7 +63,7 @@ public enum Console {
     },
     GET_ALL_BOOKS(2) {
         @Override
-        String[] getConsolePrint() throws IOException {
+        String[] getConsolePrint() {
             System.out.println("[System] 전체 도서 목록입니다.\n");
             return new String[0];
         }
