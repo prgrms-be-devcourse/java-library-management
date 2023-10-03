@@ -4,7 +4,6 @@ import dev.course.config.LibraryConfig;
 import dev.course.domain.Book;
 import dev.course.domain.BookState;
 import dev.course.exception.FuncFailureException;
-import dev.course.manager.ConsoleManager;
 import dev.course.repository.BookRepository;
 import lombok.Builder;
 
@@ -14,12 +13,10 @@ import java.util.concurrent.*;
 public class LibraryManagement {
 
     private final BookRepository bookRepository;
-    private final ConsoleManager consoleManager;
 
     @Builder
     public LibraryManagement(LibraryConfig libraryConfig) {
         this.bookRepository = libraryConfig.getBookRepositoryConfig().getBookRepository();
-        this.consoleManager = libraryConfig.getConsoleManager();
     }
 
     public void add(Book book) {
@@ -31,14 +28,14 @@ public class LibraryManagement {
     public void getAll() {
 
         List<Book> bookList = this.bookRepository.getAll();
-        bookList.forEach(this.bookRepository::printBook);
+        bookList.forEach(this::printBook);
         System.out.println("[System] 도서 목록 조회가 완료되었습니다.\n");
     }
 
     public void findByTitle(String title) throws FuncFailureException {
 
         List<Book> searched = this.bookRepository.findByTitle(title);
-        searched.forEach(this.bookRepository::printBook);
+        searched.forEach(this::printBook);
         System.out.println("[System] 도서 검색 조회가 완료되었습니다.\n");
     }
 
@@ -47,16 +44,7 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        if (book.getState().equals(BookState.RENTAL_AVAILABLE)) {
-            Book rented = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTING);
-            this.bookRepository.add(rented);
-        } else if (book.getState().equals(BookState.RENTING)) {
-            throw new FuncFailureException("[System] 대여중인 도서로 대여가 불가합니다.\n");
-        } else if (book.getState().equals(BookState.ARRANGEMENT)) {
-            throw new FuncFailureException("[System] 정리중인 도서로 대여가 불가합니다.\n");
-        } else {
-            throw new FuncFailureException("[System] 분실된 도서로 대여가 불가합니다..\n");
-        }
+        book.getState().handleBorrow(bookRepository, book);
 
         System.out.println("[System] 도서 대여가 완료되었습니다.\n");
     }
@@ -66,24 +54,18 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        if (book.getState().equals(BookState.RENTAL_AVAILABLE)) {
-            throw new FuncFailureException("[System] 대여 가능한 도서로 반납이 불가합니다.\n");
-        } else if (book.getState().equals(BookState.RENTING) || book.getState().equals(BookState.LOST)) {
-            Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.ARRANGEMENT);
-            this.bookRepository.add(returned);
+        Book elem = book.getState().handleReturn(bookRepository, book);
+        if (elem.equalState(BookState.ARRANGEMENT)) {
 
             CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 300000);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (!completableFuture.isDone()) {
-                    Book availableBook = new Book(returned.getBookId(), returned.getTitle(), returned.getAuthor(), returned.getPage_num(), BookState.RENTAL_AVAILABLE);
+                    Book availableBook = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
                     this.bookRepository.add(availableBook);
                     System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
                 }
             }));
-
-        } else {
-            throw new FuncFailureException("[System] 정리중인 도서로 반납이 불가합니다.\n");
         }
 
         System.out.println("[System] 도서 반납 처리가 완료되었습니다.\n");
@@ -94,22 +76,14 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        if (book.getState().equals(BookState.LOST)) {
-            throw new FuncFailureException("[System] 이미 분실된 도서입니다.\n");
-        } else {
-            Book lost = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.LOST);
-            this.bookRepository.add(lost);
-        }
+        book.getState().handleLost(bookRepository, book);
 
         System.out.println("[System] 도서 분실 처리가 완료되었습니다.\n");
     }
 
     public void delete(Long bookId) throws FuncFailureException {
 
-        Book book = this.bookRepository.findById(bookId)
-                .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
-
-        this.bookRepository.delete(book.getBookId());
+        this.bookRepository.delete(bookId);
 
         System.out.println("[System] 도서 삭제 처리가 완료되었습니다.\n");
     }
@@ -151,19 +125,19 @@ public class LibraryManagement {
         } finally {
             executorService.shutdown();
         }
-
-        /**
-        try {
-            TimeUnit.MILLISECONDS.sleep(delay);
-            Book arranged = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
-            this.bookRepository.add(arranged);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        */
     }
 
     public Book createBook(String title, String author, int pageNum) {
         return new Book(this.bookRepository.createBookId(), title, author, pageNum, BookState.RENTAL_AVAILABLE);
+    }
+
+    public void printBook(Book obj) {
+
+        System.out.println("도서번호 : " + obj.getBookId());
+        System.out.println("제목 : " + obj.getTitle());
+        System.out.println("작가 이름 : " + obj.getAuthor());
+        System.out.println("페이지 수 : " + obj.getPage_num() + " 페이지");
+        System.out.println("상태 : " + obj.getState().getState());
+        System.out.println("\n------------------------------\n");
     }
 }
