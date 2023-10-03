@@ -8,11 +8,9 @@ import library.book.exception.BookException;
 
 public class AvailableRent implements State {
 
-	private final BookState bookState = AVAILABLE_RENT_STATE;
-
 	@Override
 	public BookState getBookState() {
-		return bookState;
+		return AVAILABLE_RENT_STATE;
 	}
 
 	@Override

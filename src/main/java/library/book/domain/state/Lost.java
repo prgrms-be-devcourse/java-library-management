@@ -8,11 +8,9 @@ import library.book.exception.BookException;
 
 public class Lost implements State {
 
-	private final BookState bookState = LOST_STATE;
-
 	@Override
 	public BookState getBookState() {
-		return bookState;
+		return LOST_STATE;
 	}
 
 	@Override
