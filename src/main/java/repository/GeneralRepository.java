@@ -1,57 +1,55 @@
 package repository;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
 
 import domain.Book;
 
 import exception.LoadException;
 import exception.SaveException;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static domain.BookCondition.*;
 
-public class GeneralRepository implements Repository{
+public class GeneralRepository implements Repository {
 
     private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
 
     @Override
     public void load(List<Book> bookList) {
-        // CSV 파일을 읽어오는 CSVReader 객체 생성
-        try(CSVReader csvReader = new CSVReader(new FileReader(csvFileName));) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
+            String readRecord;
+            while ((readRecord = reader.readLine()) != null) {
+                String[] record = readRecord.split(",");
 
-            // CSV 파일 내용을 읽어오기
-            List<String[]> records = csvReader.readAll();
+                int id = Integer.parseInt(record[0].trim());
+                String title = record[1].trim();
+                String author = record[2].trim();
+                int page = Integer.parseInt(record[3].trim());
+                String condition = record[4].trim();
 
-            for (String[] record : records) {
-                int id = Integer.parseInt(record[0]);
-                String title = record[1];
-                String author = record[2];
-                int page = Integer.parseInt(record[3]);
-                String condition = record[4];
-                //도서를 가져오던 중 도서 정리중이면 대여 가능으로 변
-                if(Objects.equals(condition, ORGANIZING.getCondition())) condition = AVAILABLE.getCondition();
+                // 도서를 가져오던 중 도서 정리중이면 대여 가능으로 변환
+                if (Objects.equals(condition, ORGANIZING.getCondition())) {
+                    condition = AVAILABLE.getCondition();
+                }
+
                 bookList.add(new Book(id, title, author, page, condition));
             }
-        } catch (IOException | CsvException e) {
+        } catch (IOException e) {
             throw new LoadException("CSV 파일을 읽어올 수 없습니다");
         }
     }
 
     @Override
     public void save(int id, String title, String author, int page, List<Book> bookList) {
-        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName, true), CSVFormat.DEFAULT)) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFileName, true))) {
+            String newRecord = id + "," + title + "," + author + "," + page + "," + AVAILABLE.getCondition();
 
             bookList.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
-            csvPrinter.printRecord(id, title, author, page, AVAILABLE.getCondition());
 
+            writer.write(newRecord);
+            writer.newLine();
         } catch (IOException e) {
             throw new SaveException("CSV 파일에 저장할 수 없습니다.");
         }
@@ -198,9 +196,12 @@ public class GeneralRepository implements Repository{
 
     // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
     private static void saveToCSV(List<Book> bookList) {
-        try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(csvFileName), CSVFormat.DEFAULT)) {
-            for(Book book : bookList) {
-                csvPrinter.printRecord(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition());
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFileName))) {
+            for (Book book : bookList) {
+                String record = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getCondition();
+
+                writer.write(record);
+                writer.newLine();
             }
         } catch (IOException e) {
             throw new SaveException("CSV 파일에 저장할 수 없습니다.");
