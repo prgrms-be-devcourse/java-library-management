@@ -1,6 +1,7 @@
 package dev.course.repository;
 
 import dev.course.domain.Book;
+import dev.course.exception.FuncFailureException;
 import dev.course.manager.JSONFileManager;
 
 import java.util.*;
@@ -55,8 +56,10 @@ public class GeneralBookRepository implements BookRepository {
 
     @Override
     public void delete(Long bookId) {
-        Book book = storage.get(bookId);
-        storage.remove(book.getBookId());
+
+        if (storage.remove(bookId) == null) {
+            throw new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n");
+        }
         update();
     }
 
