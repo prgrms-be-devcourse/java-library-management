@@ -48,7 +48,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
 		updateBookToAvailableAfterOrganizing(book);
 		if (book.isAvailable()) {
-			book.borrow();
+			book.borrow(); // todo : book 내부에서 확인 후 borrow 하도록 , 상태와 행위 내부에서 관리
 			repository.save(book);
 		} else if (book.isBorrowed()) {
 			throw new BookAlreadyBorrowedException();
@@ -62,15 +62,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 	@Override
 	public void returnBook(ReturnBookRequestDto request) {
 		Book book = repository.findById(request.getId()).orElseThrow(BookNotFoundException::new);
-		updateBookToAvailableAfterOrganizing(book);
-		if (book.isBorrowed() || book.isLost()) {
-			book.returned();
-			repository.save(book);
-		} else if (book.isAvailable()) {
-			throw new BookAlreadyAvailableException();
-		} else if (book.isOrganizing()) {
-			throw new BookUnderOrganizingException();
-		}
+		book.returned();
 	}
 
 	@Override

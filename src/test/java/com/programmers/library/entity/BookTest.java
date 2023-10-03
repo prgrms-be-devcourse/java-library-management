@@ -12,9 +12,9 @@ public class BookTest {
 	@BeforeEach
 	public void setUp() {
 		book = new Book("Test Title", "Test Author", 200L);
-	}
+	} // todo : fixture 찾아보기
 
-	@Test
+	@Test // todo : @DisplayName
 	public void testInitialization() {
 		assertEquals("Test Title", book.getTitle());
 		assertEquals("Test Author", book.getAuthor());

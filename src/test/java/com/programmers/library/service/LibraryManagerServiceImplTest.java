@@ -93,7 +93,7 @@ class LibraryManagerServiceImplTest {
 	}
 
 	@Test
-	public void testBorrowAlreadyBorrowedBook() {
+	public void testBorrowAlreadyBorrowedBook() { // todo : parameterize Test 찾아보기
 		String bookId = "1";
 		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		Book book = new Book("title", "author", 100L);
@@ -126,7 +126,7 @@ class LibraryManagerServiceImplTest {
 	}
 
 	@Test
-	public void testBorrowNonexistentBook() {
+	public void testBorrowNonExistentBook() {
 		String bookId = "1";
 		BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());

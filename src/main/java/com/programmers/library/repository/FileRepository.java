@@ -12,7 +12,7 @@ import com.programmers.library.util.FileUtils;
 public class FileRepository implements Repository {
 
 	private final Map<Long, Book> bookMap;
-	private final FileUtils<Book> fileUtils;
+	private final FileUtils<Book> fileUtils; // csv, json, 파일 형태에 따른 util
 	private Long sequence;
 
 	public FileRepository(String filePath) {

@@ -173,6 +173,7 @@ replay_pid*
 # Ignore Gradle build output directory
 build
 
-gradlew
-gradle
-gradlew.bat
+# todo : 수정하기
+#gradlew
+#gradle
+#gradlew.bat

@@ -10,10 +10,10 @@ import com.programmers.library.entity.Book;
 
 public class MemoryRepository implements Repository {
 	private final Map<Long, Book> bookMap;
-	private Long sequence;
+	private Long sequence; //todo: 동시성 문제 관련 생각해보자
 
 	public MemoryRepository() {
-		bookMap = new LinkedHashMap<>();
+		bookMap = new LinkedHashMap<>(); //ConcurrentHashMap
 		sequence = 0L;
 	}
 

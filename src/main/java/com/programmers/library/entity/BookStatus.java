@@ -6,7 +6,7 @@ public enum BookStatus {
 	ORGANIZING("도서 정리중"),
 	LOST("분실됨");
 
-	private String value;
+	private final String value;
 
 	BookStatus(String value) {
 		this.value = value;
