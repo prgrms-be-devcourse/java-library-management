@@ -1,4 +1,4 @@
-package library.book.domain;
+package library.book.domain.state;
 
 import library.book.domain.constants.BookState;
 

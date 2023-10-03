@@ -35,7 +35,7 @@ class BookTest {
 			() -> assertThat(result.getTitle()).isEqualTo(title),
 			() -> assertThat(result.getAuthorName()).isEqualTo(authorName),
 			() -> assertThat(result.getPages()).isEqualTo(pages),
-			() -> assertThat(result.getBookState()).isEqualTo(AVAILABLE_RENT)
+			() -> assertThat(result.getBookState()).isEqualTo(AVAILABLE_RENT_STATE)
 		);
 	}
 
@@ -49,7 +49,7 @@ class BookTest {
 		book.rent();
 
 		//then
-		assertThat(book.getBookState()).isEqualTo(RENTED);
+		assertThat(book.getBookState()).isEqualTo(RENTED_STATE);
 	}
 
 	@Test
@@ -63,7 +63,7 @@ class BookTest {
 		book.returnBook();
 
 		//then
-		assertThat(book.getBookState()).isEqualTo(CLEANING);
+		assertThat(book.getBookState()).isEqualTo(CLEANING_STATE);
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class BookTest {
 		book.registerAsLost();
 
 		//then
-		assertThat(book.getBookState()).isEqualTo(LOST);
+		assertThat(book.getBookState()).isEqualTo(LOST_STATE);
 	}
 
 	@Nested
@@ -94,7 +94,7 @@ class BookTest {
 			book.finishCleaning();
 
 			//then
-			assertThat(book.getBookState()).isEqualTo(LOST);
+			assertThat(book.getBookState()).isEqualTo(LOST_STATE);
 		}
 
 		@Test
@@ -109,7 +109,7 @@ class BookTest {
 			book.finishCleaning();
 
 			//then
-			assertThat(book.getBookState()).isEqualTo(AVAILABLE_RENT);
+			assertThat(book.getBookState()).isEqualTo(AVAILABLE_RENT_STATE);
 		}
 	}
 }
