@@ -1,5 +1,6 @@
 package com.programmers.repository;
 
+import com.programmers.cons.Const;
 import com.programmers.domain.Book;
 import com.programmers.domain.BookStatus;
 import com.programmers.repository.BookRepository;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class CSVBookRepository implements BookRepository {
     private final String fileName = "src/main/resources/csv/db.csv";
     private final List<Book> books = findAll();
-    private Long sequence = (long)books.size();
+
 
 
     @Override
@@ -65,7 +66,6 @@ public class CSVBookRepository implements BookRepository {
 
     @Override
     public void saveBook(Book saveBook) {
-        saveBook.settingId(++sequence);
         books.add(saveBook);
         try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(fileName), CSVFormat.DEFAULT)) {
             for (Book book : books) {
@@ -83,6 +83,6 @@ public class CSVBookRepository implements BookRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sequence = 0L;
+        Const.resetSequence();
     }
 }

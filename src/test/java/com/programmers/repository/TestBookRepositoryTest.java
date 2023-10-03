@@ -1,5 +1,6 @@
 package com.programmers.repository;
 
+import com.programmers.cons.Const;
 import com.programmers.domain.Book;
 import com.programmers.front.BookConsole;
 import org.assertj.core.api.Assertions;
@@ -20,9 +21,9 @@ class TestBookRepositoryTest {
 
     @BeforeEach
     public void setUp(){
-        bookRepository.saveBook(new Book("test1", "author", 344));
-        bookRepository.saveBook(new Book("test21", "author", 344));
-        bookRepository.saveBook(new Book("test312", "author", 344));
+        bookRepository.saveBook(Book.enrollingBook(Const.usingSequence(),"test1", "author", 344));
+        bookRepository.saveBook(Book.enrollingBook(Const.usingSequence(),"test21", "author", 344));
+        bookRepository.saveBook(Book.enrollingBook(Const.usingSequence(),"test312", "author", 344));
     }
 
     @AfterEach
@@ -35,7 +36,7 @@ class TestBookRepositoryTest {
     @DisplayName("Repository: 정상적으로 책 등록하는 경우")
     void enrollBook() throws Exception {
         //given
-        Book book = new Book("enrollTest", "testAuthor", 122);
+        Book book = Book.enrollingBook(Const.usingSequence(),"enrollTest", "testAuthor", 122);
         //when
         bookRepository.saveBook(book);
         List<Book> list = bookRepository.findAll();
@@ -56,7 +57,7 @@ class TestBookRepositoryTest {
 
         //when
 //        BookConsole.showAllBooks(bookList);
-        Book book = new Book("enrollTest", "testAuthor", 122);
+        Book book = Book.enrollingBook(Const.usingSequence(),"enrollTest", "testAuthor", 122);
         bookRepository.saveBook(book);
 
         bookList = bookRepository.findAll();

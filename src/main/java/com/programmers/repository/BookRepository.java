@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository {
-
     List<Book> findByBookTitle(String title);
     Optional<Book> findByBookId(Long bookId);
     List<Book> findAll();

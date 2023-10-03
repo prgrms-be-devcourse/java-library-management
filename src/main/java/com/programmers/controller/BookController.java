@@ -1,5 +1,6 @@
 package com.programmers.controller;
 
+import com.programmers.cons.Const;
 import com.programmers.domain.Book;
 import com.programmers.exception.ErrorChecking;
 import com.programmers.exception.ErrorCode;
@@ -27,7 +28,7 @@ public class BookController {
             String page = BookConsole.inputBookTotalPage();
             if(!ErrorChecking.checkNumber(page)) throw new LibraryException(ErrorCode.NOT_NUMBER);
             if(!ErrorChecking.minusChecking(Integer.parseInt(page))) throw new LibraryException(ErrorCode.NOT_NUMBER);
-            bookService.enrollBook(Book.enrollingBook(bookName, author, Integer.parseInt(page)));
+            bookService.enrollBook(Book.enrollingBook(Const.usingSequence(), bookName, author, Integer.parseInt(page)));
     }
 
     /**

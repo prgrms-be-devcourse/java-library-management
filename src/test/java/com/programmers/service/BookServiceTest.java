@@ -1,5 +1,6 @@
 package com.programmers.service;
 
+import com.programmers.cons.Const;
 import com.programmers.domain.Book;
 import com.programmers.repository.TestBookRepository;
 import org.assertj.core.api.Assertions;
@@ -19,9 +20,9 @@ class BookServiceTest {
 
     @BeforeEach
     public void setUp(){
-        bookService.enrollBook(new Book("test1", "author", 344));
-        bookService.enrollBook(new Book("test21", "author", 344));
-        bookService.enrollBook(new Book("test312", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test1", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test21", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test312", "author", 344));
     }
 
     @AfterEach
@@ -33,7 +34,7 @@ class BookServiceTest {
     @DisplayName("Service: 책을 정상적으로 등록하는 서비스 로직 테스트")
     public void enrollService() throws Exception {
         //given
-        bookService.enrollBook(new Book("test4", "serviceTestAuthor", 345));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test4", "serviceTestAuthor", 345));
 
         //when
         List<Book> list = bookService.findAllBooks();
@@ -56,7 +57,7 @@ class BookServiceTest {
 
         //when
 //        BookConsole.showAllBooks(bookList);
-        Book book = new Book("enrollTest", "testAuthor", 122);
+        Book book = Book.enrollingBook(Const.usingSequence(),"enrollTest", "testAuthor", 122);
         bookService.enrollBook(book);
 
         bookList = bookService.findAllBooks();

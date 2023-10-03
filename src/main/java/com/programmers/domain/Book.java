@@ -11,8 +11,8 @@ public class Book {
     private final int totalPageNumber;
     private BookStatus bookStatus;
 
-    private Book(String title, String author, int totalPageNumber) {
-        this(null, title, author, totalPageNumber, BookStatus.AVAILABLE);
+    private Book(Long bookId, String title, String author, int totalPageNumber) {
+        this(bookId, title, author, totalPageNumber, BookStatus.AVAILABLE);
     }
 
     public Book(Long bookId, String title, String author, int totalPageNumber, BookStatus bookStatus) {
@@ -23,8 +23,8 @@ public class Book {
         this.bookStatus = bookStatus;
     }
 
-    public static Book enrollingBook(String title, String author, int totalPageNumber) {
-        return new Book(title, author, totalPageNumber);
+    public static Book enrollingBook(Long bookId, String title, String author, int totalPageNumber) {
+        return new Book(bookId, title, author, totalPageNumber);
     }
 
     public boolean filterById(Long bookId){
@@ -65,10 +65,6 @@ public class Book {
 
     public void deleteBook() {
         this.bookStatus = BookStatus.DELETED;
-    }
-
-    public void settingId(long bookId) {
-        this.bookId = bookId;
     }
 
     public void returnBook() {

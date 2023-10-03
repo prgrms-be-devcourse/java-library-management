@@ -1,6 +1,7 @@
 package com.programmers.controller;
 
 import com.programmers.LibraryConfiguration;
+import com.programmers.cons.Const;
 import com.programmers.domain.Book;
 import com.programmers.front.BookConsole;
 import com.programmers.repository.BookRepository;
@@ -31,9 +32,9 @@ class BookControllerTest {
 
     @BeforeEach
     public void setUp(){
-        bookService.enrollBook(new Book("test1", "author", 344));
-        bookService.enrollBook(new Book("test21", "author", 344));
-        bookService.enrollBook(new Book("test312", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test1", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test21", "author", 344));
+        bookService.enrollBook(Book.enrollingBook(Const.usingSequence(),"test312", "author", 344));
     }
 
 
