@@ -1,6 +1,5 @@
 package library.book.infra.repository;
 
-import static com.fasterxml.jackson.databind.SerializationFeature.*;
 import static library.book.exception.ErrorCode.*;
 
 import java.io.FileInputStream;
@@ -14,7 +13,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import library.book.domain.Book;
 import library.book.domain.BookRepository;
@@ -29,11 +27,8 @@ public class IoBookRepository implements BookRepository {
 
 	public IoBookRepository(final String filePath) {
 		this.filePath = filePath;
-		this.objectMapper = new ObjectMapper();
 		this.bookStorage = new ConcurrentHashMap<>();
-
-		objectMapper.registerModule(new JavaTimeModule());
-		objectMapper.disable(WRITE_DATES_AS_TIMESTAMPS);
+		this.objectMapper = new ObjectMapper();
 
 		try (FileInputStream inputStream = new FileInputStream(filePath)) {
 			Map<String, Object> map = objectMapper.readValue(inputStream, Map.class);

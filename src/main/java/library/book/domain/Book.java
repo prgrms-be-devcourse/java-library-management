@@ -1,7 +1,5 @@
 package library.book.domain;
 
-import java.time.LocalDateTime;
-
 import library.book.domain.constants.BookState;
 import library.book.domain.state.AvailableRent;
 import library.book.domain.state.Cleaning;
@@ -70,10 +68,6 @@ public class Book {
 
 	public BookState getBookState() {
 		return this.state.getBookState();
-	}
-
-	public LocalDateTime getCleaningEndAt() {
-		return state.getCleaningEndAt();
 	}
 
 	//== Business 메소드 ==//
