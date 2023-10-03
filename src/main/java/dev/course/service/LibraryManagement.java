@@ -9,10 +9,7 @@ import dev.course.repository.BookRepository;
 import lombok.Builder;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class LibraryManagement {
 
@@ -24,7 +21,6 @@ public class LibraryManagement {
         this.bookRepository = libraryConfig.getBookRepositoryConfig().getBookRepository();
         this.consoleManager = libraryConfig.getConsoleManager();
     }
-
 
     public void add(Book book) {
 
@@ -76,10 +72,7 @@ public class LibraryManagement {
             Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.ARRANGEMENT);
             this.bookRepository.add(returned);
 
-            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() ->
-                        afterDelayArrangementComplete(returned, 300000))
-                    .thenRunAsync(() ->
-                        System.out.println("[System] 도서 정리가 완료되었습니다.\n"));
+            CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 300000);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (!completableFuture.isDone()) {
@@ -121,8 +114,45 @@ public class LibraryManagement {
         System.out.println("[System] 도서 삭제 처리가 완료되었습니다.\n");
     }
 
+    public CompletableFuture<Void> runAsyncToWaitArrangement(Book book, long delay) {
+
+        // Run Async Using CompletableFuture
+        return CompletableFuture.runAsync(() -> {
+
+            // after 5 Min, BookState is Changing 'ARRANGEMENT' To 'RENTAL_AVAILABLE'
+            afterDelayArrangementComplete(book, delay);
+        }).thenRunAsync(() -> {
+            System.out.println("[System] 도서 정리가 완료되었습니다.\n");
+        });
+    }
+
     public void afterDelayArrangementComplete(Book book, long delay) {
 
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        executorService.schedule(() -> {
+            try {
+                Book arranged = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
+                bookRepository.add(arranged);
+            } finally {
+                latch.countDown();
+            }
+        }, delay, TimeUnit.MILLISECONDS);
+
+        try {
+            boolean completed = latch.await(delay + 1000, TimeUnit.MILLISECONDS);
+            if (!completed) {
+                System.out.println("Task Completion Timeout!");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
+
+        /**
         try {
             TimeUnit.MILLISECONDS.sleep(delay);
             Book arranged = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
@@ -130,6 +160,7 @@ public class LibraryManagement {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        */
     }
 
     public Book createBook(String title, String author, int pageNum) {
