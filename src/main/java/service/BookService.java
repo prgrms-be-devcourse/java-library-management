@@ -4,10 +4,9 @@ import constant.ExceptionMsg;
 import model.Book;
 import model.Status;
 import repository.Repository;
+import util.BookScheduler;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class BookService {
     private final Repository repository;
@@ -38,13 +37,12 @@ public class BookService {
         }
     }
 
-    public void returnBookByBookNo(Long bookNo, int time) {
+    public void returnBookByBookNo(Long bookNo, BookScheduler bookScheduler) {
         Book book = findBookByBookNo(bookNo);
-
         if (book.isAvailableToReturn()) {
             book.toOrganizing();
             repository.saveBook(book);
-            scheduleTask(book, time);
+            bookScheduler.scheduleBookTask(getBookTask(book));
         }
     }
 
@@ -67,21 +65,10 @@ public class BookService {
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
     }
 
-    private TimerTask wrap(Runnable runnable) {
-        return new TimerTask() {
-            @Override
-            public void run() {
-                runnable.run();
-            }
-        };
-    }
-
-    private void scheduleTask(Book book, int time) {
-        Runnable bookTask = () -> {
+    private Runnable getBookTask(Book book) {
+        return () -> {
             book.toAvailable();
             repository.saveBook(book);
         };
-        Timer timer = new Timer(true);
-        timer.schedule(wrap(bookTask), time);
     }
 }

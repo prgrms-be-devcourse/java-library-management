@@ -4,6 +4,8 @@ import model.Book;
 import model.Status;
 import org.junit.jupiter.api.*;
 import repository.FileRepository;
+import util.BookScheduler;
+import util.BookTestScheduler;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FIleBookServiceTest {
     private BookService bookService;
+    private BookScheduler bookScheduler;
 
     @BeforeEach
     void setUp() {
@@ -53,15 +56,16 @@ class FIleBookServiceTest {
     @Test
     @DisplayName("도서 반납 테스트")
     void returnBookByBookNo() {
-        Assertions.assertThrows(IllegalStateException.class, () -> bookService.returnBookByBookNo(1L, 5000));
-        bookService.returnBookByBookNo(2L, 5000);
-        bookService.returnBookByBookNo(3L, 5000);
+        bookScheduler = new BookTestScheduler();
+        Assertions.assertThrows(IllegalStateException.class, () -> bookService.returnBookByBookNo(1L, bookScheduler));
+        bookService.returnBookByBookNo(2L, bookScheduler);
+        bookService.returnBookByBookNo(3L, bookScheduler);
         List<Book> books = bookService.findAllBook();
         assertThat(books.get(1).getStatus()).isEqualTo(Status.ORGANIZING);
         assertThat(books.get(2).getStatus()).isEqualTo(Status.ORGANIZING);
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {

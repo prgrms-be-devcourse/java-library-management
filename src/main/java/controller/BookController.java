@@ -6,6 +6,8 @@ import io.Output;
 import repository.FileRepository;
 import repository.MemoryRepository;
 import service.BookService;
+import util.BookScheduler;
+import util.BookTaskScheduler;
 
 
 public class BookController {
@@ -44,7 +46,7 @@ public class BookController {
     }
 
     public void runApplication() {
-        {
+        while (true) {
             try {
                 output.printSelection(PRINT_SELECTION_FUNCTION);
                 int functionNumber = input.inputNumber();
@@ -109,7 +111,8 @@ public class BookController {
         output.printGuide(Guide.RETURN_START);
         output.printQuestion(Question.RETURN_BY_BOOK_NO);
         Long bookNo = input.inputLong();
-        bookService.returnBookByBookNo(bookNo, 300000);
+        BookScheduler bookScheduler = new BookTaskScheduler();
+        bookService.returnBookByBookNo(bookNo, bookScheduler);
         output.printGuide(Guide.RETURN_COMPLETE);
     }
 
