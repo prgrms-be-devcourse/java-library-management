@@ -48,7 +48,7 @@ public class FileBookRepository implements BookRepository {
     public Optional<Book> findBookById(int id) {
         return books.stream()
                 .filter(book -> book.isSameId(id))
-                .findAny();
+                .findFirst();
     }
 
     @Override
@@ -60,7 +60,15 @@ public class FileBookRepository implements BookRepository {
 
     @Override
     public void updateBookState(Book book, BookState bookState) {
-        book.setState(bookState);
+        if (bookState == BookState.AVAILABLE) {
+            book.setToAvailable();
+        } else if (bookState == BookState.RENTED) {
+            book.setToRented();
+        } else if (bookState == BookState.LOST) {
+            book.setToLost();
+        } else if (bookState == BookState.ORGANIZING) {
+            book.setToOrganizing();
+        }
         updateFile();
     }
 

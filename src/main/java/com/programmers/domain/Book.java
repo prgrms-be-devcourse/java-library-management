@@ -69,8 +69,20 @@ public class Book {
         return state;
     }
 
-    public void setState(BookState state) {
-        this.state = state;
+    public void setToAvailable() {
+        this.state = BookState.AVAILABLE;
+    }
+
+    public void setToRented() {
+        this.state = BookState.RENTED;
+    }
+
+    public void setToLost() {
+        this.state = BookState.LOST;
+    }
+
+    public void setToOrganizing() {
+        this.state = BookState.ORGANIZING;
     }
 
     public String joinInfo(String separator) {
@@ -90,15 +102,14 @@ public class Book {
     }
 
     public boolean isRentable() {
-        switch (this.state) {
-            case AVAILABLE -> {
-                return true;
-            }
-            case RENTED -> throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_RENTED.getMessage());
-            case ORGANIZING -> throw new IllegalStateException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
-            case LOST -> throw new IllegalStateException(ErrorMessages.BOOK_NOW_LOST.getMessage());
+        if (this.state == BookState.RENTED) {
+            throw new IllegalStateException(ErrorMessages.BOOK_ALREADY_RENTED.getMessage());
+        } else if (this.state == BookState.ORGANIZING) {
+            throw new IllegalStateException(ErrorMessages.BOOK_BEING_ORGANIZED.getMessage());
+        } else if (this.state == BookState.LOST) {
+            throw new IllegalStateException(ErrorMessages.BOOK_NOW_LOST.getMessage());
         }
-        return false;
+        return this.state == BookState.AVAILABLE;
     }
 
     public boolean isReturnable() {
