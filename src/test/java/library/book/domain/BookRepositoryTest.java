@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import library.book.exception.BookException;
-import library.book.infra.repository.TestBookRepository;
+import library.book.infra.repository.InMemoryBookRepository;
 
 @DisplayName("[BookRepository Test] - Domain")
 class BookRepositoryTest {
@@ -23,7 +23,7 @@ class BookRepositoryTest {
 		@DisplayName("[조회에 성공한다]")
 		void success() {
 			//given
-			BookRepository bookRepository = new TestBookRepository();
+			BookRepository bookRepository = new InMemoryBookRepository();
 			Book book = A.toEntity();
 			bookRepository.save(book);
 
@@ -38,7 +38,7 @@ class BookRepositoryTest {
 		@DisplayName("도서 번호에 대한 도서가 존재하지 않아 실패한다")
 		void failWhenNotFoundById() {
 			//given
-			BookRepository bookRepository = new TestBookRepository();
+			BookRepository bookRepository = new InMemoryBookRepository();
 
 			//when
 			ThrowingCallable when = () -> bookRepository.getById(10L);

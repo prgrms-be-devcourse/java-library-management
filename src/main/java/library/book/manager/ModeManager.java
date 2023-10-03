@@ -2,10 +2,9 @@ package library.book.manager;
 
 import java.util.function.Supplier;
 
-import library.book.application.BookService;
 import library.book.domain.BookRepository;
 import library.book.infra.repository.IoBookRepository;
-import library.book.infra.repository.TestBookRepository;
+import library.book.infra.repository.InMemoryBookRepository;
 
 public enum ModeManager {
 
@@ -13,7 +12,7 @@ public enum ModeManager {
 		() -> new IoBookRepository("src/main/resources/static/books.json")
 	),
 	TWO(
-		TestBookRepository::new
+		InMemoryBookRepository::new
 	);
 
 	private final Supplier<BookRepository> repositorySupplier;
