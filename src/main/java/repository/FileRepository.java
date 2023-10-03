@@ -15,7 +15,7 @@ import static repository.Book.countId;
 
 public class FileRepository implements Repository {
     File file = new File("src/main/resources/library.csv");
-    List<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
     public FileRepository() {
         fileToList(books, file);
@@ -48,7 +48,7 @@ public class FileRepository implements Repository {
     @Override
     public void rental(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
+                .findFirst()
                 .orElse(null);
 
         if(selectedBook == null) {

@@ -35,7 +35,7 @@ public class MemoryRepository implements Repository {
 
     public void rental(int id) {
         Book selectedBook = books.stream().filter(book -> book.getId() == id)
-                .findAny()
+                .findFirst()
                 .orElse(null);
 
         if(selectedBook == null) {
