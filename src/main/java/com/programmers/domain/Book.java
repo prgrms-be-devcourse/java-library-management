@@ -12,10 +12,7 @@ public class Book {
     private BookStatus bookStatus;
 
     public Book(String title, String author, int totalPageNumber) {
-        this.title = title;
-        this.author = author;
-        this.totalPageNumber = totalPageNumber;
-        this.bookStatus = BookStatus.AVAILABLE;
+        this(null, title, author, totalPageNumber, BookStatus.AVAILABLE);
     }
 
     public Book(Long bookId, String title, String author, int totalPageNumber, BookStatus bookStatus) {
