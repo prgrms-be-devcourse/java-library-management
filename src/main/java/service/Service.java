@@ -3,16 +3,11 @@ package service;
 import domain.Book;
 import repository.Repository;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 public class Service{
 
     private Repository repository;
-
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Service(Repository repository) {
         this.repository = repository;
