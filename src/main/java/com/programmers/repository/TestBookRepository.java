@@ -22,7 +22,7 @@ public class TestBookRepository implements BookRepository{
     @Override
     public Optional<Book> findByBookId(Long bookId) {
         return bookList.stream()
-                .filter((book) -> Objects.equals(book.getBookId(), bookId))
+                .filter(book -> book.filterById(bookId))
                 .findAny();
     }
 

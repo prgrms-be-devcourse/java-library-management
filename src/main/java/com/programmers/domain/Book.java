@@ -27,6 +27,10 @@ public class Book {
         return new Book(title, author, totalPageNumber);
     }
 
+    public boolean filterById(Long bookId){
+        return Objects.equals(this.bookId, bookId);
+    }
+
     public boolean searchByTitle(String title) {
         return this.title.contains(title);
     }

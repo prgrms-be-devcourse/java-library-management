@@ -108,7 +108,7 @@ public class BookConsole {
         System.out.print("> ");
         return scanner.nextLine();
     }
-    
+
 
     public static void rentSuccess() {
         System.out.println("[System] 도서가 대여 처리 되었습니다.");
