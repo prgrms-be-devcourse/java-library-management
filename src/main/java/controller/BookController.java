@@ -1,18 +1,20 @@
 package controller;
 
-import domain.Books;
+import domain.Book;
 import repository.MemoryRepository;
 import repository.Repository;
 import repository.TestRepository;
 import service.BookService;
 import view.View;
-import vo.BookInfoVo;
-import vo.NumberVo;
+import dto.BookInfoDTO;
+import dto.NumberDTO;
 
 import java.io.IOException;
 import java.util.List;
 
 public class BookController {
+    private final Integer MEMORY_REPOSITORY = 1;
+    private final Integer TEST_REPOSITORY = 2;
     private Repository repository;
     private BookService bookService;
     private View view;
@@ -22,23 +24,24 @@ public class BookController {
     }
 
     public void init() throws IOException {
-        NumberVo mode = view.selectMode();
+        NumberDTO mode = view.selectMode();
         selectMode(mode);
     }
 
-    public void selectMode(NumberVo numberVo) throws IOException {
-        if(numberVo.getNumber().equals(1)){
+    public void selectMode(NumberDTO numberDTO) throws IOException {
+        if(numberDTO.getNumber().equals(MEMORY_REPOSITORY)){
             repository = new MemoryRepository();
         }
-        else if(numberVo.getNumber().equals(2)){
+        else if(numberDTO.getNumber().equals(TEST_REPOSITORY)){
             repository = new TestRepository();
         }
         bookService = new BookService(repository);
         selectMenu();
     }
 
+    // 네이밍 -> 명령어를 실행한다 doCommand
     private void selectMenu() throws IOException {
-        NumberVo menu = view.selectMenu();
+        NumberDTO menu = view.selectMenu();
 
         switch (menu.getNumber()) {
             case 1: addBook();
@@ -52,28 +55,28 @@ public class BookController {
     }
 
     public void addBook() throws IOException {
-        BookInfoVo bookInfoVo = view.addBook();
+        BookInfoDTO bookInfoDTO = view.addBook();
 
-        bookService.addBook(bookInfoVo);
+        bookService.addBook(bookInfoDTO);
         selectMenu();
     };
     public void listBooks() throws IOException {
-        List<Books> books = bookService.listBooks();
+        List<Book> books = bookService.listBooks();
 
         view.listBooks(books);
         selectMenu();
     };
     public void searchBook() throws IOException {
-        BookInfoVo bookInfoVo = view.searchBook();
+        BookInfoDTO bookInfoDTO = view.searchBook();
 
-        List<Books> books = bookService.searchBook(bookInfoVo);
+        List<Book> books = bookService.searchBook(bookInfoDTO);
         view.searchList(books);
         selectMenu();
     };
     public void borrowBook() throws IOException {
-        NumberVo numberVo = view.borrowBook();
+        NumberDTO numberDTO = view.borrowBook();
         try {
-            bookService.borrowBook(numberVo.getNumber().longValue());
+            bookService.borrowBook(numberDTO.getNumber().longValue());
             view.borrowBookSuccess();
         }
         catch (Exception e){
@@ -84,9 +87,9 @@ public class BookController {
         }
     };
     public void returnBook() throws IOException {
-        NumberVo numberVo = view.returnBook();
+        NumberDTO numberDTO = view.returnBook();
         try {
-            bookService.returnBook(numberVo.getNumber().longValue());
+            bookService.returnBook(numberDTO.getNumber().longValue());
             view.returnBookSuccess();
         }
         catch (Exception e){
@@ -97,9 +100,9 @@ public class BookController {
         }
     };
     public void lostBook() throws IOException {
-        NumberVo numberVo = view.lostBook();
+        NumberDTO numberDTO = view.lostBook();
         try {
-            bookService.lostBook(numberVo.getNumber().longValue());
+            bookService.lostBook(numberDTO.getNumber().longValue());
         }
         catch (Exception e){
             view.errorMsg(e.getMessage());
@@ -109,9 +112,9 @@ public class BookController {
         }
     };
     public void deleteBook() throws IOException {
-        NumberVo numberVo = view.deleteBook();
+        NumberDTO numberDTO = view.deleteBook();
         try {
-            bookService.deleteBook(numberVo.getNumber().longValue());
+            bookService.deleteBook(numberDTO.getNumber().longValue());
         }
         catch (Exception e){
             view.errorMsg(e.getMessage());

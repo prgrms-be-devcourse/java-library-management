@@ -3,31 +3,30 @@ package domain;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.awt.print.Book;
-
 @Getter
 @Builder
-public class Books {
+public class Book {
     private Long bookNo;
     private String title;
     private String author;
     private Integer pageNum;
-    private BookStatus bookStatus;
+    private BookStatusType bookStatusType;
 
     public void setBookNo(Long bookNo){
         this.bookNo = bookNo;
     }
 
     public void toAvailable(){
-        this.bookStatus = BookStatus.AVAILABLE;
+        this.bookStatusType = BookStatusType.AVAILABLE;
     }
     public void toLost(){
-        this.bookStatus = BookStatus.LOST;
+        this.bookStatusType = BookStatusType.LOST;
     }
     public void toBorrowed(){
-        this.bookStatus = BookStatus.BORROWED;
+        this.bookStatusType = BookStatusType.BORROWED;
     }
     public void toOrganizing(){
-        this.bookStatus = BookStatus.ORGANIZING;
+        this.bookStatusType = BookStatusType.ORGANIZING;
     }
 }
+// 네이밍 복수형 -> 단수형 - 헷갈린다
