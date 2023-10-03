@@ -6,18 +6,17 @@ import com.programmers.domain.BookState;
 import com.programmers.provider.BookIdProvider;
 import com.programmers.repository.BookRepository;
 import com.programmers.repository.MemBookRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.util.NoSuchElementException;
 
 class BookServiceTest {
     private final BookRepository bookRepository;
     private final BookService bookService;
 
-    private Book availableBook;
-    private Book rentedBook;
-    private Book lostBook;
+    private final Book availableBook;
+    private final Book rentedBook;
+    private final Book lostBook;
 
     BookServiceTest() {
         bookRepository = MemBookRepository.getInstance();
@@ -36,42 +35,45 @@ class BookServiceTest {
         bookService.registerBook(lostBook);
     }
 
-    @AfterEach
-    void tearDown() {
-        bookRepository.clearBooks();
-    }
-
-
     @Test
-    void 도서등록() {
+    @DisplayName("도서 등록 테스트")
+    void testRegisterBook() {
         Book book = new Book(BookIdProvider.generateBookId(), "새로운도서", "작가", 100, BookState.AVAILABLE);
+
         bookService.registerBook(book);
+
         Assertions.assertEquals(book, bookRepository.findBookByTitle("새로운도서").get(0));
         Assertions.assertEquals(4, bookRepository.findBookByTitle("도서").size());
     }
 
     @Test
-    void 전체조회() {
-        Assertions.assertEquals(bookService.getAllBooks(), bookRepository.getAllBooks());
+    @DisplayName("전체 조회 테스트")
+    void testGetAllBook() {
         Book book = new Book(BookIdProvider.generateBookId(), "새로운도서", "작가", 100, BookState.AVAILABLE);
+
         bookService.registerBook(book);
-        Assertions.assertEquals(bookService.getAllBooks(), bookRepository.getAllBooks());
+
+        Assertions.assertEquals(4, bookService.getAllBooks().size());
     }
 
     @Test
-    void 제목으로도서검색() {
+    @DisplayName("제목에 특정 문장이 포함된 도서 검색")
+    void testFindBookByTitle() {
         Assertions.assertEquals(3, bookRepository.findBookByTitle("도서").size());
     }
 
     @Test
-    void 대여기능_성공() {
+    @DisplayName("대여가 성공한 경우: 대여가능 도서")
+    void testRentBook_withAvailableState_success() {
         bookService.rentBook(availableBook.getId());
         Assertions.assertEquals(BookState.RENTED, availableBook.getState());
     }
 
     @Test
-    void 대여기능_실패_대여중인도서() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(rentedBook.getId()));
+    @DisplayName("대여가 실패한 경우: 대여중인 도서")
+    void testRentBook_withRentedState_throwsIllegalStateException() {
+        Exception exception = Assertions.assertThrows(IllegalStateException.class, () -> bookService.rentBook(rentedBook.getId()));
+
         String expectedMessage = ErrorMessages.BOOK_ALREADY_RENTED.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -79,8 +81,10 @@ class BookServiceTest {
     }
 
     @Test
-    void 대여기능_실패_분실된도서() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(lostBook.getId()));
+    @DisplayName("대여가 실패한 경우: 분실된 도서")
+    void testRentBook_withLostState_throwsIllegalStateException() {
+        Exception exception = Assertions.assertThrows(IllegalStateException.class, () -> bookService.rentBook(lostBook.getId()));
+
         String expectedMessage = ErrorMessages.BOOK_NOW_LOST.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -88,8 +92,10 @@ class BookServiceTest {
     }
 
     @Test
-    void 대여기능_실패_없는도서() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.rentBook(123));
+    @DisplayName("대여가 실패한 경우: 없는 도서")
+    void testRentBook_withWrongId__throwsNoSuchElementException() {
+        Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> bookService.rentBook(-1));
+
         String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -97,11 +103,14 @@ class BookServiceTest {
     }
 
     @Test
-    void 반납기능_성공_빌렸던도서() {
+    @DisplayName("반납에 성공한 경우: 대여중인 도서 반납")
+    void testReturnBook_withRentedState_success() {
+        BookService.setOrganizingMilliseconds(1000); // 1초로 수정
+
         bookService.returnBook(rentedBook.getId());
         Assertions.assertEquals(BookState.ORGANIZING, rentedBook.getState());
         try {
-            Thread.sleep(10010);
+            Thread.sleep(1005);
             Assertions.assertEquals(BookState.AVAILABLE, rentedBook.getState());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -109,11 +118,14 @@ class BookServiceTest {
     }
 
     @Test
-    void 반납기능_성공_분실했던도서() {
+    @DisplayName("반납에 성공한 경우: 분실되었던 도서 반납")
+    void testReturnBook_withLostState_success() {
+        BookService.setOrganizingMilliseconds(1000); // 1초로 수정
+
         bookService.returnBook(lostBook.getId());
         Assertions.assertEquals(BookState.ORGANIZING, lostBook.getState());
         try {
-            Thread.sleep(10010);
+            Thread.sleep(1005);
             Assertions.assertEquals(BookState.AVAILABLE, lostBook.getState());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -121,8 +133,10 @@ class BookServiceTest {
     }
 
     @Test
-    void 반납기능_실패_대여가능한경우() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.returnBook(availableBook.getId()));
+    @DisplayName("반납에 실패한 경우: 대여가능한 도서")
+    void testReturnBook_withAvailableState_throwsIllegalStateException() {
+        Exception exception = Assertions.assertThrows(IllegalStateException.class, () -> bookService.returnBook(availableBook.getId()));
+
         String expectedMessage = ErrorMessages.BOOK_ALREADY_AVAILABLE.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -130,9 +144,11 @@ class BookServiceTest {
     }
 
     @Test
-    void 반납기능_실패_반납중인경우() {
+    @DisplayName("반납에 실패한 경우: 정리중인 도서")
+    void testReturnBook_withOrganizingState_throwsIllegalStateException() {
         bookService.returnBook(rentedBook.getId());
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.returnBook(rentedBook.getId()));
+        Exception exception = Assertions.assertThrows(IllegalStateException.class, () -> bookService.returnBook(rentedBook.getId()));
+
         String expectedMessage = ErrorMessages.BOOK_BEING_ORGANIZED.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -141,17 +157,24 @@ class BookServiceTest {
 
 
     @Test
-    void 분실처리_성공() {
+    @DisplayName("분실처리에 성공한 경우: 대여가능 도서")
+    void testLostBook_withAvailableState_success() {
         bookService.lostBook(availableBook.getId());
         Assertions.assertEquals(BookState.LOST, availableBook.getState());
+    }
 
+    @Test
+    @DisplayName("분실처리에 성공한 경우: 대여중인 도서")
+    void testLostBook_withRentedState_success() {
         bookService.lostBook(rentedBook.getId());
         Assertions.assertEquals(BookState.LOST, rentedBook.getState());
     }
 
     @Test
-    void 분실처리_실패() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.lostBook(lostBook.getId()));
+    @DisplayName("분실처리에 실패한 경우: 대여중인 도서")
+    void testLostBook_withRentedState_throwsIllegalStateException() {
+        Exception exception = Assertions.assertThrows(IllegalStateException.class, () -> bookService.lostBook(lostBook.getId()));
+
         String expectedMessage = ErrorMessages.BOOK_ALREADY_LOST.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -159,9 +182,11 @@ class BookServiceTest {
     }
 
     @Test
-    void 도서삭제_성공_대여가능한도서() {
+    @DisplayName("분실처리에 실패한 경우: 없는 도서")
+    void testLostBook_withWrongId_throwsNoSuchElementException() {
         bookService.deleteBook(availableBook.getId());
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(availableBook.getId()));
+
+        Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> bookService.deleteBook(availableBook.getId()));
         String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
@@ -169,31 +194,34 @@ class BookServiceTest {
     }
 
     @Test
-    void 도서삭제_성공_대여중인도서() {
+    @DisplayName("도서 삭제에 성공한 경우")
+    void testDeleteBook_success() {
+        bookService.deleteBook(availableBook.getId());
         bookService.deleteBook(rentedBook.getId());
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(rentedBook.getId()));
-        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
-        String actualMessage = exception.getMessage();
-        Assertions.assertEquals(expectedMessage, actualMessage);
-    }
-
-    @Test
-    void 도서삭제_성공_분실된도서() {
         bookService.deleteBook(lostBook.getId());
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(lostBook.getId()));
+
+        Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> bookService.deleteBook(rentedBook.getId()));
+
+        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
+        String actualMessage = exception.getMessage();
+
+        Assertions.assertEquals(expectedMessage, actualMessage);
+        Assertions.assertEquals(0, bookService.getAllBooks().size());
+    }
+
+    @Test
+    @DisplayName("도서 삭제에 실패한 경우")
+    void testDeleteBook_withWrongId_throwsNoSuchElementException() {
+        Exception exception = Assertions.assertThrows(NoSuchElementException.class, () -> bookService.deleteBook(-1));
+
         String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
         String actualMessage = exception.getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
     }
 
-
-    @Test
-    void 도서삭제_실패_없는도서() {
-        Exception exception = Assertions.assertThrows(RuntimeException.class, () -> bookService.deleteBook(123));
-        String expectedMessage = ErrorMessages.BOOK_NOT_EXIST.getMessage();
-        String actualMessage = exception.getMessage();
-
-        Assertions.assertEquals(expectedMessage, actualMessage);
+    @AfterEach
+    void tearDown() {
+        bookRepository.clearBooks();
     }
 }
