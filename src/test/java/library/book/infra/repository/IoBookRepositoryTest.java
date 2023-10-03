@@ -65,7 +65,7 @@ class IoBookRepositoryTest {
 			Book book = findBook.get();
 			assertAll(
 				() -> assertThat(book.getId()).isEqualTo(1L),
-				() -> assertThat(book.getBookState()).isEqualTo(RENTED),
+				() -> assertThat(book.getBookState()).isEqualTo(RENTED_STATE),
 				() -> assertThat(book.getTitle()).isEqualTo("hello"),
 				() -> assertThat(book.getAuthorName()).isEqualTo("hello")
 			);

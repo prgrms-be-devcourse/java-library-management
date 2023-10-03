@@ -5,6 +5,7 @@ import library.book.domain.state.AvailableRent;
 import library.book.domain.state.Cleaning;
 import library.book.domain.state.Lost;
 import library.book.domain.state.Rented;
+import library.book.domain.state.State;
 
 public class Book {
 

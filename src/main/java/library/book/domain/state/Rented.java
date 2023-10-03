@@ -3,13 +3,12 @@ package library.book.domain.state;
 import static library.book.domain.constants.BookState.*;
 import static library.book.exception.ErrorCode.*;
 
-import library.book.domain.State;
 import library.book.domain.constants.BookState;
 import library.book.exception.BookException;
 
 public class Rented implements State {
 
-	private final BookState bookState = RENTED;
+	private final BookState bookState = RENTED_STATE;
 
 	@Override
 	public BookState getBookState() {

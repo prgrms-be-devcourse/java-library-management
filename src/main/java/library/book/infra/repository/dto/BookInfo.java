@@ -1,7 +1,7 @@
 package library.book.infra.repository.dto;
 
 import library.book.domain.Book;
-import library.book.domain.State;
+import library.book.domain.state.State;
 import library.book.domain.constants.BookState;
 
 public record BookInfo(
