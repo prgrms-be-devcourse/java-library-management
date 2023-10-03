@@ -27,12 +27,13 @@ public class Book {
     }
 
     public String toString() {
-        return "\n도서번호 : " + String.valueOf(id)
-                + "\n제목 : " + title
-                + "\n작가 이름 : " + writer
-                + "\n페이지 수: " + String.valueOf(page) + "페이지"
-                + "\n상태 : " + state.getState()
-                + "\n\n------------------------------";
+        return System.lineSeparator() + "도서번호 : " + String.valueOf(id)
+                + System.lineSeparator() + "제목 : " + title
+                + System.lineSeparator() + "작가 이름 : " + writer
+                + System.lineSeparator() + "페이지 수: " + String.valueOf(page) + "페이지"
+                + System.lineSeparator() + "상태 : " + state.getState()
+                + System.lineSeparator() + System.lineSeparator()
+                + "------------------------------";
     }
 
     public String fileLine() {
