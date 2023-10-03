@@ -36,7 +36,7 @@ public class FileRepository implements Repository{
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), StandardCharsets.UTF_8));
             for (Book book : bookList) {
-                bw.write(book.getId() + "," + book.getName() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getStatus().getStatusName());
+                bw.write(book.getId() + "," + book.getName() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getStatus().getMessage());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

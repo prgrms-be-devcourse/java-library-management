@@ -6,13 +6,13 @@ public enum Status {
     ORGANIZE("도서 정리중"),
     LOST("분실됨");
 
-    private final String statusName;
+    private final String message;
 
-    Status(String statusName) {
-        this.statusName = statusName;
+    Status(String message) {
+        this.message = message;
     }
 
-    public String getStatusName(){
-        return statusName;
+    public String getMessage(){
+        return message;
     }
 }
