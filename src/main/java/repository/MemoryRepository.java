@@ -34,7 +34,7 @@ public class MemoryRepository implements Repository {
     }
 
     public void rental(int id) {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
+        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
                 .findFirst()
                 .orElse(null);
 
@@ -55,7 +55,7 @@ public class MemoryRepository implements Repository {
 
     @Override
     public void returnBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
+        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
@@ -77,7 +77,7 @@ public class MemoryRepository implements Repository {
 
     @Override
     public void lostBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
+        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
@@ -96,7 +96,7 @@ public class MemoryRepository implements Repository {
 
     @Override
     public void deleteBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.getId() == id)
+        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
                 .findAny()
                 .orElse(null);
         if(selectedBook == null) {
