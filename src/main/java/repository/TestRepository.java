@@ -30,7 +30,7 @@ public class TestRepository implements Repository{
     public List<Book> searchBook(String name) {
         List<Book> searchResult = new ArrayList<>();
         bookRepository.stream()
-                .filter(book->book.getName().contains(name))
+                .filter(book -> book.containsName(name))
                 .forEach(searchResult::add);
         return searchResult;
     }
@@ -38,7 +38,7 @@ public class TestRepository implements Repository{
     @Override
     public Book getBook(Long bookNumber) {
         return bookRepository.stream()
-                .filter(b -> b.getId().equals(bookNumber))
+                .filter(book -> book.equalsId(bookNumber))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("[System] 존재하지 않는 도서번호 입니다."));
     }

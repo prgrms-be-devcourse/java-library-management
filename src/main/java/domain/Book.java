@@ -80,4 +80,12 @@ public class Book {
         }
     }
 
+    public boolean equalsId(Long id){
+        return this.id.equals(id);
+    }
+
+    public boolean containsName(String name){
+        return this.name.contains(name);
+    }
+
 }
