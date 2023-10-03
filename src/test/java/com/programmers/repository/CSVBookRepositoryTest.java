@@ -43,6 +43,8 @@ class CSVBookRepositoryTest {
         assertThat(findBook.getBookId()).isEqualTo(Long.valueOf(list.size()));
         assertThat(findBook.getBookId()).isEqualTo(4L);
         assertThat(book.toString()).isEqualTo(findBook.toString());
+        assertThat(book.getBookId()).isEqualTo(findBook.getBookId());
+        Assertions.assertThat(book).isEqualTo(findBook);
     }
 
     @Test
@@ -58,10 +60,12 @@ class CSVBookRepositoryTest {
         bookRepository.saveBook(book);
 
         bookList = bookRepository.findAll();
-
+        Book savedBook = bookList.get(bookList.size() - 1);
         //then
         Assertions.assertThat(bookList).hasSize(4);
-        Assertions.assertThat(book.toString()).isEqualTo(bookList.get(bookList.size()-1).toString());
+        Assertions.assertThat(book.toString()).isEqualTo(savedBook.toString());
+        Assertions.assertThat(book.getBookId()).isEqualTo(savedBook.getBookId());
+        Assertions.assertThat(book).isEqualTo(savedBook);
 //        BookConsole.showAllBooks(bookList);
 
     }

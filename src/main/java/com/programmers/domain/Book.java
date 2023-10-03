@@ -1,8 +1,21 @@
 package com.programmers.domain;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Book {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book book)) return false;
+        return totalPageNumber == book.totalPageNumber && bookId.equals(book.bookId) && title.equals(book.title) && author.equals(book.author) && bookStatus == book.bookStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookId, title, author, totalPageNumber, bookStatus);
+    }
+
     @Override
     public String toString() {
         return "Book{" +
