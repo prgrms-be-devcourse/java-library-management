@@ -8,6 +8,7 @@ import thread.NormalChangeStateThread;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static domain.Reader.fc;
 import static domain.Reader.sc;
@@ -47,86 +48,92 @@ public class FileRepository implements Repository {
 
     @Override
     public void rental(int id) {
-        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
-                .findFirst()
-                .orElse(null);
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
+                .findFirst();
 
-        if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-            return;
-        }
-        switch (selectedBook.getState()) {
-            case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING.getMessage());
-            case AVAILABLE -> {
-                selectedBook.setState(BookState.RENTING);
-                updateFile(books, file);
-                System.out.println(ExecuteMessage.RENTAL_AVAILABLE.getMessage());
-            }
-            case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING.getMessage());
-            case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST.getMessage());
-        }
+        selectedBookOptional.ifPresentOrElse(
+                selectedBook -> {
+                    switch (selectedBook.getState()) {
+                        case RENTING -> System.out.println(ExecuteMessage.RENTAL_RENTING.getMessage());
+                        case AVAILABLE -> {
+                            selectedBook.setState(BookState.RENTING);
+                            updateFile(books, file);
+                            System.out.println(ExecuteMessage.RENTAL_AVAILABLE.getMessage());
+                        }
+                        case ORGANIZING -> System.out.println(ExecuteMessage.RENTAL_ORGANIZING.getMessage());
+                        case LOST -> System.out.println(ExecuteMessage.RENTAL_LOST.getMessage());
+                    }
+                },
+                () -> {
+                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
+                }
+        );
     }
 
     @Override
     public void returnBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
-                .findAny()
-                .orElse(null);
-        if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-            return;
-        }
-        NormalChangeStateThread thread = new NormalChangeStateThread(selectedBook, file, books);
+        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+                .findFirst();
+        selectedBookOptional.ifPresentOrElse(
+                selectedBook -> {
+                    NormalChangeStateThread thread = new NormalChangeStateThread(selectedBook, file, books);
 
-        if (selectedBook.getState() == BookState.RENTING || selectedBook.getState() == BookState.LOST) {
-            selectedBook.setState(BookState.ORGANIZING);
-            updateFile(books, file);
-            thread.setDaemon(true);
-            thread.start();
+                    if (selectedBook.getState() == BookState.RENTING || selectedBook.getState() == BookState.LOST) {
+                        selectedBook.setState(BookState.ORGANIZING);
+                        updateFile(books, file);
+                        thread.setDaemon(true);
+                        thread.start();
 
-            System.out.println(ExecuteMessage.RETURN_COMPLETE.getMessage());
-        } else if(selectedBook.getState() == BookState.AVAILABLE) {
-            System.out.println(ExecuteMessage.RETURN_AVAILABLE.getMessage());
-        } else {
-            System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE.getMessage());
-        }
+                        System.out.println(ExecuteMessage.RETURN_COMPLETE.getMessage());
+                    } else if (selectedBook.getState() == BookState.AVAILABLE) {
+                        System.out.println(ExecuteMessage.RETURN_AVAILABLE.getMessage());
+                    } else {
+                        System.out.println(ExecuteMessage.RETURN_IMPOSSIBLE.getMessage());
+                    }
+                },
+                    () -> {
+                        System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
+                    }
+        );
     }
 
     @Override
     public void lostBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
-                .findAny()
-                .orElse(null);
-        if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-            return;
-        }
-
-        switch (selectedBook.getState()) {
-            case RENTING -> {
-                selectedBook.setState(BookState.LOST);
-                updateFile(books, file);
-                System.out.println(ExecuteMessage.LOST_COMPLETE.getMessage());
-            }
-            case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE.getMessage());
-            case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY.getMessage());
-        }
+        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+                .findFirst();
+        selectedBookOptional.ifPresentOrElse(
+                selectedBook -> {
+                    switch (selectedBook.getState()) {
+                        case RENTING -> {
+                            selectedBook.setState(BookState.LOST);
+                            updateFile(books, file);
+                            System.out.println(ExecuteMessage.LOST_COMPLETE.getMessage());
+                        }
+                        case AVAILABLE, ORGANIZING -> System.out.println(ExecuteMessage.LOST_IMPOSSIBLE.getMessage());
+                        case LOST -> System.out.println(ExecuteMessage.LOST_ALREADY.getMessage());
+                    }
+                },
+                () -> {
+                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
+                }
+        );
     }
 
     @Override
     public void deleteBook(int id) {
-        Book selectedBook = books.stream().filter(book -> book.isSameId(id))
-                .findAny()
-                .orElse(null);
-
-        if(selectedBook == null) {
-            System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-            return;
-        } else {
-            books.remove(selectedBook);
-            updateFile(books, file);
-            System.out.println(ExecuteMessage.DELETE_COMPLETE.getMessage());
-        }
+        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+                .findFirst();
+        selectedBookOptional.ifPresentOrElse(
+                selectedBook -> {
+                    books.remove(selectedBook);
+                    updateFile(books, file);
+                    System.out.println(ExecuteMessage.DELETE_COMPLETE.getMessage());
+                },
+                () -> {
+                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
+                }
+        );
     }
 
     public static void updateFile(List<Book> books, File file) {
