@@ -2,6 +2,8 @@ package com.programmers.exception;
 
 public class ErrorChecking {
 
+    private ErrorChecking(){};
+
     public static boolean checkNumber(String input) {
         try {
             Integer.parseInt(input);
