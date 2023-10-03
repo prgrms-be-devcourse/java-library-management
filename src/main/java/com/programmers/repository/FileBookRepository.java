@@ -17,6 +17,12 @@ public class FileBookRepository implements BookRepository {
     public static final String csvSeparator = ",";
 
     private FileBookRepository() {
+        try {
+            loadDataFromFile();
+            BookIdProvider.initMaxId(books);
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static class Holder {
@@ -24,15 +30,7 @@ public class FileBookRepository implements BookRepository {
     }
 
     public static FileBookRepository getInstance() {
-        FileBookRepository fileBookRepository = FileBookRepository.Holder.INSTANCE;
-        try {
-            fileBookRepository.loadDataFromFile();
-        } catch (NoSuchElementException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            BookIdProvider.initMaxId(books);
-            return fileBookRepository;
-        }
+        return Holder.INSTANCE;
     }
 
     @Override
