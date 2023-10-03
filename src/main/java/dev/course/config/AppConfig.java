@@ -10,7 +10,7 @@ public class AppConfig {
     }
 
     public LibraryConfig getLibraryConfig(int modeId) {
-        return new LibraryConfig(getRepositoryConfig(modeId), getConsoleManager());
+        return new LibraryConfig(getRepositoryConfig(modeId));
     }
 
     public BookRepositoryConfig getRepositoryConfig(int modeId) {

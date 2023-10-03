@@ -19,10 +19,10 @@ public class ConsoleManager {
     }
 
     public int getInteger() {
-        return Integer.parseInt(getString());
+        return Integer.parseInt(getInput());
     }
 
-    public String getString() {
+    public String getInput() {
         try {
             return getBufferedReader().readLine();
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class ConsoleManager {
     }
 
     public Long getLong() {
-        return Long.parseLong(getString());
+        return Long.parseLong(getInput());
     }
 
     public void printMode() {
