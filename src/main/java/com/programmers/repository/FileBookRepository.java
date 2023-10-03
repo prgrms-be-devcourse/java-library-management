@@ -87,12 +87,14 @@ public class FileBookRepository implements BookRepository {
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
-                String[] values = line.split(csvSeparator);
-                Book book = new Book(values);
+                String[] bookInfo = line.split(csvSeparator);
+                Book book = new Book(bookInfo);
                 books.add(book);
             }
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             throw new NoSuchElementException(ErrorMessages.FILE_NOT_FOUND.getMessage());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -106,12 +108,13 @@ public class FileBookRepository implements BookRepository {
                             bw.write(line);
                             bw.newLine();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            throw new UncheckedIOException(e);
                         }
                     });
+        } catch (FileNotFoundException e) {
+            throw new NoSuchElementException(ErrorMessages.FILE_NOT_FOUND.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
     }
-
 }

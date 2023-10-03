@@ -10,7 +10,8 @@ public enum ErrorMessages {
     BOOK_NOW_LOST("[System] 이 도서는 분실되었습니다."),
     BOOK_ALREADY_AVAILABLE("[System] 원래 대여가 가능한 도서입니다."),
     BOOK_ALREADY_LOST("[System] 이미 분실 처리된 도서입니다."),
-    FILE_NOT_FOUND("[System] 읽어올 데이터가 존재하지 않습니다. 빈 파일에 새로운 데이터가 저장됩니다.");
+    FILE_NOT_FOUND("[System] 파일이 존재하지 않습니다. 빈 파일에 새로운 데이터가 저장됩니다."),
+    FILE_UPDATE_ERROR("[System] 파일 업데이트 중 에러가 발생했습니다.");
 
     private final String message;
 
