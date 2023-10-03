@@ -6,6 +6,8 @@ import repository.Repository;
 import dto.BookInfoDTO;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BookService {
     private Repository repository;
@@ -90,6 +92,20 @@ public class BookService {
         }
 
         book.toOrganizing();
+        organizeToAvailable(book);
+    }
+
+    /**
+     * 5분 대기 후 가능
+     * @param book
+     */
+    private static void organizeToAvailable(Book book) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                book.toAvailable();
+            }
+        }, 5*60*1000);
     }
 
 
