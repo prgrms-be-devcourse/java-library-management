@@ -12,7 +12,7 @@ public class MemBookRepository implements BookRepository {
     private static final List<Book> books = new ArrayList<>();
 
     private MemBookRepository() {
-        BookIdProvider.initBookId(books);
+        BookIdProvider.initMaxId(books);
     }
 
     private static class Holder {

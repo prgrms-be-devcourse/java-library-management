@@ -1,21 +1,28 @@
 package com.programmers.provider;
 
 import com.programmers.domain.Book;
-import com.programmers.domain.BookState;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class BookIdProvider {
-    private static int maxId;
+    private static int MAX_ID = 0;
 
-    public static void initBookId(List<Book> books) {
-        Book book = books.stream().max(Comparator.comparingInt(Book::getId))
-                .orElseGet(() -> new Book(0, "", "", 0, BookState.AVAILABLE));
-        maxId = book.getId();
+    public static void initMaxId(List<Book> books) {
+        if (!books.isEmpty()) {
+            MAX_ID = findMaxId(books);
+        }
+    }
+
+    private static int findMaxId(List<Book> books) {
+        List<Book> copiedBooks = new ArrayList<>(books);
+        copiedBooks.sort(Comparator.comparingInt(Book::getId));
+        int lastIndex = copiedBooks.size() - 1;
+        return copiedBooks.get(lastIndex).getId();
     }
 
     public static int generateBookId() {
-        return ++maxId;
+        return ++MAX_ID;
     }
 }

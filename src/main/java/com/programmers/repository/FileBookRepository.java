@@ -30,6 +30,7 @@ public class FileBookRepository implements BookRepository {
         } catch (NoSuchElementException e) {
             System.out.println(e.getMessage());
         } finally {
+            BookIdProvider.initMaxId(books);
             return fileBookRepository;
         }
     }
@@ -83,12 +84,10 @@ public class FileBookRepository implements BookRepository {
                 String[] values = line.split(csvSeparator);
                 Book book = new Book(values);
                 books.add(book);
-                //System.out.println(book);
             }
         } catch (IOException e) {
             throw new NoSuchElementException(ErrorMessages.FILE_NOT_FOUND.getMessage());
         }
-        BookIdProvider.initBookId(books);
     }
 
     public void updateFile() {
