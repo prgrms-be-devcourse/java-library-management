@@ -3,23 +3,15 @@ package org.example.server.repository;
 import org.example.server.entity.Book;
 import org.example.server.entity.BookState;
 
-import java.text.ParseException;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface Repository {
     default Book checkLoadTime(Book book) {
-        if (BookState.valueOf(book.state).equals(BookState.LOADING)) {
-            try {
-                Date endLoadTime = Book.format.parse(book.endLoadTime);
-                Date now = Book.format.parse(Book.format.format(new Date()));
-                if (now.after(endLoadTime)) {
-                    book.state = BookState.CAN_BORROW.name();
-                    book.endLoadTime = "";
-                    return book;
-                }
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+        if (BookState.valueOf(book.state).equals(BookState.LOADING) && book.endLoadTime.isPresent() && book.endLoadTime.get().isBefore(LocalDateTime.now())) {
+            book.state = BookState.CAN_BORROW.name();
+            book.endLoadTime = Optional.empty();
+            return book;
         }
         return book;
     }

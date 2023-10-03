@@ -4,8 +4,8 @@ import org.example.server.entity.Book;
 import org.example.server.entity.BookState;
 import org.example.server.repository.Repository;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class BookService implements Service {
     private final Repository repository;
@@ -17,6 +17,7 @@ public class BookService implements Service {
     public void register(String name, String author, int pages) {
         Book book = new Book(name, author, pages);
         repository.create(book);
+        repository.save();
     }
 
     public String readAll() {
@@ -33,6 +34,7 @@ public class BookService implements Service {
         if (bookState.equals(BookState.BORROWED) || bookState.equals(BookState.LOADING) || bookState.equals(BookState.LOST))
             throw bookState.throwStatusException();
         book.state = BookState.BORROWED.name();
+        repository.save();
     }
 
     public void restore(int bookId) {
@@ -41,10 +43,8 @@ public class BookService implements Service {
         if (bookState.equals(BookState.CAN_BORROW) || bookState.equals(BookState.LOADING))
             throw bookState.throwStatusException();
         book.state = BookState.LOADING.name();
-        Date curr = new Date();
-        Book.calendar.setTime(curr);
-        Book.calendar.add(Calendar.MINUTE, 5);
-        book.endLoadTime = Book.format.format(new Date(Book.calendar.getTimeInMillis()));
+        book.endLoadTime = Optional.of(LocalDateTime.now().plusMinutes(5));
+        repository.save();
     }
 
     public void lost(int bookId) {
@@ -53,13 +53,15 @@ public class BookService implements Service {
         if (bookState.equals(BookState.LOST))
             throw bookState.throwStatusException();
         if (bookState.equals(BookState.LOADING)) {
-            book.endLoadTime = "";
+            book.endLoadTime = Optional.empty();
         }
         book.state = BookState.LOST.name();
+        repository.save();
     }
 
     public void delete(int bookId) {
         repository.getById(bookId);
         repository.delete(bookId);
+        repository.save();
     }
 }

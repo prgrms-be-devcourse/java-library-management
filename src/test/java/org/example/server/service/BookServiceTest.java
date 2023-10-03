@@ -5,7 +5,13 @@ import org.example.server.entity.BookState;
 import org.example.server.exception.BookNotFoundException;
 import org.example.server.exception.ServerException;
 import org.example.server.repository.InMemoryRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 class BookServiceTest {
     static InMemoryRepository repository;
@@ -26,7 +32,7 @@ class BookServiceTest {
         repository.data.get(2).state = BookState.BORROWED.name();
 
         repository.data.get(3).state = BookState.LOADING.name();
-        repository.data.get(3).endLoadTime = "2024-09-30 22:43:48";
+        repository.data.get(3).endLoadTime = Optional.of(LocalDateTime.now().plusMinutes(5));
 
         repository.data.get(4).state = BookState.LOST.name();
         System.out.println(service.readAll());

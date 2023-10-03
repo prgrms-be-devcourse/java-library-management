@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -78,7 +79,7 @@ public class FileStorage {
                     bookInfoMap.put("author", book.author);
                     bookInfoMap.put("pages", book.pages);
                     bookInfoMap.put("state", book.state);
-                    bookInfoMap.put("endLoadTime", book.endLoadTime);
+                    bookInfoMap.put("endLoadTime", book.endLoadTime.map(LocalDateTime::toString).orElse(""));
                     objects.add(bookInfoMap);
                 }
         );
