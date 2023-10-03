@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
     private static final List<Book> books = new ArrayList<>();
-    private static final String csvFile = "./src/main/resources/data.csv";
     public static final String csvSeparator = ",";
+    private static String csvFilePath;
 
     private FileBookRepository() {
         try {
@@ -31,6 +31,12 @@ public class FileBookRepository implements BookRepository {
 
     public static FileBookRepository getInstance() {
         return Holder.INSTANCE;
+    }
+
+    public static void setCsvFilePath(String filePath) {
+        if (csvFilePath == null) {
+            csvFilePath = filePath;
+        }
     }
 
     @Override
@@ -85,7 +91,7 @@ public class FileBookRepository implements BookRepository {
 
     public void loadDataFromFile() {
         String line;
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             while ((line = br.readLine()) != null) {
                 String[] bookInfo = line.split(csvSeparator);
                 Book book = new Book(bookInfo);
@@ -99,7 +105,7 @@ public class FileBookRepository implements BookRepository {
     }
 
     public void updateFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFilePath))) {
             // 각 Book 객체의 정보를 CSV 형식으로 변환
             books.stream()
                     .map(book -> book.joinInfo(csvSeparator))
