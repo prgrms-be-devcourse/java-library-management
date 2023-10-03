@@ -23,7 +23,7 @@ public class TestRepository implements Repository{
 
     @Override
     public List<Book> getAll() {
-        return bookRepository;
+        return new ArrayList<>(bookRepository);
     }
 
     @Override
