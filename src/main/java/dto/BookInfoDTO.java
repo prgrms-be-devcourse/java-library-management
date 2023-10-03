@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class BookInfoDTO {
-    private Long bookNo;
     private String title;
     private String author;
     private Integer pageNum;

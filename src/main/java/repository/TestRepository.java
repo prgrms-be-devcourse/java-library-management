@@ -43,4 +43,9 @@ public class TestRepository implements Repository{
     public List<Book> bookList() {
         return this.bookList;
     }
+
+    @Override
+    public void clear(){
+        bookList().clear();
+    }
 }

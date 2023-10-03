@@ -12,4 +12,6 @@ public interface Repository {
     public Optional<Book> findById(Long bookNo);
     public List<Book> findByTitle(String title);
     public List<Book> bookList();
+
+    void clear();
 }
