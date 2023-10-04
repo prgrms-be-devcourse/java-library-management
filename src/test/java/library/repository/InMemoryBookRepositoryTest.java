@@ -30,8 +30,8 @@ class InMemoryBookRepositoryTest {
 
         // Then
         List<Book> allBooks = bookRepository.findAll();
-        assertEquals(1, allBooks.size());
-        assertEquals(book, allBooks.get(0));
+        assertThat(allBooks).hasSize(1);
+        assertThat(allBooks).contains(book);
     }
 
     @Test
@@ -48,7 +48,7 @@ class InMemoryBookRepositoryTest {
 
         // Then
         assertTrue(foundBook.isPresent());
-        assertEquals(book2, foundBook.get());
+        assertThat(foundBook).contains(book2);
     }
 
     @Test
@@ -66,9 +66,8 @@ class InMemoryBookRepositoryTest {
         List<Book> foundBooks = bookRepository.findListContainTitle("Sample");
 
         // Then
-        assertEquals(2, foundBooks.size());
-        assertTrue(foundBooks.contains(book1));
-        assertTrue(foundBooks.contains(book3));
+        assertThat(foundBooks).hasSize(2);
+        assertThat(foundBooks).contains(book1, book3);
     }
 
     @Test
@@ -85,8 +84,8 @@ class InMemoryBookRepositoryTest {
 
         // Then
         List<Book> allBooks = bookRepository.findAll();
-        assertEquals(1, allBooks.size());
-        assertFalse(allBooks.contains(book1));
+        assertThat(allBooks).hasSize(1);
+        assertThat(allBooks).doesNotContain(book1);
     }
 
     @Test
