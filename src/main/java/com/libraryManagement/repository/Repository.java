@@ -1,16 +1,18 @@
 package com.libraryManagement.repository;
 
-import com.libraryManagement.model.domain.Book;
+import com.libraryManagement.domain.Book;
 
 import java.util.List;
 
 public interface Repository {
 
-    List<Book> findAll();
+    List<Book> findAllBooks();   // 모든 책 반환
 
-    Book findOne(String str);
+    List<Book> findBooksByTitle(String str); // 검색어를 제목에 포함한 모든 책 반환
 
-    Book findOne(long id);
+    public Book findBookById(long id);
 
-    void bookInsert(Book book);
+    void insertBook(Book book);
+
+    void updateBookStatus(long id, String bookStatus);
 }

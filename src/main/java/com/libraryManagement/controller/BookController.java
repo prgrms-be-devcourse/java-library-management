@@ -1,49 +1,39 @@
 package com.libraryManagement.controller;
 
-import com.libraryManagement.model.domain.Book;
+import com.libraryManagement.domain.Book;
+import com.libraryManagement.domain.DtoBook;
 import com.libraryManagement.service.BookService;
-import com.libraryManagement.view.BookView;
+import com.libraryManagement.io.BookIO;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.List;
 
-import static com.libraryManagement.util.GlobalVariables.numBook;
+import static com.libraryManagement.domain.BookStatus.*;
+import static com.libraryManagement.domain.ChangeBookStatus.*;
+import static com.libraryManagement.util.GlobalVariables.numCreatedBooks;
 
 public class BookController {
     private final BookService bookService;
-    private final BookView bookView;
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final BookIO bookIO;
 
-    public BookController(BookService bookService, BookView bookView) {
+    public BookController(BookService bookService, BookIO bookIO) {
         this.bookService = bookService;
-        this.bookView = bookView;
+        this.bookIO = bookIO;
     }
 
     public void insertBook() throws IOException {
         bookService.insertBook(createBook());
-
-        /*
-        if(result > 0) {
-            System.out.println("도서 정보 추가 완료");
-        }else {
-            bookView.bookErrorMsg("insert");
-        }
-         */
     }
 
     public Book createBook() throws IOException {
+        long id = ++numCreatedBooks;
 
-        long id = numBook++;
+        DtoBook dtoBook = bookIO.inputBookInsert();
+        String title = dtoBook.getTitle();
+        String author = dtoBook.getAuthor();
+        int pages = dtoBook.getPages();
 
-        System.out.println("Q. 등록할 도서 제목을 입력하세요.");
-        String title = br.readLine();
-
-        System.out.println("Q. 작가 이름을 입력하세요.");
-        String author = br.readLine();
-
-        System.out.println("Q. 페이지 수를 입력하세요.");
-        int pages = Integer.parseInt(br.readLine());
+        String status = POSSIBLERENT.getName();  // 대여가능 상태로 생성
 
         return new Book
                 .Builder()
@@ -51,20 +41,44 @@ public class BookController {
                 .title(title)
                 .author(author)
                 .pages(pages)
+                .status(status)
                 .build();
     }
 
-    /*
-    // 4. 도서 정보(아이디)
-    public int bookId() {
-        System.out.print("도서 번호 입력 : ");
-        return Integer.parseInt(sc.nextLine());
+    public void findBooks() {
+        List<Book> bookList = bookService.findBooks();
+        bookIO.outputBookList(bookList);
     }
 
-    // 5. 도서 정보(아이디)
-    public String bookTitle() {
-        System.out.print("도서 제목 입력 : ");
-        return sc.nextLine();
+    public void findBookByTitle() throws IOException {
+        String str = bookIO.inputBookTitleFind();
+        List<Book> bookList = bookService.findBookByTitle(str);
+        bookIO.outputBookList(bookList);
     }
-*/
+
+    public void updateBookStatus(String updateType) throws IOException {
+        Boolean isPossible = null;
+        String bookStatus = null;
+
+        if(updateType.equals(APPLYRENT.name())){
+            long id = bookIO.inputRentBookId();
+            bookStatus = bookService.updateBookStatus(APPLYRENT.name(), id);
+            isPossible = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), id);
+        }else if(updateType.equals(APPLYRETURN.name())) {
+            long id = bookIO.inputReturnBookId();
+            bookService.updateBookStatus(APPLYRETURN.name(), id);
+            isPossible = bookService.isPossibleUpdateBookStatus(APPLYRETURN.name(), id);
+        }else if(updateType.equals(APPLYLOST.name())) {
+            long id = bookIO.inputLostBookId();
+            bookService.updateBookStatus(APPLYLOST.name(), id);
+            isPossible = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), id);
+        }else if(updateType.equals(APPLYDELETE.name())) {
+            long id = bookIO.inputDeleteBookId();
+            bookService.updateBookStatus(APPLYDELETE.name(), id);
+            isPossible = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), id);
+        }
+
+        bookIO.outputUpdateMsg(updateType, isPossible, bookStatus);
+    }
+
 }

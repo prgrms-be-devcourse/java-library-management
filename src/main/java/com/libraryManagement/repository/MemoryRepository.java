@@ -1,27 +1,40 @@
 package com.libraryManagement.repository;
 
-import com.libraryManagement.model.domain.Book;
+import com.libraryManagement.domain.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryRepository implements Repository {
+    private List<Book> memoryBookList;
+
+    public MemoryRepository() {
+        memoryBookList = new ArrayList<>();
+    }
+
     @Override
-    public List<Book> findAll() {
+    public List<Book> findAllBooks() {
         return null;
     }
 
     @Override
-    public Book findOne(String str) {
+    public List<Book> findBooksByTitle(String str) {
         return null;
     }
 
     @Override
-    public Book findOne(long id) {
+    public Book findBookById(long id) {
         return null;
     }
 
     @Override
-    public void bookInsert(Book book) {
+    public void insertBook(Book book) {
+        memoryBookList.add(book);
+    }
+
+    @Override
+    public void updateBookStatus(long id, String bookStatus) {
 
     }
+
 }

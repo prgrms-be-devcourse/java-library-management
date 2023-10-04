@@ -5,19 +5,17 @@ import com.libraryManagement.repository.Repository;
 
 public final class GlobalVariables {
 
-    private final Repository repository;
+    private Repository repository;
 
-    public static long numBook;
-    public static boolean isSelectMenu = false;
-    public static String mode;
+    public static long numCreatedBooks;
 
     public GlobalVariables(Repository repository) {
         this.repository = repository;
 
         if(repository.getClass() == MemoryRepository.class){
-            numBook = 0;
+            numCreatedBooks = 0;
         }else{
-            numBook = repository.findAll().size();
+            numCreatedBooks = repository.findAllBooks().size();
         }
     }
 }

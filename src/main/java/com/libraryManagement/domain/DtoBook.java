@@ -1,22 +1,14 @@
-package com.libraryManagement.model;
+package com.libraryManagement.domain;
 
-import com.libraryManagement.model.domain.Book;
-
-public class BookDTO{
-    private final long id;
+public class DtoBook {
     private final String title;
     private final String author;
     private final int pages;
 
-    public BookDTO(long id, String title, String author, int pages) {
-        this.id = id;
+    public DtoBook(String title, String author, int pages) {
         this.title = title;
         this.author = author;
         this.pages = pages;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getTitle() {
