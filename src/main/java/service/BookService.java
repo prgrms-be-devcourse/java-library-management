@@ -25,14 +25,14 @@ public class BookService {
 
     // [2] 도서 목록 조회
     public void showBookList() {
-        List<Book> bookList = repository.getBookList();
-        printBookList(bookList);
+        List<Book> books = repository.getBooks();
+        printBooks(books);
     }
 
     // [3] 도서 검색
     public void findBookByTitle(String title) {
-        List<Book> bookList = repository.findByTitle(title);
-        printBookList(bookList);
+        List<Book> books = repository.findByTitle(title);
+        printBooks(books);
     }
 
     // [4] 도서 대여
@@ -80,8 +80,8 @@ public class BookService {
         repository.remove(book);
     }
 
-    private void printBookList(List<Book> bookList) {
-        for (Book book : bookList) {
+    private void printBooks(List<Book> books) {
+        for (Book book : books) {
             if (book.isCleaning()) {
                 if (!book.isStillCleaning()) book.cleaningToAvailable();
             }

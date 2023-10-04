@@ -2,28 +2,33 @@ package repository;
 
 import domain.Book;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestRepository implements BookRepository {
-    private final List<Book> bookList = new ArrayList<>();
+    private final List<Book> books;
 
-    @Override
-    public void register(Book book) {
-        bookList.add(book);
+    public TestRepository(List<Book> books) {
+        this.books = books;
     }
 
     @Override
-    public List<Book> getBookList() {
-        return bookList;
+    public void register(Book book) {
+        books.add(book);
+    }
+
+    @Override
+    public List<Book> getBooks() {
+        return books;
     }
 
     @Override
     public List<Book> findByTitle(String title) {
-        return bookList.stream().filter(book -> book.getTitle().contains(title)).collect(Collectors.toList());
+        return books.stream()
+                .filter(book -> book.getTitle().contains(title))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -43,12 +48,12 @@ public class TestRepository implements BookRepository {
 
     @Override
     public void remove(Book book) {
-        bookList.remove(book);
+        books.remove(book);
     }
 
     @Override
     public Optional<Book> findById(Integer id) {
-        for (Book book : bookList) {
+        for (Book book : books) {
             if (Objects.equals(id, book.getId())) {
                 return Optional.of(book);
             }
@@ -58,7 +63,7 @@ public class TestRepository implements BookRepository {
 
     @Override
     public Integer createId() {
-        if (bookList.isEmpty()) return 1;
-        return bookList.get(bookList.size() - 1).getId() + 1;
+        if (books.isEmpty()) return 1;
+        return books.get(books.size() - 1).getId() + 1;
     }
 }

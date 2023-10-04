@@ -1,11 +1,12 @@
 import domain.Book;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
+import manager.FileManager;
 import manager.IOManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import repository.FileRepository;
+import repository.NormalRepository;
 import service.BookService;
 
 import java.util.List;
@@ -16,8 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class NormalServiceTest {
+    private final String PATH = "/src/test/resources/test_book_data.csv";
     private final IOManager ioManager = new IOManager();
-    private final FileRepository repository = new FileRepository("/src/test/resources/test_book_data.csv");
+    private final FileManager fileManager = new FileManager(PATH);
+    private final NormalRepository repository = new NormalRepository(PATH, fileManager.loadData());
     private final BookService service = new BookService(repository, ioManager);
 
     @AfterEach
@@ -35,7 +38,7 @@ public class NormalServiceTest {
 
         //when
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
 
         //then
         assertEquals(book.getTitle(), title);
@@ -51,10 +54,10 @@ public class NormalServiceTest {
         service.saveBook("사피엔스", "유발 하라리", 111);
         service.saveBook("사피엔솔로지", "송준호", 222);
         //when
-        List<Book> bookList = repository.findByTitle("사피");
+        List<Book> books = repository.findByTitle("사피");
         //then
-        assertEquals("사피엔스", bookList.get(0).getTitle());
-        assertEquals("사피엔솔로지", bookList.get(1).getTitle());
+        assertEquals("사피엔스", books.get(0).getTitle());
+        assertEquals("사피엔솔로지", books.get(1).getTitle());
     }
 
     @Test
@@ -62,7 +65,7 @@ public class NormalServiceTest {
     public void borrowBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when
         service.borrowBook(book.getId());
         //then
@@ -74,7 +77,7 @@ public class NormalServiceTest {
     public void returnBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when
         service.borrowBook(book.getId());
         service.returnBook(book.getId());
@@ -87,7 +90,7 @@ public class NormalServiceTest {
     public void lostBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         service.borrowBook(book.getId());
         //when
         service.reportLostBook(book.getId());
@@ -100,7 +103,7 @@ public class NormalServiceTest {
     public void returnLostBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when
         service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
@@ -115,7 +118,7 @@ public class NormalServiceTest {
     public void deleteBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when
         service.removeBook(book.getId());
         //then
@@ -128,11 +131,12 @@ public class NormalServiceTest {
     public void canNotBorrowLostBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.borrowBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.borrowBook(book.getId()));
         assertEquals("분실된 도서입니다.", e.getMessage());
     }
 
@@ -141,12 +145,13 @@ public class NormalServiceTest {
     public void canNotBorrowCleaningBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         service.borrowBook(book.getId());
         service.returnBook(book.getId());
 
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
         assertEquals("이미 반납되어 정리 중인 도서입니다.", e.getMessage());
     }
 
@@ -155,7 +160,7 @@ public class NormalServiceTest {
     public void checkCleaning() throws InterruptedException {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
 
         book.setCleanTimeForTest(); // 임의로 정리시간 10초로 설정
 
@@ -174,9 +179,10 @@ public class NormalServiceTest {
     public void canNotReturnAvailableBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.returnBook(book.getId()));
         assertEquals("원래 대여가 가능한 도서입니다.", e.getMessage());
     }
 
@@ -185,11 +191,12 @@ public class NormalServiceTest {
     public void canNotReportTwice() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         service.borrowBook(book.getId());
         service.reportLostBook(book.getId());
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
         assertEquals("이미 분실처리된 도서입니다.", e.getMessage());
     }
 
@@ -198,9 +205,10 @@ public class NormalServiceTest {
     public void canNotReportAvailableBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
         assertEquals("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.", e.getMessage());
     }
 
@@ -209,11 +217,12 @@ public class NormalServiceTest {
     public void canNotReportCleaningBook() {
         //given
         service.saveBook("개인주의자 선언", "문유석", 111);
-        Book book = repository.getBookList().get(0);
+        Book book = repository.getBooks().get(0);
         service.borrowBook(book.getId());
         service.returnBook(book.getId());
         //when then
-        UnchangeableStatusException e = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
+        UnchangeableStatusException e
+                = assertThrows(UnchangeableStatusException.class, () -> service.reportLostBook(book.getId()));
         assertEquals("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.", e.getMessage());
     }
 }

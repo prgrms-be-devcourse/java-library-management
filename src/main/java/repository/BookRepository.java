@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface BookRepository {
     void register(Book book);
 
-    List<Book> getBookList();
+    List<Book> getBooks();
 
     List<Book> findByTitle(String title);
 

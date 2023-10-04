@@ -17,7 +17,7 @@ public class FileManager {
 
     // file -> list
     public List<Book> loadData() {
-        List<Book> bookList = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -34,18 +34,18 @@ public class FileManager {
                         .status(BookStatus.valueOf(data[4]))
                         .returnTime(returnTime)
                         .build();
-                bookList.add(book);
+                books.add(book);
             }
         } catch (IOException e) {
             throw new RuntimeException();
         }
-        return bookList;
+        return books;
     }
 
     // list -> file
-    public void updateFile(List<Book> bookList) {
+    public void updateFile(List<Book> books) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
-            for (Book book : bookList) {
+            for (Book book : books) {
                 bw.write(book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getStatus() + "," + book.getReturnTime());
                 bw.newLine();
             }

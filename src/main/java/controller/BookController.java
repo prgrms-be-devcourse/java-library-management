@@ -1,14 +1,20 @@
 package controller;
 
+import domain.Book;
+import manager.FileManager;
 import manager.IOManager;
-import repository.FileRepository;
+import repository.NormalRepository;
 import repository.TestRepository;
 import service.BookService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookController {
     private BookService bookService;
     private final String PATH = "/src/main/resources/book_data.csv";
     private final IOManager ioManager = new IOManager();
+    private final FileManager fileManager = new FileManager(PATH);
 
     public void selectMode() {
         ioManager.printSelectMode();
@@ -23,14 +29,17 @@ public class BookController {
     }
 
     public void runMode(String mode) {
+        List<Book> books;
         switch (mode) {
             case "1" -> {
-                bookService = new BookService(new FileRepository(PATH), ioManager);
+                books = fileManager.loadData();
+                bookService = new BookService(new NormalRepository(PATH,  books), ioManager);
                 ioManager.printSystem("일반 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
             case "2" -> {
-                bookService = new BookService(new TestRepository(), ioManager);
+                books = new ArrayList<>();
+                bookService = new BookService(new TestRepository(books), ioManager);
                 ioManager.printSystem("테스트 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
