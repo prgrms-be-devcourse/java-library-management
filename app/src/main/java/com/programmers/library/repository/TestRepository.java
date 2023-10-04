@@ -44,9 +44,10 @@ public class TestRepository implements Repository {
 
     @Override
     public void update(int id, Book updatedBook) {
-        storage = storage.stream()
-                .map(book -> book.isIdEqualTo(id) ? updatedBook : book)
-                .collect(Collectors.toList());
+        storage.stream()
+                .filter(book -> book.isIdEqualTo(id))
+                .findFirst()
+                .ifPresent(book -> book = updatedBook);
     }
 
     @Override
@@ -60,5 +61,4 @@ public class TestRepository implements Repository {
     public void deleteAll() {
         storage.clear();
     }
-
 }

@@ -86,9 +86,10 @@ public class FileRepository implements Repository {
 
     @Override
     public void update(int id, Book updatedBook) {
-        storage = storage.stream()
-                .map(book -> book.isIdEqualTo(id) ? updatedBook : book)
-                .collect(Collectors.toList());
+        storage.stream()
+                .filter(book -> book.isIdEqualTo(id))
+                .findFirst()
+                .ifPresent(book -> book = updatedBook);
         saveToFile();
     }
 
