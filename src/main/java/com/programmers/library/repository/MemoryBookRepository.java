@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import com.programmers.library.entity.Book;
 
-public class MemoryRepository implements Repository {
+public class MemoryBookRepository implements BookRepository {
 	private final Map<Long, Book> bookMap;
 
-	public MemoryRepository() {
+	public MemoryBookRepository() {
 		bookMap = new LinkedHashMap<>();
 	}
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.programmers.library.entity.Book;
 
-public interface Repository {
+public interface BookRepository {
 	Book save(Book entity);
 
 	List<Book> findAll();

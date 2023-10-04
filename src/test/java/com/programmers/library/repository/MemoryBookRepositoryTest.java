@@ -1,8 +1,11 @@
 package com.programmers.library.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.programmers.library.entity.Book;
-import com.programmers.library.util.FileUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,33 +13,27 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class MemoryBookRepositoryTest {
 
-public class FileRepositoryTest {
-
-	private FileRepository repository;
-
-	private final static String TEST_FILE_PATH = "src/test/resources/data.json";
+	private MemoryBookRepository repository;
 
 	@BeforeEach
 	public void setUp() {
-		repository = new FileRepository(TEST_FILE_PATH);
-	}
-
-	@AfterEach
-	public void tearDown() {
-		FileUtils<Book> fileUtils = new FileUtils<>(TEST_FILE_PATH);
-		fileUtils.writeFile(List.of());
+		repository = new MemoryBookRepository();
 	}
 
 	@Test
 	@DisplayName("도서를 저장합니다")
 	public void testSave() {
-		Book book = new Book("Test Title", "Test Author", 100L);
+		//given
+		Book book = new Book("Test Book", "Test Author", 111L);
 
+		//when
 		Book savedBook = repository.save(book);
 
-		assertEquals("Test Title", savedBook.getTitle());
+		//then
+		assertNotNull(savedBook.getId());
+		assertEquals("Test Book", savedBook.getTitle());
 	}
 
 	@Test

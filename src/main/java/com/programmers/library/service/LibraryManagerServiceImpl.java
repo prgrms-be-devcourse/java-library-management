@@ -12,56 +12,56 @@ import com.programmers.library.dto.LostBookRequestDto;
 import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
 import com.programmers.library.exception.BookException;
-import com.programmers.library.repository.Repository;
+import com.programmers.library.repository.BookRepository;
 
 public class LibraryManagerServiceImpl implements LibarayManagerService {
 
-	private final Repository repository;
+	private final BookRepository bookRepository;
 
-	public LibraryManagerServiceImpl(Repository repository) {
-		this.repository = repository;
+	public LibraryManagerServiceImpl(BookRepository bookRepository) {
+		this.bookRepository = bookRepository;
 	}
 
 	@Override
 	public void addBook(AddBookRequestDto request) {
-		repository.save(request.toEntity());
+		bookRepository.save(request.toEntity());
 	}
 
 	@Override
 	public List<Book> getAllBooks() {
-		return repository.findAll();
+		return bookRepository.findAll();
 	}
 
 	@Override
 	public List<Book> findBooksByTitle(FindBookRequestDto request) {
-		return repository.findByTitleLike(request.getTitle());
+		return bookRepository.findByTitleLike(request.getTitle());
 	}
 
 	@Override
 	public void borrowBook(BorrowBookRequestDto request) {
-		Book book = repository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
+		Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
 		book.borrow();
-		repository.save(book);
+		bookRepository.save(book);
 	}
 
 	@Override
 	public void returnBook(ReturnBookRequestDto request) {
-		Book book = repository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
+		Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
 		book.returned();
-		repository.save(book);
+		bookRepository.save(book);
 	}
 
 	@Override
 	public void lostBook(LostBookRequestDto request) {
-		Book book = repository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
+		Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
 		book.lost();
-		repository.save(book);
+		bookRepository.save(book);
 	}
 
 	@Override
 	public void deleteBook(DeleteBookRequestDto request) {
-		Book book = repository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
-		repository.deleteById(book.getId());
+		Book book = bookRepository.findById(request.getId()).orElseThrow(() -> new BookException(BOOK_NOT_FOUND));
+		bookRepository.deleteById(book.getId());
 	}
 
 	// private void updateBookToAvailableAfterOrganizing(Book book) { // todo : 도서 정리중 -> 5분 뒤 대여 가능으로 변경
