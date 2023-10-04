@@ -10,7 +10,7 @@ import org.example.packet.responsePacket.ResponseSuccessWithNoData;
 
 import java.util.LinkedList;
 
-public class ResponsePrinter {
+public class MethodResponder {
     private final IO IO = ConsoleIO.getInstance();
 
     public void printResponse(ResponsePacket responsePacket) {
