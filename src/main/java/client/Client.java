@@ -1,6 +1,5 @@
 package client;
 
-import domain.Book;
 import repository.FileRepository;
 import repository.TestRepository;
 import service.Service;
@@ -36,38 +35,10 @@ public class Client {
     }
 
     private void selectFunction(){
-        int function = consoleManager.selectFunction();
-        switch (function) {
-            case 1 -> {
-                Book book = consoleManager.addBook();
-                service.addBook(book);
-                consoleManager.addBookResult();
-            }
-            case 2 -> {
-                consoleManager.getAll(service.getAll());
-            }
-            case 3 -> {
-                String keyword = consoleManager.searchName();
-                consoleManager.searchNamePrint(service.searchName(keyword));
-            }
-            case 4 -> {
-                int i = consoleManager.rentalBook();
-                service.rentalBook(i);
-            }
-            case 5 -> {
-                int i = consoleManager.returnBook();
-                service.organizeBook(i);
-            }
-            case 6 -> {
-                int i = consoleManager.lostBook();
-                service.lostBook(i);
-            }
-            case 7 -> {
-                int i = consoleManager.deleteBook();
-                service.deleteBook(i);
-            }
-            default -> {return;}
+        while(true){
+            int selectResult = consoleManager.selectFunction();
+            Function function = Function.of(selectResult);
+            function.excuteFunction(service, consoleManager);
         }
-        selectFunction();
     }
 }
