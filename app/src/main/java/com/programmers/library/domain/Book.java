@@ -64,7 +64,7 @@ public class Book {
             throw new IllegalStateException("[System] 원래 대여가 가능한 도서입니다.");
         }
 
-        if (status == BookStatus.BORROWABLE || !isBorrowable()) {
+        if (status == BookStatus.ORGANIZING && !isBorrowable()) {
             throw new IllegalStateException("[System] 이미 반납된 도서입니다.");
         }
 
@@ -86,11 +86,16 @@ public class Book {
 
     @JsonIgnore
     public boolean isBorrowable() {
-        if (returnedAt == null) {
+        if (status == BookStatus.BORROWABLE) {
             return true;
         }
-        long minutesElapsed = Duration.between(returnedAt, LocalDateTime.now()).toMinutes();
-        return minutesElapsed > 5;
+
+        if (status == BookStatus.ORGANIZING) {
+            long minutesElapsed = Duration.between(returnedAt, LocalDateTime.now()).toMinutes();
+            return minutesElapsed > 5;
+        }
+
+        return false;
     }
 
     public int getId() {
