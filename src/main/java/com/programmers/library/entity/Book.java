@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.programmers.library.exception.BookException;
+import com.programmers.library.util.IdGeneratorUtils;
 
 @JsonIgnoreProperties({"borrowed", "available", "lost", "organizing"})
 public class Book {
@@ -29,6 +30,7 @@ public class Book {
 	}
 
 	public Book(String title, String author, Long pages) {
+		this.id = IdGeneratorUtils.generateId();
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
@@ -53,7 +55,7 @@ public class Book {
 	}
 
 	@Override
-	public String toString() { // res dto 참고!
+	public String toString() {
 		return String.format(
 			"%n도서번호 : %d%n" +
 				"제목 : %s%n" +
@@ -132,13 +134,5 @@ public class Book {
 
 	public LocalDateTime getReturnedAt() {
 		return returnedAt;
-	}
-
-	public boolean finishedOrganizing() {
-		return status == BookStatus.ORGANIZING && returnedAt.plusMinutes(5).isBefore(LocalDateTime.now());
-	}
-
-	public void updateToAvailble() {
-		status = BookStatus.AVAILABLE;
 	}
 }

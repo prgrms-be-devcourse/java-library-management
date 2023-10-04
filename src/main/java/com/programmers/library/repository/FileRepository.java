@@ -8,26 +8,23 @@ import java.util.Optional;
 
 import com.programmers.library.entity.Book;
 import com.programmers.library.util.FileUtils;
+import com.programmers.library.util.IdGeneratorUtils;
 
 public class FileRepository implements Repository {
 
 	private final Map<Long, Book> bookMap;
 	private final FileUtils<Book> fileUtils; // csv, json, 파일 형태에 따른 util
-	private Long sequence;
 
 	public FileRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
 		bookMap = new LinkedHashMap<>();
 		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
-		sequence = bookList.stream().mapToLong(Book::getId).max().orElse(0);
+		IdGeneratorUtils.initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0));
 	}
 
 	@Override
 	public Book save(Book entity) {
-		if (entity.getId() == null) {
-			entity.setId(++sequence);
-		}
 		bookMap.put(entity.getId(), entity);
 		List<Book> bookList = new ArrayList<>();
 		bookMap.forEach((key, value) -> bookList.add(value));
