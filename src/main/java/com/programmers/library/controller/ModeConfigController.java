@@ -12,13 +12,13 @@ import com.programmers.library.repository.Repository;
 import com.programmers.library.service.LibarayManagerService;
 import com.programmers.library.service.LibraryManagerServiceImpl;
 
-public class ModeController implements Runnable {
+public class ModeConfigController implements Runnable {
 
 	private final static String FILE_PATH = "src/main/resources/data.json";
 	private final Input input;
 	private final Output output;
 
-	public ModeController(Input input, Output output) {
+	public ModeConfigController(Input input, Output output) {
 		this.input = input;
 		this.output = output;
 	}
