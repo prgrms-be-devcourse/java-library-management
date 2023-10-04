@@ -8,7 +8,7 @@ import java.util.Arrays;
 public enum Function {
     ADD(1) {
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             Book book = consoleManager.addBook();
             service.addBook(book);
             consoleManager.addBookResult();
@@ -16,41 +16,41 @@ public enum Function {
     },
     GETALL(2){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             consoleManager.getAll(service.getAll());
         }
     },
     SEARCH(3){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             String keyword = consoleManager.searchName();
             consoleManager.searchNamePrint(service.searchName(keyword));
         }
     },
     RENTAL(4){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.rentalBook();
             service.rentalBook(i);
         }
     },
     RETURN(5){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.returnBook();
             service.organizeBook(i);
         }
     },
     LOST(6){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.lostBook();
             service.lostBook(i);
         }
     },
     DELETE(7){
         @Override
-        public void excuteFunction(Service service, ConsoleManager consoleManager) {
+        public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.deleteBook();
             service.deleteBook(i);
         }
@@ -64,14 +64,14 @@ public enum Function {
 
     public static Function of(int userSelect){
         return Arrays.stream(values())
-                .filter(functionNumber -> functionNumber.isEqauls(userSelect))
+                .filter(functionNumber -> functionNumber.isEquals(userSelect))
                 .findFirst()
                 .orElseThrow();
     }
 
-    private boolean isEqauls(int userSelect){
+    private boolean isEquals(int userSelect){
         return this.functionNumber==userSelect;
     }
 
-    public abstract void excuteFunction(Service service, ConsoleManager consoleManager);
+    public abstract void excute(Service service, ConsoleManager consoleManager);
 }

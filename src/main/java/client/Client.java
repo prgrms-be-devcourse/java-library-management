@@ -38,7 +38,7 @@ public class Client {
         while(true){
             int selectResult = consoleManager.selectFunction();
             Function function = Function.of(selectResult);
-            function.excuteFunction(service, consoleManager);
+            function.excute(service, consoleManager);
         }
     }
 }
