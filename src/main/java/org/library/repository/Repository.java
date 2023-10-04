@@ -14,5 +14,5 @@ public interface Repository {
     void delete(Book book);
     void processAvailable();
 
-    void saveFile();
+    void flush();
 }

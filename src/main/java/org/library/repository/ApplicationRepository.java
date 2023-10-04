@@ -29,7 +29,7 @@ public class ApplicationRepository implements Repository{
         } else{
             add(book);
         }
-        saveFile();
+        flush();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ApplicationRepository implements Repository{
             throw new NotExistError();
         }
         bookMap.remove(book.getId());
-        saveFile();
+        flush();
 
     }
 
@@ -85,7 +85,7 @@ public class ApplicationRepository implements Repository{
     }
 
     @Override
-    public void saveFile(){
+    public void flush(){
         fileManager.write(findAll());
     }
 }

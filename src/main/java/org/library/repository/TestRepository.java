@@ -69,6 +69,6 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public void saveFile() {
+    public void flush() {
     }
 }
