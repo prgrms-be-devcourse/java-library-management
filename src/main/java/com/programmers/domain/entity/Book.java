@@ -30,8 +30,27 @@ public class Book {
         this.status = BookStatus.RENTED;
     }
 
+    public void updateBookStatusToOrganizing() {
+        validateCanBeOrganizing();
+        this.status = BookStatus.ORGANIZING;
+    }
+
+
+    public void updateBookStatusToAvailable() {
+        validateCanBeAvailable();
+        this.status = BookStatus.AVAILABLE;
+    }
+
     private void validateCanBeRented() {
         BookStatus.checkIfRentable(this.status);
+    }
+
+    private void validateCanBeAvailable() {
+        BookStatus.checkIfAvailable(this.status);
+    }
+
+    private void validateCanBeOrganizing() {
+        BookStatus.checkIfOrganizable(this.status);
     }
 
 }

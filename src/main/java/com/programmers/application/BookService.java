@@ -15,6 +15,8 @@ import java.util.function.Consumer;
 public class BookService {
 
     private final BookRepository repository;
+    private final BookScheduler bookScheduler;
+
     public Long registerBook(RegisterBookReq registerBookReq) {
         repository.findByTitle(registerBookReq.getTitle()).stream()
             .filter(book -> book.getTitle().equals(registerBookReq.getTitle()))
@@ -45,5 +47,34 @@ public class BookService {
         updateBookStatus(id, Book::updateBookStatusToRent);
     }
 
+    // 반납
+    public void returnBook(Long id) {
+        updateBookStatus(id, this::organizeBook);
+    }
+
+    private void updateBookStatus(Long id, Consumer<Book> statusUpdater) {
+        repository.findById(id).ifPresentOrElse(book -> {
+            statusUpdater.accept(book);
+            repository.update(book);
+        }, () -> {
+            throw new BookNotFoundException();
+        });
+    }
+
+    private void updateBookStatusToAvailable(Long id) {
+        // 삭제 되었을때를 고려.
+        repository.findById(id).ifPresent(book -> {
+            book.updateBookStatusToAvailable();
+            repository.update(book);
+        });
+    }
+
+    private void organizeBook(Book book) {
+        book.updateBookStatusToOrganizing();
+        scheduleStatusUpdateToAvailable(book);
+    }
+
+    private void scheduleStatusUpdateToAvailable(Book book) {
+        bookScheduler.scheduleBookAvailableTask(() -> updateBookStatusToAvailable(book.getId()));
     }
 }

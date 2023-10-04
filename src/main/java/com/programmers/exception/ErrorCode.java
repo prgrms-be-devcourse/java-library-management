@@ -7,11 +7,17 @@ public enum ErrorCode {
     INVALID_INPUT("invalid.input"),
     INVALID_EXIT("invalid.exit"),
     INVALID_MENU_NUMBER("invalid.menu"),
+    DUPLICATE_BOOK("duplicate.book"),
+    NOT_FOUND_BOOK("not.found.book"),
+    FAILED_RENT_BOOK("failed.rent.book"),
+    FAILED_RETURN_BOOK("failed.return.book"),
+    FAILED_LOST_BOOK("failed.lost.book"),
     ;
 
     ErrorCode(String key) {
         this.key = key;
     }
+
     private final String key;
 
     public String getMessage() {

@@ -24,6 +24,9 @@ public class BookController {
         return bookService.searchBook(title);
     }
 
+    public void returnBook(Long id) {
+        bookService.returnBook(id);
+    }
     public void deleteBook(Long id) {
         bookService.deleteBook(id);
     }
