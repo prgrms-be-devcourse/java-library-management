@@ -10,33 +10,37 @@ public class BookController {
     private final String PATH = "/src/main/resources/book_data.csv";
     private final IOManager io = new IOManager();
 
-    public void selectMode(){
+    public void selectMode() {
         io.printSelectMode();
         String mode;
         try {
             mode = io.getInput();
-        } catch (Exception e){
-            io.printSystem(e.getMessage()); return;
+        } catch (Exception e) {
+            io.printSystem(e.getMessage());
+            return;
         }
+        runMode(mode);
+    }
 
-        switch (mode){
-            case "1"->{
+    public void runMode(String mode) {
+        switch (mode) {
+            case "1" -> {
                 bookService = new BookService(new FileRepository(PATH));
                 io.printSystem("일반 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
-            case "2"->{
+            case "2" -> {
                 bookService = new BookService(new TestRepository());
                 io.printSystem("테스트 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }
-            default-> io.printSystem("잘못된 입력입니다.");
+            default -> io.printSystem("잘못된 입력입니다.");
         }
     }
 
-    public void selectFunction(){
-        String function="";
-        while (!function.equals("8")){
+    public void selectFunction() {
+        String function = "";
+        while (!function.equals("8")) {
             io.printSelectFunction();
             try {
                 function = io.getInput();
@@ -49,16 +53,14 @@ public class BookController {
                     case "6" -> reportLostBook();
                     case "7" -> deleteBook();
                 }
-            }
-            catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 io.printSystem("숫자를 입력해주세요.");
-            }
-
-            catch (Exception e){
+            } catch (Exception e) {
                 io.printSystem(e.getMessage());
             }
         }
     }
+
     private void reportLostBook() throws Exception {
         io.printSystem("도서 분실 처리 메뉴로 넘어갑니다.");
         io.printQuestion("분실 처리할 도서번호를 입력하세요.");
@@ -104,7 +106,7 @@ public class BookController {
         io.printQuestion("페이지 수를 입력하세요.");
         Integer page = Integer.parseInt(io.getInput());
 
-        bookService.saveBook(title,author,page);
+        bookService.saveBook(title, author, page);
 
         io.printSystem("도서 등록이 완료되었습니다.");
     }
@@ -112,7 +114,7 @@ public class BookController {
     private void deleteBook() throws Exception {
         io.printSystem("도서 삭제 처리 메뉴로 넘어갑니다.");
         io.printQuestion("삭제 처리할 도서번호를 입력하세요.");
-        Integer id =Integer.valueOf(io.getInput());
+        Integer id = Integer.valueOf(io.getInput());
         bookService.removeBook(id);
         io.printSystem("도서가 삭제 처리 되었습니다.");
     }
