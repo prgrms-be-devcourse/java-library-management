@@ -2,8 +2,11 @@ package com.programmers.infrastructure.repository;
 
 import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 public class ListBookRepository implements BookRepository {
     private final List<Book> books = Collections.synchronizedList(new ArrayList<>());
 
@@ -37,7 +40,7 @@ public class ListBookRepository implements BookRepository {
 
     @Override
     public List<Book> findByTitle(String title) {
-        return null;
+        return books.stream().filter(book -> book.getTitle().contains(title)).toList();
     }
 }
 
