@@ -14,7 +14,7 @@ public class ConsoleInput  {
 
 
     public Long selectNumber() {
-        return InputValidator.checkNumberValidate(scanner);
+        return InputValidator.checkNumber(scanner);
     }
 
 

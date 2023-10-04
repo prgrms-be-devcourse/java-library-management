@@ -19,6 +19,8 @@ public class LibraryService {
     }
 
     public void registerBook(String title, String author, Integer page) {
+        checkBookInfo(title, author, page);
+
         Long lastId = repository.findLastId() + 1;
 
         repository.register(createRentableBook(lastId, title, author, page));
@@ -95,6 +97,18 @@ public class LibraryService {
             case LOST -> {
                 throw ExceptionHandler.err(ErrorCode.ALREADY_LOST_EXCEPTION);
             }
+        }
+    }
+
+    private static void checkBookInfo(String title, String author, Integer page) {
+        if (title.isEmpty() || author.isEmpty() || page == null) {
+            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_INFO_EXCEPTION);
+        }
+        if (page <= 0) {
+            throw ExceptionHandler.err(ErrorCode.NEGATIVE_PAGE_EXCEPTION);
+        }
+        if (title.length() > 100) {
+            throw ExceptionHandler.err(ErrorCode.LIMIT_TITLE_LENGTH_EXCEPTION);
         }
     }
 }
