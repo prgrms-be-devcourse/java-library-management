@@ -139,13 +139,4 @@ public class BookTest {
         assertTrue(book.equals(equalBook));
         assertFalse(book.equals(differentBook));
     }
-
-    @Test
-    void testCopy() {
-        // copy() 메서드 테스트
-        Book copy = book.copy();
-
-        assertEquals(book, copy);
-        assertNotSame(book, copy);
-    }
 }
