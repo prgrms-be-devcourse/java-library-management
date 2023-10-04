@@ -1,5 +1,9 @@
 package com.programmers.domain.enums;
 
+import static com.programmers.exception.ErrorCode.FAILED_RENT_BOOK_LOST;
+import static com.programmers.exception.ErrorCode.FAILED_RENT_BOOK_ORGANIZING;
+import static com.programmers.exception.ErrorCode.FAILED_RENT_BOOK_RENTED;
+
 import com.programmers.exception.unchecked.BookLostFailedException;
 import com.programmers.exception.unchecked.BookRentFailedException;
 import com.programmers.exception.unchecked.BookReturnFailedException;
@@ -22,7 +26,14 @@ public enum BookStatus {
 
     public static void checkIfRentable(BookStatus status) {
         if (status != AVAILABLE) {
-            throw new BookRentFailedException();
+            switch (status) {
+                case RENTED:
+                    throw new BookRentFailedException(FAILED_RENT_BOOK_RENTED);
+                case ORGANIZING:
+                    throw new BookRentFailedException(FAILED_RENT_BOOK_ORGANIZING);
+                case LOST:
+                    throw new BookRentFailedException(FAILED_RENT_BOOK_LOST);
+            }
         }
     }
 
