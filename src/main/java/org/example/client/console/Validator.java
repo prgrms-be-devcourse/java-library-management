@@ -19,7 +19,7 @@ public class Validator {
         throw new ValidateException() {
             @Override
             public String getMessage() {
-                return "\n[System] 유효하지 않은 문자열입니다.(빈 문자열/특수문자 불가능, 1~99자 문자열만 가능)\n";
+                return System.lineSeparator() + "[System] 유효하지 않은 문자열입니다.(빈 문자열/특수문자 불가능, 1~99자 문자열만 가능)" + System.lineSeparator();
             }
         };
     }
@@ -34,7 +34,7 @@ public class Validator {
         throw new ValidateException() {
             @Override
             public String getMessage() {
-                return "\n[System] 유효하지 않은 숫자입니다.(1~4999 범위의 정수만 가능)\n";
+                return System.lineSeparator() + "[System] 유효하지 않은 숫자입니다.(1~4999 범위의 정수만 가능)" + System.lineSeparator();
             }
         };
     }
@@ -49,7 +49,7 @@ public class Validator {
         throw new ValidateException() {
             @Override
             public String getMessage() {
-                return "\n[System] 유효하지 않은 선택 번호입니다. 선택지 안에서 번호를 입력해주세요.\n";
+                return System.lineSeparator() + "[System] 유효하지 않은 선택 번호입니다. 선택지 안에서 번호를 입력해주세요." + System.lineSeparator();
             }
         };
     }

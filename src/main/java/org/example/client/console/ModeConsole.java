@@ -20,11 +20,11 @@ public class ModeConsole {
     }
 
     public enum ModeType {
-        COMMON(1, "1. 일반 모드", "\n[System] 일반 모드로 애플리케이션을 실행합니다.\n"),
-        TEST(2, "2. 테스트 모드", "\n[System] 테스트 모드로 애플리케이션을 실행합니다.\n");
+        COMMON(1, "1. 일반 모드", System.lineSeparator() + "[System] 일반 모드로 애플리케이션을 실행합니다." + System.lineSeparator()),
+        TEST(2, "2. 테스트 모드", System.lineSeparator() + "[System] 테스트 모드로 애플리케이션을 실행합니다." + System.lineSeparator());
 
-        public static final String MODE_CONSOLE = "\nQ. 모드를 선택해주세요.\n"
-                + String.join("", Stream.of(values()).map(type -> type.name + "\n").toArray(String[]::new)) + "\n> ";
+        public static final String MODE_CONSOLE = System.lineSeparator() + "Q. 모드를 선택해주세요." + System.lineSeparator()
+                + String.join("", Stream.of(values()).map(type -> type.name + System.lineSeparator()).toArray(String[]::new)) + System.lineSeparator() + "> ";
         private static final Map<Integer, ModeType> BY_NUMBER =
                 Stream.of(values()).collect(Collectors.toMap(ModeType::getNum, Function.identity()));
         public final String alert;

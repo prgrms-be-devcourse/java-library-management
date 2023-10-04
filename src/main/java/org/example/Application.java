@@ -17,7 +17,7 @@ public class Application {
             }
         } catch (RuntimeException e) {
             server.saveData();
-            System.err.print("\n>> 시스템 에러 발생! 프로그램을 종료합니다.\n");
+            System.err.print(System.lineSeparator() + ">> 시스템 에러 발생! 프로그램을 종료합니다." + System.lineSeparator());
             System.err.println(e);
         }
     }

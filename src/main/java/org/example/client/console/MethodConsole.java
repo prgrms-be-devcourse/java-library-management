@@ -64,19 +64,19 @@ public class MethodConsole {
     }
 
     public enum MethodType {
-        REGISTER(1, "1. 도서 등록", "\n[System] 도서 등록 메뉴로 넘어갑니다.\n", new ArrayList<>(Arrays.asList(
-                ("Q. 등록할 도서 제목을 입력하세요.\n\n> "),
-                ("Q. 작가 이름을 입력하세요.\n\n> "),
-                ("Q. 페이지 수를 입력하세요.\n\n> ")
+        REGISTER(1, "1. 도서 등록", System.lineSeparator() + "[System] 도서 등록 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList(
+                ("Q. 등록할 도서 제목을 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> "),
+                ("Q. 작가 이름을 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> "),
+                ("Q. 페이지 수를 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> ")
         )), MethodConsole::scanAndSetBookInfo),
-        READ_ALL(2, "2. 전체 도서 목록 조회", "\n[System] 전체 도서 목록입니다.\n", new ArrayList<>(), (io -> new RequestData())),
-        SEARCH_BY_NAME(3, "3. 제목으로 도서 검색", "\n[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n\n", new ArrayList<>(Arrays.asList("Q. 검색할 도서 제목 일부를 입력하세요.\n\n> ")), MethodConsole::scanAndSetBookName),
-        BORROW(4, "4. 도서 대여", "\n[System] 도서 대여 메뉴로 넘어갑니다.\n", new ArrayList<>(Arrays.asList("Q. 대여할 도서번호를 입력하세요\n\n> ")), MethodConsole::scanAndSetBookId),
-        RESTORE(5, "5. 도서 반납", "\n[System] 도서 반납 메뉴로 넘어갑니다.\n", new ArrayList<>(Arrays.asList("Q. 반납할 도서번호를 입력하세요\n\n> ")), MethodConsole::scanAndSetBookId),
-        LOST(6, "6. 도서 분실", "\n[System] 도서 분실 처리 메뉴로 넘어갑니다.\n", new ArrayList<>(Arrays.asList("Q. 분실 처리할 도서번호를 입력하세요\n\n> ")), MethodConsole::scanAndSetBookId),
-        DELETE(7, "7. 도서 삭제", "\n[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n", new ArrayList<>(Arrays.asList("Q. 삭제 처리할 도서번호를 입력하세요\n\n> ")), MethodConsole::scanAndSetBookId);
-        public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요.\n"
-                + String.join("", Stream.of(values()).map(type -> type.name + "\n").toArray(String[]::new)) + "\n> ";
+        READ_ALL(2, "2. 전체 도서 목록 조회", System.lineSeparator() + "[System] 전체 도서 목록입니다." + System.lineSeparator(), new ArrayList<>(), (io -> new RequestData())),
+        SEARCH_BY_NAME(3, "3. 제목으로 도서 검색", System.lineSeparator() + "[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n\n", new ArrayList<>(Arrays.asList("Q. 검색할 도서 제목 일부를 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookName),
+        BORROW(4, "4. 도서 대여", System.lineSeparator() + "[System] 도서 대여 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 대여할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
+        RESTORE(5, "5. 도서 반납", System.lineSeparator() + "[System] 도서 반납 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 반납할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
+        LOST(6, "6. 도서 분실", System.lineSeparator() + "[System] 도서 분실 처리 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 분실 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
+        DELETE(7, "7. 도서 삭제", System.lineSeparator() + "[System] 도서 삭제 처리 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 삭제 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId);
+        public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요." + System.lineSeparator()
+                + String.join("", Stream.of(values()).map(type -> type.name + System.lineSeparator()).toArray(String[]::new)) + System.lineSeparator() + "> ";
         private static final Map<Integer, MethodType> BY_NUMBER =
                 Stream.of(values()).collect(Collectors.toMap(MethodType::getNum, Function.identity()));
         public final String alert;

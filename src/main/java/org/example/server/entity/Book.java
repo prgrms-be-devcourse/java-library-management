@@ -30,11 +30,11 @@ public class Book {
 
     @Override
     public String toString() {
-        return "\n도서번호 : " + id + "\n" +
-                "제목 : " + name + "\n"
-                + "작가 이름 : " + author + "\n"
-                + "페이지 수 : " + pages + " 페이지\n" +
-                "상태 : " + BookState.valueOf(state).getStatus() + "\n" +
-                "\n------------------------------\n";
+        return System.lineSeparator() + "도서번호 : " + id + System.lineSeparator() +
+                "제목 : " + name + System.lineSeparator()
+                + "작가 이름 : " + author + System.lineSeparator()
+                + "페이지 수 : " + pages + " 페이지" + System.lineSeparator() +
+                "상태 : " + BookState.valueOf(state).getStatus() + System.lineSeparator() +
+                System.lineSeparator() + "------------------------------" + System.lineSeparator();
     }
 }
