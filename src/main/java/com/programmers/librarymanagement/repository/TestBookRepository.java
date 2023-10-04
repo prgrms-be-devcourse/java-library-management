@@ -20,14 +20,14 @@ public class TestBookRepository implements BookRepository {
     @Override
     public Optional<Book> findById(Long id) {
         return testStorage.stream()
-                .filter(book -> book.getId().equals(id))
+                .filter(book -> book.isSame(id))
                 .findAny();
     }
 
     @Override
     public List<Book> findByTitle(String title) {
         return testStorage.stream()
-                .filter(book -> book.getTitle().contains(title))
+                .filter(book -> book.isContain(title))
                 .toList();
     }
 

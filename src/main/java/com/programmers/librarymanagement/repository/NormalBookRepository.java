@@ -27,7 +27,7 @@ public class NormalBookRepository implements BookRepository {
     @Override
     public List<Book> findByTitle(String title) {
         return libraryStorage.values().stream()
-                .filter(book -> book.getTitle().contains(title))
+                .filter(book -> book.isContain(title))
                 .toList();
     }
 
