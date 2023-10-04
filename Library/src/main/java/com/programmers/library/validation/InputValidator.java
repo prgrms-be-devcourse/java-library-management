@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class InputValidator {
 
-    public static Long checkNumberValidate(Scanner scanner){
+    public static Long checkNumber(Scanner scanner){
         try{
             return Long.valueOf(scanner.nextLine());
         }catch (InputMismatchException e){

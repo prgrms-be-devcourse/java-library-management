@@ -41,8 +41,12 @@ public class Menu {
         output.write("\nQ. 페이지 수를 입력하세요.\n\n> ");
         Integer page = Integer.parseInt(input.inputString());
 
-        libraryService.registerBook(title, author, page);
-        output.write("\n[System] 도서 등록이 완료되었습니다.\n\n");
+        try{
+            libraryService.registerBook(title, author, page);
+            output.write("\n[System] 도서 등록이 완료되었습니다.\n\n");
+        }catch (ExceptionHandler e){
+            output.write(lineSeparator() + e.getMessage());
+        }
     }
 
     public void findAllBooks(){
