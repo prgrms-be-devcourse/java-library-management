@@ -7,7 +7,7 @@ import org.example.client.io.IO;
 import org.example.packet.BookDto;
 import org.example.packet.requestPacket.*;
 
-public class MethodConsole {
+public class MethodRequester {
     private final IO IO = ConsoleIO.getInstance();
 
     public RequestPacket scanTypeAndInfo() {
