@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemoryBookRepository implements BookRepository {
-    final ConcurrentHashMap<String, Book> books = new ConcurrentHashMap<>();
+    final ConcurrentHashMap<Long, Book> books = new ConcurrentHashMap<>();
 
     @Override
     public Book save(Book book) {
@@ -16,7 +16,7 @@ public class MemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findById(String id) {
+    public Optional<Book> findById(Long id) {
         return Optional.ofNullable(books.get(id));
     }
 
@@ -26,17 +26,18 @@ public class MemoryBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteById(String id) {
-        books.remove(id);
+    public int deleteById(Long id) {
+        return books.remove(id) != null ? 1 : 0;
     }
 
     @Override
-    public void update(Book book) {
-
+    public int update(Book book) {
+        return books.replace(book.getId(), book) != null ? 1 : 0;
     }
 
     @Override
     public List<Book> findByTitle(String title) {
-        return null;
+        return books.values().stream().filter(book -> book.getTitle().contains(title)).toList();
     }
+
 }

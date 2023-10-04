@@ -14,7 +14,7 @@ public class ListBookRepository implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findById(String id) {
+    public Optional<Book> findById(Long id) {
         return books.stream().filter(book -> Objects.equals(book.getId(), id)).findAny();
     }
 
@@ -24,14 +24,15 @@ public class ListBookRepository implements BookRepository {
     }
 
     @Override
-    public void deleteById(String id) {
-        books.removeIf(book -> Objects.equals(book.getId(), id));
+    public int deleteById(Long id) {
+        return books.removeIf(book -> Objects.equals(book.getId(), id)) ? 1 : 0;
     }
 
     @Override
-    public void update(Book updatedBook) {
-        books.removeIf(book -> Objects.equals(book.getId(), updatedBook.getId()));
+    public int update(Book updatedBook) {
+        var result = books.removeIf(book -> Objects.equals(book.getId(), updatedBook.getId()));
         books.add(updatedBook);
+        return result ? 1 : 0;
     }
 
     @Override
