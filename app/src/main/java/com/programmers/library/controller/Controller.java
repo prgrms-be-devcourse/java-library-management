@@ -6,11 +6,10 @@ import com.programmers.library.service.Service;
 import com.programmers.library.util.ScannerUtil;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class Controller {
 
-    private final Scanner scanner = new Scanner(System.in);
+    private final ScannerUtil scannerUtil = ScannerUtil.getInstance();
     private final Service service;
 
     public Controller(Service service) {
@@ -21,7 +20,7 @@ public class Controller {
         while (true) {
             showFeatures();
 
-            int featureId = ScannerUtil.inputInt(scanner);
+            int featureId = scannerUtil.inputInt();
 
             try {
                 switch (featureId) {
@@ -33,7 +32,7 @@ public class Controller {
                     case 6 -> reportLostBook();
                     case 7 -> deleteBook();
                     default -> {
-                        scanner.close();
+                        scannerUtil.close();
                         System.exit(0);
                     }
                 }
@@ -63,17 +62,17 @@ public class Controller {
 
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
         System.out.print("> ");
-        String name = ScannerUtil.inputString(scanner);
+        String name = scannerUtil.inputString();
         request.setName(name);
 
         System.out.println("Q. 작가 이름을 입력하세요.");
         System.out.print("> ");
-        String author = ScannerUtil.inputString(scanner);
+        String author = scannerUtil.inputString();
         request.setAuthor(author);
 
         System.out.println("Q. 페이지 수를 입력하세요.");
         System.out.print("> ");
-        int pageCount = ScannerUtil.inputInt(scanner);
+        int pageCount = scannerUtil.inputInt();
         request.setPageCount(pageCount);
 
         service.createBook(request);
@@ -99,7 +98,7 @@ public class Controller {
 
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         System.out.print("> ");
-        String name = ScannerUtil.inputString(scanner);
+        String name = scannerUtil.inputString();
 
         List<Book> books = service.getBooksByName(name);
 
@@ -116,7 +115,7 @@ public class Controller {
 
         System.out.println("Q. 대여할 도서번호를 입력하세요");
         System.out.print("> ");
-        int id = ScannerUtil.inputInt(scanner);
+        int id = scannerUtil.inputInt();
 
         service.borrowBook(id);
 
@@ -128,7 +127,7 @@ public class Controller {
 
         System.out.println("Q. 반납할 도서번호를 입력하세요");
         System.out.print("> ");
-        int id = ScannerUtil.inputInt(scanner);
+        int id = scannerUtil.inputInt();
 
         service.returnBook(id);
 
@@ -141,7 +140,7 @@ public class Controller {
 
         System.out.println("Q. 분실 처리할 도서번호를 입력하세요");
         System.out.print("> ");
-        int id = ScannerUtil.inputInt(scanner);
+        int id = scannerUtil.inputInt();
 
         service.reportLostBook(id);
 
@@ -153,7 +152,7 @@ public class Controller {
 
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
         System.out.print("> ");
-        int id = ScannerUtil.inputInt(scanner);
+        int id = scannerUtil.inputInt();
 
         service.deleteBook(id);
 

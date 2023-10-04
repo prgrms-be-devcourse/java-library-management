@@ -3,11 +3,13 @@ package com.programmers.library.util;
 import java.util.Scanner;
 
 public class ScannerUtil {
+    private final static ScannerUtil instance = new ScannerUtil();
+    private final Scanner scanner = new Scanner(System.in);
 
     private ScannerUtil() {
     }
 
-    public static int inputInt(Scanner scanner) {
+    public int inputInt() {
         int result = 0;
         String input = scanner.nextLine().trim();
 
@@ -20,8 +22,15 @@ public class ScannerUtil {
         return result;
     }
 
-    public static String inputString(Scanner scanner) {
+    public String inputString() {
         return scanner.nextLine().trim();
     }
 
+    public void close() {
+        scanner.close();
+    }
+
+    public static ScannerUtil getInstance() {
+        return instance;
+    }
 }

@@ -5,20 +5,14 @@ package com.programmers.library;
 
 import com.programmers.library.util.ScannerUtil;
 
-import java.util.Scanner;
-
 public class App {
     public static void run() {
         Mode.showModes();
 
-        Scanner scanner = new Scanner(System.in);
-        int modeId = ScannerUtil.inputInt(scanner);
-
+        int modeId = ScannerUtil.getInstance().inputInt();
 
         Mode mode = Mode.selectMode(modeId);
         mode.run();
-
-        scanner.close();
     }
 
     public static void main(String[] args) {
