@@ -5,10 +5,7 @@ import org.example.server.entity.BookState;
 import org.example.server.exception.BookNotFoundException;
 import org.example.server.exception.ServerException;
 import org.example.server.repository.InMemoryRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,9 +14,9 @@ class BookServiceTest {
     static InMemoryRepository repository;
     static BookService service;
 
-    @BeforeAll
+    @BeforeEach
     @DisplayName("테스트 레포지토리로 각 상태에 있는 책 저장")
-    static void beforeAll() {
+    void beforeEach() {
         System.out.println("@BeforeAll");
         repository = new InMemoryRepository();
         service = new BookService(repository);
