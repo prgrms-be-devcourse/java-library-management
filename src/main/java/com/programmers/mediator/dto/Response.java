@@ -1,5 +1,10 @@
 package com.programmers.mediator.dto;
 
+import java.util.Optional;
+
 public interface Response<T> {
-    T getResponse();
+
+    Optional<T> getBody();
+
+    String getMessage();
 }

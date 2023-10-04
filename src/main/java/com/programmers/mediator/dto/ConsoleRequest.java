@@ -1,23 +1,32 @@
 package com.programmers.mediator.dto;
 
-import lombok.Builder;
+import java.util.Optional;
 
-public class ConsoleRequest implements Request<String> {
-    private final String request;
+public class ConsoleRequest<T> implements Request<T> {
 
-    @Builder
-    private ConsoleRequest(String request) {
-        this.request = request;
+    private final T body;
+    private final String pathInfo;
+
+    private ConsoleRequest(T body, String pathInfo) {
+        this.body = body;
+        this.pathInfo = pathInfo;
     }
 
     @Override
-    public String getRequest() {
-        return request;
+    public Optional<T> getBody() {
+        return Optional.ofNullable(body);
     }
 
-    public static ConsoleRequest of(String request) {
-        return ConsoleRequest.builder()
-                .request(request)
-                .build();
+    @Override
+    public String getPathInfo() {
+        return pathInfo;
+    }
+
+    public static <T> ConsoleRequest<T> withBodyRequest(T body, String pathInfo) {
+        return new ConsoleRequest<>(body, pathInfo);
+    }
+
+    public static <T> ConsoleRequest<T> noBodyRequest(String pathInfo) {
+        return new ConsoleRequest<>(null, pathInfo);
     }
 }

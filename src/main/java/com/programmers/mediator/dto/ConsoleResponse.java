@@ -1,23 +1,37 @@
 package com.programmers.mediator.dto;
 
-import lombok.Builder;
+import java.util.Optional;
 
-public class ConsoleResponse implements Response<String>{
-    private final String response;
+public class ConsoleResponse<T> implements Response<T> {
 
-    @Builder
-    private ConsoleResponse(String response) {
-        this.response = response;
+    private final String message;
+    private final T body;
+
+    private ConsoleResponse(String message, T body) {
+        this.message = message;
+        this.body = body;
+    }
+
+    private ConsoleResponse(String message) {
+        this.message = message;
+        this.body = null;
     }
 
     @Override
-    public String getResponse() {
-        return response;
+    public Optional<T> getBody() {
+        return Optional.ofNullable(body);
     }
 
-    public static ConsoleResponse of(String response) {
-        return ConsoleResponse.builder()
-                .response(response)
-                .build();
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public static <T> ConsoleResponse<T> noBodyResponse(String message) {
+        return new ConsoleResponse<>(message);
+    }
+
+    public static <T> ConsoleResponse<T> withBodyResponse(String message, T body) {
+        return new ConsoleResponse<>(message, body);
     }
 }

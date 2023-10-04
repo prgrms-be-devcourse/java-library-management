@@ -1,37 +1,49 @@
 package com.programmers.mediator;
 
-import com.programmers.domain.enums.MenuCommand;
+import com.programmers.adapter.BookControllerAdapter;
+import com.programmers.domain.entity.Book;
+import com.programmers.presentation.enums.Menu;
 import com.programmers.exception.checked.InvalidMenuNumberException;
-import com.programmers.mediator.dto.ConsoleRequest;
+import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
+import com.programmers.infrastructure.MenuRequestProvider;
 import com.programmers.mediator.dto.Request;
 import com.programmers.mediator.dto.Response;
-import com.programmers.presentation.Controller;
-import com.programmers.presentation.UserInteraction;
-import com.programmers.util.Messages;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RequiredArgsConstructor
-public class ConsoleRequestProcessor implements RequestProcessor<String,String> {
-    private final Controller controller;
-    private final UserInteraction userInteraction;
+public class ConsoleRequestProcessor implements RequestProcessor<String, String> {
+
+    private final BookControllerAdapter bookControllerAdapter;
+    private final ConsoleInteractionAggregator consoleInteractionAggregator;
+    private final MenuRequestProvider menuRequestProvider;
 
     @Override
-    public Request<String> getRequest() {
-        userInteraction.displayMessage(Messages.SELECT_MENU.getMessage());
-        return ConsoleRequest.of(userInteraction.collectUserInput());
-    }
-
-    @Override
-    public void sendResponse(Response<String> response) {
-        userInteraction.displayMessage(response.getResponse());
-    }
-
-    @Override
-    public Response<String> processRequest(Request<String> request) {
+    public Request getRequest() {
+        // 모드 선택 받아서 리퀘스트 만들기까지.
         try {
-            return MenuCommand.routeToControllerByOptionNum(request.getRequest(), controller);
+            return menuRequestProvider.getMenuRequest(
+                consoleInteractionAggregator.collectMenuInput());
         } catch (InvalidMenuNumberException e) {
-            userInteraction.displayMessage(e.getMessage());
+            consoleInteractionAggregator.displayMessage(e.getMessage());
+            return getRequest();
+        }
+    }
+
+    @Override
+    public void sendResponse(Response response) {
+        response.getBody()
+            .ifPresent(body -> consoleInteractionAggregator.displayBooksInfo((List<Book>) body));
+        consoleInteractionAggregator.displayMessage(response.getMessage());
+    }
+
+    @Override
+    public Response processRequest(Request request) {
+        try {
+            return Menu.routeToController(request, bookControllerAdapter);
+        } catch (InvalidMenuNumberException e) {
+            consoleInteractionAggregator.displayMessage(e.getMessage());
             return processRequest(getRequest());
         }
     }
