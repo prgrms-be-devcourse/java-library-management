@@ -10,8 +10,7 @@ public enum BookState {
     RENTAL_AVAILABLE("대여 가능") {
         @Override
         public void handleBorrow(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book rented = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), RENTING);
-            bookRepository.add(rented);
+            bookRepository.update(book, RENTING);
         }
 
         @Override
@@ -21,8 +20,7 @@ public enum BookState {
 
         @Override
         public void handleLost(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book lost = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), LOST);
-            bookRepository.add(lost);
+            bookRepository.update(book, LOST);
         }
     },
     RENTING("대여중") {
@@ -33,15 +31,13 @@ public enum BookState {
 
         @Override
         public Book handleReturn(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), ARRANGEMENT);
-            bookRepository.add(returned);
-            return returned;
+            bookRepository.update(book, ARRANGEMENT);
+            return book;
         }
 
         @Override
         public void handleLost(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book lost = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), LOST);
-            bookRepository.add(lost);
+            bookRepository.update(book, LOST);
         }
     },
     ARRANGEMENT("도서 정리중") {
@@ -57,8 +53,7 @@ public enum BookState {
 
         @Override
         public void handleLost(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book lost = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), LOST);
-            bookRepository.add(lost);
+            bookRepository.update(book, LOST);
         }
     },
     LOST("분실됨") {
@@ -69,9 +64,8 @@ public enum BookState {
 
         @Override
         public Book handleReturn(BookRepository bookRepository, Book book) throws FuncFailureException {
-            Book returned = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), ARRANGEMENT);
-            bookRepository.add(returned);
-            return returned;
+            bookRepository.update(book, ARRANGEMENT);
+            return book;
         }
 
         @Override
@@ -80,7 +74,7 @@ public enum BookState {
         }
     };
 
-    private String state;
+    private final String state;
 
     BookState(String state) {
         this.state = state;

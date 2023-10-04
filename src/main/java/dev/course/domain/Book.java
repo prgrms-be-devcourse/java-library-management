@@ -6,7 +6,7 @@ public class Book implements Comparable {
     private final String title;
     private final String author;
     private final int pageNum;
-    private final BookState state;
+    private BookState state;
 
     public Book(Long bookId, String title, String author, int pageNum, BookState state) {
         this.bookId = bookId;
@@ -42,6 +42,10 @@ public class Book implements Comparable {
 
     public BookState getState() {
         return state;
+    }
+
+    public void setState(BookState state) {
+        this.state = state;
     }
 
     public boolean equalState(BookState state) {

@@ -1,6 +1,7 @@
 package dev.course.repository;
 
 import dev.course.domain.Book;
+import dev.course.domain.BookState;
 import dev.course.exception.FuncFailureException;
 
 import java.util.*;
@@ -46,6 +47,13 @@ public class TestBookRepository implements BookRepository {
         if (storage.remove(bookId) == null) {
             throw new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n");
         }
+    }
+
+    @Override
+    public void update(Book obj, BookState state) {
+
+        obj.setState(state);
+        storage.put(obj.getBookId(), obj);
     }
 
     @Override
