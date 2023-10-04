@@ -32,7 +32,7 @@ public class Console implements Runnable {
             String author = stringInput("작가 이름을 입력하세요.");
             int totalPages = intInput("페이지 수를 입력하세요.");
 
-            BookDto data = new BookDto(title, author, totalPages);
+            CreateBookDto data = new CreateBookDto(title, author, totalPages);
 
             service.registerBook(data);
         } catch (IllegalArgumentException e) {
@@ -76,7 +76,7 @@ public class Console implements Runnable {
         } catch (NumberFormatException e) {
             printSystemMessage("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
-            BookStatus status = BookStatus.get(e.getMessage()).get();
+            BookStatus status = BookStatus.getByDescription(e.getMessage());
             if (status == BORROWED) printSystemMessage("이미 대여 중인 도서입니다.");
             else if (status == ARRANGING) printSystemMessage("정리 중인 도서입니다. 5분 후 다시 대여해 주세요.");
             else if (status == LOST) printSystemMessage("현재 분실 처리된 도서입니다.");
@@ -92,7 +92,7 @@ public class Console implements Runnable {
         } catch (NumberFormatException e) {
             printSystemMessage("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
-            BookStatus status = BookStatus.get(e.getMessage()).get();
+            BookStatus status = BookStatus.getByDescription(e.getMessage());
             if (status == AVAILABLE) printSystemMessage("원래 대여가 가능한 도서입니다.");
             else if (status == ARRANGING) printSystemMessage("정리 중인 도서입니다.");
         }

@@ -1,8 +1,7 @@
 import devcourse.backend.business.ModeType;
 import devcourse.backend.business.BookService;
-import devcourse.backend.model.BookStatus;
 import devcourse.backend.repository.Repository;
-import devcourse.backend.view.BookDto;
+import devcourse.backend.view.CreateBookDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +22,13 @@ public class BookServiceTest {
         bookService = new BookService(ModeType.TEST_MODE);
     }
 
-    private static List<BookDto> getBookDtos() {
-        List<BookDto> dtos = new ArrayList<>();
+    private static List<CreateBookDto> getBookDtos() {
+        List<CreateBookDto> dtos = new ArrayList<>();
 
-        BookDto book = new BookDto("이펙티브 자바", "조슈아 블로크", 520);
+        CreateBookDto book = new CreateBookDto("이펙티브 자바", "조슈아 블로크", 520);
         dtos.add(book);
 
-        BookDto book2 = new BookDto("친절한 SQL 튜닝", "조시형", 560);
+        CreateBookDto book2 = new CreateBookDto("친절한 SQL 튜닝", "조시형", 560);
         dtos.add(book2);
 
         return dtos;
@@ -39,7 +38,7 @@ public class BookServiceTest {
     @DisplayName("도서를 등록할 수 있습니다.")
     void 수동_도서_등록() {
         // [이펙티브 자바] 등록
-        BookDto book = getBookDtos().get(0);
+        CreateBookDto book = getBookDtos().get(0);
         bookService.registerBook(book);
 
         // BookService가 Repository의 addBook() 호출
