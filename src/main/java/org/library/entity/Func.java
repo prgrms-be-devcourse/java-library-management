@@ -1,6 +1,6 @@
 package org.library.entity;
 
-import org.library.error.InvalidFuncError;
+import org.library.exception.InvalidFuncException;
 import org.library.controller.Controller;
 
 import java.util.Arrays;
@@ -44,6 +44,6 @@ public enum Func {
     public static Func of(int value){
         return Arrays.stream(values()).filter(f-> f.isValueEqual(value))
                 .findAny()
-                .orElseThrow(InvalidFuncError::new);
+                .orElseThrow(InvalidFuncException::new);
     }
 }

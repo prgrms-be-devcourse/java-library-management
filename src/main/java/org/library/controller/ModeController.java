@@ -2,7 +2,7 @@ package org.library.controller;
 
 import org.library.entity.Message;
 import org.library.entity.Mode;
-import org.library.error.InvalidModeError;
+import org.library.exception.InvalidModeException;
 import org.library.repository.Repository;
 import org.library.utils.ConsoleInputManager;
 
@@ -16,7 +16,7 @@ public class ModeController {
         printAllMode();
         int mode = consoleInputManager.inputInt();
         if(!isValid(mode)){
-            throw new InvalidModeError();
+            throw new InvalidModeException();
         }
         return getRepository(mode);
     }
@@ -28,7 +28,7 @@ public class ModeController {
                 return mode.getRepository();
             }
         }
-        throw new InvalidModeError();
+        throw new InvalidModeException();
     }
 
     public void printAllMode(){

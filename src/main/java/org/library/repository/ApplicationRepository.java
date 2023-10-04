@@ -1,7 +1,7 @@
 package org.library.repository;
 
 import org.library.entity.Book;
-import org.library.error.NotExistError;
+import org.library.exception.NotExistException;
 import org.library.utils.JsonManager;
 
 import java.util.*;
@@ -55,7 +55,7 @@ public class ApplicationRepository implements Repository{
     @Override
     public void delete(Book book) {
         if(!bookMap.containsKey(book.getId())){
-            throw new NotExistError();
+            throw new NotExistException();
         }
         bookMap.remove(book.getId());
         flush();

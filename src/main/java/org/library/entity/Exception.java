@@ -1,6 +1,6 @@
 package org.library.entity;
 
-public enum Error {
+public enum Exception {
 
     INVALID_INPUT_MODE("[System] 모드 선택이 잘못되었습니다."),
     INVALID_INPUT_FUNC("[System] 기능 선택이 잘못되었습니다."),
@@ -17,7 +17,7 @@ public enum Error {
 
     private final String message;
 
-    Error(String message) {
+    Exception(String message) {
         this.message = message;
     }
 

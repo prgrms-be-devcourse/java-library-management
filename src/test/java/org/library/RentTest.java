@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.entity.Book;
 import org.library.entity.State;
-import org.library.error.AlreadyLostError;
-import org.library.error.AlreadyOrganizingError;
-import org.library.error.AlreadyRentError;
+import org.library.exception.AlreadyLostException;
+import org.library.exception.AlreadyOrganizingException;
+import org.library.exception.AlreadyRentException;
 import org.library.repository.ApplicationRepository;
 import org.library.repository.Repository;
 import org.library.service.BookService;
@@ -41,7 +41,7 @@ public class RentTest {
         service.save(book);
         service.rent(book.getId()); // 대여 완료
         // 이미 대여 상태에서 대여 신청
-        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyRentError.class);
+        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyRentException.class);
     }
 
     @DisplayName("도서 정리중 상태에서 대여")
@@ -52,7 +52,7 @@ public class RentTest {
         service.rent(book.getId()); // 대여 완료
         service.returns(book.getId()); // 반납 완료(대여 정리중 상태)
         // 도서 정리중 상태에서 대여 신청
-        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyOrganizingError.class);
+        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyOrganizingException.class);
     }
 
     @DisplayName("분실 상태에서 대여")
@@ -62,8 +62,6 @@ public class RentTest {
         service.save(book);
         service.reportLost(book.getId());
         // 도서 분실 상태에서 대여 신청
-        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyLostError.class);
+        assertThatThrownBy(()->book.rent()).isInstanceOf(AlreadyLostException.class);
     }
-
-
 }

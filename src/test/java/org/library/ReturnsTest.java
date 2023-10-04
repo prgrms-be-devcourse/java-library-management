@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.entity.Book;
 import org.library.entity.Message;
-import org.library.error.NotReturnsError;
+import org.library.exception.NotReturnsException;
 import org.library.repository.ApplicationRepository;
 import org.library.repository.Repository;
 import org.library.service.BookService;
@@ -46,7 +46,7 @@ public class ReturnsTest {
     void 대여가능상태_반납(){
         Book book = new Book(service.generateId(), "테스트이름", "테스트저자", 20);
         service.save(book);
-        assertThatThrownBy(()->book.returns()).isInstanceOf(NotReturnsError.class);
+        assertThatThrownBy(()->book.returns()).isInstanceOf(NotReturnsException.class);
     }
 
     @DisplayName("도서정리중 상태에서 반납")
@@ -56,6 +56,6 @@ public class ReturnsTest {
         service.save(book);
         service.rent(book.getId());
         service.returns(book.getId());
-        assertThatThrownBy(()-> book.returns()).isInstanceOf(NotReturnsError.class);
+        assertThatThrownBy(()-> book.returns()).isInstanceOf(NotReturnsException.class);
     }
 }

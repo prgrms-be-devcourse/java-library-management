@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.entity.Book;
 import org.library.entity.Message;
-import org.library.error.AlreadyLostError;
+import org.library.exception.AlreadyLostException;
 import org.library.repository.ApplicationRepository;
 import org.library.repository.Repository;
 import org.library.service.BookService;
@@ -38,6 +38,6 @@ public class ReportLostTest {
         Book book = new Book(service.generateId(), "testTitle", "testAuthor", 33);
         service.save(book);
         service.reportLost(book.getId());
-        assertThatThrownBy(() -> book.reportLost()).isInstanceOf(AlreadyLostError.class);
+        assertThatThrownBy(() -> book.reportLost()).isInstanceOf(AlreadyLostException.class);
     }
 }

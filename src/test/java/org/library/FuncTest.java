@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.entity.Func;
-import org.library.error.InvalidFuncError;
+import org.library.exception.InvalidFuncException;
 
 public class FuncTest {
 
@@ -12,7 +12,6 @@ public class FuncTest {
     @Test
     public void 없는_기능번호_입력(){
         int errorFunc = 99;
-        Assertions.assertThatThrownBy(()-> Func.of(errorFunc)).isInstanceOf(InvalidFuncError.class);
+        Assertions.assertThatThrownBy(()-> Func.of(errorFunc)).isInstanceOf(InvalidFuncException.class);
     }
-
 }

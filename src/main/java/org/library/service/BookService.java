@@ -1,7 +1,7 @@
 package org.library.service;
 
 import org.library.entity.Book;
-import org.library.entity.Error;
+import org.library.entity.Exception;
 import org.library.entity.Message;
 import org.library.repository.Repository;
 
@@ -32,7 +32,7 @@ public class BookService {
     // 3. 제목으로 도서 검색
     public List<Book> findByTitle(String title){
         if(title.isBlank()){
-            throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
+            throw new IllegalArgumentException(Exception.INVALID_TITLE.getMessage());
         }
         return repository.findByTitle(title);
     }

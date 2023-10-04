@@ -1,6 +1,6 @@
 package org.library.entity;
 
-import org.library.error.*;
+import org.library.exception.*;
 
 import java.time.LocalDateTime;
 
@@ -20,25 +20,25 @@ public class Book {
         this.page = page;
 
         if(title.isBlank()){
-            throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
+            throw new IllegalArgumentException(Exception.INVALID_TITLE.getMessage());
         }
         if(author.isBlank()){
-            throw new IllegalArgumentException(Error.INVALID_AUTHOR.getMessage());
+            throw new IllegalArgumentException(Exception.INVALID_AUTHOR.getMessage());
         }
         if(page < 0){
-            throw new IllegalArgumentException(Error.INVALID_PAGE.getMessage());
+            throw new IllegalArgumentException(Exception.INVALID_PAGE.getMessage());
         }
     }
 
     public String rent(){
         if(state.equals(State.RENT)){
-            throw new AlreadyRentError();
+            throw new AlreadyRentException();
         }
         if(state.equals(State.LOST)){
-            throw new AlreadyLostError();
+            throw new AlreadyLostException();
         }
         if(state.equals(State.ORGANIZING)){
-            throw new AlreadyOrganizingError();
+            throw new AlreadyOrganizingException();
         }
         state = State.RENT;
         return Message.SUCCESS_RENT.getMessage();
@@ -46,7 +46,7 @@ public class Book {
 
     public String returns(){
         if(!state.equals(State.RENT) && !state.equals(State.LOST)){
-            throw new NotReturnsError();
+            throw new NotReturnsException();
         }
         state = State.ORGANIZING;
         organizingTime = LocalDateTime.now().plusMinutes(5);
@@ -55,7 +55,7 @@ public class Book {
 
     public String reportLost(){
         if(state.equals(State.LOST)){
-            throw new AlreadyLostError();
+            throw new AlreadyLostException();
         }
         this.state = State.LOST;
         return Message.SUCCESS_REPORT_LOST.getMessage();

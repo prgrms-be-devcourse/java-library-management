@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.entity.Book;
-import org.library.error.NotExistError;
+import org.library.exception.NotExistException;
 import org.library.repository.ApplicationRepository;
 import org.library.repository.Repository;
 import org.library.service.BookService;
@@ -44,6 +44,6 @@ public class DeleteTest {
         service.save(book);
         service.delete(book.getId());
 
-        assertThatThrownBy(() -> repository.delete(book)).isInstanceOf(NotExistError.class);
+        assertThatThrownBy(() -> repository.delete(book)).isInstanceOf(NotExistException.class);
     }
 }
