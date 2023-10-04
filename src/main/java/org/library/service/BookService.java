@@ -4,14 +4,17 @@ import org.library.entity.Book;
 import org.library.entity.Exception;
 import org.library.entity.Message;
 import org.library.repository.Repository;
+import org.library.utils.AvailableProcessor;
 
 import java.util.List;
 
 public class BookService {
     private final Repository repository;
+    private final AvailableProcessor availableProcessor;
 
     public BookService(Repository repository) {
         this.repository = repository;
+        this.availableProcessor = new AvailableProcessor(repository);
     }
 
     // id 생성
@@ -87,5 +90,9 @@ public class BookService {
     // 8. 파일 저장(종료)
     public void flush(){
         repository.flush();
+    }
+
+    public void processAvailable(){
+        availableProcessor.run();
     }
 }

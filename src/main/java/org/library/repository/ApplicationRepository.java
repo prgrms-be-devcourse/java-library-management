@@ -35,21 +35,21 @@ public class ApplicationRepository implements Repository{
 
     @Override
     public List<Book> findAll() {
-        processAvailable();
         return bookMap.values().stream().sorted(Comparator.comparingLong(Book::getId)).toList();
     }
 
     @Override
     public List<Book> findByTitle(String title) {
-        processAvailable();
-        return bookMap.values().stream().filter(b -> b.getTitle().contains(title)).sorted(Comparator.comparingLong(Book::getId)).toList();
+        return bookMap.values().stream().filter(b -> b.getTitle().contains(title))
+                .sorted(Comparator.comparingLong(Book::getId))
+                .toList();
     }
 
     @Override
     public Book findById(Long id) {
-        processAvailable();
         return bookMap.values().stream().filter(b -> b.getId().equals(id))
-                .findAny().orElseThrow();
+                .findAny()
+                .orElseThrow();
     }
 
     @Override
@@ -60,11 +60,6 @@ public class ApplicationRepository implements Repository{
         bookMap.remove(book.getId());
         flush();
 
-    }
-
-    @Override
-    public void processAvailable() {
-        bookMap.values().forEach(Book::processAvailable);
     }
 
     public boolean exists(Book book){

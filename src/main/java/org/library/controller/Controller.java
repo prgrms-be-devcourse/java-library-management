@@ -80,6 +80,7 @@ public class Controller {
     public void run(){
         int functionNum = consoleManager.inputFunctionNum();
         Func func = Func.of(functionNum);
+        bookService.processAvailable();
         func.call(this);
     }
 }

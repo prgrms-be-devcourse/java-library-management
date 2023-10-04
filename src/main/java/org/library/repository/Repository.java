@@ -12,7 +12,5 @@ public interface Repository {
     List<Book> findByTitle(String title);
     Book findById(Long id);
     void delete(Book book);
-    void processAvailable();
-
     void flush();
 }
