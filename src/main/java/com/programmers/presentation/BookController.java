@@ -24,6 +24,10 @@ public class BookController {
         return bookService.searchBook(title);
     }
 
+    public void rentBook(Long id) {
+        bookService.rentBook(id);
+    }
+
     public void returnBook(Long id) {
         bookService.returnBook(id);
     }
