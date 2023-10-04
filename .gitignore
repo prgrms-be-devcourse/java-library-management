@@ -115,8 +115,6 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 ### Java ###
-=======
->>>>>>> dfadc504e65cdb860b395879ec811c5331254e4d
 # Compiled class file
 *.class
 
@@ -141,7 +139,6 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-<<<<<<< HEAD
 
 ### Gradle ###
 .gradle
