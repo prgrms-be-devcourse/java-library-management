@@ -5,9 +5,7 @@ import org.library.entity.Error;
 import org.library.entity.Message;
 import org.library.repository.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class BookService {
     private final Repository repository;
@@ -36,11 +34,7 @@ public class BookService {
         if(title.isBlank()){
             throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
         }
-        try{
-            return repository.findByTitle(title);
-        }catch(NoSuchElementException e){
-            return new ArrayList<>();
-        }
+        return repository.findByTitle(title);
     }
 
     // 4. 도서 대여

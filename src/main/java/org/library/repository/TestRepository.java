@@ -25,15 +25,13 @@ public class TestRepository implements Repository{
     @Override
     public List<Book> findAll() {
         processAvailable();
-        Optional<List<Book>> books = Optional.ofNullable(bookMap.values().stream().sorted(Comparator.comparingLong(Book::getId)).toList());
-        return books.orElse(new ArrayList<>());
+        return bookMap.values().stream().sorted(Comparator.comparingLong(Book::getId)).toList();
     }
 
     @Override
     public List<Book> findByTitle(String title) {
         processAvailable();
-        List<Book> findBooks = bookMap.values().stream().filter(b -> b.getTitle().contains(title)).sorted(Comparator.comparingLong(Book::getId)).toList();
-        return Optional.ofNullable(findBooks).orElseThrow();
+        return bookMap.values().stream().filter(b -> b.getTitle().contains(title)).sorted(Comparator.comparingLong(Book::getId)).toList();
     }
 
     @Override
