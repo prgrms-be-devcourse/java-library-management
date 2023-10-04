@@ -6,7 +6,8 @@ import com.programmers.mediator.RequestProcessor;
 import com.programmers.mediator.dto.Request;
 import com.programmers.mediator.dto.Response;
 
-public class BookApplication implements Runnable{
+public class BookApplication implements Runnable {
+
     private final RequestProcessor requestProcessor;
     private final AppExceptionHandler exceptionHandler;
 

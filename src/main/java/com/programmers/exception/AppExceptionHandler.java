@@ -1,15 +1,14 @@
 package com.programmers.exception;
 
 import com.programmers.exception.unchecked.UncheckedCustomException;
-import com.programmers.presentation.UserInteraction;
+import com.programmers.mediator.RequestProcessor;
+import com.programmers.mediator.dto.ConsoleResponse;
+import lombok.RequiredArgsConstructor;
 
-
+@RequiredArgsConstructor
 public class AppExceptionHandler {
-    private final UserInteraction userInteraction;
 
-    public AppExceptionHandler(UserInteraction userInteraction) {
-        this.userInteraction = userInteraction;
-    }
+    private final RequestProcessor requestProcessor;
 
     public void handle(Runnable runnable) {
         try {
@@ -17,7 +16,8 @@ public class AppExceptionHandler {
         } catch (UncheckedCustomException e) {
             userInteraction.displayMessage(e.getErrorCode().getMessage());
         } catch (Exception e) {
-            userInteraction.displayMessage(e.getMessage());
+            requestProcessor.sendResponse(
+                ConsoleResponse.noBodyResponse(e.getMessage()));
         }
     }
 }
