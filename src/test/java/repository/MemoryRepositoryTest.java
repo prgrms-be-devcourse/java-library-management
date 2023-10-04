@@ -47,7 +47,7 @@ class MemoryRepositoryTest {
 
     @Test
     @DisplayName("제목으로 도서 검색 테스트")
-    void findBookByTitle() {
+    void testFindBookByTitle() {
         Book book1 = new Book(1L, "해리포터", "J.K 롤링", 255, Status.AVAILABLE);
         Book book2 = new Book(2L, "토끼책", "조영호", 255, Status.AVAILABLE);
 
@@ -73,7 +73,7 @@ class MemoryRepositoryTest {
 
     @Test
     @DisplayName("도서 번호로 도서 조회 테스트")
-    void findBookByBookNo() {
+    void testFindBookByBookNo() {
         Book book = new Book(1L, "Test Book", "Test Author", 255, Status.AVAILABLE);
         memoryRepository.saveBook(book);
 
@@ -81,5 +81,15 @@ class MemoryRepositoryTest {
                 .orElseThrow();
 
         assertEquals(book, bookFound);
+    }
+
+    @Test
+    @DisplayName("bookNo 생성 메소드 테스트")
+    void testCreateBookNo() {
+        Book book = new Book(1L, "Test Book", "Test Author", 255, Status.AVAILABLE);
+        memoryRepository.saveBook(book);
+
+        Long createdBookNo = memoryRepository.createBookNo();
+        assertEquals(2, createdBookNo);
     }
 }
