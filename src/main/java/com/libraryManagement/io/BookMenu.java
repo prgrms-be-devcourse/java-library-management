@@ -34,7 +34,7 @@ public class BookMenu {
         menuList.add("도서 삭제");
     }
 
-    public void displayBookMenu() throws IOException {
+    public void displayBookMenu() throws IOException, InterruptedException {
         while(true) {
             for(int i = 0; i < menuList.size(); i++){
                 System.out.println(i + ". " + menuList.get(i));

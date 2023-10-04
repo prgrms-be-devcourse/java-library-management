@@ -15,7 +15,7 @@ import static java.lang.System.exit;
 
 public class AppConfig {
 
-    public void init() throws IOException {
+    public void init() throws IOException, InterruptedException {
 
         ModeMenu modeMenu = new ModeMenu();
         modeMenu.displayModeMenu();

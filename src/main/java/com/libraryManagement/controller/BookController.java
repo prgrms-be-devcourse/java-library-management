@@ -54,7 +54,7 @@ public class BookController {
         bookIO.outputBookList(bookList);
     }
 
-    public void updateBookStatus(String updateType) throws IOException {
+    public void updateBookStatus(String updateType) throws IOException, InterruptedException {
 
         long id = bookIO.inputApplyBookId(updateType);
         Boolean isPossible = bookService.isPossibleUpdateBookStatus(updateType, id);

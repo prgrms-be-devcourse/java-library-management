@@ -4,6 +4,10 @@ import com.libraryManagement.domain.Book;
 import com.libraryManagement.repository.Repository;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.libraryManagement.domain.BookStatus.*;
 import static com.libraryManagement.domain.ChangeBookStatus.*;
@@ -11,6 +15,7 @@ import static com.libraryManagement.domain.ChangeBookStatus.APPLYDELETE;
 
 public class BookService {
     private final Repository repository;
+    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public BookService(Repository repository) {
         this.repository = repository;
@@ -58,8 +63,8 @@ public class BookService {
         return null;
     }
 
-    // bookStatus 를 반환 -> update 에러 원인을 알려주기 위해서 (대여 신청일 때만 사용)
-    public String updateBookStatus(String updateType, long id) {
+    // bookStatus 를 반환 -> update 불가능 원인을 알려주기 위해서 (대여일 때만 사용)
+    public String updateBookStatus(String updateType, long id) throws InterruptedException {
 
         if(updateType.equals(APPLYRENT.name())){
             if(isPossibleUpdateBookStatus(updateType, id)){    // 대여할 수 있다면
@@ -71,6 +76,11 @@ public class BookService {
         }else if(updateType.equals(APPLYRETURN.name())) {
             if(isPossibleUpdateBookStatus(updateType, id)){    // 반납할 수 있다면
                 repository.updateBookStatus(id, READY.getName());
+
+                // 5분 후에 대여 가능 상태로 변경합니다.
+                scheduler.schedule(() -> {
+                    repository.updateBookStatus(id, POSSIBLERENT.getName());
+                }, 5, TimeUnit.SECONDS);
             }
         }else if(updateType.equals(APPLYLOST.name())) {
             if(isPossibleUpdateBookStatus(updateType, id)){    // 분실처리할 수 있다면

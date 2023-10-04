@@ -4,21 +4,21 @@
         "author": "1",
         "id": 1,
         "title": "1",
-        "status": "삭제됨"
+        "status": "대여가능"
     },
     {
         "pages": 2,
         "author": "2",
         "id": 2,
         "title": "2",
-        "status": "준비중"
+        "status": "대여가능"
     },
     {
         "pages": 3,
         "author": "3",
         "id": 3,
         "title": "3",
-        "status": "대여중"
+        "status": "대여가능"
     },
     {
         "pages": 4,
