@@ -32,14 +32,14 @@ public class LibraryManagement {
         System.out.println("[System] 도서 목록 조회가 완료되었습니다.\n");
     }
 
-    public void findByTitle(String title) throws FuncFailureException {
+    public void findByTitle(String title) {
 
         List<Book> searched = this.bookRepository.findByTitle(title);
         searched.forEach(this::printBook);
         System.out.println("[System] 도서 검색 조회가 완료되었습니다.\n");
     }
 
-    public void borrow(Long bookId) throws FuncFailureException {
+    public void borrow(Long bookId) {
 
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
@@ -49,7 +49,7 @@ public class LibraryManagement {
         System.out.println("[System] 도서 대여가 완료되었습니다.\n");
     }
 
-    public void returns(Long bookId) throws FuncFailureException {
+    public void returns(Long bookId) {
 
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
@@ -71,7 +71,7 @@ public class LibraryManagement {
         System.out.println("[System] 도서 반납 처리가 완료되었습니다.\n");
     }
 
-    public void lost(Long bookId) throws FuncFailureException {
+    public void lost(Long bookId) {
 
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
@@ -81,7 +81,7 @@ public class LibraryManagement {
         System.out.println("[System] 도서 분실 처리가 완료되었습니다.\n");
     }
 
-    public void delete(Long bookId) throws FuncFailureException {
+    public void delete(Long bookId) {
 
         this.bookRepository.delete(bookId);
 
