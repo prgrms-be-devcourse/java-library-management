@@ -1,11 +1,12 @@
 package com.programmers.library.entity;
 
+import static com.programmers.library.constants.MessageConstants.*;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.programmers.library.exception.BookAlreadyAvailableException;
-import com.programmers.library.exception.BookUnderOrganizingException;
+import com.programmers.library.exception.BookException;
 
 @JsonIgnoreProperties({"borrowed", "available", "lost", "organizing"})
 public class Book {
@@ -79,23 +80,29 @@ public class Book {
 	}
 
 	public void borrow() {
-		status = BookStatus.BORROWED;
+		if (this.status == BookStatus.BORROWED)
+			throw new BookException(BOOK_ALREADY_BORROWED);
+		else if (this.status == BookStatus.LOST)
+			throw new BookException(BOOK_LOST);
+		else if (this.status == BookStatus.ORGANIZING)
+			throw new BookException(BOOK_UNDER_ORGANIZING);
+		this.status = BookStatus.BORROWED;
 	}
 
 	public void returned() {
-
-		if(this.status==BookStatus.BORROWED || this.status==BookStatus.LOST) {
-			status = BookStatus.ORGANIZING;
-			returnedAt = LocalDateTime.now();
-		} else if(this.status==BookStatus.AVAILABLE) {
-			throw new BookAlreadyAvailableException();
-		} else if(this.status==BookStatus.ORGANIZING) {
-			throw new BookUnderOrganizingException();
+		if (this.status == BookStatus.AVAILABLE) {
+			throw new BookException(BOOK_ALREADY_AVAILABLE);
+		} else if (this.status == BookStatus.ORGANIZING) {
+			throw new BookException(BOOK_UNDER_ORGANIZING);
 		}
-//		updateBookToAvailableAfterOrganizing(book);
+		status = BookStatus.ORGANIZING;
+		returnedAt = LocalDateTime.now();
 	}
 
 	public void lost() {
+		if (this.status == BookStatus.LOST) {
+			throw new BookException(BOOK_LOST);
+		}
 		status = BookStatus.LOST;
 	}
 

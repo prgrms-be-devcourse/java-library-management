@@ -1,5 +1,6 @@
 package com.programmers.library.service;
 
+import static com.programmers.library.constants.MessageConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,11 +23,7 @@ import com.programmers.library.dto.FindBookRequestDto;
 import com.programmers.library.dto.LostBookRequestDto;
 import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
-import com.programmers.library.exception.BookAlreadyAvailableException;
-import com.programmers.library.exception.BookAlreadyBorrowedException;
-import com.programmers.library.exception.BookLostException;
-import com.programmers.library.exception.BookNotFoundException;
-import com.programmers.library.exception.BookUnderOrganizingException;
+import com.programmers.library.exception.BookException;
 import com.programmers.library.repository.Repository;
 
 class LibraryManagerServiceImplTest {
@@ -125,7 +122,7 @@ class LibraryManagerServiceImplTest {
 			Book book = new Book("title", "author", 100L);
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookAlreadyAvailableException.class, () -> service.returnBook(request));
+			assertThrows(BookException.class, () -> service.returnBook(request), BOOK_ALREADY_AVAILABLE);
 		}
 
 		@Test
@@ -137,7 +134,7 @@ class LibraryManagerServiceImplTest {
 			book.returned();
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookUnderOrganizingException.class, () -> service.returnBook(request));
+			assertThrows(BookException.class, () -> service.returnBook(request), BOOK_UNDER_ORGANIZING);
 		}
 
 		@Test
@@ -147,7 +144,7 @@ class LibraryManagerServiceImplTest {
 			ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 			when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
-			assertThrows(BookNotFoundException.class, () -> service.returnBook(request));
+			assertThrows(BookException.class, () -> service.returnBook(request), BOOK_NOT_FOUND);
 		}
 	}
 
@@ -179,7 +176,7 @@ class LibraryManagerServiceImplTest {
 			book.lost();
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookLostException.class, () -> service.lostBook(request));
+			assertThrows(BookException.class, () -> service.lostBook(request), BOOK_LOST);
 		}
 
 		@Test
@@ -189,7 +186,7 @@ class LibraryManagerServiceImplTest {
 			LostBookRequestDto request = new LostBookRequestDto(bookId);
 			when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
-			assertThrows(BookNotFoundException.class, () -> service.lostBook(request));
+			assertThrows(BookException.class, () -> service.lostBook(request), BOOK_NOT_FOUND);
 		}
 	}
 
@@ -217,7 +214,7 @@ class LibraryManagerServiceImplTest {
 			DeleteBookRequestDto request = new DeleteBookRequestDto(bookId);
 			when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
-			assertThrows(BookNotFoundException.class, () -> service.deleteBook(request));
+			assertThrows(BookException.class, () -> service.deleteBook(request), BOOK_NOT_FOUND);
 		}
 	}
 
@@ -247,7 +244,7 @@ class LibraryManagerServiceImplTest {
 			book.borrow();
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookAlreadyBorrowedException.class, () -> service.borrowBook(request));
+			assertThrows(BookException.class, () -> service.borrowBook(request), BOOK_ALREADY_BORROWED);
 		}
 
 		@Test
@@ -259,7 +256,7 @@ class LibraryManagerServiceImplTest {
 			book.lost();
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookLostException.class, () -> service.borrowBook(request));
+			assertThrows(BookException.class, () -> service.borrowBook(request), BOOK_LOST);
 		}
 
 		@Test
@@ -271,7 +268,7 @@ class LibraryManagerServiceImplTest {
 			book.returned();
 			when(repository.findById(request.getId())).thenReturn(Optional.of(book));
 
-			assertThrows(BookUnderOrganizingException.class, () -> service.borrowBook(request));
+			assertThrows(BookException.class, () -> service.borrowBook(request), BOOK_UNDER_ORGANIZING);
 		}
 
 		@Test
@@ -281,7 +278,7 @@ class LibraryManagerServiceImplTest {
 			BorrowBookRequestDto request = new BorrowBookRequestDto(bookId);
 			when(repository.findById(request.getId())).thenReturn(Optional.empty());
 
-			assertThrows(BookNotFoundException.class, () -> service.borrowBook(request));
+			assertThrows(BookException.class, () -> service.borrowBook(request), BOOK_NOT_FOUND);
 		}
 	}
 }
