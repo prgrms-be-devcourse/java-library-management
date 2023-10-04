@@ -14,12 +14,13 @@ import static org.assertj.core.api.Assertions.*;
 
 public class RegisterTest {
 
-    BookService service;
-    Repository repository;
+    private BookService service;
+    private Repository repository;
+    private String path = "src/test/resources/Book.json";
 
     @BeforeEach
     void init(){
-        repository = new ApplicationRepository();
+        repository = new ApplicationRepository(path);
         service = new BookService(repository);
     }
 
