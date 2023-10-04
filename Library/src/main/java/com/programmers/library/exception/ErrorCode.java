@@ -16,7 +16,13 @@ public enum ErrorCode {
     ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION("[System] 원래 대여가 가능한 도서입니다."),
     ALREADY_RETURN_ORGANIZING_BOOK_EXCEPTION("[System] 이미 반납되어 정리중인 도서입니다."),
     LOST_FAILED_EXCEPTION("[System] 분실 처리할 수 없는 도서입니다."),
-    ALREADY_LOST_EXCEPTION("[System] 이미 분실 처리된 도서입니다.")
+    ALREADY_LOST_EXCEPTION("[System] 이미 분실 처리된 도서입니다."),
+    INVALID_BOOK_TITLE_EXCEPTION("[System] 도서 제목을 정확하게 입력해주세요."),
+    INVALID_BOOK_AUTHOR_EXCEPTION("[System] 도서의 저자를 정확하게 입력해주세요."),
+    INVALID_NUMBER_INPUT_EXCEPTION("[System] 정확한 숫자 입력값을 입력해주세요."),
+    NEGATIVE_PAGE_EXCEPTION("[System] 도서의 페이지 정보로 음수값은 등록할 수 없습니다."),
+    LIMIT_TITLE_LENGTH_EXCEPTION("[System] 도서의 제목은 최대 100글자 까지 작성 가능합니다."),
+    BOOK_NOT_ORGANIZING_EXCEPTION("[System] 도서의 상태가 정리중이 아닌 다른 상태이므로 정리작업을 실행할 수 없습니다.")
     ;
 
     private final String message;

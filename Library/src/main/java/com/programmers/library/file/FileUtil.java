@@ -34,7 +34,7 @@ public class FileUtil {
 
         public void saveToCsvFile(Book book) {
             try {
-                String line = book(book) + System.lineSeparator();
+                String line = getBookInfo(book) + System.lineSeparator();
                 Files.writeString(Path.of(FILE_PATH), line, StandardOpenOption.APPEND);
             } catch (IOException e) {
                 throw ExceptionHandler.err(ErrorCode.WRITE_FILE_FAILED_EXCEPTION);
@@ -73,7 +73,7 @@ public class FileUtil {
 
                 while ((bookInfo = br.readLine()) != null) {
                     if (lineNumber == editNumber) {
-                        bw.write(book(book));
+                        bw.write(getBookInfo(book));
                         bw.newLine();
                     } else {
                         bw.write(bookInfo);
@@ -90,7 +90,7 @@ public class FileUtil {
             tempFile.renameTo(targetFile);
         }
 
-        private String book(Book book) {
+        private String getBookInfo(Book book) {
             String bookId = String.valueOf(book.getBookId());
             String title = book.getTitle();
             String author = book.getAuthor();

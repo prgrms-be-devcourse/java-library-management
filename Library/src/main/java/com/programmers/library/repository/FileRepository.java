@@ -23,9 +23,11 @@ public class FileRepository implements Repository{
         return fileHandler.init();
     }
 
-    public void updateStatus(Book book, BookStatusType bookStatus){
-        book.updateBookStatus(bookStatus);
-        fileHandler.updateFile(book);
+    public void updateStatus(Book book, BookStatusType originStatus, BookStatusType changeStatus){
+        if(book.getBookStatus().equals(originStatus)){
+            book.updateBookStatus(changeStatus);
+            fileHandler.updateFile(book);
+        }
     }
 
     @Override

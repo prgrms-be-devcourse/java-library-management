@@ -1,7 +1,6 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.repository.Repository;
@@ -19,13 +18,11 @@ public class LibraryService {
     }
 
     public void registerBook(String title, String author, Integer page) {
+        checkBookInfo(title, author, page);
+
         Long lastId = repository.findLastId() + 1;
 
         repository.register(createRentableBook(lastId, title, author, page));
-    }
-
-    public void updateStatus(Book book, BookStatusType bookStatus){
-        repository.updateStatus(book, bookStatus);
     }
 
     public List<Book> findAllBooks() {
@@ -50,7 +47,7 @@ public class LibraryService {
 
         switch (rentalBook.getBookStatus()) {
             case RENTABLE -> {
-                repository.updateStatus(rentalBook, RENTED);
+                repository.updateStatus(rentalBook, rentalBook.getBookStatus(), RENTED);
             }
             case RENTED -> {
                 throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ALREADY_RENTED_EXCEPTION);
@@ -69,7 +66,7 @@ public class LibraryService {
 
         switch (returnBook.getBookStatus()) {
             case RENTED, LOST -> {
-                repository.updateStatus(returnBook, ORGANIZING);
+                repository.updateStatus(returnBook, returnBook.getBookStatus(), ORGANIZING);
             }
             case RENTABLE -> {
                 throw ExceptionHandler.err(ErrorCode.ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION);
@@ -87,7 +84,7 @@ public class LibraryService {
 
         switch (lostBook.getBookStatus()) {
             case RENTED -> {
-                repository.updateStatus(lostBook, LOST);
+                repository.updateStatus(lostBook, lostBook.getBookStatus(), LOST);
             }
             case RENTABLE, ORGANIZING -> {
                 throw ExceptionHandler.err(ErrorCode.LOST_FAILED_EXCEPTION);
@@ -95,6 +92,21 @@ public class LibraryService {
             case LOST -> {
                 throw ExceptionHandler.err(ErrorCode.ALREADY_LOST_EXCEPTION);
             }
+        }
+    }
+
+    private static void checkBookInfo(String title, String author, Integer page) {
+        if(title.isEmpty()){
+            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_TITLE_EXCEPTION);
+        }
+        if(author.isEmpty()) {
+            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_AUTHOR_EXCEPTION);
+        }
+        if(page <= 0) {
+            throw ExceptionHandler.err(ErrorCode.NEGATIVE_PAGE_EXCEPTION);
+        }
+        if(title.length() > 100) {
+            throw ExceptionHandler.err(ErrorCode.LIMIT_TITLE_LENGTH_EXCEPTION);
         }
     }
 }

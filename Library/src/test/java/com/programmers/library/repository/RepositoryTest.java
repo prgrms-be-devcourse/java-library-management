@@ -68,12 +68,15 @@ class RepositoryTest {
     @DisplayName("제목으로 책 찾기 테스트")
     public void findBooksByTitleTest(){
         // Given
+        Book book2 = createRentableBook(2L, "스킨 인 더 게임", "나심 탈레반", 444);
         repository.register(book);
+        repository.register(book2);
 
         // When
         List<Book> books = repository.findBooksByTitle("제목1");
 
         // Then
+        assertEquals(books.size(), 1);
         assertEquals(books.get(0).getTitle(), "제목1");
     }
 
@@ -98,7 +101,7 @@ class RepositoryTest {
 
         // When
         Book findBook = repository.findBookById(1L).get();
-        repository.updateStatus(findBook, ORGANIZING);
+        repository.updateStatus(findBook, findBook.getBookStatus(), ORGANIZING);
 
         // Then
         assertEquals(findBook.getBookStatus().getDescription(), "정리중");
