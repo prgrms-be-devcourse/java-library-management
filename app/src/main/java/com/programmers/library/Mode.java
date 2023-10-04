@@ -5,6 +5,8 @@ import com.programmers.library.repository.FileRepository;
 import com.programmers.library.repository.TestRepository;
 import com.programmers.library.service.Service;
 
+import java.util.Arrays;
+
 public enum Mode {
     NORMAL(1, "일반", new Controller(new Service(new FileRepository()))),
     TEST(2, "테스트", new Controller(new Service(new TestRepository())));
@@ -33,9 +35,9 @@ public enum Mode {
     }
 
     public static Mode selectMode(int id) {
-        if (id == 2) {
-            return Mode.TEST;
-        }
-        return Mode.NORMAL;
+        return Arrays.stream(values())
+                .filter(mode -> mode.id == id)
+                .findFirst()
+                .orElse(NORMAL);
     }
 }
