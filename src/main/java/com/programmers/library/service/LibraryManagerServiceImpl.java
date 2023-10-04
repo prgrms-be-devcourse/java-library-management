@@ -64,11 +64,13 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 		bookRepository.deleteById(book.getId());
 	}
 
-	// private void updateBookToAvailableAfterOrganizing(Book book) { // todo : 도서 정리중 -> 5분 뒤 대여 가능으로 변경
-	// 	if (book.finishedOrganizing()) {
-	// 		book.updateToAvailble();
-	// 		repository.save(book);
-	// 	}
-	// }
+	@Override
+	public void organizeBooks() {
+		List<Book> books = bookRepository.findAll();
+		books.forEach(book -> {
+			book.organize();
+			bookRepository.save(book);
+		});
+	}
 
 }

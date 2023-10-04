@@ -3,6 +3,8 @@ package com.programmers.library.controller;
 import static com.programmers.library.constants.MessageConstants.*;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Supplier;
 
 import com.programmers.library.entity.Book;
@@ -17,11 +19,14 @@ public class MenuController implements Runnable {
 	private final Input input;
 	private final Output output;
 	private final LibarayManagerService service;
+	private final ScheduledExecutorService scheduler;
 
 	public MenuController(Input input, Output output, LibarayManagerService service) {
 		this.input = input;
 		this.output = output;
 		this.service = service;
+		this.scheduler = Executors.newScheduledThreadPool(1);
+		this.scheduler.scheduleAtFixedRate(service::organizeBooks, 0, 1, java.util.concurrent.TimeUnit.MINUTES);
 	}
 
 	@Override

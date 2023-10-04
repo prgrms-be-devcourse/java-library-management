@@ -24,4 +24,6 @@ public interface LibarayManagerService {
 	void lostBook(LostBookRequestDto request);
 
 	void deleteBook(DeleteBookRequestDto request);
+
+	void organizeBooks();
 }

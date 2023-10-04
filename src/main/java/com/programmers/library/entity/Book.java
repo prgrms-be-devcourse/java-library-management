@@ -90,6 +90,12 @@ public class Book {
 		status = BookStatus.LOST;
 	}
 
+	public void organize() {
+		if (this.status == BookStatus.ORGANIZING && this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+			this.status = BookStatus.AVAILABLE;
+		}
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -113,4 +119,5 @@ public class Book {
 	public LocalDateTime getReturnedAt() {
 		return returnedAt;
 	}
+
 }
