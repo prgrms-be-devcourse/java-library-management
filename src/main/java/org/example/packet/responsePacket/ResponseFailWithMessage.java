@@ -1,27 +1,18 @@
 package org.example.packet.responsePacket;
 
-import org.example.packet.BookDto;
-import org.example.packet.MethodType;
-
-import java.util.LinkedList;
-
 public class ResponseFailWithMessage extends ResponsePacket {
 
-    private final String failMessage;
+    public final String FAIL_MESSAGE;
 
-    public ResponseFailWithMessage(MethodType method, String failMessage) {
+    public ResponseFailWithMessage(String method, String failMessage) {
         super(method);
-        this.failMessage = failMessage;
-    }
-
-    public String getFailMessage() {
-        return failMessage;
+        this.FAIL_MESSAGE = failMessage;
     }
 
     @Override
     public String toString() {
         return "ResponseFailWithMessage{" +
-                "failMessage='" + failMessage + '\'' +
+                "failMessage='" + FAIL_MESSAGE + '\'' +
                 '}';
     }
 }

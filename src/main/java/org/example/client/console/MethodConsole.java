@@ -1,8 +1,7 @@
 package org.example.client.console;
 
 import org.example.client.io.IO;
-import org.example.packet.BookDto;
-import org.example.packet.MethodType;
+import org.example.packet.dto.BookDto;
 import org.example.packet.requestPacket.*;
 import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
@@ -20,9 +19,9 @@ public class MethodConsole {
     private final IO io = IO.getInstance();
 
     public void printResponse(ResponsePacket responsePacket) {
-        Type type = Type.valueOf(responsePacket.getMethod().name());
+        Type type = Type.valueOf(responsePacket.METHOD);
         if (responsePacket instanceof ResponseSuccessWithData) {
-            LinkedList<BookDto> bookDtos = ((ResponseSuccessWithData) responsePacket).getBookDtos();
+            LinkedList<BookDto> bookDtos = ((ResponseSuccessWithData) responsePacket).BOOKS;
             if (bookDtos.isEmpty()) {
                 io.println(System.lineSeparator() + "[System] 존재하는 도서가 없습니다." + System.lineSeparator());
             } else {
@@ -36,7 +35,7 @@ public class MethodConsole {
             return;
         }
         if (responsePacket instanceof ResponseFailWithMessage) {
-            String failMessage = ((ResponseFailWithMessage) responsePacket).getFailMessage();
+            String failMessage = ((ResponseFailWithMessage) responsePacket).FAIL_MESSAGE;
             io.println(failMessage);
         }
     }
@@ -50,12 +49,22 @@ public class MethodConsole {
             type = scanType();
         }
         io.println(type.START_MESSAGE);
-        return switch (type) {
-            case REGISTER -> scanBookInfo(type);
-            case READ_ALL -> new RequestWithNoData(MethodType.valueOf(type.name()));
-            case SEARCH_BY_NAME -> scanBookName(type);
-            default -> scanBookId(type);
-        };
+        try {
+            return switch (type) {
+                case REGISTER -> scanBookInfo(type);
+                case READ_ALL -> new RequestWithNoData(type.name());
+                case SEARCH_BY_NAME -> scanBookName(type);
+                default -> scanBookId(type);
+            };
+        } catch (ValidateException e) {
+            io.println(e.getMessage());
+            return switch (type) {
+                case REGISTER -> scanBookInfo(type);
+                case READ_ALL -> new RequestWithNoData(type.name());
+                case SEARCH_BY_NAME -> scanBookName(type);
+                default -> scanBookId(type);
+            };
+        }
     }
 
     private Type scanType() {
@@ -65,36 +74,25 @@ public class MethodConsole {
     }
 
     private RequestWithBook scanBookInfo(Type type) {
-        BookDto bookDto = new BookDto();
-        try {
-            io.print(type.QUESTIONS.get(0));
-            bookDto.name = Validator.validateNameAndAuthor(io.scanLine());
-            io.print(type.QUESTIONS.get(1));
-            bookDto.author = Validator.validateNameAndAuthor(io.scanLine());
-            io.print(type.QUESTIONS.get(2));
-            bookDto.pages = Validator.validateIdAndPages(io.scanLine());
-        } catch (ValidateException e) {
-            io.println(e.getMessage());
-            io.print(type.QUESTIONS.get(0));
-            bookDto.name = Validator.validateNameAndAuthor(io.scanLine());
-            io.print(type.QUESTIONS.get(1));
-            bookDto.author = Validator.validateNameAndAuthor(io.scanLine());
-            io.print(type.QUESTIONS.get(2));
-            bookDto.pages = Validator.validateIdAndPages(io.scanLine());
-        }
-        return new RequestWithBook(MethodType.valueOf(type.name()), bookDto);
+        io.print(type.QUESTIONS.get(0));
+        String name = Validator.validateNameAndAuthor(io.scanLine());
+        io.print(type.QUESTIONS.get(1));
+        String author = Validator.validateNameAndAuthor(io.scanLine());
+        io.print(type.QUESTIONS.get(2));
+        int pages = Validator.validateIdAndPages(io.scanLine());
+        return new RequestWithBook(type.name(), new BookDto(name, author, pages));
     }
 
     private RequestWithName scanBookName(Type type) {
         io.println(type.QUESTIONS.get(0));
         String name = Validator.validateNameAndAuthor(io.scanLine());
-        return new RequestWithName(MethodType.valueOf(type.name()), name);
+        return new RequestWithName(type.name(), name);
     }
 
     private RequestWithId scanBookId(Type type) {
         io.println(type.QUESTIONS.get(0));
         int id = Validator.validateIdAndPages(io.scanLine());
-        return new RequestWithId(MethodType.valueOf(type.name()), id);
+        return new RequestWithId(type.name(), id);
     }
 
     private enum Type {

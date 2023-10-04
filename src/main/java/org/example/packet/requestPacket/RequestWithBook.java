@@ -1,24 +1,19 @@
 package org.example.packet.requestPacket;
 
-import org.example.packet.BookDto;
-import org.example.packet.MethodType;
+import org.example.packet.dto.BookDto;
 
 public class RequestWithBook extends RequestPacket {
-    private final BookDto bookDto;
+    public final BookDto BOOK_INFO;
 
-    public RequestWithBook(MethodType method, BookDto bookDto) {
+    public RequestWithBook(String method, BookDto bookDto) {
         super(method);
-        this.bookDto = bookDto;
-    }
-
-    public BookDto getBookDto() {
-        return bookDto;
+        this.BOOK_INFO = bookDto;
     }
 
     @Override
     public String toString() {
         return "RequestWithBook{" +
-                "bookDto=" + bookDto +
+                "bookDto=" + BOOK_INFO +
                 '}';
     }
 }

@@ -1,6 +1,6 @@
 package org.example.server.entity;
 
-import org.example.packet.BookDto;
+import org.example.packet.dto.BookDto;
 import org.example.server.entity.bookStatus.*;
 
 public class Book {

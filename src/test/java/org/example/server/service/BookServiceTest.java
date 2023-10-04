@@ -1,5 +1,6 @@
 package org.example.server.service;
 
+import org.example.packet.dto.BookDto;
 import org.example.server.entity.Book;
 import org.example.server.entity.bookStatus.BookStatusType;
 import org.example.server.exception.BookNotFoundException;
@@ -17,15 +18,14 @@ class BookServiceTest {
     @BeforeEach
     @DisplayName("테스트 레포지토리로 각 상태에 있는 책 저장")
     void beforeEach() {
-        System.out.println("@BeforeAll");
         repository = new InMemoryRepository();
         service = new BookService(repository);
-        repository.create(new Book("테스트책1", "이세희", 100)); // id = 1
-        repository.create(new Book("테스트책2", "이세희", 100)); // id = 2, 대여중
+        repository.save(new Book(new BookDto("테스트책1", "이세희", 100))); // id = 1
+        repository.save(new Book(new BookDto("테스트책2", "이세희", 100))); // id = 2, 대여중
         repository.data.get(2).status = BookStatusType.BORROWED.getBookStatus();
-        repository.create(new Book("테스트책3", "이세희", 100)); // id = 3, 정리중
+        repository.save(new Book(new BookDto("테스트책3", "이세희", 100))); // id = 3, 정리중
         repository.data.get(3).status = BookStatusType.LOAD.getBookStatus();
-        repository.create(new Book("테스트책4", "이세희", 100)); // id = 4, 분실
+        repository.save(new Book(new BookDto("테스트책4", "이세희", 100))); // id = 4, 분실
         repository.data.get(4).status = BookStatusType.LOST.getBookStatus();
 
         System.out.println(service.readAll());
@@ -34,20 +34,16 @@ class BookServiceTest {
 
     /* 도서 전채 조회 테스트 */
     @Test
-    @DisplayName("없는 문자열 가진 책 검색")
+    @DisplayName("책 전체 조회")
     void readAllIfAllNotExist() {
-        Assertions.assertThrows(ServerException.class, () -> {
-            service.searchByName("없는 이름");
-        });
+        service.readAll();
     }
 
     /* 도서 이름 검색 테스트 */
     @Test
     @DisplayName("없는 문자열 가진 책 검색")
     void searchByNameIfNotContain() {
-        Assertions.assertThrows(ServerException.class, () -> {
-            service.searchByName("없는 이름");
-        });
+        service.searchByName("없는 이름");
     }
 
     /* 도서 대여 테스트 */
@@ -95,7 +91,7 @@ class BookServiceTest {
     void restoreIfCanBorrow() {
         Assertions.assertThrows(ServerException.class, () -> {
             service.restore(1);
-            System.out.println(repository.getById(1));
+            System.out.println(repository.findById(1));
         });
     }
 

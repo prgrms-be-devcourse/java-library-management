@@ -1,7 +1,6 @@
 package org.example.server.controller;
 
-import org.example.packet.BookDto;
-import org.example.packet.MethodType;
+import org.example.packet.dto.BookDto;
 import org.example.packet.requestPacket.*;
 import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
@@ -20,9 +19,9 @@ public class BookController implements Controller {
     }
 
     public ResponsePacket handleRequest(RequestPacket requestPacket) {
-        MethodType method = requestPacket.getMethod();
+        MethodType methodType = MethodType.valueOf(requestPacket.METHOD);
         try {
-            return switch (method) {
+            return switch (methodType) {
                 case REGISTER -> register((RequestWithBook) requestPacket);
                 case READ_ALL -> readAll((RequestWithNoData) requestPacket);
                 case SEARCH_BY_NAME -> searchByName((RequestWithName) requestPacket);
@@ -32,42 +31,53 @@ public class BookController implements Controller {
                 case DELETE -> delete((RequestWithId) requestPacket);
             };
         } catch (ServerException e) {
-            return new ResponseFailWithMessage(method, e.getMessage());
+            return new ResponseFailWithMessage(methodType.name(), e.getMessage());
         }
     }
 
     private ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
-        service.register(requestWithBook.getBookDto());
-        return new ResponseSuccessWithNoData(MethodType.REGISTER);
+        service.register(requestWithBook.BOOK_INFO);
+        return new ResponseSuccessWithNoData(MethodType.REGISTER.name());
     }
 
     private ResponseSuccessWithData readAll(RequestWithNoData requestWithNoData) {
         LinkedList<BookDto> books = service.readAll();
-        return new ResponseSuccessWithData(MethodType.READ_ALL, books);
+        return new ResponseSuccessWithData(MethodType.READ_ALL.name(), books);
     }
 
     private ResponseSuccessWithData searchByName(RequestWithName requestWithName) {
-        LinkedList<BookDto> books = service.searchByName(requestWithName.getName());
-        return new ResponseSuccessWithData(MethodType.SEARCH_BY_NAME, books);
+        LinkedList<BookDto> books = service.searchByName(requestWithName.NAME);
+        return new ResponseSuccessWithData(MethodType.SEARCH_BY_NAME.name(), books);
     }
 
     private ResponseSuccessWithNoData borrow(RequestWithId requestWithId) {
-        service.borrow(requestWithId.getId());
-        return new ResponseSuccessWithNoData(MethodType.BORROW);
+        service.borrow(requestWithId.ID);
+        return new ResponseSuccessWithNoData(MethodType.BORROW.name());
     }
 
     private ResponseSuccessWithNoData restore(RequestWithId requestWithId) {
-        service.restore(requestWithId.getId());
-        return new ResponseSuccessWithNoData(MethodType.RESTORE);
+        service.restore(requestWithId.ID);
+        return new ResponseSuccessWithNoData(MethodType.RESTORE.name());
     }
 
     private ResponseSuccessWithNoData lost(RequestWithId requestWithId) {
-        service.lost(requestWithId.getId());
-        return new ResponseSuccessWithNoData(MethodType.LOST);
+        service.lost(requestWithId.ID);
+        return new ResponseSuccessWithNoData(MethodType.LOST.name());
     }
 
     private ResponseSuccessWithNoData delete(RequestWithId requestWithId) {
-        service.delete(requestWithId.getId());
-        return new ResponseSuccessWithNoData(MethodType.DELETE);
+        service.delete(requestWithId.ID);
+        return new ResponseSuccessWithNoData(MethodType.DELETE.name());
     }
+
+    private enum MethodType {
+        REGISTER,
+        READ_ALL,
+        SEARCH_BY_NAME,
+        BORROW,
+        RESTORE,
+        LOST,
+        DELETE;
+    }
+
 }

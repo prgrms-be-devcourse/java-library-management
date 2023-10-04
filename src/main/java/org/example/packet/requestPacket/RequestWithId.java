@@ -1,23 +1,18 @@
 package org.example.packet.requestPacket;
 
 
-import org.example.packet.MethodType;
-
 public class RequestWithId extends RequestPacket {
-    private final int id;
+    public final int ID;
 
-    public RequestWithId(MethodType method, int id) {
+    public RequestWithId(String method, int id) {
         super(method);
-        this.id = id;
-    }
-    public int getId() {
-        return id;
+        this.ID = id;
     }
 
     @Override
     public String toString() {
         return "RequestWithId{" +
-                "id=" + id +
+                "id=" + ID +
                 '}';
     }
 }

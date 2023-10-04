@@ -1,4 +1,4 @@
-package org.example.packet;
+package org.example.packet.dto;
 
 import org.example.server.entity.Book;
 
@@ -17,7 +17,10 @@ public class BookDto {
         this.status = book.status.getBookStatusType().getStatusName();
     }
 
-    public BookDto() {
+    public BookDto(String name, String author, int pages) {
+        this.name = name;
+        this.author = author;
+        this.pages = pages;
     }
 
     @Override

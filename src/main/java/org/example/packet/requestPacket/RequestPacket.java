@@ -1,15 +1,9 @@
 package org.example.packet.requestPacket;
 
-import org.example.packet.MethodType;
-
 public abstract class RequestPacket {
-    protected MethodType method;
+    public final String METHOD;
 
-    public RequestPacket(MethodType method) {
-        this.method = method;
-    }
-
-    public MethodType getMethod() {
-        return method;
+    public RequestPacket(String method) {
+        this.METHOD = method;
     }
 }
