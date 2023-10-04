@@ -1,7 +1,5 @@
 package com.programmers.library.utils;
 
-import java.util.Scanner;
-
 public enum MenuType {
     ADD(1, "도서 등록"),
     VIEW(2, "전체 도서 목록 조회"),
@@ -14,6 +12,7 @@ public enum MenuType {
 
     private int menuNum;
     private String menuName;
+    private static ConsoleIO console = new ConsoleIO();
 
     MenuType(int menuNum, String menuName) {
         this.menuNum = menuNum;
@@ -24,9 +23,9 @@ public enum MenuType {
         for(MenuType menu : MenuType.values()) {
             if(menu.menuNum == menuNum) {
                 if(menuNum == 0) {
-                    System.out.println("\n[System] 애플리케이션을 종료합니다.\n");
+                    console.printMessage("\n[System] 애플리케이션을 종료합니다.\n");
                 } else {
-                    System.out.println("\n[System] " + menu.menuName + "메뉴로 넘어갑니다.\n");
+                    console.printMessage("\n[System] " + menu.menuName + "메뉴로 넘어갑니다.\n");
                 }
                 return menu;
             }
@@ -35,15 +34,12 @@ public enum MenuType {
     }
 
     public static MenuType selectMenu() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Q. 사용할 기능을 선택해주세요.");
+        console.printMessage("Q. 사용할 기능을 선택해주세요.");
         for(MenuType menu : MenuType.values()) {
-            System.out.println(menu.menuNum + ". " + menu.menuName);
+            console.printMessage(menu.menuNum + ". " + menu.menuName);
         }
-        System.out.print("\n> ");
 
-        int menuInput = scanner.nextInt();
+        int menuInput = console.getIntInput("");
         return getMenuByNum(menuInput);
     }
 }
