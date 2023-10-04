@@ -130,7 +130,7 @@ public class Book {
                 "제목 : " + name + '\n' +
                 "작가 이름 : " + author + '\n' +
                 "페이지 수 : " + pageCount + '\n' +
-                "상태 : " + status;
+                "상태 : " + status.getName();
     }
 
     @Override
