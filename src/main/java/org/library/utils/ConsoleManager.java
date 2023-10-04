@@ -1,12 +1,11 @@
 package org.library.utils;
 
-import org.library.entity.Book;
-import org.library.entity.Func;
-import org.library.entity.Message;
-import org.library.vo.BookVo;
-
 import java.util.Arrays;
 import java.util.List;
+import org.library.domain.Func;
+import org.library.domain.Message;
+import org.library.dto.BookDto;
+import org.library.entity.Book;
 
 public class ConsoleManager {
 
@@ -16,7 +15,7 @@ public class ConsoleManager {
         this.consoleInputManager = consoleInputManager;
     }
 
-    public BookVo register() {
+    public BookDto register() {
         System.out.println(Message.START_REGISTER.getMessage());
         System.out.println(Message.INPUT_REGISTER_TITLE.getMessage());
         String title = consoleInputManager.inputString();
@@ -24,7 +23,7 @@ public class ConsoleManager {
         String author = consoleInputManager.inputString();
         System.out.println(Message.INPUT_REGISTER_PAGE.getMessage());
         int page = consoleInputManager.inputInt();
-        return new BookVo(title, author, page);
+        return new BookDto(title, author, page);
     }
 
     public void showAll(List<Book> bookList) {

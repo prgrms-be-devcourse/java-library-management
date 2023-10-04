@@ -1,9 +1,9 @@
 package org.library.service;
 
 import java.util.List;
+import org.library.domain.Message;
 import org.library.entity.Book;
-import org.library.entity.Exception;
-import org.library.entity.Message;
+import org.library.exception.Exception;
 import org.library.repository.Repository;
 import org.library.utils.AvailableProcessor;
 

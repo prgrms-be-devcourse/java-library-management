@@ -1,9 +1,11 @@
 package org.library.entity;
 
 import java.time.LocalDateTime;
+import org.library.domain.Message;
 import org.library.exception.AlreadyLostException;
 import org.library.exception.AlreadyOrganizingException;
 import org.library.exception.AlreadyRentException;
+import org.library.exception.Exception;
 import org.library.exception.NotReturnsException;
 
 public class Book {

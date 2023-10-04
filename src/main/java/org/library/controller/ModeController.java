@@ -1,8 +1,8 @@
 package org.library.controller;
 
 import java.util.Arrays;
-import org.library.entity.Message;
-import org.library.entity.Mode;
+import org.library.domain.Message;
+import org.library.domain.Mode;
 import org.library.exception.InvalidModeException;
 import org.library.repository.Repository;
 import org.library.utils.ConsoleInputManager;

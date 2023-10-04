@@ -1,13 +1,12 @@
 package org.library.controller;
 
+import java.util.List;
+import org.library.domain.Func;
+import org.library.domain.Message;
+import org.library.dto.BookDto;
 import org.library.entity.Book;
-import org.library.entity.Func;
-import org.library.entity.Message;
 import org.library.service.BookService;
 import org.library.utils.ConsoleManager;
-import org.library.vo.BookVo;
-
-import java.util.List;
 
 
 public class Controller {
@@ -22,9 +21,9 @@ public class Controller {
 
     // 1. 도서 등록
     public void register() {
-        BookVo bookVo = consoleManager.register();
+        BookDto bookDto = consoleManager.register();
         Long id = bookService.generateId();
-        bookService.save(new Book(id, bookVo.getTitle(), bookVo.getAuthor(), bookVo.getPage()));
+        bookService.save(new Book(id, bookDto.getTitle(), bookDto.getAuthor(), bookDto.getPage()));
         System.out.println(Message.SUCCESS_REGISTER.getMessage());
     }
 

@@ -1,4 +1,4 @@
-package org.library.entity;
+package org.library.domain;
 
 public enum Message {
 

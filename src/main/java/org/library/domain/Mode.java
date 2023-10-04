@@ -1,4 +1,4 @@
-package org.library.entity;
+package org.library.domain;
 
 import org.library.repository.ApplicationRepository;
 import org.library.repository.Repository;

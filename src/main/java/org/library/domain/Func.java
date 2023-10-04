@@ -1,4 +1,4 @@
-package org.library.entity;
+package org.library.domain;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
