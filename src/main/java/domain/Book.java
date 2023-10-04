@@ -88,4 +88,11 @@ public class Book {
         return this.name.contains(name);
     }
 
+    public String infoForFile(String seperator) {
+        return this.id
+                +seperator+this.name
+                +seperator+this.author
+                +seperator+this.page
+                +seperator+this.status.getMessage();
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public class FileRepository implements Repository{
 
     private final String path = System.getProperty("user.dir") + "/repository.csv";
+    private final String seperator = ",";
     private final List<Book> bookList = new ArrayList<>();
 
     public FileRepository(){
@@ -35,7 +36,7 @@ public class FileRepository implements Repository{
         try {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), StandardCharsets.UTF_8));
             for (Book book : bookList) {
-                bw.write(book.getId() + "," + book.getName() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getStatus().getMessage());
+                bw.write(book.infoForFile(seperator));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
