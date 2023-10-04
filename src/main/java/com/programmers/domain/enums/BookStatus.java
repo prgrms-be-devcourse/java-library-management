@@ -1,5 +1,6 @@
 package com.programmers.domain.enums;
 
+import com.programmers.exception.unchecked.BookLostFailedException;
 import com.programmers.exception.unchecked.BookRentFailedException;
 import com.programmers.exception.unchecked.BookReturnFailedException;
 
@@ -31,6 +32,11 @@ public enum BookStatus {
         }
     }
 
+    public static void checkIfLost(BookStatus status) {
+        if (status == BookStatus.LOST) {
+            throw new BookLostFailedException();
+        }
+    }
 
     public static void checkIfAvailable(BookStatus status) {
         if (status != BookStatus.ORGANIZING) {

@@ -31,6 +31,11 @@ public class BookController {
     public void returnBook(Long id) {
         bookService.returnBook(id);
     }
+
+    public void reportLostBook(Long id) {
+        bookService.reportLostBook(id);
+    }
+
     public void deleteBook(Long id) {
         bookService.deleteBook(id);
     }

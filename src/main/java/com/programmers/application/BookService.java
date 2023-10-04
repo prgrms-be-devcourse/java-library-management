@@ -52,6 +52,11 @@ public class BookService {
         updateBookStatus(id, this::organizeBook);
     }
 
+    // 분실
+    public void reportLostBook(Long id) {
+        updateBookStatus(id, Book::updateBookStatusToLost);
+    }
+
     private void updateBookStatus(Long id, Consumer<Book> statusUpdater) {
         repository.findById(id).ifPresentOrElse(book -> {
             statusUpdater.accept(book);

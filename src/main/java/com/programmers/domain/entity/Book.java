@@ -35,6 +35,10 @@ public class Book {
         this.status = BookStatus.ORGANIZING;
     }
 
+    public void updateBookStatusToLost() {
+        validateCanBeLost();
+        this.status = BookStatus.LOST;
+    }
 
     public void updateBookStatusToAvailable() {
         validateCanBeAvailable();
@@ -53,4 +57,7 @@ public class Book {
         BookStatus.checkIfOrganizable(this.status);
     }
 
+    private void validateCanBeLost() {
+        BookStatus.checkIfLost(this.status);
+    }
 }
