@@ -1,8 +1,6 @@
-import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.Book;
+import devcourse.backend.model.BookStatus;
 import devcourse.backend.repository.FileRepository;
-import devcourse.backend.repository.Repository;
-import devcourse.backend.view.BookDto;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
@@ -15,7 +13,6 @@ import java.util.*;
 import static devcourse.backend.FileSetting.TEST_FILE_NAME;
 import static devcourse.backend.FileSetting.TEST_FILE_PATH;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 public class FileRepositoryTest { ;
     private FileRepository fileRepository;
@@ -70,17 +67,6 @@ public class FileRepositoryTest { ;
 
         // addBook()이 책을 추가했는지 검증
         assertTrue(fileRepository.getBooks().contains(newBook));
-    }
-
-    @Test
-    void 파일로부터_도서_등록(){
-        // loadBooks() 메서드 테스트
-        Set<Book> books = fileRepository.loadBooks();
-        assertNotNull(books);
-
-        assertEquals(books.size(), 2);
-        assertTrue(books.contains(getBooks().get(0)));
-        assertTrue(books.contains(getBooks().get(1)));
     }
 
     @Test

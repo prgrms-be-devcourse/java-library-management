@@ -1,6 +1,6 @@
 package devcourse.backend.repository;
 
-import devcourse.backend.medel.Book;
+import devcourse.backend.model.Book;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -92,7 +92,7 @@ public class FileRepository implements Repository {
         }
     }
 
-    public Set<Book> loadBooks() {
+    private Set<Book> loadBooks() {
         Set<Book> books = new HashSet<>();
         try (BufferedReader reader = getReader()) {
             String header = reader.readLine();

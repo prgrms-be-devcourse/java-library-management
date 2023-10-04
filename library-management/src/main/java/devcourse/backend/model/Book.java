@@ -1,8 +1,5 @@
-package devcourse.backend.medel;
+package devcourse.backend.model;
 
-import devcourse.backend.view.BookDto;
-
-import java.awt.*;
 import java.util.Objects;
 
 public class Book {

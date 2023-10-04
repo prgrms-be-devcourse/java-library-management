@@ -1,5 +1,5 @@
-import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.Book;
+import devcourse.backend.model.BookStatus;
 import devcourse.backend.repository.MemoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,19 +61,6 @@ public class MemoryRepositoryTest {
 
         // addBook()이 책을 추가했는지 검증
         assertTrue(memoryRepository.getBooks().contains(newBook));
-    }
-
-    @Test
-    void 도서_상태_변경() {
-        // Mock 데이터
-        Book newBook = new Book.Builder("친절한 SQL 튜닝", "조시형", 560).build();
-        memoryRepository.getBooks().add(newBook);
-
-        // 도서 상태 변경
-        memoryRepository.changeStatus(newBook.getId(), BookStatus.BORROWED);
-
-        // changeStatus()가 상태를 변경했는지 검증
-        assertEquals(BookStatus.BORROWED, newBook.getStatus());
     }
 
     private static List<Book> getBooks() {

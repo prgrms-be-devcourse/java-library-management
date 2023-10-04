@@ -2,11 +2,11 @@ package devcourse.backend.view;
 
 import devcourse.backend.business.ModeType;
 import devcourse.backend.business.BookService;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.BookStatus;
 
 import java.util.Scanner;
 
-import static devcourse.backend.medel.BookStatus.*;
+import static devcourse.backend.model.BookStatus.*;
 
 public class Console implements Runnable {
     private static Scanner sc = new Scanner(System.in);

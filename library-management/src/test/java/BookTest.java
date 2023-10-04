@@ -1,10 +1,10 @@
-import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.Book;
+import devcourse.backend.model.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static devcourse.backend.medel.BookStatus.*;
+import static devcourse.backend.model.BookStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookTest {
