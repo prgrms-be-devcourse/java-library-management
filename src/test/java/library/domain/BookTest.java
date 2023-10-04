@@ -83,22 +83,31 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("도서를 분실 처리하면 도서는 '분실됨' 상태가 되어야합니다. (도서가 이미 분실 중이면 에러 발생.)")
+    @DisplayName("도서를 분실 처리하면 도서는 '분실됨' 상태가 되어야합니다.")
     void test_givenBook_whenLost_thenGoesForLost() {
         // Given
-        Book book1 = Book.createBook(1L, "Title1", "Author1", 59, null, AVAILABLE);
-        Book book2 = Book.createBook(2L, "Title2", "Author2", 59, null, IN_CLEANUP);
-        Book book3 = Book.createBook(3L, "Title3", "Author3", 59, null, RENTED);
-        Book book4 = Book.createBook(4L, "Title4", "Author4", 59, null, LOST);
+        Book availableBook = Book.createBook(1L, "Title1", "Author1", 59, null, AVAILABLE);
+        Book inCleanUpBook = Book.createBook(2L, "Title2", "Author2", 59, null, IN_CLEANUP);
+        Book rentedBook = Book.createBook(3L, "Title3", "Author3", 59, null, RENTED);
 
         // When, Then
-        book1.toLost();
-        assertThat(book1.getStatus()).isEqualTo(LOST);
-        book2.toLost();
-        assertThat(book2.getStatus()).isEqualTo(LOST);
-        book3.toLost();
-        assertThat(book3.getStatus()).isEqualTo(LOST);
-        assertThrows(BookException.class, book4::toLost);
+        availableBook.toLost();
+        assertThat(availableBook.getStatus()).isEqualTo(LOST);
+        inCleanUpBook.toLost();
+        assertThat(inCleanUpBook.getStatus()).isEqualTo(LOST);
+        rentedBook.toLost();
+        assertThat(rentedBook.getStatus()).isEqualTo(LOST);
+    }
+
+    @Test
+    @DisplayName("도서가 이미 분실 중이면 에러가 발생해야합니다.")
+    void test_givenLostBook_whenLost_thenThrowsException() {
+        // Given
+        Book book = Book.createBook(123L, "Title", "Author", 59, null, LOST);
+
+        // When, Then
+        assertThat(assertThrows(BookException.class, book::toLost).getMessage())
+                .isEqualTo(BOOK_ALREADY_LOST.getMessage());
     }
 
     @Test
