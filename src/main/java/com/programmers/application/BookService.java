@@ -1,25 +1,30 @@
 package com.programmers.application;
 
-import com.programmers.config.enums.ExitCommand;
+import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
-import com.programmers.exception.checked.InvalidExitCommandException;
-import com.programmers.presentation.UserInteraction;
-import com.programmers.util.Messages;
+import com.programmers.exception.unchecked.BookNotFoundException;
+import com.programmers.exception.unchecked.DuplicateBookException;
+import com.programmers.domain.dto.RegisterBookReq;
+import com.programmers.util.BookScheduler;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 public class BookService {
-    private final BookRepository repository;
-    private final UserInteraction userInteraction;
 
-    public String exitApp() {
-        try{
-            userInteraction.displayMessage(Messages.Exit_PROMPT.getMessage());
-            String exitInput = userInteraction.collectUserInput();
-            ExitCommand.promptForExit(exitInput);
-        }catch (InvalidExitCommandException e){
-            userInteraction.displayMessage(e.getMessage());
-            exitApp();
+    private final BookRepository repository;
+    public Long registerBook(RegisterBookReq registerBookReq) {
+        repository.findByTitle(registerBookReq.getTitle()).stream()
+            .filter(book -> book.getTitle().equals(registerBookReq.getTitle()))
+            .findAny()
+            .ifPresent(book -> {
+                throw new DuplicateBookException();
+            });
+        var book = repository.save(registerBookReq.toBook());
+        return book.getId();
+    }
         }
         return Messages.Return_MENU.getMessage();
     }
