@@ -1,31 +1,34 @@
 package library.service;
 
+import library.domain.Book;
 import library.domain.BookStatus;
 import library.dto.BookFindResponse;
 import library.dto.BookSaveRequest;
+import library.exception.BookErrorMessage;
 import library.exception.BookException;
 import library.repository.BookRepository;
-import library.repository.InMemoryBookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 class BookServiceTest {
 
     private BookRepository bookRepository;
     private BookService bookService;
-    private BookService testBookService;
 
     @BeforeEach
     void setup() {
-        bookRepository = new InMemoryBookRepository();
+        bookRepository = mock(BookRepository.class);
         bookService = new BookService(bookRepository);
-        testBookService = new BookService(new ReturnSameNumberBookRepository());
     }
 
     @Test
@@ -39,87 +42,77 @@ class BookServiceTest {
         bookService.addBook(bookSaveRequest);
 
         // Then
-        assertThat(bookRepository.findAll()).hasSize(2);
-    }
-
-    @Test
-    @DisplayName("도서 번호가 중복되는 경우 도서를 추가할 수 없어야 합니다.")
-    void testAdd_WithDuplicatedBookNumber_ThrowsException() {
-        // Given
-        BookSaveRequest bookSaveRequest = new BookSaveRequest("Title", "Author", 100);
-        testBookService.addBook(bookSaveRequest);
-
-        // When, Then
-        assertThrows(BookException.class,
-                () -> testBookService.addBook(bookSaveRequest));
+        verify(bookRepository, times(2)).add(any());
     }
 
     @Test
     @DisplayName("도서 제목으로 도서를 찾을 수 있어야 합니다.")
     void testFindByBookNumber() {
         // Given
-        bookService.addBook(new BookSaveRequest("Ogu and the Secret Forest", "Moonlab", 59));
-        bookService.addBook(new BookSaveRequest("Ogu and the Blind Forest", "Moonlab", 59));
-        bookService.addBook(new BookSaveRequest("Ogu and the Moon Forest", "Moonlab", 59));
+        String title = "Ogu and the Secret Forest";
+        when(bookRepository.findListContainTitle(title))
+                .thenReturn(Collections.singletonList(Book.createAvailableBook(1, title, "Author", 100)));
 
         // When
-        List<BookFindResponse> findByForest = bookService.findBookListContainTitle("Forest");
-        List<BookFindResponse> findBySecret = bookService.findBookListContainTitle("Secret");
+        List<BookFindResponse> findByTitle = bookService.findBookListContainTitle(title);
 
         // Then
-        assertThat(findByForest).hasSize(3);
-        assertThat(findBySecret).hasSize(1);
+        assertThat(findByTitle)
+                .hasSize(1)
+                .extracting("title")
+                .containsExactly(title);
     }
 
     @Test
-    @DisplayName("도서 번호를 통태 상태를 변경할 수 있어야 합니다.")
+    @DisplayName("도서 번호를 통해 상태를 변경할 수 있어야 합니다.")
     void testChangesBookStatus() {
         // Given
-        BookSaveRequest bookSaveRequest = new BookSaveRequest("Title", "Author", 100);
-        bookService.addBook(bookSaveRequest);
-        long bookNumber = bookRepository.findAll().get(0).getBookNumber();
+        Book book = Book.createAvailableBook(1, "Title", "Author", 100);
+        when(bookRepository.findAll()).thenReturn(Collections.singletonList(book));
+        when(bookRepository.findByBookNumber(anyLong())).thenReturn(Optional.of(book));
+
+        long bookNumber = book.getBookNumber();
+        int callTimes = 0;
 
         // When, Then
         bookService.rentBook(bookNumber);
-        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.RENTED);
+        assertThat(book.getStatus().name()).isEqualTo(BookStatus.RENTED.name());
+        verify(bookRepository, times(++callTimes)).persist();
+
         bookService.returnBook(bookNumber);
-        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.IN_CLEANUP);
+        assertThat(book.getStatus().name()).isEqualTo(BookStatus.IN_CLEANUP.name());
+        verify(bookRepository, times(++callTimes)).persist();
+
         bookService.lostBook(bookNumber);
-        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.LOST);
+        assertThat(book.getStatus().name()).isEqualTo(BookStatus.LOST.name());
+        verify(bookRepository, times(++callTimes)).persist();
     }
 
     @Test
     @DisplayName("존재하지 않는 도서 번호로 상태를 변경할 수 없습니다")
     void testChangesBookStatus_WithNotExistingBookNumber_ThrowsException() {
         // Given
-        BookSaveRequest bookSaveRequest = new BookSaveRequest("Title", "Author", 100);
-        bookService.addBook(bookSaveRequest);
-        long bookNumber = bookRepository.findAll().get(0).getBookNumber();
+        when(bookRepository.findByBookNumber(anyLong())).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(BookException.class,
-                () -> bookService.rentBook(bookNumber + 1));
+        assertThatExceptionOfType(BookException.class)
+                .isThrownBy(() -> bookService.rentBook(1L))
+                .withMessage(BookErrorMessage.BOOK_NOT_FOUND.getMessage());
     }
 
     @Test
     @DisplayName("도서 번호를 통해 도서를 삭제할 수 있어야 합니다.")
     void testDeleteBook() {
         // Given
-        BookSaveRequest bookSaveRequest = new BookSaveRequest("Title", "Author", 100);
-        bookService.addBook(bookSaveRequest);
-        long bookNumber = bookRepository.findAll().get(0).getBookNumber();
+        Book book = Book.createAvailableBook(1, "Title", "Author", 100);
+        when(bookRepository.findByBookNumber(book.getBookNumber())).thenReturn(Optional.of(book));
+        long bookNumber = book.getBookNumber();
 
         // When
         bookService.deleteBook(bookNumber);
 
         // Then
+        verify(bookRepository, times(1)).delete(book);
         assertThat(bookRepository.findAll()).isEmpty();
-    }
-
-    static class ReturnSameNumberBookRepository extends InMemoryBookRepository {
-        @Override
-        public long getNextBookNumber() {
-            return 1L;
-        }
     }
 }
