@@ -138,11 +138,11 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id && pageCount == book.pageCount && Objects.equals(name, book.name) && Objects.equals(author, book.author) && status == book.status && Objects.equals(returnedAt, book.returnedAt);
+        return id == book.id && pageCount == book.pageCount && Objects.equals(name, book.name) && Objects.equals(author, book.author);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, author, pageCount, status, returnedAt);
+        return Objects.hash(id, name, author, pageCount);
     }
 }
