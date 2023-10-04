@@ -20,3 +20,7 @@ public class BookController {
         return bookService.findAllBooks();
     }
 
+    public List<Book> searchBooksByTitle(String title) {
+        return bookService.searchBook(title);
+    }
+

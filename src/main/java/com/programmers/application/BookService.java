@@ -29,6 +29,11 @@ public class BookService {
     public List<Book> findAllBooks() {
         return repository.findAll();
     }
+
+    public List<Book> searchBook(String title) {
+        return repository.findByTitle(title);
+    }
+
         }
         return Messages.Return_MENU.getMessage();
     }
