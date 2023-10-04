@@ -5,12 +5,9 @@ import library.domain.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,13 +15,6 @@ class CsvFileHandlerTest {
 
     private static final String testFilePath = "src/main/resources/books.csv";
     private CsvFileHandler fileHandler;
-
-    static Stream<Book> provideBooks() {
-        return Stream.of(
-                Book.createBook(1L, "Title 1", "Author 1", 100, LocalDateTime.now(), BookStatus.AVAILABLE),
-                Book.createBook(2L, "Title 2", "Author 2", 200, LocalDateTime.now(), BookStatus.RENTED)
-        );
-    }
 
     @BeforeEach
     void setUp() {
@@ -41,12 +31,14 @@ class CsvFileHandlerTest {
         assertThat(loadedBooks).isNotNull();
     }
 
+    @Test
     @DisplayName("도서 목록을 파일에 저장할 수 있어야 합니다.")
-    @MethodSource("provideBooks")
-    @ParameterizedTest
-    void testSaveBooksToFile(Book book) {
+    void testSaveBooksToFile() {
         // given
-        List<Book> books = List.of(book);
+        List<Book> books = List.of(
+                Book.createBook(1L, "Title 1", "Author 1", 100, LocalDateTime.now(), BookStatus.AVAILABLE),
+                Book.createBook(2L, "Title 2", "Author 2", 200, LocalDateTime.now(), BookStatus.RENTED)
+        );
 
         // when
         fileHandler.saveBooksToFile(books);
