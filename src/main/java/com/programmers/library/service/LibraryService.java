@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 public class LibraryService {
 
-    private LibraryRepository libraryRepository;
+    private final LibraryRepository libraryRepository;
 
     public LibraryService(LibraryRepository libraryRepository) {
         this.libraryRepository = libraryRepository;

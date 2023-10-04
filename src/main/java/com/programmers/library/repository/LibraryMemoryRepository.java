@@ -9,8 +9,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LibraryMemoryRepository implements LibraryRepository{
-    private static List<Book> books = new ArrayList<>();
+    private final List<Book> books;
     private static int sequence = 0;
+
+    public LibraryMemoryRepository() {
+        books = new ArrayList<>();
+    }
 
     @Override
     public int save(Book book) {

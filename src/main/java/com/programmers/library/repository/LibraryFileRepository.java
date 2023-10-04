@@ -10,9 +10,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LibraryFileRepository implements LibraryRepository {
-    private static List<Book> books = new ArrayList<>();
+    private final List<Book> books;
     private static int sequence;
-    private static CSVFileHandler csvFileHandler;
+    private final CSVFileHandler csvFileHandler;
 
     public LibraryFileRepository() {
         csvFileHandler = new CSVFileHandler();
