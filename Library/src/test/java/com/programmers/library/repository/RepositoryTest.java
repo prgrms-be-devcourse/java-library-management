@@ -101,7 +101,7 @@ class RepositoryTest {
 
         // When
         Book findBook = repository.findBookById(1L).get();
-        repository.updateStatus(findBook, ORGANIZING);
+        repository.updateStatus(findBook, findBook.getBookStatus(), ORGANIZING);
 
         // Then
         assertEquals(findBook.getBookStatus().getDescription(), "정리중");

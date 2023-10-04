@@ -13,7 +13,7 @@ public interface Repository {
     public void deleteBook(Long id);
     public List<Book> findBooksByTitle(String title);
     public Optional<Book> findBookById(Long id);
-    public void updateStatus(Book book, BookStatusType bookStatus);
+    public void updateStatus(Book book,BookStatusType originStatus, BookStatusType changeStatus);
     public Long findLastId();
 
 }

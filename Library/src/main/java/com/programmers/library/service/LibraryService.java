@@ -1,7 +1,6 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.repository.Repository;
@@ -26,10 +25,6 @@ public class LibraryService {
         repository.register(createRentableBook(lastId, title, author, page));
     }
 
-    public void updateStatus(Book book, BookStatusType bookStatus){
-        repository.updateStatus(book, bookStatus);
-    }
-
     public List<Book> findAllBooks() {
         return repository.findAllBooks();
     }
@@ -52,7 +47,7 @@ public class LibraryService {
 
         switch (rentalBook.getBookStatus()) {
             case RENTABLE -> {
-                repository.updateStatus(rentalBook, RENTED);
+                repository.updateStatus(rentalBook, rentalBook.getBookStatus(), RENTED);
             }
             case RENTED -> {
                 throw ExceptionHandler.err(ErrorCode.RENTAL_FAILED_ALREADY_RENTED_EXCEPTION);
@@ -71,7 +66,7 @@ public class LibraryService {
 
         switch (returnBook.getBookStatus()) {
             case RENTED, LOST -> {
-                repository.updateStatus(returnBook, ORGANIZING);
+                repository.updateStatus(returnBook, returnBook.getBookStatus(), ORGANIZING);
             }
             case RENTABLE -> {
                 throw ExceptionHandler.err(ErrorCode.ALREADY_AVAILABLE_RENTAL_BOOK_EXCEPTION);
@@ -89,7 +84,7 @@ public class LibraryService {
 
         switch (lostBook.getBookStatus()) {
             case RENTED -> {
-                repository.updateStatus(lostBook, LOST);
+                repository.updateStatus(lostBook, lostBook.getBookStatus(), LOST);
             }
             case RENTABLE, ORGANIZING -> {
                 throw ExceptionHandler.err(ErrorCode.LOST_FAILED_EXCEPTION);
