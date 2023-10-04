@@ -18,6 +18,16 @@ public class Book {
         this.title = title;
         this.author = author;
         this.page = page;
+
+        if(title.isBlank()){
+            throw new IllegalArgumentException(Error.INVALID_TITLE.getMessage());
+        }
+        if(author.isBlank()){
+            throw new IllegalArgumentException(Error.INVALID_AUTHOR.getMessage());
+        }
+        if(page < 0){
+            throw new IllegalArgumentException(Error.INVALID_PAGE.getMessage());
+        }
     }
 
     public String rent(){
