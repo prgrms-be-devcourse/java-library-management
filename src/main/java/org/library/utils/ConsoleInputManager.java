@@ -3,21 +3,22 @@ package org.library.utils;
 import java.util.Scanner;
 
 public class ConsoleInputManager {
+
     private static final Scanner scanner = new Scanner(System.in);
 
-    public int inputInt(){
+    public int inputInt() {
         int intNum = scanner.nextInt();
         scanner.nextLine();
         return intNum;
     }
 
-    public long inputLong(){
+    public long inputLong() {
         long longNum = scanner.nextLong();
         scanner.nextLine();
         return longNum;
     }
 
-    public String inputString(){
+    public String inputString() {
         return scanner.nextLine();
     }
 }

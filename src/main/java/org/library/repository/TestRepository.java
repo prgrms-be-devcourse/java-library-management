@@ -1,17 +1,19 @@
 package org.library.repository;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.library.entity.Book;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+public class TestRepository implements Repository {
 
-public class TestRepository implements Repository{
     private static final Map<Long, Book> bookMap = new ConcurrentHashMap<>();
 
     public TestRepository() {
     }
 
-    public TestRepository(String path){
+    public TestRepository(String path) {
     }
 
     @Override
@@ -22,9 +24,9 @@ public class TestRepository implements Repository{
 
     @Override
     public void save(Book book) {
-        if(exists(book)){ // 수정
+        if (exists(book)) { // 수정
             edit(book);
-        }else{ // 추가
+        } else { // 추가
             add(book);
         }
     }
@@ -36,13 +38,14 @@ public class TestRepository implements Repository{
 
     @Override
     public List<Book> findByTitle(String title) {
-        return bookMap.values().stream().filter(b -> b.getTitle().contains(title)).sorted(Comparator.comparingLong(Book::getId)).toList();
+        return bookMap.values().stream().filter(b -> b.getTitle().contains(title))
+            .sorted(Comparator.comparingLong(Book::getId)).toList();
     }
 
     @Override
     public Book findById(Long id) {
         return bookMap.values().stream().filter(b -> b.getId().equals(id))
-                .findAny().orElseThrow();
+            .findAny().orElseThrow();
     }
 
     @Override
@@ -50,13 +53,13 @@ public class TestRepository implements Repository{
         bookMap.remove(book.getId());
     }
 
-    public boolean exists(Book book){
+    public boolean exists(Book book) {
         return bookMap.values().stream().anyMatch(b -> b.getId().equals(book.getId()));
     }
 
-    public void edit(Book targetBook){
-        for(Long id : bookMap.keySet()){
-            if(targetBook.getId().equals(id)){
+    public void edit(Book targetBook) {
+        for (Long id : bookMap.keySet()) {
+            if (targetBook.getId().equals(id)) {
                 Book book = bookMap.get(id);
                 book = targetBook;
                 break;
@@ -64,7 +67,7 @@ public class TestRepository implements Repository{
         }
     }
 
-    public void add(Book targetBook){
+    public void add(Book targetBook) {
         bookMap.put(targetBook.getId(), targetBook);
     }
 

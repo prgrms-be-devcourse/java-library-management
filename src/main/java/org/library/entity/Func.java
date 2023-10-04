@@ -1,10 +1,9 @@
 package org.library.entity;
 
-import org.library.exception.InvalidFuncException;
-import org.library.controller.Controller;
-
 import java.util.Arrays;
 import java.util.function.Consumer;
+import org.library.controller.Controller;
+import org.library.exception.InvalidFuncException;
 
 public enum Func {
     ONE(1, "도서 등록", Controller::register),
@@ -28,11 +27,11 @@ public enum Func {
         this.func = func;
     }
 
-    public void call(Controller controller){
+    public void call(Controller controller) {
         this.func.accept(controller);
     }
 
-    public boolean isValueEqual(int value){
+    public boolean isValueEqual(int value) {
         return this.value == value;
     }
 
@@ -41,9 +40,9 @@ public enum Func {
         return value + ". " + name;
     }
 
-    public static Func of(int value){
-        return Arrays.stream(values()).filter(f-> f.isValueEqual(value))
-                .findAny()
-                .orElseThrow(InvalidFuncException::new);
+    public static Func of(int value) {
+        return Arrays.stream(values()).filter(f -> f.isValueEqual(value))
+            .findAny()
+            .orElseThrow(InvalidFuncException::new);
     }
 }

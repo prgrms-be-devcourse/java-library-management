@@ -21,7 +21,7 @@ public class Controller {
     }
 
     // 1. 도서 등록
-    public void register(){
+    public void register() {
         BookVo bookVo = consoleManager.register();
         Long id = bookService.generateId();
         bookService.save(new Book(id, bookVo.getTitle(), bookVo.getAuthor(), bookVo.getPage()));
@@ -29,13 +29,13 @@ public class Controller {
     }
 
     // 2. 전체 목록 보여주기
-    public void showAll(){
+    public void showAll() {
         List<Book> books = bookService.findAll();
         consoleManager.showAll(books);
     }
 
     // 3. 도서 제목 기준 도서 찾기
-    public void findBookByTitle(){
+    public void findBookByTitle() {
         String title = consoleManager.inputTitle();
         List<Book> books = bookService.findByTitle(title);
         consoleManager.printBookList(books);
@@ -43,28 +43,28 @@ public class Controller {
     }
 
     // 4. 도서 대여
-    public void rent(){
+    public void rent() {
         Long id = consoleManager.rent();
         String result = bookService.rent(id);
         consoleManager.printResult(result);
     }
 
     // 5. 도서 반납
-    public void returns(){
+    public void returns() {
         Long id = consoleManager.returns();
         String result = bookService.returns(id);
         consoleManager.printResult(result);
     }
 
     // 6. 도서 분실
-    public void reportLost(){
+    public void reportLost() {
         Long id = consoleManager.reportLost();
         String result = bookService.reportLost(id);
         consoleManager.printResult(result);
     }
 
     // 7. 도서 삭제
-    public void delete(){
+    public void delete() {
         Long id = consoleManager.delete();
         String result = bookService.delete(id);
         consoleManager.printResult(result);
@@ -77,7 +77,7 @@ public class Controller {
         System.exit(0);
     }
 
-    public void run(){
+    public void run() {
         int functionNum = consoleManager.inputFunctionNum();
         Func func = Func.of(functionNum);
         bookService.processAvailable();

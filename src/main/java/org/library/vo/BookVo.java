@@ -1,6 +1,7 @@
 package org.library.vo;
 
 public class BookVo {
+
     private String title;
     private String author;
     private int page;

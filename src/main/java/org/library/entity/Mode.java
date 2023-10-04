@@ -5,10 +5,8 @@ import org.library.repository.Repository;
 import org.library.repository.TestRepository;
 import org.library.utils.RepositorySupplier;
 
-import java.util.function.Supplier;
-
 public enum Mode {
-    APPLICATION(1,"일반 모드", ApplicationRepository::new),
+    APPLICATION(1, "일반 모드", ApplicationRepository::new),
     TEST(2, "테스트 모드", TestRepository::new);
 
     private int num;
@@ -21,7 +19,7 @@ public enum Mode {
         this.repositorySupplier = repositorySupplier;
     }
 
-    public boolean isEqual(int inputNum){
+    public boolean isEqual(int inputNum) {
         return this.num == inputNum;
     }
 
