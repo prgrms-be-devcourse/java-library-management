@@ -6,17 +6,17 @@ import com.programmers.library.repository.TestRepository;
 import com.programmers.library.service.Service;
 
 public enum Mode {
-    NORMAL(1, "일반"),
-    TEST(2, "테스트");
+    NORMAL(1, "일반", new Controller(new Service(new FileRepository()))),
+    TEST(2, "테스트", new Controller(new Service(new TestRepository())));
 
     private final int id;
     private final String name;
     private final Controller controller;
 
-    Mode(int id, String name) {
+    Mode(int id, String name, Controller controller) {
         this.id = id;
         this.name = name;
-        this.controller = id == 2 ? new Controller(new Service(new TestRepository())) : new Controller(new Service(new FileRepository()));
+        this.controller = controller;
     }
 
     public void run() {
