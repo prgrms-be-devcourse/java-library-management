@@ -43,7 +43,7 @@ public class LibraryManagementService {
         Status result = book.getStatus();
 
         // 도서가 대여 가능할 경우, 대여중으로 상태 변경
-        switch (book.getStatus()) {
+        switch (result) {
             case CAN_RENT -> {
                 Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ALREADY_RENT, book.getReturnDateTime());
                 bookRepository.updateBook(rentBook);
