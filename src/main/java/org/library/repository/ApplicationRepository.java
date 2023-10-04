@@ -5,9 +5,10 @@ import org.library.error.NotExistError;
 import org.library.utils.JsonManager;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationRepository implements Repository{
-    private static final Map<Long, Book> bookMap = new HashMap<>();
+    private static final Map<Long, Book> bookMap = new ConcurrentHashMap<>();
     private final JsonManager jsonManager;
 
     public ApplicationRepository() {

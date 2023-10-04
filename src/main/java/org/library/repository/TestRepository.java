@@ -3,9 +3,10 @@ package org.library.repository;
 import org.library.entity.Book;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TestRepository implements Repository{
-    private static final Map<Long, Book> bookMap = new HashMap<>();
+    private static final Map<Long, Book> bookMap = new ConcurrentHashMap<>();
 
     @Override
     public Long generatedId() {
