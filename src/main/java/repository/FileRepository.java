@@ -19,8 +19,7 @@ public class FileRepository implements Repository{
     }
 
     private void loadFile(){
-        try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8))){
             String data;
             while((data=br.readLine())!=null){
                 String[] splitData = data.split(",");
@@ -33,9 +32,9 @@ public class FileRepository implements Repository{
     }
 
     private void writeFile(){
-        try {
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), StandardCharsets.UTF_8));
+        try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), StandardCharsets.UTF_8))){
             for (Book book : bookList) {
+                bw.newLine();
                 bw.write(book.infoForFile(seperator));
             }
         } catch (IOException e) {
