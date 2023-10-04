@@ -4,27 +4,7 @@
     "title": "오픈 인 더 게임",
     "author": "나심 탈레브",
     "totalPages": 444,
-    "status": "IN_PLACE"
-  },
-  {
-    "bookNumber": 2,
-    "title": "위기의 역사",
-    "author": "오건영",
-    "totalPages": 480,
-    "status": "ON_LOAN"
-  },
-  {
-    "bookNumber": 3,
-    "title": "Precalculus",
-    "author": "Demana",
-    "totalPages": 3489,
-    "status": "ON_ARRANGEMENT"
-  },
-  {
-    "bookNumber": 4,
-    "title": "보바리 부인",
-    "author": "귀스타브 플로베르",
-    "totalPages": 584,
-    "status": "LOST"
+    "status": "IN_PLACE",
+    "arrangementBegunAt": null
   }
 ]

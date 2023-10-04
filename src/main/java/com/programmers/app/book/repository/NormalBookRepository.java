@@ -77,6 +77,7 @@ public class NormalBookRepository implements BookRepository {
     public Book updateBookIfArranged(Book book) {
         if (book.isDoneArranging()) {
             updateBookStatus(book, BookStatus.IN_PLACE);
+            save();
         }
 
         return books.get(book.getBookNumber());
@@ -95,6 +96,6 @@ public class NormalBookRepository implements BookRepository {
 
     @Override
     public void save() {
-        fileManager.save(findAllBooks().orElse(null));
+        fileManager.save(new ArrayList<>(books.values()));
     }
 }
