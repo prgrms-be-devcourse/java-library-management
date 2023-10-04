@@ -52,13 +52,13 @@ public class MethodConsole {
 
     public static RequestData scanAndSetBookName(IO io) {
         RequestData requestData = new RequestData();
-        io.print(clientMethod.getQuestion());
+        io.print(clientMethod.getQuestions().get(0));
         String name = Validator.validateNameAndAuthor(io.scanLine());
         return new RequestData(name);
     }
 
     public static RequestData scanAndSetBookId(IO io) {
-        io.print(clientMethod.getQuestion());
+        io.print(clientMethod.getQuestions().get(0));
         int id = Validator.validateIdAndPages(io.scanLine());
         return new RequestData(id);
     }
@@ -103,10 +103,6 @@ public class MethodConsole {
 
         public ArrayList<String> getQuestions() {
             return questions;
-        }
-
-        public String getQuestion() {
-            return questions.get(0);
         }
 
         public RequestData scanInfo(IO io) {
