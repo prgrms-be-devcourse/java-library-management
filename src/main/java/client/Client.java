@@ -5,8 +5,6 @@ import repository.FileRepository;
 import repository.TestRepository;
 import service.Service;
 
-import java.io.IOException;
-
 public class Client {
 
     private final ConsoleManager consoleManager;
@@ -16,12 +14,12 @@ public class Client {
         this.consoleManager = consoleManager;
     }
 
-    public void run() throws IOException {
+    public void run(){
         selectMode();
         selectFunction();
     }
 
-    private void selectMode() throws IOException {
+    private void selectMode(){
         int mode = consoleManager.modeSelect();
         switch (mode) {
             case 1 -> {
@@ -37,7 +35,7 @@ public class Client {
         consoleManager.modePrint(mode);
     }
 
-    private void selectFunction() throws IOException {
+    private void selectFunction(){
         int function = consoleManager.selectFunction();
         switch (function) {
             case 1 -> {

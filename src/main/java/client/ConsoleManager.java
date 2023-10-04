@@ -15,17 +15,25 @@ public class ConsoleManager {
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    private int inputNumber() throws IOException {
+    private int inputNumber(){
         System.out.print(System.lineSeparator()+" >");
-        return Integer.parseInt(br.readLine());
+        try{
+            return Integer.parseInt(br.readLine());
+        }catch(IOException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    private String inputText() throws IOException {
+    private String inputText(){
         System.out.print(System.lineSeparator()+" >");
-        return br.readLine();
+        try{
+            return br.readLine();
+        }catch(IOException e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
-    public int modeSelect() throws IOException {
+    public int modeSelect(){
         System.out.println("Q. 모드를 선택해주세요.");
         System.out.println("1. 일반 모드");
         System.out.println("2. 테스트 모드");
@@ -44,7 +52,7 @@ public class ConsoleManager {
         }
     }
 
-    public int selectFunction() throws IOException {
+    public int selectFunction(){
         System.out.println("Q. 사용할 기능을 선택해주세요." + System.lineSeparator() +
                 "1. 도서 등록" + System.lineSeparator() +
                 "2. 전체 도서 목록 조회" + System.lineSeparator() +
@@ -57,7 +65,7 @@ public class ConsoleManager {
         return inputNumber();
     }
 
-    public Book addBook() throws IOException {
+    public Book addBook(){
         System.out.println("[System] 도서 등록 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 등록할 도서 제목을 입력하세요.");
         String name = inputText();
@@ -85,7 +93,7 @@ public class ConsoleManager {
         System.out.println("[System] 도서 목록 끝" + System.lineSeparator());
     }
 
-    public String searchName() throws IOException {
+    public String searchName(){
         System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.");
         return inputText();
@@ -103,25 +111,25 @@ public class ConsoleManager {
         System.out.println("[System] 검색된 도서 끝" + System.lineSeparator());
     }
 
-    public int rentalBook() throws IOException {
+    public int rentalBook(){
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 대여할 도서번호를 입력하세요");
         return inputNumber();
     }
 
-    public int returnBook() throws IOException {
+    public int returnBook(){
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 반납할 도서번호를 입력하세요");
         return inputNumber();
     }
 
-    public int lostBook() throws IOException {
+    public int lostBook(){
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 분실 처리할 도서번호를 입력하세요");
         return inputNumber();
     }
 
-    public int deleteBook() throws IOException {
+    public int deleteBook(){
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
         return inputNumber();
