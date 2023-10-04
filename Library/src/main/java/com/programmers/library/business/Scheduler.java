@@ -7,7 +7,6 @@ import com.programmers.library.file.FileHandler;
 import com.programmers.library.file.FileUtil;
 import com.programmers.library.repository.FileRepository;
 import com.programmers.library.repository.Repository;
-import com.programmers.library.service.LibraryService;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,6 +36,12 @@ public class Scheduler {
                 repository.updateStatus(book, ORGANIZING, RENTABLE);
                 executorService.shutdown();
             }, ORGANIZING_TIME, TimeUnit.MINUTES);
+        }
+    }
+
+    public void shutdown(){
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
         }
     }
 }
