@@ -37,6 +37,10 @@ public enum BookFunction {
                 .findFirst();
     }
 
+    public String getCode() {
+        return this.code;
+    }
+
     public String getMenuEntranceMessage() {
         return this.menuEntranceMessage;
     }
