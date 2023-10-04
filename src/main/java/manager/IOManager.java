@@ -1,5 +1,6 @@
 package manager;
 
+import domain.Book;
 import exception.EmptyInputException;
 
 import java.io.BufferedReader;
@@ -31,6 +32,16 @@ public class IOManager {
 
     public void printQuestion(String message){
         System.out.printf("\nQ. %s\n",message);
+    }
+
+    public void printBookInfo(Book book) {
+        System.out.println("\n" + "도서번호 : " + book.getId() + "\n"
+                + "제목 : " + book.getTitle() + "\n"
+                + "작가 이름 : " + book.getAuthor() + "\n"
+                + "페이지 수 : " + book.getPage() + "\n"
+                + "상태 : " + book.getStatus().getLabel() + "\n\n"
+                + "-------------------------------------"
+        );
     }
 
     public String getInput() throws Exception {

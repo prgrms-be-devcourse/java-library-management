@@ -4,7 +4,6 @@ import domain.Book;
 import manager.FileManager;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,6 +81,7 @@ public class FileRepository implements BookRepository {
         return bookList.get(bookList.size()-1).getId()+1;
     }
 
+    // 리스트 값 비우기 (테스트용)
     public void clear(){
         bookList.clear();
         fileManager.updateFile(bookList);

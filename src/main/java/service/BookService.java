@@ -3,15 +3,17 @@ package service;
 import domain.Book;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
+import manager.IOManager;
 import repository.BookRepository;
 
 import java.util.List;
 
 public class BookService {
     private final BookRepository repository;
-
-    public BookService(BookRepository repository) {
+    private final IOManager ioManager;
+    public BookService(BookRepository repository, IOManager ioManager) {
         this.repository = repository;
+        this.ioManager = ioManager;
     }
 
     // [1] 도서 저장
@@ -82,7 +84,7 @@ public class BookService {
             if (book.isCleaning()) {
                 if (!book.isStillCleaning()) book.cleaningToAvailable();
             }
-            book.printBookInfo();
+            ioManager.printBookInfo(book);
         }
     }
 }
