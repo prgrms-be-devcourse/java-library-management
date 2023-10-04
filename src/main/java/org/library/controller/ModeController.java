@@ -4,17 +4,17 @@ import org.library.entity.Message;
 import org.library.entity.Mode;
 import org.library.error.InvalidModeError;
 import org.library.repository.Repository;
-import org.library.utils.InputManager;
+import org.library.utils.ConsoleInputManager;
 
 import java.util.Arrays;
 
 public class ModeController {
-    InputManager inputManager = new InputManager();
+    ConsoleInputManager consoleInputManager = new ConsoleInputManager();
 
     public Repository selectMode(){
         System.out.println(Message.INPUT_USE_MODE.getMessage());
         printAllMode();
-        int mode = inputManager.inputInt();
+        int mode = consoleInputManager.inputInt();
         if(!isValid(mode)){
             throw new InvalidModeError();
         }
