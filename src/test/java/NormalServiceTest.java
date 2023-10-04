@@ -1,5 +1,4 @@
 import domain.Book;
-import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import manager.IOManager;
@@ -9,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import repository.FileRepository;
 import service.BookService;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static domain.BookStatus.*;

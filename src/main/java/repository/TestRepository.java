@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class TestRepository implements BookRepository {
     private final List<Book> bookList = new ArrayList<>();
+
     @Override
     public void register(Book book) {
         bookList.add(book);
@@ -47,8 +48,8 @@ public class TestRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(Integer id) {
-        for (Book book: bookList){
-            if (Objects.equals(id, book.getId())){
+        for (Book book : bookList) {
+            if (Objects.equals(id, book.getId())) {
                 return Optional.of(book);
             }
         }
@@ -58,6 +59,6 @@ public class TestRepository implements BookRepository {
     @Override
     public Integer createId() {
         if (bookList.isEmpty()) return 1;
-        return bookList.get(bookList.size()-1).getId()+1;
+        return bookList.get(bookList.size() - 1).getId() + 1;
     }
 }

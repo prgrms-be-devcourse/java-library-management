@@ -17,7 +17,7 @@ public class Book {
     private final Integer page;
     private BookStatus status;
     private LocalDateTime returnTime;
-    private int cleanTime = 1000 * 60 *5;
+    private int cleanTime = 1000 * 60 * 5;
 
     @Builder
     public Book(Integer id, String title, String author, int page, BookStatus status, LocalDateTime returnTime) {
@@ -42,7 +42,7 @@ public class Book {
         return Objects.equals(this.id, id);
     }
 
-    public void setCleanTimeForTest(){
+    public void setCleanTimeForTest() {
         cleanTime = 1000 * 10; // 10초
     }
 

@@ -58,16 +58,16 @@ public class FileRepository implements BookRepository {
 
     // [7] 도서 삭제
     @Override
-    public void remove(Book book){
+    public void remove(Book book) {
         bookList.remove(book);
         fileManager.updateFile(bookList);
     }
 
     // 아이디로 도서 조회
     @Override
-    public Optional<Book> findById(Integer id){
-        for (Book book: bookList){
-            if (book.isSameBookId(id)){
+    public Optional<Book> findById(Integer id) {
+        for (Book book : bookList) {
+            if (book.isSameBookId(id)) {
                 return Optional.of(book);
             }
         }
@@ -76,13 +76,13 @@ public class FileRepository implements BookRepository {
 
     // 도서 아이디 생성
     @Override
-    public Integer createId(){
+    public Integer createId() {
         if (bookList.isEmpty()) return START_ID;
-        return bookList.get(bookList.size()-1).getId()+1;
+        return bookList.get(bookList.size() - 1).getId() + 1;
     }
 
     // 리스트 값 비우기 (테스트용)
-    public void clear(){
+    public void clear() {
         bookList.clear();
         fileManager.updateFile(bookList);
     }

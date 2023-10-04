@@ -18,9 +18,9 @@ public class FileManager {
     // file -> list
     public List<Book> loadData() {
         List<Book> bookList = new ArrayList<>();
-        try(BufferedReader br = new BufferedReader(new FileReader(path))){
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
-            while ((line = br.readLine())!=null){
+            while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 LocalDateTime returnTime = null;
                 if (!data[5].equals("null"))
@@ -36,20 +36,20 @@ public class FileManager {
                         .build();
                 bookList.add(book);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException();
         }
         return bookList;
     }
 
     // list -> file
-    public void updateFile(List<Book> bookList){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
-            for (Book book : bookList){
-                bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus()+","+book.getReturnTime());
+    public void updateFile(List<Book> bookList) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+            for (Book book : bookList) {
+                bw.write(book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getStatus() + "," + book.getReturnTime());
                 bw.newLine();
             }
-        } catch(IOException e){
+        } catch (IOException e) {
             throw new RuntimeException();
         }
     }

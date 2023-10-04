@@ -8,10 +8,12 @@ import java.io.InputStreamReader;
 
 public class IOManager {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    public void printSelectMode(){
+
+    public void printSelectMode() {
         System.out.println("\nQ. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
     }
-    public void printSelectFunction(){
+
+    public void printSelectFunction() {
         System.out.println("""
 
                 Q. 사용할 기능을 선택해주세요.
@@ -26,12 +28,12 @@ public class IOManager {
                 """);
     }
 
-    public void printSystem(String message){
-        System.out.printf("\n[System] %s\n",message);
+    public void printSystem(String message) {
+        System.out.printf("\n[System] %s\n", message);
     }
 
-    public void printQuestion(String message){
-        System.out.printf("\nQ. %s\n",message);
+    public void printQuestion(String message) {
+        System.out.printf("\nQ. %s\n", message);
     }
 
     public void printBookInfo(Book book) {
