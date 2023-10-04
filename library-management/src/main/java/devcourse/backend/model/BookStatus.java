@@ -17,10 +17,10 @@ public enum BookStatus {
         return description;
     }
 
-    public static Optional<BookStatus> get(String description) {
+    public static BookStatus getByDescription(String description) {
         return Arrays.stream(BookStatus.values())
                 .filter(e -> e.description.equals(description))
-                .findAny();
+                .findAny().orElseThrow(() -> new IllegalArgumentException(description + "은 존재하지 않은 도서 상태입니다."));
     }
 
     public final boolean canSwitch(BookStatus after) {

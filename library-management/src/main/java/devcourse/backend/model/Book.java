@@ -1,10 +1,8 @@
 package devcourse.backend.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
-import java.util.TimeZone;
 
 public class Book {
     private final long id;
@@ -35,13 +33,13 @@ public class Book {
             return this;
         }
 
-        public Builder updateAt(String status) {
-            this.status = BookStatus.get(status).orElseThrow();
+        public Builder updateAt(String updateAt) {
+            this.updateAt = LocalDateTime.parse(updateAt);
             return this;
         }
 
         public Builder bookStatus(String status) {
-            this.status = BookStatus.get(status).orElseThrow();
+            this.status = BookStatus.getByDescription(status);
             return this;
         }
 

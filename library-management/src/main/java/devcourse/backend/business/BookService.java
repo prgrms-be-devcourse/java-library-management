@@ -4,7 +4,7 @@ import devcourse.backend.model.Book;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
-import devcourse.backend.view.BookDto;
+import devcourse.backend.view.CreateBookDto;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class BookService {
         scheduler.startScheduler();
     }
 
-    public void registerBook(BookDto data) {
+    public void registerBook(CreateBookDto data) {
         repository.addBook(new Book.Builder(data.getTitle(), data.getAuthor(), data.getTotalPages()).build());
     }
 
