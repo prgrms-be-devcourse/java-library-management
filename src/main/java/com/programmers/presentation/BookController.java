@@ -28,3 +28,7 @@ public class BookController {
         bookService.deleteBook(id);
     }
 
+    public void exitApplication(String optionNum) {
+        ExitCommand.promptForExit(optionNum);
+    }
+}
