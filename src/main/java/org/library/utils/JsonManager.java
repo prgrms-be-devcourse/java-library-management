@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileManager {
+public class JsonManager {
     private Gson gson = new GsonBuilder()
             .registerTypeAdapter(State.class, new StateSerializer())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())

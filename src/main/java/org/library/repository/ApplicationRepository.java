@@ -2,17 +2,17 @@ package org.library.repository;
 
 import org.library.entity.Book;
 import org.library.error.NotExistError;
-import org.library.utils.FileManager;
+import org.library.utils.JsonManager;
 
 import java.util.*;
 
 public class ApplicationRepository implements Repository{
     private static final Map<Long, Book> bookMap = new HashMap<>();
-    private final FileManager fileManager;
+    private final JsonManager jsonManager;
 
     public ApplicationRepository() {
-        fileManager = new FileManager();
-        List<Book> fileBooks = fileManager.read();
+        jsonManager = new JsonManager();
+        List<Book> fileBooks = jsonManager.read();
         fileBooks.forEach(this::add);
     }
 
@@ -86,6 +86,6 @@ public class ApplicationRepository implements Repository{
 
     @Override
     public void flush(){
-        fileManager.write(findAll());
+        jsonManager.write(findAll());
     }
 }
