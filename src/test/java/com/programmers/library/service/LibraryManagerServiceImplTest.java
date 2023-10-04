@@ -186,7 +186,7 @@ class LibraryManagerServiceImplTest {
 	}
 
 	@Test
-	public void testReturnNonexistentBook() {
+	public void testReturnNonExistentBook() {
 		String bookId = "1";
 		ReturnBookRequestDto request = new ReturnBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
@@ -219,7 +219,7 @@ class LibraryManagerServiceImplTest {
 	}
 
 	@Test
-	public void testLostNonexistentBook() {
+	public void testLostNonExistentBook() {
 		String bookId = "1";
 		LostBookRequestDto request = new LostBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
@@ -241,7 +241,7 @@ class LibraryManagerServiceImplTest {
 	}
 
 	@Test
-	public void testDeleteNonexistentBook() {
+	public void testDeleteNonExistentBook() {
 		String bookId = "1";
 		DeleteBookRequestDto request = new DeleteBookRequestDto(bookId);
 		when(repository.findById(request.getId())).thenReturn(Optional.empty());
