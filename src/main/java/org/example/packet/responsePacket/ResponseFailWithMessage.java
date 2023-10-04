@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class ResponseFailWithMessage extends ResponsePacket {
 
-    private String failMessage;
+    private final String failMessage;
 
     public ResponseFailWithMessage(MethodType method, String failMessage) {
         super(method);
@@ -16,5 +16,12 @@ public class ResponseFailWithMessage extends ResponsePacket {
 
     public String getFailMessage() {
         return failMessage;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseFailWithMessage{" +
+                "failMessage='" + failMessage + '\'' +
+                '}';
     }
 }

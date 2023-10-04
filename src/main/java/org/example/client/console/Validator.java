@@ -1,17 +1,8 @@
 package org.example.client.console;
 
-import org.example.packet.RequestData;
-
 import java.util.regex.Pattern;
 
 public class Validator {
-    protected static RequestData validateBook(String[] input) {
-        String name = validateNameAndAuthor(input[0]);
-        String author = validateNameAndAuthor(input[1]);
-        int pages = validateIdAndPages(input[2]);
-        return new RequestData(name, author, pages);
-    }
-
     protected static String validateNameAndAuthor(String input) {
         if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,99}$", input)) {
             return input;

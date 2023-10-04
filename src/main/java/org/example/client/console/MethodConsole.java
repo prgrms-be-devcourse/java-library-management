@@ -1,112 +1,138 @@
 package org.example.client.console;
 
 import org.example.client.io.IO;
-import org.example.packet.Request;
-import org.example.packet.RequestData;
+import org.example.packet.BookDto;
+import org.example.packet.MethodType;
+import org.example.packet.requestPacket.*;
+import org.example.packet.responsePacket.ResponseFailWithMessage;
+import org.example.packet.responsePacket.ResponsePacket;
+import org.example.packet.responsePacket.ResponseSuccessWithData;
+import org.example.packet.responsePacket.ResponseSuccessWithNoData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MethodConsole {
-    private static MethodType clientMethod;
+    private final IO io = IO.getInstance();
 
-    private MethodConsole() {
+    public void printResponse(ResponsePacket responsePacket) {
+        Type type = Type.valueOf(responsePacket.getMethod().name());
+        if (responsePacket instanceof ResponseSuccessWithData) {
+            LinkedList<BookDto> bookDtos = ((ResponseSuccessWithData) responsePacket).getBookDtos();
+            if (bookDtos.isEmpty()) {
+                io.println(System.lineSeparator() + "[System] 존재하는 도서가 없습니다." + System.lineSeparator());
+            } else {
+                bookDtos.forEach(bookDto -> io.println(String.valueOf(bookDto)));
+                io.println(type.SUCCESS_MESSAGE);
+            }
+            return;
+        }
+        if (responsePacket instanceof ResponseSuccessWithNoData) {
+            io.println(type.SUCCESS_MESSAGE);
+            return;
+        }
+        if (responsePacket instanceof ResponseFailWithMessage) {
+            String failMessage = ((ResponseFailWithMessage) responsePacket).getFailMessage();
+            io.println(failMessage);
+        }
     }
 
-    public static Request scanTypeAndInfo(IO io) {
-        Request request = setClientMethod(io);
+    public RequestPacket scanTypeAndInfo() {
+        Type type;
         try {
-            request.requestData = clientMethod.scanInfo(io);
+            type = scanType();
         } catch (ValidateException e) {
             io.println(e.getMessage());
-            request.requestData = clientMethod.scanInfo(io);
+            type = scanType();
         }
-        return request;
+        io.println(type.START_MESSAGE);
+        return switch (type) {
+            case REGISTER -> scanBookInfo(type);
+            case READ_ALL -> new RequestWithNoData(MethodType.valueOf(type.name()));
+            case SEARCH_BY_NAME -> scanBookName(type);
+            default -> scanBookId(type);
+        };
     }
 
-    public static Request setClientMethod(IO io) {
-        io.print(MethodType.MENU_CONSOLE);
-        int selectNum = Validator.validateSelectNum(MethodType.values().length, io.scanLine());
-        clientMethod = MethodType.valueOfNumber(selectNum);
-        io.println(clientMethod.alert);
-        return new Request(clientMethod.name());
+    private Type scanType() {
+        io.print(Type.BASIC_QUESTION);
+        int methodNumber = Validator.validateSelectNum(Type.values().length, io.scanLine());
+        return Type.valueOfNumber(methodNumber);
     }
 
-    public static RequestData scanAndSetBookInfo(IO io) {
-        String[] bookInfo = clientMethod.getQuestions().stream().map(question -> {
-            try {
-                io.print(question);
-                return Validator.validateNameAndAuthor(io.scanLine());
-            } catch (ValidateException e) {
-                io.println(e.getMessage());
-                io.print(question);
-                return Validator.validateNameAndAuthor(io.scanLine());
-            }
-        }).toArray(String[]::new);
-        return Validator.validateBook(bookInfo);
+    private RequestWithBook scanBookInfo(Type type) {
+        BookDto bookDto = new BookDto();
+        try {
+            io.print(type.QUESTIONS.get(0));
+            bookDto.name = Validator.validateNameAndAuthor(io.scanLine());
+            io.print(type.QUESTIONS.get(1));
+            bookDto.author = Validator.validateNameAndAuthor(io.scanLine());
+            io.print(type.QUESTIONS.get(2));
+            bookDto.pages = Validator.validateIdAndPages(io.scanLine());
+        } catch (ValidateException e) {
+            io.println(e.getMessage());
+            io.print(type.QUESTIONS.get(0));
+            bookDto.name = Validator.validateNameAndAuthor(io.scanLine());
+            io.print(type.QUESTIONS.get(1));
+            bookDto.author = Validator.validateNameAndAuthor(io.scanLine());
+            io.print(type.QUESTIONS.get(2));
+            bookDto.pages = Validator.validateIdAndPages(io.scanLine());
+        }
+        return new RequestWithBook(MethodType.valueOf(type.name()), bookDto);
     }
 
-    public static RequestData scanAndSetBookName(IO io) {
-        RequestData requestData = new RequestData();
-        io.print(clientMethod.getQuestions().get(0));
+    private RequestWithName scanBookName(Type type) {
+        io.println(type.QUESTIONS.get(0));
         String name = Validator.validateNameAndAuthor(io.scanLine());
-        return new RequestData(name);
+        return new RequestWithName(MethodType.valueOf(type.name()), name);
     }
 
-    public static RequestData scanAndSetBookId(IO io) {
-        io.print(clientMethod.getQuestions().get(0));
+    private RequestWithId scanBookId(Type type) {
+        io.println(type.QUESTIONS.get(0));
         int id = Validator.validateIdAndPages(io.scanLine());
-        return new RequestData(id);
+        return new RequestWithId(MethodType.valueOf(type.name()), id);
     }
 
-    public enum MethodType {
-        REGISTER(1, "1. 도서 등록", System.lineSeparator() + "[System] 도서 등록 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList(
+    private enum Type {
+        REGISTER(1, "도서 등록", System.lineSeparator() + "[System] 도서 등록 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서 등록이 완료되었습니다." + System.lineSeparator(), new LinkedList<>(Arrays.asList(
                 ("Q. 등록할 도서 제목을 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> "),
                 ("Q. 작가 이름을 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> "),
                 ("Q. 페이지 수를 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> ")
-        )), MethodConsole::scanAndSetBookInfo),
-        READ_ALL(2, "2. 전체 도서 목록 조회", System.lineSeparator() + "[System] 전체 도서 목록입니다." + System.lineSeparator(), new ArrayList<>(), (io -> new RequestData())),
-        SEARCH_BY_NAME(3, "3. 제목으로 도서 검색", System.lineSeparator() + "[System] 제목으로 도서 검색 메뉴로 넘어갑니다.\n\n", new ArrayList<>(Arrays.asList("Q. 검색할 도서 제목 일부를 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookName),
-        BORROW(4, "4. 도서 대여", System.lineSeparator() + "[System] 도서 대여 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 대여할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
-        RESTORE(5, "5. 도서 반납", System.lineSeparator() + "[System] 도서 반납 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 반납할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
-        LOST(6, "6. 도서 분실", System.lineSeparator() + "[System] 도서 분실 처리 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 분실 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId),
-        DELETE(7, "7. 도서 삭제", System.lineSeparator() + "[System] 도서 삭제 처리 메뉴로 넘어갑니다." + System.lineSeparator(), new ArrayList<>(Arrays.asList("Q. 삭제 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")), MethodConsole::scanAndSetBookId);
-        public static final String MENU_CONSOLE = "Q. 사용할 기능을 선택해주세요." + System.lineSeparator()
-                + String.join("", Stream.of(values()).map(type -> type.name + System.lineSeparator()).toArray(String[]::new)) + System.lineSeparator() + "> ";
-        private static final Map<Integer, MethodType> BY_NUMBER =
-                Stream.of(values()).collect(Collectors.toMap(MethodType::getNum, Function.identity()));
-        public final String alert;
-        private final int num;
-        private final String name;
-        private final ArrayList<String> questions;
-        private final Function<IO, RequestData> scanInfoFunction;
+        ))),
+        READ_ALL(2, "전체 도서 목록 조회", System.lineSeparator() + "[System] 전체 도서 목록입니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서 목록 끝" + System.lineSeparator(), new LinkedList<>()),
+        SEARCH_BY_NAME(3, "제목으로 도서 검색", System.lineSeparator() + "[System] 제목으로 도서 검색 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 검색된 도서 끝" + System.lineSeparator(), new LinkedList<>(Arrays.asList("Q. 검색할 도서 제목 일부를 입력하세요." + System.lineSeparator() + System.lineSeparator() + "> "))),
+        BORROW(4, "도서 대여", System.lineSeparator() + "[System] 도서 대여 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서가 대여 처리 되었습니다." + System.lineSeparator(), new LinkedList<>(Arrays.asList("Q. 대여할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> "))),
+        RESTORE(5, "도서 반납", System.lineSeparator() + "[System] 도서 반납 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서가 반납 처리 되었습니다." + System.lineSeparator(), new LinkedList<>(Arrays.asList("Q. 반납할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> "))),
+        LOST(6, "도서 분실", System.lineSeparator() + "[System] 도서 분실 처리 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서가 분실 처리 되었습니다." + System.lineSeparator(), new LinkedList<>(Arrays.asList("Q. 분실 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> "))),
+        DELETE(7, "도서 삭제", System.lineSeparator() + "[System] 도서 삭제 처리 메뉴로 넘어갑니다." + System.lineSeparator(), System.lineSeparator() + "[System] 도서가 삭제 처리 되었습니다." + System.lineSeparator(), new LinkedList<>(Arrays.asList("Q. 삭제 처리할 도서번호를 입력하세요" + System.lineSeparator() + System.lineSeparator() + "> ")));
+        private static final String BASIC_QUESTION = "Q. 사용할 기능을 선택해주세요." + System.lineSeparator()
+                + String.join(System.lineSeparator(), Stream.of(values()).map(type -> type.NUMBER + ". " + type.NAME_KOR).toArray(String[]::new)) + System.lineSeparator() + "> ";
+        private static final Map<Integer, Type> BY_NUMBER =
+                Stream.of(values()).collect(Collectors.toMap(Type::getNum, Function.identity()));
+        private final int NUMBER;
+        private final String NAME_KOR;
+        private final String START_MESSAGE;
+        private final String SUCCESS_MESSAGE;
+        private final LinkedList<String> QUESTIONS;
 
-        MethodType(int num, String name, String alert, ArrayList<String> questions, Function<IO, RequestData> scanInfoFunction) {
-            this.num = num;
-            this.name = name;
-            this.alert = alert;
-            this.questions = questions;
-            this.scanInfoFunction = scanInfoFunction;
+        Type(int number, String name_kor, String start_msg, String success_msg, LinkedList<String> questions) {
+            this.NUMBER = number;
+            this.NAME_KOR = name_kor;
+            this.START_MESSAGE = start_msg;
+            this.SUCCESS_MESSAGE = success_msg;
+            this.QUESTIONS = questions;
         }
 
-        public static MethodType valueOfNumber(int num) {
+        private static Type valueOfNumber(int num) {
             return BY_NUMBER.get(num);
         }
 
-        public int getNum() {
-            return num;
-        }
-
-        public ArrayList<String> getQuestions() {
-            return questions;
-        }
-
-        public RequestData scanInfo(IO io) {
-            return this.scanInfoFunction.apply(io);
+        private int getNum() {
+            return NUMBER;
         }
     }
 }

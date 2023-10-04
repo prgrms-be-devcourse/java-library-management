@@ -1,7 +1,7 @@
 package org.example.server.service;
 
-import org.example.server.entity.Book;
 import org.example.packet.BookDto;
+import org.example.server.entity.Book;
 import org.example.server.repository.Repository;
 
 import java.util.LinkedList;
@@ -18,11 +18,19 @@ public class BookService implements Service {
     }
 
     public LinkedList<BookDto> readAll() {
-        return (LinkedList<BookDto>) repository.getAll().stream().map(BookDto::new).toList();
+        LinkedList<BookDto> bookDtos = new LinkedList<>();
+        repository.getAll().forEach(book -> {
+            bookDtos.add(new BookDto(book));
+        });
+        return bookDtos;
     }
 
     public LinkedList<BookDto> searchByName(String name) {
-        return (LinkedList<BookDto>) repository.getByName(name).stream().map(BookDto::new).toList();
+        LinkedList<BookDto> bookDtos = new LinkedList<>();
+        repository.getByName(name).forEach(book -> {
+            bookDtos.add(new BookDto(book));
+        });
+        return bookDtos;
     }
 
     public void borrow(int bookId) {

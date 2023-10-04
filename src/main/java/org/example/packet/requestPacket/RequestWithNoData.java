@@ -6,4 +6,9 @@ public class RequestWithNoData extends RequestPacket {
     public RequestWithNoData(MethodType method) {
         super(method);
     }
+
+    @Override
+    public String toString() {
+        return "RequestWithNoData{}";
+    }
 }

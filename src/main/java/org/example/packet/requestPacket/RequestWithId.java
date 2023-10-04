@@ -13,4 +13,11 @@ public class RequestWithId extends RequestPacket {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "RequestWithId{" +
+                "id=" + id +
+                '}';
+    }
 }

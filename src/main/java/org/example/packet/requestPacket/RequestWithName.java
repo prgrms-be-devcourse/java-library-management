@@ -14,4 +14,11 @@ public class RequestWithName extends RequestPacket {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "RequestWithName{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

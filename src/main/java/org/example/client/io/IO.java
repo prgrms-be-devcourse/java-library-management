@@ -4,8 +4,16 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class IO {
-    private static Scanner scanner = new Scanner(System.in);
-    private PrintStream printer = new PrintStream(System.out);
+    private static final IO instance = new IO();
+    private final Scanner scanner = new Scanner(System.in);
+    private final PrintStream printer = new PrintStream(System.out);
+
+    private IO() {
+    }
+
+    public static IO getInstance() {
+        return instance;
+    }
 
     public String scanLine() {
         return scanner.nextLine().trim();

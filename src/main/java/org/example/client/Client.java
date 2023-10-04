@@ -2,32 +2,22 @@ package org.example.client;
 
 import org.example.client.console.MethodConsole;
 import org.example.client.console.ModeConsole;
-import org.example.client.console.ValidateException;
-import org.example.client.io.IO;
-import org.example.packet.Request;
+import org.example.packet.requestPacket.RequestPacket;
+import org.example.packet.responsePacket.ResponsePacket;
 
 public class Client {
-    private final IO io = new IO();
+    private final ModeConsole modeConsole = new ModeConsole();
+    private final MethodConsole methodConsole = new MethodConsole();
 
     public String scanMode() {
-        try {
-            return ModeConsole.scanType(io);
-        } catch (ValidateException e) {
-            io.println(e.getMessage());
-            return ModeConsole.scanType(io);
-        }
+        return modeConsole.scanType();
     }
 
-    public Request scanMenu() {
-        try {
-            return MethodConsole.scanTypeAndInfo(io);
-        } catch (ValidateException e) {
-            io.println(e.getMessage());
-            return MethodConsole.scanTypeAndInfo(io);
-        }
+    public RequestPacket scanMethod() {
+        return methodConsole.scanTypeAndInfo();
     }
 
-    public void printResponse(String response) {
-        io.println(response);
+    public void printResponse(ResponsePacket responsePacket) {
+        methodConsole.printResponse(responsePacket);
     }
 }

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class ResponseSuccessWithData extends ResponsePacket {
 
-    private LinkedList<BookDto> bookDtos;
+    private final LinkedList<BookDto> bookDtos;
 
     public ResponseSuccessWithData(MethodType method, LinkedList<BookDto> bookDtos) {
         super(method);
@@ -16,5 +16,12 @@ public class ResponseSuccessWithData extends ResponsePacket {
 
     public LinkedList<BookDto> getBookDtos() {
         return bookDtos;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseSuccessWithData{" +
+                "bookDtos=" + bookDtos +
+                '}';
     }
 }

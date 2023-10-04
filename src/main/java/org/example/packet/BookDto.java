@@ -17,13 +17,16 @@ public class BookDto {
         this.status = book.status.getBookStatusType().getStatusName();
     }
 
-//    @Override
-//    public String toString() {
-//        return System.lineSeparator() + "도서번호 : " + id + System.lineSeparator() +
-//                "제목 : " + name + System.lineSeparator()
-//                + "작가 이름 : " + author + System.lineSeparator()
-//                + "페이지 수 : " + pages + " 페이지" + System.lineSeparator() +
-//                "상태 : " + status + System.lineSeparator() +
-//                System.lineSeparator() + "------------------------------" + System.lineSeparator();
-//    }
+    public BookDto() {
+    }
+
+    @Override
+    public String toString() {
+        return System.lineSeparator() + "도서번호 : " + id + System.lineSeparator() +
+                "제목 : " + name + System.lineSeparator()
+                + "작가 이름 : " + author + System.lineSeparator()
+                + "페이지 수 : " + pages + " 페이지" + System.lineSeparator() +
+                "상태 : " + status + System.lineSeparator() +
+                System.lineSeparator() + "------------------------------" + System.lineSeparator();
+    }
 }

@@ -11,12 +11,14 @@ public class RequestWithBook extends RequestPacket {
         this.bookDto = bookDto;
     }
 
-    @Override
-    public MethodType getMethod() {
-        return method;
-    }
-
     public BookDto getBookDto() {
         return bookDto;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestWithBook{" +
+                "bookDto=" + bookDto +
+                '}';
     }
 }
