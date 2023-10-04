@@ -27,8 +27,13 @@ public class ReportLostTest {
     @DisplayName("도서 분실 처리")
     @Test
     void 도서_분실_처리(){
+        //given
         Book book = new Book(service.generateId(), "testTitle", "testAuthor", 33);
+
+        //when
         service.save(book);
+
+        //then
         String result = book.reportLost();
         assertThat(result).isEqualTo(Message.SUCCESS_REPORT_LOST.getMessage());
     }
@@ -36,9 +41,14 @@ public class ReportLostTest {
     @DisplayName("분실 상태에서 분실 처리")
     @Test
     void 분실상태_분실처리(){
+        //given
         Book book = new Book(service.generateId(), "testTitle", "testAuthor", 33);
+
+        //when
         service.save(book);
         service.reportLost(book.getId());
+
+        //then
         assertThatThrownBy(() -> book.reportLost()).isInstanceOf(AlreadyLostException.class);
     }
 }

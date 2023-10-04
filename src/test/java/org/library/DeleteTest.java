@@ -28,11 +28,15 @@ public class DeleteTest {
     @DisplayName("도서 삭제")
     @Test
     void 도서_삭제(){
+        //given
         Long deleteId = 30L;
         Book book = new Book(deleteId, "titleTest", "titleAuthor", 29);
+
+        //when
         service.save(book);
         service.delete(book.getId());
 
+        //then
         List<Book> all = service.findAll();
         assertThat(all.stream().filter(b->b.getId().equals(deleteId)).findAny().isEmpty()).isTrue();
     }
@@ -40,11 +44,15 @@ public class DeleteTest {
     @DisplayName("없는 도서를 삭제")
     @Test
     void 없는_도서_삭제(){
+        //given
         Long deleteId = 30L;
         Book book = new Book(deleteId, "titleTest", "titleAuthor", 29);
+
+        //when
         service.save(book);
         service.delete(book.getId());
 
+        //then
         assertThatThrownBy(() -> repository.delete(book)).isInstanceOf(NotExistException.class);
     }
 }

@@ -23,7 +23,10 @@ public class ModeTest {
     @DisplayName("없는 모드를 입력할 시")
     @Test
     void 없는_모드_입력(){
+        // given
         int mode = 33;
+
+        //then
         assertThatThrownBy(()-> modeController.getRepository(mode)).isInstanceOf(InvalidModeException.class);
     }
 }

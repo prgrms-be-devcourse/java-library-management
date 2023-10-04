@@ -26,10 +26,15 @@ public class FindTitleTest {
     @DisplayName("책 제목으로 검색")
     @Test
     void 책_제목_검색(){
+        //given
         String searchTitle = "검색할 책";
         Book book = new Book(repository.generatedId(), searchTitle, "테스터", 20);
+
+        //when
         service.save(book);
         List<Book> searchList = service.findByTitle(searchTitle);
+
+        //then
         assertThat(searchList.stream().filter(b->b.getTitle().equals(searchTitle)).findAny()).isPresent();
     }
 }
