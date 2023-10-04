@@ -23,21 +23,21 @@ public enum BookStatus {
                 .findAny();
     }
 
-    public static final boolean canSwitch(BookStatus before, BookStatus after) {
+    public final boolean canSwitch(BookStatus after) {
         if (after == BORROWED) {
-            if (before == BookStatus.AVAILABLE) return true;
+            if (this == BookStatus.AVAILABLE) return true;
         }
 
         if (after == ARRANGING) {
-            if (before == BORROWED || before == LOST) return true;
+            if (this == BORROWED || this == LOST) return true;
         }
 
         if (after == AVAILABLE) {
-            if (before == ARRANGING) return true;
+            if (this == ARRANGING) return true;
         }
 
         if (after == LOST) {
-            return (before == LOST) ? false : true;
+            return (this == LOST) ? false : true;
         }
 
         return false;
