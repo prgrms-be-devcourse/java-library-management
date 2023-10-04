@@ -17,6 +17,10 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    public void exit() {
+        bookRepository.save();
+    }
+
     public void register(BookRequest bookRequest) {
         int newBookNumber = bookRepository.getLastBookNumber() + 1;
         bookRepository.add(bookRequest.toBook(newBookNumber));

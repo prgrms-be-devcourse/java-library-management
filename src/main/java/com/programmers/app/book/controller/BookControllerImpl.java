@@ -18,6 +18,7 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void exit() {
+        bookService.exit();
         communicationAgent.printExitMessage();
         System.exit(0);
     }
