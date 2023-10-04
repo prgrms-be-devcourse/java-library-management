@@ -24,11 +24,13 @@ public class AppConfig {
     private final MenuSelector menuSelector;
     private final MenuExecutor menuExecutor;
 
+    private static final String FILE_PATH = "src/main/resources/books.json";
+
     public AppConfig(InitialConfig initialConfig, Mode mode) {
         this.initialConfig = initialConfig;
         mode.printSelected(initialConfig.getCommunicationAgent());
         this.menuSelector = generateMenuSelector();
-        this.menuExecutor = generateMenuExecuter(mode);
+        this.menuExecutor = generateMenuExecutor(mode);
     }
 
     private MenuSelector generateMenuSelector() {
@@ -40,12 +42,11 @@ public class AppConfig {
     }
 
     private FileManager<HashMap<Integer, Book>, List<Book>> generateBookFileManager() {
-        String booksFilePath = "src/main/resources/books.json";
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .serializeNulls()
                 .create();
-        return new BookFileManager(booksFilePath, gson);
+        return new BookFileManager(FILE_PATH, gson);
     }
 
     private BookRepository generateBookRepository(Mode mode)  {
@@ -75,11 +76,11 @@ public class AppConfig {
         return new BookControllerImpl(generateBookService(mode), initialConfig.getCommunicationAgent());
     }
 
-    private MenuExecutor generateMenuExecuter(Mode mode) {
+    private MenuExecutor generateMenuExecutor(Mode mode) {
         return new MenuExecutor(generateBookController(mode));
     }
 
-    public MenuExecutor getMenuExecuter() {
+    public MenuExecutor getMenuExecutor() {
         return this.menuExecutor;
     }
 }

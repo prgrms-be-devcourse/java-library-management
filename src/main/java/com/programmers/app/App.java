@@ -17,7 +17,7 @@ public class App {
     public void run() {
         while (true) {
             Menu menu = appConfig.getMenuSelector().select();
-            appConfig.getMenuExecuter().execute(menu);
+            appConfig.getMenuExecutor().execute(menu);
         }
     }
 }
