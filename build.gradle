@@ -16,6 +16,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-core:3.11.2'  // Mockito core 라이브러리
+    testImplementation 'org.mockito:mockito-inline:3.11.2'  // Mockito core 라이브러리
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'  // Mockito + JUnit 5 연동 라이브러리
 }
 
 java {
