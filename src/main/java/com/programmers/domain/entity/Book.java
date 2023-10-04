@@ -24,4 +24,14 @@ public class Book {
         this.status = status;
         this.pages = pages;
     }
+
+    public void updateBookStatusToRent() {
+        validateCanBeRented();
+        this.status = BookStatus.RENTED;
+    }
+
+    private void validateCanBeRented() {
+        BookStatus.checkIfRentable(this.status);
+    }
+
 }

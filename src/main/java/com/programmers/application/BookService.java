@@ -40,5 +40,10 @@ public class BookService {
         }
     }
 
+    // 대여
+    public void rentBook(Long id) {
+        updateBookStatus(id, Book::updateBookStatusToRent);
+    }
+
     }
 }
