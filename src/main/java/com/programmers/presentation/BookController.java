@@ -24,3 +24,7 @@ public class BookController {
         return bookService.searchBook(title);
     }
 
+    public void deleteBook(Long id) {
+        bookService.deleteBook(id);
+    }
+

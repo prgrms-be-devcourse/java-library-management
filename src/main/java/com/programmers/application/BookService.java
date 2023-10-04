@@ -34,7 +34,11 @@ public class BookService {
         return repository.findByTitle(title);
     }
 
+    public void deleteBook(Long id) {
+        if (repository.deleteById(id) == 0) {
+            throw new BookNotFoundException();
         }
-        return Messages.Return_MENU.getMessage();
+    }
+
     }
 }
