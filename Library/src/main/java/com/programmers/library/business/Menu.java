@@ -130,6 +130,7 @@ public class Menu {
     }
 
     public void exit(){
+        scheduler.shutdown();
         output.write("\n[System] 프로그램을 종료합니다.\n");
     }
     public void inValidMenu(){
