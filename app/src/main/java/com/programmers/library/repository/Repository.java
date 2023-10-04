@@ -6,19 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Repository {
-    public int generateId();
+    int generateId();
 
-    public void save(Book book);
+    void save(Book book);
 
-    public List<Book> findAll();
+    List<Book> findAll();
 
-    public List<Book> findAllByName(String name);
+    List<Book> findAllByName(String name);
 
-    public Optional<Book> findOneById(int id);
+    Optional<Book> findOneById(int id);
 
-    public void update(int id, Book updatedBook);
+    void update(int id, Book updatedBook);
 
-    public void delete(int id);
+    void delete(int id);
 
-    public void deleteAll();
+    void deleteAll();
 }
