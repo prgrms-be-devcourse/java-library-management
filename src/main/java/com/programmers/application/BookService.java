@@ -1,15 +1,14 @@
 package com.programmers.application;
 
+import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
 import com.programmers.exception.unchecked.BookNotFoundException;
 import com.programmers.exception.unchecked.DuplicateBookException;
-import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.util.BookScheduler;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BookService {
@@ -79,6 +78,7 @@ public class BookService {
         scheduleStatusUpdateToAvailable(book);
     }
 
+    // TODO 테스트 어떻게 작성하지
     private void scheduleStatusUpdateToAvailable(Book book) {
         bookScheduler.scheduleBookAvailableTask(() -> updateBookStatusToAvailable(book.getId()));
     }

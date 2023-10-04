@@ -11,7 +11,7 @@ public class NormalModeFactory implements ModeAbstractFactory {
 
     private BookRepository bookRepository;
 
-    // 테스트를 위해
+    //TODO: 테스트때문에 추가
     NormalModeFactory() {
     }
 
