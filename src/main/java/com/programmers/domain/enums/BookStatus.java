@@ -27,12 +27,9 @@ public enum BookStatus {
     public static void checkIfRentable(BookStatus status) {
         if (status != AVAILABLE) {
             switch (status) {
-                case RENTED:
-                    throw new BookRentFailedException(FAILED_RENT_BOOK_RENTED);
-                case ORGANIZING:
-                    throw new BookRentFailedException(FAILED_RENT_BOOK_ORGANIZING);
-                case LOST:
-                    throw new BookRentFailedException(FAILED_RENT_BOOK_LOST);
+                case RENTED -> throw new BookRentFailedException(FAILED_RENT_BOOK_RENTED);
+                case ORGANIZING -> throw new BookRentFailedException(FAILED_RENT_BOOK_ORGANIZING);
+                case LOST -> throw new BookRentFailedException(FAILED_RENT_BOOK_LOST);
             }
         }
     }
