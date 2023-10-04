@@ -3,7 +3,7 @@ package service;
 import domain.BookStatusType;
 import domain.Book;
 import repository.Repository;
-import dto.BookInfoDTO;
+import dto.CreateBookRequestDTO;
 
 import java.util.List;
 import java.util.Timer;
@@ -22,10 +22,10 @@ public class BookService {
 
     /**
      * 도서 등록
-     * @param bookInfoDTO
+     * @param createBookRequestDTO
      */
-    public void addBook(BookInfoDTO bookInfoDTO){
-        Book book = Book.builder().author(bookInfoDTO.getAuthor()).title(bookInfoDTO.getTitle()).pageNum(bookInfoDTO.getPageNum())
+    public void addBook(CreateBookRequestDTO createBookRequestDTO){
+        Book book = Book.builder().author(createBookRequestDTO.getAuthor()).title(createBookRequestDTO.getTitle()).pageNum(createBookRequestDTO.getPageNum())
                 .bookStatusType(BookStatusType.AVAILABLE).build();
         repository.addBook(book);
     }
@@ -119,10 +119,10 @@ public class BookService {
 
     /**
      * 도서 검색
-     * @param bookInfoDTO
+     * @param createBookRequestDTO
      * @return
      */
-    public List<Book> searchBook(BookInfoDTO bookInfoDTO) {
-        return repository.findByTitle(bookInfoDTO.getTitle());
+    public List<Book> searchBook(CreateBookRequestDTO createBookRequestDTO) {
+        return repository.findByTitle(createBookRequestDTO.getTitle());
     }
 }

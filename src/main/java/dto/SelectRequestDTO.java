@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class NumberDTO {
+public class SelectRequestDTO {
     Integer number;
 }

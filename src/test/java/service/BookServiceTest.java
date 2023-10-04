@@ -2,7 +2,7 @@ package service;
 
 import domain.Book;
 import domain.BookStatusType;
-import dto.BookInfoDTO;
+import dto.CreateBookRequestDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ class BookServiceTest {
     @Test
     void addTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
 
         // when
         bookService.addBook(bookDTO);
@@ -38,7 +38,7 @@ class BookServiceTest {
     @Test
     void borrowTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
@@ -54,7 +54,7 @@ class BookServiceTest {
     @Test
     void borrowFailTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
@@ -68,7 +68,7 @@ class BookServiceTest {
     @Test
     void deleteTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
@@ -84,7 +84,7 @@ class BookServiceTest {
     @Test
     void lostTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
@@ -100,7 +100,7 @@ class BookServiceTest {
     @Test
     void returnTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
@@ -117,7 +117,7 @@ class BookServiceTest {
     @Test
     void returnFailTest(){
         // given
-        BookInfoDTO bookDTO = BookInfoDTO.builder().title("test1").author("test").pageNum(123).build();
+        CreateBookRequestDTO bookDTO = CreateBookRequestDTO.builder().title("test1").author("test").pageNum(123).build();
         bookService.addBook(bookDTO);
         List<Book> testList = repository.findByTitle("test1");
         Book test = testList.get(0);
