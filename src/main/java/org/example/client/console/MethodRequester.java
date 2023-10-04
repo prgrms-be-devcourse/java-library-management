@@ -9,6 +9,7 @@ import org.example.packet.requestPacket.*;
 
 public class MethodRequester {
     private final IO IO = ConsoleIO.getInstance();
+    private final Validator VALIDATOR = new Validator();
 
     public RequestPacket scanTypeAndInfo() {
         MethodType methodType;
@@ -39,29 +40,29 @@ public class MethodRequester {
 
     private MethodType scanType() {
         IO.print(MethodType.BASIC_QUESTION);
-        int methodNumber = Validator.validateSelectNum(MethodType.values().length, IO.scanLine());
+        int methodNumber = VALIDATOR.validateSelectNum(MethodType.values().length, IO.scanLine());
         return MethodType.valueOfNumber(methodNumber);
     }
 
     private RequestWithBook scanBookInfo(MethodType methodType) {
         IO.print(methodType.QUESTIONS.get(0));
-        String name = Validator.validateNameAndAuthor(IO.scanLine());
+        String name = VALIDATOR.validateNameAndAuthor(IO.scanLine());
         IO.print(methodType.QUESTIONS.get(1));
-        String author = Validator.validateNameAndAuthor(IO.scanLine());
+        String author = VALIDATOR.validateNameAndAuthor(IO.scanLine());
         IO.print(methodType.QUESTIONS.get(2));
-        int pages = Validator.validateIdAndPages(IO.scanLine());
+        int pages = VALIDATOR.validateIdAndPages(IO.scanLine());
         return new RequestWithBook(methodType.name(), new BookDto(name, author, pages));
     }
 
     private RequestWithName scanBookName(MethodType methodType) {
         IO.print(methodType.QUESTIONS.get(0));
-        String name = Validator.validateNameAndAuthor(IO.scanLine());
+        String name = VALIDATOR.validateNameAndAuthor(IO.scanLine());
         return new RequestWithName(methodType.name(), name);
     }
 
     private RequestWithId scanBookId(MethodType methodType) {
         IO.print(methodType.QUESTIONS.get(0));
-        int id = Validator.validateIdAndPages(IO.scanLine());
+        int id = VALIDATOR.validateIdAndPages(IO.scanLine());
         return new RequestWithId(methodType.name(), id);
     }
 }

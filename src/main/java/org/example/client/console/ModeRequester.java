@@ -12,18 +12,19 @@ import java.util.stream.Stream;
 
 public class ModeRequester {
     private final IO IO = ConsoleIO.getInstance();
+    private final Validator VALIDATOR = new Validator();
 
     public String scanType() {
         try {
             IO.print(Type.BASIC_QUESTION);
-            int selectNum = Validator.validateSelectNum(Type.values().length, IO.scanLine());
+            int selectNum = VALIDATOR.validateSelectNum(Type.values().length, IO.scanLine());
             Type type = Type.valueOfNumber(selectNum);
             IO.println(type.START_MESSAGE);
             return type.name();
         } catch (ValidateException e) {
             IO.println(e.getMessage());
             IO.print(Type.BASIC_QUESTION);
-            int selectNum = Validator.validateSelectNum(Type.values().length, IO.scanLine());
+            int selectNum = VALIDATOR.validateSelectNum(Type.values().length, IO.scanLine());
             Type type = Type.valueOfNumber(selectNum);
             IO.println(type.START_MESSAGE);
             return type.name();

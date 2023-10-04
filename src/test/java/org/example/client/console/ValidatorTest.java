@@ -12,7 +12,7 @@ class ValidatorTest {
     @DisplayName("문자열 유효성 검증: 특수 문자 예외")
     void validateNameAndAuthorSpecial() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateNameAndAuthor("%");
+            new Validator().validateNameAndAuthor("%");
         });
     }
 
@@ -20,7 +20,7 @@ class ValidatorTest {
     @DisplayName("문자열 유효성 검증: 공백 예외")
     void validateNameAndAuthorEmpty() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateNameAndAuthor("");
+            new Validator().validateNameAndAuthor("");
         });
     }
 
@@ -30,7 +30,7 @@ class ValidatorTest {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 120; i++) sb.append("a");
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateNameAndAuthor(sb.toString());
+            new Validator().validateNameAndAuthor(sb.toString());
         });
     }
 
@@ -39,7 +39,7 @@ class ValidatorTest {
     @Test
     void validateIdAndPagesEmpty() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateIdAndPages("");
+            new Validator().validateIdAndPages("");
         });
     }
 
@@ -47,7 +47,7 @@ class ValidatorTest {
     @Test
     void validateIdAndPagesSpecial() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateIdAndPages("a");
+            new Validator().validateIdAndPages("a");
         });
     }
 
@@ -55,7 +55,7 @@ class ValidatorTest {
     @Test
     void validateIdAndPagesAlpha() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateIdAndPages("a");
+            new Validator().validateIdAndPages("a");
         });
     }
 
@@ -63,7 +63,7 @@ class ValidatorTest {
     @Test
     void validateIdAndPagesDown1() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateIdAndPages("0");
+            new Validator().validateIdAndPages("0");
         });
     }
 
@@ -71,7 +71,7 @@ class ValidatorTest {
     @Test
     void validateIdAndPagesUP5000() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateIdAndPages("5001");
+            new Validator().validateIdAndPages("5001");
         });
     }
 
@@ -80,7 +80,7 @@ class ValidatorTest {
     @Test
     void validateSelectNumEmpty() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateSelectNum(5, "");
+            new Validator().validateSelectNum(5, "");
         });
     }
 
@@ -88,7 +88,7 @@ class ValidatorTest {
     @Test
     void validateSelectNum() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateSelectNum(5, "%%");
+            new Validator().validateSelectNum(5, "%%");
         });
     }
 
@@ -96,7 +96,7 @@ class ValidatorTest {
     @Test
     void validateSelectNumAlpha() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateSelectNum(5, "a");
+            new Validator().validateSelectNum(5, "a");
         });
     }
 
@@ -104,7 +104,7 @@ class ValidatorTest {
     @Test
     void validateSelectNumDown1() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateSelectNum(5, "0");
+            new Validator().validateSelectNum(5, "0");
         });
     }
 
@@ -112,7 +112,7 @@ class ValidatorTest {
     @Test
     void validateSelectNumUP5000() {
         Assertions.assertThrows(ValidateException.class, () -> {
-            Validator.validateSelectNum(5, "5001");
+            new Validator().validateSelectNum(5, "5001");
         });
     }
 }
