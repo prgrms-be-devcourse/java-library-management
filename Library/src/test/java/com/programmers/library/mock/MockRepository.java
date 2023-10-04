@@ -43,8 +43,8 @@ public class MockRepository implements Repository {
     }
 
     @Override
-    public void updateStatus(Book book, BookStatusType bookStatus) {
-        book.updateBookStatus(bookStatus);
+    public void updateStatus(Book book, BookStatusType originStatus, BookStatusType changeStatus) {
+        book.updateBookStatus(changeStatus);
     }
 
     @Override

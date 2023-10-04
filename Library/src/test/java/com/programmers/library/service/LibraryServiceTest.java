@@ -137,24 +137,6 @@ class LibraryServiceTest {
         assertEquals(findBook.getTitle(), "제목 1");
     }
 
-    @Test
-    @DisplayName("도서 상태 변경 메서드 호출 테스트")
-    public void updateStatusTest(){
-        // Given
-        Long bookId = 1L;
-        String title = "제목 1";
-        String author = "저자 1";
-        Integer page = 100;
-
-        Book book = createRentableBook(bookId, title, author, page);
-        libraryService.registerBook(title,author,page);
-
-        // When
-        libraryService.updateStatus(book, LOST);
-
-        // Then
-        assertEquals(book.getBookStatus().getDescription(), "분실");
-    }
 
     @Test
     @DisplayName("존재하지 않는 도서번호에 대한 예외처리 테스트")
@@ -202,7 +184,7 @@ class LibraryServiceTest {
         libraryService.registerBook(title,author,page);
 
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, LOST);
+        repository.updateStatus(findBook, findBook.getBookStatus(), LOST);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
@@ -225,7 +207,7 @@ class LibraryServiceTest {
         libraryService.registerBook(title,author,page);
 
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, RENTED);
+        repository.updateStatus(findBook,findBook.getBookStatus(), RENTED);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
@@ -248,7 +230,7 @@ class LibraryServiceTest {
         libraryService.registerBook(title,author,page);
 
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, ORGANIZING);
+        repository.updateStatus(findBook,findBook.getBookStatus(), ORGANIZING);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
@@ -271,7 +253,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, RENTED);
+        repository.updateStatus(findBook, findBook.getBookStatus(), RENTED);
 
         // When
         libraryService.returnBook(bookId);
@@ -291,7 +273,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, RENTABLE);
+        repository.updateStatus(findBook, findBook.getBookStatus(), RENTABLE);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
@@ -314,7 +296,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, ORGANIZING);
+        repository.updateStatus(findBook, findBook.getBookStatus(), ORGANIZING);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
@@ -337,7 +319,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, RENTED);
+        repository.updateStatus(findBook, findBook.getBookStatus(), RENTED);
 
         // When
         libraryService.lostBook(bookId);
@@ -357,7 +339,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, LOST);
+        repository.updateStatus(findBook, findBook.getBookStatus(), LOST);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
@@ -401,7 +383,7 @@ class LibraryServiceTest {
 
         libraryService.registerBook(title,author,page);
         Book findBook = libraryService.findBookById(bookId);
-        libraryService.updateStatus(findBook, ORGANIZING);
+        repository.updateStatus(findBook, findBook.getBookStatus(), ORGANIZING);
 
         // When
         ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{

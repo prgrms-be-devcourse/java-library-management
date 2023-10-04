@@ -21,7 +21,7 @@ public class Menu {
         this.libraryService = libraryService;
         this.output = output;
         this.input = input;
-        this.scheduler = new Scheduler(libraryService);
+        this.scheduler = new Scheduler();
     }
 
     public int selectMenu() {
