@@ -15,4 +15,6 @@ public interface Repository {
     void insertBook(Book book);
 
     void updateBookStatus(long id, String bookStatus);
+
+    long getNumCreatedBooks();
 }

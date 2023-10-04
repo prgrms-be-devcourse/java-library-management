@@ -28,32 +28,6 @@ public class BookService {
         return repository.findBooksByTitle(str);
     }
 
-    // bookStatus 를 반환 -> update 에러 원인을 알려주기 위해서 (대여 신청일 때만 사용)
-    public String updateBookStatus(String updateType, long id) {
-
-        if(updateType.equals(APPLYRENT.name())){
-            if(isPossibleUpdateBookStatus(updateType, id)){    // 대여할 수 있다면
-                repository.updateBookStatus(id, NOPOSSIBLERENT.getName());
-            }else{
-                return repository.findBookById(id).getStatus();
-            }
-        }else if(updateType.equals(APPLYRETURN.name())) {
-            if(isPossibleUpdateBookStatus(updateType, id)){    // 반납할 수 있다면
-                repository.updateBookStatus(id, READY.getName());
-            }
-        }else if(updateType.equals(APPLYLOST.name())) {
-            if(isPossibleUpdateBookStatus(updateType, id)){    // 분실처리할 수 있다면
-                repository.updateBookStatus(id, LOST.getName());
-            }
-        }else if(updateType.equals(APPLYDELETE.name())) {
-            if(isPossibleUpdateBookStatus(updateType, id)){    // 삭제처리할 수 있다면
-                repository.updateBookStatus(id, DELETE.getName());
-            }
-        }
-
-        return null;
-    }
-
     public Boolean isPossibleUpdateBookStatus(String updateType, long id) {
         if(updateType.equals(APPLYRENT.name())){
             // 대여가능일 때만 대여가능
@@ -83,4 +57,36 @@ public class BookService {
 
         return null;
     }
+
+    // bookStatus 를 반환 -> update 에러 원인을 알려주기 위해서 (대여 신청일 때만 사용)
+    public String updateBookStatus(String updateType, long id) {
+
+        if(updateType.equals(APPLYRENT.name())){
+            if(isPossibleUpdateBookStatus(updateType, id)){    // 대여할 수 있다면
+                repository.updateBookStatus(id, NOPOSSIBLERENT.getName());
+                return POSSIBLERENT.getName();
+            }else{
+                return repository.findBookById(id).getStatus();
+            }
+        }else if(updateType.equals(APPLYRETURN.name())) {
+            if(isPossibleUpdateBookStatus(updateType, id)){    // 반납할 수 있다면
+                repository.updateBookStatus(id, READY.getName());
+            }
+        }else if(updateType.equals(APPLYLOST.name())) {
+            if(isPossibleUpdateBookStatus(updateType, id)){    // 분실처리할 수 있다면
+                repository.updateBookStatus(id, LOST.getName());
+            }
+        }else if(updateType.equals(APPLYDELETE.name())) {
+            if(isPossibleUpdateBookStatus(updateType, id)){    // 삭제처리할 수 있다면
+                repository.updateBookStatus(id, DELETE.getName());
+            }
+        }
+
+        return null;
+    }
+
+    public long getNumCreatedBooks() {
+        return repository.getNumCreatedBooks();
+    }
+
 }

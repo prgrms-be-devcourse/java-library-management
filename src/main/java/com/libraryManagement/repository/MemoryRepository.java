@@ -37,4 +37,9 @@ public class MemoryRepository implements Repository {
 
     }
 
+    @Override
+    public long getNumCreatedBooks() {
+        return 0;
+    }
+
 }

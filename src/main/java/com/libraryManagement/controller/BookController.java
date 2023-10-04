@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.libraryManagement.domain.BookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.*;
-import static com.libraryManagement.util.GlobalVariables.numCreatedBooks;
 
 public class BookController {
     private final BookService bookService;
@@ -26,7 +24,7 @@ public class BookController {
     }
 
     public Book createBook() throws IOException {
-        long id = ++numCreatedBooks;
+        long id = bookService.getNumCreatedBooks() + 1;
 
         DtoBook dtoBook = bookIO.inputBookInsert();
         String title = dtoBook.getTitle();
@@ -57,26 +55,10 @@ public class BookController {
     }
 
     public void updateBookStatus(String updateType) throws IOException {
-        Boolean isPossible = null;
-        String bookStatus = null;
 
-        if(updateType.equals(APPLYRENT.name())){
-            long id = bookIO.inputRentBookId();
-            bookStatus = bookService.updateBookStatus(APPLYRENT.name(), id);
-            isPossible = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), id);
-        }else if(updateType.equals(APPLYRETURN.name())) {
-            long id = bookIO.inputReturnBookId();
-            bookService.updateBookStatus(APPLYRETURN.name(), id);
-            isPossible = bookService.isPossibleUpdateBookStatus(APPLYRETURN.name(), id);
-        }else if(updateType.equals(APPLYLOST.name())) {
-            long id = bookIO.inputLostBookId();
-            bookService.updateBookStatus(APPLYLOST.name(), id);
-            isPossible = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), id);
-        }else if(updateType.equals(APPLYDELETE.name())) {
-            long id = bookIO.inputDeleteBookId();
-            bookService.updateBookStatus(APPLYDELETE.name(), id);
-            isPossible = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), id);
-        }
+        long id = bookIO.inputApplyBookId(updateType);
+        Boolean isPossible = bookService.isPossibleUpdateBookStatus(updateType, id);
+        String bookStatus = bookService.updateBookStatus(updateType, id);
 
         bookIO.outputUpdateMsg(updateType, isPossible, bookStatus);
     }

@@ -1,58 +1,37 @@
 [
     {
-        "pages": 11,
-        "author": "작가1",
+        "pages": 1,
+        "author": "1",
         "id": 1,
-        "title": "제목1",
-        "status": "대여중"
+        "title": "1",
+        "status": "삭제됨"
     },
     {
-        "pages": 22,
-        "author": "작가2",
+        "pages": 2,
+        "author": "2",
         "id": 2,
-        "title": "제목2",
-        "status": "대여중"
+        "title": "2",
+        "status": "준비중"
     },
     {
-        "pages": 33,
-        "author": "작가3",
+        "pages": 3,
+        "author": "3",
         "id": 3,
-        "title": "제목3",
+        "title": "3",
         "status": "대여중"
     },
     {
-        "pages": 44,
-        "author": "작가4",
+        "pages": 4,
+        "author": "4",
         "id": 4,
-        "title": "제목4",
-        "status": "대여중"
+        "title": "4",
+        "status": "대여가능"
     },
     {
-        "pages": 55,
-        "author": "작가5",
+        "pages": 5,
+        "author": "5",
         "id": 5,
-        "title": "제목5",
-        "status": "대여가능"
-    },
-    {
-        "pages": 66,
-        "author": "작가6",
-        "id": 6,
-        "title": "제목6",
-        "status": "대여중"
-    },
-    {
-        "pages": 77,
-        "author": "작가7",
-        "id": 7,
-        "title": "제목7",
-        "status": "대여가능"
-    },
-    {
-        "pages": 88,
-        "author": "작가8",
-        "id": 8,
-        "title": "제목8",
+        "title": "5",
         "status": "대여가능"
     }
 ]

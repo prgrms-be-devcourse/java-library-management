@@ -32,7 +32,6 @@ public class AppConfig {
             System.out.println("모드 선택에 실패했습니다. 프로그램을 종료합니다.");
             exit(0);
         }
-        GlobalVariables globalVariables = new GlobalVariables(repository);
 
         BookMenu bookMenu = new BookMenu(new BookController(new BookService(repository), new BookIO()));
         bookMenu.displayBookMenu();

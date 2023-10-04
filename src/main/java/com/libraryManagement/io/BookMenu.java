@@ -80,7 +80,7 @@ public class BookMenu {
                 case "도서 삭제" :
                     System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n");
                     bookController.updateBookStatus(APPLYDELETE.name());
-                    return;
+                    break;
                 default :
                     System.out.println("번호를 다시 입력해주세요.");
                     System.out.println("종료하려면 -1을 입력해주세요.\n");

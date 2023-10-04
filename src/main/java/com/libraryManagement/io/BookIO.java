@@ -40,6 +40,23 @@ public class BookIO {
         return br.readLine();
     }
 
+    public long inputApplyBookId(String updateType) throws IOException {
+        if(updateType.equals(APPLYRENT.name())){
+            System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
+        }
+        else if(updateType.equals(APPLYRETURN.name())) {
+            System.out.println("Q. 반납할 도서번호를 입력하세요.\n");
+        }
+        else if(updateType.equals(APPLYLOST.name())) {
+            System.out.println("Q. 분실 처리할 도서번호를 입력하세요.\n");
+        }
+        else if(updateType.equals(APPLYDELETE.name())) {
+            System.out.println("Q. 삭제 처리할 도서번호를 입력하세요.\n");
+        }
+
+        return Long.parseLong(br.readLine());
+    }
+
     public long inputRentBookId() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
         return Long.parseLong(br.readLine());
@@ -74,6 +91,8 @@ public class BookIO {
                     System.out.println("[System] 5분 내로 대여가능합니다.\n");
                 }else if(bookStatus.equals(LOST.getName())) {
                     System.out.println("[System] 분실된 도서입니다.\n");
+                }else if(bookStatus.equals(DELETE.getName())) {
+                    System.out.println("[System] 삭제된 도서입니다.\n");
                 }
             }
         }else if(updateType.equals(APPLYRETURN.name())) {

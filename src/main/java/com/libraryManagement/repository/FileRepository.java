@@ -1,7 +1,6 @@
 package com.libraryManagement.repository;
 
 import com.libraryManagement.domain.Book;
-import com.libraryManagement.domain.BookStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -112,8 +111,6 @@ public class FileRepository implements Repository {
     }
 
     public Book findBookById(long id) {
-        Book book = null;
-
         try {
             readJSONArray();
 
@@ -123,7 +120,7 @@ public class FileRepository implements Repository {
             int pages = jsonObject.getInt("pages");
             String status = jsonObject.getString("status");
 
-            book = new Book
+            return new Book
                     .Builder()
                     .id(id)
                     .title(title)
@@ -136,7 +133,7 @@ public class FileRepository implements Repository {
             e.printStackTrace();
         }
 
-        return book;
+        return null;
     }
 
     @Override
@@ -186,4 +183,16 @@ public class FileRepository implements Repository {
         }
     }
 
+    @Override
+    public long getNumCreatedBooks() {
+        try {
+            readJSONArray();
+            return jsonArray.length();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }
