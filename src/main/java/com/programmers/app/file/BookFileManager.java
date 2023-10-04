@@ -42,9 +42,7 @@ public class BookFileManager implements FileManager<HashMap<Integer, Book>, List
 
     @Override
     public void save(List<Book> books) {
-        try {
-            FileWriter fileWriter = new FileWriter(filePath);
-
+        try(FileWriter fileWriter = new FileWriter(filePath)) {
             Type type = new TypeToken<List<BookJSON>>(){}.getType();
             List<BookJSON> bookJSONs = books.stream()
                     .map(Book::toBookJSON)
@@ -52,7 +50,6 @@ public class BookFileManager implements FileManager<HashMap<Integer, Book>, List
 
             gson.toJson(bookJSONs, type, fileWriter);
             fileWriter.flush();
-            fileWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Failed to write books.json for some reason. System exits");
