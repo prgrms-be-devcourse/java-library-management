@@ -8,9 +8,14 @@ import org.library.vo.BookVo;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsoleManager {
+public class ConsoleInputManager {
 
-    private InputManager inputManager = new InputManager();
+    private InputManager inputManager;
+
+    public ConsoleInputManager(InputManager inputManager) {
+        this.inputManager = inputManager;
+    }
+
     public BookVo register(){
         System.out.println(Message.START_REGISTER.getMessage());
         System.out.println(Message.INPUT_REGISTER_TITLE.getMessage());

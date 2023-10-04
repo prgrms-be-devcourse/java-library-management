@@ -4,7 +4,7 @@ import org.library.entity.Book;
 import org.library.entity.Func;
 import org.library.entity.Message;
 import org.library.service.BookService;
-import org.library.utils.ConsoleManager;
+import org.library.utils.ConsoleInputManager;
 import org.library.vo.BookVo;
 
 import java.util.List;
@@ -13,15 +13,16 @@ import java.util.List;
 public class Controller {
 
     private BookService bookService;
-    private ConsoleManager consoleManager = new ConsoleManager();
+    private ConsoleInputManager consoleInputManager;
 
-    public Controller(BookService bookService) {
+    public Controller(BookService bookService, ConsoleInputManager consoleInputManager) {
         this.bookService = bookService;
+        this.consoleInputManager = consoleInputManager;
     }
 
     // 1. 도서 등록
     public void register(){
-        BookVo bookVo = consoleManager.register();
+        BookVo bookVo = consoleInputManager.register();
         Long id = bookService.generateId();
         bookService.save(new Book(id, bookVo.getTitle(), bookVo.getAuthor(), bookVo.getPage()));
         System.out.println(Message.SUCCESS_REGISTER.getMessage());
@@ -30,38 +31,38 @@ public class Controller {
     // 2. 전체 목록 보여주기
     public void showAll(){
         List<Book> books = bookService.findAll();
-        consoleManager.showAll(books);
+        consoleInputManager.showAll(books);
     }
 
     // 3. 도서 제목 기준 도서 찾기
     public void findBookByTitle(){
-        String title = consoleManager.inputTitle();
+        String title = consoleInputManager.inputTitle();
         List<Book> books = bookService.findByTitle(title);
-        consoleManager.printBookList(books);
+        consoleInputManager.printBookList(books);
         System.out.println(Message.END_FIND_BY_TITLE.getMessage());
     }
 
     // 4. 도서 대여
     public void rent(){
-        Long id = consoleManager.rent();
+        Long id = consoleInputManager.rent();
         bookService.rent(id);
     }
 
     // 5. 도서 반납
     public void returns(){
-        Long id = consoleManager.returns();
+        Long id = consoleInputManager.returns();
         bookService.returns(id);
     }
 
     // 6. 도서 분실
     public void reportLost(){
-        Long id = consoleManager.reportLost();
+        Long id = consoleInputManager.reportLost();
         bookService.reportLost(id);
     }
 
     // 7. 도서 삭제
     public void delete(){
-        Long id = consoleManager.delete();
+        Long id = consoleInputManager.delete();
         bookService.delete(id);
     }
 
@@ -73,7 +74,7 @@ public class Controller {
     }
 
     public void run(){
-        int functionNum = consoleManager.inputFunctionNum();
+        int functionNum = consoleInputManager.inputFunctionNum();
         Func func = Func.of(functionNum);
         func.call(this);
     }
