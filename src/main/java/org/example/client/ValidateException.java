@@ -1,4 +1,4 @@
-package org.example.client.console;
+package org.example.client;
 
 public class ValidateException extends RuntimeException {
 }

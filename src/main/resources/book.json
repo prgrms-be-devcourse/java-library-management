@@ -1,25 +1,18 @@
 {
-  "new_id" : 8,
+  "new_id" : 12,
   "data" : [ {
     "id" : 1,
     "name" : "132",
     "author" : "123",
     "pages" : 123,
-    "status" : "CAN_BORROW",
-    "endLoadTime" : ""
+    "status" : "LOAD",
+    "endLoadTime" : "2023-10-04T22:48:25.963717"
   }, {
     "id" : 2,
     "name" : "123",
     "author" : "123",
     "pages" : 123,
-    "status" : "CAN_BORROW",
-    "endLoadTime" : ""
-  }, {
-    "id" : 3,
-    "name" : "123",
-    "author" : "123",
-    "pages" : 123,
-    "status" : "CAN_BORROW",
+    "status" : "LOST",
     "endLoadTime" : ""
   }, {
     "id" : 4,
@@ -40,6 +33,34 @@
     "name" : "rtrt",
     "author" : "rtrt",
     "pages" : 678,
+    "status" : "LOST",
+    "endLoadTime" : ""
+  }, {
+    "id" : 8,
+    "name" : "123",
+    "author" : "123",
+    "pages" : 123,
+    "status" : "CAN_BORROW",
+    "endLoadTime" : ""
+  }, {
+    "id" : 9,
+    "name" : "rkskdk",
+    "author" : "가나낭",
+    "pages" : 12,
+    "status" : "CAN_BORROW",
+    "endLoadTime" : ""
+  }, {
+    "id" : 10,
+    "name" : "가나",
+    "author" : "가나의 나가",
+    "pages" : 123,
+    "status" : "CAN_BORROW",
+    "endLoadTime" : ""
+  }, {
+    "id" : 11,
+    "name" : "123",
+    "author" : "123",
+    "pages" : 123,
     "status" : "CAN_BORROW",
     "endLoadTime" : ""
   } ]

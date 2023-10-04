@@ -1,6 +1,6 @@
 package org.example.server.entity;
 
-import org.example.packet.dto.BookDto;
+import org.example.packet.BookDto;
 import org.example.server.entity.bookStatus.*;
 
 public class Book {
@@ -11,9 +11,9 @@ public class Book {
     public BookStatus status;
 
     public Book(BookDto bookDto) {
-        this.name = bookDto.name;
-        this.author = bookDto.author;
-        this.pages = bookDto.pages;
+        this.name = bookDto.NAME;
+        this.author = bookDto.AUTHOR;
+        this.pages = bookDto.PAGES;
         this.status = new CanBorrowStatus();
     }
 

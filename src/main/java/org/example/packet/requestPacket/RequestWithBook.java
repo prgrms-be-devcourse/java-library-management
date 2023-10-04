@@ -1,6 +1,6 @@
 package org.example.packet.requestPacket;
 
-import org.example.packet.dto.BookDto;
+import org.example.packet.BookDto;
 
 public class RequestWithBook extends RequestPacket {
     public final BookDto BOOK_INFO;

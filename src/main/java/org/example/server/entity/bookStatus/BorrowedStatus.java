@@ -3,11 +3,11 @@ package org.example.server.entity.bookStatus;
 import org.example.server.exception.AlreadyBorrowedException;
 
 public class BorrowedStatus implements BookStatus {
-    public BookStatusType bookStatusType = BookStatusType.BORROWED;
+    private final BookStatusType TYPE = BookStatusType.BORROWED;
 
     @Override
-    public BookStatusType getBookStatusType() {
-        return bookStatusType;
+    public BookStatusType getType() {
+        return TYPE;
     }
 
     @Override

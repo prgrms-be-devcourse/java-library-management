@@ -1,5 +1,8 @@
 package org.example.client.console;
 
+import org.example.client.ValidateException;
+import org.example.client.Validator;
+import org.example.client.io.ConsoleIO;
 import org.example.client.io.IO;
 
 import java.util.Map;
@@ -9,21 +12,21 @@ import java.util.stream.Stream;
 
 public class ModeConsole {
 
-    private final IO io = IO.getInstance();
+    private final IO IO = ConsoleIO.getInstance();
 
     public String scanType() {
         try {
-            io.print(Type.BASIC_QUESTION);
-            int selectNum = Validator.validateSelectNum(Type.values().length, io.scanLine());
+            IO.print(Type.BASIC_QUESTION);
+            int selectNum = Validator.validateSelectNum(Type.values().length, IO.scanLine());
             Type type = Type.valueOfNumber(selectNum);
-            io.println(type.START_MESSAGE);
+            IO.println(type.START_MESSAGE);
             return type.name();
         } catch (ValidateException e) {
-            io.println(e.getMessage());
-            io.print(Type.BASIC_QUESTION);
-            int selectNum = Validator.validateSelectNum(Type.values().length, io.scanLine());
+            IO.println(e.getMessage());
+            IO.print(Type.BASIC_QUESTION);
+            int selectNum = Validator.validateSelectNum(Type.values().length, IO.scanLine());
             Type type = Type.valueOfNumber(selectNum);
-            io.println(type.START_MESSAGE);
+            IO.println(type.START_MESSAGE);
             return type.name();
         }
     }
@@ -40,10 +43,10 @@ public class ModeConsole {
         private final int NUMBER;
         private final String NAME;
 
-        Type(int num, String name, String alert) {
+        Type(int num, String name, String startMessage) {
             this.NUMBER = num;
             this.NAME = name;
-            this.START_MESSAGE = alert;
+            this.START_MESSAGE = startMessage;
         }
 
         private static Type valueOfNumber(int num) {

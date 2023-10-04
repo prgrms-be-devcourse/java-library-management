@@ -5,20 +5,20 @@ import org.example.server.exception.LoadingException;
 import java.time.LocalDateTime;
 
 public class LoadStatus implements BookStatus {
-    BookStatusType bookStatusType = BookStatusType.LOAD;
-    LocalDateTime endLoadTime;
+    public final LocalDateTime END_LOAD_TIME;
+    private final BookStatusType TYPE = BookStatusType.LOAD;
 
     public LoadStatus() {
-        endLoadTime = LocalDateTime.now().plusMinutes(5);
+        END_LOAD_TIME = LocalDateTime.now().plusMinutes(5);
     }
 
     public LoadStatus(String endLoadTime) {
-        this.endLoadTime = LocalDateTime.parse(endLoadTime);
+        this.END_LOAD_TIME = LocalDateTime.parse(endLoadTime);
     }
 
     @Override
-    public BookStatusType getBookStatusType() {
-        return bookStatusType;
+    public BookStatusType getType() {
+        return TYPE;
     }
 
     @Override
@@ -34,9 +34,5 @@ public class LoadStatus implements BookStatus {
     @Override
     public void lost() {
         // 성공
-    }
-
-    public LocalDateTime getEndLoadTime() {
-        return endLoadTime;
     }
 }

@@ -3,11 +3,11 @@ package org.example.server.entity.bookStatus;
 import org.example.server.exception.LostException;
 
 public class LostStatus implements BookStatus {
-    BookStatusType bookStatusType = BookStatusType.LOST;
+    private final BookStatusType TYPE = BookStatusType.LOST;
 
     @Override
-    public BookStatusType getBookStatusType() {
-        return bookStatusType;
+    public BookStatusType getType() {
+        return TYPE;
     }
 
     @Override

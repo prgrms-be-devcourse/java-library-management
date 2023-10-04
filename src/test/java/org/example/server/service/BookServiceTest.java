@@ -1,6 +1,6 @@
 package org.example.server.service;
 
-import org.example.packet.dto.BookDto;
+import org.example.packet.BookDto;
 import org.example.server.entity.Book;
 import org.example.server.entity.bookStatus.BookStatusType;
 import org.example.server.exception.BookNotFoundException;
@@ -22,11 +22,11 @@ class BookServiceTest {
         service = new BookService(repository);
         repository.save(new Book(new BookDto("테스트책1", "이세희", 100))); // id = 1
         repository.save(new Book(new BookDto("테스트책2", "이세희", 100))); // id = 2, 대여중
-        repository.data.get(2).status = BookStatusType.BORROWED.getBookStatus();
+        repository.DATA.get(2).status = BookStatusType.BORROWED.getBookStatus();
         repository.save(new Book(new BookDto("테스트책3", "이세희", 100))); // id = 3, 정리중
-        repository.data.get(3).status = BookStatusType.LOAD.getBookStatus();
+        repository.DATA.get(3).status = BookStatusType.LOAD.getBookStatus();
         repository.save(new Book(new BookDto("테스트책4", "이세희", 100))); // id = 4, 분실
-        repository.data.get(4).status = BookStatusType.LOST.getBookStatus();
+        repository.DATA.get(4).status = BookStatusType.LOST.getBookStatus();
 
         System.out.println(service.readAll());
     }

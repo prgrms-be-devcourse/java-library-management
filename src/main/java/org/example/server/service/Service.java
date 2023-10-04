@@ -1,6 +1,6 @@
 package org.example.server.service;
 
-import org.example.packet.dto.BookDto;
+import org.example.packet.BookDto;
 
 import java.util.LinkedList;
 

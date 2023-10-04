@@ -1,5 +1,7 @@
 package org.example.client.console;
 
+import org.example.client.ValidateException;
+import org.example.client.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

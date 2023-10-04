@@ -1,6 +1,6 @@
 package org.example.server.controller;
 
-import org.example.packet.dto.BookDto;
+import org.example.packet.BookDto;
 import org.example.packet.requestPacket.*;
 import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
@@ -12,10 +12,10 @@ import org.example.server.service.Service;
 import java.util.LinkedList;
 
 public class BookController implements Controller {
-    private final Service service;
+    private final Service SERVICE;
 
     public BookController(Service service) {
-        this.service = service;
+        this.SERVICE = service;
     }
 
     public ResponsePacket handleRequest(RequestPacket requestPacket) {
@@ -36,37 +36,37 @@ public class BookController implements Controller {
     }
 
     private ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
-        service.register(requestWithBook.BOOK_INFO);
+        SERVICE.register(requestWithBook.BOOK_INFO);
         return new ResponseSuccessWithNoData(MethodType.REGISTER.name());
     }
 
     private ResponseSuccessWithData readAll(RequestWithNoData requestWithNoData) {
-        LinkedList<BookDto> books = service.readAll();
+        LinkedList<BookDto> books = SERVICE.readAll();
         return new ResponseSuccessWithData(MethodType.READ_ALL.name(), books);
     }
 
     private ResponseSuccessWithData searchByName(RequestWithName requestWithName) {
-        LinkedList<BookDto> books = service.searchByName(requestWithName.NAME);
+        LinkedList<BookDto> books = SERVICE.searchByName(requestWithName.NAME);
         return new ResponseSuccessWithData(MethodType.SEARCH_BY_NAME.name(), books);
     }
 
     private ResponseSuccessWithNoData borrow(RequestWithId requestWithId) {
-        service.borrow(requestWithId.ID);
+        SERVICE.borrow(requestWithId.ID);
         return new ResponseSuccessWithNoData(MethodType.BORROW.name());
     }
 
     private ResponseSuccessWithNoData restore(RequestWithId requestWithId) {
-        service.restore(requestWithId.ID);
+        SERVICE.restore(requestWithId.ID);
         return new ResponseSuccessWithNoData(MethodType.RESTORE.name());
     }
 
     private ResponseSuccessWithNoData lost(RequestWithId requestWithId) {
-        service.lost(requestWithId.ID);
+        SERVICE.lost(requestWithId.ID);
         return new ResponseSuccessWithNoData(MethodType.LOST.name());
     }
 
     private ResponseSuccessWithNoData delete(RequestWithId requestWithId) {
-        service.delete(requestWithId.ID);
+        SERVICE.delete(requestWithId.ID);
         return new ResponseSuccessWithNoData(MethodType.DELETE.name());
     }
 

@@ -8,21 +8,22 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 public class InMemoryRepository implements Repository {
-    public final LinkedHashMap<Integer, Book> data = new LinkedHashMap<>();
+    public final LinkedHashMap<Integer, Book> DATA = new LinkedHashMap<>();
+    private final TimeChecker TIME_CHECKER = new TimeChecker();
     public int newId = 1;
 
     @Override
     public void save(Book book) {
         int bookId = newId++;
         book.id = bookId;
-        data.put(bookId, book);
+        DATA.put(bookId, book);
     }
 
     @Override
     public LinkedList<Book> getAll() {
         LinkedList<Book> books = new LinkedList<>();
-        data.values().forEach((book) -> {
-            books.add(checkLoadTime(book));
+        DATA.values().forEach((book) -> {
+            books.add(TIME_CHECKER.checkLoadTime(book));
         });
         return books;
     }
@@ -30,9 +31,9 @@ public class InMemoryRepository implements Repository {
     @Override
     public LinkedList<Book> getByName(String name) {
         LinkedList<Book> books = new LinkedList<>();
-        data.values().forEach(
+        DATA.values().forEach(
                 book -> {
-                    checkLoadTime(book);
+                    TIME_CHECKER.checkLoadTime(book);
                     if (book.name.contains(name)) books.add(book);
                 }
         );
@@ -41,14 +42,14 @@ public class InMemoryRepository implements Repository {
 
     @Override
     public Book findById(int id) {
-        Optional<Book> book = Optional.ofNullable(data.get(id));
+        Optional<Book> book = Optional.ofNullable(DATA.get(id));
         if (book.isEmpty())
             throw new BookNotFoundException();
-        return checkLoadTime(book.get());
+        return TIME_CHECKER.checkLoadTime(book.get());
     }
 
     @Override
     public void delete(int id) {
-        data.remove(id);
+        DATA.remove(id);
     }
 }
