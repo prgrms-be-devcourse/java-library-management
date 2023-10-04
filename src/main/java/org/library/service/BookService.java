@@ -44,50 +44,49 @@ public class BookService {
     }
 
     // 4. 도서 대여
-    public void rent(Long id){
+    public String rent(Long id){
         Book book = repository.findById(id);
         try{
             String result = book.rent();
-            System.out.println(result);
+            repository.save(book);
+            return result;
         }catch(RuntimeException e){
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
-
-        repository.save(book);
     }
 
     // 5. 도서 반납
-    public void returns(Long id){
+    public String returns(Long id){
         Book book = repository.findById(id);
         try{
             String result = book.returns();
-            System.out.println(result);
+            repository.save(book);
+            return result;
         }catch (RuntimeException e){
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
-        repository.save(book);
     }
 
     // 6. 도서 분실
-    public void reportLost(Long id){
+    public String reportLost(Long id){
         Book book = repository.findById(id);
         try{
             String result = book.reportLost();
-            System.out.println(result);
+            repository.save(book);
+            return result;
         }catch (RuntimeException e){
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
-        repository.save(book);
     }
 
     // 7. 도서 삭제
-    public void delete(Long id){
+    public String delete(Long id){
         Book book = repository.findById(id);
         try{
             repository.delete(book);
-            System.out.println(Message.SUCCESS_DELETE.getMessage());
+            return Message.SUCCESS_DELETE.getMessage();
         }catch (RuntimeException e){
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
     }
 
