@@ -5,10 +5,7 @@ import library.repository.FileBookRepository;
 import library.repository.InMemoryBookRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -16,13 +13,6 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ModeTest {
-
-    private static Stream<Arguments> modeCode() {
-        return Stream.of(
-                Arguments.of(Mode.NORMAL, "1"),
-                Arguments.of(Mode.TEST, "2")
-        );
-    }
 
     private static Stream<Arguments> modeStrategy() {
         return Stream.of(
@@ -32,10 +22,10 @@ class ModeTest {
     }
 
     @DisplayName("모드 코드로 모드를 찾을 수 있어야 합니다.")
-    @MethodSource("modeCode")
+    @EnumSource(Mode.class)
     @ParameterizedTest(name = "모드 {0}의 코드는 {1}입니다.")
-    void testFindByCode(Mode mode, String code) {
-        Optional<Mode> actual = Mode.findByCode(code);
+    void testFindByCode(Mode mode) {
+        Optional<Mode> actual = Mode.findByCode(mode.getCode());
         assertThat(actual).contains(mode);
     }
 

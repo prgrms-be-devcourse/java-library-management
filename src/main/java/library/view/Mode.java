@@ -28,6 +28,10 @@ public enum Mode {
                 .findFirst();
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public String getExecutionMessage() {
         return this.description + "로 애플리케이션을 실행합니다.";
     }
