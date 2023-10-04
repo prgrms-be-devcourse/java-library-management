@@ -1,6 +1,6 @@
 package devcourse.backend.business;
 
-import devcourse.backend.medel.Book;
+import devcourse.backend.model.Book;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static devcourse.backend.FileSetting.*;
-import static devcourse.backend.medel.BookStatus.*;
+import static devcourse.backend.model.BookStatus.*;
 
 public class BookService {
     private final Repository repository;
@@ -39,6 +39,7 @@ public class BookService {
 
         if(book.getStatus().canSwitch(BORROWED)) {
             book.changeStatus(BORROWED);
+            repository.flush();
         } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 
@@ -47,6 +48,7 @@ public class BookService {
 
         if(book.getStatus().canSwitch(ARRANGING)) {
             book.changeStatus(ARRANGING);
+            repository.flush();
         } else throw new IllegalArgumentException(book.getStatus().toString());
 
         new Timer().schedule(new TimerTask() {
@@ -61,6 +63,7 @@ public class BookService {
         Book book = repository.findById(bookId).orElseThrow();
         if(book.getStatus().canSwitch(LOST)) {
             book.changeStatus(LOST);
+            repository.flush();
         } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 

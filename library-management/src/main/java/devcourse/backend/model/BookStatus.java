@@ -1,4 +1,4 @@
-package devcourse.backend.medel;
+package devcourse.backend.model;
 
 import java.util.Arrays;
 import java.util.Optional;

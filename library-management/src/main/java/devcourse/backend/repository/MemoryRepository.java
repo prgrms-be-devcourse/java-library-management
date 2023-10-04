@@ -1,7 +1,7 @@
 package devcourse.backend.repository;
 
-import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.Book;
+import devcourse.backend.model.BookStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +48,12 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
-    public void changeStatus(long id, BookStatus status) {
-        findById(id).changeStatus(status);
+    public void deleteById(long bookId) {
+        books.remove(findById(bookId));
     }
 
     @Override
-    public void deleteById(long bookId) {
-        books.remove(findById(bookId));
+    public void flush() {
+        // DO NOTHING
     }
 }

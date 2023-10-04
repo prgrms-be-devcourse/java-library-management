@@ -1,7 +1,6 @@
 package devcourse.backend.repository;
 
-import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
+import devcourse.backend.model.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +15,6 @@ public interface Repository {
     void addBook(Book book);
 
     void deleteById(long bookId);
+
+    void flush();
 }
