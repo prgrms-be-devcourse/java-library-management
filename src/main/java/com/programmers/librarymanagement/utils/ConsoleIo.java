@@ -89,55 +89,75 @@ public class ConsoleIo {
         }
     }
 
-    public String getInputString() {
+    public String getInputString() throws IOException {
 
         System.out.print("> ");
 
-        String input;
+        String input = br.readLine().strip();
 
-        // IOException 처리
-        try {
+        while (true) {
+
+            if (input.length() > 100) {
+                System.out.println("[System] 최대 100글자까지 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else if (!input.replaceAll(" ", "").matches("^[0-9a-zA-Z가-힣]+$")) {
+                System.out.println("[System] 숫자, 한글, 알파벳만 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else {
+                break;
+            }
+
+            System.out.print("> ");
+
             input = br.readLine().strip();
-        } catch (IOException e) {
-            System.out.println("[System] 올바른 입력 형식이 아닙니다. 다시 입력해주세요. \n");
-            input = this.getInputString();
-        }
-
-        // 입력받은 문자열 검증
-        if (input.length() > 100) {
-            System.out.println("[System] 최대 100글자까지 입력할 수 있습니다. 다시 입력해주세요. \n");
-            input = this.getInputString();
-        } else if (!input.replaceAll(" ", "").matches("^[0-9a-zA-Z가-힣]+$")) {
-            System.out.println("[System] 숫자, 한글, 알파벳만 입력할 수 있습니다. 다시 입력해주세요. \n");
-            input = this.getInputString();
         }
 
         return input;
     }
 
-    public String getInputNum() {
+    public int getInputInt() throws IOException {
 
         System.out.print("> ");
 
-        String input;
+        String input = br.readLine().strip();
 
-        // IOException 처리
-        try {
+        while (true) {
+
+            if (input.length() > 10) {
+                System.out.println("[System] 최대 10글자까지 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else if (!input.matches("^[0-9]+$")) {
+                System.out.println("[System] 숫자만 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else {
+                break;
+            }
+
+            System.out.print("> ");
+
             input = br.readLine().strip();
-        } catch (IOException e) {
-            System.out.println("[System] 올바른 입력 형식이 아닙니다. 다시 입력해주세요. \n");
-            input = this.getInputNum();
         }
 
-        // 입력받은 문자 검증
-        if (input.length() > 10) {
-            System.out.println("[System] 최대 10글자까지 입력할 수 있습니다. 다시 입력해주세요. \n");
-            input = this.getInputString();
-        } else if (!input.matches("^[0-9]+$")) {
-            System.out.println("[System] 숫자만 입력할 수 있습니다. 다시 입력해주세요. \n");
-            input = this.getInputString();
+        return Integer.parseInt(input);
+    }
+
+    public Long getInputLong() throws IOException {
+
+        System.out.print("> ");
+
+        String input = br.readLine().strip();
+
+        while (true) {
+
+            if (input.length() > 19) {
+                System.out.println("[System] 최대 19글자까지 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else if (!input.matches("^[0-9]+$")) {
+                System.out.println("[System] 숫자만 입력할 수 있습니다. 다시 입력해주세요. \n");
+            } else {
+                break;
+            }
+
+            System.out.print("> ");
+
+            input = br.readLine().strip();
         }
 
-        return input;
+        return Long.parseLong(input);
     }
 }
