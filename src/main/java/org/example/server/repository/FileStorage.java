@@ -16,28 +16,28 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileStorage {
-    public final LinkedHashMap<Integer, Book> DATA;
-    private final File JSON_FILE;
     private final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    public int newId;
+    public LinkedHashMap<Integer, Book> DATA;
+    private File JSON_FILE;
 
-    public FileStorage() {
+    public int loadData() {
         try {
             URI path = Paths.get("src", "main", "resources", "book.json").toUri();
             JSON_FILE = new File(path);
             Map<String, Object> jsonMap = OBJECT_MAPPER.readValue(JSON_FILE, Map.class);
-            newId = (int) jsonMap.get("new_id");
+            int newId = (int) jsonMap.get("new_id");
             DATA = new LinkedHashMap<>();
             if (newId != 1) {
                 ArrayList<LinkedHashMap<String, Object>> dataObjects = (ArrayList<LinkedHashMap<String, Object>>) jsonMap.get("data");
                 putObjectsToBookData(dataObjects);
             }
+            return newId;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void saveFile() {
+    public void saveFile(int newId) {
         Map<String, Object> jsonMap = new HashMap<>();
         if (DATA.isEmpty()) {
             jsonMap.put("new_id", 1);

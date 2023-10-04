@@ -5,8 +5,8 @@
     "name" : "132",
     "author" : "123",
     "pages" : 123,
-    "status" : "LOAD",
-    "endLoadTime" : "2023-10-04T22:48:25.963717"
+    "status" : "CAN_BORROW",
+    "endLoadTime" : ""
   }, {
     "id" : 2,
     "name" : "123",

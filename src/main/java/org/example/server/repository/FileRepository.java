@@ -9,14 +9,16 @@ import java.util.Optional;
 public class FileRepository implements Repository {
     private final FileStorage FILE_STORAGE;
     private final TimeChecker TIME_CHECKER = new TimeChecker();
+    public int newId;
 
     public FileRepository() {
         FILE_STORAGE = new FileStorage();
+        newId = FILE_STORAGE.loadData();
     }
 
     @Override
     public void save(Book book) {
-        int bookId = FILE_STORAGE.newId++;
+        int bookId = newId++;
         book.id = bookId;
         FILE_STORAGE.DATA.put(bookId, book);
         saveData();
@@ -62,6 +64,6 @@ public class FileRepository implements Repository {
     }
 
     private void saveData() {
-        FILE_STORAGE.saveFile();
+        FILE_STORAGE.saveFile(newId);
     }
 }
