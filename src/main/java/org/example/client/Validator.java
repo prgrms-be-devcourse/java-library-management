@@ -3,7 +3,7 @@ package org.example.client;
 import java.util.regex.Pattern;
 
 public class Validator {
-    public static String validateNameAndAuthor(String input) {
+    public String validateNameAndAuthor(String input) {
         if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,99}$", input)) {
             return input;
         }
@@ -15,7 +15,7 @@ public class Validator {
         };
     }
 
-    public static int validateIdAndPages(String inputStr) {
+    public int validateIdAndPages(String inputStr) {
         if (Pattern.matches("^[0-9]{1,4}$", inputStr)) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input < 5000) {
@@ -30,7 +30,7 @@ public class Validator {
         };
     }
 
-    public static int validateSelectNum(int selectCount, String inputStr) {
+    public int validateSelectNum(int selectCount, String inputStr) {
         if (Pattern.matches("[1-9]", inputStr)) {
             int input = Integer.parseInt(inputStr);
             if (input <= selectCount) {
