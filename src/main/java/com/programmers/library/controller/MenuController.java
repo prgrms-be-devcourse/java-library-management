@@ -5,6 +5,7 @@ import static com.programmers.library.constants.MessageConstants.*;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.programmers.library.entity.Book;
 import com.programmers.library.enums.Menu;
 import com.programmers.library.exception.InvalidMenuException;
 import com.programmers.library.io.Input;
@@ -80,19 +81,9 @@ public class MenuController implements Runnable {
 		output.printSystemMessage(endMsg);
 	}
 
-	private <T> void executeWithMessagesAndPrint(String startMsg, Supplier<T> serviceAction, String endMsg) {
+	private void executeWithMessagesAndPrint(String startMsg, Supplier<List<Book>> serviceAction, String endMsg) {
 		output.printSystemMessage(startMsg);
-
-		T result = serviceAction.get();
-		if (result instanceof List<?> resultList) {
-			resultList.forEach(item -> {
-				output.printWithLineBreak(item.toString());
-				output.printWithLineBreak("------------------------------");
-			});
-		} else {
-			output.printSystemMessage(result.toString());
-		}
-
+		output.printListBook(serviceAction.get());
 		output.printSystemMessage(endMsg);
 	}
 
