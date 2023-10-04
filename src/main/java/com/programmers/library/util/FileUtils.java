@@ -17,8 +17,7 @@ public class FileUtils<T> {
 
 	public FileUtils(String filePath) {
 		this.filePath = filePath; // todo : 파일이 중간에 변경된다면? 생각해보기
-		objectMapper = new ObjectMapper().registerModule(new JavaTimeModule()); //chaining
-		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 	}
 
 	public <T> List<T> readFile(Class<T> clazz) {
