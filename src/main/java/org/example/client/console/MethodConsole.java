@@ -84,13 +84,13 @@ public class MethodConsole {
     }
 
     private RequestWithName scanBookName(Type type) {
-        io.println(type.QUESTIONS.get(0));
+        io.print(type.QUESTIONS.get(0));
         String name = Validator.validateNameAndAuthor(io.scanLine());
         return new RequestWithName(type.name(), name);
     }
 
     private RequestWithId scanBookId(Type type) {
-        io.println(type.QUESTIONS.get(0));
+        io.print(type.QUESTIONS.get(0));
         int id = Validator.validateIdAndPages(io.scanLine());
         return new RequestWithId(type.name(), id);
     }

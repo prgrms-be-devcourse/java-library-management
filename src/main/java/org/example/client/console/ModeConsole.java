@@ -12,11 +12,20 @@ public class ModeConsole {
     private final IO io = IO.getInstance();
 
     public String scanType() {
-        io.print(Type.BASIC_QUESTION);
-        int selectNum = Validator.validateSelectNum(Type.values().length, io.scanLine());
-        Type type = Type.valueOfNumber(selectNum);
-        io.println(type.START_MESSAGE);
-        return type.name();
+        try {
+            io.print(Type.BASIC_QUESTION);
+            int selectNum = Validator.validateSelectNum(Type.values().length, io.scanLine());
+            Type type = Type.valueOfNumber(selectNum);
+            io.println(type.START_MESSAGE);
+            return type.name();
+        } catch (ValidateException e) {
+            io.println(e.getMessage());
+            io.print(Type.BASIC_QUESTION);
+            int selectNum = Validator.validateSelectNum(Type.values().length, io.scanLine());
+            Type type = Type.valueOfNumber(selectNum);
+            io.println(type.START_MESSAGE);
+            return type.name();
+        }
     }
 
     private enum Type {
