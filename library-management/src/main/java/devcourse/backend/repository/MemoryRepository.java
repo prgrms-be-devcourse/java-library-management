@@ -21,7 +21,6 @@ public class MemoryRepository implements Repository {
     @Override
     public List<Book> findAll() {
         return books.stream()
-                .map(b -> b.copy())
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }
@@ -30,7 +29,6 @@ public class MemoryRepository implements Repository {
     public List<Book> findByKeyword(String keyword) {
         return books.stream()
                 .filter(b -> b.like(keyword))
-                .map(b -> b.copy())
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }

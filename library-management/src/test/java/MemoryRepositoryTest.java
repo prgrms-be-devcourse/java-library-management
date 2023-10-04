@@ -22,8 +22,8 @@ public class MemoryRepositoryTest {
         // MemoryRepository에 미리 데이터 삽입
         List<Book> books = new ArrayList<>();
         memoryRepository.setBooks(books);
-        books.add(getBooks().get(0).copy());
-        books.add(getBooks().get(1).copy());
+        //books.add(getBooks().get(0));
+        //books.add(getBooks().get(1));
     }
 
     @Test

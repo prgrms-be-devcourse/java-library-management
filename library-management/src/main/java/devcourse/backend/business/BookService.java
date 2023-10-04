@@ -7,19 +7,21 @@ import devcourse.backend.repository.Repository;
 import devcourse.backend.view.BookDto;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static devcourse.backend.FileSetting.*;
 import static devcourse.backend.model.BookStatus.*;
 
 public class BookService {
+    private final BookOrganizingScheduler scheduler;
     private final Repository repository;
 
     public BookService(ModeType mode) {
         if(mode == ModeType.TEST_MODE) {
             this.repository = new MemoryRepository();
         } else this.repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
+
+        scheduler = new BookOrganizingScheduler(repository);
+        scheduler.startScheduler();
     }
 
     public void registerBook(BookDto data) {
@@ -51,12 +53,7 @@ public class BookService {
             repository.flush();
         } else throw new IllegalArgumentException(book.getStatus().toString());
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                book.changeStatus(AVAILABLE);
-            }
-        }, 5 * 60 * 1000);
+        if(!scheduler.isRunning()) scheduler.startScheduler();
     }
 
     public void reportLoss(long bookId) {

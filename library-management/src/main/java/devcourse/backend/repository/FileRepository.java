@@ -7,12 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class FileRepository implements Repository {
     private Set<Book> books;
     private final Path FILE_PATH;
-    private final String COLUMNS = "도서 번호;도서명;작가;총 페이지 수;상태";
+    private final String COLUMNS = "도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간";
 
     public FileRepository(String path, String fileName) {
         this.FILE_PATH = Paths.get(path.concat(fileName));
@@ -29,7 +30,6 @@ public class FileRepository implements Repository {
     @Override
     public List<Book> findAll() {
         return books.stream()
-                .map(b -> b.copy())
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }
@@ -38,7 +38,6 @@ public class FileRepository implements Repository {
     public List<Book> findByKeyword(String keyword) {
         return books.stream()
                 .filter(b -> b.like(keyword))
-                .map(b -> b.copy())
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }
@@ -100,10 +99,10 @@ public class FileRepository implements Repository {
                     .map(s -> s.split("[;,]"))
                     .forEach(data -> {
                         Book.Builder builder = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]));
-                        if(data[0].equals("")) books.add(builder.build());
-                        else books.add(builder.id(Long.valueOf(data[0]))
-                                .bookStatus(data[4])
-                                .build());
+                        if(!data[0].equals("")) builder.id(Long.valueOf(data[0]));
+                        if(data.length > 4 && !data[4].equals("")) builder.bookStatus(data[4]);
+                        if(data.length > 5 && data[4].equals("도서 정리 중")) builder.updateAt(data[5]);
+                        books.add(builder.build());
                     });
         } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
         return books;
