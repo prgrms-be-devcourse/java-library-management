@@ -1,12 +1,12 @@
-package org.library.vo;
+package org.library.dto;
 
-public class BookVo {
+public class BookDto {
 
     private String title;
     private String author;
     private int page;
 
-    public BookVo(String title, String author, int page) {
+    public BookDto(String title, String author, int page) {
         this.title = title;
         this.author = author;
         this.page = page;
