@@ -19,7 +19,7 @@ class BookTest {
         // Given
         Book availableBook = Book.createBook(1L, "Title", "Author", 1, null, AVAILABLE);
 
-        // When, Then
+        // When
         availableBook.toRent();
 
         // Then
