@@ -48,7 +48,7 @@ public class FileRepositoryTest { ;
     @Test
     void 도서_번호로_도서_검색() {
         Book someBook = fileRepository.getBooks().stream().findAny().orElseThrow();
-        Book result = fileRepository.findById(someBook.getId());
+        Book result = fileRepository.findById(someBook.getId()).orElseThrow();
         assertEquals(someBook, result);
     }
 

@@ -1,7 +1,6 @@
 package devcourse.backend.repository;
 
 import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -45,10 +44,10 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public Book findById(long id) {
+    public Optional<Book> findById(long id) {
         return books.stream()
                 .filter(b -> b.getId() == id)
-                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
+                .findAny();
     }
 
     @Override
@@ -60,12 +59,6 @@ public class FileRepository implements Repository {
     @Override
     public void addBook(Book book) {
         books.add(book);
-        flush();
-    }
-
-    @Override
-    public void changeStatus(long id, BookStatus status) {
-        findById(id).changeStatus(status);
         flush();
     }
 

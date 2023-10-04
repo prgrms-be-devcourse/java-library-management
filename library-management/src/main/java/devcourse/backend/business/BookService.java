@@ -1,8 +1,6 @@
 package devcourse.backend.business;
 
-import devcourse.backend.FileSetting;
 import devcourse.backend.medel.Book;
-import devcourse.backend.medel.BookStatus;
 import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
@@ -13,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static devcourse.backend.FileSetting.*;
+import static devcourse.backend.medel.BookStatus.*;
 
 public class BookService {
     private final Repository repository;
@@ -36,21 +35,33 @@ public class BookService {
     }
 
     public void rentBook(long bookId) {
-        repository.changeStatus(bookId, BookStatus.BORROWED);
+        Book book = repository.findById(bookId).orElseThrow();
+
+        if(book.getStatus().canSwitch(BORROWED)) {
+            book.changeStatus(BORROWED);
+        } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 
     public void returnBook(long bookId) {
-        repository.changeStatus(bookId, BookStatus.ARRANGING);
+        Book book = repository.findById(bookId).orElseThrow();
+
+        if(book.getStatus().canSwitch(ARRANGING)) {
+            book.changeStatus(ARRANGING);
+        } else throw new IllegalArgumentException(book.getStatus().toString());
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                repository.changeStatus(bookId, BookStatus.AVAILABLE);
+                book.changeStatus(AVAILABLE);
             }
         }, 5 * 60 * 1000);
     }
 
     public void reportLoss(long bookId) {
-        repository.changeStatus(bookId, BookStatus.LOST);
+        Book book = repository.findById(bookId).orElseThrow();
+        if(book.getStatus().canSwitch(LOST)) {
+            book.changeStatus(LOST);
+        } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 
     public void deleteBook(long bookId) {

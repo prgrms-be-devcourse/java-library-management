@@ -5,7 +5,7 @@ import devcourse.backend.medel.BookStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public class MemoryRepository implements Repository {
     List<Book> books = new ArrayList<>();
@@ -36,10 +36,10 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
-    public Book findById(long id) {
+    public Optional<Book> findById(long id) {
         return books.stream()
                 .filter(b -> b.getId() == id)
-                .findAny().orElseThrow(() -> new IllegalArgumentException("존재하지 않는 도서번호 입니다."));
+                .findAny();
     }
 
     @Override

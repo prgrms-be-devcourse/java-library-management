@@ -78,8 +78,7 @@ public class Book {
     public BookStatus getStatus() { return status; }
 
     public void changeStatus(BookStatus status) {
-        if (BookStatus.canSwitch(this.status, status)) this.status = status;
-        else throw new IllegalArgumentException(this.status.toString());
+        this.status = status;
     }
 
     @Override
