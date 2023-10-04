@@ -17,6 +17,7 @@ public class Book {
     private final Integer page;
     private BookStatus status;
     private LocalDateTime returnTime;
+    private int cleanTime = 1000 * 60 *5;
 
     @Builder
     public Book(Integer id, String title, String author, int page, BookStatus status, LocalDateTime returnTime) {
@@ -41,6 +42,10 @@ public class Book {
         return Objects.equals(this.id, id);
     }
 
+    public void setCleanTimeForTest(){
+        cleanTime = 1000 * 10; // 10초
+    }
+
     //책 상태 관련 함수
     public void borrow() {
         status = BORROWED;
@@ -56,7 +61,7 @@ public class Book {
     }
 
     public boolean isStillCleaning() {
-        return Duration.between(returnTime, LocalDateTime.now()).toMinutes() < 5;
+        return Duration.between(returnTime, LocalDateTime.now()).toMillis() < cleanTime;
     }
 
     public void cleaningToAvailable() {
