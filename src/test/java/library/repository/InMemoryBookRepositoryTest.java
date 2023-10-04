@@ -4,11 +4,14 @@ import library.domain.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InMemoryBookRepositoryTest {
 
@@ -88,18 +91,18 @@ class InMemoryBookRepositoryTest {
         assertThat(allBooks).doesNotContain(book1);
     }
 
-    @Test
-    @DisplayName("다음 도서 번호 조회 시 마지막 도서 번호 + 1을 반환해야 합니다.")
-    void testGetNextBookNumber() {
-        long bookNumber = 59;
+    @DisplayName("도서 번호 조회 시 마지막 도서 번호 + 1을 반환해야 합니다.")
+    @ParameterizedTest(name = "마지막 도서 번호가 {0}이면 다음 도서 번호는 {1}입니다.")
+    @CsvSource(delimiter = ',', value = {"59,60"})
+    void testGetNextBookNumber(long lastBookNumber, long expectedNextBookNumber) {
         // Given
-        Book book = Book.createBook(bookNumber, "Book 1", "Author 1", 100, null, null);
+        Book book = Book.createBook(lastBookNumber, "Book 1", "Author 1", 100, null, null);
         bookRepository.add(book);
 
         // When
         long nextBookNumber = bookRepository.getNextBookNumber();
 
         // Then
-        assertEquals(bookNumber + 1, nextBookNumber);
+        assertThat(nextBookNumber).isEqualTo(expectedNextBookNumber);
     }
 }
