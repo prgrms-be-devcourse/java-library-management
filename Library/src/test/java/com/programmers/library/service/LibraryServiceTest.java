@@ -1,7 +1,6 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.domain.BookStatusType;
 import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.mock.MockRepository;
 import com.programmers.library.repository.Repository;
@@ -193,8 +192,8 @@ class LibraryServiceTest {
     }
 
     @Test
-    @DisplayName("도서 대여 실패 테스트")
-    public void rentalBookFailedTest(){
+    @DisplayName("분실 처리로 인한 도서 대여 실패 테스트")
+    public void rentalBookFailedByLostTest(){
         Long bookId = 1L;
         String title = "제목 1";
         String author = "저자 1";
@@ -212,6 +211,52 @@ class LibraryServiceTest {
 
         // Then
         String failedRental = "[System] 분실 처리된 도서로 대여가 불가능합니다.";
+        assertEquals(result.getMessage(), failedRental);
+    }
+
+    @Test
+    @DisplayName("이미 대여중으로 인한 도서 대여 실패 테스트")
+    public void rentalBookFailedByRentedTest(){
+        Long bookId = 1L;
+        String title = "제목 1";
+        String author = "저자 1";
+        Integer page = 100;
+
+        libraryService.registerBook(title,author,page);
+
+        Book findBook = libraryService.findBookById(bookId);
+        libraryService.updateStatus(findBook, RENTED);
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.rentalBook(bookId);
+        });
+
+        // Then
+        String failedRental = "[System] 이미 대여중인 도서입니다.";
+        assertEquals(result.getMessage(), failedRental);
+    }
+
+    @Test
+    @DisplayName("정리중으로 인한 도서 대여 실패 테스트")
+    public void rentalBookFailedByOrganizingTest(){
+        Long bookId = 1L;
+        String title = "제목 1";
+        String author = "저자 1";
+        Integer page = 100;
+
+        libraryService.registerBook(title,author,page);
+
+        Book findBook = libraryService.findBookById(bookId);
+        libraryService.updateStatus(findBook, ORGANIZING);
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.rentalBook(bookId);
+        });
+
+        // Then
+        String failedRental = "[System] 도서가 정리중입니다. 잠시 후 다시 시도해주세요.";
         assertEquals(result.getMessage(), failedRental);
     }
 
@@ -236,8 +281,8 @@ class LibraryServiceTest {
     }
 
     @Test
-    @DisplayName("도서 반납 실패 테스트")
-    public void returnBookFailedTest(){
+    @DisplayName("대여 가능 도서 반납 실패 테스트")
+    public void returnBookFailedByRentableTest(){
         // Given
         Long bookId = 1L;
         String title = "제목 1";
@@ -255,6 +300,29 @@ class LibraryServiceTest {
 
         // Then
         String failedReturn = "[System] 원래 대여가 가능한 도서입니다.";
+        assertEquals(result.getMessage(), failedReturn);
+    }
+
+    @Test
+    @DisplayName("정리중으로 인한 도서 반납 실패 테스트")
+    public void returnBookFailedTest(){
+        // Given
+        Long bookId = 1L;
+        String title = "제목 1";
+        String author = "저자 1";
+        Integer page = 100;
+
+        libraryService.registerBook(title,author,page);
+        Book findBook = libraryService.findBookById(bookId);
+        libraryService.updateStatus(findBook, ORGANIZING);
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
+            libraryService.returnBook(bookId);
+        });
+
+        // Then
+        String failedReturn = "[System] 이미 반납되어 정리중인 도서입니다.";
         assertEquals(result.getMessage(), failedReturn);
     }
 
@@ -279,8 +347,8 @@ class LibraryServiceTest {
     }
 
     @Test
-    @DisplayName("도서 분실 처리 실패 테스트")
-    public void lostBookFailedTest(){
+    @DisplayName("이미 분실 처리 된 도서 분실 처리 실패 테스트")
+    public void lostBookFailedByLostTest(){
         // Given
         Long bookId = 1L;
         String title = "제목 1";
@@ -298,6 +366,50 @@ class LibraryServiceTest {
 
         // Then
         String failedReturn = "[System] 이미 분실 처리된 도서입니다.";
+        assertEquals(result.getMessage(), failedReturn);
+    }
+    @Test
+    @DisplayName("대여 가능한 도서 분실 처리 실패 테스트")
+    public void lostBookFailedTest(){
+        // Given
+        Long bookId = 1L;
+        String title = "제목 1";
+        String author = "저자 1";
+        Integer page = 100;
+
+        libraryService.registerBook(title,author,page);
+        Book findBook = libraryService.findBookById(bookId);
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
+            libraryService.lostBook(bookId);
+        });
+
+        // Then
+        String failedReturn = "[System] 분실 처리할 수 없는 도서입니다.";
+        assertEquals(result.getMessage(), failedReturn);
+    }
+
+    @Test
+    @DisplayName("정리중 도서 분실 처리 실패 테스트")
+    public void lostBookFailedByRentableTest(){
+        // Given
+        Long bookId = 1L;
+        String title = "제목 1";
+        String author = "저자 1";
+        Integer page = 100;
+
+        libraryService.registerBook(title,author,page);
+        Book findBook = libraryService.findBookById(bookId);
+        libraryService.updateStatus(findBook, ORGANIZING);
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () ->{
+            libraryService.lostBook(bookId);
+        });
+
+        // Then
+        String failedReturn = "[System] 분실 처리할 수 없는 도서입니다.";
         assertEquals(result.getMessage(), failedReturn);
     }
 }
