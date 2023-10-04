@@ -20,8 +20,8 @@ public class AppConfig {
         ModeMenu modeMenu = new ModeMenu();
         modeMenu.displayModeMenu();
 
+        //==의존성 주입==//
         Repository repository = null;
-
         if(modeMenu.getSelectMode().equals("일반 모드")){
             repository = new FileRepository();
         }else if(modeMenu.getSelectMode().equals("테스트 모드")) {
@@ -33,7 +33,11 @@ public class AppConfig {
             exit(0);
         }
 
-        BookMenu bookMenu = new BookMenu(new BookController(new BookService(repository), new BookIO()));
+        BookService bookService = new BookService(repository);
+        BookIO bookIO = new BookIO();
+        BookController bookController = new BookController(bookService, bookIO);
+
+        BookMenu bookMenu = new BookMenu(bookController);
         bookMenu.displayBookMenu();
     }
 }

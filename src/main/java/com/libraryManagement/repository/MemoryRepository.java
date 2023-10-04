@@ -1,45 +1,67 @@
 package com.libraryManagement.repository;
 
 import com.libraryManagement.domain.Book;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.libraryManagement.domain.BookStatus.DELETE;
+
 public class MemoryRepository implements Repository {
-    private List<Book> memoryBookList;
+    private List<Book> bookList;
 
     public MemoryRepository() {
-        memoryBookList = new ArrayList<>();
+        bookList = new ArrayList<>();
     }
 
     @Override
     public List<Book> findAllBooks() {
-        return null;
+        List<Book> resBookList = new ArrayList<>();
+
+        for (Book book : bookList) {
+            if (book.getStatus().equals(DELETE.getName()))
+                continue;
+
+            resBookList.add(book);
+        }
+
+        return resBookList;
     }
 
     @Override
     public List<Book> findBooksByTitle(String str) {
-        return null;
+        List<Book> resBookList = new ArrayList<>();
+
+        for (Book book : bookList) {
+            if (book.getStatus().equals(DELETE.getName()))
+                continue;
+
+            if (book.getTitle().contains(str))
+                resBookList.add(book);
+        }
+
+        return resBookList;
     }
 
     @Override
     public Book findBookById(long id) {
-        return null;
+        return bookList.get((int) (id - 1));
     }
 
     @Override
     public void insertBook(Book book) {
-        memoryBookList.add(book);
+        bookList.add(book);
     }
 
     @Override
     public void updateBookStatus(long id, String bookStatus) {
-
+        bookList.get((int) (id - 1)).setStatus(bookStatus);
     }
 
     @Override
     public long getNumCreatedBooks() {
-        return 0;
+        return bookList.size();
     }
 
 }
