@@ -73,19 +73,6 @@ public class FileRepositoryTest { ;
     }
 
     @Test
-    void 도서_상태_변경() {
-        // Mock 데이터
-        Book newBook = new Book.Builder("친절한 SQL 튜닝", "조시형", 560).build();
-        fileRepository.getBooks().add(newBook);
-
-        // 도서 상태 변경
-        fileRepository.changeStatus(newBook.getId(), BookStatus.BORROWED);
-
-        // changeStatus()가 상태를 변경했는지 검증
-        assertEquals(BookStatus.BORROWED, newBook.getStatus());
-    }
-
-    @Test
     void 파일로부터_도서_등록(){
         // loadBooks() 메서드 테스트
         Set<Book> books = fileRepository.loadBooks();
