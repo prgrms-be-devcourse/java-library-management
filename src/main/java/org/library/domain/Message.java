@@ -37,7 +37,7 @@ public enum Message {
     QUIT("[System] 도서 관리 프로그램을 종료합니다.");
 
 
-    private String message;
+    private final String message;
 
     Message(String message) {
         this.message = message;

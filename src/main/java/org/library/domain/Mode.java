@@ -9,9 +9,9 @@ public enum Mode {
     APPLICATION(1, "일반 모드", ApplicationRepository::new),
     TEST(2, "테스트 모드", TestRepository::new);
 
-    private int num;
-    private String name;
-    private RepositorySupplier repositorySupplier;
+    private final int num;
+    private final String name;
+    private final RepositorySupplier repositorySupplier;
 
     Mode(int num, String name, RepositorySupplier repositorySupplier) {
         this.num = num;
