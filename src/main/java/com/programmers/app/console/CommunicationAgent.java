@@ -76,7 +76,7 @@ public class CommunicationAgent {
     }
 
     public int instructDelete() {
-        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
+        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
         return consoleReader.readInt();
     }
