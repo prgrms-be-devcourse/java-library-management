@@ -11,8 +11,8 @@ public class ApplicationRepository implements Repository{
     private static final Map<Long, Book> bookMap = new ConcurrentHashMap<>();
     private final JsonManager jsonManager;
 
-    public ApplicationRepository() {
-        jsonManager = new JsonManager();
+    public ApplicationRepository(String path) {
+        jsonManager = new JsonManager(path);
         List<Book> fileBooks = jsonManager.read();
         fileBooks.forEach(this::add);
     }

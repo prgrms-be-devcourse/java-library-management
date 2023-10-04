@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JsonManager {
     private Gson gson = new GsonBuilder()
@@ -19,13 +20,17 @@ public class JsonManager {
             .serializeNulls()
             .setPrettyPrinting()
             .create();
-    private String path = "/Users/soseungsoo/Desktop/java-library/src/main/resources/json/Book.json";
+    private final String path;
+
+    public JsonManager(String path) {
+        this.path = path;
+    }
 
     public List<Book> read(){
         try (Reader reader = new FileReader(path)) {
             Type listType = new TypeToken<List<Book>>(){}.getType();
             List<Book> books = gson.fromJson(reader, listType);
-            return books;
+            return Optional.ofNullable(books).orElse(new ArrayList<>());
         } catch (Exception e) {
             e.printStackTrace();
         }

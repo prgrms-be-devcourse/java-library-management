@@ -9,7 +9,13 @@ import org.library.utils.ConsoleInputManager;
 import java.util.Arrays;
 
 public class ModeController {
-    ConsoleInputManager consoleInputManager = new ConsoleInputManager();
+    private ConsoleInputManager consoleInputManager;
+    private String path;
+
+    public ModeController(ConsoleInputManager consoleInputManager, String path) {
+        this.consoleInputManager = consoleInputManager;
+        this.path = path;
+    }
 
     public Repository selectMode(){
         System.out.println(Message.INPUT_USE_MODE.getMessage());
@@ -25,7 +31,7 @@ public class ModeController {
         for(Mode mode : Mode.values()){
             if(mode.isEqual(modeNum)){
                 System.out.println("[System] " + mode.getName() + "로 애플리케이션을 실행합니다.");
-                return mode.getRepository();
+                return mode.getRepository(path);
             }
         }
         throw new InvalidModeException();

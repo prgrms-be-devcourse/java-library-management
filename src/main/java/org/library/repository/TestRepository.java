@@ -8,6 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TestRepository implements Repository{
     private static final Map<Long, Book> bookMap = new ConcurrentHashMap<>();
 
+    public TestRepository() {
+    }
+
+    public TestRepository(String path){
+    }
+
     @Override
     public Long generatedId() {
         Long max = bookMap.keySet().stream().max(Comparator.naturalOrder()).orElse(0L);
