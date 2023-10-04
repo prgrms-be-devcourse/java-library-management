@@ -1,22 +1,21 @@
-package org.library.utils;
+package org.library.controller;
 
 import org.library.entity.Book;
 import org.library.entity.Func;
 import org.library.entity.Message;
-import org.library.error.InvalidFuncError;
 import org.library.service.BookService;
+import org.library.utils.ConsoleManager;
 import org.library.vo.BookVo;
 
-import java.util.Arrays;
 import java.util.List;
 
 
-public class Executor {
+public class Controller {
 
     private BookService bookService;
     private ConsoleManager consoleManager = new ConsoleManager();
 
-    public Executor(BookService bookService) {
+    public Controller(BookService bookService) {
         this.bookService = bookService;
     }
 
