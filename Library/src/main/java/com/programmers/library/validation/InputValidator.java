@@ -16,6 +16,8 @@ public class InputValidator {
             throw ExceptionHandler.err(ErrorCode.INVALID_INPUT_EXCEPTION);
         }catch (NoSuchElementException e){
             throw ExceptionHandler.err(ErrorCode.NO_INPUT_EXCEPTION);
+        }catch (NumberFormatException e){
+            throw ExceptionHandler.err(ErrorCode.INVALID_NUMBER_INPUT_EXCEPTION);
         }
     }
 }

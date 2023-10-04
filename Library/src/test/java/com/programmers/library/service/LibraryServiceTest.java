@@ -45,6 +45,61 @@ class LibraryServiceTest {
     }
 
     @Test
+    @DisplayName("제목 미입력으로 인한 도서 등록 실패 테스트")
+    public void bookRegisterFailedByTitle(){
+        // Given
+        String title = "";
+        String author ="저자 1";
+        Integer page = 100;
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.registerBook(title,author,page);
+        });
+
+        // Then
+        String errorMessage = "[System] 도서 제목을 정확하게 입력해주세요.";
+        assertEquals(errorMessage,  result.getMessage());
+    }
+
+    @Test
+    @DisplayName("저자 미입력으로 인한 도서 등록 실패 테스트")
+    public void bookRegisterFailedByAuthor(){
+        // Given
+        String title = "제목 1";
+        String author ="";
+        Integer page = 100;
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.registerBook(title,author,page);
+        });
+
+        // Then
+        String errorMessage = "[System] 도서의 저자를 정확하게 입력해주세요.";
+        assertEquals(errorMessage,  result.getMessage());
+    }
+
+    @Test
+    @DisplayName("도서 페이지 음수값 입력으로 인한 도서 등록 실패 테스트")
+    public void bookRegisterFailedByPage(){
+        // Given
+        String title = "제목 1";
+        String author ="저자 1";
+        Integer page = -23;
+
+        // When
+        ExceptionHandler result = assertThrows(ExceptionHandler.class, () -> {
+            libraryService.registerBook(title,author,page);
+        });
+
+        // Then
+        String errorMessage = "[System] 도서의 페이지 정보로 음수값은 등록할 수 없습니다.";
+        assertEquals(errorMessage,  result.getMessage());
+    }
+
+
+    @Test
     @DisplayName("전체 도서 조회 메서드 호출 테스트")
     public void callFindAllBooksTest(){
         // Given

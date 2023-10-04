@@ -24,6 +24,8 @@ public class BookTest {
         assertEquals(book.getTitle(), title);
     }
 
+
+
     @Test
     @DisplayName("책 엔티티 상태 확인 테스트")
     public void bookStatusTest(){

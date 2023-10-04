@@ -101,13 +101,16 @@ public class LibraryService {
     }
 
     private static void checkBookInfo(String title, String author, Integer page) {
-        if (title.isEmpty() || author.isEmpty() || page == null) {
-            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_INFO_EXCEPTION);
+        if(title.isEmpty()){
+            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_TITLE_EXCEPTION);
         }
-        if (page <= 0) {
+        if(author.isEmpty()) {
+            throw ExceptionHandler.err(ErrorCode.INVALID_BOOK_AUTHOR_EXCEPTION);
+        }
+        if(page <= 0) {
             throw ExceptionHandler.err(ErrorCode.NEGATIVE_PAGE_EXCEPTION);
         }
-        if (title.length() > 100) {
+        if(title.length() > 100) {
             throw ExceptionHandler.err(ErrorCode.LIMIT_TITLE_LENGTH_EXCEPTION);
         }
     }
