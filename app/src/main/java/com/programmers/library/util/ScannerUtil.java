@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class ScannerUtil {
 
+    private ScannerUtil() {
+    }
+
     public static int inputInt(Scanner scanner) {
         int result = 0;
         String input = scanner.nextLine().trim();
