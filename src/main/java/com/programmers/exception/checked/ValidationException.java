@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ValidationException extends Exception {
+
     private final ErrorCode errorCode;
 
     public ValidationException(ErrorCode errorCode) {

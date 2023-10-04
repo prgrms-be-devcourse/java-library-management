@@ -56,6 +56,7 @@ public class DependencyInjector {
 
         initializeValidatorsAndConsoles();
         initializeGeneratorsAndProviders();
+        initializeModeDependentServices();
         initializeServicesAndHandlers();
     }
 
@@ -84,6 +85,10 @@ public class DependencyInjector {
         this.menuRequestProvider = new MenuRequestProvider(menuRequestGenerators);
     }
 
+    private void initializeModeDependentServices() {
+        ModeAbstractFactory modeFactory = getModeFactory(consoleInteractionAggregator);
+        this.bookRepository = modeFactory.createBookRepository(objectMapper);
+        this.idGenerator = modeFactory.createIdGenerator();
     }
 
     private void initializeServicesAndHandlers() {
