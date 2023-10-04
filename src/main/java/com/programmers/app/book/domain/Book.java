@@ -1,18 +1,33 @@
 package com.programmers.app.book.domain;
 
-public class Book {
-    private int bookNumber;
-    private String title;
-    private String author;
-    private int totalPages;
-    private BookStatus status;
+import java.time.LocalDateTime;
 
-    public Book(int bookNumber, String title, String author, int totalPages) {
+import com.programmers.app.book.dto.BookJSON;
+
+public class Book {
+
+    private static final int MINUTES_FOR_BOOK_ARRANGEMENT = 5;
+
+    private final int bookNumber;
+    private final String title;
+    private final String author;
+    private final int totalPages;
+    private final BookStatus status;
+    private final LocalDateTime arrangementBegunAt;
+
+    public Book(
+            int bookNumber,
+            String title,
+            String author,
+            int totalPages,
+            BookStatus status,
+            LocalDateTime arrangementBegunAt) {
         this.bookNumber = bookNumber;
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;
-        this.status = BookStatus.IN_PLACE;
+        this.status = status;
+        this.arrangementBegunAt = arrangementBegunAt;
     }
 
     public int getBookNumber() {
@@ -24,23 +39,39 @@ public class Book {
     }
 
     public boolean isInPlace() {
-        return status.equals(BookStatus.IN_PLACE);
+        return status == BookStatus.IN_PLACE;
     }
 
-    public boolean isOnLoan() {
-        return status.equals(BookStatus.ON_LOAN);
+    public boolean isBorrowed() {
+        return status == BookStatus.BORROWED;
     }
 
     public boolean isLost() {
-        return status.equals(BookStatus.LOST);
+        return status == BookStatus.LOST;
     }
 
     public boolean isOnArrangement() {
-        return status.equals(BookStatus.ON_ARRANGEMENT);
+        return status == BookStatus.ON_ARRANGEMENT;
     }
 
-    public void setStatus(BookStatus bookStatus) {
-        this.status = bookStatus;
+    public boolean isDoneArranging() {
+        if (!this.isOnArrangement()) {
+            return false;
+        }
+        LocalDateTime completedAt = arrangementBegunAt.plusMinutes(MINUTES_FOR_BOOK_ARRANGEMENT);
+        return completedAt.isBefore(LocalDateTime.now());
+    }
+
+    public Book generateStatusUpdatedBook(BookStatus status) {
+        return new Book(bookNumber, title, author, totalPages, status, null);
+    }
+
+    public Book generateReturnedBook() {
+        return new Book(bookNumber, title, author, totalPages, BookStatus.ON_ARRANGEMENT, LocalDateTime.now());
+    }
+
+    public BookJSON toBookJSON() {
+        return new BookJSON(bookNumber, title, author, totalPages, status, arrangementBegunAt);
     }
 
     @Override
