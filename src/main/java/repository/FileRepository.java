@@ -68,7 +68,7 @@ public class FileRepository implements BookRepository {
     @Override
     public Optional<Book> findById(Integer id){
         for (Book book: bookList){
-            if (Objects.equals(id, book.getId())){
+            if (book.isSameBookId(id)){
                 return Optional.of(book);
             }
         }

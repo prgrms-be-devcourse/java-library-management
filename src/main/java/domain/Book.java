@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static domain.BookStatus.*;
 
@@ -38,18 +39,21 @@ public class Book {
 
 
     public void printBookInfo() {
-        System.out.println("\n" +"도서번호 : "+ id +"\n"
-                +"제목 : " + title + "\n"
-                +"작가 이름 : " + author + "\n"
-                +"페이지 수 : " + page + "\n"
-                +"상태 : " + status.getLabel()+ "\n\n"
-                +"-------------------------------------"
+        System.out.println("\n" + "도서번호 : " + id + "\n"
+                + "제목 : " + title + "\n"
+                + "작가 이름 : " + author + "\n"
+                + "페이지 수 : " + page + "\n"
+                + "상태 : " + status.getLabel() + "\n\n"
+                + "-------------------------------------"
         );
     }
 
+    public boolean isSameBookId(Integer id) {
+        return Objects.equals(this.id, id);
+    }
 
     //책 상태 관련 함수
-    public void borrow(){
+    public void borrow() {
         status = BORROWED;
     }
 
@@ -58,22 +62,19 @@ public class Book {
         status = CLEANING;
     }
 
-    public boolean isCleaning(){
+    public boolean isCleaning() {
         return status == CLEANING;
     }
 
-    public boolean isStillCleaning(){
-        if (Duration.between(returnTime, LocalDateTime.now()).toMinutes()<5) {
-            return true;
-        }
-        return false;
+    public boolean isStillCleaning() {
+        return Duration.between(returnTime, LocalDateTime.now()).toMinutes() < 5;
     }
 
-    public void cleaningToAvailable(){
+    public void cleaningToAvailable() {
         status = AVAILABLE;
     }
 
-    public void report(){
+    public void report() {
         status = LOST;
     }
 }
