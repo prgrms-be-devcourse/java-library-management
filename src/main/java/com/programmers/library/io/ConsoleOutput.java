@@ -19,9 +19,4 @@ public class ConsoleOutput implements Output {
 		});
 	}
 
-	// @Override
-	// public void printWithLineBreak(String message) {
-	// 	System.out.println(message);
-	// }
-
 }

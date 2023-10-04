@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.programmers.library.entity.Book;
+import com.programmers.library.entity.BookFixture;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,31 +18,28 @@ import java.util.Optional;
 public class MemoryBookRepositoryTest {
 
 	private MemoryBookRepository repository;
+	private Book book1;
+	private Book book2;
 
 	@BeforeEach
 	public void setUp() {
 		repository = new MemoryBookRepository();
+		book1 = BookFixture.createJavaBook();
+		book2 = BookFixture.createPythonBook();
 	}
 
 	@Test
 	@DisplayName("도서를 저장합니다")
 	public void testSave() {
-		//given
-		Book book = new Book("Test Book", "Test Author", 111L);
+		Book savedBook = repository.save(book1);
 
-		//when
-		Book savedBook = repository.save(book);
-
-		//then
 		assertNotNull(savedBook.getId());
-		assertEquals("Test Book", savedBook.getTitle());
+		assertEquals(book1.getTitle(), savedBook.getTitle());
 	}
 
 	@Test
 	@DisplayName("전체 도서를 조회합니다")
 	public void testFindAll() {
-		Book book1 = new Book("Test Book1", "Test Author", 111L);
-		Book book2 = new Book("Test Book2", "Test Author", 111L);
 		repository.save(book1);
 		repository.save(book2);
 
@@ -52,8 +51,7 @@ public class MemoryBookRepositoryTest {
 	@Test
 	@DisplayName("id로 도서를 조회합니다")
 	public void testFindById() {
-		Book book = new Book("Test Book", "Test Author", 111L);
-		Book savedBook = repository.save(book);
+		Book savedBook = repository.save(book1);
 
 		Optional<Book> foundBook = repository.findById(savedBook.getId());
 
@@ -64,22 +62,19 @@ public class MemoryBookRepositoryTest {
 	@Test
 	@DisplayName("제목으로 도서를 조회합니다")
 	public void testFindByTitleLike() {
-		Book book1 = new Book("Java Programming", "Test Author", 111L);
-		Book book2 = new Book("Python Programming", "Test Author", 111L);
 		repository.save(book1);
 		repository.save(book2);
 
-		List<Book> javaBooks = repository.findByTitleLike("Java");
+		List<Book> javaBooks = repository.findByTitle("Java");
 
 		assertEquals(1, javaBooks.size());
-		assertEquals("Java Programming", javaBooks.get(0).getTitle());
+		assertEquals(book1.getTitle(), javaBooks.get(0).getTitle());
 	}
 
 	@Test
 	@DisplayName("도서를 삭제합니다")
 	public void testDeleteById() {
-		Book book = new Book("Test Book", "Test Author", 111L);
-		Book savedBook = repository.save(book);
+		Book savedBook = repository.save(book1);
 
 		repository.deleteById(savedBook.getId());
 

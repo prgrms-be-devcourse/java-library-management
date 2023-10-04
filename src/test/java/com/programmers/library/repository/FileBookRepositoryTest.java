@@ -1,6 +1,7 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.entity.Book;
+import com.programmers.library.entity.BookFixture;
 import com.programmers.library.util.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,20 +33,18 @@ public class FileBookRepositoryTest {
 	@Test
 	@DisplayName("도서를 저장합니다")
 	public void testSave() {
-		Book book = new Book("Test Title", "Test Author", 100L);
+		Book book = BookFixture.createSampleBook();
 
 		Book savedBook = repository.save(book);
 
-		assertEquals("Test Title", savedBook.getTitle());
+		assertEquals(book.getTitle(), savedBook.getTitle());
 	}
 
 	@Test
 	@DisplayName("전체 도서를 조회합니다")
 	public void testFindAll() {
-		Book book1 = new Book("Test Book1", "Test Author", 111L);
-		Book book2 = new Book("Test Book2", "Test Author", 111L);
-		repository.save(book1);
-		repository.save(book2);
+		repository.save(BookFixture.createJavaBook());
+		repository.save(BookFixture.createPythonBook());
 
 		List<Book> allBooks = repository.findAll();
 
@@ -55,7 +54,7 @@ public class FileBookRepositoryTest {
 	@Test
 	@DisplayName("id로 도서를 조회합니다")
 	public void testFindById() {
-		Book book = new Book("Test Book", "Test Author", 111L);
+		Book book = BookFixture.createSampleBook();
 		Book savedBook = repository.save(book);
 
 		Optional<Book> foundBook = repository.findById(savedBook.getId());
@@ -67,21 +66,21 @@ public class FileBookRepositoryTest {
 	@Test
 	@DisplayName("제목으로 도서를 조회합니다")
 	public void testFindByTitleLike() {
-		Book book1 = new Book("Java Programming", "Test Author", 111L);
-		Book book2 = new Book("Python Programming", "Test Author", 111L);
+		Book book1 = BookFixture.createJavaBook();
+		Book book2 = BookFixture.createPythonBook();
 		repository.save(book1);
 		repository.save(book2);
 
-		List<Book> javaBooks = repository.findByTitleLike("Java");
+		List<Book> javaBooks = repository.findByTitle(book1.getTitle());
 
 		assertEquals(1, javaBooks.size());
-		assertEquals("Java Programming", javaBooks.get(0).getTitle());
+		assertEquals(book1.getTitle(), javaBooks.get(0).getTitle());
 	}
 
 	@Test
 	@DisplayName("도서를 삭제합니다")
 	public void testDeleteById() {
-		Book book = new Book("Test Book", "Test Author", 111L);
+		Book book = BookFixture.createJavaBook();
 		Book savedBook = repository.save(book);
 
 		repository.deleteById(savedBook.getId());
