@@ -1,7 +1,7 @@
 package manager;
 
 import domain.Book;
-import domain.Status;
+import domain.BookStatus;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class FileManager {
                         .title(data[1])
                         .author(data[2])
                         .page(Integer.parseInt(data[3]))
-                        .status(Status.valueOf(data[4]))
+                        .status(BookStatus.valueOf(data[4]))
                         .returnTime(returnTime)
                         .build();
                 bookList.add(book);

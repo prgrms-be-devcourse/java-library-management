@@ -1,5 +1,5 @@
 import domain.Book;
-import domain.Status;
+import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ public class TestServiceTest {
         assertEquals(book.getTitle(),title);
         assertEquals(book.getAuthor(),author);
         assertEquals(book.getPage(),page);
-        assertEquals(book.getStatus(), Status.AVAILABLE);
+        assertEquals(book.getStatus(), BookStatus.AVAILABLE);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class TestServiceTest {
         //when
         service.borrowBook(book.getId());
         //then
-        assertEquals(Status.BORROWED,book.getStatus());
+        assertEquals(BookStatus.BORROWED,book.getStatus());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class TestServiceTest {
         service.borrowBook(book.getId());
         service.returnBook(book.getId());
         //then
-        assertEquals(Status.CLEANING,book.getStatus());
+        assertEquals(BookStatus.CLEANING,book.getStatus());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class TestServiceTest {
         //when
         service.reportLostBook(book.getId());
         //then
-        assertEquals(Status.LOST,book.getStatus());
+        assertEquals(BookStatus.LOST,book.getStatus());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class TestServiceTest {
         service.reportLostBook(book.getId());
         service.returnBook(book.getId());
         //then
-        assertEquals(Status.CLEANING,book.getStatus());
+        assertEquals(BookStatus.CLEANING,book.getStatus());
     }
 
 

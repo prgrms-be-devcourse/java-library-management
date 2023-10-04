@@ -1,5 +1,5 @@
 import domain.Book;
-import domain.Status;
+import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class FileServiceTest {
+public class NormalServiceTest {
     BookService service;
     FileRepository repository;
     @BeforeEach
@@ -46,7 +46,7 @@ public class FileServiceTest {
         assertEquals(book.getTitle(),title);
         assertEquals(book.getAuthor(),author);
         assertEquals(book.getPage(),page);
-        assertEquals(book.getStatus(), Status.AVAILABLE);
+        assertEquals(book.getStatus(), BookStatus.AVAILABLE);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class FileServiceTest {
         //when
         service.borrowBook(book.getId());
         //then
-        assertEquals(Status.BORROWED,book.getStatus());
+        assertEquals(BookStatus.BORROWED,book.getStatus());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class FileServiceTest {
         service.borrowBook(book.getId());
         service.returnBook(book.getId());
         //then
-        assertEquals(Status.CLEANING,book.getStatus());
+        assertEquals(BookStatus.CLEANING,book.getStatus());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class FileServiceTest {
         //when
         service.reportLostBook(book.getId());
         //then
-        assertEquals(Status.LOST,book.getStatus());
+        assertEquals(BookStatus.LOST,book.getStatus());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class FileServiceTest {
         service.reportLostBook(book.getId());
         service.returnBook(book.getId());
         //then
-        assertEquals(Status.CLEANING,book.getStatus());
+        assertEquals(BookStatus.CLEANING,book.getStatus());
     }
 
 

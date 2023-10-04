@@ -7,7 +7,7 @@ import repository.BookRepository;
 
 import java.util.List;
 
-import static domain.Status.CLEANING;
+import static domain.BookStatus.CLEANING;
 
 public class BookService {
     private final BookRepository repository;

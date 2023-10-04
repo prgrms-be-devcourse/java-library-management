@@ -1,9 +1,9 @@
 package domain;
 
-public enum Status {
+public enum BookStatus {
     AVAILABLE("대여 가능"), BORROWED("대여중"), CLEANING("정리중"), LOST("분실");
     private final String label;
-    Status(String label){
+    BookStatus(String label){
         this.label = label;
     }
     public String getLabel(){

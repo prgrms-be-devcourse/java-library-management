@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static domain.Status.*;
+import static domain.BookStatus.*;
 
 @Getter
 public class Book {
@@ -14,11 +14,11 @@ public class Book {
     private final String title;
     private final String author;
     private final Integer page;
-    private Status status;
+    private BookStatus status;
     private LocalDateTime returnTime;
 
     @Builder
-    public Book(Integer id, String title, String author, int page, Status status, LocalDateTime returnTime) {
+    public Book(Integer id, String title, String author, int page, BookStatus status, LocalDateTime returnTime) {
         this.id = id;
         this.title = title;
         this.author = author;
