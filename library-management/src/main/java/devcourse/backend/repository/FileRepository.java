@@ -7,11 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class FileRepository implements Repository {
-    private Set<Book> books;
+    private Map<Long, Book> books;
     private final Path FILE_PATH;
     private final String COLUMNS = "도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간";
 
@@ -22,21 +21,18 @@ public class FileRepository implements Repository {
         flush();
     }
 
-    // 테스트 코드를 위한 메서드
-    public Set<Book> getBooks() {
-        return books;
-    }
-
     @Override
     public List<Book> findAll() {
-        return books.stream()
+        return books.values()
+                .stream()
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
     }
 
     @Override
     public List<Book> findByKeyword(String keyword) {
-        return books.stream()
+        return books.values()
+                .stream()
                 .filter(b -> b.like(keyword))
                 .sorted((a, b) -> Math.toIntExact(a.getId() - b.getId()))
                 .toList();
@@ -44,20 +40,19 @@ public class FileRepository implements Repository {
 
     @Override
     public Optional<Book> findById(long id) {
-        return books.stream()
-                .filter(b -> b.getId() == id)
-                .findAny();
+        if(books.containsKey(id)) return Optional.of(books.get(id));
+        return Optional.empty();
     }
 
     @Override
     public void deleteById(long bookId) {
-        books.remove(findById(bookId));
+        books.remove(bookId);
         flush();
     }
 
     @Override
     public void addBook(Book book) {
-        books.add(book);
+        books.put(book.getId(), book);
         flush();
     }
 
@@ -91,8 +86,8 @@ public class FileRepository implements Repository {
         }
     }
 
-    private Set<Book> loadBooks() {
-        Set<Book> books = new HashSet<>();
+    private Map<Long, Book> loadBooks() {
+        Map<Long, Book> books = new HashMap();
         try (BufferedReader reader = getReader()) {
             String header = reader.readLine();
             reader.lines()
@@ -102,7 +97,8 @@ public class FileRepository implements Repository {
                         if(!data[0].equals("")) builder.id(Long.valueOf(data[0]));
                         if(data.length > 4 && !data[4].equals("")) builder.bookStatus(data[4]);
                         if(data.length > 5 && data[4].equals("도서 정리 중")) builder.updateAt(data[5]);
-                        books.add(builder.build());
+                        Book book = builder.build();
+                        books.put(book.getId(), book);
                     });
         } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
         return books;
@@ -112,7 +108,8 @@ public class FileRepository implements Repository {
         try (BufferedWriter writer = getWriter()) {
             writer.write(COLUMNS);
             writer.newLine();
-            books.stream().sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
+            books.values().stream()
+                    .sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
                     .forEach(book -> {
                         try {
                             writer.write(book.toRecord());
