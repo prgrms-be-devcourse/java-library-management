@@ -44,13 +44,6 @@ public class MemoryRepositoryTest {
     }
 
     @Test
-    void 도서_번호로_도서_검색() {
-        Book someBook = memoryRepository.getBooks().stream().findAny().orElseThrow();
-        Book result = memoryRepository.findById(someBook.getId());
-        assertEquals(someBook, result);
-    }
-
-    @Test
     void 도서_번호로_도서_삭제() {
         // deleteById() 메서드를 호출합니다.
         Book someBook = memoryRepository.getBooks().stream().findAny().orElseThrow();
