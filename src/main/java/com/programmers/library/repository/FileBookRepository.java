@@ -45,7 +45,7 @@ public class FileBookRepository implements BookRepository {
 	}
 
 	@Override
-	public List<Book> findByTitleLike(String title) {
+	public List<Book> findByTitle(String title) {
 		List<Book> bookList = new ArrayList<>();
 		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(bookList::add);
 		return bookList;

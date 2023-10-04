@@ -34,7 +34,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 
 	@Override
 	public List<Book> findBooksByTitle(FindBookRequestDto request) {
-		return bookRepository.findByTitleLike(request.getTitle());
+		return bookRepository.findByTitle(request.getTitle());
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public interface BookRepository {
 
 	Optional<Book> findById(Long id);
 
-	List<Book> findByTitleLike(String title);
+	List<Book> findByTitle(String title);
 
 	void deleteById(Long id);
 }
