@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class Server {
     private Controller controller;
 
-    public void setServer(String mode) {
+    public void setMode(String mode) {
         Repository repository = ModeType.valueOf(mode).getRepository();
         Service service = new BookService(repository);
         controller = new BookController(service);

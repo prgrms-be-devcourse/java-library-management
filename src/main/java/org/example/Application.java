@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.client.Client;
-import org.example.packet.Request;
+import org.example.packet.requestPacket.RequestPacket;
 import org.example.server.Server;
 
 public class Application {
@@ -9,14 +9,12 @@ public class Application {
         Client client = new Client();
         Server server = new Server();
         try {
-            server.setServer(client.scanMode());
+            server.setMode(client.scanMode());
             while (true) {
-                Request request = client.scanMenu();
-                String response = server.requestMethod(request);
-                client.printResponse(response);
+                RequestPacket requestPacket = client.scanMenu();
+                client.printResponse(server.requestMethod(requestPacket));
             }
         } catch (RuntimeException e) {
-            server.saveData();
             System.err.print(System.lineSeparator() + ">> 시스템 에러 발생! 프로그램을 종료합니다." + System.lineSeparator());
             System.err.println(e);
         }
