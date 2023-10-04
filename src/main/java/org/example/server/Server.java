@@ -3,6 +3,7 @@ package org.example.server;
 import org.example.packet.Request;
 import org.example.server.controller.BookController;
 import org.example.server.controller.Controller;
+import org.example.server.exception.ServerException;
 import org.example.server.repository.FileRepository;
 import org.example.server.repository.InMemoryRepository;
 import org.example.server.repository.Repository;
@@ -30,7 +31,7 @@ public class Server {
                 saveData();
             }
             return controller.mapController(request);
-        } catch (RuntimeException e) {
+        } catch (ServerException e) {
             return e.getMessage();
         }
     }

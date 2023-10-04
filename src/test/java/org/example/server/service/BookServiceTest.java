@@ -1,14 +1,14 @@
 package org.example.server.service;
 
 import org.example.server.entity.Book;
-import org.example.server.entity.BookState;
+import org.example.server.entity.bookStatus.BookStatusType;
 import org.example.server.exception.BookNotFoundException;
 import org.example.server.exception.ServerException;
 import org.example.server.repository.InMemoryRepository;
-import org.junit.jupiter.api.*;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 class BookServiceTest {
     static InMemoryRepository repository;
@@ -21,17 +21,13 @@ class BookServiceTest {
         repository = new InMemoryRepository();
         service = new BookService(repository);
         repository.create(new Book("테스트책1", "이세희", 100)); // id = 1
-        repository.create(new Book("테스트책2", "이세희", 100)); // id = 2
-        repository.create(new Book("테스트책3", "이세희", 100)); // id = 3
-        repository.create(new Book("테스트책4", "이세희", 100)); // id = 4
+        repository.create(new Book("테스트책2", "이세희", 100)); // id = 2, 대여중
+        repository.data.get(2).status = BookStatusType.BORROWED.getBookStatus();
+        repository.create(new Book("테스트책3", "이세희", 100)); // id = 3, 정리중
+        repository.data.get(3).status = BookStatusType.LOAD.getBookStatus();
+        repository.create(new Book("테스트책4", "이세희", 100)); // id = 4, 분실
+        repository.data.get(4).status = BookStatusType.LOST.getBookStatus();
 
-        // 2번은 대여중, 3번은 정리중, 4번은 분실 상태
-        repository.data.get(2).state = BookState.BORROWED.name();
-
-        repository.data.get(3).state = BookState.LOADING.name();
-        repository.data.get(3).endLoadTime = Optional.of(LocalDateTime.now().plusMinutes(5));
-
-        repository.data.get(4).state = BookState.LOST.name();
         System.out.println(service.readAll());
     }
 

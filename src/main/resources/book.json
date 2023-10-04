@@ -1,4 +1,18 @@
 {
-  "new_id" : 1,
-  "data" : [ ]
+  "new_id" : 3,
+  "data" : [ {
+    "id" : 1,
+    "name" : "132",
+    "author" : "123",
+    "pages" : 123,
+    "status" : "LOAD",
+    "endLoadTime" : "2023-10-04T14:28:44.184843100"
+  }, {
+    "id" : 2,
+    "name" : "123",
+    "author" : "123",
+    "pages" : 123,
+    "status" : "CAN_BORROW",
+    "endLoadTime" : ""
+  } ]
 }

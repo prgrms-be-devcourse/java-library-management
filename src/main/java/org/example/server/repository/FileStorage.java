@@ -2,13 +2,14 @@ package org.example.server.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.server.entity.Book;
+import org.example.server.entity.bookStatus.BookStatusType;
+import org.example.server.entity.bookStatus.LoadStatus;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -43,9 +44,9 @@ public class FileStorage {
                     String name = (String) bookInfoMap.get("name");
                     String author = (String) bookInfoMap.get("author");
                     int pages = (int) bookInfoMap.get("pages");
-                    String state = (String) bookInfoMap.get("state");
+                    String status = (String) bookInfoMap.get("status");
                     String endLoadTime = (String) bookInfoMap.get("endLoadTime");
-                    data.put(id, new Book(id, name, author, pages, state, endLoadTime));
+                    data.put(id, new Book(id, name, author, pages, status, endLoadTime));
                 }
         );
     }
@@ -66,20 +67,25 @@ public class FileStorage {
             fileWriter.write(jsonStr);
             fileWriter.flush();
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException("[System] 파일 쓰기 에러 발생");
         }
     }
 
     private void putBookDataToObjects(ArrayList<LinkedHashMap<String, Object>> objects) {
-        data.values().stream().forEach(
+        data.values().forEach(
                 book -> {
                     LinkedHashMap<String, Object> bookInfoMap = new LinkedHashMap<>();
                     bookInfoMap.put("id", book.id);
                     bookInfoMap.put("name", book.name);
                     bookInfoMap.put("author", book.author);
                     bookInfoMap.put("pages", book.pages);
-                    bookInfoMap.put("state", book.state);
-                    bookInfoMap.put("endLoadTime", book.endLoadTime.map(LocalDateTime::toString).orElse(""));
+                    bookInfoMap.put("status", book.status.getBookStatusType().name());
+                    if (book.status.getBookStatusType().equals(BookStatusType.LOAD)) {
+                        LoadStatus bookStatus = (LoadStatus) book.status;
+                        bookInfoMap.put("endLoadTime", bookStatus.getEndLoadTime().toString());
+                    } else {
+                        bookInfoMap.put("endLoadTime", "");
+                    }
                     objects.add(bookInfoMap);
                 }
         );
