@@ -5,6 +5,7 @@ import org.example.server.entity.bookStatus.BookStatusType;
 import org.example.server.entity.bookStatus.LoadStatus;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 public interface Repository {
     default Book checkLoadTime(Book book) {
@@ -18,15 +19,13 @@ public interface Repository {
         return book;
     }
 
-    void create(Book book);
+    void save(Book book);
 
-    String readAll();
+    LinkedList<Book> getAll();
 
-    String searchByName(String bookName);
+    LinkedList<Book> getByName(String name);
 
-    Book getById(int bookId);
+    Book findById(int id);
 
-    void delete(int bookId);
-
-    void save();
+    void delete(int id);
 }

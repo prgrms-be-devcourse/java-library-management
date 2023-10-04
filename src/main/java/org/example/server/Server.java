@@ -1,9 +1,9 @@
 package org.example.server;
 
-import org.example.packet.Request;
+import org.example.packet.requestPacket.RequestPacket;
+import org.example.packet.responsePacket.ResponsePacket;
 import org.example.server.controller.BookController;
 import org.example.server.controller.Controller;
-import org.example.server.exception.ServerException;
 import org.example.server.repository.FileRepository;
 import org.example.server.repository.InMemoryRepository;
 import org.example.server.repository.Repository;
@@ -14,32 +14,15 @@ import java.util.function.Supplier;
 
 public class Server {
     private Controller controller;
-    private Repository repository;
-    private int saveTimer;
 
     public void setServer(String mode) {
-        repository = ModeType.valueOf(mode).getRepository();
+        Repository repository = ModeType.valueOf(mode).getRepository();
         Service service = new BookService(repository);
         controller = new BookController(service);
-        saveTimer = 0;
     }
 
-    public String requestMethod(Request request) {
-        try {
-            if (++saveTimer == 5) {
-                saveTimer = 0;
-                saveData();
-            }
-            return controller.mapController(request);
-        } catch (ServerException e) {
-            return e.getMessage();
-        }
-    }
-
-    public void saveData() {
-        if (repository instanceof FileRepository) {
-            repository.save();
-        }
+    public ResponsePacket requestMethod(RequestPacket requestPacket) {
+        return controller.handleRequest(requestPacket);
     }
 
     private enum ModeType {

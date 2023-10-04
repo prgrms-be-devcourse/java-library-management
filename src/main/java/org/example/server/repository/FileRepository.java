@@ -2,8 +2,8 @@ package org.example.server.repository;
 
 import org.example.server.entity.Book;
 import org.example.server.exception.BookNotFoundException;
-import org.example.server.exception.EmptyLibraryException;
 
+import java.util.LinkedList;
 import java.util.Optional;
 
 public class FileRepository implements Repository {
@@ -14,53 +14,53 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void create(Book book) {
+    public void save(Book book) {
         int bookId = fileStorage.newId++;
         book.id = bookId;
         fileStorage.data.put(bookId, book);
+        saveData();
     }
 
     @Override
-    public String readAll() {
-        if (fileStorage.data.isEmpty())
-            throw new EmptyLibraryException();
-        StringBuilder sb = new StringBuilder();
+    public LinkedList<Book> getAll() {
+        LinkedList<Book> books = new LinkedList<>();
         fileStorage.data.values().forEach((book) -> {
-            sb.append(checkLoadTime(book));
+            books.add(checkLoadTime(book));
         });
-        sb.append("\n");
-        return sb.toString();
+        saveData();
+        return books;
     }
 
     @Override
-    public String searchByName(String bookName) {
-        StringBuilder sb = new StringBuilder();
+    public LinkedList<Book> getByName(String name) {
+        LinkedList<Book> books = new LinkedList<>();
         fileStorage.data.values().forEach(
                 book -> {
                     checkLoadTime(book);
-                    if (book.name.contains(bookName)) sb.append(book);
+                    if (book.name.contains(name)) books.add(book);
                 }
         );
-        if (sb.isEmpty())
-            throw new EmptyLibraryException();
-        sb.append("\n");
-        return sb.toString();
+        saveData();
+        return books;
     }
 
     @Override
-    public Book getById(int bookId) {
-        Optional<Book> bookOpt = Optional.ofNullable(fileStorage.data.get(bookId));
+    public Book findById(int id) {
+        Optional<Book> bookOpt = Optional.ofNullable(fileStorage.data.get(id));
         if (bookOpt.isEmpty())
             throw new BookNotFoundException();
-        return checkLoadTime(bookOpt.get());
+        Book book = checkLoadTime(bookOpt.get());
+        saveData();
+        return book;
     }
 
     @Override
-    public void delete(int bookId) {
-        fileStorage.data.remove(bookId);
+    public void delete(int id) {
+        fileStorage.data.remove(id);
+        saveData();
     }
 
-    public void save() {
+    private void saveData() {
         fileStorage.saveFile();
     }
 }

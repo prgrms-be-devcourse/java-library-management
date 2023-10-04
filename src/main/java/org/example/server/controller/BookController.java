@@ -1,10 +1,16 @@
 package org.example.server.controller;
 
-import org.example.packet.Request;
-import org.example.packet.RequestData;
+import org.example.packet.BookDto;
+import org.example.packet.MethodType;
+import org.example.packet.requestPacket.*;
+import org.example.packet.responsePacket.ResponseFailWithMessage;
+import org.example.packet.responsePacket.ResponsePacket;
+import org.example.packet.responsePacket.ResponseSuccessWithData;
+import org.example.packet.responsePacket.ResponseSuccessWithNoData;
+import org.example.server.exception.ServerException;
 import org.example.server.service.Service;
 
-import java.util.function.BiFunction;
+import java.util.LinkedList;
 
 public class BookController implements Controller {
     private final Service service;
@@ -13,46 +19,55 @@ public class BookController implements Controller {
         this.service = service;
     }
 
-    public String mapController(Request request) {
-        return MethodType.valueOf(request.method).mapping(service, request.requestData);
+    public ResponsePacket handleRequest(RequestPacket requestPacket) {
+        MethodType method = requestPacket.getMethod();
+        try {
+            return switch (method) {
+                case REGISTER -> register((RequestWithBook) requestPacket);
+                case READ_ALL -> readAll((RequestWithNoData) requestPacket);
+                case SEARCH_BY_NAME -> searchByName((RequestWithName) requestPacket);
+                case BORROW -> borrow((RequestWithId) requestPacket);
+                case RESTORE -> restore((RequestWithId) requestPacket);
+                case LOST -> lost((RequestWithId) requestPacket);
+                case DELETE -> delete((RequestWithId) requestPacket);
+            };
+        } catch (ServerException e) {
+            return new ResponseFailWithMessage(method, e.getMessage());
+        }
     }
 
-    private enum MethodType {
-        REGISTER((service, data) -> {
-            service.register(data.name, data.author, data.pages);
-            return System.lineSeparator() + "[System] 도서 등록이 완료되었습니다." + System.lineSeparator();
-        }),
-        READ_ALL((service, data) -> {
-            return service.readAll() + System.lineSeparator() + "[System] 도서 목록 끝" + System.lineSeparator();
-        }),
-        SEARCH_BY_NAME((service, data) -> {
-            return service.searchByName(data.name) + System.lineSeparator() + "[System] 검색된 도서 끝" + System.lineSeparator();
-        }),
-        BORROW((service, data) -> {
-            service.borrow(data.id);
-            return System.lineSeparator() + "[System] 도서가 대여 처리 되었습니다." + System.lineSeparator();
-        }),
-        RESTORE((service, data) -> {
-            service.restore(data.id);
-            return System.lineSeparator() + "[System] 도서가 반납 처리 되었습니다." + System.lineSeparator();
-        }),
-        LOST((service, data) -> {
-            service.lost(data.id);
-            return System.lineSeparator() + "[System] 도서가 분실 처리 되었습니다." + System.lineSeparator();
-        }),
-        DELETE((service, data) -> {
-            service.delete(data.id);
-            return System.lineSeparator() + "[System] 도서가 삭제 처리 되었습니다." + System.lineSeparator();
-        });
+    private ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
+        service.register(requestWithBook.getBookDto());
+        return new ResponseSuccessWithNoData(MethodType.REGISTER);
+    }
 
-        public final BiFunction<Service, RequestData, String> mappingFunction;
+    private ResponseSuccessWithData readAll(RequestWithNoData requestWithNoData) {
+        LinkedList<BookDto> books = service.readAll();
+        return new ResponseSuccessWithData(MethodType.READ_ALL, books);
+    }
 
-        MethodType(BiFunction<Service, RequestData, String> mappingFunction) {
-            this.mappingFunction = mappingFunction;
-        }
+    private ResponseSuccessWithData searchByName(RequestWithName requestWithName) {
+        LinkedList<BookDto> books = service.searchByName(requestWithName.getName());
+        return new ResponseSuccessWithData(MethodType.SEARCH_BY_NAME, books);
+    }
 
-        public String mapping(Service service, RequestData request) {
-            return this.mappingFunction.apply(service, request);
-        }
+    private ResponseSuccessWithNoData borrow(RequestWithId requestWithId) {
+        service.borrow(requestWithId.getId());
+        return new ResponseSuccessWithNoData(MethodType.BORROW);
+    }
+
+    private ResponseSuccessWithNoData restore(RequestWithId requestWithId) {
+        service.restore(requestWithId.getId());
+        return new ResponseSuccessWithNoData(MethodType.RESTORE);
+    }
+
+    private ResponseSuccessWithNoData lost(RequestWithId requestWithId) {
+        service.lost(requestWithId.getId());
+        return new ResponseSuccessWithNoData(MethodType.LOST);
+    }
+
+    private ResponseSuccessWithNoData delete(RequestWithId requestWithId) {
+        service.delete(requestWithId.getId());
+        return new ResponseSuccessWithNoData(MethodType.DELETE);
     }
 }

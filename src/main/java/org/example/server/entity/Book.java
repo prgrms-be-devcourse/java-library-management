@@ -1,5 +1,6 @@
 package org.example.server.entity;
 
+import org.example.packet.BookDto;
 import org.example.server.entity.bookStatus.*;
 
 public class Book {
@@ -9,10 +10,10 @@ public class Book {
     public int pages; // 5000 미만
     public BookStatus status;
 
-    public Book(String name, String author, int pages) {
-        this.name = name;
-        this.author = author;
-        this.pages = pages;
+    public Book(BookDto bookDto) {
+        this.name = bookDto.name;
+        this.author = bookDto.author;
+        this.pages = bookDto.pages;
         this.status = new CanBorrowStatus();
     }
 
@@ -22,16 +23,6 @@ public class Book {
         this.author = author;
         this.pages = pages;
         this.status = BookStatusType.valueOf(status).equals(BookStatusType.LOAD) ? new LoadStatus(endLoadTime) : BookStatusType.valueOf(status).getBookStatus();
-    }
-
-    @Override
-    public String toString() {
-        return System.lineSeparator() + "도서번호 : " + id + System.lineSeparator() +
-                "제목 : " + name + System.lineSeparator()
-                + "작가 이름 : " + author + System.lineSeparator()
-                + "페이지 수 : " + pages + " 페이지" + System.lineSeparator() +
-                "상태 : " + status.getBookStatusType().getStatusName() + System.lineSeparator() +
-                System.lineSeparator() + "------------------------------" + System.lineSeparator();
     }
 
     public void borrow() {

@@ -1,11 +1,15 @@
 package org.example.server.service;
 
+import org.example.packet.BookDto;
+
+import java.util.LinkedList;
+
 public interface Service {
-    void register(String name, String author, int pages);
+    void register(BookDto bookDto);
 
-    String readAll();
+    LinkedList<BookDto> readAll();
 
-    String searchByName(String bookName);
+    LinkedList<BookDto> searchByName(String name);
 
     void borrow(int bookId);
 

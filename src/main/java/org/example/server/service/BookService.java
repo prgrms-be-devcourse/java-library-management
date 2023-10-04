@@ -1,7 +1,10 @@
 package org.example.server.service;
 
 import org.example.server.entity.Book;
+import org.example.packet.BookDto;
 import org.example.server.repository.Repository;
+
+import java.util.LinkedList;
 
 public class BookService implements Service {
     private final Repository repository;
@@ -10,41 +13,35 @@ public class BookService implements Service {
         this.repository = repository;
     }
 
-    public void register(String name, String author, int pages) {
-        Book book = new Book(name, author, pages);
-        repository.create(book);
-        repository.save();
+    public void register(BookDto bookDto) {
+        repository.save(new Book(bookDto));
     }
 
-    public String readAll() {
-        return repository.readAll();
+    public LinkedList<BookDto> readAll() {
+        return (LinkedList<BookDto>) repository.getAll().stream().map(BookDto::new).toList();
     }
 
-    public String searchByName(String bookName) {
-        return repository.searchByName(bookName);
+    public LinkedList<BookDto> searchByName(String name) {
+        return (LinkedList<BookDto>) repository.getByName(name).stream().map(BookDto::new).toList();
     }
 
     public void borrow(int bookId) {
-        Book book = repository.getById(bookId);
+        Book book = repository.findById(bookId);
         book.borrow();
-        repository.save();
     }
 
     public void restore(int bookId) {
-        Book book = repository.getById(bookId);
+        Book book = repository.findById(bookId);
         book.restore();
-        repository.save();
     }
 
     public void lost(int bookId) {
-        Book book = repository.getById(bookId);
+        Book book = repository.findById(bookId);
         book.lost();
-        repository.save();
     }
 
     public void delete(int bookId) {
-        repository.getById(bookId);
+        repository.findById(bookId);
         repository.delete(bookId);
-        repository.save();
     }
 }
