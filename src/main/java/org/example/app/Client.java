@@ -29,6 +29,9 @@ public class Client {
         } else if (mode == 2) {
             System.out.println("테스트 모드를 입력하셨습니다.");
             libraryManagementService = new LibraryManagementService(new InMemoryRepository());
+        } else {
+            System.out.println("모드는 1 또는 2만 선택 가능합니다.");
+            selectMode();
         }
     }
 
@@ -65,15 +68,11 @@ public class Client {
     }
 
     private void registerBook() {
-        System.out.println("""
-                [System] 도서 등록 메뉴로 넘어갑니다.
-                Q. 등록할 도서 제목을 입력하세요."""
-        );
-        String title = scan.nextLine();
-        System.out.println("Q. 작가 이름을 입력하세요.");
-        String author = scan.nextLine();
-        System.out.println("Q. 페이지 수를 입력하세요.");
-        Integer pageSize = scan.nextInt();
+        System.out.println("[System] 도서 등록 메뉴로 넘어갑니다.");
+        String title = promptForNonEmptyInput("Q. 등록할 도서 제목을 입력하세요.", "제목을 입력하지 않았습니다.");
+        String author = promptForNonEmptyInput("Q. 작가 이름을 입력하세요.", "작가를 입력하지 않았습니다.");
+        Integer pageSize = promptForPositiveIntInput("Q. 페이지 수를 입력하세요.", "페이지 수는 양수여야 합니다.");
+
         libraryManagementService.registerBook(title, author, pageSize);
         System.out.println("[System] 도서 등록이 완료되었습니다.\n");
     }
@@ -89,11 +88,8 @@ public class Client {
     }
 
     private void searchBooksByTitle() {
-        System.out.println("""
-                [System] 제목으로 도서 검색 메뉴로 넘어갑니다.
-                Q. 검색할 도서 제목 일부를 입력하세요.-"""
-        );
-        String title = scan.nextLine();
+        System.out.println("[System] 제목으로 도서 검색 메뉴로 넘어갑니다.");
+        String title = promptForNonEmptyInput("Q. 검색할 도서 제목 일부를 입력하세요.", "제목을 입력하지 않았습니다.");
         libraryManagementService.searchBookBy(title)
                 .stream()
                 .forEach(book -> {
@@ -103,11 +99,8 @@ public class Client {
     }
 
     private void borrowBook() {
-        System.out.println("""
-                [System] 제목으로 도서 대여 메뉴로 넘어갑니다.
-                Q. 대여할 도서번호를 입력하세요."""
-        );
-        Integer bookId = scan.nextInt();
+        System.out.println("[System] 제목으로 도서 대여 메뉴로 넘어갑니다.");
+        Integer bookId = promptForPositiveIntInput("Q. 대여할 도서번호를 입력하세요.", "도서번호는 양수여야 합니다.");
         try {
             libraryManagementService.borrowBook(bookId);
             System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
@@ -117,11 +110,8 @@ public class Client {
     }
 
     private void returnBook() {
-        System.out.println("""
-                [System] 도서 반납 메뉴로 넘어갑니다.
-                Q. 반납할 도서번호를 입력하세요."""
-        );
-        Integer bookId = scan.nextInt();
+        System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.");
+        Integer bookId = promptForPositiveIntInput("Q. 반납할 도서번호를 입력하세요.", "도서번호는 양수여야 합니다.");
         try {
             libraryManagementService.returnBook(bookId);
             System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
@@ -131,11 +121,8 @@ public class Client {
     }
 
     private void lostBook() {
-        System.out.println("""
-                [System] 도서 분실 처리 메뉴로 넘어갑니다.
-                Q. 분실 처리할 도서번호를 입력하세요."""
-        );
-        Integer bookId = scan.nextInt();
+        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
+        Integer bookId = promptForPositiveIntInput("Q. 분실 처리할 도서번호를 입력하세요.", "도서번호는 양수여야 합니다.");
         try {
             libraryManagementService.lostBook(bookId);
             System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
@@ -145,16 +132,42 @@ public class Client {
     }
 
     private void deleteBook() {
-        System.out.println("""
-                [System] 도서 삭제 처리 메뉴로 넘어갑니다.
-                Q. 삭제 처리할 도서번호를 입력하세요"""
-        );
-        Integer bookId = scan.nextInt();
+        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
+        Integer bookId = promptForPositiveIntInput("Q. 삭제 처리할 도서번호를 입력하세요", "도서번호는 양수여야 합니다.");
         try {
             libraryManagementService.deleteBook(bookId);
             System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private String promptForNonEmptyInput(String question, String errorMessage) {
+        String input;
+        do {
+            System.out.println(question);
+            input = scan.nextLine();
+            if (input.isEmpty()) {
+                System.out.println(errorMessage);
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+
+    private Integer promptForPositiveIntInput(String question, String errorMessage) {
+        Integer input;
+        do {
+            System.out.println(question);
+            while (!scan.hasNextInt()) {
+                System.out.println("[System] 올바른 숫자를 입력해야 합니다.");
+                scan.next();
+            }
+            input = scan.nextInt();
+            if (input <= 0) {
+                System.out.println(errorMessage);
+            }
+            scan.nextLine();
+        } while (input <= 0);
+        return input;
     }
 }
