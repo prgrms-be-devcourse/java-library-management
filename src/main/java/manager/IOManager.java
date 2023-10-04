@@ -1,6 +1,12 @@
 package manager;
 
-public class PrintManager {
+import exception.EmptyInputException;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class IOManager {
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     public void printSelectMode(){
         System.out.println("\nQ. 모드를 선택해주세요.\n1. 일반 모드\n2. 테스트 모드\n");
     }
@@ -25,5 +31,12 @@ public class PrintManager {
 
     public void printQuestion(String message){
         System.out.printf("\nQ. %s\n",message);
+    }
+
+    public String getInput() throws Exception {
+        System.out.print("> ");
+        String value = br.readLine().strip();
+        if (value.isBlank()) throw new EmptyInputException();
+        return value;
     }
 }
