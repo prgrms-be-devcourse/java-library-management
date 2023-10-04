@@ -2,7 +2,6 @@ import domain.Book;
 import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.TestRepository;
@@ -15,14 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestServiceTest {
-    private BookService service;
-    private TestRepository repository;
+    private final TestRepository repository = new TestRepository();
+    private final BookService service = new BookService(repository);
 
-    @BeforeEach
-    public void beforeEach(){
-        repository = new TestRepository();
-        service = new BookService(repository);
-    }
 
     @Test
     @DisplayName("책 저장 성공")

@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-    private String PATH = System.getProperty("user.dir");
+    private String path = System.getProperty("user.dir");
 
-    public FileManager(String PATH) {
-        this.PATH += PATH;
+    public FileManager(String path) {
+        this.path += path;
     }
 
     // file -> list
     public List<Book> loadData() {
         List<Book> bookList = new ArrayList<>();
-        try(BufferedReader br = new BufferedReader(new FileReader(PATH))){
+        try(BufferedReader br = new BufferedReader(new FileReader(path))){
             String line;
             while ((line = br.readLine())!=null){
                 String[] data = line.split(",");
@@ -44,7 +44,7 @@ public class FileManager {
 
     // list -> file
     public void updateFile(List<Book> bookList){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(PATH))){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(path))){
             for (Book book : bookList){
                 bw.write(book.getId()+","+book.getTitle()+","+book.getAuthor()+","+book.getPage()+","+book.getStatus()+","+book.getReturnTime());
                 bw.newLine();

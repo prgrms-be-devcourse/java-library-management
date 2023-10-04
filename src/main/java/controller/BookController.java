@@ -7,6 +7,7 @@ import service.BookService;
 
 public class BookController {
     private BookService bookService;
+    private final String PATH = "/src/main/resources/book_data.csv";
     private final IOManager io = new IOManager();
 
     public void selectMode(){
@@ -20,8 +21,7 @@ public class BookController {
 
         switch (mode){
             case "1"->{
-                String path = "/src/main/resources/book_data.csv";
-                bookService = new BookService(new FileRepository(path));
+                bookService = new BookService(new FileRepository(PATH));
                 io.printSystem("일반 모드로 애플리케이션을 실행합니다.");
                 selectFunction();
             }

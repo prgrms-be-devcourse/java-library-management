@@ -3,7 +3,6 @@ import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.FileRepository;
@@ -16,13 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class NormalServiceTest {
-    private BookService service;
-    private FileRepository repository;
-    @BeforeEach
-    public void beforeEach(){
-        repository = new FileRepository("/src/test/resources/test_book_data.csv");
-        service = new BookService(repository);
-    }
+    private final FileRepository repository = new FileRepository("/src/test/resources/test_book_data.csv");
+    private final BookService service = new BookService(repository);
 
     @AfterEach
     public void afterEach(){
