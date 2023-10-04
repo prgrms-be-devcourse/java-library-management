@@ -1,6 +1,8 @@
 package com.programmers.library.business;
 
 import com.programmers.library.domain.Book;
+import com.programmers.library.exception.ErrorCode;
+import com.programmers.library.exception.ExceptionHandler;
 import com.programmers.library.file.FileHandler;
 import com.programmers.library.file.FileUtil;
 import com.programmers.library.repository.FileRepository;
@@ -26,9 +28,15 @@ public class Scheduler {
     }
 
     public void completeOrganizing(Book book) {
-        executorService.schedule(() -> {
-            repository.updateStatus(book, ORGANIZING, RENTABLE);
-            executorService.shutdown();
-        }, ORGANIZING_TIME, TimeUnit.MINUTES);
+        synchronized (this) {
+            if (book.getBookStatus() != ORGANIZING) {
+                throw ExceptionHandler.err(ErrorCode.BOOK_NOT_ORGANIZING_EXCEPTION);
+            }
+
+            executorService.schedule(() -> {
+                repository.updateStatus(book, ORGANIZING, RENTABLE);
+                executorService.shutdown();
+            }, ORGANIZING_TIME, TimeUnit.MINUTES);
+        }
     }
 }
