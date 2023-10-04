@@ -1,6 +1,5 @@
 package org.example.app;
 
-import org.example.domain.Book;
 import org.example.repository.FileRepository;
 import org.example.repository.InMemoryRepository;
 import org.example.service.LibraryManagementService;
@@ -10,7 +9,6 @@ import java.util.Scanner;
 public class Client {
     private LibraryManagementService libraryManagementService;
     private Scanner scan = new Scanner(System.in);
-    private Integer nextBookId;
     private final String bookInfoCsvPath = "data/bookInfo.csv";
 
     public void useLibraryManagement() {
@@ -32,7 +30,6 @@ public class Client {
             System.out.println("테스트 모드를 입력하셨습니다.");
             libraryManagementService = new LibraryManagementService(new InMemoryRepository());
         }
-        nextBookId = libraryManagementService.getNextBookId();
     }
 
     private void selectLibraryFunction() {
@@ -77,7 +74,7 @@ public class Client {
         String author = scan.nextLine();
         System.out.println("Q. 페이지 수를 입력하세요.");
         Integer pageSize = scan.nextInt();
-        libraryManagementService.registerBook(Book.createWithoutStatus(nextBookId++, title, author, pageSize));
+        libraryManagementService.registerBook(title, author, pageSize);
         System.out.println("[System] 도서 등록이 완료되었습니다.\n");
     }
 

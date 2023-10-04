@@ -13,14 +13,16 @@ import java.util.concurrent.TimeUnit;
 public class LibraryManagementService {
     private Repository repository;
     private final Integer organizingMinutes = 5;
+    private Integer nextBookId;
 
     public LibraryManagementService(Repository repository) {
         this.repository = repository;
+        nextBookId = repository.getNextBookId();
     }
 
     // 도서 등록
-    public void registerBook(Book book) {
-        repository.saveBook(book);
+    public void registerBook(String title, String author, Integer pageSize) {
+        repository.saveBook(Book.createWithoutStatus(nextBookId++, title, author, pageSize));
     }
 
     // 전체 도서 목록 조회
@@ -73,9 +75,5 @@ public class LibraryManagementService {
     public void deleteBook(Integer bookId) {
         repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
         repository.deleteBookById(bookId);
-    }
-
-    public Integer getNextBookId() {
-        return repository.getNextBookId();
     }
 }
