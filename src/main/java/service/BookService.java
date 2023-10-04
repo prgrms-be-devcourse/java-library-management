@@ -7,8 +7,6 @@ import repository.BookRepository;
 
 import java.util.List;
 
-import static domain.BookStatus.CLEANING;
-
 public class BookService {
     private final BookRepository repository;
 
@@ -43,6 +41,7 @@ public class BookService {
             case CLEANING -> {
                 if (book.isStillCleaning())
                     throw new UnchangeableStatusException("정리 중인 도서입니다.");
+                else book.cleaningToAvailable();
             }
         }
         repository.borrow(book);
@@ -56,6 +55,7 @@ public class BookService {
             case CLEANING -> {
                 if (book.isStillCleaning())
                     throw new UnchangeableStatusException("이미 반납되어 정리 중인 도서입니다.");
+                else book.cleaningToAvailable();
             }
         }
         repository.returnBook(book);
@@ -79,8 +79,9 @@ public class BookService {
 
     private void printBookList(List<Book> bookList) {
         for (Book book: bookList) {
-            if (book.getStatus()==CLEANING)
-                book.isStillCleaning();
+            if (book.isCleaning()) {
+                if (!book.isStillCleaning()) book.cleaningToAvailable();
+            }
             book.printBookInfo();
         }
     }

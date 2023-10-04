@@ -58,12 +58,19 @@ public class Book {
         status = CLEANING;
     }
 
+    public boolean isCleaning(){
+        return status == CLEANING;
+    }
+
     public boolean isStillCleaning(){
         if (Duration.between(returnTime, LocalDateTime.now()).toMinutes()<5) {
             return true;
         }
-        status = AVAILABLE;
         return false;
+    }
+
+    public void cleaningToAvailable(){
+        status = AVAILABLE;
     }
 
     public void report(){

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class FileRepository implements BookRepository {
     private final FileManager fileManager;
     private final List<Book> bookList;
+    private final Integer START_ID = 1;
 
     public FileRepository(String path) {
         fileManager = new FileManager(path);
@@ -77,7 +78,7 @@ public class FileRepository implements BookRepository {
     // 도서 아이디 생성
     @Override
     public Integer createId(){
-        if (bookList.isEmpty()) return 1;
+        if (bookList.isEmpty()) return START_ID;
         return bookList.get(bookList.size()-1).getId()+1;
     }
 
