@@ -48,4 +48,12 @@ public class Book {
     public LocalDateTime getReturnDateTime() {
         return returnDateTime;
     }
+
+    public Boolean isSame(Long id) {
+        return this.id.equals(id);
+    }
+
+    public Boolean isContain(String title) {
+        return this.title.contains(title);
+    }
 }
