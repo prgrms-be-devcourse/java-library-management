@@ -5,10 +5,12 @@ import library.domain.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,6 +19,13 @@ class CsvFileHandlerTest {
 
     private static final String testFilePath = "src/main/resources/books.csv";
     private CsvFileHandler fileHandler;
+
+    static Stream<Book> provideBooks() {
+        return Stream.of(
+                Book.createBook(1L, "Title 1", "Author 1", 100, LocalDateTime.now(), BookStatus.AVAILABLE),
+                Book.createBook(2L, "Title 2", "Author 2", 200, LocalDateTime.now(), BookStatus.RENTED)
+        );
+    }
 
     @BeforeEach
     void setUp() {
@@ -33,19 +42,18 @@ class CsvFileHandlerTest {
         assertNotNull(loadedBooks);
     }
 
-    @Test
     @DisplayName("도서 목록을 파일에 저장할 수 있어야 합니다.")
-    void testSaveBooksToFile() {
+    @MethodSource("provideBooks")
+    @ParameterizedTest
+    void testSaveBooksToFile(Book book) {
         // given
-        List<Book> savedBooks = new ArrayList<>();
-        savedBooks.add(Book.createBook(1L, "Title 1", "Author 1", 100, LocalDateTime.now(), BookStatus.AVAILABLE));
-        savedBooks.add(Book.createBook(2L, "Title 2", "Author 2", 200, LocalDateTime.now(), BookStatus.RENTED));
+        List<Book> books = List.of(book);
 
         // when
-        fileHandler.saveBooksToFile(savedBooks);
-        List<Book> loadedBooks = fileHandler.loadBooksFromFile();
+        fileHandler.saveBooksToFile(books);
 
         // then
-        assertEquals(savedBooks.size(), loadedBooks.size());
+        List<Book> loadedBooks = fileHandler.loadBooksFromFile();
+        assertEquals(books, loadedBooks);
     }
 }
