@@ -10,8 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class InMemoryBookRepositoryTest {
 
@@ -33,8 +32,9 @@ class InMemoryBookRepositoryTest {
 
         // Then
         List<Book> allBooks = bookRepository.findAll();
-        assertThat(allBooks).hasSize(1);
-        assertThat(allBooks).contains(book);
+        assertThat(allBooks)
+                .hasSize(1)
+                .contains(book);
     }
 
     @Test
@@ -50,8 +50,9 @@ class InMemoryBookRepositoryTest {
         Optional<Book> foundBook = bookRepository.findByBookNumber(2);
 
         // Then
-        assertTrue(foundBook.isPresent());
-        assertThat(foundBook).contains(book2);
+        assertThat(foundBook)
+                .isPresent()
+                .contains(book2);
     }
 
     @Test
@@ -69,8 +70,9 @@ class InMemoryBookRepositoryTest {
         List<Book> foundBooks = bookRepository.findListContainTitle("Sample");
 
         // Then
-        assertThat(foundBooks).hasSize(2);
-        assertThat(foundBooks).contains(book1, book3);
+        assertThat(foundBooks)
+                .hasSize(2)
+                .contains(book1, book3);
     }
 
     @Test
@@ -87,8 +89,9 @@ class InMemoryBookRepositoryTest {
 
         // Then
         List<Book> allBooks = bookRepository.findAll();
-        assertThat(allBooks).hasSize(1);
-        assertThat(allBooks).doesNotContain(book1);
+        assertThat(allBooks)
+                .hasSize(1)
+                .doesNotContain(book1);
     }
 
     @DisplayName("도서 번호 조회 시 마지막 도서 번호 + 1을 반환해야 합니다.")

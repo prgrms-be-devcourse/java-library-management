@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import static library.domain.BookStatus.*;
 import static library.exception.BookErrorMessage.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BookTest {
@@ -23,7 +23,7 @@ class BookTest {
         availableBook.toRent();
 
         // Then
-        assertEquals(RENTED, availableBook.getStatus());
+        assertThat(availableBook.getStatus()).isEqualTo(RENTED);
     }
 
     @Test
@@ -35,9 +35,12 @@ class BookTest {
         Book lostBook = Book.createBook(3L, "Title3", "Author3", 59, null, LOST);
 
         // When, Then
-        assertEquals(BOOK_ALREADY_RENTED.getMessage(), assertThrows(BookException.class, rentedBook::toRent).getMessage());
-        assertEquals(BOOK_IN_CLEANUP.getMessage(), assertThrows(BookException.class, inCleanUpBook::toRent).getMessage());
-        assertEquals(BOOK_LOST.getMessage(), assertThrows(BookException.class, lostBook::toRent).getMessage());
+        assertThat(assertThrows(BookException.class, rentedBook::toRent).getMessage())
+                .isEqualTo(BOOK_ALREADY_RENTED.getMessage());
+        assertThat(assertThrows(BookException.class, inCleanUpBook::toRent).getMessage())
+                .isEqualTo(BOOK_IN_CLEANUP.getMessage());
+        assertThat(assertThrows(BookException.class, lostBook::toRent).getMessage())
+                .isEqualTo(BOOK_LOST.getMessage());
     }
 
     @Test
@@ -50,7 +53,7 @@ class BookTest {
         book.toReturn();
 
         // Then
-        assertEquals(IN_CLEANUP, book.getStatus());
+        assertThat(book.getStatus()).isEqualTo(IN_CLEANUP);
     }
 
     @Test
@@ -61,8 +64,10 @@ class BookTest {
         Book inCleanUpBook = Book.createBook(2L, "Title2", "Author2", 59, LocalDateTime.now(), IN_CLEANUP);
 
         // When, Then
-        assertEquals(BOOK_ALREADY_AVAILABLE.getMessage(), assertThrows(BookException.class, availableBook::toReturn).getMessage());
-        assertEquals(BOOK_IN_CLEANUP.getMessage(), assertThrows(BookException.class, inCleanUpBook::toReturn).getMessage());
+        assertThat(assertThrows(BookException.class, availableBook::toReturn).getMessage())
+                .isEqualTo(BOOK_ALREADY_AVAILABLE.getMessage());
+        assertThat(assertThrows(BookException.class, inCleanUpBook::toReturn).getMessage())
+                .isEqualTo(BOOK_IN_CLEANUP.getMessage());
     }
 
     @Test
@@ -73,8 +78,8 @@ class BookTest {
         Book afterThan3Minutes = Book.createBook(2L, "Title2", "Author2", 59, LocalDateTime.now().minusMinutes(3), IN_CLEANUP);
 
         // When, Then
-        assertEquals(AVAILABLE, afterThan5Minutes.getStatus());
-        assertEquals(IN_CLEANUP, afterThan3Minutes.getStatus());
+        assertThat(afterThan5Minutes.getStatus()).isEqualTo(AVAILABLE);
+        assertThat(afterThan3Minutes.getStatus()).isEqualTo(IN_CLEANUP);
     }
 
     @Test
@@ -88,11 +93,11 @@ class BookTest {
 
         // When, Then
         book1.toLost();
-        assertEquals(LOST, book1.getStatus());
+        assertThat(book1.getStatus()).isEqualTo(LOST);
         book2.toLost();
-        assertEquals(LOST, book2.getStatus());
+        assertThat(book2.getStatus()).isEqualTo(LOST);
         book3.toLost();
-        assertEquals(LOST, book3.getStatus());
+        assertThat(book3.getStatus()).isEqualTo(LOST);
         assertThrows(BookException.class, book4::toLost);
     }
 
@@ -103,7 +108,7 @@ class BookTest {
 
         book.toReturn();
 
-        assertEquals(IN_CLEANUP, book.getStatus());
+        assertThat(book.getStatus()).isEqualTo(IN_CLEANUP);
     }
 
     @Test
@@ -114,7 +119,8 @@ class BookTest {
         Book book2 = Book.createBook(1L, "Title1", "Author1", 59, null, AVAILABLE);
 
         // When, Then
-        assertEquals(book1, book2);
-        assertEquals(book1.hashCode(), book2.hashCode());
+        assertThat(book1)
+                .isEqualTo(book2)
+                .hasSameHashCodeAs(book2);
     }
 }

@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CsvFileHandlerTest {
 
@@ -39,7 +38,7 @@ class CsvFileHandlerTest {
         List<Book> loadedBooks = fileHandler.loadBooksFromFile();
 
         // then
-        assertNotNull(loadedBooks);
+        assertThat(loadedBooks).isNotNull();
     }
 
     @DisplayName("도서 목록을 파일에 저장할 수 있어야 합니다.")
@@ -54,6 +53,6 @@ class CsvFileHandlerTest {
 
         // then
         List<Book> loadedBooks = fileHandler.loadBooksFromFile();
-        assertEquals(books, loadedBooks);
+        assertThat(loadedBooks).isEqualTo(books);
     }
 }

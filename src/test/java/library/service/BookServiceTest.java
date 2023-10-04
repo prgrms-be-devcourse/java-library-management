@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BookServiceTest {
@@ -39,7 +39,7 @@ class BookServiceTest {
         bookService.addBook(bookSaveRequest);
 
         // Then
-        assertEquals(2, bookRepository.findAll().size());
+        assertThat(bookRepository.findAll()).hasSize(2);
     }
 
     @Test
@@ -67,8 +67,8 @@ class BookServiceTest {
         List<BookFindResponse> findBySecret = bookService.findBookListContainTitle("Secret");
 
         // Then
-        assertEquals(3, findByForest.size());
-        assertEquals(1, findBySecret.size());
+        assertThat(findByForest).hasSize(3);
+        assertThat(findBySecret).hasSize(1);
     }
 
     @Test
@@ -81,11 +81,11 @@ class BookServiceTest {
 
         // When, Then
         bookService.rentBook(bookNumber);
-        assertEquals(BookStatus.RENTED.name(), bookRepository.findByBookNumber(bookNumber).get().getStatus().name());
+        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.RENTED);
         bookService.returnBook(bookNumber);
-        assertEquals(BookStatus.IN_CLEANUP.name(), bookRepository.findByBookNumber(bookNumber).get().getStatus().name());
+        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.IN_CLEANUP);
         bookService.lostBook(bookNumber);
-        assertEquals(BookStatus.LOST.name(), bookRepository.findByBookNumber(bookNumber).get().getStatus().name());
+        assertThat(bookRepository.findByBookNumber(bookNumber).orElseThrow().getStatus()).isEqualTo(BookStatus.LOST);
     }
 
     @Test
@@ -97,7 +97,8 @@ class BookServiceTest {
         long bookNumber = bookRepository.findAll().get(0).getBookNumber();
 
         // When, Then
-        assertThrows(BookException.class, () -> bookService.rentBook(bookNumber + 1));
+        assertThrows(BookException.class,
+                () -> bookService.rentBook(bookNumber + 1));
     }
 
     @Test
@@ -112,7 +113,7 @@ class BookServiceTest {
         bookService.deleteBook(bookNumber);
 
         // Then
-        assertEquals(0, bookRepository.findAll().size());
+        assertThat(bookRepository.findAll()).isEmpty();
     }
 
     static class ReturnSameNumberBookRepository extends InMemoryBookRepository {
