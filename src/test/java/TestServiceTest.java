@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestServiceTest {
-    BookService service;
-    TestRepository repository;
+    private BookService service;
+    private TestRepository repository;
 
     @BeforeEach
     public void beforeEach(){

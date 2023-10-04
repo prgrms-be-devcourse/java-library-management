@@ -16,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class NormalServiceTest {
-    BookService service;
-    FileRepository repository;
+    private BookService service;
+    private FileRepository repository;
     @BeforeEach
     public void beforeEach(){
         repository = new FileRepository("/src/test/resources/test_book_data.csv");
         service = new BookService(repository);
-        repository.clear();
     }
 
     @AfterEach
@@ -123,7 +122,6 @@ public class NormalServiceTest {
         Book book = repository.getBookList().get(0);
         //when
         service.removeBook(book.getId());
-        System.out.println(repository.findById(book.getId()));
         //then
         assertThrows(NotExistBookIdException.class, () -> service.borrowBook(book.getId()));
     }
