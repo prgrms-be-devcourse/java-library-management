@@ -6,7 +6,6 @@ import org.example.exception.ExceptionCode;
 import org.example.repository.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,56 +35,44 @@ public class LibraryManagementService {
 
     // 도서 대여
     public void borrowBook(Integer bookId) {
-        Optional<Book> bookToBorrow = repository.findBookById(bookId);
-        bookToBorrow.ifPresent(book -> {
-            if (book.canBorrow()) {
-                repository.updateBookStatus(bookId, BookStatusType.BORROWING);
-            } else {
-                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
-            }
-        });
-        bookToBorrow.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        Book bookToBorrow = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        if (bookToBorrow.canBorrow()) {
+            repository.updateBookStatus(bookId, BookStatusType.BORROWING);
+        } else {
+            throw new IllegalArgumentException(ExceptionCode.getException(bookToBorrow.getStatus()).getMessage());
+        }
     }
 
     // 도서 반납
     public void returnBook(Integer bookId) {
-        Optional<Book> bookToReturn = repository.findBookById(bookId);
-        bookToReturn.ifPresent(book -> {
-            if (book.canReturn()) {
-                repository.updateBookStatus(bookId, BookStatusType.ORGANIZING);
-                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-                scheduler.schedule(() -> {
-                    repository.updateBookStatus(bookId, BookStatusType.BORROW_AVAILABE);
-                    scheduler.shutdown();
-                }, organizingMinutes, TimeUnit.MINUTES);
-            } else {
-                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
-            }
-        });
-        bookToReturn.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        Book bookToReturn = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        if (bookToReturn.canReturn()) {
+            repository.updateBookStatus(bookId, BookStatusType.ORGANIZING);
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.schedule(() -> {
+                repository.updateBookStatus(bookId, BookStatusType.BORROW_AVAILABE);
+                scheduler.shutdown();
+            }, organizingMinutes, TimeUnit.MINUTES);
+        } else {
+            throw new IllegalArgumentException(ExceptionCode.getException(bookToReturn.getStatus()).getMessage());
+        }
     }
 
     // 도서 분실
     public void lostBook(Integer bookId) {
-        Optional<Book> lostBook = repository.findBookById(bookId);
-        lostBook.ifPresent(book -> {
-            if (book.canLost()) {
-                repository.updateBookStatus(bookId, BookStatusType.LOST);
-            } else {
-                throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
-            }
-        });
-        lostBook.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        Book lostBook = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        if (lostBook.canLost()) {
+            repository.updateBookStatus(bookId, BookStatusType.LOST);
+        } else {
+            throw new IllegalArgumentException(ExceptionCode.getException(lostBook.getStatus()).getMessage());
+        }
 
     }
 
     // 도서 삭제
     public void deleteBook(Integer bookId) {
-        Optional<Book> bookToDelete = repository.findBookById(bookId);
-        bookToDelete.ifPresent(book -> {
-            repository.deleteBookById(bookId);
-        });
-        bookToDelete.orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        repository.deleteBookById(bookId);
     }
 
     public Integer getNextBookId() {
