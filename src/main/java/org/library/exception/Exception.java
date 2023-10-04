@@ -1,4 +1,4 @@
-package org.library.entity;
+package org.library.exception;
 
 public enum Exception {
 
