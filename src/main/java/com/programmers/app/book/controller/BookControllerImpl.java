@@ -31,59 +31,52 @@ public class BookControllerImpl implements BookController {
 
     @Override
     public void findAllBooks() {
-        try {
-            List<Book> books = bookService.findAllBooks();
-            communicationAgent.printFindResult(books);
-        } catch (RuntimeException e) {
-            communicationAgent.printError(e);
-        }
+        printCatchException(() -> communicationAgent.printFindResult(bookService.findAllBooks()));
     }
 
     @Override
     public void searchBookByTitle() {
-        try {
+        printCatchException(() -> {
             List<Book> books = bookService.findByTitle(communicationAgent.instructFindTitle());
             communicationAgent.printSearchResult(books);
-        } catch (RuntimeException e) {
-            communicationAgent.printError(e);
-        }
+        });
     }
 
     @Override
     public void borrowBook(Menu menu) {
-        try {
+        printCatchException(() -> {
             bookService.borrowBook(communicationAgent.instructBorrow());
             communicationAgent.printOperationCompleted(menu);
-        } catch (RuntimeException e) {
-            communicationAgent.printError(e);
-        }
+        });
     }
 
     @Override
     public void returnBook(Menu menu) {
-        try {
+        printCatchException(() -> {
             bookService.returnBook(communicationAgent.instructReturn());
             communicationAgent.printOperationCompleted(menu);
-        } catch (RuntimeException e) {
-            communicationAgent.printError(e);
-        }
+        });
     }
 
     @Override
     public void reportLostBook(Menu menu) {
-        try {
+        printCatchException(() -> {
             bookService.reportLost(communicationAgent.instructReportLost());
             communicationAgent.printOperationCompleted(menu);
-        } catch (RuntimeException e) {
-            communicationAgent.printError(e);
-        }
+        });
     }
 
     @Override
     public void deleteBook(Menu menu) {
-        try {
+        printCatchException(() -> {
             bookService.deleteBook(communicationAgent.instructDelete());
             communicationAgent.printOperationCompleted(menu);
+        });
+    }
+
+    private void printCatchException(Runnable runnable) {
+        try {
+            runnable.run();
         } catch (RuntimeException e) {
             communicationAgent.printError(e);
         }
