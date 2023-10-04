@@ -5,11 +5,9 @@ import static com.programmers.library.constants.MessageConstants.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.util.IdGeneratorUtils;
 
-@JsonIgnoreProperties({"borrowed", "available", "lost", "organizing"})
 public class Book {
 	private Long id;
 	private String title;
@@ -20,7 +18,7 @@ public class Book {
 	// 만약 status가 엄~~~~청 늘어난다면?? if 계속 추가해줄겨? 분리해볼수도 있다 (trade-off)
 	// 각 상태별로 행위를 구현, SOLID
 	// Status - borrow, return
-	// AvailStatus -
+	// AvailStatus
 	// ReturnStatus
 	// 입고 Status - borrow, return
 
@@ -65,22 +63,6 @@ public class Book {
 			id, title, author, pages, status.getValue());
 	}
 
-	public boolean isBorrowed() {
-		return status == BookStatus.BORROWED;
-	}
-
-	public boolean isAvailable() {
-		return status == BookStatus.AVAILABLE;
-	}
-
-	public boolean isLost() {
-		return status == BookStatus.LOST;
-	}
-
-	public boolean isOrganizing() {
-		return status == BookStatus.ORGANIZING;
-	}
-
 	public void borrow() {
 		if (this.status == BookStatus.BORROWED)
 			throw new BookException(BOOK_ALREADY_BORROWED);
@@ -114,10 +96,6 @@ public class Book {
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getAuthor() {
