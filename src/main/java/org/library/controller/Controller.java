@@ -73,7 +73,7 @@ public class Controller {
     // 8. 프로그램 종료
     public void exit() {
         System.out.println(Message.QUIT.getMessage());
-        bookService.saveFile();
+        bookService.flush();
         System.exit(0);
     }
 

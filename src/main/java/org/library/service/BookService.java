@@ -85,7 +85,7 @@ public class BookService {
     }
 
     // 8. 파일 저장(종료)
-    public void saveFile(){
-        repository.saveFile();
+    public void flush(){
+        repository.flush();
     }
 }
