@@ -15,16 +15,9 @@ public class Book {
 	private Long pages;
 	private BookStatus status;
 
-	// 만약 status가 엄~~~~청 늘어난다면?? if 계속 추가해줄겨? 분리해볼수도 있다 (trade-off)
-	// 각 상태별로 행위를 구현, SOLID
-	// Status - borrow, return
-	// AvailStatus
-	// ReturnStatus
-	// 입고 Status - borrow, return
-
 	private LocalDateTime returnedAt;
 
-	public Book() { // todo : 왜 있지?
+	public Book() {
 	}
 
 	public Book(String title, String author, Long pages) {
@@ -36,7 +29,7 @@ public class Book {
 	}
 
 	@Override
-	public boolean equals(Object o) { // todo : 확인
+	public boolean equals(Object o) {
 		if (this == o)
 			return true;
 		if (o == null || getClass() != o.getClass())

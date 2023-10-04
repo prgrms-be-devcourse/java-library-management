@@ -16,7 +16,7 @@ public class FileUtils<T> {
 	private final String filePath;
 
 	public FileUtils(String filePath) {
-		this.filePath = filePath; // todo : 파일이 중간에 변경된다면? 생각해보기
+		this.filePath = filePath;
 		objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 	}
 

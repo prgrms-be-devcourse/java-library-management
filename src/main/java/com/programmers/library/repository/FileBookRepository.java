@@ -13,8 +13,7 @@ import com.programmers.library.util.IdGeneratorUtils;
 public class FileBookRepository implements BookRepository {
 
 	private final Map<Long, Book> bookMap;
-	private final FileUtils<Book> fileUtils; // csv, json, 파일 형태에 따른 util
-
+	private final FileUtils<Book> fileUtils;
 	public FileBookRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
 		bookMap = new LinkedHashMap<>();
