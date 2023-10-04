@@ -5,6 +5,10 @@ plugins {
 group 'devcourse.library'
 version '1.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = '17'
+}
+
 repositories {
     mavenCentral()
 }
