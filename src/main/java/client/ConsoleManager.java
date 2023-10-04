@@ -80,7 +80,7 @@ public class ConsoleManager {
         System.out.println("[System] 도서 등록이 완료되었습니다." + System.lineSeparator());
     }
 
-    public void getAll(List<Book> list){
+    public void getAllResult(List<Book> list){
         System.out.println("[System] 전체 도서 목록입니다." + System.lineSeparator());
         list.forEach(book -> {
             System.out.println("Id : " + book.getId());
@@ -99,7 +99,7 @@ public class ConsoleManager {
         return inputText();
     }
 
-    public void searchNamePrint(List<Book> list){
+    public void searchNameResult(List<Book> list){
         list.forEach(book -> {
             System.out.println("도서제목 : " + book.getId());
             System.out.println("제목 : " + book.getName());
@@ -117,10 +117,18 @@ public class ConsoleManager {
         return inputNumber();
     }
 
+    public void rentalResult(){
+        System.out.println("[System] 도서가 대여 처리 되었습니다.");
+    }
+
     public int returnBook(){
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 반납할 도서번호를 입력하세요");
         return inputNumber();
+    }
+
+    public void returnResult(){
+        System.out.println("[System] 도서가 반납 처리 되었습니다.");
     }
 
     public int lostBook(){
@@ -129,9 +137,17 @@ public class ConsoleManager {
         return inputNumber();
     }
 
+    public void lostResult() {
+        System.out.println("[System] 도서가 분실 처리 되었습니다.");
+    }
+
     public int deleteBook(){
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다." + System.lineSeparator());
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
         return inputNumber();
+    }
+
+    public void deleteResult(){
+        System.out.println("[System] [System] 도서가 분실 처리 되었습니다.");
     }
 }

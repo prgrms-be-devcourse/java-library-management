@@ -48,22 +48,19 @@ public class Book {
     }
 
     public void rentalBook(){
-        if(this.status == Status.IMPOSSIBLE) System.out.println("[System] 이미 대여중인 도서입니다.");
-        else if (this.status == Status.ORGANIZE) System.out.println("[System] 도서 정리중입니다.");
-        else if (this.status == Status.LOST) System.out.println("[System] 분실된 책입니다.");
+        if(this.status == Status.IMPOSSIBLE) throw new RuntimeException("[System] 이미 대여중인 도서입니다.");
+        else if (this.status == Status.ORGANIZE) throw new RuntimeException("[System] 도서 정리중입니다.");
+        else if (this.status == Status.LOST) throw new RuntimeException("[System] 분실된 책입니다.");
         else {
-            System.out.println("[System] 도서가 대여 처리 되었습니다.");
             this.status = Status.IMPOSSIBLE;
         }
     }
 
     public void organizeBook(){
         if(this.status == Status.IMPOSSIBLE || this.status == Status.LOST) {
-            System.out.println("[System] 도서가 반납 처리 되었습니다.");
             this.status = Status.ORGANIZE;
-
         }
-        else System.out.println( "[System] 원래 대여가 가능한 도서입니다.");
+        else throw new RuntimeException("[System] 원래 대여가 가능한 도서입니다.");
     }
 
     public void returnBook(){
@@ -72,11 +69,10 @@ public class Book {
 
     public void lostBook(){
         if(this.status != Status.LOST){
-            System.out.println("[System] 도서가 분실 처리 되었습니다.");
             this.status = Status.LOST;
         }
         else{
-            System.out.println("[System] 이미 분실 처리된 도서입니다.");
+            throw new RuntimeException("[System] 이미 분실 처리된 도서입니다.");
         }
     }
 

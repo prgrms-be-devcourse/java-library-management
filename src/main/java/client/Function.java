@@ -17,14 +17,14 @@ public enum Function {
     GETALL(2){
         @Override
         public void excute(Service service, ConsoleManager consoleManager) {
-            consoleManager.getAll(service.getAll());
+            consoleManager.getAllResult(service.getAll());
         }
     },
     SEARCH(3){
         @Override
         public void excute(Service service, ConsoleManager consoleManager) {
             String keyword = consoleManager.searchName();
-            consoleManager.searchNamePrint(service.searchName(keyword));
+            consoleManager.searchNameResult(service.searchName(keyword));
         }
     },
     RENTAL(4){
@@ -32,6 +32,7 @@ public enum Function {
         public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.rentalBook();
             service.rentalBook(i);
+            consoleManager.rentalResult();
         }
     },
     RETURN(5){
@@ -39,6 +40,7 @@ public enum Function {
         public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.returnBook();
             service.organizeBook(i);
+            consoleManager.returnResult();
         }
     },
     LOST(6){
@@ -46,6 +48,7 @@ public enum Function {
         public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.lostBook();
             service.lostBook(i);
+            consoleManager.lostResult();
         }
     },
     DELETE(7){
@@ -53,6 +56,7 @@ public enum Function {
         public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.deleteBook();
             service.deleteBook(i);
+            consoleManager.deleteResult();
         }
     };
 
