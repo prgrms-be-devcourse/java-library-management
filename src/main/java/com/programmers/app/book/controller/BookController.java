@@ -1,20 +1,22 @@
 package com.programmers.app.book.controller;
 
+import com.programmers.app.menu.Menu;
+
 public interface BookController {
 
     void exit();
 
-    void register();
+    void register(Menu menu);
 
     void findAllBooks();
 
     void searchBookByTitle();
 
-    void borrowBook();
+    void borrowBook(Menu menu);
 
-    void returnBook();
+    void returnBook(Menu menu);
 
-    void reportLostBook();
+    void reportLostBook(Menu menu);
 
-    void deleteBook();
+    void deleteBook(Menu menu);
 }

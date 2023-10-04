@@ -5,6 +5,7 @@ import java.util.List;
 import com.programmers.app.book.domain.Book;
 import com.programmers.app.book.service.BookService;
 import com.programmers.app.console.CommunicationAgent;
+import com.programmers.app.menu.Menu;
 
 public class BookControllerImpl implements BookController {
     private final BookService bookService;
@@ -22,9 +23,9 @@ public class BookControllerImpl implements BookController {
     }
 
     @Override
-    public void register() {
+    public void register(Menu menu) {
         bookService.register(communicationAgent.instructRegister());
-        communicationAgent.printOperationCompleted("등록");
+        communicationAgent.printOperationCompleted(menu);
     }
 
     @Override
@@ -48,40 +49,40 @@ public class BookControllerImpl implements BookController {
     }
 
     @Override
-    public void borrowBook() {
+    public void borrowBook(Menu menu) {
         try {
             bookService.borrowBook(communicationAgent.instructBorrow());
-            communicationAgent.printOperationCompleted("대여");
+            communicationAgent.printOperationCompleted(menu);
         } catch (RuntimeException e) {
             communicationAgent.printError(e);
         }
     }
 
     @Override
-    public void returnBook() {
+    public void returnBook(Menu menu) {
         try {
             bookService.returnBook(communicationAgent.instructReturn());
-            communicationAgent.printOperationCompleted("반납");
+            communicationAgent.printOperationCompleted(menu);
         } catch (RuntimeException e) {
             communicationAgent.printError(e);
         }
     }
 
     @Override
-    public void reportLostBook() {
+    public void reportLostBook(Menu menu) {
         try {
             bookService.reportLost(communicationAgent.instructReportLost());
-            communicationAgent.printOperationCompleted("분실");
+            communicationAgent.printOperationCompleted(menu);
         } catch (RuntimeException e) {
             communicationAgent.printError(e);
         }
     }
 
     @Override
-    public void deleteBook() {
+    public void deleteBook(Menu menu) {
         try {
             bookService.deleteBook(communicationAgent.instructDelete());
-            communicationAgent.printOperationCompleted("삭제");
+            communicationAgent.printOperationCompleted(menu);
         } catch (RuntimeException e) {
             communicationAgent.printError(e);
         }
