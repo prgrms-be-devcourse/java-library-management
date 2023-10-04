@@ -16,3 +16,7 @@ public class BookController {
         bookService.registerBook(req);
     }
 
+    public List<Book> getAllBooks() {
+        return bookService.findAllBooks();
+    }
+

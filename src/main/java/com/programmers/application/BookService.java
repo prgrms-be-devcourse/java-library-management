@@ -25,6 +25,10 @@ public class BookService {
         var book = repository.save(registerBookReq.toBook());
         return book.getId();
     }
+
+    public List<Book> findAllBooks() {
+        return repository.findAll();
+    }
         }
         return Messages.Return_MENU.getMessage();
     }
