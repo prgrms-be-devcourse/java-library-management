@@ -93,14 +93,7 @@ public class ConsoleManager {
     }
 
     public void searchNameResult(List<Book> list){
-        list.forEach(book -> {
-            System.out.println("도서제목 : " + book.getId());
-            System.out.println("제목 : " + book.getName());
-            System.out.println("작가 이름 : " + book.getAuthor());
-            System.out.println("페이지 수 : " + book.getPage());
-            System.out.println("상태 : " + book.getStatus().getMessage());
-            System.out.println("----------------------");
-        });
+        list.forEach(book -> System.out.println(book.toString()));
         System.out.println("[System] 검색된 도서 끝" + System.lineSeparator());
     }
 

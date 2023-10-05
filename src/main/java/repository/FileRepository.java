@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileRepository implements Repository{
 
@@ -58,11 +59,9 @@ public class FileRepository implements Repository{
 
     @Override
     public List<Book> searchBook(String name) {
-        List<Book> searchResult = new ArrayList<>();
-        bookList.stream()
+        return bookList.stream()
                 .filter(book -> book.containsName(name))
-                .forEach(searchResult::add);
-        return searchResult;
+                .collect(Collectors.toList());
     }
 
     @Override
