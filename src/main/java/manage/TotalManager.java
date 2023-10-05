@@ -1,6 +1,7 @@
 package manage;
 
 import domain.Book;
+import domain.BookProcess;
 import domain.BookState;
 import exception.EntityNotFoundException;
 import manage.book.BookManager;
@@ -106,7 +107,7 @@ public class TotalManager {
         System.out.print("대여할 도서 번호를 입력해주세요." + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(CONSOLE_INPUT.nextLine().trim());
-        BookState initState = bookManager.rent(number);
+        BookState initState = bookManager.process(number, BookProcess.RENT);
 
         if (initState != BookState.AVAILABLE)
             System.out.println("도서가 " + initState.getDisplayName() + " 상태이기 때문에 대여할 수 없습니다." + System.lineSeparator());
@@ -118,7 +119,7 @@ public class TotalManager {
         System.out.print("반납할 도서 번호를 입력해 주세요." + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(CONSOLE_INPUT.nextLine().trim());
-        BookState initState = bookManager.revert(number);
+        BookState initState = bookManager.process(number, BookProcess.REVERT);
 
         if (initState == BookState.RENTED)
             System.out.println("정상 반납되었습니다." + System.lineSeparator());
@@ -131,7 +132,7 @@ public class TotalManager {
         System.out.print("분실 처리할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(CONSOLE_INPUT.nextLine().trim());
-        BookState initState = bookManager.lost(number);
+        BookState initState = bookManager.process(number, BookProcess.LOST);
 
         if (initState != BookState.LOST)
             System.out.println("분실 처리되었습니다." + System.lineSeparator());
@@ -143,7 +144,7 @@ public class TotalManager {
         System.out.print("삭제할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(CONSOLE_INPUT.nextLine().trim());
-        bookManager.delete(number);
+        bookManager.process(number, BookProcess.DELETE);
 
         System.out.println("정상 삭제되었습니다." + System.lineSeparator());
     }

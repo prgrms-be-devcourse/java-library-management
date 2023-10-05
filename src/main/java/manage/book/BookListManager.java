@@ -43,38 +43,11 @@ public class BookListManager implements BookManager {
     }
 
     @Override
-    public BookState rent(int bookNum) {
+    public BookState process(int bookNum, BookProcess bookProcess){
         Book book = getBook(bookNum);
         BookState initState = book.getBookState();
 
-        book.process(BookProcess.RENT);
-        return initState;
-    }
-
-    @Override
-    public BookState revert(int bookNum) {
-        Book book = getBook(bookNum);
-        BookState initState = book.getBookState();
-
-        book.process(BookProcess.REVERT);
-        return initState;
-    }
-
-    @Override
-    public BookState lost(int bookNum) {
-        Book book = getBook(bookNum);
-        BookState initState = book.getBookState();
-
-        book.process(BookProcess.LOST);
-        return initState;
-    }
-
-    @Override
-    public BookState delete(int bookNum) {
-        Book book = getBook(bookNum);
-        BookState initState = book.getBookState();
-
-        book.process(BookProcess.DELETE);
+        book.process(bookProcess);
         return initState;
     }
 

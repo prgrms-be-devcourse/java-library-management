@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static domain.BookProcess.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -78,11 +79,11 @@ public class BookListManagerTest {
         bookManager.register(new Book(6, "title6", "author6", 400, BookState.DELETED, NEVER_REVERTED));
 
         // when
-        List<BookState> list = IntStream.rangeClosed(1, 5).mapToObj(bookManager::rent).toList();
+        List<BookState> list = IntStream.rangeClosed(1, 5).mapToObj(bookNum -> bookManager.process(bookNum, RENT)).toList();
 
         // then
         IntStream.range(0, 5).forEach(i -> assertEquals(list.get(i), expected[i]));
-        assertThrows(EntityNotFoundException.class, () -> bookManager.rent(6));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.process(6, RENT));
     }
 
     @Test
@@ -95,9 +96,9 @@ public class BookListManagerTest {
         bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
         // when
         // then
-        assertEquals(BookState.AVAILABLE, bookManager.revert(1));
-        assertEquals(BookState.RENTED, bookManager.revert(2));
-        assertThrows(EntityNotFoundException.class, () -> bookManager.revert(3));
+        assertEquals(BookState.AVAILABLE, bookManager.process(1, REVERT));
+        assertEquals(BookState.RENTED, bookManager.process(2, REVERT));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.process(3, REVERT));
     }
 
     @Test
@@ -110,9 +111,9 @@ public class BookListManagerTest {
         bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
         // when
         // then
-        assertEquals(BookState.AVAILABLE, bookManager.lost(1));
-        assertEquals(BookState.LOST, bookManager.lost(2));
-        assertThrows(EntityNotFoundException.class, () -> bookManager.lost(3));
+        assertEquals(BookState.AVAILABLE, bookManager.process(1, LOST));
+        assertEquals(BookState.LOST, bookManager.process(2, LOST));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.process(3, LOST));
     }
 
     @Test
@@ -125,8 +126,8 @@ public class BookListManagerTest {
         bookManager.register(new Book(3, "title3", "author3", 100, BookState.DELETED, NEVER_REVERTED));
         // when
         // then
-        assertEquals(BookState.AVAILABLE, bookManager.delete(1));
-        assertEquals(BookState.LOST, bookManager.delete(2));
-        assertThrows(EntityNotFoundException.class, () -> bookManager.delete(3));
+        assertEquals(BookState.AVAILABLE, bookManager.process(1, DELETE));
+        assertEquals(BookState.LOST, bookManager.process(2, DELETE));
+        assertThrows(EntityNotFoundException.class, () -> bookManager.process(3, DELETE));
     }
 }
