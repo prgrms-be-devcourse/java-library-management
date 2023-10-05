@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CsvFileHandlerTest {
 
-    private static final String testFilePath = "src/main/resources/books.csv";
+    private static final String testFilePath = "src/test/resources/books.csv";
     private CsvFileHandler fileHandler;
 
     @BeforeEach
