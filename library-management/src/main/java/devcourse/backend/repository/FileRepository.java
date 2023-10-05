@@ -3,6 +3,7 @@ package devcourse.backend.repository;
 import devcourse.backend.model.Book;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,13 +67,13 @@ public class FileRepository implements Repository {
 
     private BufferedWriter getWriter() {
         try {
-            return Files.newBufferedWriter(FILE_PATH, StandardOpenOption.TRUNCATE_EXISTING);
+            return Files.newBufferedWriter(FILE_PATH, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) { throw new RuntimeException("파일 쓰기 실패"); }
     }
 
     private BufferedReader getReader() {
         try {
-            return new BufferedReader(new FileReader(FILE_PATH.toFile()));
+            return Files.newBufferedReader(FILE_PATH, StandardCharsets.UTF_8);
         } catch (IOException e) { throw new RuntimeException("파일 읽기 실패"); }
     }
 
@@ -95,6 +96,7 @@ public class FileRepository implements Repository {
         try (BufferedReader reader = getReader()) {
             COLUMNS = reader.readLine();
             reader.lines()
+                    .filter(line -> !line.trim().isEmpty())
                     .map(s -> s.split("[;,]"))
                     .forEach(data -> {
                         Book.Builder builder = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]));
@@ -104,7 +106,7 @@ public class FileRepository implements Repository {
                         Book book = builder.build();
                         books.put(book.getId(), book);
                     });
-        } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다."); }
+        } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다." + e.getMessage()); }
         return books;
     }
 
