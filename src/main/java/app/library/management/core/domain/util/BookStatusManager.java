@@ -3,6 +3,7 @@ package app.library.management.core.domain.util;
 import app.library.management.core.domain.Book;
 import app.library.management.core.repository.BookRepository;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -15,9 +16,9 @@ public class BookStatusManager {
         this.scheduler = scheduler;
     }
 
-    public void execute(Book book) {
+    public void execute(Book book, LocalDateTime now) {
         scheduler.schedule(() -> {
-            book.available();
+            book.available(now);
             bookRepository.update(book);
         }, 5, TimeUnit.MINUTES);
     }

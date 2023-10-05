@@ -78,28 +78,28 @@ public class Book {
         return status;
     }
 
-    public void updateLastModifiedTime() {
-        this.lastModifiedTime = LocalDateTime.now();
+    public void updateLastModifiedTime(LocalDateTime now) {
+        this.lastModifiedTime = now;
     }
 
-    public void rent() {
+    public void rent(LocalDateTime now) {
         this.status = BookStatus.RENTED;
-        updateLastModifiedTime();
+        updateLastModifiedTime(now);
     }
 
-    public void lost() {
+    public void lost(LocalDateTime now) {
         this.status = BookStatus.LOST;
-        updateLastModifiedTime();
+        updateLastModifiedTime(now);
     }
 
-    public void returnBook() {
+    public void returnBook(LocalDateTime now) {
         this.status = BookStatus.ORGANIZING;
-        updateLastModifiedTime();
+        updateLastModifiedTime(now);
     }
 
-    public void available() {
+    public void available(LocalDateTime now) {
         this.status = BookStatus.AVAILABLE;
-        updateLastModifiedTime();
+        updateLastModifiedTime(now);
     }
 
     public boolean isBookReturnable() {

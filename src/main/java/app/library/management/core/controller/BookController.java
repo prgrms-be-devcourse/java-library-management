@@ -7,6 +7,7 @@ import app.library.management.infra.port.Response;
 import app.library.management.core.service.BookService;
 import app.library.management.core.service.response.dto.BookServiceResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookController {
@@ -56,7 +57,8 @@ public class BookController {
     public void rentBook() {
 
         int id = request.rentByIdRequest();
-        BookServiceResponse bookServiceResponse = bookService.rent(id);
+        LocalDateTime now = LocalDateTime.now();
+        BookServiceResponse bookServiceResponse = bookService.rent(id, now);
         response.rentByIdResponse(bookServiceResponse.getResponseState(), bookServiceResponse.getStage(), bookServiceResponse.getBookStatus());
     }
 
@@ -66,7 +68,8 @@ public class BookController {
     public void returnBook() {
 
         int id = request.returnByIdRequest();
-        BookServiceResponse bookServiceResponse = bookService.returnBook(id);
+        LocalDateTime now = LocalDateTime.now();
+        BookServiceResponse bookServiceResponse = bookService.returnBook(id, now);
         response.returnByIdResponse(bookServiceResponse.getResponseState(), bookServiceResponse.getStage(), bookServiceResponse.getBookStatus());
     }
 
@@ -76,7 +79,8 @@ public class BookController {
     public void reportLostBook() {
 
         int id = request.reportLostByIdRequest();
-        BookServiceResponse bookServiceResponse = bookService.reportLost(id);
+        LocalDateTime now = LocalDateTime.now();
+        BookServiceResponse bookServiceResponse = bookService.reportLost(id, now);
         response.reportLostByIdResponse(bookServiceResponse.getResponseState(), bookServiceResponse.getStage(), bookServiceResponse.getBookStatus());
     }
 

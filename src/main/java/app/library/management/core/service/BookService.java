@@ -10,6 +10,7 @@ import app.library.management.core.repository.BookRepository;
 import app.library.management.core.service.response.dto.BookServiceResponse;
 import app.library.management.core.service.response.dto.status.ResponseState;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,7 +66,7 @@ public class BookService {
      * @param id
      * @return BookServiceResponse
      */
-    public BookServiceResponse rent(long id) {
+    public BookServiceResponse rent(long id, LocalDateTime now) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if (optionalBook.isEmpty()) {
             // 없는 자원에 대한 예외처리
@@ -77,7 +78,7 @@ public class BookService {
         if (book.getStatus() != BookStatus.AVAILABLE) {
             return new BookServiceResponse(ResponseState.VALIDATION_EXCEPTION, Stage.RENT, book.getStatus());
         }
-        book.rent();
+        book.rent(now);
         bookRepository.update(book);
         return new BookServiceResponse(ResponseState.SUCCESS, Stage.RENT, book.getStatus());
     }
@@ -88,7 +89,7 @@ public class BookService {
      * @param id
      * @return BookServiceResponse
      */
-    public BookServiceResponse returnBook(long id) {
+    public BookServiceResponse returnBook(long id, LocalDateTime now) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if (optionalBook.isEmpty()) {
             // 없는 자원에 대한 예외처리
@@ -99,9 +100,9 @@ public class BookService {
             // 이미 반납된 도서 [정리중, 대여중] 에 대한 예외처리
             return new BookServiceResponse(ResponseState.VALIDATION_EXCEPTION, Stage.RETURN, book.getStatus());
         }
-        book.returnBook();
+        book.returnBook(now);
         bookRepository.update(book);
-        bookStatusManager.execute(book);
+        bookStatusManager.execute(book, now);
         return new BookServiceResponse(ResponseState.SUCCESS, Stage.RETURN, book.getStatus());
     }
 
@@ -111,7 +112,7 @@ public class BookService {
      * @param id
      * @return BookServiceResponse
      */
-    public BookServiceResponse reportLost(long id) {
+    public BookServiceResponse reportLost(long id, LocalDateTime now) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if (optionalBook.isEmpty()) {
             // 없는 자원에 대한 예외처리
@@ -122,7 +123,7 @@ public class BookService {
             // 이미 [분실]된 도서에 대한 예외처리
             return new BookServiceResponse(ResponseState.VALIDATION_EXCEPTION, Stage.LOST, book.getStatus());
         }
-        book.lost();
+        book.lost(now);
         bookRepository.update(book);
         return new BookServiceResponse(ResponseState.SUCCESS, Stage.LOST, book.getStatus());
     }
