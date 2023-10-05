@@ -1,16 +1,21 @@
 package controller;
 
 import domain.Book;
+import lombok.Getter;
 import manager.FileManager;
+import manager.IOManager;
+import repository.NormalRepository;
+import repository.TestRepository;
+import service.BookService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+@Getter
 public enum ModeType {
-    NORMAL("1", "일반 모드로 애플리케이션을 실행합니다.",loadBooks()),
-    TEST("2", "테스트 모드로 애플리케이션을 실행합니다.",new ArrayList<>());
+    NORMAL("1", "일반 모드로 애플리케이션을 실행합니다.", loadBooks()),
+    TEST("2", "테스트 모드로 애플리케이션을 실행합니다.", new ArrayList<>());
 
     private final String number;
     private final String message;
@@ -18,20 +23,16 @@ public enum ModeType {
     private static final String PATH = "/src/main/resources/book_data.csv";
     private static final FileManager fileManager = new FileManager(PATH);
 
-    private static  List<Book> loadBooks(){
+    private static List<Book> loadBooks() {
         return fileManager.loadData();
     }
 
-    public String getNumber() {
-        return number;
+    private static BookService loadServiceNormal(IOManager ioManager) {
+        return new BookService(new NormalRepository(PATH, NORMAL.getBooks()), ioManager);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public List<Book> getBooks() {
-        return books;
+    private static BookService loadServiceTest(IOManager ioManager) {
+        return new BookService(new TestRepository(TEST.getBooks()), ioManager);
     }
 
     ModeType(String number, String message, List<Book> books) {
@@ -40,11 +41,16 @@ public enum ModeType {
         this.books = books;
     }
 
-    public static ModeType findByMode(String mode) {
+    public static ModeType findMode(String mode) {
         return Arrays.stream(ModeType.values())
                 .filter(modeType -> modeType.getNumber().equals(mode))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static BookService findService(ModeType modeType, IOManager ioManager) {
+        if (modeType == NORMAL) return loadServiceNormal(ioManager);
+        return loadServiceTest(ioManager);
     }
 
 

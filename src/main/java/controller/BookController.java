@@ -1,18 +1,10 @@
 package controller;
 
-import domain.Book;
-import manager.FileManager;
 import manager.IOManager;
-import repository.NormalRepository;
-import repository.TestRepository;
 import service.BookService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookController {
     private BookService bookService;
-    private static final String PATH = "/src/main/resources/book_data.csv";
     private final IOManager ioManager = new IOManager();
 
     public void selectMode() {
@@ -28,19 +20,12 @@ public class BookController {
     }
 
     public void runMode(String mode) {
-        ModeType modeType = ModeType.findByMode(mode);
+        ModeType modeType = ModeType.findMode(mode);
         if (modeType == null) {
             ioManager.printSystem("잘못된 입력입니다.");
             return;
         }
-        switch (modeType) {
-            case NORMAL -> {
-                bookService = new BookService(new NormalRepository(PATH, modeType.getBooks()), ioManager);
-            }
-            case TEST -> {
-                bookService = new BookService(new TestRepository(modeType.getBooks()), ioManager);
-            }
-        }
+        bookService = ModeType.findService(modeType, ioManager);
         ioManager.printSystem(modeType.getMessage());
         selectFunction();
     }
