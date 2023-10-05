@@ -86,7 +86,7 @@ public class BookListManagerTest {
     }
 
     @Test
-    void returnBook(){
+    void revertBooksInAllStates(){
         // given
         BookManager bookManager = new BookListManager(new TestBookFileManager());
 
@@ -101,7 +101,7 @@ public class BookListManagerTest {
     }
 
     @Test
-    void lost(){
+    void lostBooksInAllStates(){
         // given
         BookManager bookManager = new BookListManager(new TestBookFileManager());
 
@@ -116,7 +116,7 @@ public class BookListManagerTest {
     }
 
     @Test
-    void delete(){
+    void deleteBooksInAllStates(){
         // given
         BookManager bookManager = new BookListManager(new TestBookFileManager());
 
