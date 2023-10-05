@@ -1,7 +1,6 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.utils.StatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +41,18 @@ public class LibraryMemoryRepository implements LibraryRepository{
                 .findFirst();
     }
 
-
     @Override
     public void delete(int bookId) {
         books.removeIf(book -> book.getBookId() == bookId);
     }
 
     @Override
-    public void updateStatus(int bookId, StatusType status) {
-        Book book = findById(bookId).get();
-        book.setStatus(status);
+    public void update(Book updatedBook) {  // 도서 정보(상태) 업데이트
+        List<Book> updatedBooks = books.stream()
+                .map(book -> book.getBookId() == updatedBook.getBookId() ? updatedBook : book)
+                .collect(Collectors.toList());
+        books.clear();
+        books.addAll(updatedBooks);
     }
 
     @Override
