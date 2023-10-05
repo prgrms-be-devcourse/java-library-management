@@ -82,14 +82,7 @@ public class ConsoleManager {
 
     public void getAllResult(List<Book> list){
         System.out.println("[System] 전체 도서 목록입니다." + System.lineSeparator());
-        list.forEach(book -> {
-            System.out.println("Id : " + book.getId());
-            System.out.println("제목 : " + book.getName());
-            System.out.println("작가 이름 : " + book.getPage());
-            System.out.println("페이지 수 : " + book.getPage());
-            System.out.println("상태 : " + book.getStatus().getMessage());
-            System.out.println("----------------------");
-        });
+        list.forEach(book -> System.out.println(book.toString()));
         System.out.println("[System] 도서 목록 끝" + System.lineSeparator());
     }
 

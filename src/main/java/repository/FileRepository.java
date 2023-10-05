@@ -53,7 +53,7 @@ public class FileRepository implements Repository{
 
     @Override
     public List<Book> getAll() {
-        return bookList;
+        return new ArrayList<>(bookList);
     }
 
     @Override

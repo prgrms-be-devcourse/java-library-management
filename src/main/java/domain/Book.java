@@ -91,4 +91,14 @@ public class Book {
                 +seperator+this.page
                 +seperator+this.status.getMessage();
     }
+
+    @Override
+    public String toString() {
+        return "Id : " + this.id + System.lineSeparator()
+                + "제목 : " + this.name + System.lineSeparator()
+                + "작가 이름 : " + this.author + System.lineSeparator()
+                + "페이지 수 : " + this.page + System.lineSeparator()
+                + "상태 : " + this.status.getMessage() + System.lineSeparator()
+                + "--------------------------";
+    }
 }
