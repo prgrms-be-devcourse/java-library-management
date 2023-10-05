@@ -11,7 +11,7 @@ import static domain.BookStatus.*;
 
 @Getter
 public class Book {
-    private final Integer id;
+    private Integer id;
     private final String title;
     private final String author;
     private final Integer page;
@@ -29,13 +29,16 @@ public class Book {
         this.returnTime = returnTime;
     }
 
-    public Book(Integer id, String title, String author, Integer page) {
-        this.id = id;
+    public Book(String title, String author, Integer page) {
         this.title = title;
         this.author = author;
         this.page = page;
         this.status = AVAILABLE;
         this.returnTime = null;
+    }
+
+    public void allocateId(Integer id) {
+        this.id = id;
     }
 
     public boolean isSameBookId(Integer id) {
@@ -70,5 +73,14 @@ public class Book {
 
     public void report() {
         status = LOST;
+    }
+
+    // 동등성 검사
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return getTitle().equals(book.getTitle()) && getAuthor().equals(book.getAuthor()) && getPage().equals(book.getPage());
     }
 }

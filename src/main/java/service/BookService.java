@@ -1,6 +1,7 @@
 package service;
 
 import domain.Book;
+import exception.AlreadySavedBookException;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import manager.IOManager;
@@ -19,8 +20,14 @@ public class BookService {
 
     // [1] 도서 저장
     public void saveBook(String title, String author, Integer page) {
-        Book book = new Book(repository.createId(), title, author, page);
-        repository.register(book);
+        Book newBook = new Book(title, author, page);
+        for (Book book: repository.findByTitle(newBook.getTitle())) {
+            if (book.equals(newBook)){
+                throw new AlreadySavedBookException();
+            }
+        }
+        newBook.allocateId(repository.createId());
+        repository.register(newBook);
     }
 
     // [2] 도서 목록 조회
