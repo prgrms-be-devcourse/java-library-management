@@ -1,9 +1,8 @@
 package com.programmers.librarymanagement.application;
 
 import com.programmers.librarymanagement.domain.Book;
-import com.programmers.librarymanagement.domain.ReturnResult;
 import com.programmers.librarymanagement.domain.Status;
-import com.programmers.librarymanagement.exception.BookNotFoundException;
+import com.programmers.librarymanagement.exception.*;
 import com.programmers.librarymanagement.repository.BookRepository;
 
 import java.time.LocalDateTime;
@@ -36,41 +35,39 @@ public class LibraryManagementService {
         return bookRepository.findByTitle(title);
     }
 
-    public Status rentBook(Long id) {
+    public void rentBook(Long id) {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
 
-        Status result = book.getStatus();
-
         // 도서가 대여 가능할 경우, 대여중으로 상태 변경
-        switch (result) {
+        switch (book.getStatus()) {
             case CAN_RENT -> {
                 book.updateStatusToAlreadyRent();
                 bookRepository.updateBook(book);
             }
 
+            case ALREADY_RENT -> throw new BookAlreadyRentException();
+
             case ARRANGE -> {
                 if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isBefore(LocalDateTime.now())) {
                     book.updateStatusToAlreadyRent();
                     bookRepository.updateBook(book);
-
-                    result = Status.CAN_RENT;
+                } else {
+                    throw new BookArrangeException();
                 }
             }
-        }
 
-        return result;
+            case LOST -> throw new BookLostException();
+        }
     }
 
-    public ReturnResult returnBook(Long id) {
+    public void returnBook(Long id) {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
 
-        ReturnResult result = ReturnResult.SUCCESS_RETURN;
-
         // 도서가 반납 가능할 경우, 정리중으로 상태 변경
         switch (book.getStatus()) {
-            case CAN_RENT -> result = ReturnResult.ALREADY_RETURN;
+            case CAN_RENT -> throw new BookAlreadyReturnException();
 
             case ALREADY_RENT, LOST -> {
                 book.updateStatusToArrange();
@@ -82,21 +79,17 @@ public class LibraryManagementService {
 
                 // 도서 반납 후 5분이 지났다면 대여 가능
                 if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isBefore(LocalDateTime.now())) {
-                    result = ReturnResult.ALREADY_RETURN;
+                    throw new BookAlreadyReturnException();
                 } else {
-                    result = ReturnResult.ARRANGE;
+                    throw new BookArrangeException();
                 }
             }
         }
-
-        return result;
     }
 
-    public Boolean lostBook(Long id) {
+    public void lostBook(Long id) {
 
         Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-
-        boolean result = true;
 
         // 도서가 분실 처리 가능할 경우, 분실됨으로 상태 변경
         switch (book.getStatus()) {
@@ -105,10 +98,8 @@ public class LibraryManagementService {
                 bookRepository.updateBook(book);
             }
 
-            case LOST -> result = false;
+            case LOST -> throw new BookAlreadyLostException();
         }
-
-        return result;
     }
 
     public void deleteBook(Long id) {

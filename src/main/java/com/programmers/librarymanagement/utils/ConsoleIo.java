@@ -1,8 +1,6 @@
 package com.programmers.librarymanagement.utils;
 
 import com.programmers.librarymanagement.domain.Book;
-import com.programmers.librarymanagement.domain.ReturnResult;
-import com.programmers.librarymanagement.domain.Status;
 import com.programmers.librarymanagement.dto.BookRequestDto;
 
 import java.io.BufferedReader;
@@ -107,17 +105,8 @@ public class ConsoleIo {
         return this.getInputLong();
     }
 
-    public void rentBookResponse(Status result) {
-
-        switch (result) {
-            case CAN_RENT -> System.out.println("[System] 도서가 대여 처리 되었습니다. \n");
-
-            case ALREADY_RENT -> System.out.println("[System] 이미 대여중인 도서입니다. \n");
-
-            case ARRANGE -> System.out.println("[System] 정리 중인 도서입니다. \n");
-
-            case LOST -> System.out.println("[System] 분실된 도서입니다. \n");
-        }
+    public void rentBookResponse() {
+        System.out.println("[System] 도서가 대여 처리 되었습니다. \n");
     }
 
     public Long returnBookRequest() throws IOException {
@@ -129,15 +118,9 @@ public class ConsoleIo {
         return this.getInputLong();
     }
 
-    public void returnBookResponse(ReturnResult result) {
+    public void returnBookResponse() {
 
-        switch (result) {
-            case SUCCESS_RETURN -> System.out.println("[System] 도서가 반납 처리 되었습니다. \n");
-
-            case ALREADY_RETURN -> System.out.println("[System] 원래 대여가 가능한 도서입니다. \n");
-
-            case ARRANGE -> System.out.println("[System] 정리 중인 도서입니다. \n");
-        }
+        System.out.println("[System] 도서가 반납 처리 되었습니다. \n");
     }
 
     public Long lostBookRequest() throws IOException {
@@ -149,13 +132,8 @@ public class ConsoleIo {
         return this.getInputLong();
     }
 
-    public void lostBookResponse(Boolean result) {
-
-        if (result) {
-            System.out.println("[System] 도서가 분실 처리 되었습니다. \n");
-        } else {
-            System.out.println("[System] 이미 분실 처리된 도서입니다. \n");
-        }
+    public void lostBookResponse() {
+        System.out.println("[System] 도서가 분실 처리 되었습니다. \n");
     }
 
     public Long deleteBookRequest() throws IOException {
@@ -173,6 +151,26 @@ public class ConsoleIo {
 
     public void printBookNotFoundException() {
         System.out.println("[System] 존재하지 않는 도서번호 입니다. \n");
+    }
+
+    public void printBookAlreadyRentException() {
+        System.out.println("[System] 이미 대여중인 도서입니다. \n");
+    }
+
+    public void printBookArrangeException() {
+        System.out.println("[System] 정리 중인 도서입니다. \n");
+    }
+
+    public void printBookLostException() {
+        System.out.println("[System] 분실된 도서입니다. \n");
+    }
+
+    public void printBookAlreadyReturnException() {
+        System.out.println("[System] 원래 대여가 가능한 도서입니다. \n");
+    }
+
+    public void printBookAlreadyLostException() {
+        System.out.println("[System] 이미 분실 처리된 도서입니다. \n");
     }
 
     private void printBookInfo(List<Book> bookList) {

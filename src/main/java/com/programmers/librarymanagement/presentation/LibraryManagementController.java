@@ -1,10 +1,8 @@
 package com.programmers.librarymanagement.presentation;
 
 import com.programmers.librarymanagement.domain.Book;
-import com.programmers.librarymanagement.domain.ReturnResult;
-import com.programmers.librarymanagement.domain.Status;
 import com.programmers.librarymanagement.dto.BookRequestDto;
-import com.programmers.librarymanagement.exception.BookNotFoundException;
+import com.programmers.librarymanagement.exception.*;
 import com.programmers.librarymanagement.utils.ConsoleIo;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
 import com.programmers.librarymanagement.repository.TestBookRepository;
@@ -113,48 +111,69 @@ public class LibraryManagementController {
 
         Long id = consoleIo.rentBookRequest();
 
-        Status result;
-
         try {
-            result = libraryManagementService.rentBook(id);
+            libraryManagementService.rentBook(id);
+
         } catch (BookNotFoundException e) {
             consoleIo.printBookNotFoundException();
             return;
+
+        } catch (BookAlreadyRentException e) {
+            consoleIo.printBookAlreadyRentException();
+            return;
+
+        } catch (BookArrangeException e) {
+            consoleIo.printBookArrangeException();
+            return;
+
+        } catch (BookLostException e) {
+            consoleIo.printBookLostException();
+            return;
         }
 
-        consoleIo.rentBookResponse(result);
+        consoleIo.rentBookResponse();
     }
 
     private void returnBook() throws IOException {
 
         Long id = consoleIo.returnBookRequest();
 
-        ReturnResult result;
-
         try {
-            result = libraryManagementService.returnBook(id);
+            libraryManagementService.returnBook(id);
+
         } catch (BookNotFoundException e) {
             consoleIo.printBookNotFoundException();
             return;
+
+        } catch (BookAlreadyReturnException e) {
+            consoleIo.printBookAlreadyReturnException();
+            return;
+
+        } catch (BookArrangeException e) {
+            consoleIo.printBookArrangeException();
+            return;
         }
 
-        consoleIo.returnBookResponse(result);
+        consoleIo.returnBookResponse();
     }
 
     private void lostBook() throws IOException {
 
         Long id = consoleIo.lostBookRequest();
 
-        Boolean result;
-
         try {
-            result = libraryManagementService.lostBook(id);
+            libraryManagementService.lostBook(id);
+
         } catch (BookNotFoundException e) {
             consoleIo.printBookNotFoundException();
             return;
+
+        } catch (BookAlreadyLostException e) {
+            consoleIo.printBookAlreadyLostException();
+            return;
         }
 
-        consoleIo.lostBookResponse(result);
+        consoleIo.lostBookResponse();
     }
 
     private void deleteBook() throws IOException {
@@ -163,6 +182,7 @@ public class LibraryManagementController {
 
         try {
             libraryManagementService.deleteBook(id);
+
         } catch (BookNotFoundException e) {
             consoleIo.printBookNotFoundException();
             return;
