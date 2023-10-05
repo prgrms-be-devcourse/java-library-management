@@ -29,22 +29,24 @@ public class BookController {
     }
 
     public void runMode(String mode) {
+        ModeType modeType = ModeType.findByMode(mode);
         List<Book> books;
-        switch (mode) {
-            case "1" -> {
+        if (modeType == null) {
+            ioManager.printSystem("잘못된 입력입니다.");
+            return;
+        }
+        switch (modeType) {
+            case NORMAL -> {
                 books = fileManager.loadData();
-                bookService = new BookService(new NormalRepository(PATH,  books), ioManager);
-                ioManager.printSystem("일반 모드로 애플리케이션을 실행합니다.");
-                selectFunction();
+                bookService = new BookService(new NormalRepository(PATH, books), ioManager);
             }
-            case "2" -> {
+            case TEST -> {
                 books = new ArrayList<>();
                 bookService = new BookService(new TestRepository(books), ioManager);
-                ioManager.printSystem("테스트 모드로 애플리케이션을 실행합니다.");
-                selectFunction();
             }
-            default -> ioManager.printSystem("잘못된 입력입니다.");
         }
+        ioManager.printSystem(modeType.getMessage());
+        selectFunction();
     }
 
     public void selectFunction() {
