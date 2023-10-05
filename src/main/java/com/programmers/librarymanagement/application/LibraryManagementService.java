@@ -111,18 +111,10 @@ public class LibraryManagementService {
         return result;
     }
 
-    public Boolean deleteBook(Long id) {
+    public void deleteBook(Long id) {
 
-        boolean result = true;
-
-        try {
-            Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-            bookRepository.deleteBook(book);
-        } catch (BookNotFoundException e) {
-            result = false;
-        }
-
-        return result;
+        Book book = bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        bookRepository.deleteBook(book);
     }
 
     private void updateAllStatus() {
