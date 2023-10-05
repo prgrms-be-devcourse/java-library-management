@@ -1,5 +1,7 @@
 package dev.course.domain;
 
+import dev.course.repository.BookRepository;
+
 public class Book implements Comparable {
 
     private final Long bookId;
@@ -44,11 +46,38 @@ public class Book implements Comparable {
         return state;
     }
 
-    public void setState(BookState state) {
-        this.state = state;
-    }
-
     public boolean equalState(BookState state) {
         return this.state.equals(state);
+    }
+
+    public void toStatusRenting() {
+        this.state = BookState.RENTING;
+    }
+
+    public void toStatusRentalAvailable() {
+        this.state = BookState.RENTAL_AVAILABLE;
+    }
+
+    public void toStatusArrangement() {
+        this.state = BookState.ARRANGEMENT;
+    }
+
+    public void toStatusLost() {
+        this.state = BookState.LOST;
+    }
+
+    public void borrow() {
+        this.state.handleBorrow(this);
+        this.toStatusRenting();
+    }
+
+    public void returns() {
+        this.state.handleReturn(this);
+        this.toStatusArrangement();
+    }
+
+    public void lost() {
+        this.state.handleLost(this);
+        this.toStatusLost();
     }
 }
