@@ -2,8 +2,6 @@ package org.example.server;
 
 import org.example.packet.requestPacket.RequestPacket;
 import org.example.packet.responsePacket.ResponsePacket;
-import org.example.server.controller.BookController;
-import org.example.server.controller.Controller;
 import org.example.server.repository.FileRepository;
 import org.example.server.repository.InMemoryRepository;
 import org.example.server.repository.Repository;
@@ -13,16 +11,17 @@ import org.example.server.service.Service;
 import java.util.function.Supplier;
 
 public class Server {
-    private Controller controller;
+    private RequestHandler requestHandler;
 
     public void setMode(String mode) {
         Repository repository = ModeType.valueOf(mode).getRepository();
         Service service = new BookService(repository);
-        controller = new BookController(service);
+        BookController bookController = new BookController(service);
+        requestHandler = new RequestHandler(bookController);
     }
 
     public ResponsePacket requestMethod(RequestPacket requestPacket) {
-        return controller.handleRequest(requestPacket);
+        return requestHandler.handleRequest(requestPacket);
     }
 
     private enum ModeType {
