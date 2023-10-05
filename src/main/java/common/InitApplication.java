@@ -6,7 +6,7 @@ import manage.book.BookListManager;
 import manage.file.CsvFileManager;
 import manage.file.TestFileManager;
 
-import static common.Util.ConsoleInput;
+import static common.Util.CONSOLE_INPUT;
 
 public class InitApplication {
     private static final int PROD_MODE = 1;
@@ -19,7 +19,7 @@ public class InitApplication {
 
         while (true) {
             try {
-                mode = Integer.parseInt(ConsoleInput.nextLine().strip());
+                mode = Integer.parseInt(CONSOLE_INPUT.nextLine().strip());
                 if(mode != PROD_MODE && mode != TEST_MODE) throw new NumberFormatException();
                 break;
             }catch (NumberFormatException e){

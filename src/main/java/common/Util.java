@@ -3,5 +3,5 @@ package common;
 import java.util.Scanner;
 
 public class Util {
-    public static Scanner ConsoleInput = new Scanner(System.in);
+    public static final Scanner CONSOLE_INPUT = new Scanner(System.in);
 }
