@@ -191,10 +191,46 @@ class FileRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 분실 테스트")
-    void lostBook() {
+    @DisplayName("도서 분실 테스트 : 대여중")
+    void lostBookRenting() {
         repository.lostBook(3);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.LOST_COMPLETE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
         Assertions.assertThat(findBookById(3).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @Test
+    @DisplayName("도서 분실 테스트 : 대여 가능")
+    void lostBookAvailable() {
+        repository.lostBook(1);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.LOST_IMPOSSIBLE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 분실 테스트 : 분실됨")
+    void lostBookLost() {
+        repository.lostBook(4);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.LOST_ALREADY.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 분실 테스트 : 도서 정리중")
+    void lostBookOrganizing() {
+        repository.returnBook(3);
+        repository.lostBook(3);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RETURN_COMPLETE.getMessage() + "\r\n"
+                + ExecuteMessage.LOST_IMPOSSIBLE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
     }
 
     @Test
