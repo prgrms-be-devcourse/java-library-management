@@ -36,7 +36,7 @@ class BookMemoryRepositoryTest {
         );
     }
 
-    @DisplayName("도서 전체를 조회하면, bookArrayList에 있는 모든 도서들을 조회할 수 있다.")
+    @DisplayName("도서 전체를 조회하면 bookArrayList에 있는 모든 도서들을 조회할 수 있다.")
     @Test
     void findAll() {
         // given
@@ -57,7 +57,7 @@ class BookMemoryRepositoryTest {
         );
     }
 
-    @DisplayName("도서 이름으로 도서들을 조회할 수 있다.")
+    @DisplayName("도서 제목으로 도서들을 조회할 수 있다.")
     @Test
     void findByTitle() {
         // given
