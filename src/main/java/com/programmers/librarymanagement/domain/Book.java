@@ -12,9 +12,9 @@ public class Book {
 
     private final int page;
 
-    private final Status status;
+    private Status status;
 
-    private final LocalDateTime returnDateTime;
+    private LocalDateTime returnDateTime;
 
     public Book(Long id, String title, String author, int page, Status status, LocalDateTime returnDateTime) {
         this.id = id;
@@ -55,5 +55,25 @@ public class Book {
 
     public Boolean isContain(String title) {
         return this.title.contains(title);
+    }
+
+    public void updateStatusToCanRent() {
+        this.status = Status.CAN_RENT;
+    }
+
+    public void updateStatusToAlreadyRent() {
+        this.status = Status.ALREADY_RENT;
+    }
+
+    public void updateStatusToArrange() {
+        this.status = Status.ARRANGE;
+    }
+
+    public void updateStatusToLost() {
+        this.status = Status.LOST;
+    }
+
+    public void updateReturnDateTime() {
+        this.returnDateTime = LocalDateTime.now();
     }
 }
