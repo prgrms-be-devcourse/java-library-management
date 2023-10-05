@@ -167,13 +167,12 @@ public class ConsoleIo {
         return this.getInputLong();
     }
 
-    public void deleteBookResponse(Boolean result) {
+    public void deleteBookResponse() {
+        System.out.println("[System] 도서가 삭제 처리 되었습니다. \n");
+    }
 
-        if (result) {
-            System.out.println("[System] 도서가 삭제 처리 되었습니다. \n");
-        } else {
-            System.out.println("[System] 존재하지 않는 도서번호 입니다. \n");
-        }
+    public void printBookNotFoundException() {
+        System.out.println("[System] 존재하지 않는 도서번호 입니다. \n");
     }
 
     private void printBookInfo(List<Book> bookList) {

@@ -118,7 +118,7 @@ public class LibraryManagementController {
         try {
             result = libraryManagementService.rentBook(id);
         } catch (BookNotFoundException e) {
-            System.out.println("[System] 입력한 도서 번호에 해당하는 도서가 존재하지 않습니다. 기능 선택으로 돌아갑니다. \n");
+            consoleIo.printBookNotFoundException();
             return;
         }
 
@@ -134,7 +134,7 @@ public class LibraryManagementController {
         try {
             result = libraryManagementService.returnBook(id);
         } catch (BookNotFoundException e) {
-            System.out.println("[System] 입력한 도서 번호에 해당하는 도서가 존재하지 않습니다. 기능 선택으로 돌아갑니다. \n");
+            consoleIo.printBookNotFoundException();
             return;
         }
 
@@ -150,7 +150,7 @@ public class LibraryManagementController {
         try {
             result = libraryManagementService.lostBook(id);
         } catch (BookNotFoundException e) {
-            System.out.println("[System] 입력한 도서 번호에 해당하는 도서가 존재하지 않습니다. 기능 선택으로 돌아갑니다. \n");
+            consoleIo.printBookNotFoundException();
             return;
         }
 
@@ -161,15 +161,13 @@ public class LibraryManagementController {
 
         Long id = consoleIo.deleteBookRequest();
 
-        Boolean result;
-
         try {
-            result = libraryManagementService.deleteBook(id);
+            libraryManagementService.deleteBook(id);
         } catch (BookNotFoundException e) {
-            System.out.println("[System] 입력한 도서 번호에 해당하는 도서가 존재하지 않습니다. 기능 선택으로 돌아갑니다. \n");
+            consoleIo.printBookNotFoundException();
             return;
         }
 
-        consoleIo.deleteBookResponse(result);
+        consoleIo.deleteBookResponse();
     }
 }
