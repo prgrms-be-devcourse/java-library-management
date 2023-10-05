@@ -8,8 +8,8 @@ import java.util.*;
 public class MemoryRepository implements Repository {
     private Map<Long, Book> books;
 
-    public List<Book> getBooksASList() {
-        return books.values().stream().toList();
+    public MemoryRepository() {
+        this.books = new HashMap<>();
     }
 
     public void setBooks(List<Book> books) {

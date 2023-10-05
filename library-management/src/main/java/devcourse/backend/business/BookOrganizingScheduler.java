@@ -3,6 +3,7 @@ package devcourse.backend.business;
 import devcourse.backend.model.Book;
 import devcourse.backend.repository.Repository;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -17,9 +18,11 @@ public class BookOrganizingScheduler {
     private final Repository repository;
     private boolean isRunning;
     private ScheduledExecutorService scheduler;
+    private Clock clock;
 
-    public BookOrganizingScheduler(Repository repository) {
+    public BookOrganizingScheduler(Repository repository, Clock clock) {
         this.repository = repository;
+        this.clock = clock;
         isRunning = false;
     }
 
@@ -54,7 +57,7 @@ public class BookOrganizingScheduler {
                 scheduler.shutdown();
             }
 
-            LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+            LocalDateTime now = LocalDateTime.now(clock);
             for (Book book : booksToBeAvailable) {
                 if (now.isAfter(book.getUpdateAt().plusMinutes(1L))) {
                     book.changeStatus(AVAILABLE);

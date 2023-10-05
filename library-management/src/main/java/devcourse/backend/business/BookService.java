@@ -6,6 +6,7 @@ import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.CreateBookDto;
 
+import java.time.Clock;
 import java.util.List;
 
 import static devcourse.backend.FileSetting.*;
@@ -15,12 +16,12 @@ public class BookService {
     private final BookOrganizingScheduler scheduler;
     private final Repository repository;
 
-    public BookService(ModeType mode) {
+    public BookService(ModeType mode, Clock clock) {
         if(mode == ModeType.TEST_MODE) {
             this.repository = new MemoryRepository();
         } else this.repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
 
-        scheduler = new BookOrganizingScheduler(repository);
+        scheduler = new BookOrganizingScheduler(repository, clock);
         scheduler.startScheduler();
     }
 
