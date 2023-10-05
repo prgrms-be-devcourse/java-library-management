@@ -3,7 +3,6 @@ package domain;
 import java.util.List;
 
 public class Book {
-    private static final List<String> FIELD_DISPLAY_NAMES = List.of("도서번호", "제목", "작가", "페이지 수", "상태");
     private static final int PROCESSING_TIME_MILLIS = 5 * 60 * 1_000;
     private static final int NOT_REVERTED = -1;
 
