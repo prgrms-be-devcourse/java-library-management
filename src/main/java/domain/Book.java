@@ -1,7 +1,5 @@
 package domain;
 
-import java.util.List;
-
 public class Book {
     private static final int PROCESSING_TIME_MILLIS = 5 * 60 * 1_000;
     private static final int NOT_REVERTED = -1;
@@ -31,14 +29,6 @@ public class Book {
         this.bookState = bookState;
         this.lastReturn = lastReturn;
         numberCnt = Math.max(numberCnt, number) + 1;
-    }
-
-    public void setBookState(BookState bookState) {
-        this.bookState = bookState;
-    }
-
-    public void setLastReturn(long lastReturn) {
-        this.lastReturn = lastReturn;
     }
 
     public int getNumber() {
@@ -95,5 +85,29 @@ public class Book {
         }
 
         return sb.toString();
+    }
+
+    public void process(BookProcess bookProc){
+        switch (bookProc){
+            case RENT -> {
+                if (this.bookState == BookState.AVAILABLE)
+                    this.bookState = BookState.RENTED;
+            }
+            case REVERT -> {
+                if (this.bookState == BookState.RENTED){
+                    this.bookState = BookState.PROCESSING;
+                    this.lastReturn = System.currentTimeMillis();
+                }
+            }
+            case LOST -> {
+                if (this.bookState != BookState.LOST)
+                    this.bookState = BookState.LOST;
+            }
+            case DELETE -> {
+                if (this.bookState != BookState.DELETED)
+                    this.bookState = BookState.DELETED;
+            }
+        }
+
     }
 }

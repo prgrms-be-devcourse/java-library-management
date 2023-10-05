@@ -1,6 +1,7 @@
 package manage.book;
 
 import domain.Book;
+import domain.BookProcess;
 import domain.BookState;
 import exception.EntityNotFoundException;
 import manage.file.BookFileManager;
@@ -44,12 +45,10 @@ public class BookListManager implements BookManager {
     @Override
     public BookState rent(int bookNum) {
         Book book = getBook(bookNum);
+        BookState initState = book.getBookState();
 
-        if (book.getBookState() == BookState.AVAILABLE) {
-            book.setBookState(BookState.RENTED);
-            return BookState.AVAILABLE;
-        }
-        return book.getBookState();
+        book.process(BookProcess.RENT);
+        return initState;
     }
 
     @Override
@@ -57,10 +56,7 @@ public class BookListManager implements BookManager {
         Book book = getBook(bookNum);
         BookState initState = book.getBookState();
 
-        if (book.getBookState() == BookState.RENTED){
-            book.setBookState(BookState.PROCESSING);
-            book.setLastReturn(System.currentTimeMillis());
-        }
+        book.process(BookProcess.REVERT);
         return initState;
     }
 
@@ -69,9 +65,7 @@ public class BookListManager implements BookManager {
         Book book = getBook(bookNum);
         BookState initState = book.getBookState();
 
-        if (book.getBookState() != BookState.LOST)
-            book.setBookState(BookState.LOST);
-
+        book.process(BookProcess.LOST);
         return initState;
     }
 
@@ -80,9 +74,7 @@ public class BookListManager implements BookManager {
         Book book = getBook(bookNum);
         BookState initState = book.getBookState();
 
-        if (book.getBookState() != BookState.DELETED)
-            book.setBookState(BookState.DELETED);
-
+        book.process(BookProcess.DELETE);
         return initState;
     }
 
