@@ -12,9 +12,8 @@ import java.util.List;
 
 public class BookController {
     private BookService bookService;
-    private final String PATH = "/src/main/resources/book_data.csv";
+    private static final String PATH = "/src/main/resources/book_data.csv";
     private final IOManager ioManager = new IOManager();
-    private final FileManager fileManager = new FileManager(PATH);
 
     public void selectMode() {
         ioManager.printSelectMode();
@@ -30,19 +29,16 @@ public class BookController {
 
     public void runMode(String mode) {
         ModeType modeType = ModeType.findByMode(mode);
-        List<Book> books;
         if (modeType == null) {
             ioManager.printSystem("잘못된 입력입니다.");
             return;
         }
         switch (modeType) {
             case NORMAL -> {
-                books = fileManager.loadData();
-                bookService = new BookService(new NormalRepository(PATH, books), ioManager);
+                bookService = new BookService(new NormalRepository(PATH, modeType.getBooks()), ioManager);
             }
             case TEST -> {
-                books = new ArrayList<>();
-                bookService = new BookService(new TestRepository(books), ioManager);
+                bookService = new BookService(new TestRepository(modeType.getBooks()), ioManager);
             }
         }
         ioManager.printSystem(modeType.getMessage());
