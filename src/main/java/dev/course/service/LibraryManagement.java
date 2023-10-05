@@ -44,7 +44,8 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        book.getState().handleBorrow(bookRepository, book);
+        book.borrow();
+        this.bookRepository.update(book);
 
         System.out.println("[System] 도서 대여가 완료되었습니다.\n");
     }
@@ -54,15 +55,17 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        Book elem = book.getState().handleReturn(bookRepository, book);
-        if (elem.equalState(BookState.ARRANGEMENT)) {
+        book.returns();
+        this.bookRepository.update(book);
+
+        if (book.equalState(BookState.ARRANGEMENT)) {
 
             CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 300000);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (!completableFuture.isDone()) {
-                    Book availableBook = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
-                    this.bookRepository.add(availableBook);
+                    book.toStatusRentalAvailable();
+                    this.bookRepository.update(book);
                     System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
                 }
             }));
@@ -76,7 +79,8 @@ public class LibraryManagement {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-        book.getState().handleLost(bookRepository, book);
+        book.lost();
+        this.bookRepository.update(book);
 
         System.out.println("[System] 도서 분실 처리가 완료되었습니다.\n");
     }
@@ -108,8 +112,8 @@ public class LibraryManagement {
 
         executorService.schedule(() -> {
             try {
-                Book arranged = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
-                bookRepository.add(arranged);
+                book.toStatusRentalAvailable();
+                this.bookRepository.update(book);
             } finally {
                 latch.countDown();
             }
