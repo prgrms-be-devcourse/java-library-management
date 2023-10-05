@@ -14,10 +14,11 @@ import static domain.Reader.fc;
 import static repository.Book.countId;
 
 public class FileRepository implements Repository {
-    public static File file = new File("src/main/resources/library.csv");
+    public static File file;
     public static List<Book> books = new ArrayList<>();
 
-    public FileRepository() {
+    public FileRepository(String pathName) {
+        file = new File(pathName);
         fileToList(books, file);
         countId = books.get(books.size() - 1).getId() + 1;
         organizeState(books);
