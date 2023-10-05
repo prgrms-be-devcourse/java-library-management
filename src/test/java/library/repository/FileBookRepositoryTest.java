@@ -22,17 +22,16 @@ class FileBookRepositoryTest {
     private final static int THREAD_SIZE = 32;
     private FileBookRepository bookRepository;
 
-    private static void deleteAllBooks() {
-        FileBookRepository fileBookRepository = new FileBookRepository();
-        fileBookRepository.findAll().forEach(fileBookRepository::delete);
-    }
-
     private static Book createDummyBook(int bookNumber) {
         return Book.createAvailableBook(
                 bookNumber,
                 "Title " + bookNumber,
                 "Author " + bookNumber,
                 bookNumber);
+    }
+
+    private void deleteAllBooks() {
+        bookRepository.findAll().forEach(bookRepository::delete);
     }
 
     @BeforeEach
