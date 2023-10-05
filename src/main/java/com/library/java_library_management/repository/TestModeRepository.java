@@ -3,10 +3,7 @@ package com.library.java_library_management.repository;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.status.BookStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class TestModeRepository implements Repository{
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private HashMap<Integer, BookInfo> bookMap = new HashMap<>();
+    private Map<Integer, BookInfo> bookMap = new HashMap<>();
     private int book_number_cnt = 1;
 
 
