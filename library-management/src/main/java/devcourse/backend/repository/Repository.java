@@ -11,6 +11,7 @@ public interface Repository {
     List<Book> findByKeyword(String keyword);
 
     Optional<Book> findById(long id);
+    Optional<Book> findByTitleAndAuthor(String title, String author);
 
     void addBook(Book book);
 

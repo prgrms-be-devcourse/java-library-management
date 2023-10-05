@@ -25,7 +25,11 @@ public class BookService {
     }
 
     public void registerBook(CreateBookDto data) {
-        repository.addBook(new Book.Builder(data.getTitle(), data.getAuthor(), data.getTotalPages()).build());
+        repository.findByTitleAndAuthor(data.getTitle(), data.getAuthor())
+                .ifPresentOrElse(
+                        (b) -> { throw new IllegalArgumentException("'" + b.getTitle() + "'는 이미 존재 하는 도서입니다."); } ,
+                        () -> repository.addBook(new Book.Builder(data.getTitle(), data.getAuthor(), data.getTotalPages()).build())
+                );
     }
 
     public List<Book> getAllBooks() {
