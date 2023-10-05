@@ -1,6 +1,7 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
+import com.programmers.library.dto.AddBookRequest;
 import com.programmers.library.utils.ConsoleIO;
 import com.programmers.library.utils.MessageProvider;
 import com.programmers.library.utils.StatusType;
@@ -22,9 +23,8 @@ public class LibraryService {
     }
 
     // 도서 등록
-    public void addBook(String title, String author, int pages) {
-        Book book = new Book(title, author, pages);
-        libraryRepository.save(book);
+    public void addBook(AddBookRequest request) {
+        libraryRepository.save(request.toEntity());     // dto 사용
         console.printMessage(MessageProvider.BOOK_ADDED);
     }
 
@@ -61,25 +61,22 @@ public class LibraryService {
         console.printMessage(MessageProvider.SEARCH_RESULTS_END);
     }
 
-    // 도서 번호 찾아 도서 상태 반환
-    private void handleStatus(int bookId, Consumer<StatusType> statusHandler) {
-        libraryRepository.findById(bookId)
-                .ifPresentOrElse(
-                        book -> {
-                            StatusType status = book.getStatus();
-                            statusHandler.accept(status);
-                        },
-                        () -> console.printMessage(MessageProvider.INVALID_BOOK_ID)
-
-                );
+    // 도서 번호로 도서 찾기
+    private void handleBook(int bookId, Consumer<Book> bookHandler) {
+        libraryRepository.findById(bookId).ifPresentOrElse(
+                bookHandler,
+                () -> console.printMessage(MessageProvider.INVALID_BOOK_ID)
+        );
     }
 
     // 도서 대여
     public void rentBook(int bookId) {
-        handleStatus(bookId, status -> {
+        handleBook(bookId, book -> {
+            StatusType status = book.getStatus();
             switch (status) {
                 case AVAILABLE -> {
-                    libraryRepository.updateStatus(bookId, StatusType.RENTING);
+                    Book updatedBook = book.updateStatus(StatusType.RENTING);   // '대여중'으로 상태 변경
+                    libraryRepository.update(updatedBook);  // repository에서 변경 사항 반영
                     console.printMessage(MessageProvider.BOOK_RENTED);
                 }
                 case RENTING -> console.printMessage(MessageProvider.ALREADY_RENTED);
@@ -89,12 +86,13 @@ public class LibraryService {
     }
 
     // 5분 뒤 '대여 가능' 설정
-    private void set5MinuteTimer(int bookId) {
+    private void set5MinuteTimer(Book book) {
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                libraryRepository.updateStatus(bookId, StatusType.AVAILABLE);
+                Book updatedBook = book.updateStatus(StatusType.AVAILABLE); // '대여 가능'으로 상태 변경
+                libraryRepository.update(updatedBook);
             }
         };
         timer.schedule(timerTask, 5 * 60 * 1000);
@@ -102,12 +100,14 @@ public class LibraryService {
 
     // 도서 반납
     public void returnBook(int bookId) {
-        handleStatus(bookId, status -> {
+        handleBook(bookId, book -> {
+            StatusType status = book.getStatus();
             switch (status) {
                 case RENTING, LOST -> {
-                    libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
+                    Book updatedBook = book.updateStatus(StatusType.ORGANIZING);    // '도서 정리중'으로 상태 변경
+                    libraryRepository.update(updatedBook);
                     console.printMessage(MessageProvider.BOOK_RETURNED);
-                    set5MinuteTimer(bookId);
+                    set5MinuteTimer(updatedBook);   // 5분 타이머 설정
                 }
                 case AVAILABLE, ORGANIZING -> console.printMessage(MessageProvider.UNRETURNABLE + "( *사유: " + status.getDescription() + " )\n");
             }
@@ -116,10 +116,12 @@ public class LibraryService {
 
     // 도서 분실 처리
     public void lostBook(int bookId) {
-        handleStatus(bookId, status -> {
+        handleBook(bookId, book -> {
+            StatusType status = book.getStatus();
             switch (status) {
                 case AVAILABLE, RENTING, ORGANIZING -> {
-                    libraryRepository.updateStatus(bookId, StatusType.LOST);
+                    Book updatedBook = book.updateStatus(StatusType.LOST);  // '분실됨'으로 상태 변경
+                    libraryRepository.update(updatedBook);
                     console.printMessage(MessageProvider.BOOK_LOST);
                 }
                 case LOST -> console.printMessage(MessageProvider.ALREADY_LOST);
@@ -129,14 +131,10 @@ public class LibraryService {
 
     // 도서 삭제
     public void deleteBook(int bookId) {
-        libraryRepository.findById(bookId)
-                .ifPresentOrElse(
-                        book -> {
-                            libraryRepository.delete(bookId);
-                            console.printMessage(MessageProvider.BOOK_DELETED);
-                        },
-                        () -> console.printMessage(MessageProvider.INVALID_BOOK_ID)
-                );
+        handleBook(bookId, book -> {
+            libraryRepository.delete(bookId);
+            console.printMessage(MessageProvider.BOOK_DELETED);
+        });
     }
 
 }
