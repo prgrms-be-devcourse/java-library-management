@@ -2,14 +2,15 @@ package com.programmers.librarymanagement;
 
 import com.programmers.librarymanagement.application.LibraryManagementService;
 import com.programmers.librarymanagement.domain.Book;
-import com.programmers.librarymanagement.domain.ReturnResult;
-import com.programmers.librarymanagement.domain.Status;
+import com.programmers.librarymanagement.exception.BookAlreadyLostException;
+import com.programmers.librarymanagement.exception.BookAlreadyReturnException;
+import com.programmers.librarymanagement.exception.BookNotFoundException;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
 
-import static com.programmers.librarymanagement.domain.Status.ALREADY_RENT;
+import static com.programmers.librarymanagement.domain.Status.*;
 
 @DisplayName("Service test for NormalBookRepository")
 public class NormalManagementServiceTest {
@@ -106,11 +107,8 @@ public class NormalManagementServiceTest {
         Long bookNum = normalBookRepository.findByTitle("패턴").get(0).getId();
         libraryManagementService.rentBook(bookNum);
 
-        // when
-        Status result = libraryManagementService.rentBook(bookNum);
-
-        // then
-        Assertions.assertEquals(ALREADY_RENT, result);
+        // when - then
+        Assertions.assertThrows(BookAlreadyReturnException.class, () -> libraryManagementService.rentBook(bookNum));
     }
 
     @Test
@@ -122,10 +120,10 @@ public class NormalManagementServiceTest {
         libraryManagementService.rentBook(bookNum);
 
         // when
-        ReturnResult result = libraryManagementService.returnBook(bookNum);
+        libraryManagementService.returnBook(bookNum);
 
         // then
-        Assertions.assertEquals(ReturnResult.SUCCESS_RETURN, result);
+        Assertions.assertEquals(normalBookRepository.findById(bookNum).get().getStatus(), ARRANGE);
     }
 
     @Test
@@ -135,11 +133,8 @@ public class NormalManagementServiceTest {
         libraryManagementService.addBook("종이접기 100선", "빙봉", 521);
         Long bookNum = normalBookRepository.findByTitle("종이접기").get(0).getId();
 
-        // when
-        ReturnResult result = libraryManagementService.returnBook(bookNum);
-
-        // then
-        Assertions.assertEquals(ReturnResult.ALREADY_RETURN, result);
+        // when - then
+        Assertions.assertThrows(BookAlreadyReturnException.class, () -> libraryManagementService.returnBook(bookNum));
     }
 
     @Test
@@ -150,10 +145,10 @@ public class NormalManagementServiceTest {
         Long bookNum = normalBookRepository.findByTitle("정석").get(0).getId();
 
         // when
-        Boolean result = libraryManagementService.lostBook(bookNum);
+        libraryManagementService.lostBook(bookNum);
 
         // then
-        Assertions.assertEquals(true, result);
+        Assertions.assertEquals(normalBookRepository.findById(bookNum).get().getStatus(), LOST);
     }
 
     @Test
@@ -164,11 +159,8 @@ public class NormalManagementServiceTest {
         Long bookNum = normalBookRepository.findByTitle("정석").get(0).getId();
         libraryManagementService.lostBook(bookNum);
 
-        // when
-        Boolean result = libraryManagementService.lostBook(bookNum);
-
-        // then
-        Assertions.assertEquals(false, result);
+        // when - then
+        Assertions.assertThrows(BookAlreadyLostException.class, () -> libraryManagementService.lostBook(bookNum));
     }
 
     @Test
@@ -179,10 +171,10 @@ public class NormalManagementServiceTest {
         Long bookNum = normalBookRepository.findByTitle("프로그래밍").get(0).getId();
 
         // when
-        Boolean result = libraryManagementService.deleteBook(bookNum);
+        libraryManagementService.deleteBook(bookNum);
 
         // then
-        Assertions.assertEquals(true, result);
+        Assertions.assertFalse(normalBookRepository.findById(bookNum).isPresent());
     }
 
     @Test
@@ -192,10 +184,7 @@ public class NormalManagementServiceTest {
         libraryManagementService.addBook("프로그래밍 언어 개념", "원유헌", 521);
         Long bookNum = normalBookRepository.findByTitle("프로그래밍").get(0).getId();
 
-        // when
-        Boolean result = libraryManagementService.deleteBook(bookNum + 1);
-
-        // then
-        Assertions.assertEquals(false, result);
+        // when - then
+        Assertions.assertThrows(BookNotFoundException.class, () -> libraryManagementService.deleteBook(bookNum + 1));
     }
 }
