@@ -39,9 +39,10 @@ public class TotalManager {
                     case 2 -> searchAll();
                     case 3 -> search();
                     case 4 -> rent();
-                    case 5 -> returnBook();
+                    case 5 -> revert();
                     case 6 -> lost();
                     case 7 -> delete();
+                    default -> throw new IllegalArgumentException("잘못된 기능 선택");
                 }
             }catch (IllegalArgumentException e){
                 System.out.println("잘못된 입력입니다. 최초 선택으로 이동합니다." + System.lineSeparator());
@@ -113,7 +114,7 @@ public class TotalManager {
             System.out.println("도서가 대여되었습니다!" + System.lineSeparator());
     }
 
-    private void returnBook(){
+    private void revert(){
         System.out.print("반납할 도서 번호를 입력해 주세요." + System.lineSeparator() + "> ");
 
         int number = Integer.parseInt(CONSOLE_INPUT.nextLine().trim());
