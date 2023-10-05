@@ -14,14 +14,13 @@ public enum Menu {
 
 
     private final String description;
+    private final Runnable viewer;
     private final int num;
 
-    private final Runnable viewer;
-
     Menu(int num, String description, Runnable viewer) {
-        this.num = num;
         this.description = description;
         this.viewer = viewer;
+        this.num = num;
     }
 
     @Override
@@ -30,13 +29,13 @@ public enum Menu {
     }
 
     public static void selected(int num) {
-        get(num).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."))
-                .viewer.run();
+        get(num).viewer.run();
     }
 
-    private static Optional<Menu> get(int num) {
+    private static Menu get(int num) {
         return Arrays.stream(Menu.values())
                 .filter(e -> e.num == num)
-                .findAny();
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
     }
 }

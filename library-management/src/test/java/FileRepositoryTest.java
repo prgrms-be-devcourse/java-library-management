@@ -19,8 +19,10 @@ public class FileRepositoryTest { ;
 
     @BeforeEach
     void 파일_리포지토리_초기화() {
-        // 각 테스트 전에 FileRepository 초기화
+        // 각 테스트 전에 파일에 있는 데이터 삭제
         truncate();
+
+        // 각 테스트 전에 FileRepository 초기화
         fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
     }
 
@@ -41,7 +43,7 @@ public class FileRepositoryTest { ;
         // repository 초기화 시 파일에서 자동으로 데이터 로딩
         fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
 
-        // 파일에 있던 도서가 로딩
+        // 파일에 있던 도서가 로딩됨
         List<Book> books = fileRepository.findAll();
         assertEquals(2, books.size());
         assertEquals("이펙티브 자바", books.get(0).getTitle());
@@ -81,7 +83,6 @@ public class FileRepositoryTest { ;
                 }
             }
             assertTrue(found);
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 }
