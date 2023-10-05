@@ -5,6 +5,10 @@ plugins {
 group = 'devcourse.backend'
 version = '1.0.0'
 
+java {
+    sourceCompatibility = '19'
+}
+
 repositories {
     mavenCentral()
 }
