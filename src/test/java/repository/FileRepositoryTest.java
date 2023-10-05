@@ -32,7 +32,7 @@ class FileRepositoryTest {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         bw.write("1,해리포터,조앤롤링,324,대여 가능\n" +
                 "3,하이낭,다잗ㄹㄹ자,34253,대여중\n" +
-                "4,하인,ㄷㅈㄹㅈ,4356,대여 가능\n" +
+                "4,하인,ㄷㅈㄹㅈ,4356,분실됨\n" +
                 "5,gi,skdl,243,대여 가능\n" +
                 "6,신데렐라,ㅇㄴ,23,대여 가능\n");
         bw.close();
@@ -107,7 +107,7 @@ class FileRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 대여 테스트 : 대여가능")
+    @DisplayName("도서 대여 테스트 : 대여 가능")
     void rentalAvailable() {
         repository.rental(1);
 
@@ -151,10 +151,43 @@ class FileRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 반납 테스트")
-    void returnBook() {
+    @DisplayName("도서 반납 테스트 : 대여 가능")
+    void returnBookAvailable() {
+        repository.returnBook(1);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RETURN_AVAILABLE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 반납 테스트 : 대여중")
+    void returnBookRenting() {
         repository.returnBook(3);
         Assertions.assertThat(findBookById(3).getState()).isEqualTo(BookState.ORGANIZING);
+    }
+
+    @Test
+    @DisplayName("도서 반납 테스트 : 분실됨")
+    void returnBookLost() {
+        repository.returnBook(4);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RETURN_COMPLETE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+        Assertions.assertThat(findBookById(4).getState()).isEqualTo(BookState.ORGANIZING);
+    }
+
+    @Test
+    @DisplayName("도서 반납 테스트 : 도서 정리중")
+    void returnBookOrganizing() {
+        repository.returnBook(3);
+        repository.returnBook(3);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RETURN_COMPLETE.getMessage() + "\r\n"
+                + ExecuteMessage.RETURN_IMPOSSIBLE.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
     }
 
     @Test
