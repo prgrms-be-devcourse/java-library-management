@@ -1,6 +1,7 @@
 package app.library.management.core.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Book {
 
@@ -10,7 +11,7 @@ public class Book {
      * 중복되지 않아야 하며
      * 식별가능해야 한다
      */
-    private long id;
+    private long id = -1L;
 
     /**
      * title: 도서 제목
@@ -108,5 +109,18 @@ public class Book {
 
     public boolean isBookReturnable() {
         return this.status == BookStatus.RENTED || this.status == BookStatus.LOST;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id == book.id && pages == book.pages && Objects.equals(title, book.title) && Objects.equals(author, book.author) && status == book.status && Objects.equals(lastModifiedTime, book.lastModifiedTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author, pages, status, lastModifiedTime);
     }
 }
