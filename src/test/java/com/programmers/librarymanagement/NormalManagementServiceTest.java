@@ -3,6 +3,7 @@ package com.programmers.librarymanagement;
 import com.programmers.librarymanagement.application.LibraryManagementService;
 import com.programmers.librarymanagement.domain.Book;
 import com.programmers.librarymanagement.exception.BookAlreadyLostException;
+import com.programmers.librarymanagement.exception.BookAlreadyRentException;
 import com.programmers.librarymanagement.exception.BookAlreadyReturnException;
 import com.programmers.librarymanagement.exception.BookNotFoundException;
 import com.programmers.librarymanagement.repository.NormalBookRepository;
@@ -108,7 +109,7 @@ public class NormalManagementServiceTest {
         libraryManagementService.rentBook(bookNum);
 
         // when - then
-        Assertions.assertThrows(BookAlreadyReturnException.class, () -> libraryManagementService.rentBook(bookNum));
+        Assertions.assertThrows(BookAlreadyRentException.class, () -> libraryManagementService.rentBook(bookNum));
     }
 
     @Test
