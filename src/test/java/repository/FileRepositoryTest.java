@@ -1,6 +1,7 @@
 package repository;
 
 import domain.BookState;
+import message.ExecuteMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +71,7 @@ class FileRepositoryTest {
                 제목 : 하인\r
                 작가 이름 : ㄷㅈㄹㅈ\r
                 페이지 수: 4356페이지\r
-                상태 : 대여 가능\r\n\r
+                상태 : 분실됨\r\n\r
                 ------------------------------\r\n\r
                 도서번호 : 5\r
                 제목 : gi\r
@@ -106,10 +107,47 @@ class FileRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 대여 테스트")
-    void rental() {
+    @DisplayName("도서 대여 테스트 : 대여가능")
+    void rentalAvailable() {
         repository.rental(1);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RENTAL_AVAILABLE.getMessage();
+
         Assertions.assertThat(findBookById(1).getState()).isEqualTo(BookState.RENTING);
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 대여 테스트 : 대여중")
+    void rentalRenting() {
+        repository.rental(3);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RENTAL_RENTING.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 대여 테스트 : 도서 정리중")
+    void rentalOrganizing() {
+        repository.returnBook(3);
+        repository.rental(3);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RETURN_COMPLETE.getMessage() + "\r\n"
+                + ExecuteMessage.RENTAL_ORGANIZING.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
+    }
+
+    @Test
+    @DisplayName("도서 대여 테스트 : 분실됨")
+    void rentalLost() {
+        repository.rental(4);
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String message = ExecuteMessage.RENTAL_LOST.getMessage();
+        Assertions.assertThat(consoleOutput).isEqualTo(message);
     }
 
     @Test
