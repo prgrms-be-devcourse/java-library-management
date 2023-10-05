@@ -41,8 +41,7 @@ public class TestBookRepository implements BookRepository {
 
         Book originalBook = findById(book.getId()).orElseThrow(BookNotFoundException::new);
 
-        testStorage.remove(originalBook);
-        testStorage.add(book);
+        testStorage.set(testStorage.indexOf(originalBook), book);
     }
 
     @Override
