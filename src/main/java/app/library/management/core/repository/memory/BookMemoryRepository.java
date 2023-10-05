@@ -9,8 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
-    private static final List<Book> bookArrayList = new CopyOnWriteArrayList<>();
-    private static long nextId = 0L;
+    private final List<Book> bookArrayList = new CopyOnWriteArrayList<>();
+    private long nextId = 0L;
 
     @Override
     public Book save(Book book) {
