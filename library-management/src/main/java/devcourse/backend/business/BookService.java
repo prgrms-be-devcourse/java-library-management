@@ -16,11 +16,8 @@ public class BookService {
     private final BookOrganizingScheduler scheduler;
     private final Repository repository;
 
-    public BookService(ModeType mode, Clock clock) {
-        if(mode == ModeType.TEST_MODE) {
-            this.repository = new MemoryRepository();
-        } else this.repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
-
+    public BookService(Repository repository, Clock clock) {
+        this.repository = repository;
         scheduler = new BookOrganizingScheduler(repository, clock);
         scheduler.startScheduler();
     }

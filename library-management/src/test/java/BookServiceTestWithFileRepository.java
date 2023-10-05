@@ -1,24 +1,34 @@
-import devcourse.backend.business.ModeType;
 import devcourse.backend.business.BookService;
+import devcourse.backend.business.ModeType;
 import devcourse.backend.model.Book;
 import devcourse.backend.model.BookStatus;
-import devcourse.backend.repository.MemoryRepository;
+import devcourse.backend.repository.FileRepository;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.CreateBookDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Clock;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+import static devcourse.backend.FileSetting.TEST_FILE_NAME;
+import static devcourse.backend.FileSetting.TEST_FILE_PATH;
 import static devcourse.backend.model.BookStatus.*;
+import static devcourse.backend.model.BookStatus.LOST;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BookServiceTestWithMemoryRepository {
+public class BookServiceTestWithFileRepository {
     private BookService bookService;
     private Repository repository;
     private Clock clock;
@@ -26,9 +36,19 @@ public class BookServiceTestWithMemoryRepository {
     @BeforeEach
     @DisplayName("각 테스트는 빈 저장소를 가지고 테스트를 시작합니다.")
     void BookService_초기화() {
+        truncate();
         clock = Clock.system(ZoneId.of("Asia/Seoul"));
-        repository = new MemoryRepository();
+        repository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
         bookService = new BookService(repository, clock);
+    }
+
+    private void truncate() {
+        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DisplayName("테스트에서 사용할 도서 DTO 리스트를 반환하는 메서드입니다.")
@@ -204,16 +224,6 @@ public class BookServiceTestWithMemoryRepository {
         /**
          * TODO: 5분 뒤 [도서 정리 중] -> [대여 가능]으로 변경
          */
-//        Clock fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
-//
-//        // 현재 시간을 5분 뒤로 조작
-//        Instant futureTime = fixedClock.instant().plusSeconds(6 * 60);
-//        Clock mockClock = Mockito.mock(Clock.class);
-//        Mockito.when(mockClock.instant()).thenReturn(futureTime);
-//        Mockito.when(mockClock.getZone()).thenReturn(ZoneId.systemDefault());
-//
-//        clock = mockClock;
-//        assertEquals(AVAILABLE, savedBook.getStatus());
     }
 
     @Test
