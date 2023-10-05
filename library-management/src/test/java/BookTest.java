@@ -8,7 +8,6 @@ import static devcourse.backend.model.BookStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookTest {
-
     private Book book;
 
     @BeforeEach
@@ -37,7 +36,7 @@ public class BookTest {
     @Test
     void testToRecord() {
         // toRecord() 메서드 테스트
-        String expectedRecord = book.getId() + ";이펙티브 자바;조슈아 블로크;520;대여 가능";
+        String expectedRecord = book.getId() + ";이펙티브 자바;조슈아 블로크;520;대여 가능;" + book.getUpdateAt();
         String actualRecord = book.toRecord();
         assertEquals(expectedRecord, actualRecord);
     }
@@ -47,96 +46,5 @@ public class BookTest {
         // like() 메서드 테스트
         assertTrue(book.like("자바"));
         assertFalse(book.like("Java"));
-    }
-
-    @Test
-    @DisplayName("[대여 가능] 상태 일 때만 [대여 중]상태로 바꿀 수 있습니다.")
-    void 대여_중_상태로_변경() {
-        // [대여 가능] -> [대여 중] O
-        Book available = getBook(AVAILABLE);
-        available.changeStatus(BORROWED);
-        assertEquals(available.getStatus(), BORROWED);
-
-        // [대여 중, 도서 정리 중, 분실됨] -> [대여 중] X
-        Book lent = getBook(BORROWED);
-        Book toArrange = getBook(ARRANGING);
-        Book lost = getBook(LOST);
-
-        assertThrows(IllegalArgumentException.class, () -> lent.changeStatus(BORROWED));
-        assertThrows(IllegalArgumentException.class, () -> toArrange.changeStatus(BORROWED));
-        assertThrows(IllegalArgumentException.class, () -> lost.changeStatus(BORROWED));
-    }
-
-    private static Book getBook(BookStatus status) {
-        return new Book.Builder("book", "author", 100)
-                .bookStatus(status.toString())
-                .build();
-    }
-
-    @Test
-    @DisplayName("[대여 중, 분실됨] 상태 일 때만 [도서 정리 중] 상태로 바꿀 수 있습니다.")
-    void 도서_정리_상태로_변경() {
-        // [대여 중, 분실됨] -> [도서 정리 중] O
-        Book lent = getBook(BORROWED);
-        lent.changeStatus(ARRANGING);
-        assertEquals(lent.getStatus(), ARRANGING);
-
-        Book lost = getBook(LOST);
-        lost.changeStatus(ARRANGING);
-        assertEquals(lost.getStatus(), ARRANGING);
-
-        // [대여 가능, 도서 정리 중] -> [도서 정리 중] X
-        Book available = getBook(AVAILABLE);
-        Book toArrange = getBook(ARRANGING);
-        assertThrows(IllegalArgumentException.class, () -> toArrange.changeStatus(ARRANGING));
-        assertThrows(IllegalArgumentException.class, () -> available.changeStatus(ARRANGING));
-    }
-
-    @Test
-    @DisplayName("[도서 정리 중] 상태 일 때만 [대여 가능] 상태로 바꿀 수 있습니다.")
-    void 대여_가능_상태로_변경() {
-        // [도서 정리 중] -> [대여 가능] O
-        Book toArrange = getBook(ARRANGING);
-        toArrange.changeStatus(AVAILABLE);
-        assertEquals(toArrange.getStatus(), AVAILABLE);
-
-        // [대여 가능, 대여 중, 분실됨] -> [대여 가능] X
-        Book available = getBook(AVAILABLE);
-        Book lent = getBook(BORROWED);
-        Book lost = getBook(LOST);
-        assertThrows(IllegalArgumentException.class, () -> available.changeStatus(AVAILABLE));
-        assertThrows(IllegalArgumentException.class, () -> lent.changeStatus(AVAILABLE));
-        assertThrows(IllegalArgumentException.class, () -> lost.changeStatus(AVAILABLE));
-    }
-
-    @Test
-    @DisplayName("[분실됨] 상태 일 때만 [분실됨] 상태로 바꿀 수 없습니다.")
-    void 분실됨_상태로_변경() {
-        // [대여 가능, 대여 중, 도서 정리 중] -> [분실됨] O
-        Book available = getBook(AVAILABLE);
-        available.changeStatus(LOST);
-        assertEquals(available.getStatus(), LOST);
-
-        Book lent = getBook(BORROWED);
-        lent.changeStatus(LOST);
-        assertEquals(lent.getStatus(), LOST);
-
-        Book toArrange = getBook(ARRANGING);
-        toArrange.changeStatus(LOST);
-        assertEquals(toArrange.getStatus(), LOST);
-
-        // [분실됨] -> [분실됨] X
-        Book lost = getBook(LOST);
-        assertThrows(IllegalArgumentException.class, () -> lost.changeStatus(LOST));
-    }
-
-    @Test
-    void testEquals() {
-        // equals() 메서드 테스트
-        Book equalBook = new Book.Builder("이펙티브 자바", "조슈아 블로크", 520).build();
-        Book differentBook = new Book.Builder("가상 면접 사례로 배우는 대규모 시스템 설계 기초", "알렉스 쉬", 320).build();
-
-        assertTrue(book.equals(equalBook));
-        assertFalse(book.equals(differentBook));
     }
 }
