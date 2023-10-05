@@ -1,7 +1,15 @@
 package com.programmers.library.domain;
 
 import com.programmers.library.utils.StatusType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
     private int bookId;
     private String title;
@@ -9,19 +17,19 @@ public class Book {
     private int pages;
     private StatusType status;
 
-    public Book(String title, String author, int pages) {
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
-        this.status = StatusType.AVAILABLE; // 기본 도서 상태 - AVAILABLE(대여 가능)
+    // Setter 메서드 대신 새로운 객체 반환
+    public Book updateStatus(StatusType newStatus) {
+        return Book.builder()
+                .bookId(this.bookId)
+                .title(this.title)
+                .author(this.author)
+                .pages(this.pages)
+                .status(newStatus)
+                .build();
     }
 
-    public Book(int bookId, String title, String author, int pages, StatusType status) {
+    public void setBookId(int bookId) {
         this.bookId = bookId;
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
-        this.status = status;
     }
 
     @Override
@@ -31,34 +39,5 @@ public class Book {
                 "\n작가 이름 : " + author +
                 "\n페이지 수 : " + pages +
                 "\n상태 : " + status.getDescription();
-    }
-
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
-    public StatusType getStatus() {
-        return status;
-    }
-
-    // Setter 메서드 대신 새로운 객체 반환
-    public Book updateStatus(StatusType newStatus) {
-        return new Book(bookId, title, author, pages, newStatus);
     }
 }
