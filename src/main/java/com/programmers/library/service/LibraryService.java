@@ -8,6 +8,7 @@ import com.programmers.library.repository.LibraryRepository;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 
 public class LibraryService {
 
@@ -59,28 +60,35 @@ public class LibraryService {
         console.printMessage("[System] 검색된 도서 끝\n");
     }
 
-    // 도서 대여
-    public void rentBook(int bookId) {
+    // 도서 번호 찾아 도서 상태 반환
+    private void handleStatus(int bookId, Consumer<StatusType> statusHandler) {
         libraryRepository.findById(bookId)
                 .ifPresentOrElse(
                         book -> {
                             StatusType status = book.getStatus();
-
-                            switch (status) {
-                                case AVAILABLE -> {
-                                    libraryRepository.updateStatus(bookId, StatusType.RENTING);
-                                    console.printMessage("[System] 도서가 대여 처리 되었습니다.\n");
-                                }
-                                case RENTING -> console.printMessage("[System] 이미 대여중인 도서입니다.\n");
-                                case ORGANIZING, LOST -> console.printMessage("[System] 해당 도서는 대여가 불가능합니다.( *사유: " + status.getDescription() + " )\n");
-                            }
+                            statusHandler.accept(status);
                         },
                         () -> console.printMessage("[System] 존재하지 않는 도서번호 입니다.\n")
+
                 );
     }
 
-    // 도서 반납
-    private void set5MinuteTimer(int bookId) {  // 5분 뒤 '대여 가능' 설정
+    // 도서 대여
+    public void rentBook(int bookId) {
+        handleStatus(bookId, status -> {
+            switch (status) {
+                case AVAILABLE -> {
+                    libraryRepository.updateStatus(bookId, StatusType.RENTING);
+                    console.printMessage("[System] 도서가 대여 처리 되었습니다.\n");
+                }
+                case RENTING -> console.printMessage("[System] 이미 대여중인 도서입니다.\n");
+                case ORGANIZING, LOST -> console.printMessage("[System] 해당 도서는 대여가 불가능합니다.( *사유: " + status.getDescription() + " )\n");
+            }
+        });
+    }
+
+    // 5분 뒤 '대여 가능' 설정
+    private void set5MinuteTimer(int bookId) {
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -91,42 +99,31 @@ public class LibraryService {
         timer.schedule(timerTask, 5 * 60 * 1000);
     }
 
+    // 도서 반납
     public void returnBook(int bookId) {
-        libraryRepository.findById(bookId)
-                .ifPresentOrElse(
-                        book -> {
-                            StatusType status = book.getStatus();
-
-                            switch (status) {
-                                case RENTING, LOST -> {
-                                    libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
-                                    console.printMessage("[System] 도서가 반납 처리 되었습니다.\n");
-                                    set5MinuteTimer(bookId);
-                                }
-                                case AVAILABLE, ORGANIZING -> console.printMessage("해당 도서는 반납할 수 없습니다. ( *사유: " + status.getDescription() + " )\n");
-                            }
-                        },
-                        () -> console.printMessage("[System] 존재하지 않는 도서번호 입니다.\n")
-                );
+        handleStatus(bookId, status -> {
+            switch (status) {
+                case RENTING, LOST -> {
+                    libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
+                    console.printMessage("[System] 도서가 반납 처리 되었습니다.\n");
+                    set5MinuteTimer(bookId);
+                }
+                case AVAILABLE, ORGANIZING -> console.printMessage("해당 도서는 반납할 수 없습니다. ( *사유: " + status.getDescription() + " )\n");
+            }
+        });
     }
 
     // 도서 분실 처리
     public void lostBook(int bookId) {
-        libraryRepository.findById(bookId)
-                .ifPresentOrElse(
-                        book -> {
-                            StatusType bookStatus = book.getStatus();
-
-                            switch (bookStatus) {
-                                case AVAILABLE, RENTING, ORGANIZING -> {
-                                    libraryRepository.updateStatus(bookId, StatusType.LOST);
-                                    console.printMessage("[System] 도서가 분실 처리 되었습니다.\n");
-                                }
-                                case LOST -> console.printMessage("[System] 이미 분실 처리된 도서입니다.\n");
-                            }
-                        },
-                        () -> console.printMessage("[System] 존재하지 않는 도서번호 입니다.\n")
-                );
+        handleStatus(bookId, status -> {
+            switch (status) {
+                case AVAILABLE, RENTING, ORGANIZING -> {
+                    libraryRepository.updateStatus(bookId, StatusType.LOST);
+                    console.printMessage("[System] 도서가 분실 처리 되었습니다.\n");
+                }
+                case LOST -> console.printMessage("[System] 이미 분실 처리된 도서입니다.\n");
+            }
+        });
     }
 
     // 도서 삭제
