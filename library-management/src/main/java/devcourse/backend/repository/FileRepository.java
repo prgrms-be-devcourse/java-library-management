@@ -12,7 +12,7 @@ import java.util.*;
 public class FileRepository implements Repository {
     private Map<Long, Book> books;
     private final Path FILE_PATH;
-    private final String COLUMNS = "도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간";
+    private String COLUMNS;
 
     public FileRepository(String path, String fileName) {
         this.FILE_PATH = Paths.get(path.concat(fileName));
@@ -45,6 +45,14 @@ public class FileRepository implements Repository {
     }
 
     @Override
+    public Optional<Book> findByTitleAndAuthor(String title, String author) {
+        return books.values().stream()
+                .filter(b -> b.getTitle().equals(title))
+                .filter(b -> b.getAuthor().equals(author))
+                .findAny();
+    }
+
+    @Override
     public void deleteById(long bookId) {
         books.remove(bookId);
         flush();
@@ -68,10 +76,6 @@ public class FileRepository implements Repository {
         } catch (IOException e) { throw new RuntimeException("파일 읽기 실패"); }
     }
 
-    public String getColumns() {
-        return COLUMNS;
-    }
-
     private void createFileIfNotExist(String path, String name) {
         File file = new File(new File(path), name);
         if(!file.exists()) {
@@ -89,7 +93,7 @@ public class FileRepository implements Repository {
     private Map<Long, Book> loadBooks() {
         Map<Long, Book> books = new HashMap();
         try (BufferedReader reader = getReader()) {
-            String header = reader.readLine();
+            COLUMNS = reader.readLine();
             reader.lines()
                     .map(s -> s.split("[;,]"))
                     .forEach(data -> {

@@ -41,6 +41,14 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
+    public Optional<Book> findByTitleAndAuthor(String title, String author) {
+        return books.values().stream()
+                .filter(b -> b.getTitle().equals(title))
+                .filter(b -> b.getAuthor().equals(author))
+                .findAny();
+    }
+
+    @Override
     public void deleteById(long bookId) {
         books.remove(bookId);
     }
