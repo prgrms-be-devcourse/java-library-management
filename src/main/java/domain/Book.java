@@ -31,18 +31,6 @@ public class Book {
         return id;
     }
 
-    public String getName(){
-        return name;
-    }
-
-    public String getAuthor(){ return author; }
-
-    public int getPage(){ return page; }
-
-    public Status getStatus(){
-        return status;
-    }
-
     public void setId(Long id){
         this.id = id;
     }
