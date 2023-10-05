@@ -4,6 +4,7 @@ import domain.Book;
 import service.Service;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public enum Function {
     ADD(1) {
@@ -70,7 +71,7 @@ public enum Function {
         return Arrays.stream(values())
                 .filter(functionNumber -> functionNumber.isEquals(userSelect))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new NoSuchElementException("[System] 목록에 있는 번호를 입력해주세요."));
     }
 
     private boolean isEquals(int userSelect){

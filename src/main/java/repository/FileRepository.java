@@ -23,22 +23,22 @@ public class FileRepository implements Repository{
             String data;
             while((data=br.readLine())!=null){
                 String[] splitData = data.split(",");
-                Book book = new Book(Long.parseLong(splitData[0]), splitData[1], splitData[2], Integer.parseInt(splitData[3]), Status.valueOf(splitData[4]));
+                Book book = new Book(Long.parseLong(splitData[0]), splitData[1], splitData[2], Integer.parseInt(splitData[3]), Status.of(splitData[4]));
                 bookList.add(book);
             }
         }catch(IOException e){
-            System.out.println();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     private void writeFile(){
-        try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), StandardCharsets.UTF_8))){
+        try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, false), StandardCharsets.UTF_8))){
             for (Book book : bookList) {
-                bw.newLine();
                 bw.write(book.infoForFile(seperator));
+                bw.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
