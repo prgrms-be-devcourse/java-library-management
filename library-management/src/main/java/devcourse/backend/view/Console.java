@@ -163,7 +163,7 @@ public class Console implements Runnable {
         System.out.println("상태 : " + book.getStatus());
     }
 
-    public static int getIntInput(String prompt) {
+    private static int getIntInput(String prompt) {
         System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
@@ -175,7 +175,7 @@ public class Console implements Runnable {
         }
     }
 
-    public static long getLongInput(String prompt) {
+    private static long getLongInput(String prompt) {
         System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
@@ -187,7 +187,7 @@ public class Console implements Runnable {
         }
     }
 
-    public static String getStringInput(String prompt) {
+    private static String getStringInput(String prompt) {
         System.out.println("Q. " + prompt);
         System.out.println();
         System.out.print("> ");
