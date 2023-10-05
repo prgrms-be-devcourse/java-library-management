@@ -21,9 +21,9 @@ public enum ModeType {
     private final String message;
     private final List<Book> books;
     private static final String PATH = "/src/main/resources/book_data.csv";
-    private static final FileManager fileManager = new FileManager(PATH);
 
     private static List<Book> loadBooks() {
+        FileManager fileManager = new FileManager(PATH);
         return fileManager.loadData();
     }
 
