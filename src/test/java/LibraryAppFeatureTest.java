@@ -77,15 +77,17 @@ public class LibraryAppFeatureTest {
             Book book = this.bookRepository.findById(bookId)
                     .orElseThrow(() -> new FuncFailureException("[System] 해당 도서는 존재하지 않습니다.\n"));
 
-            Book elem = book.getState().handleReturn(bookRepository, book);
-            if (elem.equalState(BookState.ARRANGEMENT)) {
+            book.returns();
+            this.bookRepository.update(book);
+
+            if (book.equalState(BookState.ARRANGEMENT)) {
 
                 CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 10000);
 
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (!completableFuture.isDone()) {
-                        Book availableBook = new Book(book.getBookId(), book.getTitle(), book.getAuthor(), book.getPage_num(), BookState.RENTAL_AVAILABLE);
-                        this.bookRepository.add(availableBook);
+                        book.toStatusRentalAvailable();
+                        this.bookRepository.add(book);
                         System.out.println("[System] 시스템 종료 전 처리: 도서 상태를 '대여 가능'으로 변경하였습니다.\n");
                     }
                 }));
