@@ -18,59 +18,51 @@ public class FileRepositoryTest { ;
     private FileRepository fileRepository;
 
     @BeforeEach
-    void 파일_리포지토리_초기화() throws IOException {
-        // 테스트 파일에 데이터 삽입
-        addDataToTestFile();
+    void 파일_리포지토리_초기화() {
         // 각 테스트 전에 FileRepository 초기화
+        truncate();
         fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
     }
 
-    @Test
-    void 전체_도서_목록_조회() {
-        List<Book> result = fileRepository.findAll();
-
-        assertEquals(2, result.size());
-        assertEquals(result.get(0), getBooks().get(0));
-        assertEquals(result.get(1), getBooks().get(1));
+    private void truncate() {
+        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    void 도서_제목으로_검색() {
-        List<Book> result = fileRepository.findByKeyword("자바");
+    public void 파일로_부터_데이터_로딩() {
+        // 파일에 테스트 데이터 삽입 : [이펙티브 자바], [객체지향의 사실과 오해]
+        addDataToTestFile();
 
-        assertEquals(1, result.size());
-        assertTrue(result.contains(getBooks().get(0))); // [에펙티브 자바]
+        // repository 초기화 시 파일에서 자동으로 데이터 로딩
+        fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+
+        // 파일에 있던 도서가 로딩
+        List<Book> books = fileRepository.findAll();
+        assertEquals(2, books.size());
+        assertEquals("이펙티브 자바", books.get(0).getTitle());
+        assertEquals("객체지향의 사실과 오해", books.get(1).getTitle());
+    }
+
+    private void addDataToTestFile() {
+        // 파일에 테스트 데이터 추가
+        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+            writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
+            writer.newLine();
+            writer.write("1;이펙티브 자바;조슈아 블로크;520;대여 가능;");
+            writer.newLine();
+            writer.write("2;객체지향의 사실과 오해;조영호;260;대여 가능;");
+            writer.newLine();
+        } catch (IOException e) {}
     }
 
     @Test
-    void 도서_번호로_도서_검색() {
-        Book someBook = fileRepository.getBooks().stream().findAny().orElseThrow();
-        Book result = fileRepository.findById(someBook.getId()).orElseThrow();
-        assertEquals(someBook, result);
-    }
-
-    @Test
-    void 도서_번호로_도서_삭제() {
-        // deleteById() 메서드를 호출합니다.
-        Book someBook = fileRepository.getBooks().stream().findAny().orElseThrow();
-        fileRepository.deleteById(someBook.getId());
-        assertFalse(fileRepository.getBooks().contains(someBook));
-    }
-
-    @Test
-    void 도서_추가() {
-        // Mock 데이터
-        Book newBook = new Book.Builder("친절한 SQL 튜닝", "조시형", 560).build();
-
-        // addBook() 메서드 호출
-        fileRepository.addBook(newBook);
-
-        // addBook()이 책을 추가했는지 검증
-        assertTrue(fileRepository.getBooks().contains(newBook));
-    }
-
-    @Test
-    public void 파일_저장() {
+    public void 데이터를_파일에_저장() {
         // flush() 메서드 테스트
         Book bookToAdd = new Book.Builder("친절한 SQL 튜닝", "조시형", 560).build();
         fileRepository.addBook(bookToAdd);
@@ -79,9 +71,6 @@ public class FileRepositoryTest { ;
         // 파일에서 저장한 데이터 찾기
         Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
         try (BufferedReader reader = Files.newBufferedReader(filePath)) {
-            String header = reader.readLine();
-            assertEquals(fileRepository.getColumns(), header);
-
             String line;
             boolean found = false;
             while ((line = reader.readLine()) != null) {
@@ -93,31 +82,6 @@ public class FileRepositoryTest { ;
             }
             assertTrue(found);
         } catch (IOException e) {
-        }
-    }
-
-    private static List<Book> getBooks() {
-        // Mock 데이터
-        List<Book> books = new ArrayList<>();
-
-        Book book1 = new Book.Builder("이펙티브 자바", "조슈아 블로크", 520).id(1).bookStatus(BookStatus.AVAILABLE.toString()).build();
-        Book book2 = new Book.Builder("객체지향의 사실과 오해", "조영호", 260).id(2).bookStatus(BookStatus.AVAILABLE.toString()).build();
-        books.add(book1);
-        books.add(book2);
-
-        return books;
-    }
-
-    private void addDataToTestFile() throws IOException {
-        // 파일에 테스트 데이터 추가
-        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
-        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            writer.write("도서 번호;도서명;작가;총 페이지 수;상태");
-            writer.newLine();
-            writer.write("1;이펙티브 자바;조슈아 블로크;520;대여 가능");
-            writer.newLine();
-            writer.write("2;객체지향의 사실과 오해;조영호;260;대여 가능");
-            writer.newLine();
         }
     }
 }

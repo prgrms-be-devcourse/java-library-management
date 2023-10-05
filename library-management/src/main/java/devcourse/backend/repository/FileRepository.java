@@ -95,6 +95,7 @@ public class FileRepository implements Repository {
 
     private void createFileIfNotExist(String path, String name) {
         File file = new File(new File(path), name);
+        System.out.println(FILE_PATH);
         if(!file.exists()) {
             try {
                 file.createNewFile();
