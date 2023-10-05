@@ -25,6 +25,8 @@ public class CsvFileManager implements FileManager {
         HashSet<Integer> bookNumSet = new HashSet<>();
 
         File file = new File(this.filePath);
+
+        file.getParentFile().mkdirs();
         try {
             file.createNewFile();
         } catch (IOException e) {
