@@ -45,31 +45,20 @@ public class Book {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getAuthor() {
         return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public int getPages() {
         return pages;
     }
 
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
     public StatusType getStatus() {
         return status;
     }
 
-    public void setStatus(StatusType status) {
-        this.status = status;
+    // Setter 메서드 대신 새로운 객체 반환
+    public Book updateStatus(StatusType newStatus) {
+        return new Book(bookId, title, author, pages, newStatus);
     }
 }
