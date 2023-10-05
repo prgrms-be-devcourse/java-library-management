@@ -2,6 +2,7 @@ package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
 import com.programmers.library.utils.ConsoleIO;
+import com.programmers.library.utils.MessageProvider;
 import com.programmers.library.utils.StatusType;
 import com.programmers.library.repository.LibraryRepository;
 
@@ -24,7 +25,7 @@ public class LibraryService {
     public void addBook(String title, String author, int pages) {
         Book book = new Book(title, author, pages);
         libraryRepository.save(book);
-        console.printMessage("[System] 도서 등록이 완료되었습니다.\n");
+        console.printMessage(MessageProvider.BOOK_ADDED);
     }
 
     // 전체 도서 목록 조회
@@ -32,16 +33,16 @@ public class LibraryService {
         List<Book> books = libraryRepository.findAll();
 
         if(books.isEmpty()) {   // 현재 등록된 도서가 없는 경우
-            console.printMessage("[System] 현재 등록된 도서가 없습니다.\n");
+            console.printMessage(MessageProvider.NO_BOOKS);
             return;
         }
 
-        console.printMessage("[System] 전체 도서 목록입니다.\n");
+        console.printMessage(MessageProvider.BOOK_LIST_START);
         for (Book book : books) {
             System.out.println(book.toString());
             System.out.println("\n------------------------------\n");
         }
-        console.printMessage("[System] 도서 목록 끝\n");
+        console.printMessage(MessageProvider.BOOK_LIST_END);
     }
 
     // 도서 제목으로 검색
@@ -49,7 +50,7 @@ public class LibraryService {
         List<Book> books = libraryRepository.findByTitle(title);
 
         if(books.isEmpty()) {
-            console.printMessage("[System] 검색된 도서가 없습니다.\n");
+            console.printMessage(MessageProvider.NO_SEARCH_BOOKS);
             return;
         }
 
@@ -57,7 +58,7 @@ public class LibraryService {
             console.printMessage("\n" + book.toString());
             console.printMessage("\n------------------------------");
         }
-        console.printMessage("[System] 검색된 도서 끝\n");
+        console.printMessage(MessageProvider.SEARCH_RESULTS_END);
     }
 
     // 도서 번호 찾아 도서 상태 반환
@@ -68,7 +69,7 @@ public class LibraryService {
                             StatusType status = book.getStatus();
                             statusHandler.accept(status);
                         },
-                        () -> console.printMessage("[System] 존재하지 않는 도서번호 입니다.\n")
+                        () -> console.printMessage(MessageProvider.INVALID_BOOK_ID)
 
                 );
     }
@@ -79,10 +80,10 @@ public class LibraryService {
             switch (status) {
                 case AVAILABLE -> {
                     libraryRepository.updateStatus(bookId, StatusType.RENTING);
-                    console.printMessage("[System] 도서가 대여 처리 되었습니다.\n");
+                    console.printMessage(MessageProvider.BOOK_RENTED);
                 }
-                case RENTING -> console.printMessage("[System] 이미 대여중인 도서입니다.\n");
-                case ORGANIZING, LOST -> console.printMessage("[System] 해당 도서는 대여가 불가능합니다.( *사유: " + status.getDescription() + " )\n");
+                case RENTING -> console.printMessage(MessageProvider.ALREADY_RENTED);
+                case ORGANIZING, LOST -> console.printMessage(MessageProvider.UNAVAILABLE_FOR_RENT + "( *사유: " + status.getDescription() + " )\n");
             }
         });
     }
@@ -105,10 +106,10 @@ public class LibraryService {
             switch (status) {
                 case RENTING, LOST -> {
                     libraryRepository.updateStatus(bookId, StatusType.ORGANIZING);
-                    console.printMessage("[System] 도서가 반납 처리 되었습니다.\n");
+                    console.printMessage(MessageProvider.BOOK_RETURNED);
                     set5MinuteTimer(bookId);
                 }
-                case AVAILABLE, ORGANIZING -> console.printMessage("해당 도서는 반납할 수 없습니다. ( *사유: " + status.getDescription() + " )\n");
+                case AVAILABLE, ORGANIZING -> console.printMessage(MessageProvider.UNRETURNABLE + "( *사유: " + status.getDescription() + " )\n");
             }
         });
     }
@@ -119,9 +120,9 @@ public class LibraryService {
             switch (status) {
                 case AVAILABLE, RENTING, ORGANIZING -> {
                     libraryRepository.updateStatus(bookId, StatusType.LOST);
-                    console.printMessage("[System] 도서가 분실 처리 되었습니다.\n");
+                    console.printMessage(MessageProvider.BOOK_LOST);
                 }
-                case LOST -> console.printMessage("[System] 이미 분실 처리된 도서입니다.\n");
+                case LOST -> console.printMessage(MessageProvider.ALREADY_LOST);
             }
         });
     }
@@ -132,9 +133,9 @@ public class LibraryService {
                 .ifPresentOrElse(
                         book -> {
                             libraryRepository.delete(bookId);
-                            console.printMessage("[System] 도서가 삭제 처리 되었습니다.\n");
+                            console.printMessage(MessageProvider.BOOK_DELETED);
                         },
-                        () -> console.printMessage("[System] 존재하지 않는 도서번호 입니다.\n")
+                        () -> console.printMessage(MessageProvider.INVALID_BOOK_ID)
                 );
     }
 
