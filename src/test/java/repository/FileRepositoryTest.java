@@ -30,7 +30,7 @@ class FileRepositoryTest {
     void afterEach() throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         bw.write("1,해리포터,조앤롤링,324,대여 가능\n" +
-                "3,하이낭,다잗ㄹㄹ자,34253,대여 가능\n" +
+                "3,하이낭,다잗ㄹㄹ자,34253,대여중\n" +
                 "4,하인,ㄷㅈㄹㅈ,4356,대여 가능\n" +
                 "5,gi,skdl,243,대여 가능\n" +
                 "6,신데렐라,ㅇㄴ,23,대여 가능\n");
@@ -64,7 +64,7 @@ class FileRepositoryTest {
                 제목 : 하이낭\r
                 작가 이름 : 다잗ㄹㄹ자\r
                 페이지 수: 34253페이지\r
-                상태 : 대여 가능\r\n\r
+                상태 : 대여중\r\n\r
                 ------------------------------\r\n\r
                 도서번호 : 4\r
                 제목 : 하인\r
@@ -113,19 +113,24 @@ class FileRepositoryTest {
     }
 
     @Test
+    @DisplayName("도서 반납 테스트")
     void returnBook() {
+        repository.returnBook(3);
+        Assertions.assertThat(findBookById(3).getState()).isEqualTo(BookState.ORGANIZING);
     }
 
     @Test
+    @DisplayName("도서 분실 테스트")
     void lostBook() {
+        repository.lostBook(3);
+        Assertions.assertThat(findBookById(3).getState()).isEqualTo(BookState.LOST);
     }
 
     @Test
+    @DisplayName("도서 삭제 테스트")
     void deleteBook() {
-    }
-
-    @Test
-    void updateFile() {
+        repository.deleteBook(6);
+        org.junit.jupiter.api.Assertions.assertEquals(4, books.size());
     }
 
     Book findBookById(int id) {
