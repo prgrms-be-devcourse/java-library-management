@@ -3,12 +3,12 @@ package org.example.server.repository;
 import org.example.server.entity.Book;
 import org.example.server.exception.BookNotFoundException;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryRepository implements Repository {
-    public final LinkedHashMap<Integer, Book> DATA = new LinkedHashMap<>();
+    public final ConcurrentHashMap<Integer, Book> DATA = new ConcurrentHashMap<>();
     private final TimeChecker TIME_CHECKER = new TimeChecker();
     public int newId = 1;
 

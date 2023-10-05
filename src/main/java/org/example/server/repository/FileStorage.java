@@ -14,19 +14,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FileStorage {
     private final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    public LinkedHashMap<Integer, Book> DATA;
+    public ConcurrentHashMap<Integer, Book> DATA;
     private File JSON_FILE;
 
     public int loadData() {
         try {
             URI path = Paths.get("src", "main", "resources", "book.json").toUri();
             JSON_FILE = new File(path);
-            Map<String, Object> jsonMap = OBJECT_MAPPER.readValue(JSON_FILE, Map.class);
+            Map jsonMap = OBJECT_MAPPER.readValue(JSON_FILE, Map.class);
             int newId = (int) jsonMap.get("new_id");
-            DATA = new LinkedHashMap<>();
+            DATA = new ConcurrentHashMap<>();
             if (newId != 1) {
                 ArrayList<LinkedHashMap<String, Object>> dataObjects = (ArrayList<LinkedHashMap<String, Object>>) jsonMap.get("data");
                 putObjectsToBookData(dataObjects);
@@ -44,7 +45,7 @@ public class FileStorage {
             jsonMap.put("data", new ArrayList<>());
         } else {
             jsonMap.put("new_id", newId);
-            ArrayList<LinkedHashMap<String, Object>> dataObjects = new ArrayList<>();
+            ArrayList<ConcurrentHashMap<String, Object>> dataObjects = new ArrayList<>();
             putBookDataToObjects(dataObjects);
             jsonMap.put("data", dataObjects);
         }
@@ -71,10 +72,10 @@ public class FileStorage {
         );
     }
 
-    private void putBookDataToObjects(ArrayList<LinkedHashMap<String, Object>> objects) {
+    private void putBookDataToObjects(ArrayList<ConcurrentHashMap<String, Object>> objects) {
         DATA.values().forEach(
                 book -> {
-                    LinkedHashMap<String, Object> bookInfoMap = new LinkedHashMap<>();
+                    ConcurrentHashMap<String, Object> bookInfoMap = new ConcurrentHashMap<>();
                     bookInfoMap.put("id", book.id);
                     bookInfoMap.put("name", book.name);
                     bookInfoMap.put("author", book.author);
