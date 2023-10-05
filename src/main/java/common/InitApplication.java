@@ -11,7 +11,7 @@ import static common.Util.ConsoleInput;
 public class InitApplication {
     private static final int PROD_MODE = 1;
     private static final int TEST_MODE = 2;
-    private static final String FILE_PATH = "temp.csv";
+    private static final String FILE_PATH = "./src/main/resources/temp.csv";
 
     public static void run(){
         int mode;
