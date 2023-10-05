@@ -6,6 +6,8 @@ import manage.book.BookListManager;
 import manage.file.CsvFileManager;
 import manage.file.TestFileManager;
 
+import java.io.IOException;
+
 import static common.Util.CONSOLE_INPUT;
 
 public class InitApplication {
@@ -37,6 +39,8 @@ public class InitApplication {
             totalManager.run();
         }catch (BookNumberAlreadyExistException e){
             System.out.println("읽어오는 파일에 중복되는 도서번호가 존재하여 불러올 수 없습니다.");
+        }catch (RuntimeException e){
+            System.out.println("다음 문제가 발생하여 프로그램을 종료합니다." + System.lineSeparator() + e.getMessage());
         }
     }
 }
