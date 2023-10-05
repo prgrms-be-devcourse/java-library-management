@@ -68,25 +68,6 @@ public class Book {
             this.bookState = BookState.AVAILABLE;
     }
 
-    @Override
-    public String toString(){
-        String[] fields = {
-                String.valueOf(this.number),
-                this.title, this.author,
-                String.valueOf(this.pageNum),
-                this.bookState.getDisplayName()
-        };
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < fields.length; i++) {
-            sb.append(FIELD_DISPLAY_NAMES.get(i));
-            sb.append(": ");
-            sb.append(fields[i]);
-            sb.append(System.lineSeparator());
-        }
-
-        return sb.toString();
-    }
-
     public void process(BookProcess bookProc){
         switch (bookProc){
             case RENT -> {

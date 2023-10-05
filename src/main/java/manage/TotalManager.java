@@ -1,12 +1,14 @@
 package manage;
 
 import domain.Book;
+import domain.BookDisplayField;
 import domain.BookProcess;
 import domain.BookState;
 import exception.EntityNotFoundException;
 import manage.book.BookManager;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static common.Util.CONSOLE_INPUT;
 
@@ -96,7 +98,24 @@ public class TotalManager {
         System.out.println();
 
         books.forEach(book -> {
-            System.out.println(book);
+            String[] fieldDisplayName = {
+                    BookDisplayField.NUMBER.getDisplayValue(),
+                    BookDisplayField.TITLE.getDisplayValue(),
+                    BookDisplayField.AUTHOR.getDisplayValue(),
+                    BookDisplayField.PAGE_NUM.getDisplayValue(),
+                    BookDisplayField.STATE.getDisplayValue()
+            };
+
+            String[] fieldVal = {
+                    String.valueOf(book.getNumber()),
+                    book.getTitle(),
+                    book.getAuthor(),
+                    String.valueOf(book.getPageNum()),
+                    book.getBookState().getDisplayName()
+            };
+
+            IntStream.range(0, fieldVal.length)
+                    .forEach(i -> System.out.println(fieldDisplayName[i] + ": " + fieldVal[i]));
             System.out.println();
         });
 

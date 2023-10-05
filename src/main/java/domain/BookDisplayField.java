@@ -9,6 +9,10 @@ public enum BookDisplayField {
 
     private final String displayValue;
 
+    public String getDisplayValue() {
+        return displayValue;
+    }
+
     BookDisplayField(String displayValue) {
         this.displayValue = displayValue;
     }
