@@ -1,5 +1,6 @@
 package repository;
 
+import domain.BookState;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -88,11 +89,27 @@ class FileRepositoryTest {
     }
 
     @Test
+    @DisplayName("도서 검색 테스트")
     void search() {
+        repository.search("해리");
+
+        String consoleOutput = outputStreamCaptor.toString().trim();
+        String block = """
+                도서번호 : 1\r
+                제목 : 해리포터\r
+                작가 이름 : 조앤롤링\r
+                페이지 수: 324페이지\r
+                상태 : 대여 가능\r\n\r
+                ------------------------------""";
+
+        org.junit.jupiter.api.Assertions.assertEquals(block, consoleOutput);
     }
 
     @Test
+    @DisplayName("도서 대여 테스트")
     void rental() {
+        repository.rental(1);
+        Assertions.assertThat(findBookById(1).getState()).isEqualTo(BookState.RENTING);
     }
 
     @Test
