@@ -65,9 +65,8 @@ public class GeneralBookRepository implements BookRepository {
     }
 
     @Override
-    public void update(Book obj, BookState state) {
+    public void update(Book obj) {
 
-        obj.setState(state);
         storage.put(obj.getBookId(), obj);
         update();
     }

@@ -11,7 +11,7 @@ public interface BookRepository {
     Optional<Book> findById(Long bookId);
     void add(Book obj);
     void delete(Long bookId);
-    void update(Book obj, BookState state);
+    void update(Book obj);
     List<Book> getAll();
     List<Book> findByTitle(String title);
     int getSize();
