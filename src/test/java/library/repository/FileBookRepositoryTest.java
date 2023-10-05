@@ -69,9 +69,7 @@ class FileBookRepositoryTest {
     @DisplayName("여러 사용자가 동시에 도서를 추가할 수 있어야 합니다.")
     void testAdd() {
         // When
-        executeConcurrentActions(bookNumber -> {
-            bookRepository.add(createDummyBook(bookNumber));
-        });
+        executeConcurrentActions(bookNumber -> bookRepository.add(createDummyBook(bookNumber)));
 
         // Then
         assertThat(bookRepository.findAll()).hasSize(REPEAT_COUNT);
