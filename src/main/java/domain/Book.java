@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import static domain.BookStatus.*;
@@ -49,6 +50,9 @@ public class Book {
         cleanTime = 1000 * 10; // 10초
     }
 
+    public boolean isContainsTitle(String title){
+        return this.title.contains(title);
+    }
     //책 상태 관련 함수
     public void borrow() {
         status = BORROWED;

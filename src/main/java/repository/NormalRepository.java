@@ -3,6 +3,7 @@ package repository;
 import domain.Book;
 import manager.FileManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,8 +34,8 @@ public class NormalRepository implements BookRepository {
     // [3] 도서 검색
     @Override
     public List<Book> findByTitle(String title) {
-        return books.stream()
-                .filter(book -> book.getTitle().contains(title))
+        return getBooks().stream()
+                .filter(book -> book.isContainsTitle(title))
                 .collect(Collectors.toList());
     }
 
