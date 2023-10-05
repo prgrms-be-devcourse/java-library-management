@@ -3,7 +3,7 @@ package manage.book;
 import domain.Book;
 import domain.BookState;
 import exception.EntityNotFoundException;
-import manage.file.TestFileManager;
+import manage.file.TestBookFileManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class BookListManagerTest {
     @Test
     void registerOneBook(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
         Book book =
                 new Book(1, "title", "author", 100, BookState.AVAILABLE, NEVER_REVERTED);
         // when
@@ -31,7 +31,7 @@ public class BookListManagerTest {
     @Test
     void searchForAllUndeletedBooks(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
         List<Book> books = List.of(
                 new Book(1, "title1", "author1", 120, BookState.AVAILABLE, NEVER_REVERTED),
                 new Book(2, "title2", "author2", 140, BookState.DELETED, NEVER_REVERTED),
@@ -49,7 +49,7 @@ public class BookListManagerTest {
     @Test
     void searchBooksByTitleContainedText(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
         List<Book> books = List.of(
                 new Book(1, "t_itle1", "author1", 120, BookState.AVAILABLE, NEVER_REVERTED),
                 new Book(2, "titl_e2", "author2", 140, BookState.DELETED, NEVER_REVERTED),
@@ -67,7 +67,7 @@ public class BookListManagerTest {
         // given
         BookState[] expected = {BookState.AVAILABLE, BookState.AVAILABLE, BookState.PROCESSING, BookState.RENTED, BookState.LOST};
 
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
 
         bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
         bookManager.register(new Book(2, "title2", "author2",
@@ -88,7 +88,7 @@ public class BookListManagerTest {
     @Test
     void returnBook(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
 
         bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
         bookManager.register(new Book(2, "title2", "author2", 100, BookState.RENTED, NEVER_REVERTED));
@@ -103,7 +103,7 @@ public class BookListManagerTest {
     @Test
     void lost(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
 
         bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
         bookManager.register(new Book(2, "title2", "author2", 100, BookState.LOST, NEVER_REVERTED));
@@ -118,7 +118,7 @@ public class BookListManagerTest {
     @Test
     void delete(){
         // given
-        BookManager bookManager = new BookListManager(new TestFileManager());
+        BookManager bookManager = new BookListManager(new TestBookFileManager());
 
         bookManager.register(new Book(1, "title1", "author1", 100, BookState.AVAILABLE, NEVER_REVERTED));
         bookManager.register(new Book(2, "title2", "author2", 100, BookState.LOST, NEVER_REVERTED));

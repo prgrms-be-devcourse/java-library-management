@@ -3,10 +3,8 @@ package common;
 import exception.BookNumberAlreadyExistException;
 import manage.TotalManager;
 import manage.book.BookListManager;
-import manage.file.CsvFileManager;
-import manage.file.TestFileManager;
-
-import java.io.IOException;
+import manage.file.CsvBookFileManager;
+import manage.file.TestBookFileManager;
 
 import static common.Util.CONSOLE_INPUT;
 
@@ -32,9 +30,9 @@ public class InitApplication {
         try {
             TotalManager totalManager;
             if (mode == PROD_MODE)
-                totalManager = new TotalManager(new BookListManager(new CsvFileManager(FILE_PATH)));
+                totalManager = new TotalManager(new BookListManager(new CsvBookFileManager(FILE_PATH)));
             else
-                totalManager = new TotalManager(new BookListManager(new TestFileManager()));
+                totalManager = new TotalManager(new BookListManager(new TestBookFileManager()));
 
             totalManager.run();
         }catch (BookNumberAlreadyExistException e){

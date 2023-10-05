@@ -3,7 +3,7 @@ package manage.book;
 import domain.Book;
 import domain.BookState;
 import exception.EntityNotFoundException;
-import manage.file.FileManager;
+import manage.file.BookFileManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 
 public class BookListManager implements BookManager {
     private final HashMap<Integer, Book> books;
-    private final FileManager fileManager;
+    private final BookFileManager bookFileManager;
 
-    public BookListManager(FileManager fileManager){
-        this.fileManager = fileManager;
-        this.books = fileManager.read();
+    public BookListManager(BookFileManager bookFileManager){
+        this.bookFileManager = bookFileManager;
+        this.books = bookFileManager.read();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class BookListManager implements BookManager {
     }
 
     public void saveFile(){
-        fileManager.write(this.books);
+        bookFileManager.write(this.books);
     }
 
     private Book getBook(int bookNum){

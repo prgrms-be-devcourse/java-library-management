@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.IntStream;
 
-public class CsvFileManager implements FileManager {
+public class CsvBookFileManager implements BookFileManager {
     private static final String CSV_PATTERN = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
     private final String filePath;
 
-    public CsvFileManager(String filePath) {
+    public CsvBookFileManager(String filePath) {
         this.filePath = filePath;
     }
 

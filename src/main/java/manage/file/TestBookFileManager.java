@@ -4,7 +4,7 @@ import domain.Book;
 
 import java.util.HashMap;
 
-public class TestFileManager implements FileManager {
+public class TestBookFileManager implements BookFileManager {
     @Override
     public HashMap<Integer, Book> read() {
         return new HashMap<>();

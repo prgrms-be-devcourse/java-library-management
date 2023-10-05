@@ -14,12 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CsvFileManagerTest {
+public class CsvBookFileManagerTest {
     private final String FILE_PATH = getClass().getClassLoader().getResource("temp.csv").getPath();
-    private final FileManager fileManager;
+    private final BookFileManager bookFileManager;
 
-    public CsvFileManagerTest() {
-        this.fileManager = new CsvFileManager(FILE_PATH);
+    public CsvBookFileManagerTest() {
+        this.bookFileManager = new CsvBookFileManager(FILE_PATH);
     }
 
     @BeforeEach
@@ -37,7 +37,7 @@ public class CsvFileManagerTest {
     void readBooksFromCsv(){
         // given
         // when
-        HashMap<Integer, Book> books = fileManager.read();
+        HashMap<Integer, Book> books = bookFileManager.read();
         // then
         assertEquals(books.size(), 1);
         assertEquals(books.get(3).getAuthor(), "최강록");
@@ -53,9 +53,9 @@ public class CsvFileManagerTest {
         HashMap<Integer, Book> books = new HashMap<>();
         bookList.forEach(book -> books.put(book.getNumber(), book));
         // when
-        fileManager.write(books);
+        bookFileManager.write(books);
         // then
-        HashMap<Integer, Book> readBooks = fileManager.read();
+        HashMap<Integer, Book> readBooks = bookFileManager.read();
         assertEquals(readBooks.size(), 2);
     }
 }
