@@ -10,16 +10,18 @@ import java.util.concurrent.TimeUnit;
 public class BookStatusManager {
     private final BookRepository bookRepository;
     private final ScheduledExecutorService scheduler;
+    private final int delayMillisecond;
 
-    public BookStatusManager(BookRepository bookRepository, ScheduledExecutorService scheduler) {
+    public BookStatusManager(BookRepository bookRepository, ScheduledExecutorService scheduler, int delayMillisecond) {
         this.bookRepository = bookRepository;
         this.scheduler = scheduler;
+        this.delayMillisecond = delayMillisecond;
     }
 
     public void execute(Book book, LocalDateTime now) {
         scheduler.schedule(() -> {
             book.available(now);
             bookRepository.update(book);
-        }, 5, TimeUnit.MINUTES);
+        }, TimeUnit.MILLISECONDS.toSeconds(delayMillisecond), TimeUnit.SECONDS);
     }
 }

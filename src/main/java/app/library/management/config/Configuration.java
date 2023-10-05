@@ -1,6 +1,7 @@
 package app.library.management.config;
 
 import app.library.management.config.factory.BookRepositoryFactory;
+import app.library.management.config.util.PropertiesUtil;
 import app.library.management.core.domain.util.BookStatusManager;
 import app.library.management.core.domain.util.SchedulerManager;
 import app.library.management.infra.port.Request;
@@ -29,7 +30,8 @@ public class Configuration {
     }
 
     private BookStatusManager statusManager() {
-        return new BookStatusManager(bookRepository(), schedulerManager.getScheduler());
+        return new BookStatusManager(bookRepository(), schedulerManager.getScheduler(),
+                Integer.parseInt(PropertiesUtil.getProperty("delayMillisecond")));
     }
 
     private BookService bookService() {
