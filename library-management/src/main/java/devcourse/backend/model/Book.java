@@ -66,6 +66,11 @@ public class Book {
         return title.contains(keyword);
     }
 
+    public void changeStatus(BookStatus status) {
+        this.status = status;
+        this.updateAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    }
+
     public long getId() {
         return id;
     }
@@ -85,10 +90,5 @@ public class Book {
 
     public LocalDateTime getUpdateAt() {
         return updateAt;
-    }
-
-    public void changeStatus(BookStatus status) {
-        this.status = status;
-        this.updateAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

@@ -65,6 +65,22 @@ public class FileRepository implements Repository {
         flush();
     }
 
+    @Override
+    public void flush() {
+        try (BufferedWriter writer = getWriter()) {
+            writer.write(COLUMNS);
+            writer.newLine();
+            books.values().stream()
+                    .sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
+                    .forEach(book -> {
+                        try {
+                            writer.write(book.toRecord());
+                            writer.newLine();
+                        } catch (IOException e) {}
+                    });
+        } catch (IOException e) {}
+    }
+
     private BufferedWriter getWriter() {
         try {
             return Files.newBufferedWriter(FILE_PATH, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
@@ -108,20 +124,5 @@ public class FileRepository implements Repository {
                     });
         } catch (IOException e) { throw new RuntimeException("데이터를 가져올 수 없습니다." + e.getMessage()); }
         return books;
-    }
-
-    public void flush() {
-        try (BufferedWriter writer = getWriter()) {
-            writer.write(COLUMNS);
-            writer.newLine();
-            books.values().stream()
-                    .sorted((a, b)-> Math.toIntExact(a.getId() - b.getId()))
-                    .forEach(book -> {
-                        try {
-                            writer.write(book.toRecord());
-                            writer.newLine();
-                        } catch (IOException e) {}
-                    });
-        } catch (IOException e) {}
     }
 }
