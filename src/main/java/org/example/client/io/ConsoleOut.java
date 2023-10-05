@@ -1,23 +1,19 @@
 package org.example.client.io;
 
+import org.example.client.Validator;
+
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class ConsoleIO implements IO {
-    private static final ConsoleIO instance = new ConsoleIO();
-    private final Scanner scanner = new Scanner(System.in);
+public class ConsoleOut implements Out {
+    private static final ConsoleOut instance = new ConsoleOut();
     private final PrintStream printer = new PrintStream(System.out);
 
-    private ConsoleIO() {
+    private ConsoleOut() {
     }
 
-    public static ConsoleIO getInstance() {
+    public static ConsoleOut getInstance() {
         return instance;
-    }
-
-    @Override
-    public String scanLine() {
-        return scanner.nextLine().trim();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.client.io;
 
-public interface IO {
-    String scanLine();
+public interface Out {
 
     void print(String string);
 
