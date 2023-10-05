@@ -45,6 +45,7 @@ public class TotalManager {
                     case 5 -> revert();
                     case 6 -> lost();
                     case 7 -> delete();
+                    case 8 -> System.out.println("프로그램을 종료합니다.");
                     default -> throw new IllegalArgumentException("잘못된 기능 선택");
                 }
             }catch (IllegalArgumentException e){
