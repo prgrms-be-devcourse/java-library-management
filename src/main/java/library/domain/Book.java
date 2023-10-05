@@ -73,7 +73,7 @@ public class Book {
         return this.returnDateTime == null;
     }
 
-    public void toRent() {
+    public synchronized void toRent() {
         updateCleanUpStatus();
         switch (this.status) {
             case AVAILABLE -> this.status = RENTED;
@@ -83,7 +83,7 @@ public class Book {
         }
     }
 
-    public void toReturn() {
+    public synchronized void toReturn() {
         switch (this.status) {
             case RENTED, LOST -> this.status = IN_CLEANUP;
             case IN_CLEANUP -> throw new BookException(BOOK_IN_CLEANUP);
@@ -92,7 +92,7 @@ public class Book {
         this.returnDateTime = LocalDateTime.now();
     }
 
-    public void toLost() {
+    public synchronized void toLost() {
         switch (this.status) {
             case RENTED, IN_CLEANUP, AVAILABLE -> this.status = LOST;
             case LOST -> throw new BookException(BOOK_ALREADY_LOST);

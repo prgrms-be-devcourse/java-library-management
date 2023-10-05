@@ -19,13 +19,13 @@ public class FileBookRepository implements BookRepository {
     }
 
     @Override
-    public void add(Book item) {
+    public synchronized void add(Book item) {
         bookList.add(item);
         saveBooksToFile();
     }
 
     @Override
-    public Optional<Book> findByBookNumber(long bookNumber) {
+    public synchronized Optional<Book> findByBookNumber(long bookNumber) {
         return bookList.stream()
                 .filter(book -> book.equalsBookNumber(bookNumber))
                 .findFirst();
@@ -44,13 +44,13 @@ public class FileBookRepository implements BookRepository {
     }
 
     @Override
-    public void delete(Book book) {
+    public synchronized void delete(Book book) {
         bookList.remove(book);
         saveBooksToFile();
     }
 
     @Override
-    public void persist() {
+    public synchronized void persist() {
         saveBooksToFile();
     }
 
