@@ -79,7 +79,7 @@ public class BookService {
                 // 5분 후에 대여 가능 상태로 변경합니다.
                 scheduler.schedule(() -> {
                     repository.updateBookStatus(id, POSSIBLERENT.getName());
-                }, 5, TimeUnit.SECONDS);
+                }, 5, TimeUnit.MINUTES);
             }
         }else if(updateType.equals(APPLYLOST.name())) {
             if(isPossibleUpdateBookStatus(updateType, id)){    // 분실처리할 수 있다면
