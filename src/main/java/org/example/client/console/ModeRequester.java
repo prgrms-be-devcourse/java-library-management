@@ -2,8 +2,8 @@ package org.example.client.console;
 
 import org.example.client.ValidateException;
 import org.example.client.Validator;
-import org.example.client.io.ConsoleIO;
-import org.example.client.io.IO;
+import org.example.client.io.ConsoleOut;
+import org.example.client.io.Out;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -11,22 +11,22 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModeRequester {
-    private final IO IO = ConsoleIO.getInstance();
+    private final Out OUT = ConsoleOut.getInstance();
     private final Validator VALIDATOR = new Validator();
 
     public String scanType() {
         try {
-            IO.print(Type.BASIC_QUESTION);
-            int selectNum = VALIDATOR.validateSelectNum(Type.values().length, IO.scanLine());
+            OUT.print(Type.BASIC_QUESTOUTN);
+            int selectNum = VALIDATOR.scanAndValidateSelection(Type.values().length);
             Type type = Type.valueOfNumber(selectNum);
-            IO.println(type.START_MESSAGE);
+            OUT.println(type.START_MESSAGE);
             return type.name();
         } catch (ValidateException e) {
-            IO.println(e.getMessage());
-            IO.print(Type.BASIC_QUESTION);
-            int selectNum = VALIDATOR.validateSelectNum(Type.values().length, IO.scanLine());
+            OUT.println(e.getMessage());
+            OUT.print(Type.BASIC_QUESTOUTN);
+            int selectNum = VALIDATOR.scanAndValidateSelection(Type.values().length);
             Type type = Type.valueOfNumber(selectNum);
-            IO.println(type.START_MESSAGE);
+            OUT.println(type.START_MESSAGE);
             return type.name();
         }
     }
@@ -35,7 +35,7 @@ public class ModeRequester {
         COMMON(1, "일반 모드", System.lineSeparator() + "[System] 일반 모드로 애플리케이션을 실행합니다." + System.lineSeparator()),
         TEST(2, "테스트 모드", System.lineSeparator() + "[System] 테스트 모드로 애플리케이션을 실행합니다." + System.lineSeparator());
 
-        private static final String BASIC_QUESTION = "Q. 모드를 선택해주세요." + System.lineSeparator()
+        private static final String BASIC_QUESTOUTN = "Q. 모드를 선택해주세요." + System.lineSeparator()
                 + String.join(System.lineSeparator(), Stream.of(values()).map(type -> type.NUMBER + ". " + type.NAME).toArray(String[]::new)) + System.lineSeparator() + "> ";
         private static final Map<Integer, Type> BY_NUMBER =
                 Stream.of(values()).collect(Collectors.toMap(Type::getNum, Function.identity()));

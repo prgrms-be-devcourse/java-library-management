@@ -2,13 +2,13 @@ package org.example.client.console;
 
 import org.example.client.ValidateException;
 import org.example.client.Validator;
-import org.example.client.io.ConsoleIO;
-import org.example.client.io.IO;
+import org.example.client.io.ConsoleOut;
+import org.example.client.io.Out;
 import org.example.packet.BookDto;
 import org.example.packet.requestPacket.*;
 
 public class MethodRequester {
-    private final IO IO = ConsoleIO.getInstance();
+    private final Out OUT = ConsoleOut.getInstance();
     private final Validator VALIDATOR = new Validator();
 
     public RequestPacket scanTypeAndInfo() {
@@ -16,10 +16,10 @@ public class MethodRequester {
         try {
             methodType = scanType();
         } catch (ValidateException e) {
-            IO.println(e.getMessage());
+            OUT.println(e.getMessage());
             methodType = scanType();
         }
-        IO.println(methodType.START_MESSAGE);
+        OUT.println(methodType.START_MESSAGE);
         try {
             return switch (methodType) {
                 case REGISTER -> scanBookInfo(methodType);
@@ -28,7 +28,7 @@ public class MethodRequester {
                 default -> scanBookId(methodType);
             };
         } catch (ValidateException e) {
-            IO.println(e.getMessage());
+            OUT.println(e.getMessage());
             return switch (methodType) {
                 case REGISTER -> scanBookInfo(methodType);
                 case READ_ALL -> new RequestWithNoData(methodType.name());
@@ -39,30 +39,30 @@ public class MethodRequester {
     }
 
     private MethodType scanType() {
-        IO.print(MethodType.BASIC_QUESTION);
-        int methodNumber = VALIDATOR.validateSelectNum(MethodType.values().length, IO.scanLine());
+        OUT.print(MethodType.BASIC_QUESTION);
+        int methodNumber = VALIDATOR.scanAndValidateSelection(MethodType.values().length);
         return MethodType.valueOfNumber(methodNumber);
     }
 
     private RequestWithBook scanBookInfo(MethodType methodType) {
-        IO.print(methodType.QUESTIONS.get(0));
-        String name = VALIDATOR.validateNameAndAuthor(IO.scanLine());
-        IO.print(methodType.QUESTIONS.get(1));
-        String author = VALIDATOR.validateNameAndAuthor(IO.scanLine());
-        IO.print(methodType.QUESTIONS.get(2));
-        int pages = VALIDATOR.validateIdAndPages(IO.scanLine());
+        OUT.print(methodType.QUESTIONS.get(0));
+        String name = VALIDATOR.scanAndValidateString();
+        OUT.print(methodType.QUESTIONS.get(1));
+        String author = VALIDATOR.scanAndValidateString();
+        OUT.print(methodType.QUESTIONS.get(2));
+        int pages = VALIDATOR.scanAndValidateNumber();
         return new RequestWithBook(methodType.name(), new BookDto(name, author, pages));
     }
 
     private RequestWithName scanBookName(MethodType methodType) {
-        IO.print(methodType.QUESTIONS.get(0));
-        String name = VALIDATOR.validateNameAndAuthor(IO.scanLine());
+        OUT.print(methodType.QUESTIONS.get(0));
+        String name = VALIDATOR.scanAndValidateString();
         return new RequestWithName(methodType.name(), name);
     }
 
     private RequestWithId scanBookId(MethodType methodType) {
-        IO.print(methodType.QUESTIONS.get(0));
-        int id = VALIDATOR.validateIdAndPages(IO.scanLine());
+        OUT.print(methodType.QUESTIONS.get(0));
+        int id = VALIDATOR.scanAndValidateNumber();
         return new RequestWithId(methodType.name(), id);
     }
 }

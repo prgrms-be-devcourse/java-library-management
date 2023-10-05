@@ -1,7 +1,7 @@
 package org.example.client.console;
 
-import org.example.client.io.ConsoleIO;
-import org.example.client.io.IO;
+import org.example.client.io.ConsoleOut;
+import org.example.client.io.Out;
 import org.example.packet.BookDto;
 import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
@@ -11,27 +11,28 @@ import org.example.packet.responsePacket.ResponseSuccessWithNoData;
 import java.util.LinkedList;
 
 public class MethodResponder {
-    private final IO IO = ConsoleIO.getInstance();
+
+    private final Out OUT = ConsoleOut.getInstance();
 
     public void printResponse(ResponsePacket responsePacket) {
         MethodType methodType = MethodType.valueOf(responsePacket.METHOD);
         if (responsePacket instanceof ResponseSuccessWithData) {
             LinkedList<BookDto> bookDtos = ((ResponseSuccessWithData) responsePacket).BOOKS;
             if (bookDtos.isEmpty()) {
-                IO.print(System.lineSeparator() + "[System] 존재하는 도서가 없습니다." + System.lineSeparator());
+                OUT.print(System.lineSeparator() + "[System] 존재하는 도서가 없습니다." + System.lineSeparator());
             } else {
-                IO.println(booksToString(bookDtos));
-                IO.println(methodType.SUCCESS_MESSAGE);
+                OUT.println(booksToString(bookDtos));
+                OUT.println(methodType.SUCCESS_MESSAGE);
             }
             return;
         }
         if (responsePacket instanceof ResponseSuccessWithNoData) {
-            IO.println(methodType.SUCCESS_MESSAGE);
+            OUT.println(methodType.SUCCESS_MESSAGE);
             return;
         }
         if (responsePacket instanceof ResponseFailWithMessage) {
             String failMessage = ((ResponseFailWithMessage) responsePacket).FAIL_MESSAGE;
-            IO.println(failMessage);
+            OUT.println(failMessage);
         }
     }
 
