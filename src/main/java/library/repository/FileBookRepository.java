@@ -9,12 +9,11 @@ import java.util.Optional;
 
 public class FileBookRepository implements BookRepository {
 
-    private static final String CSV_FILE_PATH = "src/main/resources/books.csv";
     private final CsvFileHandler csvFileHandler;
     private final List<Book> bookList;
 
-    public FileBookRepository() {
-        this.csvFileHandler = new CsvFileHandler(CSV_FILE_PATH);
+    public FileBookRepository(String csvFilePath) {
+        this.csvFileHandler = new CsvFileHandler(csvFilePath);
         this.bookList = loadBooksFromFile();
     }
 

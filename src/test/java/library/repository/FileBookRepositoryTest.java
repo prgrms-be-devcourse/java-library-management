@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FileBookRepositoryTest {
 
+    private static final String TEST_FILE_PATH = "src/test/resources/books.csv";
     private final static int REPEAT_COUNT = 1000;
     private final static int THREAD_SIZE = 32;
     private FileBookRepository bookRepository;
@@ -36,7 +37,7 @@ class FileBookRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        bookRepository = new FileBookRepository();
+        bookRepository = new FileBookRepository(TEST_FILE_PATH);
     }
 
     @AfterEach

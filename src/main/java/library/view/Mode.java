@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public enum Mode {
-    NORMAL("1", "일반 모드", FileBookRepository::new),
+    NORMAL("1", "일반 모드", () -> new FileBookRepository("src/main/resources/books.csv")),
     TEST("2", "테스트 모드", InMemoryBookRepository::new);
 
     private final String code;
