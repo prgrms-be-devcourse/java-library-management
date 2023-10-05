@@ -78,6 +78,10 @@ public class Book {
         return status;
     }
 
+    public LocalDateTime getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
     public void updateLastModifiedTime(LocalDateTime now) {
         this.lastModifiedTime = now;
     }
@@ -104,9 +108,5 @@ public class Book {
 
     public boolean isBookReturnable() {
         return this.status == BookStatus.RENTED || this.status == BookStatus.LOST;
-    }
-
-    public LocalDateTime getLastModifiedTime() {
-        return lastModifiedTime;
     }
 }
