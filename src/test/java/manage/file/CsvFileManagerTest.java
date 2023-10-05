@@ -1,8 +1,8 @@
 package manage.file;
 
 
-import entity.Book;
-import entity.BookState;
+import domain.Book;
+import domain.BookState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

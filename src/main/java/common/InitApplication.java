@@ -6,11 +6,12 @@ import manage.book.BookListManager;
 import manage.file.CsvFileManager;
 import manage.file.TestFileManager;
 
-import static common.Util.sc;
+import static common.Util.ConsoleInput;
 
 public class InitApplication {
     private static final int PROD_MODE = 1;
     private static final int TEST_MODE = 2;
+    private static final String FILE_PATH = "temp.csv";
 
     public static void run(){
         int mode;
@@ -18,7 +19,7 @@ public class InitApplication {
 
         while (true) {
             try {
-                mode = Integer.parseInt(sc.nextLine().strip());
+                mode = Integer.parseInt(ConsoleInput.nextLine().strip());
                 if(mode != PROD_MODE && mode != TEST_MODE) throw new NumberFormatException();
                 break;
             }catch (NumberFormatException e){
@@ -29,7 +30,7 @@ public class InitApplication {
         try {
             TotalManager totalManager;
             if (mode == PROD_MODE)
-                totalManager = new TotalManager(new BookListManager(new CsvFileManager("temp.csv")));
+                totalManager = new TotalManager(new BookListManager(new CsvFileManager(FILE_PATH)));
             else
                 totalManager = new TotalManager(new BookListManager(new TestFileManager()));
 

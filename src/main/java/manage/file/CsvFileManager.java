@@ -1,7 +1,7 @@
 package manage.file;
 
-import entity.Book;
-import entity.BookState;
+import domain.Book;
+import domain.BookState;
 import exception.BookNumberAlreadyExistException;
 
 import java.io.*;
@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 
 public class CsvFileManager implements FileManager {
     private static final String CSV_PATTERN = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+
     private final String filePath;
 
     public CsvFileManager(String filePath) {
@@ -23,7 +24,7 @@ public class CsvFileManager implements FileManager {
         HashMap<Integer, Book> books = new HashMap<>();
         HashSet<Integer> bookNumSet = new HashSet<>();
 
-        File file = new File(filePath);
+        File file = new File(this.filePath);
         try {
             file.createNewFile();
         } catch (IOException e) {

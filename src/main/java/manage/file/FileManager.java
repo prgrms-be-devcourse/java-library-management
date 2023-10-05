@@ -1,6 +1,6 @@
 package manage.file;
 
-import entity.Book;
+import domain.Book;
 
 import java.util.HashMap;
 

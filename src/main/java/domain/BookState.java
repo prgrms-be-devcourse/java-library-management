@@ -1,4 +1,4 @@
-package entity;
+package domain;
 
 public enum BookState {
     AVAILABLE("대여 가능" + System.lineSeparator()),

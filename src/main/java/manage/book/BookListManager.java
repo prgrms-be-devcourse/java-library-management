@@ -1,7 +1,7 @@
 package manage.book;
 
-import entity.Book;
-import entity.BookState;
+import domain.Book;
+import domain.BookState;
 import exception.EntityNotFoundException;
 import manage.file.FileManager;
 

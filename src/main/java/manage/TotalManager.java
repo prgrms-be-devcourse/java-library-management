@@ -1,13 +1,13 @@
 package manage;
 
-import entity.Book;
-import entity.BookState;
+import domain.Book;
+import domain.BookState;
 import exception.EntityNotFoundException;
 import manage.book.BookManager;
 
 import java.util.List;
 
-import static common.Util.sc;
+import static common.Util.ConsoleInput;
 
 public class TotalManager {
     private final BookManager bookManager;
@@ -32,7 +32,7 @@ public class TotalManager {
                     """);
             System.out.print("> ");
             try {
-                cmd = Integer.parseInt(sc.nextLine().trim());
+                cmd = Integer.parseInt(ConsoleInput.nextLine().trim());
 
                 switch (cmd){
                     case 1 -> register();
@@ -57,15 +57,15 @@ public class TotalManager {
                 "도서 제목을 입력해 주세요." + System.lineSeparator() + "> ");
 
         String[] bookInfo = new String[3];
-        bookInfo[0] = sc.nextLine().trim();
+        bookInfo[0] = ConsoleInput.nextLine().trim();
 
         System.out.print("작가 이름을 입력해 주세요." + System.lineSeparator() + "> ");
 
-        bookInfo[1] = sc.nextLine().trim();
+        bookInfo[1] = ConsoleInput.nextLine().trim();
 
         System.out.print("페이지 수를 입력해 주세요.(숫자만 입력해 주세요!)" + System.lineSeparator() + "> ");
 
-        bookInfo[2] = sc.nextLine().trim();
+        bookInfo[2] = ConsoleInput.nextLine().trim();
 
         Book createdBook = new Book(bookInfo[0], bookInfo[1], Integer.parseInt(bookInfo[2]));
         bookManager.register(createdBook);
@@ -84,7 +84,7 @@ public class TotalManager {
         System.out.println("검색할 도서 제목 일부를 입력해주세요!");
         System.out.print("> ");
 
-        String text = sc.nextLine().trim();
+        String text = ConsoleInput.nextLine().trim();
         List<Book> books = bookManager.search(text);
 
         printingBookList(books);
@@ -104,7 +104,7 @@ public class TotalManager {
     private void rent(){
         System.out.print("대여할 도서 번호를 입력해주세요." + System.lineSeparator() + "> ");
 
-        int number = Integer.parseInt(sc.nextLine().trim());
+        int number = Integer.parseInt(ConsoleInput.nextLine().trim());
         BookState initState = bookManager.rent(number);
 
         if (initState != BookState.AVAILABLE)
@@ -116,7 +116,7 @@ public class TotalManager {
     private void returnBook(){
         System.out.print("반납할 도서 번호를 입력해 주세요." + System.lineSeparator() + "> ");
 
-        int number = Integer.parseInt(sc.nextLine().trim());
+        int number = Integer.parseInt(ConsoleInput.nextLine().trim());
         BookState initState = bookManager.revert(number);
 
         if (initState == BookState.RENTED)
@@ -129,7 +129,7 @@ public class TotalManager {
     private void lost(){
         System.out.print("분실 처리할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
-        int number = Integer.parseInt(sc.nextLine().trim());
+        int number = Integer.parseInt(ConsoleInput.nextLine().trim());
         BookState initState = bookManager.lost(number);
 
         if (initState != BookState.LOST)
@@ -141,7 +141,7 @@ public class TotalManager {
     private void delete(){
         System.out.print("삭제할 도서 번호를 입력해 주세요" + System.lineSeparator() + "> ");
 
-        int number = Integer.parseInt(sc.nextLine().trim());
+        int number = Integer.parseInt(ConsoleInput.nextLine().trim());
         bookManager.delete(number);
 
         System.out.println("정상 삭제되었습니다." + System.lineSeparator());
