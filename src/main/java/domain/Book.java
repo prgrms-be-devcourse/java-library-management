@@ -5,7 +5,7 @@ import java.util.List;
 public class Book {
     private static final List<String> FIELD_DISPLAY_NAMES = List.of("도서번호", "제목", "작가", "페이지 수", "상태");
     private static final int PROCESSING_TIME_MILLIS = 5 * 60 * 1_000;
-    private static final int NEVER_REVERTED = -1;
+    private static final int NOT_REVERTED = -1;
 
     private static int numberCnt = 1;
     private final int number;
@@ -21,7 +21,7 @@ public class Book {
         this.author = author;
         this.pageNum = pageNum;
         this.bookState = BookState.AVAILABLE;
-        this.lastReturn = NEVER_REVERTED;
+        this.lastReturn = NOT_REVERTED;
     }
 
     public Book(int number, String title, String author, int pageNum, BookState bookState, long lastReturn) {
