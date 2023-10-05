@@ -45,14 +45,14 @@ public class LibraryManagementService {
         // 도서가 대여 가능할 경우, 대여중으로 상태 변경
         switch (result) {
             case CAN_RENT -> {
-                Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ALREADY_RENT, book.getReturnDateTime());
-                bookRepository.updateBook(rentBook);
+                book.updateStatusToAlreadyRent();
+                bookRepository.updateBook(book);
             }
 
             case ARRANGE -> {
                 if (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isBefore(LocalDateTime.now())) {
-                    Book arrangeBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ALREADY_RENT, book.getReturnDateTime());
-                    bookRepository.updateBook(arrangeBook);
+                    book.updateStatusToAlreadyRent();
+                    bookRepository.updateBook(book);
 
                     result = Status.CAN_RENT;
                 }
@@ -73,8 +73,9 @@ public class LibraryManagementService {
             case CAN_RENT -> result = ReturnResult.ALREADY_RETURN;
 
             case ALREADY_RENT, LOST -> {
-                Book rentBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.ARRANGE, LocalDateTime.now());
-                bookRepository.updateBook(rentBook);
+                book.updateStatusToArrange();
+                book.updateReturnDateTime();
+                bookRepository.updateBook(book);
             }
 
             case ARRANGE -> {
@@ -100,8 +101,8 @@ public class LibraryManagementService {
         // 도서가 분실 처리 가능할 경우, 분실됨으로 상태 변경
         switch (book.getStatus()) {
             case CAN_RENT, ALREADY_RENT, ARRANGE -> {
-                Book missBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.LOST, book.getReturnDateTime());
-                bookRepository.updateBook(missBook);
+                book.updateStatusToLost();
+                bookRepository.updateBook(book);
             }
 
             case LOST -> result = false;
@@ -132,8 +133,8 @@ public class LibraryManagementService {
             // 도서 반납 후 5분이 지났다면 대여 가능으로 상태 변경
             if ((book.getStatus() == Status.ARRANGE) && (book.getReturnDateTime().plusMinutes(BOOK_ARRANGE_TIME).isBefore(LocalDateTime.now()))) {
 
-                Book statusBook = new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), Status.CAN_RENT, book.getReturnDateTime());
-                bookRepository.updateBook(statusBook);
+                book.updateStatusToCanRent();
+                bookRepository.updateBook(book);
             }
         }
     }
