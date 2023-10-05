@@ -2,9 +2,7 @@ package library.util.file;
 
 import library.domain.Book;
 import library.domain.BookStatus;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +17,11 @@ class CsvFileHandlerTest {
     @BeforeEach
     void setUp() {
         fileHandler = new CsvFileHandler(testFilePath);
+    }
+
+    @AfterEach
+    void tearDown() {
+        fileHandler.saveBooksToFile(List.of());
     }
 
     @Test
