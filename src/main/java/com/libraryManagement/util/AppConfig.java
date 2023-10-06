@@ -1,6 +1,8 @@
 package com.libraryManagement.util;
 
 import com.libraryManagement.controller.BookController;
+import com.libraryManagement.domain.BookStatus;
+import com.libraryManagement.domain.ChangeBookStatus;
 import com.libraryManagement.io.BookIO;
 import com.libraryManagement.io.BookMenu;
 import com.libraryManagement.io.ModeMenu;
@@ -16,6 +18,7 @@ import static java.lang.System.exit;
 public class AppConfig {
 
     public void init() throws IOException, InterruptedException {
+
 
         ModeMenu modeMenu = new ModeMenu();
         modeMenu.displayModeMenu();

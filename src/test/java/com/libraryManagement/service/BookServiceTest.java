@@ -5,13 +5,22 @@ import com.libraryManagement.repository.MemoryRepository;
 import com.libraryManagement.repository.Repository;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
+
 import static com.libraryManagement.domain.BookStatus.*;
 import static com.libraryManagement.domain.ChangeBookStatus.*;
+import static java.time.Duration.ofMinutes;
+import static java.time.Duration.ofSeconds;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 class BookServiceTest {
-    static Repository repository = new MemoryRepository();
-    static BookService bookService = new BookService(repository);
+    Repository repository = new MemoryRepository();
+    BookService bookService = new BookService(repository);
+    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public void initData() {
         Book book1 = new Book
@@ -157,17 +166,75 @@ class BookServiceTest {
     }
 
     @Test
-    void 반납신청() {
+    void 반납신청() throws InterruptedException {
+        // given
+        this.initData();
 
+        // when
+        bookService.updateBookStatus(APPLYRETURN.name(), 2);
+        bookService.updateBookStatus(APPLYRETURN.name(), 3);
+        bookService.updateBookStatus(APPLYRETURN.name(), 4);
+        bookService.updateBookStatus(APPLYRETURN.name(), 5);
+
+        // then
+        // 반납신청이 불가능한 book1 제외하고 반납신청이 되었는지 확인 (준비중으로 변경)
+        assertEquals(READY.getName(), repository.findBookById(2).getStatus());
+        assertEquals(READY.getName(), repository.findBookById(3).getStatus());
+        assertEquals(READY.getName(), repository.findBookById(4).getStatus());
+        assertEquals(READY.getName(), repository.findBookById(5).getStatus());
+
+        // 5분 후에 작업이 완료될 때까지 대기
+        CompletableFuture<Void> waitForCompletion = CompletableFuture.allOf(
+                CompletableFuture.runAsync(() -> {
+                    assertTimeout(ofSeconds(2), () -> {
+                        while (!POSSIBLERENT.getName().equals(repository.findBookById(2).getStatus())) {
+                            Thread.sleep(1000); // 1초마다 체크
+                        }
+                    });
+                }),
+                CompletableFuture.runAsync(() -> {
+                    assertTimeout(ofSeconds(2), () -> {
+                        while (!POSSIBLERENT.getName().equals(repository.findBookById(3).getStatus())) {
+                            Thread.sleep(1000); // 1초마다 체크
+                        }
+                    });
+                }),
+                CompletableFuture.runAsync(() -> {
+                    assertTimeout(ofSeconds(2), () -> {
+                        while (!POSSIBLERENT.getName().equals(repository.findBookById(4).getStatus())) {
+                            Thread.sleep(1000); // 1초마다 체크
+                        }
+                    });
+                }),
+                CompletableFuture.runAsync(() -> {
+                    assertTimeout(ofSeconds(2), () -> {
+                        while (!POSSIBLERENT.getName().equals(repository.findBookById(5).getStatus())) {
+                            Thread.sleep(1000); // 1초마다 체크
+                        }
+                    });
+                })
+        );
+
+        waitForCompletion.join(); // 모든 작업이 완료될 때까지 대기
     }
 
     @Test
     void 분실신청() {
+        // given
+        this.initData();
 
+        // when
+
+        // then
     }
 
     @Test
     void 삭제신청() {
+        // given
+        this.initData();
 
+        // when
+
+        // then
     }
 }

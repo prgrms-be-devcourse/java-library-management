@@ -2,10 +2,10 @@ package com.libraryManagement.service;
 
 import com.libraryManagement.domain.Book;
 import com.libraryManagement.repository.Repository;
+import com.libraryManagement.util.MyScheduler;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.libraryManagement.domain.BookStatus.*;
@@ -14,7 +14,7 @@ import static com.libraryManagement.domain.ChangeBookStatus.APPLYDELETE;
 
 public class BookService {
     private final Repository repository;
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private MyScheduler myScheduler = new MyScheduler();
 
     public BookService(Repository repository) {
         this.repository = repository;
@@ -77,9 +77,9 @@ public class BookService {
                 repository.updateBookStatus(id, READY.getName());
 
                 // 5분 후에 대여 가능 상태로 변경합니다.
-                scheduler.schedule(() -> {
+                myScheduler.scheduleTask(() -> {
                     repository.updateBookStatus(id, POSSIBLERENT.getName());
-                }, 5, TimeUnit.MINUTES);
+                }, 5, TimeUnit.SECONDS);
             }
         }else if(applyType.equals(APPLYLOST.name())) {
             if(isPossibleUpdateBookStatus(applyType, id)){    // 분실처리할 수 있다면
@@ -97,5 +97,4 @@ public class BookService {
     public long getNumCreatedBooks() {
         return repository.getNumCreatedBooks();
     }
-
 }
