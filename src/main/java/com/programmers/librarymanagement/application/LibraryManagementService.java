@@ -32,6 +32,9 @@ public class LibraryManagementService {
     }
 
     public List<Book> getBookByTitle(String title) {
+
+        updateAllStatus();
+
         return bookRepository.findByTitle(title);
     }
 
