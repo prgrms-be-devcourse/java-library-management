@@ -18,10 +18,10 @@ public class BookController {
             outputManager.printSystem(e.getMessage());
             return;
         }
-        runMode(mode);
+        applyMode(mode);
     }
 
-    public void runMode(String mode) {
+    public void applyMode(String mode) {
         ModeType modeType = ModeType.findMode(mode);
         if (modeType == null) {
             outputManager.printSystem("잘못된 입력입니다.");
@@ -29,13 +29,13 @@ public class BookController {
         }
         bookService = ModeType.findService(modeType, outputManager);
         outputManager.printSystem(modeType.getMessage());
-        selectFunction();
+        selectMenu();
     }
 
-    public void selectFunction() {
+    public void selectMenu() {
         String function = "";
         while (!function.equals("8")) {
-            outputManager.printSelectFunction();
+            outputManager.printSelectedMenu();
             try {
                 switch (function = inputManager.getInput()) {
                     case "1" -> saveBook();
