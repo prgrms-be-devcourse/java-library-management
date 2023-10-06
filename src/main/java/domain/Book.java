@@ -56,7 +56,11 @@ public class Book {
     }
 
     public void returnBook(){
-        if(this.status == Status.ORGANIZE) this.status = Status.POSSIBLE;
+        if(this.status == Status.ORGANIZE) {
+            BackGround backGroundTimer = new BackGround(this);
+            backGroundTimer.start();
+            this.status = Status.POSSIBLE;
+        }
         else throw new RuntimeException("[System] 잘못된 접근입니다.");
     }
 
@@ -93,5 +97,23 @@ public class Book {
                 + "페이지 수 : " + this.page + System.lineSeparator()
                 + "상태 : " + this.status.getMessage() + System.lineSeparator()
                 + "--------------------------";
+    }
+
+    private static class BackGround extends Thread{
+        private final Book book;
+
+        BackGround(Book book){
+            this.book = book;
+        }
+
+        @Override
+        public void run() {
+            try {
+                sleep(300000);
+                book.returnBook();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
