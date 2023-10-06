@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 
 class GeneralRepositoryTest {
 
-    private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvTestFile.csv";
+    private static final String csvFileName = "csv/csvTestFile";
     Repository repository = new GeneralRepository();
 
     @BeforeEach

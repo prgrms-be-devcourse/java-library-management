@@ -14,7 +14,7 @@ import static domain.BookCondition.*;
 
 public class GeneralRepository implements Repository {
 
-    private static final String csvFileName = "/Users/kimnamgyu/desktop/study/dev-course/csvFile.csv";
+    private static final String csvFileName = "csv/csvFile";
 
     @Override
     public void load(List<Book> bookList) {
