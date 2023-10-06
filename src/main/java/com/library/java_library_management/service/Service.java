@@ -61,11 +61,13 @@ public class Service {
 
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n" + "\n" + "Q. 대여할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-        String result = repository.rentBook(book_id);
-        if(result == null)
+        BookStatus status = repository.getStatusById(book_id);
+        if(status == null)
             System.out.println("존재하지 않는 도서입니다.");
         else
             System.out.println(repository.rentBook(book_id));
+
+
     }
 
     //도서 반납

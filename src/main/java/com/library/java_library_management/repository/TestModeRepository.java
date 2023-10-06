@@ -6,7 +6,6 @@ import com.library.java_library_management.status.BookStatus;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class TestModeRepository implements Repository{
@@ -49,25 +48,13 @@ public class TestModeRepository implements Repository{
         }catch (NullPointerException e){
             return null;
         }
-
     }
 
     @Override
     public void returnBook(int book_id) {
-        try {
-            BookInfo book = bookMap.get(book_id);
-            if (book.getStatus().equals(BookStatus.RENT) || book.getStatus().equals(BookStatus.LOST)) {
-                book.setStatus(BookStatus.CLEANING);
-                scheduler.schedule(() -> {
-                    book.setStatus(BookStatus.AVAILABLE);
-                }, 5, TimeUnit.MINUTES);
-                System.out.println("반납 처리 되었습니다.");
-            } else {
-                System.out.println("원래 대여 가능한 도서입니다");
-            }
-        } catch (NullPointerException e) {
-            System.out.println("존재하지 않는 도서입니다.");
-        }
+        BookInfo book = bookMap.get(book_id);
+        book.setStatus(BookStatus.AVAILABLE);
+        bookMap.put(book_id, book);
     }
 
     @Override
