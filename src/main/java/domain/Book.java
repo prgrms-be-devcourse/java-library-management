@@ -59,7 +59,6 @@ public class Book {
         if(this.status == Status.ORGANIZE) {
             BackGround backGroundTimer = new BackGround(this);
             backGroundTimer.start();
-            this.status = Status.POSSIBLE;
         }
         else throw new RuntimeException("[System] 잘못된 접근입니다.");
     }
