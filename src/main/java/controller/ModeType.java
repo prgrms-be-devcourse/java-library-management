@@ -3,7 +3,7 @@ package controller;
 import domain.Book;
 import lombok.Getter;
 import manager.FileManager;
-import manager.IOManager;
+import manager.OutputManager;
 import repository.NormalRepository;
 import repository.TestRepository;
 import service.BookService;
@@ -27,11 +27,11 @@ public enum ModeType {
         return fileManager.loadData();
     }
 
-    private static BookService loadServiceNormal(IOManager ioManager) {
+    private static BookService loadServiceNormal(OutputManager ioManager) {
         return new BookService(new NormalRepository(PATH, NORMAL.getBooks()), ioManager);
     }
 
-    private static BookService loadServiceTest(IOManager ioManager) {
+    private static BookService loadServiceTest(OutputManager ioManager) {
         return new BookService(new TestRepository(TEST.getBooks()), ioManager);
     }
 
@@ -48,7 +48,7 @@ public enum ModeType {
                 .orElse(null);
     }
 
-    public static BookService findService(ModeType modeType, IOManager ioManager) {
+    public static BookService findService(ModeType modeType, OutputManager ioManager) {
         if (modeType == NORMAL) return loadServiceNormal(ioManager);
         return loadServiceTest(ioManager);
     }

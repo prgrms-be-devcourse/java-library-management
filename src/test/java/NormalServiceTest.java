@@ -2,7 +2,7 @@ import domain.Book;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
 import manager.FileManager;
-import manager.IOManager;
+import manager.OutputManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NormalServiceTest {
     private final String PATH = "/src/test/resources/test_book_data.csv";
-    private final IOManager ioManager = new IOManager();
+    private final OutputManager outputManager = new OutputManager();
     private final FileManager fileManager = new FileManager(PATH);
     private final NormalRepository repository = new NormalRepository(PATH, fileManager.loadData());
-    private final BookService service = new BookService(repository, ioManager);
+    private final BookService service = new BookService(repository, outputManager);
 
     @AfterEach
     public void afterEach() {

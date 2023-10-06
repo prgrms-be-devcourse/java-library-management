@@ -2,7 +2,7 @@ import domain.Book;
 import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.IOManager;
+import manager.OutputManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.TestRepository;
@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestServiceTest {
-    private final IOManager ioManager = new IOManager();
+    private final OutputManager outputManager = new OutputManager();
     private final TestRepository repository = new TestRepository(new ArrayList<>());
-    private final BookService service = new BookService(repository, ioManager);
+    private final BookService service = new BookService(repository, outputManager);
 
 
     @Test

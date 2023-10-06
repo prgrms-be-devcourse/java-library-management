@@ -4,18 +4,18 @@ import domain.Book;
 import exception.AlreadySavedBookException;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.IOManager;
+import manager.OutputManager;
 import repository.BookRepository;
 
 import java.util.List;
 
 public class BookService {
     private final BookRepository repository;
-    private final IOManager ioManager;
+    private final OutputManager outputManager;
 
-    public BookService(BookRepository repository, IOManager ioManager) {
+    public BookService(BookRepository repository, OutputManager outputManager) {
         this.repository = repository;
-        this.ioManager = ioManager;
+        this.outputManager = outputManager;
     }
 
     // [1] 도서 저장
@@ -92,7 +92,7 @@ public class BookService {
             if (book.isCleaning()) {
                 if (!book.isStillCleaning()) book.cleaningToAvailable();
             }
-            ioManager.printBookInfo(book);
+            outputManager.printBookInfo(book);
         }
     }
 }
