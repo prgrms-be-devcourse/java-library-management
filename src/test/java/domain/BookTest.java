@@ -100,4 +100,50 @@ class BookTest {
         //then
         assertThat(book.getStatus()).isEqualTo(Status.POSSIBLE);
     }
+
+    @Test
+    void lostBookSuccess() {
+        //given
+        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        book.lostBook();
+
+        //then
+        assertThat(book.getStatus()).isEqualTo(Status.LOST);
+    }
+
+    @Test
+    void lostBookSuccess2() {
+        //given
+        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.IMPOSSIBLE);
+
+        //when
+        book.lostBook();
+
+        //then
+        assertThat(book.getStatus()).isEqualTo(Status.LOST);
+    }
+
+    @Test
+    void lostBookSuccess3() {
+        //given
+        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.ORGANIZE);
+
+        //when
+        book.lostBook();
+
+        //then
+        assertThat(book.getStatus()).isEqualTo(Status.LOST);
+    }
+
+    @Test
+    void lostBookFail() {
+        //given
+        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.LOST);
+
+        assertThatThrownBy(book::lostBook)
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("[System] 이미 분실 처리된 도서입니다.");
+    }
 }
