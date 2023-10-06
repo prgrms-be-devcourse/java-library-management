@@ -1,5 +1,6 @@
 package com.programmers.application;
 
+import com.programmers.domain.dto.BookResponse;
 import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
@@ -27,12 +28,20 @@ public class BookService {
         return book.getId();
     }
 
-    public List<Book> findAllBooks() {
-        return repository.findAll();
+    public List<BookResponse> findAllBooks() {
+        List<Book> result = repository.findAll();
+        return result
+            .stream()
+            .map(BookResponse::of)
+            .toList();
     }
 
-    public List<Book> searchBook(String title) {
-        return repository.findByTitle(title);
+    public List<BookResponse> searchBook(String title) {
+        List<Book> result = repository.findByTitle(title);
+        return result
+            .stream()
+            .map(BookResponse::of)
+            .toList();
     }
 
     public void deleteBook(Long id) {
@@ -80,12 +89,11 @@ public class BookService {
 
     private void organizeBook(Book book) {
         book.updateBookStatusToOrganizing();
-        scheduleStatusUpdateToAvailable(book);
+        scheduleStatusUpdateToAvailable(book.getId());
     }
 
     // TODO 테스트 어떻게 작성하지
-    // 파라미터로 아이디를 넘기자.
-    private void scheduleStatusUpdateToAvailable(Book book) {
-        bookScheduler.scheduleBookAvailableTask(() -> updateBookStatusToAvailable(book.getId()));
+    private void scheduleStatusUpdateToAvailable(Long id) {
+        bookScheduler.scheduleBookAvailableTask(() -> updateBookStatusToAvailable(id));
     }
 }

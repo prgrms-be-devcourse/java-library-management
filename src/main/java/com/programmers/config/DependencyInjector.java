@@ -13,18 +13,24 @@ import com.programmers.exception.GlobalExceptionHandler;
 import com.programmers.exception.checked.InvalidModeNumberException;
 import com.programmers.infrastructure.IO.Console;
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
-import com.programmers.infrastructure.IO.command.DeleteBookRequestGenerator;
-import com.programmers.infrastructure.IO.command.ExitRequestGenerator;
-import com.programmers.infrastructure.IO.command.MenuRequestGenerator;
-import com.programmers.infrastructure.IO.command.RegisterBookRequestGenerator;
-import com.programmers.infrastructure.IO.command.RentBookRequestGenerator;
-import com.programmers.infrastructure.IO.command.ReportLostBookRequestGenerator;
-import com.programmers.infrastructure.IO.command.ReturnBookRequestGenerator;
-import com.programmers.infrastructure.IO.command.SearchBookByTitleRequestGenerator;
-import com.programmers.infrastructure.IO.command.ViewAllBooksRequestGenerator;
 import com.programmers.infrastructure.IO.provider.JsonFileProvider;
+import com.programmers.infrastructure.IO.requestCommand.DeleteBookRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.ExitRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.MenuRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.RegisterBookRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.RentBookRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.ReportLostBookRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.ReturnBookRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.SearchBookByTitleRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.ViewAllBooksRequestGenerator;
+import com.programmers.infrastructure.IO.responseCommand.ResponseExitSender;
+import com.programmers.infrastructure.IO.responseCommand.ResponseListBodySender;
+import com.programmers.infrastructure.IO.responseCommand.ResponseNoBodySender;
+import com.programmers.infrastructure.IO.responseCommand.ResponseSender;
+import com.programmers.infrastructure.IO.responseCommand.ResponseSingleBodySender;
 import com.programmers.infrastructure.IO.validator.InputValidator;
 import com.programmers.infrastructure.MenuRequestProvider;
+import com.programmers.infrastructure.MenuResponseProvider;
 import com.programmers.mediator.ConsoleRequestProcessor;
 import com.programmers.mediator.RequestProcessor;
 import com.programmers.presentation.BookController;
@@ -49,6 +55,8 @@ public class DependencyInjector {
     private MenuRequestProvider menuRequestProvider;
     private List<MenuRequestGenerator> menuRequestGenerators;
     private FileProvider<Book> fileRepository;
+    private List<ResponseSender> menuResponseSenders;
+    private MenuResponseProvider menuResponseProvider;
 
     // TODO: 테스트때문에 생성자에서 안하고 init 으로 바꿈
     private DependencyInjector() {
@@ -100,6 +108,11 @@ public class DependencyInjector {
             new SearchBookByTitleRequestGenerator(consoleInteractionAggregator),
             new ViewAllBooksRequestGenerator(consoleInteractionAggregator)
         );
+        this.menuResponseSenders = List.of(new ResponseExitSender(consoleInteractionAggregator)
+            , new ResponseNoBodySender(consoleInteractionAggregator),
+            new ResponseListBodySender(consoleInteractionAggregator),
+            new ResponseSingleBodySender(consoleInteractionAggregator));
+        this.menuResponseProvider = new MenuResponseProvider(menuResponseSenders);
         this.menuRequestProvider = new MenuRequestProvider(menuRequestGenerators);
     }
 
@@ -113,7 +126,7 @@ public class DependencyInjector {
         this.bookService = new BookService(bookRepository, new BookScheduler());
         this.controller = new BookController(bookService);
         this.requestProcessor = new ConsoleRequestProcessor(new BookControllerAdapter(controller),
-            consoleInteractionAggregator, menuRequestProvider);
+            consoleInteractionAggregator, menuRequestProvider, menuResponseProvider);
         this.globalExceptionHandler = new GlobalExceptionHandler(requestProcessor);
         this.appExceptionHandler = new AppExceptionHandler(requestProcessor);
     }

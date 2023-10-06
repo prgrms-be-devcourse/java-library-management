@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -14,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class ReturnBookRequestGeneratorTest {
+class ReportLostBookRequestGeneratorTest {
     private AutoCloseable closeable;
     @InjectMocks
-    private ReturnBookRequestGenerator returnBookRequestGenerator;
+    private ReportLostBookRequestGenerator reportLostBookRequestGenerator;
     @Mock
     private ConsoleInteractionAggregator consoleInteractionAggregator;
 
@@ -36,12 +36,12 @@ class ReturnBookRequestGeneratorTest {
     @Test
     @DisplayName("generateRequest 메서드 검증")
     void generateRequest() {
-        Long expectedRentInput = 1L;
-        when(consoleInteractionAggregator.collectRentInput()).thenReturn(expectedRentInput);
+        Long expectedLostInput = 1L;
+        when(consoleInteractionAggregator.collectLostInput()).thenReturn(expectedLostInput);
 
-        Request request = returnBookRequestGenerator.generateRequest();
+        Request request = reportLostBookRequestGenerator.generateRequest();
 
-        assertEquals(expectedRentInput, request.getBody().get());
-        assertEquals(Menu.RETURN_BOOK.getOptionNumber(), request.getPathInfo());
+        assertEquals(expectedLostInput, request.getBody().get());
+        assertEquals(Menu.REPORT_LOST_BOOK.getOptionNumber(), request.getPathInfo());
     }
 }

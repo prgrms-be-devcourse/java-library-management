@@ -1,8 +1,8 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.mediator.dto.Request;
@@ -16,10 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class ViewAllBooksRequestGeneratorTest {
+class DeleteBookRequestGeneratorTest {
     private AutoCloseable closeable;
     @InjectMocks
-    private ViewAllBooksRequestGenerator viewAllBooksRequestGenerator;
+    private DeleteBookRequestGenerator deleteBookRequestGenerator;
     @Mock
     private ConsoleInteractionAggregator consoleInteractionAggregator;
 
@@ -37,12 +37,14 @@ class ViewAllBooksRequestGeneratorTest {
 
     @Test
     @DisplayName("generateRequest 메서드 검증")
-    void generateRequest() {
-        Request request = viewAllBooksRequestGenerator.generateRequest();
+    void testGenerateRequest() {
+        Long expectedDeleteInput = 1L;
+        when(consoleInteractionAggregator.collectDeleteInput()).thenReturn(expectedDeleteInput);
 
-        assertFalse(request.getBody().isPresent());
-        assertEquals(Menu.VIEW_ALL_BOOKS.getOptionNumber(), request.getPathInfo());
+        Request request = deleteBookRequestGenerator.generateRequest();
 
-        verify(consoleInteractionAggregator).displayMessage(Messages.SELECT_MENU_LIST.getMessage());
+        verify(consoleInteractionAggregator).displayMessage(Messages.SELECT_MENU_DELETE.getMessage());
+        assertEquals(expectedDeleteInput, request.getBody().get());
+        assertEquals(Menu.DELETE_BOOK.getOptionNumber(), request.getPathInfo());
     }
 }

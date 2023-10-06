@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

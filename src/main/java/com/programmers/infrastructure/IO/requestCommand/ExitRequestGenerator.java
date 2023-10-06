@@ -1,9 +1,9 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
-import com.programmers.presentation.enums.Menu;
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.mediator.dto.ConsoleRequest;
 import com.programmers.mediator.dto.Request;
+import com.programmers.presentation.enums.Menu;
 import com.programmers.util.Messages;
 import lombok.RequiredArgsConstructor;
 

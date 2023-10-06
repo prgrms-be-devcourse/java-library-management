@@ -1,13 +1,11 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.mediator.dto.Request;
 import com.programmers.presentation.enums.Menu;
-import com.programmers.util.Messages;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class DeleteBookRequestGeneratorTest {
+class RentBookRequestGeneratorTest {
     private AutoCloseable closeable;
     @InjectMocks
-    private DeleteBookRequestGenerator deleteBookRequestGenerator;
+    private RentBookRequestGenerator rentBookRequestGenerator;
     @Mock
     private ConsoleInteractionAggregator consoleInteractionAggregator;
 
@@ -37,14 +35,13 @@ class DeleteBookRequestGeneratorTest {
 
     @Test
     @DisplayName("generateRequest 메서드 검증")
-    void testGenerateRequest() {
-        Long expectedDeleteInput = 1L;
-        when(consoleInteractionAggregator.collectDeleteInput()).thenReturn(expectedDeleteInput);
+    void generateRequest() {
+        Long expectedRentInput = 1L;
+        when(consoleInteractionAggregator.collectRentInput()).thenReturn(expectedRentInput);
 
-        Request request = deleteBookRequestGenerator.generateRequest();
+        Request request = rentBookRequestGenerator.generateRequest();
 
-        verify(consoleInteractionAggregator).displayMessage(Messages.SELECT_MENU_DELETE.getMessage());
-        assertEquals(expectedDeleteInput, request.getBody().get());
-        assertEquals(Menu.DELETE_BOOK.getOptionNumber(), request.getPathInfo());
+        assertEquals(expectedRentInput, request.getBody().get());
+        assertEquals(Menu.RENT_BOOK.getOptionNumber(), request.getPathInfo());
     }
 }

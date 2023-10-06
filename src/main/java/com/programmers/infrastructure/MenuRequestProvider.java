@@ -1,7 +1,7 @@
 package com.programmers.infrastructure;
 
 import com.programmers.exception.checked.InvalidMenuNumberException;
-import com.programmers.infrastructure.IO.command.MenuRequestGenerator;
+import com.programmers.infrastructure.IO.requestCommand.MenuRequestGenerator;
 import com.programmers.mediator.dto.Request;
 import java.util.List;
 

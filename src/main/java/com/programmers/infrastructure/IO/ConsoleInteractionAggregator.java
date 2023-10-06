@@ -1,6 +1,5 @@
 package com.programmers.infrastructure.IO;
 
-import com.programmers.domain.entity.Book;
 import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.util.Messages;
 import java.util.List;
@@ -65,25 +64,12 @@ public class ConsoleInteractionAggregator {
         return console.collectUserLongInput();
     }
 
-    public void displayBooksInfo(List<Book> books) {
-        books.forEach(this::displayBookInfo);
+    public <T> void displayListInfo(List<T> ListItems) {
+        ListItems.forEach(item -> displayMessage(item.toString()));
     }
 
-    private void displayBookInfo(Book book) {
-        console.displayMessage(
-            String.format("도서 번호: %d" + System.lineSeparator() +
-                    "제목: %s" + System.lineSeparator() +
-                    "작가: %s" + System.lineSeparator() +
-                    "페이지 수: %d" + System.lineSeparator() +
-                    "상태 : %s" + System.lineSeparator() + System.lineSeparator()
-                    + "------------------------------",
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getPages(),
-                book.getStatus().getName())
-        );
-
+    public <T> void displaySingleInfo(T item) {
+        displayMessage(item.toString());
     }
 
     public void displayMessage(String message) {

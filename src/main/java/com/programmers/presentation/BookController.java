@@ -1,12 +1,10 @@
 package com.programmers.presentation;
 
 import com.programmers.application.BookService;
-import com.programmers.presentation.enums.ExitCommand;
-import com.programmers.domain.entity.Book;
+import com.programmers.domain.dto.BookResponse;
 import com.programmers.domain.dto.RegisterBookReq;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class BookController {
@@ -16,11 +14,11 @@ public class BookController {
         bookService.registerBook(req);
     }
 
-    public List<Book> getAllBooks() {
+    public List<BookResponse> getAllBooks() {
         return bookService.findAllBooks();
     }
 
-    public List<Book> searchBooksByTitle(String title) {
+    public List<BookResponse> searchBooksByTitle(String title) {
         return bookService.searchBook(title);
     }
 
@@ -40,7 +38,4 @@ public class BookController {
         bookService.deleteBook(id);
     }
 
-    public void exitApplication(String optionNum) {
-        ExitCommand.promptForExit(optionNum);
-    }
 }

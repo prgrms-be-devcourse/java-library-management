@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import com.programmers.mediator.dto.Request;
 

@@ -16,7 +16,7 @@ public class MessageProperties {
     static {
         try (InputStream input = MessageProperties.class.getClassLoader()
             .getResourceAsStream(
-            "messages.properties")) {
+                "messages.properties")) {
             if (input != null) {
                 properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             } else {
@@ -28,7 +28,7 @@ public class MessageProperties {
 
         try (InputStream input = MessageProperties.class.getClassLoader()
             .getResourceAsStream(
-            "error_messages.properties")) {
+                "error_messages.properties")) {
             if (input != null) {
                 errorProperties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             } else {

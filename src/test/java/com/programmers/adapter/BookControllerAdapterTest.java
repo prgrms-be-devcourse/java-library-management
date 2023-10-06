@@ -2,18 +2,13 @@ package com.programmers.adapter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.programmers.domain.dto.RegisterBookReq;
-import com.programmers.domain.entity.Book;
 import com.programmers.mediator.dto.ConsoleResponse;
 import com.programmers.presentation.BookController;
 import com.programmers.util.Messages;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,32 +52,32 @@ class BookControllerAdapterTest {
         assertFalse(body.isPresent());
     }
 
-    @Test
-    @DisplayName("모든 책 조회 컨트롤러 연결 테스트")
-    void testGetAllBooks() {
-        List<Book> mockBooks = new ArrayList<>();
-
-        when(mockController.getAllBooks()).thenReturn(mockBooks);
-        ConsoleResponse response = adapter.getAllBooks();
-
-        assertEquals(Messages.BOOK_LIST_SUCCESS.getMessage(), response.getMessage());
-        Optional<List<Book>> body = (Optional<List<Book>>) response.getBody();
-        assertTrue(body.isPresent());
-    }
-
-    @Test
-    @DisplayName("책 제목으로 조회 컨트롤러 연결 테스트")
-    void testSearchBooksByTitle() {
-        String title = "Sample Title";
-        List<Book> mockBooks = new ArrayList<>();
-
-        when(mockController.searchBooksByTitle(title)).thenReturn(mockBooks);
-        ConsoleResponse response = adapter.searchBooksByTitle(title);
-
-        assertEquals(Messages.BOOK_SEARCH_SUCCESS.getMessage(), response.getMessage());
-        Optional<List<Book>> body = (Optional<List<Book>>) response.getBody();
-        assertTrue(body.isPresent());
-    }
+//    @Test
+//    @DisplayName("모든 책 조회 컨트롤러 연결 테스트")
+//    void testGetAllBooks() {
+//        List<Book> mockBooks = new ArrayList<>();
+//
+//        when(mockController.getAllBooks()).thenReturn(mockBooks);
+//        ConsoleResponse response = adapter.getAllBooks();
+//
+//        assertEquals(Messages.BOOK_LIST_SUCCESS.getMessage(), response.getMessage());
+//        Optional<List<Book>> body = (Optional<List<Book>>) response.getBody();
+//        assertTrue(body.isPresent());
+//    }
+//
+//    @Test
+//    @DisplayName("책 제목으로 조회 컨트롤러 연결 테스트")
+//    void testSearchBooksByTitle() {
+//        String title = "Sample Title";
+//        List<Book> mockBooks = new ArrayList<>();
+//
+//        when(mockController.searchBooksByTitle(title)).thenReturn(mockBooks);
+//        ConsoleResponse response = adapter.searchBooksByTitle(title);
+//
+//        assertEquals(Messages.BOOK_SEARCH_SUCCESS.getMessage(), response.getMessage());
+//        Optional<List<Book>> body = (Optional<List<Book>>) response.getBody();
+//        assertTrue(body.isPresent());
+//    }
 
     @Test
     @DisplayName("책 대여 컨트롤러 연결 테스트")

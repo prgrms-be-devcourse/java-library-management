@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -14,10 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class RentBookRequestGeneratorTest {
+class ExitRequestGeneratorTest {
+
     private AutoCloseable closeable;
     @InjectMocks
-    private RentBookRequestGenerator rentBookRequestGenerator;
+    private ExitRequestGenerator exitRequestGenerator;
     @Mock
     private ConsoleInteractionAggregator consoleInteractionAggregator;
 
@@ -36,12 +37,12 @@ class RentBookRequestGeneratorTest {
     @Test
     @DisplayName("generateRequest 메서드 검증")
     void generateRequest() {
-        Long expectedRentInput = 1L;
-        when(consoleInteractionAggregator.collectRentInput()).thenReturn(expectedRentInput);
+        String expectedExitInput = "n";
+        when(consoleInteractionAggregator.collectExitInput()).thenReturn(expectedExitInput);
 
-        Request request = rentBookRequestGenerator.generateRequest();
+        Request request = exitRequestGenerator.generateRequest();
 
-        assertEquals(expectedRentInput, request.getBody().get());
-        assertEquals(Menu.RENT_BOOK.getOptionNumber(), request.getPathInfo());
+        assertEquals(expectedExitInput, request.getBody().get());
+        assertEquals(Menu.Exit.getOptionNumber(), request.getPathInfo());
     }
 }

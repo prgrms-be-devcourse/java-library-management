@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -14,11 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-class ExitRequestGeneratorTest {
-
+class SearchBookByTitleRequestGeneratorTest {
     private AutoCloseable closeable;
     @InjectMocks
-    private ExitRequestGenerator exitRequestGenerator;
+    private SearchBookByTitleRequestGenerator searchBookByTitleRequestGenerator;
     @Mock
     private ConsoleInteractionAggregator consoleInteractionAggregator;
 
@@ -37,12 +36,12 @@ class ExitRequestGeneratorTest {
     @Test
     @DisplayName("generateRequest 메서드 검증")
     void generateRequest() {
-        String expectedExitInput = "n";
-        when(consoleInteractionAggregator.collectExitInput()).thenReturn(expectedExitInput);
+        String expectedSearchInput = "Sample Book Title";
+        when(consoleInteractionAggregator.collectSearchInput()).thenReturn(expectedSearchInput);
 
-        Request request = exitRequestGenerator.generateRequest();
+        Request request = searchBookByTitleRequestGenerator.generateRequest();
 
-        assertEquals(expectedExitInput, request.getBody().get());
-        assertEquals(Menu.Exit.getOptionNumber(), request.getPathInfo());
+        assertEquals(expectedSearchInput, request.getBody().orElse(null));
+        assertEquals(Menu.SEARCH_BOOK_BY_TITLE.getOptionNumber(), request.getPathInfo());
     }
 }

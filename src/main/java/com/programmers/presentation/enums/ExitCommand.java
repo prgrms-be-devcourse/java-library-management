@@ -23,12 +23,11 @@ public enum ExitCommand {
     }
 
     //TODO: 종료 시 메세지를 보내려면? -> 다른 곳에서 보내서 처리
-    public static void promptForExit(String exitInput) {
+    public static boolean promptForExit(String exitInput) {
         if (isExitCommand(exitInput)) {
-            // 메세지
-            System.exit(0);
+            return true;
         } else if (isNotExitCommand(exitInput)) {
-            return;
+            return false;
         }
         throw new InvalidExitCommandException();
     }

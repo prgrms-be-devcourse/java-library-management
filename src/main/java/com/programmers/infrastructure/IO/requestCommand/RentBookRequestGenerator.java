@@ -1,4 +1,4 @@
-package com.programmers.infrastructure.IO.command;
+package com.programmers.infrastructure.IO.requestCommand;
 
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.mediator.dto.ConsoleRequest;
@@ -8,19 +8,19 @@ import com.programmers.util.Messages;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DeleteBookRequestGenerator implements MenuRequestGenerator {
+public class RentBookRequestGenerator implements MenuRequestGenerator {
 
     private final ConsoleInteractionAggregator consoleInteractionAggregator;
 
     @Override
     public String getMenuNumber() {
-        return Menu.DELETE_BOOK.getOptionNumber();
+        return Menu.RENT_BOOK.getOptionNumber();
     }
 
     @Override
     public Request generateRequest() {
-        consoleInteractionAggregator.displayMessage(Messages.SELECT_MENU_DELETE.getMessage());
+        consoleInteractionAggregator.displayMessage(Messages.SELECT_MENU_RENT.getMessage());
         return ConsoleRequest.withBodyRequest(
-            consoleInteractionAggregator.collectDeleteInput(), getMenuNumber());
+            consoleInteractionAggregator.collectRentInput(), getMenuNumber());
     }
 }
