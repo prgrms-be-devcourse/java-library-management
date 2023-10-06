@@ -1,5 +1,6 @@
 package io;
 
+import constant.ExceptionMsg;
 import constant.Guide;
 import constant.Question;
 import constant.Selection;
@@ -43,6 +44,10 @@ public class Console implements Output, Input {
 
     @Override
     public void printBooks(List<Book> books) {
+        if (books.isEmpty()) {
+            System.out.println(ExceptionMsg.FOUNT_NOTHING.getMessage());
+            return;
+        }
         for (Book book : books) {
             System.out.println(book.toString());
         }
