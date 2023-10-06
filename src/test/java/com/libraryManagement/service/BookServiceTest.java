@@ -127,12 +127,47 @@ class BookServiceTest {
     }
 
     @Test
-    void 도서상태_수정() {
+    void 대여신청() throws InterruptedException {
         // given
+        this.initData();
 
         // when
+        String returnStr1 = bookService.updateBookStatus(APPLYRENT.name(), 1);
+        String returnStr2 = bookService.updateBookStatus(APPLYRENT.name(), 2);
+        String returnStr3 = bookService.updateBookStatus(APPLYRENT.name(), 3);
+        String returnStr4 = bookService.updateBookStatus(APPLYRENT.name(), 4);
+        String returnStr5 = bookService.updateBookStatus(APPLYRENT.name(), 5);
 
         // then
+
+        // update 된 도서 상태 검증
+        assertEquals(NOPOSSIBLERENT.getName(), repository.findBookById(1).getStatus());
+        assertEquals(NOPOSSIBLERENT.getName(), repository.findBookById(2).getStatus());
+        assertEquals(READY.getName(), repository.findBookById(3).getStatus());
+        assertEquals(LOST.getName(), repository.findBookById(4).getStatus());
+        assertEquals(DELETE.getName(), repository.findBookById(5).getStatus());
+
+        // updateBookStatus 에서 applyType 이 APPLYRENT 일 때의 반환값 검증
+        // 대여할 수 있다면 대여중으로 update 하고, POSSIBLERENT("대여가능") 을 반환
+        assertEquals(POSSIBLERENT.getName(), returnStr1);
+        assertEquals(NOPOSSIBLERENT.getName(), returnStr2);
+        assertEquals(READY.getName(), returnStr3);
+        assertEquals(LOST.getName(), returnStr4);
+        assertEquals(DELETE.getName(), returnStr5);
     }
 
+    @Test
+    void 반납신청() {
+
+    }
+
+    @Test
+    void 분실신청() {
+
+    }
+
+    @Test
+    void 삭제신청() {
+
+    }
 }
