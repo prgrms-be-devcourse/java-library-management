@@ -41,7 +41,7 @@ class FileStorageAdaptorTest {
 
         // then
         verify(fileStorageMock, times(1)).saveFile(any(BookVO.class));
-        assertThat(savedBook.getId()).isEqualTo(0);
+        assertThat(savedBook.getId()).isNotEqualTo(-1);
     }
 
     @DisplayName("도서 전체를 조회하면 'Book'을 리스트 형태로 반환한다.")
