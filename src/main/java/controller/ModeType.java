@@ -3,7 +3,7 @@ package controller;
 import domain.Book;
 import lombok.Getter;
 import manager.FileManager;
-import manager.OutputManager;
+import manager.console.OutputManager;
 import repository.NormalRepository;
 import repository.TestRepository;
 import service.BookService;

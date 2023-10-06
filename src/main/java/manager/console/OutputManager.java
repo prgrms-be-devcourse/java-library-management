@@ -1,4 +1,4 @@
-package manager;
+package manager.console;
 
 import domain.Book;
 

@@ -1,7 +1,7 @@
 package controller;
 
-import manager.InputManager;
-import manager.OutputManager;
+import manager.console.InputManager;
+import manager.console.OutputManager;
 import service.BookService;
 
 public class BookController {
@@ -54,7 +54,7 @@ public class BookController {
         }
     }
 
-    private void reportLostBook() throws Exception {
+    private void reportLostBook() throws Exception{
         outputManager.printSystem("도서 분실 처리 메뉴로 넘어갑니다.");
         outputManager.printQuestion("분실 처리할 도서번호를 입력하세요.");
         bookService.reportLostBook(Integer.valueOf(inputManager.getInput()));

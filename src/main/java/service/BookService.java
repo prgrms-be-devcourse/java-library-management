@@ -4,7 +4,7 @@ import domain.Book;
 import exception.AlreadySavedBookException;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.OutputManager;
+import manager.console.OutputManager;
 import repository.BookRepository;
 
 import java.util.List;

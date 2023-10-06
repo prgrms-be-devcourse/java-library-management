@@ -1,4 +1,4 @@
-package manager;
+package manager.console;
 
 import exception.EmptyInputException;
 
@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 public class InputManager {
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
     public String getInput() throws Exception {
         System.out.print("> ");
         String value = br.readLine().strip();

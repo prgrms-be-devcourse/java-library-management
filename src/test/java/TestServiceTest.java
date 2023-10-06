@@ -2,7 +2,7 @@ import domain.Book;
 import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.OutputManager;
+import manager.console.OutputManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.TestRepository;
