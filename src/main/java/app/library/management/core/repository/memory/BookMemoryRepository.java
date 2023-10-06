@@ -6,15 +6,16 @@ import app.library.management.core.repository.BookRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
     private final List<Book> bookArrayList = new CopyOnWriteArrayList<>();
-    private long nextId = 0L;
+    private final AtomicLong nextId = new AtomicLong(0);
 
     @Override
     public Book save(Book book) {
-        book.setId(nextId++);
+        book.setId(nextId.getAndIncrement());
         bookArrayList.add(book);
         return book;
     }
