@@ -34,7 +34,7 @@ import java.util.List;
 
 public class DependencyInjector {
 
-    private static final DependencyInjector instance = new DependencyInjector();
+    private static boolean isInitialized = false;
     private BookRepository bookRepository;
     private RequestProcessor requestProcessor;
     private Console console;
@@ -51,12 +51,19 @@ public class DependencyInjector {
     private FileProvider<Book> fileRepository;
 
     // TODO: 테스트때문에 생성자에서 안하고 init 으로 바꿈
-    private DependencyInjector() {}
+    private DependencyInjector() {
+    }
+
+    private static class SingleInstanceHolder {
+
+        private static final DependencyInjector instance = new DependencyInjector();
+
+    }
 
     // 동시성 문제때문에... -> 싱글톤 패턴 구현 방법.
-    // 실제 사용하는 시점에 초기화 가능, 레이지 로딩 (실제로 사용할때 가져온다) 구현 참고. 레이지 이니셜라이징. 레이지 키워드로 검색
-    public void init() {
-        if (isInitialized()) {
+    // 실제 사용하는 시점에 초기화 가능, 레이지 로딩 (실제로 사용할때 가져온다) 구현 참고. 레이지 이니셜라이징 (싱글톤에서 쓰는거). 레이지 키워드로 검색
+    public synchronized void init() {
+        if (isInitialized) {
             return;
         }
 
@@ -64,15 +71,17 @@ public class DependencyInjector {
         initializeGeneratorsAndProviders();
         initializeModeDependentServices();
         initializeServicesAndHandlers();
+
+        isInitialized = true;
     }
 
-    private boolean isInitialized() {
-        return requestProcessor != null;
+    public static DependencyInjector getInstance() {
+        return SingleInstanceHolder.instance;
     }
 
     private void initializeValidatorsAndConsoles() {
         this.userInteractionValidator = new InputValidator();
-        this.console = new Console(new java.util.Scanner(System.in),userInteractionValidator);
+        this.console = new Console(new java.util.Scanner(System.in), userInteractionValidator);
         //TODO: 테스트때문에 추가
         if (consoleInteractionAggregator == null) {
             this.consoleInteractionAggregator = new ConsoleInteractionAggregator(console);
@@ -110,7 +119,7 @@ public class DependencyInjector {
     }
 
 
-    private static ModeAbstractFactory getModeFactory(
+    private ModeAbstractFactory getModeFactory(
         ConsoleInteractionAggregator consoleInteractionAggregator) {
         try {
             ModeAbstractFactory modeAbstractFactory = Mode.getModeFactory(
@@ -123,23 +132,31 @@ public class DependencyInjector {
         }
     }
 
-    public static DependencyInjector getInstance() {
-        return instance;
-    }
-
     public RequestProcessor getRequestProcessor() {
+        if (!isInitialized) {
+            init();
+        }
         return requestProcessor;
     }
 
     public GlobalExceptionHandler getGlobalExceptionHandler() {
+        if (!isInitialized) {
+            init();
+        }
         return globalExceptionHandler;
     }
 
     public AppExceptionHandler getAppExceptionHandler() {
+        if (!isInitialized) {
+            init();
+        }
         return appExceptionHandler;
     }
 
     public IdGenerator getIdGenerator() {
+        if (!isInitialized) {
+            init();
+        }
         return idGenerator;
     }
 }
