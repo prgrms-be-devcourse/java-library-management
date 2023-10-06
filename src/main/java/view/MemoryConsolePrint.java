@@ -6,7 +6,7 @@ import repository.Book;
 import thread.MemoryChangeStateThread;
 
 import static domain.BookState.RENTING;
-import static repository.FileRepository.*;
+import static repository.MemoryRepository.books;
 
 public class MemoryConsolePrint {
     public static void printListView() {

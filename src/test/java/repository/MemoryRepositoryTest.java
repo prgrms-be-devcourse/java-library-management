@@ -9,32 +9,30 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import static repository.FileRepository.books;
-import static repository.FileRepository.file;
 
-class FileRepositoryTest {
+import static repository.Book.countId;
+import static repository.MemoryRepository.books;
+
+class MemoryRepositoryTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-    private Repository repository = new FileRepository();
+    private Repository repository = new MemoryRepository();
 
-    FileRepositoryTest()  {
+    MemoryRepositoryTest()  {
     }
 
     @BeforeEach
     void beforeEach() {
+        books.add(new Book(1, "해리포터", "조앤롤링", 324, BookState.AVAILABLE));
+        books.add(new Book(3, "백설공주", "디즈니", 33, BookState.RENTING));
+        books.add(new Book(4, "코스모스", "칼세이건", 543, BookState.LOST));
+        books.add(new Book(5, "90일 밤의 우주", "김명진", 324, BookState.AVAILABLE));
+        countId = 6;
         System.setOut(new PrintStream(outputStreamCaptor));
     }
 
     @AfterEach
-    void afterEach() throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        bw.write("1,해리포터,조앤롤링,324,대여 가능\n" +
-                "3,하이낭,다잗ㄹㄹ자,34253,대여중\n" +
-                "4,하인,ㄷㅈㄹㅈ,4356,분실됨\n" +
-                "5,gi,skdl,243,대여 가능\n" +
-                "6,신데렐라,ㅇㄴ,23,대여 가능\n");
-        bw.close();
-
+    void afterEach() {
         System.setOut(standardOut);
     }
 
@@ -44,7 +42,7 @@ class FileRepositoryTest {
         Book book = new Book("완전감각", "oneokrock", 324);
         repository.register(book);
         Assertions.assertThat(book).isEqualTo(findBookById(book.getId()));
-        org.junit.jupiter.api.Assertions.assertEquals(6, books.size());
+        org.junit.jupiter.api.Assertions.assertEquals(5, books.size());
     }
 
     @Test
@@ -61,27 +59,21 @@ class FileRepositoryTest {
                 상태 : 대여 가능\r\n\r
                 ------------------------------\r\n\r
                 도서번호 : 3\r
-                제목 : 하이낭\r
-                작가 이름 : 다잗ㄹㄹ자\r
-                페이지 수: 34253페이지\r
+                제목 : 백설공주\r
+                작가 이름 : 디즈니\r
+                페이지 수: 33페이지\r
                 상태 : 대여중\r\n\r
                 ------------------------------\r\n\r
                 도서번호 : 4\r
-                제목 : 하인\r
-                작가 이름 : ㄷㅈㄹㅈ\r
-                페이지 수: 4356페이지\r
+                제목 : 코스모스\r
+                작가 이름 : 칼세이건\r
+                페이지 수: 543페이지\r
                 상태 : 분실됨\r\n\r
                 ------------------------------\r\n\r
                 도서번호 : 5\r
-                제목 : gi\r
-                작가 이름 : skdl\r
-                페이지 수: 243페이지\r
-                상태 : 대여 가능\r\n\r
-                ------------------------------\r\n\r
-                도서번호 : 6\r
-                제목 : 신데렐라\r
-                작가 이름 : ㅇㄴ\r
-                페이지 수: 23페이지\r
+                제목 : 90일 밤의 우주\r
+                작가 이름 : 김명진\r
+                페이지 수: 324페이지\r
                 상태 : 대여 가능\r\n\r
                 ------------------------------""";
 
@@ -285,13 +277,13 @@ class FileRepositoryTest {
     @Test
     @DisplayName("도서 삭제 테스트 : 성공")
     void deleteBookSuccess()  {
-        repository.deleteBook(6);
+        repository.deleteBook(5);
 
         String consoleOutput = outputStreamCaptor.toString().trim();
         String message = ExecuteMessage.DELETE_COMPLETE.getMessage();
 
         Assertions.assertThat(consoleOutput).isEqualTo(message);
-        org.junit.jupiter.api.Assertions.assertEquals(4, books.size());
+        org.junit.jupiter.api.Assertions.assertEquals(3, books.size());
     }
 
     @Test

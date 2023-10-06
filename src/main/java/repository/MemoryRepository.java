@@ -12,7 +12,7 @@ import java.util.Optional;
 import static repository.Book.countId;
 
 public class MemoryRepository implements Repository {
-    static List<Book> books = new ArrayList<>();
+    public static List<Book> books = new ArrayList<>();
 
     public MemoryRepository() {
         countId = 1;

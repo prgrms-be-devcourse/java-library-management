@@ -14,7 +14,7 @@ import static domain.Reader.sc;
 public class Mode {
     Service service;
     public Mode(ModeType mode) {
-        if(mode == ModeType.NORMAL_MODE) service = new Service(new FileRepository("src/main/resources/library.csv"));
+        if(mode == ModeType.NORMAL_MODE) service = new Service(new FileRepository());
         else if(mode == ModeType.TEST_MODE) service = new Service(new MemoryRepository());
     }
 
