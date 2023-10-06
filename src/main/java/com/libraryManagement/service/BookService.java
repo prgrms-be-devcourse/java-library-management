@@ -40,7 +40,7 @@ public class BookService {
             }
             return false;
         }else if(updateType.equals(APPLYRETURN.name())) {
-            // 대여중일 때만 반납 불가
+            // 대여가능일 때만 반납 불가
             if(repository.findBookById(id).getStatus().equals(POSSIBLERENT.getName())){
                 return false;
             }
