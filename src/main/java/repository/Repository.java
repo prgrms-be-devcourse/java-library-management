@@ -10,7 +10,7 @@ public interface Repository {
 
     void save(int id, String title, String author, int page, List<Book> list);
 
-    List<Book> findByTitle(String searchTitle, List<Book> list);
+    List<Book> findByTitleContaining(String searchTitle, List<Book> list);
 
     String rentById(int rentId, List<Book> list);
 

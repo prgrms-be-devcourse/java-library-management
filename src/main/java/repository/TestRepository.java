@@ -2,11 +2,9 @@ package repository;
 
 import domain.Book;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static domain.BookCondition.*;
 
@@ -23,11 +21,11 @@ public class TestRepository implements Repository {
     }
 
     @Override
-    public List<Book> findByTitle(String searchTitle, List<Book> bookList) {
+    public List<Book> findByTitleContaining(String searchTitle, List<Book> bookList) {
         return bookList.stream()
-                .filter(book -> book.getTitle().toLowerCase().contains(searchTitle))
+                .filter(book -> book.isTitleContaining(book, searchTitle))
                 .map(book -> new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

@@ -104,7 +104,7 @@ public class TotalService implements Service{
         messagePrinter.printFindBookTitle();
         String searchTitle = scanner.nextLine();
 
-        List<Book> foundBooks = repository.findByTitle(searchTitle, bookList);
+        List<Book> foundBooks = repository.findByTitleContaining(searchTitle, bookList);
 
         StringBuilder stringBuilder = new StringBuilder();
 
