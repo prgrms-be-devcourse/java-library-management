@@ -2,29 +2,32 @@ package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class LibraryMemoryRepository implements LibraryRepository{
     private final List<Book> books;
-    private static int sequence = 0;
+    private final AtomicInteger sequence;
 
     public LibraryMemoryRepository() {
-        books = new ArrayList<>();
+        books = new CopyOnWriteArrayList<>();   // 동시성 처리
+        sequence = new AtomicInteger(1);
     }
 
     @Override
     public int save(Book book) {
-        book.setBookId(++sequence);
+        int bookIdx = sequence.getAndIncrement();
+        book.setBookId(bookIdx);
         books.add(book);
-        return book.getBookId();
+        return bookIdx;
     }
 
     @Override
     public List<Book> findAll() {
-        return new ArrayList<>(books);
+        return books;
     }
 
     @Override
@@ -48,11 +51,7 @@ public class LibraryMemoryRepository implements LibraryRepository{
 
     @Override
     public void update(Book updatedBook) {  // 도서 정보(상태) 업데이트
-        List<Book> updatedBooks = books.stream()
-                .map(book -> book.getBookId() == updatedBook.getBookId() ? updatedBook : book)
-                .collect(Collectors.toList());
-        books.clear();
-        books.addAll(updatedBooks);
+        books.replaceAll(book -> book.getBookId() == updatedBook.getBookId() ? updatedBook : book);
     }
 
     @Override

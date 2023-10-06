@@ -1,7 +1,6 @@
 package com.programmers.library.repository;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.utils.StatusType;
 
 import java.util.List;
 import java.util.Optional;
