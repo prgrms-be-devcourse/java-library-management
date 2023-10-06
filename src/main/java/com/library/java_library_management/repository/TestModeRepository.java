@@ -59,21 +59,9 @@ public class TestModeRepository implements Repository{
 
     @Override
     public void missBook(int book_id) {
-        try{
-            BookInfo book = bookMap.get(book_id);
-            if(book.getStatus() != BookStatus.LOST){
-                book.setStatus(BookStatus.LOST);
-                System.out.println("[System] 도서가 분실 처리 되었습니다.");
-            }
-            else{
-                throw new RuntimeException();
-            }
-        }catch (NullPointerException e){
-            System.out.println("존재하지 않는 도서번호입니다.");
-        }
-        catch (RuntimeException e){
-            System.out.println("이미 분실 처리된 도서입니다.");
-        }
+        BookInfo book = bookMap.get(book_id);
+        book.setStatus(BookStatus.LOST);
+        bookMap.put(book_id, book);
     }
 
 
