@@ -1,10 +1,10 @@
 package com.programmers.library.repository;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
 import com.programmers.library.util.FileUtils;
@@ -14,9 +14,10 @@ public class FileBookRepository implements BookRepository {
 
 	private final Map<Long, Book> bookMap;
 	private final FileUtils<Book> fileUtils;
+
 	public FileBookRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
-		bookMap = new LinkedHashMap<>();
+		bookMap = new ConcurrentHashMap<>();
 		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		IdGeneratorUtils.initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0));
