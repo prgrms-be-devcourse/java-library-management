@@ -5,11 +5,13 @@ import app.library.management.core.repository.BookRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class FileStorageAdaptor implements BookRepository {
 
     private final FileStorage fileStorage;
+    private final AtomicLong idGenerator = new AtomicLong(0);
 
     public FileStorageAdaptor(FileStorage fileStorage) {
         this.fileStorage = fileStorage;
@@ -17,7 +19,7 @@ public class FileStorageAdaptor implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        int nextId = fileStorage.readFile().size();
+        long nextId = idGenerator.incrementAndGet();
         book.setId(nextId);
         fileStorage.saveFile(new BookVO(nextId, book.getTitle(), book.getAuthor(), book.getPages()));
         return book;
