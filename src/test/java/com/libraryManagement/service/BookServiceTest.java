@@ -92,18 +92,18 @@ class BookServiceTest {
         this.initData();
 
         // when
-        Boolean isPossible1 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 1);
-        Boolean isPossible2 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 2);
-        Boolean isPossible3 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 3);
-        Boolean isPossible4 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 4);
-        Boolean isPossible5 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 5);
+        Boolean isPossible1 = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), 1);
+        Boolean isPossible2 = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), 2);
+        Boolean isPossible3 = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), 3);
+        Boolean isPossible4 = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), 4);
+        Boolean isPossible5 = bookService.isPossibleUpdateBookStatus(APPLYLOST.name(), 5);
 
         // then
         assertEquals(true, isPossible1);
-        assertEquals(false, isPossible2);
-        assertEquals(false, isPossible3);
+        assertEquals(true, isPossible2);
+        assertEquals(true, isPossible3);
         assertEquals(false, isPossible4);
-        assertEquals(false, isPossible5);
+        assertEquals(true, isPossible5);
     }
 
     @Test
@@ -112,17 +112,17 @@ class BookServiceTest {
         this.initData();
 
         // when
-        Boolean isPossible1 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 1);
-        Boolean isPossible2 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 2);
-        Boolean isPossible3 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 3);
-        Boolean isPossible4 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 4);
-        Boolean isPossible5 = bookService.isPossibleUpdateBookStatus(APPLYRENT.name(), 5);
+        Boolean isPossible1 = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), 1);
+        Boolean isPossible2 = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), 2);
+        Boolean isPossible3 = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), 3);
+        Boolean isPossible4 = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), 4);
+        Boolean isPossible5 = bookService.isPossibleUpdateBookStatus(APPLYDELETE.name(), 5);
 
         // then
         assertEquals(true, isPossible1);
-        assertEquals(false, isPossible2);
-        assertEquals(false, isPossible3);
-        assertEquals(false, isPossible4);
+        assertEquals(true, isPossible2);
+        assertEquals(true, isPossible3);
+        assertEquals(true, isPossible4);
         assertEquals(false, isPossible5);
     }
 
