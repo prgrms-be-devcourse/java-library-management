@@ -202,4 +202,6 @@ gradle-app.setting
 
 .idea
 
+csv
+
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,intellij,macos
