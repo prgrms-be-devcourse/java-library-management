@@ -1,7 +1,6 @@
 package repository;
 
 import domain.Book;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,14 +16,14 @@ import static org.assertj.core.api.Assertions.*;
 
 class GeneralRepositoryTest {
 
-    private static final String csvFileName = "csv/csvTestFile";
+    private static final String CSV_TEST_FILE = "csv/csvTestFile";
     Repository repository = new GeneralRepository();
 
     @BeforeEach
     @DisplayName("테스트 전에 CSV파일을 초기화")
     void beforeEach() {
         try {
-            clearCSV(csvFileName);
+            clearCSV(CSV_TEST_FILE);
         } catch (IOException e) {
             throw new RuntimeException();
         } // csv 파일 초기화

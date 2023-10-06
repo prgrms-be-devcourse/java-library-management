@@ -14,11 +14,11 @@ import static domain.BookCondition.*;
 
 public class GeneralRepository implements Repository {
 
-    private static final String csvFileName = "csv/csvFile";
+    private static final String CSV_FILE = "csv/csvFile";
 
     @Override
     public void load(List<Book> bookList) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(csvFileName))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
             String readRecord;
             while ((readRecord = reader.readLine()) != null) {
                 String[] record = readRecord.split(",");
@@ -43,7 +43,7 @@ public class GeneralRepository implements Repository {
 
     @Override
     public void save(int id, String title, String author, int page, List<Book> bookList) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFileName, true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE, true))) {
             String newRecord = id + "," + title + "," + author + "," + page + "," + AVAILABLE.getCondition();
 
             bookList.add(new Book(id, title, author, page, AVAILABLE.getCondition()));
@@ -60,7 +60,7 @@ public class GeneralRepository implements Repository {
         return bookList.stream()
                 .filter(book -> book.getTitle().toLowerCase().contains(searchTitle))
                 .map(book -> new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -196,7 +196,7 @@ public class GeneralRepository implements Repository {
 
     // 변경된 점을 CSV파일에 저장하는 코드(덮어쓰기)
     private static void saveToCSV(List<Book> bookList) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE))) {
             for (Book book : bookList) {
                 String record = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage() + "," + book.getCondition();
 
