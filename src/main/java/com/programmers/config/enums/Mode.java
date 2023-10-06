@@ -10,14 +10,13 @@ public enum Mode {
     NORMAL("1", NormalModeFactory.getInstance()),
     TEST("2", TestModeFactory.getInstance());
 
-    //TODO: 이름 변경
-    Mode(String modeNumber, ModeAbstractFactory repositoryFactory) {
+    Mode(String modeNumber, ModeAbstractFactory modeFactory) {
         this.modeNumber = modeNumber;
-        this.repositoryFactory = repositoryFactory;
+        this.modeFactory = modeFactory;
     }
 
     private final String modeNumber;
-    private final ModeAbstractFactory repositoryFactory;
+    private final ModeAbstractFactory modeFactory;
 
     public static ModeAbstractFactory getModeFactory(String inputModeNumber)
         throws InvalidModeNumberException {
@@ -25,6 +24,6 @@ public enum Mode {
             .filter(mode -> mode.modeNumber.equals(inputModeNumber))
             .findAny()
             .orElseThrow(InvalidModeNumberException::new)
-            .repositoryFactory;
+            .modeFactory;
     }
 }
