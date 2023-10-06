@@ -33,4 +33,20 @@ class TestRepositoryTest {
         assertThat(all.size()).isEqualTo(1);
         assertThat(all.get(0)).isEqualTo(book);
     }
+
+    @Test
+    @DisplayName("도서 검색")
+    void searchName() {
+        //given
+        Book book1 = new Book(1L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book2 = new Book(2L, "석정의 바자", "남궁성", 500, Status.POSSIBLE);
+        testRepository.addBook(book1);
+        testRepository.addBook(book2);
+        
+        //when
+        List<Book> javaBook = testRepository.searchBook("자바");
+
+        assertThat(javaBook.get(0)).isEqualTo(book1);
+        assertThat(javaBook.size()).isEqualTo(1);
+    }
 }
