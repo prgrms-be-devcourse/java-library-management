@@ -118,7 +118,6 @@ public class GeneralModeRepository implements Repository{
             File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
             fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-            System.out.println("분실 처리 완료 되었습니다.");
         }catch (IOException e){
             e.printStackTrace();
         }
