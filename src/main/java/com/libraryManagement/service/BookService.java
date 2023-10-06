@@ -28,7 +28,7 @@ public class BookService {
         return repository.findAllBooks();
     }
 
-    public List<Book> findBookByTitle(String str) {
+    public List<Book> findBooksByTitle(String str) {
         return repository.findBooksByTitle(str);
     }
 

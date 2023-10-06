@@ -50,7 +50,7 @@ public class BookController {
 
     public void findBookByTitle() throws IOException {
         String str = bookIO.inputBookTitleFind();
-        List<Book> bookList = bookService.findBookByTitle(str);
+        List<Book> bookList = bookService.findBooksByTitle(str);
         bookIO.outputBookList(bookList);
     }
 
