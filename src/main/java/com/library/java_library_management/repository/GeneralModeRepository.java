@@ -45,7 +45,6 @@ public class GeneralModeRepository implements Repository{
                             title, author, pageSize, jsonStatus));
             fileInfo.setValue(fileInfo.getValue()+1);
             fileControl.modifyFile(fileInfo.getBookNumPath(), "count", String.valueOf(fileInfo.getValue()));
-            System.out.println("도서가 등록 되었습니다.");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -85,19 +84,11 @@ public class GeneralModeRepository implements Repository{
         try{
             File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             BookInfo book = getBookFromFile(file);
-            if(book.getStatus() == BookStatus.RENT)
-                return "이미 대여중인 도서입니다.";
-            else if(book.getStatus() == BookStatus.LOST)
-                return "현재 분실상태인 도서입니다.";
-            else if(book.getStatus() == BookStatus.CLEANING)
-                return "현재 정리중인 도서입니다.";
-            else{
-                String jsonStatus = objectMapper.writeValueAsString(BookStatus.RENT);
-                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                return book.getStatus().rentBook(book);
-            }
+            String jsonStatus = objectMapper.writeValueAsString(BookStatus.RENT);
+            fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+            return book.getStatus().rentBook(book);
         }catch (IOException e){
-            return "존재하지 않는 도서입니다.";
+            return null;
         }
     }
 
@@ -106,25 +97,17 @@ public class GeneralModeRepository implements Repository{
         File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
         try{
             BookInfo book = getBookFromFile(file);
-            if (book.getStatus() == BookStatus.AVAILABLE) {
-                throw new RuntimeException();
-            } else{
-                String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
-                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                scheduler.schedule(() -> {
-                    try {
-                        String statusAfterFive = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
-                        fileControl.modifyFile(file.getAbsolutePath(), "status", statusAfterFive);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }, 5, TimeUnit.MINUTES);
-                System.out.println("반납 처리 완료 되었습니다.");
-            }
+            String jsonStatus = objectMapper.writeValueAsString(BookStatus.CLEANING);
+            fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+            scheduler.schedule(() -> {
+                try {
+                    String statusAfterFive = objectMapper.writeValueAsString(BookStatus.AVAILABLE);
+                    fileControl.modifyFile(file.getAbsolutePath(), "status", statusAfterFive);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }}, 5, TimeUnit.MINUTES);
         }catch (IOException e){
             e.printStackTrace();
-        }catch (RuntimeException e){
-            System.out.println("원래 대여 가능한 도서입니다");
         }
     }
 

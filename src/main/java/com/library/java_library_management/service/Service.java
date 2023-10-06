@@ -30,6 +30,7 @@ public class Service {
         System.out.println("페이지 수를 입력하세요");
         bookInfo.setPageSize(Integer.parseInt(br.readLine()));
         repository.registerBook(bookInfo.getTitle(), bookInfo.getAuthor(), bookInfo.getPageSize());
+        System.out.println("도서가 등록되었습니다");
     }
 
     //전체 목록 조회
