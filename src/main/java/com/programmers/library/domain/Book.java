@@ -17,6 +17,13 @@ public class Book {
     private int pages;
     private StatusType status;
 
+    public Book(String title, String author, int pages) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.status = StatusType.AVAILABLE; // 기본 도서 상태 - AVAILABLE(대여 가능)
+    }
+
     // Setter 메서드 대신 새로운 객체 반환
     public Book updateStatus(StatusType newStatus) {
         return Book.builder()

@@ -1,6 +1,5 @@
 package com.programmers.library.controller;
 
-import com.programmers.library.dto.AddBookRequest;
 import com.programmers.library.utils.ConsoleIO;
 import com.programmers.library.utils.MenuType;
 import com.programmers.library.service.LibraryService;
@@ -27,8 +26,7 @@ public class LibraryController {
                     String title = console.getStringInput("Q. 등록할 도서 제목을 입력하세요.");
                     String author = console.getStringInput("Q. 작가 이름을 입력하세요.");
                     int pages = console.getIntInput("Q. 페이지 수를 입력하세요.");
-                    AddBookRequest request = new AddBookRequest(title, author, pages);
-                    libraryService.addBook(request);
+                    libraryService.addBook(title, author, pages);
                     break;
                 case VIEW:
                     libraryService.viewAllBooks();

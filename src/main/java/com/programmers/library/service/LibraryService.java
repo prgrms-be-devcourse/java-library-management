@@ -1,7 +1,6 @@
 package com.programmers.library.service;
 
 import com.programmers.library.domain.Book;
-import com.programmers.library.dto.AddBookRequest;
 import com.programmers.library.utils.ConsoleIO;
 import com.programmers.library.utils.MessageProvider;
 import com.programmers.library.utils.StatusType;
@@ -23,8 +22,9 @@ public class LibraryService {
     }
 
     // 도서 등록
-    public void addBook(AddBookRequest request) {
-        libraryRepository.save(request.toEntity());     // dto 사용
+    public void addBook(String title, String author, int pages) {
+        Book book = new Book(title, author, pages);
+        libraryRepository.save(book);
         console.printMessage(MessageProvider.BOOK_ADDED);
     }
 
