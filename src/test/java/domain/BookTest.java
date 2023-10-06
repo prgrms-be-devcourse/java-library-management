@@ -56,4 +56,48 @@ class BookTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("[System] 분실된 책입니다.");
     }
+
+    @Test
+    @DisplayName("책 상태가 대여 중 혹은 분실됨이라면, 해당 메서드를 실행하였을 때 상태가 도서 정리중으로 변경된다.")
+    void organizeBookSuccess() {
+        //given
+        Book book1 = new Book(1L, "자바의 정석", "남궁성", 500, Status.IMPOSSIBLE);
+        Book book2 = new Book(1L, "자바의 정석", "남궁성", 500, Status.LOST);
+
+        //when
+        book1.organizeBook();
+        book2.organizeBook();
+
+        // then
+        assertThat(book1.getStatus()).isEqualTo(Status.ORGANIZE);
+        assertThat(book2.getStatus()).isEqualTo(Status.ORGANIZE);
+    }
+
+    @Test
+    @DisplayName("책 상태가 대여 가능 혹은 도서 정리중이라면, 해당 메서드를 실행하였을 때 예외 발생.")
+    void organizeBookFail() {
+        // given
+        Book book1 = new Book(1L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book2 = new Book(1L, "자바의 정석", "남궁성", 500, Status.ORGANIZE);
+
+        // then
+        assertThatThrownBy(book1::organizeBook)
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("[System] 원래 대여가 가능한 도서입니다.");
+        assertThatThrownBy(book2::organizeBook)
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("[System] 원래 대여가 가능한 도서입니다.");
+    }
+
+    @Test
+    void returnBookSuccess() {
+        //given
+        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.ORGANIZE);
+
+        //when
+        book.returnBook();
+
+        //then
+        assertThat(book.getStatus()).isEqualTo(Status.POSSIBLE);
+    }
 }

@@ -56,7 +56,8 @@ public class Book {
     }
 
     public void returnBook(){
-        this.status = Status.POSSIBLE;
+        if(this.status == Status.ORGANIZE) this.status = Status.POSSIBLE;
+        else throw new RuntimeException("[System] 잘못된 접근입니다.");
     }
 
     public void lostBook(){
