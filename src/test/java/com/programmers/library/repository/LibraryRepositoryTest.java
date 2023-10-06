@@ -19,13 +19,13 @@ class LibraryRepositoryTest {
     private LibraryRepository libraryRepository;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         libraryRepository = new LibraryFileRepository();
 //        libraryRepository = new LibraryMemoryRepository();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         libraryRepository.clearAll();
     }
 

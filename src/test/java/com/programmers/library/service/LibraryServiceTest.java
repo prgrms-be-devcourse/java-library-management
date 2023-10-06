@@ -18,14 +18,14 @@ class LibraryServiceTest {
     private LibraryService libraryService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         libraryRepository = new LibraryFileRepository();
 //        libraryRepository = new LibraryMemoryRepository();
         libraryService = new LibraryService(libraryRepository);
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         libraryRepository.clearAll();
     }
 
