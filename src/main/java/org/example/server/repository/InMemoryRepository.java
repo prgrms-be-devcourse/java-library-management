@@ -29,7 +29,7 @@ public class InMemoryRepository implements Repository {
     }
 
     @Override
-    public LinkedList<Book> getByName(String name) {
+    public LinkedList<Book> getByName(String name) { // 여러개가
         LinkedList<Book> books = new LinkedList<>();
         DATA.values().forEach(
                 book -> {
@@ -39,7 +39,8 @@ public class InMemoryRepository implements Repository {
         );
         return books;
     }
-
+//get : null일 수 없다 예외
+//find : null일 수 있다. Optional로 반환 -> 컨벤션 JPA
     @Override
     public Book findById(int id) {
         Optional<Book> book = Optional.ofNullable(DATA.get(id));

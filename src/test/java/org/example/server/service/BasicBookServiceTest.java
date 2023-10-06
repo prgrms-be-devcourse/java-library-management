@@ -33,7 +33,7 @@ public class BasicBookServiceTest {
     }
 
     @Test
-    @DisplayName("도서 등록: 성공")
+    @DisplayName("도서 등록: 성공") // 사이즈 변경 검증
     void borrowAllIfExist() {
         BookDto newBookDto = new BookDto("새로 나온 책", "이세희", 100);
 

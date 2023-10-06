@@ -16,7 +16,7 @@ public class BookController {
 
     public BookController(Service service) {
         this.SERVICE = service;
-    }
+    } // 각각 행위에 맞는 네이밍
 
     public ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
         SERVICE.register(requestWithBook.BOOK_INFO);

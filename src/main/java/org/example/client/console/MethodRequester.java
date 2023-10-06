@@ -7,9 +7,9 @@ import org.example.client.io.Out;
 import org.example.packet.BookDto;
 import org.example.packet.requestPacket.*;
 
-public class MethodRequester {
+public class MethodRequester { // 입력을 받는 역할 + In
     private final Out OUT = ConsoleOut.getInstance();
-    private final Validator VALIDATOR = new Validator();
+    private final Validator VALIDATOR = new Validator(); // final이 정말 상수일까!!!!!! static final!!
 
     public RequestPacket scanTypeAndInfo() {
         MethodType methodType;
@@ -54,7 +54,7 @@ public class MethodRequester {
         return new RequestWithBook(methodType.name(), new BookDto(name, author, pages));
     }
 
-    private RequestWithName scanBookName(MethodType methodType) {
+    private RequestWithName scanBookName(MethodType methodType) { // 어떤 요청을 위한 것인지? -> 객체의 행위에 대해서 명시
         OUT.print(methodType.QUESTIONS.get(0));
         String name = VALIDATOR.scanAndValidateString();
         return new RequestWithName(methodType.name(), name);

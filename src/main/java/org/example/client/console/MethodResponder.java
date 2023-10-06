@@ -10,7 +10,7 @@ import org.example.packet.responsePacket.ResponseSuccessWithNoData;
 
 import java.util.LinkedList;
 
-public class MethodResponder {
+public class MethodResponder { // 생성자에 in, out을 바꿔서 사용할 수 있도록(의존성 주입)
 
     private final Out OUT = ConsoleOut.getInstance();
 

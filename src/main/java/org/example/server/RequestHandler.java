@@ -5,14 +5,14 @@ import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
 import org.example.server.exception.ServerException;
 
-public class RequestHandler {
+public class RequestHandler { // 인터페이스로 만들고 각각에 맞는 구현체-> (고민해보기) ex. RequestWithNoData에 맞도록 매핑
     private final BookController bookController;
 
     RequestHandler(BookController bookController) {
         this.bookController = bookController;
     }
 
-    public ResponsePacket handleRequest(RequestPacket requestPacket) {
+    public ResponsePacket handleRequest(RequestPacket requestPacket) { // 인터페이스를 타입 캐스팅 -> 
         MethodType methodType = MethodType.valueOf(requestPacket.METHOD);
         try {
             return switch (methodType) {

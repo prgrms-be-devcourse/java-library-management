@@ -5,7 +5,7 @@ import org.example.client.io.In;
 
 import java.util.regex.Pattern;
 
-public class Validator {
+public class Validator { // 두 가지 책임: 1.스캔, 2.검증 -> in이 바뀐다면? / 검증에 대한 역할만!
     private final In IN;
 
     public Validator(In in) {

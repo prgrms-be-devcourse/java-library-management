@@ -14,7 +14,7 @@ public class Client {
 
     public RequestPacket scanMethod() {
         return new MethodRequester().scanTypeAndInfo();
-    }
+    } // 계속 인스턴스 생성!! 언제 생성하고 언제 유지할까! (상태)
 
     public void printResponse(ResponsePacket responsePacket) {
         new MethodResponder().printResponse(responsePacket);

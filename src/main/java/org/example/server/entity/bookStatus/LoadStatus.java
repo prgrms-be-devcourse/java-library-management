@@ -22,7 +22,7 @@ public class LoadStatus implements BookStatus {
     }
 
     @Override
-    public void borrow() {
+    public void borrow() { // (선택) 네이밍 + 검증 역할이 드러나는 것으로
         throw new LoadingException(System.lineSeparator() + "[System] 해당 도서는 정리중입니다." + System.lineSeparator());
     }
 
