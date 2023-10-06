@@ -81,6 +81,7 @@ class BookServiceTest {
         bookService.borrowBookByBookNo(bookNo);
 
         verify(repository, times(1)).saveBook(book);
+        assertThat(book.getStatus()).isEqualTo(Status.BORROWED);
     }
 
     @Test
@@ -92,6 +93,7 @@ class BookServiceTest {
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
 
         assertThrows(IllegalStateException.class, () -> bookService.borrowBookByBookNo(bookNo));
+        verify(repository, never()).saveBook(book);
     }
 
     @Test
