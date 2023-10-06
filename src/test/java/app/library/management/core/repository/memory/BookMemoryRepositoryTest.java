@@ -47,6 +47,7 @@ class BookMemoryRepositoryTest {
 
         // when
         List<Future<Long>> futures = executorService.invokeAll(ans);
+        executorService.shutdown();
         for (Future<Long> future : futures) {
             callableExSet.add(future.get());
         }

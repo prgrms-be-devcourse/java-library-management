@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 public class BookMemoryRepository implements BookRepository {
     private final List<Book> bookArrayList = new CopyOnWriteArrayList<>();
-    private final AtomicLong nextId = new AtomicLong(0);
+    private final AtomicLong idGenerator = new AtomicLong(0);
 
     @Override
     public Book save(Book book) {
-        book.setId(nextId.getAndIncrement());
+        book.setId(idGenerator.getAndIncrement());
         bookArrayList.add(book);
         return book;
     }
