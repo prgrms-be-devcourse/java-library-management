@@ -116,19 +116,11 @@ public class GeneralModeRepository implements Repository{
     public void missBook(int book_id) {
         try{
             File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
-            BookInfo book = getBookFromFile(file);
-            if(book.getStatus() == BookStatus.LOST)
-                throw new RuntimeException();
-            else{
-                String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
-                fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
-                System.out.println("분실 처리 완료 되었습니다.");
-            }
+            String jsonStatus = objectMapper.writeValueAsString(BookStatus.LOST);
+            fileControl.modifyFile(file.getAbsolutePath(), "status", jsonStatus);
+            System.out.println("분실 처리 완료 되었습니다.");
         }catch (IOException e){
-            System.out.println("존재하지 않는 도서입니다.");
-        }
-        catch (RuntimeException e){
-            System.out.println("이미 분실 처리된 도서입니다.");
+            e.printStackTrace();
         }
     }
 
@@ -138,9 +130,8 @@ public class GeneralModeRepository implements Repository{
         try{
             File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
             Files.delete(Paths.get(file.getAbsolutePath()));
-            System.out.println("삭제처리 되었습니다.");
         }catch (IOException e){
-            System.out.println("존재하지 않는 도서입니다.");
+            e.printStackTrace();
         }
     }
 
