@@ -36,8 +36,7 @@ public class Service {
         List<BookInfo> totalBook = repository.getTotalBook();
 
         for (BookInfo book : totalBook) {
-            System.out.println("도서번호 : " + book.getBook_id() + "\n" + "제목 : " + book.getTitle() + "\n" + "작가 : " + book.getAuthor() + "\n" + "페이지 수 : " + book.getPage_size() + "\n" + "상태 : " + book.getStatus());
-            System.out.println("\n" + "------------------------------\n" + "\n");
+            System.out.println(book.toString());
         }
     }
 

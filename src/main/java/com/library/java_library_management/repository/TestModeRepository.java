@@ -13,7 +13,7 @@ public class TestModeRepository implements Repository{
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private Map<Integer, BookInfo> bookMap = new HashMap<>();
     private int book_number_cnt = 1;
-
+    
 
     @Override
     public void registerBook(String title, String author, int pageSize) {
