@@ -11,13 +11,11 @@ public class CSVFileHandler {
     private static final String resourceName = "library.csv";
     private static final String filePath = System.getProperty("user.dir") + File.separator + resourceName;   // 파일 경로
 
-    public List<Book> readBooksFromCSV() {
+    public List<Book> readBooksFromCSV() {  // 파일 읽기
         List<Book> books = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-            br.readLine();  // 헤더
-
             while((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 if(data.length == 5) {
@@ -49,11 +47,8 @@ public class CSVFileHandler {
         return bts;
     }
 
-    public void writeBooksToCSV(List<Book> books) {
+    public void writeBooksToCSV(List<Book> books) {     // 파일에 쓰기
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            bw.write("title, author, pages, status");   // 헤더
-            bw.newLine();
-
             for (Book book :books) {
                 String csvLine = booksToString(book);
                 bw.write(csvLine);
@@ -75,14 +70,9 @@ public class CSVFileHandler {
     }
 
     public void clearCSV() {
-        File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
-        }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            bw.write("title, author, pages, status");   // 헤더
-            bw.newLine();
-        } catch (IOException e) {
+        try (PrintWriter writer = new PrintWriter(filePath)) {
+            writer.print("");
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
