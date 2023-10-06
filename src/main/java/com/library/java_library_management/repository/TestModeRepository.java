@@ -17,6 +17,8 @@ public class TestModeRepository implements Repository{
     @Override
     public BookStatus getStatusById(int book_id) {
         BookInfo book = bookMap.get(book_id);
+        if(book == null)
+            return null;
         return book.getStatus();
     }
 
@@ -45,7 +47,7 @@ public class TestModeRepository implements Repository{
             BookInfo bookInfo = bookMap.get(book_id);
             return bookInfo.getStatus().rentBook(bookInfo);
         }catch (NullPointerException e){
-            return "[System] 존재하지 않는 도서입니다.";
+            return null;
         }
 
     }

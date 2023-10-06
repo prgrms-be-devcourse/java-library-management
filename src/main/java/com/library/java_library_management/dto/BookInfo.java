@@ -19,10 +19,10 @@ public class BookInfo {
     @Override
     public String toString() {
         return "도서번호 : " + book_id + "\n" +
-                        "제목 : " + title + "\n" +
-                        "작가 이름 : " + author + "\n" +
-                        "페이지 수 : " + page_size + "\n" +
-                        "상태 : " + status;
+                "제목 : " + title + "\n" +
+                "작가 이름 : " + author + "\n" +
+                "페이지 수 : " + page_size + "\n" +
+                "상태 : " + status;
     }
 
     public int getBook_id() {

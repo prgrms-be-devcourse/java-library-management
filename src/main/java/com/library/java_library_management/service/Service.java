@@ -3,6 +3,7 @@ package com.library.java_library_management.service;
 import com.library.java_library_management.dto.BookInfo;
 import com.library.java_library_management.dto.RegisterBookInfo;
 import com.library.java_library_management.repository.Repository;
+import com.library.java_library_management.status.BookStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,20 +58,30 @@ public class Service {
 
     //도서 대여
     public void rent() throws IOException {
+
         System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.\n" + "\n" + "Q. 대여할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-
-        System.out.println(repository.rentBook(book_id));
-
+        String result = repository.rentBook(book_id);
+        if(result == null)
+            System.out.println("존재하지 않는 도서입니다.");
+        else
+            System.out.println(repository.rentBook(book_id));
     }
 
     //도서 반납
     public void returnBook() throws IOException {
         System.out.println("[System] 도서 반납 메뉴로 넘어갑니다.\n" + "\n" + "Q. 반납할 도서번호를 입력하세요");
         int book_id = Integer.parseInt(br.readLine());
-
-        repository.returnBook(book_id);
-
+        BookStatus status = repository.getStatusById(book_id);
+        if(status == null){
+            System.out.println("존재하지 않는 도서입니다.");
+        }
+        else if(status == BookStatus.AVAILABLE)
+            System.out.println("원래 이용가능한 도서입니다.");
+        else{
+            repository.returnBook(book_id);
+            System.out.println("[System] 도서가 반납 처리 되었습니다");
+        }
     }
 
 
@@ -78,16 +89,27 @@ public class Service {
     public void missBook() throws IOException {
         System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.\n" + "\n" + "Q. 분실 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-        repository.missBook(number);
+        BookStatus status = repository.getStatusById(number);
+        if(status == null)
+            System.out.println("존재하지 않는 도서입니다.");
+        else if(status == BookStatus.LOST)
+            System.out.println("이미 분실 처리된 도서입니다.");
+        else {
+            repository.missBook(number);
+            System.out.println("[System] 도서가 분실 처리 완료 되었습니다");
+        }
     }
 
     //도서 삭제처리
     public void deleteBook() throws IOException {
         System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.\n" + "\n" + "Q. 삭제 처리할 도서번호를 입력하세요");
         int number = Integer.parseInt(br.readLine());
-
-        repository.deleteById(number);
-
-
+        BookStatus status = repository.getStatusById(number);
+        if(status == null)
+            System.out.println("존재하지 않는 도서입니다.");
+        else{
+            repository.deleteById(number);
+            System.out.println("[System] 도서가 삭제 처리 되었습니다.");
+        }
     }
 }
