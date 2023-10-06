@@ -4,13 +4,13 @@ import com.programmers.config.factory.ModeAbstractFactory;
 import com.programmers.config.factory.NormalModeFactory;
 import com.programmers.config.factory.TestModeFactory;
 import com.programmers.exception.checked.InvalidModeNumberException;
-
 import java.util.stream.Stream;
 
 public enum Mode {
     NORMAL("1", NormalModeFactory.getInstance()),
     TEST("2", TestModeFactory.getInstance());
 
+    //TODO: 이름 변경
     Mode(String modeNumber, ModeAbstractFactory repositoryFactory) {
         this.modeNumber = modeNumber;
         this.repositoryFactory = repositoryFactory;
@@ -24,7 +24,7 @@ public enum Mode {
         return Stream.of(Mode.values())
             .filter(mode -> mode.modeNumber.equals(inputModeNumber))
             .findAny()
-            .orElseThrow(() -> new InvalidModeNumberException())
+            .orElseThrow(InvalidModeNumberException::new)
             .repositoryFactory;
     }
 }

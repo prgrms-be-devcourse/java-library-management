@@ -51,9 +51,10 @@ public class DependencyInjector {
     private FileProvider<Book> fileRepository;
 
     // TODO: 테스트때문에 생성자에서 안하고 init 으로 바꿈
-    private DependencyInjector() {
-    }
+    private DependencyInjector() {}
 
+    // 동시성 문제때문에... -> 싱글톤 패턴 구현 방법.
+    // 실제 사용하는 시점에 초기화 가능, 레이지 로딩 (실제로 사용할때 가져온다) 구현 참고. 레이지 이니셜라이징. 레이지 키워드로 검색
     public void init() {
         if (isInitialized()) {
             return;
@@ -71,7 +72,7 @@ public class DependencyInjector {
 
     private void initializeValidatorsAndConsoles() {
         this.userInteractionValidator = new InputValidator();
-        this.console = new Console(new java.util.Scanner(System.in), userInteractionValidator);
+        this.console = new Console(new java.util.Scanner(System.in),userInteractionValidator);
         //TODO: 테스트때문에 추가
         if (consoleInteractionAggregator == null) {
             this.consoleInteractionAggregator = new ConsoleInteractionAggregator(console);

@@ -36,6 +36,8 @@ public class BookService {
     }
 
     public void deleteBook(Long id) {
+        // 검증을 타이트하게 하려면 있는지 검사를 먼저 하자.
+        //이렇게 하면 가독성 하타취
         if (repository.deleteById(id) == 0) {
             throw new BookNotFoundException();
         }
@@ -56,6 +58,9 @@ public class BookService {
         updateBookStatus(id, Book::updateBookStatusToLost);
     }
 
+
+    // 비즈니스를 이해해야 함수 사용 여부를 알 수 있을 것이다.
+    // 합치면 히스토리가 사라진다.
     private void updateBookStatus(Long id, Consumer<Book> statusUpdater) {
         repository.findById(id).ifPresentOrElse(book -> {
             statusUpdater.accept(book);
@@ -79,6 +84,7 @@ public class BookService {
     }
 
     // TODO 테스트 어떻게 작성하지
+    // 파라미터로 아이디를 넘기자.
     private void scheduleStatusUpdateToAvailable(Book book) {
         bookScheduler.scheduleBookAvailableTask(() -> updateBookStatusToAvailable(book.getId()));
     }
