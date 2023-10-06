@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookScheduler {
 
+    // TODO: 소멸 되었을떄....
     private final ScheduledExecutorService scheduler;
     private final int BOOK_ORGANIZING_TIME = 1000 * 60 * 5;
 

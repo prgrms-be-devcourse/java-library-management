@@ -1,10 +1,11 @@
 package com.programmers.adapter;
 
+import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.mediator.dto.ConsoleResponse;
 import com.programmers.presentation.BookController;
-import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.util.Messages;
 
+// 프레젠테이션에 잇어야하지 ㅇ낳을까
 public class BookControllerAdapter {
 
     private final BookController controller;

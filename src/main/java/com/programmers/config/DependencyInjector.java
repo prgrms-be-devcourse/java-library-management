@@ -47,8 +47,10 @@ public class DependencyInjector {
     private List<MenuRequestGenerator> menuRequestGenerators;
 
     // TODO: 테스트때문에 생성자에서 안하고 init 으로 바꿈
-    public DependencyInjector() {}
+    private DependencyInjector() {}
 
+    // 동시성 문제때문에... -> 싱글톤 패턴 구현 방법.
+    // 실제 사용하는 시점에 초기화 가능, 레이지 로딩 (실제로 사용할때 가져온다) 구현 참고. 레이지 이니셜라이징. 레이지 키워드로 검색
     public void init() {
         if (isInitialized()) {
             return;
@@ -99,7 +101,6 @@ public class DependencyInjector {
         this.globalExceptionHandler = new GlobalExceptionHandler(requestProcessor);
         this.appExceptionHandler = new AppExceptionHandler(requestProcessor);
     }
-
 
     private static ModeAbstractFactory getModeFactory(
         ConsoleInteractionAggregator consoleInteractionAggregator) {
