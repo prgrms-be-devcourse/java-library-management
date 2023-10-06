@@ -56,9 +56,9 @@ public class GeneralRepository implements Repository {
     }
 
     @Override
-    public List<Book> findByTitle(String searchTitle, List<Book> bookList) {
+    public List<Book> findByTitleContaining(String searchTitle, List<Book> bookList) {
         return bookList.stream()
-                .filter(book -> book.getTitle().toLowerCase().contains(searchTitle))
+                .filter(book -> book.isTitleContaining(book, searchTitle))
                 .map(book -> new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPage(), book.getCondition()))
                 .toList();
     }

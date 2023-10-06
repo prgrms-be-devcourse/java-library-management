@@ -39,6 +39,11 @@ public class Book {
         this.condition = condition;
     }
 
+    public boolean isTitleContaining(Book book, String searchTitle) {
+        if (book.getTitle().toLowerCase().contains(searchTitle.toLowerCase())) return true;
+        return false;
+    }
+
     @Override
     public String toString() {
         return "도서 번호 : " + id + "\n" +
