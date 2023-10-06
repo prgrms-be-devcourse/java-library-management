@@ -119,7 +119,7 @@ class LibraryRepositoryTest {
         int bookId = libraryRepository.save(book);
         StatusType beforeStatus = book.getStatus();
 
-        // then
+        // when
         Book updatedBook = book.updateStatus(StatusType.RENTING);  // 대여 가능 -> 대여중으로 상태 변경
         libraryRepository.update(updatedBook);
 
