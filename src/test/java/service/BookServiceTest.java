@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import repository.Repository;
 import util.BookScheduler;
+import util.BookTestScheduler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
 class BookServiceTest {
     @Mock
     private Repository repository;
-    @Mock
     private BookScheduler bookScheduler;
     private BookService bookService;
 
@@ -99,12 +99,19 @@ class BookServiceTest {
     void testReturnBook() {
         Long bookNo = 1L;
         Book book = new Book(1L, "제목1", "작가1", 123, Status.BORROWED);
+        bookScheduler = new BookTestScheduler();
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
-        bookService.returnBookByBookNo(bookNo, bookScheduler);
-
-        verify(repository, times(1)).saveBook(book);
-        verify(bookScheduler, times(1)).scheduleBookTask(any(Runnable.class));
+        try {
+            bookService.returnBookByBookNo(bookNo, bookScheduler);
+            assertThat(book.getStatus()).isEqualTo(Status.ORGANIZING);
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }finally {
+            verify(repository, times(2)).saveBook(book);
+            assertThat(book.getStatus()).isEqualTo(Status.AVAILABLE);
+        }
     }
 
     @Test

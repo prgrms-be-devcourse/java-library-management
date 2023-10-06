@@ -9,6 +9,6 @@ public class BookTestScheduler implements BookScheduler{
     @Override
     public void scheduleBookTask(Runnable bookTask) {
         TimerTask timerTask = wrap(bookTask);
-        timer.schedule(timerTask, 1000);
+        timer.schedule(timerTask, 500);
     }
 }
