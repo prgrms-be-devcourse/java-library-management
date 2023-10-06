@@ -5,7 +5,9 @@ import com.programmers.adapter.BookControllerAdapter;
 import com.programmers.application.BookService;
 import com.programmers.config.enums.Mode;
 import com.programmers.config.factory.ModeAbstractFactory;
+import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
+import com.programmers.domain.repository.FileProvider;
 import com.programmers.exception.AppExceptionHandler;
 import com.programmers.exception.GlobalExceptionHandler;
 import com.programmers.exception.checked.InvalidModeNumberException;
@@ -20,6 +22,7 @@ import com.programmers.infrastructure.IO.command.ReportLostBookRequestGenerator;
 import com.programmers.infrastructure.IO.command.ReturnBookRequestGenerator;
 import com.programmers.infrastructure.IO.command.SearchBookByTitleRequestGenerator;
 import com.programmers.infrastructure.IO.command.ViewAllBooksRequestGenerator;
+import com.programmers.infrastructure.IO.provider.JsonFileProvider;
 import com.programmers.infrastructure.IO.validator.InputValidator;
 import com.programmers.infrastructure.MenuRequestProvider;
 import com.programmers.mediator.ConsoleRequestProcessor;
@@ -45,9 +48,11 @@ public class DependencyInjector {
     private ObjectMapper objectMapper;
     private MenuRequestProvider menuRequestProvider;
     private List<MenuRequestGenerator> menuRequestGenerators;
+    private FileProvider<Book> fileRepository;
 
     // TODO: 테스트때문에 생성자에서 안하고 init 으로 바꿈
-    public DependencyInjector() {}
+    private DependencyInjector() {
+    }
 
     public void init() {
         if (isInitialized()) {
@@ -66,13 +71,16 @@ public class DependencyInjector {
 
     private void initializeValidatorsAndConsoles() {
         this.userInteractionValidator = new InputValidator();
-        this.console = new Console(new java.util.Scanner(System.in),userInteractionValidator);
+        this.console = new Console(new java.util.Scanner(System.in), userInteractionValidator);
         //TODO: 테스트때문에 추가
-        if(consoleInteractionAggregator == null) this.consoleInteractionAggregator = new ConsoleInteractionAggregator(console);
+        if (consoleInteractionAggregator == null) {
+            this.consoleInteractionAggregator = new ConsoleInteractionAggregator(console);
+        }
     }
 
     private void initializeGeneratorsAndProviders() {
         this.objectMapper = new ObjectMapper();
+        this.fileRepository = new JsonFileProvider(objectMapper);
         this.menuRequestGenerators = List.of(new ExitRequestGenerator(consoleInteractionAggregator),
             new DeleteBookRequestGenerator(consoleInteractionAggregator),
             new RegisterBookRequestGenerator(consoleInteractionAggregator),
@@ -87,7 +95,7 @@ public class DependencyInjector {
 
     private void initializeModeDependentServices() {
         ModeAbstractFactory modeFactory = getModeFactory(consoleInteractionAggregator);
-        this.bookRepository = modeFactory.createBookRepository(objectMapper);
+        this.bookRepository = modeFactory.createBookRepository(fileRepository);
         this.idGenerator = modeFactory.createIdGenerator();
     }
 

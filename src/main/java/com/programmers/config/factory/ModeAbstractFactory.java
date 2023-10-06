@@ -1,12 +1,13 @@
 package com.programmers.config.factory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
+import com.programmers.domain.repository.FileProvider;
 import com.programmers.util.IdGenerator;
 
 public interface ModeAbstractFactory {
 
-    BookRepository createBookRepository(ObjectMapper objectMapper);
+    BookRepository createBookRepository(FileProvider<Book> fileRepository);
 
     IdGenerator createIdGenerator();
 

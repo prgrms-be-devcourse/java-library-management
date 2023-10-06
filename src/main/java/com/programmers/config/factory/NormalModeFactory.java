@@ -1,8 +1,9 @@
 package com.programmers.config.factory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
-import com.programmers.infrastructure.repository.FileMemoryBookRepository;
+import com.programmers.domain.repository.FileProvider;
+import com.programmers.infrastructure.repository.PersistentBookRepository;
 import com.programmers.util.AppProperties;
 import com.programmers.util.IdGenerator;
 import com.programmers.util.Messages;
@@ -24,9 +25,9 @@ public class NormalModeFactory implements ModeAbstractFactory {
     }
 
     @Override
-    public BookRepository createBookRepository(ObjectMapper objectMapper) {
+    public BookRepository createBookRepository(FileProvider<Book> fileProvider) {
         if (this.bookRepository == null) {
-            this.bookRepository = createNewFileMemoryBookRepository(objectMapper);
+            this.bookRepository = createNewFileMemoryBookRepository(fileProvider);
         }
 
         return this.bookRepository;
@@ -43,7 +44,8 @@ public class NormalModeFactory implements ModeAbstractFactory {
         return Messages.SELECT_MODE_NORMAL.getMessage();
     }
 
-    protected FileMemoryBookRepository createNewFileMemoryBookRepository(ObjectMapper objectMapper) {
-        return new FileMemoryBookRepository(objectMapper);
+    protected PersistentBookRepository createNewFileMemoryBookRepository(
+        FileProvider<Book> fileRepository) {
+        return new PersistentBookRepository(fileRepository);
     }
 }
