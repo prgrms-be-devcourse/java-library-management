@@ -69,15 +69,7 @@ public class TestModeRepository implements Repository{
 
     @Override
     public void deleteById(int book_id) {
-        try{
-            BookInfo book = bookMap.get(book_id);
-            if(book == null){
-                throw new NullPointerException();
-            }
-            bookMap.remove(book_id);
-        }catch (NullPointerException e){
-            System.out.println("존재하지 않는 도서입니다.");
-        }
+        bookMap.remove(book_id);
     }
 
     @Override
