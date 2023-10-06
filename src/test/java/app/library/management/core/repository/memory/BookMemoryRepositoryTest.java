@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +34,37 @@ class BookMemoryRepositoryTest {
                 () -> assertNotEquals(-1L, savedBook.getId()),
                 () -> assertThat(bookMemoryRepository.findAll()).contains(savedBook)
         );
+    }
+
+    @DisplayName("동시에 여러 도서가 bookArrayList에 추가될 수 있다.")
+    @Test
+    void saveWithMulitThread() throws InterruptedException, ExecutionException {
+        // given
+        int threadCnt = 100;
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        List<Callable<Long>> ans = getCallables(threadCnt);
+        Set<Long> callableExSet = new HashSet<>();
+
+        // when
+        List<Future<Long>> futures = executorService.invokeAll(ans);
+        for (Future<Long> future : futures) {
+            callableExSet.add(future.get());
+        }
+
+        // then
+        assertThat(callableExSet).hasSize(threadCnt);
+    }
+
+    private List<Callable<Long>> getCallables(int threadCnt) {
+        List<Callable<Long>> callables = new ArrayList<>();
+        for(int i=0; i<threadCnt; i++) {
+            callables.add(() -> {
+                Book book = new Book("title", "author", 100);
+                Book savedBook = bookMemoryRepository.save(book);
+                return savedBook.getId();
+            });
+        }
+        return callables;
     }
 
     @DisplayName("도서 전체를 조회하면 bookArrayList에 있는 모든 도서들을 조회할 수 있다.")
@@ -115,5 +146,7 @@ class BookMemoryRepositoryTest {
         // then
         assertThat(bookList).doesNotContain(savedBook);
     }
+
+
 
 }
