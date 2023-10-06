@@ -2,8 +2,11 @@ package com.programmers.util;
 
 
 import com.programmers.exception.unchecked.SystemErrorException;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
 public class AppProperties {
@@ -22,8 +25,7 @@ public class AppProperties {
         }
     }
 
-    public AppProperties() {
-    }
+    private AppProperties() {}
 
     public static String getProperty(String key) {
         String value = properties.getProperty(key, "메세지 가져오기에 실패 하였습니다.");
@@ -32,7 +34,9 @@ public class AppProperties {
 
     public static void setFileLastNumber(Long lastNumber) throws IOException {
         properties.setProperty("file.lastRowNumber", String.valueOf(lastNumber));
-        properties.store(new FileOutputStream("application.properties"), null);
+        try (OutputStream output = new FileOutputStream("src/main/resources/application.properties")) {
+            properties.store(output, null);
+        }
     }
 
 }
