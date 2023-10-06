@@ -24,8 +24,17 @@ public class GeneralModeRepository implements Repository{
     private final FileInfo fileInfo = new FileInfo();
 
 
-
-
+    @Override
+    public BookStatus getStatusById(int book_id) {
+        try{
+            File file = new File(fileInfo.getFilePath() + book_id + ". book.json");
+            BookInfo book = getBookFromFile(file);
+            return book.getStatus();
+        } catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
     //도서 등록
     @Override
     public void registerBook(String title, String author, int pageSize) {
