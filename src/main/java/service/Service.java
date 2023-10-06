@@ -26,42 +26,18 @@ public class Service{
     }
 
     public void rentalBook(int bookNumber){
-        Book book = repository.getBook((long)bookNumber);
-        book.rentalBook();
+        repository.rentalBook((long)bookNumber);
     }
 
     public void organizeBook(int bookNumber){
-        Book book = repository.getBook((long)bookNumber);
-        book.organizeBook();
-        BackGround backGroundTimer = new BackGround(book);
-        backGroundTimer.start();
+        repository.organizeBook((long)bookNumber);
     }
 
     public void lostBook(int bookNumber){
-        Book book = repository.getBook((long)bookNumber);
-        book.lostBook();
+        repository.lostBook((long)bookNumber);
     }
 
     public void deleteBook(int bookNumber){
         repository.deleteBook((long)bookNumber);
     }
-
-    private static class BackGround extends Thread{
-        private final Book book;
-
-        BackGround(Book book){
-            this.book = book;
-        }
-
-        @Override
-        public void run() {
-            try {
-                sleep(300000);
-                book.returnBook();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
 }

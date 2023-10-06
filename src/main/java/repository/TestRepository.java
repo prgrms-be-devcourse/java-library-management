@@ -47,4 +47,29 @@ public class TestRepository implements Repository{
         Book book = getBook(bookNumber);
         bookRepository.remove(book);
     }
+
+    @Override
+    public void rentalBook(Long bookNumber) {
+        Book book = getBook(bookNumber);
+        book.rentalBook();
+    }
+
+    @Override
+    public void organizeBook(Long bookNumber) {
+        Book book = getBook(bookNumber);
+        book.organizeBook();
+        returnBook(bookNumber);
+    }
+
+    @Override
+    public void returnBook(Long bookNumber) {
+        Book book = getBook(bookNumber);
+        book.returnBook();
+    }
+
+    @Override
+    public void lostBook(Long bookNumber) {
+        Book book = getBook(bookNumber);
+        book.lostBook();
+    }
 }
