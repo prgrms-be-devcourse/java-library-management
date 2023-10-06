@@ -31,6 +31,10 @@ public class Book {
         return id;
     }
 
+    public Status getStatus(){
+        return this.status;
+    }
+
     public void setId(Long id){
         this.id = id;
     }
