@@ -5,7 +5,7 @@ import service.Mode;
 
 import java.util.InputMismatchException;
 
-import static view.ConsolePrint.getModeNum;
+import static domain.ConsolePrint.getModeNum;
 
 public class Main {
     public static void main(String[] args) {

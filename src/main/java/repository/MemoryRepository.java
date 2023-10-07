@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Book;
 import domain.BookState;
 import thread.MemoryChangeStateThread;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static repository.Book.countId;
+import static domain.Book.countId;
 
 public class MemoryRepository implements Repository {
     private static List<Book> books = new ArrayList<>();

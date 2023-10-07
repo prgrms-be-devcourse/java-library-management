@@ -1,14 +1,14 @@
 package view;
 
 import message.ExecuteMessage;
-import repository.Book;
+import domain.Book;
 import service.Service;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static view.ConsolePrint.*;
+import static domain.ConsolePrint.*;
 
 public enum SelectMenu {
     REGISTER(1) {

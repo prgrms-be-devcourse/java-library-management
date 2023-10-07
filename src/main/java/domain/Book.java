@@ -1,9 +1,9 @@
-package repository;
+package domain;
 
 import domain.BookState;
 
 public class Book {
-    static int countId;
+    public static int countId;
     private final int id;
     private final String title;
     private final String writer;

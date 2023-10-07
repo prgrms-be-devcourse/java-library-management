@@ -1,9 +1,9 @@
-package view;
+package domain;
 
 import message.ExecuteMessage;
 import message.QuestionMessage;
 import message.SelectMessage;
-import repository.Book;
+import domain.Book;
 
 import java.util.List;
 

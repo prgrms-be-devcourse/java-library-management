@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Book;
 import domain.BookState;
 import exception.FileWriteException;
 import thread.FileChangeStateThread;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static domain.Reader.fc;
-import static repository.Book.countId;
+import static domain.Book.countId;
 
 public class FileRepository implements Repository {
     private static File file = new File("src/main/resources/library.csv");

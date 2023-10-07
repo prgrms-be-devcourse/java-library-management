@@ -8,8 +8,7 @@ import repository.FileRepository;
 import repository.MemoryRepository;
 import java.util.InputMismatchException;
 
-import static view.ConsolePrint.getMenuNum;
-import static view.ConsolePrint.getModeNum;
+import static domain.ConsolePrint.getMenuNum;
 
 public class Mode {
     Service service;

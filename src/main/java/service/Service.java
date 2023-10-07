@@ -2,7 +2,7 @@ package service;
 
 import domain.BookState;
 import message.ExecuteMessage;
-import repository.Book;
+import domain.Book;
 import repository.Repository;
 
 import java.util.List;

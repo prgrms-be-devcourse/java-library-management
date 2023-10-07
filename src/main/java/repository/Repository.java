@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Book;
 import domain.BookState;
 import java.util.List;
 

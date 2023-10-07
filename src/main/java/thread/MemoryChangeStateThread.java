@@ -1,7 +1,7 @@
 package thread;
 
 import domain.BookState;
-import repository.Book;
+import domain.Book;
 
 public class MemoryChangeStateThread extends Thread {
     private final Book book;
