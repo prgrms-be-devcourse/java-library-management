@@ -1,5 +1,6 @@
 package service;
 
+import domain.BackGround;
 import domain.Book;
 import domain.Status;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,5 +97,17 @@ class ServiceTest {
         //then
         assertThat(service.searchName("자바")).isEqualTo(list);
         verify(repository, times(1)).searchBook("자바");
+    }
+    @Test
+    void deleteBook() {
+        //given
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        when(repository.getBook(0L)).thenReturn(Optional.of(book1));
+
+        //then
+        service.deleteBook(0);
+        verify(repository, times(1)).deleteBook(any(Book.class));
     }
 }
