@@ -14,14 +14,14 @@ public class ListBookManager implements BookManager {
     private static final Duration PROCESSING_COST = Duration.ofMinutes(5);
     private static final String infoDelim = "\n------------------------------\n";
 
-    private final List<Book> bookList = new ArrayList<>();
+    private final List<Book> books = new ArrayList<>();
     private int id;
 
     @Override
     public void init(Collection<Book> data) {
-        bookList.addAll(data);
+        books.addAll(data);
 
-        id = bookList.stream()
+        id = books.stream()
                 .mapToInt(Book::getId)
                 .max()
                 .orElse(0);
@@ -32,7 +32,7 @@ public class ListBookManager implements BookManager {
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime processedTime = currentTime.minus(PROCESSING_COST);
 
-        bookList.stream()
+        books.stream()
                 .filter(book -> isProcessed(book, processedTime))
                 .forEach(book -> {
                     book.setState(AVAILABLE);
@@ -48,21 +48,21 @@ public class ListBookManager implements BookManager {
 
         Book newBook = new Book(++id, title, author, pages, LocalDateTime.now());
 
-        bookList.add(newBook);
+        books.add(newBook);
 
         return SUCCESS_CREATE_BOOK.msg();
     }
 
     @Override
     public String getInfos() {
-        return bookList.stream()
+        return books.stream()
                 .map(Book::info)
                 .collect(Collectors.joining(infoDelim));
     }
 
     @Override
     public String getInfosByTitle(String title) {
-        return bookList.stream()
+        return books.stream()
                 .filter(book -> book.getTitle().contains(title))
                 .map(Book::info)
                 .collect(Collectors.joining(infoDelim));
@@ -74,7 +74,7 @@ public class ListBookManager implements BookManager {
             return NOT_EXIST_ID.msg();
         }
 
-        Book target = bookList.stream()
+        Book target = books.stream()
                 .filter(book -> book.getId() == id)
                 .findFirst()
                 .orElseThrow();
@@ -95,7 +95,7 @@ public class ListBookManager implements BookManager {
             return NOT_EXIST_ID.msg();
         }
 
-        Book target = bookList.stream()
+        Book target = books.stream()
                 .filter(book -> book.getId() == id)
                 .findFirst()
                 .orElseThrow();
@@ -118,7 +118,7 @@ public class ListBookManager implements BookManager {
             return NOT_EXIST_ID.msg();
         }
 
-        Book target = bookList.stream()
+        Book target = books.stream()
                 .filter(book -> book.getId() == id)
                 .findFirst()
                 .orElseThrow();
@@ -139,14 +139,14 @@ public class ListBookManager implements BookManager {
             return NOT_EXIST_ID.msg();
         }
 
-        bookList.removeIf(book -> book.getId() == id);
+        books.removeIf(book -> book.getId() == id);
 
         return SUCCESS_DELETE_BOOK.msg();
     }
 
     @Override
     public List<Book> getBooks() {
-        return bookList;
+        return books;
     }
 
     private boolean isProcessed(Book book, LocalDateTime processedTime) {
@@ -154,12 +154,12 @@ public class ListBookManager implements BookManager {
     }
 
     private boolean hasNotId(int id) {
-        return bookList.stream()
+        return books.stream()
                 .noneMatch(book -> book.getId() == id);
     }
 
     private boolean hasTitle(String title) {
-        return bookList.stream()
+        return books.stream()
                 .anyMatch(book -> book.getTitle().equals(title));
     }
 }
