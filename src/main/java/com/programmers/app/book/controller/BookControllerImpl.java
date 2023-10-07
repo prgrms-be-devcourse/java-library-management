@@ -3,6 +3,7 @@ package com.programmers.app.book.controller;
 import java.util.List;
 
 import com.programmers.app.book.domain.Book;
+import com.programmers.app.book.dto.BookRequest;
 import com.programmers.app.book.service.BookService;
 import com.programmers.app.console.CommunicationAgent;
 import com.programmers.app.menu.Menu;
@@ -20,24 +21,28 @@ public class BookControllerImpl implements BookController {
     public void exit() {
         bookService.exit();
         communicationAgent.printExitMessage();
-        System.exit(0);
     }
 
     @Override
     public void register(Menu menu) {
-        bookService.register(communicationAgent.instructRegister());
+        BookRequest newBook = communicationAgent.instructRegister();
+        bookService.register(newBook);
         communicationAgent.printOperationCompleted(menu);
     }
 
     @Override
     public void findAllBooks() {
-        printCatchException(() -> communicationAgent.printFindResult(bookService.findAllBooks()));
+        printCatchException(() -> {
+            List<Book> books = bookService.findAllBooks();
+            communicationAgent.printFindResult(books);
+        });
     }
 
     @Override
     public void searchBookByTitle() {
         printCatchException(() -> {
-            List<Book> books = bookService.findByTitle(communicationAgent.instructFindTitle());
+            String partialTitle = communicationAgent.instructFindTitle();
+            List<Book> books = bookService.findByTitle(partialTitle);
             communicationAgent.printSearchResult(books);
         });
     }
@@ -45,7 +50,8 @@ public class BookControllerImpl implements BookController {
     @Override
     public void borrowBook(Menu menu) {
         printCatchException(() -> {
-            bookService.borrowBook(communicationAgent.instructBorrow());
+            int bookNumber = communicationAgent.instructMenuAction(menu);
+            bookService.borrowBook(bookNumber);
             communicationAgent.printOperationCompleted(menu);
         });
     }
@@ -53,7 +59,8 @@ public class BookControllerImpl implements BookController {
     @Override
     public void returnBook(Menu menu) {
         printCatchException(() -> {
-            bookService.returnBook(communicationAgent.instructReturn());
+            int bookNumber = communicationAgent.instructMenuAction(menu);
+            bookService.returnBook(bookNumber);
             communicationAgent.printOperationCompleted(menu);
         });
     }
@@ -61,7 +68,8 @@ public class BookControllerImpl implements BookController {
     @Override
     public void reportLostBook(Menu menu) {
         printCatchException(() -> {
-            bookService.reportLost(communicationAgent.instructReportLost());
+            int bookNumber = communicationAgent.instructMenuAction(menu);
+            bookService.reportLost(bookNumber);
             communicationAgent.printOperationCompleted(menu);
         });
     }
@@ -69,7 +77,8 @@ public class BookControllerImpl implements BookController {
     @Override
     public void deleteBook(Menu menu) {
         printCatchException(() -> {
-            bookService.deleteBook(communicationAgent.instructDelete());
+            int bookNumber = communicationAgent.instructMenuAction(menu);
+            bookService.deleteBook(bookNumber);
             communicationAgent.printOperationCompleted(menu);
         });
     }
