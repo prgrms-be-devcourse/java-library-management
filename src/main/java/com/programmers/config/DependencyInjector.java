@@ -176,6 +176,7 @@ public class DependencyInjector {
     }
 
     public IdGenerator getIdGenerator() {
+        // TODO : 이것 때문에 테스트 실패
         if (!isInitialized) {
             init();
         }

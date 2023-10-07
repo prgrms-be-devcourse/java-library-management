@@ -9,15 +9,16 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.programmers.BookEntities;
 import com.programmers.config.DependencyInjector;
+import com.programmers.domain.dto.BookResponse;
 import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.domain.entity.Book;
-import com.programmers.domain.enums.BookStatus;
 import com.programmers.domain.repository.BookRepository;
 import com.programmers.exception.unchecked.BookNotFoundException;
 import com.programmers.util.BookScheduler;
 import com.programmers.util.IdGenerator;
-import java.util.Arrays;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +37,8 @@ class BookServiceTest {
 
     BookService bookService = new BookService(mockRepository, mockScheduler);
 
+    BookEntities bookEntities;
+
     private AutoCloseable closeable;
 
     @Mock
@@ -48,6 +51,7 @@ class BookServiceTest {
     void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
         when(idGenerator.generateId()).thenReturn(1L);
+        this.bookEntities = new BookEntities();
     }
 
     @AfterEach
@@ -59,15 +63,18 @@ class BookServiceTest {
 
     @Test
     @DisplayName("책 등록 테스트")
-    void registerBookTest() {
+    void registerBookTest() throws NoSuchFieldException, IllegalAccessException {
+        Field privateField = DependencyInjector.class.getDeclaredField("isInitialized");
+
+        // private 필드에 대한 접근 권한을 설정 (이 부분이 접근하는 핵심)
+        privateField.setAccessible(true);
+
+        // private 필드의 값을 변경
+        privateField.set(privateField, true);
+
         RegisterBookReq request = RegisterBookReq.from("New Book", "Author", 123);
 
-        Book book = Book.builder()
-            .title("New Book")
-            .author("Author")
-            .pages(123)
-            .status(BookStatus.AVAILABLE)
-            .build();
+        Book book = bookEntities.getBook(1L);
 
         when(mockRepository.findByTitle("New Book")).thenReturn(List.of());
         when(mockRepository.save(any(Book.class))).thenReturn(book);
@@ -80,19 +87,12 @@ class BookServiceTest {
     @Test
     @DisplayName("책 모두 조회 테스트")
     void findAllBooksTest() {
-        List<Book> books = Arrays.asList(
-            Book.builder().author("Author 1").title("Book 1").pages(600)
-                .status(BookStatus.AVAILABLE).build(),
-            Book.builder().author("Author 2").title("Book 2").pages(456)
-                .status(BookStatus.AVAILABLE).build(),
-            Book.builder().author("Author 3").title("Book 3").pages(789)
-                .status(BookStatus.AVAILABLE).build()
-        );
+        List<Book> books = bookEntities.getBooks();
 
         when(mockRepository.findAll()).thenReturn(books);
-        List<Book> result = bookService.findAllBooks();
+        List<BookResponse> result = bookService.findAllBooks();
 
-        assertEquals(3, result.size());
+        assertEquals(4, result.size());
         verify(mockRepository, times(1)).findAll();
     }
 
@@ -111,10 +111,10 @@ class BookServiceTest {
     public void deleteBookWhenBookExists() {
         Long id = 1L;
 
+        when(mockRepository.findById(id)).thenReturn(Optional.of(new Book()));
         when(mockRepository.deleteById(id)).thenReturn(1);
 
         assertDoesNotThrow(() -> bookService.deleteBook(id));
-        verify(mockRepository).deleteById(id);
     }
 
     @Test

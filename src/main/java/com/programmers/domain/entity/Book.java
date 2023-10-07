@@ -23,13 +23,19 @@ public class Book {
 
     @Builder
     private Book(Long id, String title, String author, BookStatus status, Integer pages) {
-        this.id = DependencyInjector.getInstance().getIdGenerator().generateId();
+        // TODO: 이 부분 해결책
+        if (id != null) {
+            this.id = id;
+        } else {
+            this.id = DependencyInjector.getInstance().getIdGenerator().generateId();
+        }
         this.title = title;
         this.author = author;
         this.status = status;
         this.pages = pages;
     }
 
+// TODO: 이름 변경?
     public void updateBookStatusToRent() {
         validateCanBeRented();
         this.status = new Rented();

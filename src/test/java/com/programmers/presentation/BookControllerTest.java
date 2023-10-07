@@ -1,14 +1,18 @@
 package com.programmers.presentation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.programmers.BookEntities;
 import com.programmers.application.BookService;
 import com.programmers.config.DependencyInjector;
+import com.programmers.domain.dto.BookResponse;
 import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.util.IdGenerator;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 class BookControllerTest {
+
+    private BookEntities bookEntities;
 
     private AutoCloseable closeable;
     @Mock
@@ -33,6 +39,7 @@ class BookControllerTest {
 
     @BeforeEach
     void setUp() {
+        bookEntities = new BookEntities();
         closeable = MockitoAnnotations.openMocks(this);
         when(idGenerator.generateId()).thenReturn(1L);
     }
@@ -55,22 +62,22 @@ class BookControllerTest {
 
     @Test
     void testGetAllBooks() {
-//        when(bookService.findAllBooks()).thenReturn(Arrays.asList(new Book(), new Book()));
-//
-//        List<Book> result = bookController.getAllBooks();
-//
-//        verify(bookService, times(1)).findAllBooks();
-//        assertEquals(2, result.size());
+        when(bookService.findAllBooks()).thenReturn(bookEntities.getBooksResponses());
+
+        List<BookResponse> result = bookController.getAllBooks();
+
+        verify(bookService, times(1)).findAllBooks();
+        assertEquals(4, result.size());
     }
 
     @Test
     void testSearchBooksByTitle() {
-//        when(bookService.searchBook("Test")).thenReturn(Arrays.asList(new Book()));
-//
-//        List<Book> result = bookController.searchBooksByTitle("Test");
+        when(bookService.searchBook("Test")).thenReturn(bookEntities.getBooksResponses());
 
-//        verify(bookService, times(1)).searchBook("Test");
-//        assertEquals(1, result.size());
+        List<BookResponse> result = bookController.searchBooksByTitle("Test");
+
+        verify(bookService, times(1)).searchBook("Test");
+        assertEquals(4, result.size());
     }
 
     @Test

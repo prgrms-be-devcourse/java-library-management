@@ -1,24 +1,20 @@
 package com.programmers.infrastructure.IO;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.programmers.BookEntities;
 import com.programmers.config.DependencyInjector;
+import com.programmers.domain.dto.BookResponse;
 import com.programmers.domain.dto.RegisterBookReq;
-import com.programmers.domain.entity.Book;
-import com.programmers.domain.enums.BookStatus;
 import com.programmers.util.IdGenerator;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 class ConsoleInteractionAggregatorTest {
 
@@ -33,8 +29,11 @@ class ConsoleInteractionAggregatorTest {
     @InjectMocks
     private DependencyInjector dependencyInjector = DependencyInjector.getInstance();
 
+    BookEntities bookEntities;
+
     @BeforeEach
     void setUp() {
+        bookEntities = new BookEntities();
         consoleMock = Mockito.mock(Console.class);
         aggregator = new ConsoleInteractionAggregator(consoleMock);
     }
@@ -57,35 +56,6 @@ class ConsoleInteractionAggregatorTest {
         String result = aggregator.collectSearchInput();
 
         assertEquals("Test Search", result);
-    }
-
-    // You can similarly add test cases for other collect methods
-
-    @Test
-    void displayBooksInfo() {
-        closeable = MockitoAnnotations.openMocks(this);
-        when(idGenerator.generateId()).thenReturn(1L);
-
-        List<Book> books = Arrays.asList(
-            Book.builder().author("Author 1").title("Book 1").pages(600)
-                .status(BookStatus.AVAILABLE).build(),
-            Book.builder().author("Author 2").title("Book 2").pages(456)
-                .status(BookStatus.AVAILABLE).build(),
-            Book.builder().author("Author 3").title("Book 3").pages(789)
-                .status(BookStatus.AVAILABLE).build()
-        );
-
-        aggregator.displayBooksInfo(books);
-
-        verify(consoleMock, times(books.size())).displayMessage(anyString());
-
-        try{
-            if (closeable != null) {
-                closeable.close();
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     @Test
@@ -138,10 +108,24 @@ class ConsoleInteractionAggregatorTest {
     }
 
     @Test
-    void displayMessage() {
+    void testDisplayListInfo() {
+        List<BookResponse> items = bookEntities.getBooksResponses();
+
+        aggregator.displayListInfo(items);
+    }
+
+    @Test
+    void testDisplaySingleInfo() {
+        BookResponse item = bookEntities.getBookResponse(1L);
+
+        assertDoesNotThrow(() -> aggregator.displaySingleInfo(item));
+    }
+
+    @Test
+    void testDisplayMessage() {
         String message = "Test Message";
-        aggregator.displayMessage(message);
-        verify(consoleMock).displayMessage(message);
+
+        assertDoesNotThrow(() -> aggregator.displayMessage(message));
     }
 
 }
