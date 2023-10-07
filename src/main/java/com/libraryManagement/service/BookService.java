@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.libraryManagement.domain.BookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.APPLYDELETE;
 
 public class BookService {
     private final Repository repository;
@@ -46,12 +44,12 @@ public class BookService {
     }
 
     // 상태가 추가될때.. 2가지 변경 필요해짐
-    public void rentBook(long id) throws InterruptedException {
+    public void rentBook(long id) {
         if(isPossibleRentBook(id))
             repository.updateBookStatus(id, RENT.getName());
     }
 
-    public void returnBook(long id) throws IOException {
+    public void returnBook(long id) {
         if(isPossibleReturnBook(id))
             repository.updateBookStatus(id, RENT.getName());
 
@@ -61,12 +59,12 @@ public class BookService {
         }, 5, TimeUnit.MINUTES);
     }
 
-    public void lostBook(long id) throws IOException {
+    public void lostBook(long id) {
         if(isPossibleLostBook(id))
             repository.updateBookStatus(id, RENT.getName());
     }
 
-    public void deleteBook(long id) throws IOException {
+    public void deleteBook(long id) {
         if(isPossibleDeleteBook(id))
             repository.updateBookStatus(id, RENT.getName());
     }
@@ -78,6 +76,7 @@ public class BookService {
         }
         return false;
     }
+
     private Boolean isPossibleReturnBook(long id) {
         // 대여가능일 때만 반납 불가
         if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
@@ -85,6 +84,7 @@ public class BookService {
         }
         return true;
     }
+
     private Boolean isPossibleLostBook(long id) {
         // 분실됨일 때만 분실처리 불가
         if(repository.findBookById(id).getStatus().equals(LOST.getName())){
@@ -92,6 +92,7 @@ public class BookService {
         }
         return true;
     }
+
     private Boolean isPossibleDeleteBook(long id) {
         // 존재하지 않는 도서일 때만 삭제처리 불가
         if(repository.findBookById(id).getStatus().equals(DELETE.getName())){

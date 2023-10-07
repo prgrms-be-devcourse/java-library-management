@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import static com.libraryManagement.domain.BookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.APPLYDELETE;
 
 public class BookIO {
 
@@ -42,25 +40,7 @@ public class BookIO {
         return br.readLine();
     }
 
-    // NumberFormatException 를 따로 메시지 띄워주는것을 고려
-    // 네이밍이 모호해서 바꾸거나 분리
-//    public long inputApplyBookId(String updateType) throws IOException {
-//        if(updateType.equals(APPLYRENT.name())){
-//            System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
-//        }
-//        else if(updateType.equals(APPLYRETURN.name())) {
-//            System.out.println("Q. 반납할 도서번호를 입력하세요.\n");
-//        }
-//        else if(updateType.equals(APPLYLOST.name())) {
-//            System.out.println("Q. 분실 처리할 도서번호를 입력하세요.\n");
-//        }
-//        else if(updateType.equals(APPLYDELETE.name())) {
-//            System.out.println("Q. 삭제 처리할 도서번호를 입력하세요.\n");
-//        }
-//
-//        return Long.parseLong(br.readLine());
-//    }
-
+    // NumberFormatException 를 따로 메시지 띄워주는 것을 고려
     public long inputRentBookId() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
         return Long.parseLong(br.readLine());
@@ -79,6 +59,10 @@ public class BookIO {
     public long inputDeleteBookId() throws IOException {
         System.out.println("Q. 삭제 처리할 도서번호를 입력하세요.\n");
         return Long.parseLong(br.readLine());
+    }
+
+    public void outputRentMsg() {
+
     }
 
     public void outputUpdateMsg(String updateType, Boolean isPossible, String bookStatus) {
