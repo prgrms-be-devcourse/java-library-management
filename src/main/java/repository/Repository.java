@@ -16,12 +16,4 @@ public interface Repository {
     Optional<Book> getBook(Long bookNumber);
 
     void deleteBook(Book book);
-
-    void rentalBook(Book book);
-
-    void organizeBook(Book book);
-
-    void returnBook(Book book);
-
-    void lostBook(Book book);
 }

@@ -46,25 +46,4 @@ public class TestRepository implements Repository{
     public void deleteBook(Book book){
         bookRepository.remove(book);
     }
-
-    @Override
-    public void rentalBook(Book book) {
-        book.rentalBook();
-    }
-
-    @Override
-    public void organizeBook(Book book) {
-        book.organizeBook();
-        returnBook(book);
-    }
-
-    @Override
-    public void returnBook(Book book) {
-        book.returnBook();
-    }
-
-    @Override
-    public void lostBook(Book book) {
-        book.lostBook();
-    }
 }

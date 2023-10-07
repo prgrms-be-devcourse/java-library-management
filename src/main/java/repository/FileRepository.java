@@ -77,29 +77,4 @@ public class FileRepository implements Repository{
         bookList.remove(book);
         writeFile();
     }
-
-    @Override
-    public void rentalBook(Book book) {
-        book.rentalBook();
-        writeFile();
-    }
-
-    @Override
-    public void organizeBook(Book book) {
-        book.organizeBook();
-        writeFile();
-        returnBook(book);
-    }
-
-    @Override
-    public void returnBook(Book book) {
-        book.returnBook();
-        writeFile();
-    }
-
-    @Override
-    public void lostBook(Book book) {
-        book.lostBook();
-        writeFile();
-    }
 }
