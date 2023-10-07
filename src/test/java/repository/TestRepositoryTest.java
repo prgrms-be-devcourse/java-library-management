@@ -79,4 +79,17 @@ class TestRepositoryTest {
         //then
         assertThat(testRepository.getAll().size()).isEqualTo(0);
     }
+
+    @Test
+    @DisplayName("도서 대여")
+    void rentalBook() {
+        //given
+        Book book1 = new Book(1L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        testRepository.rentalBook(book1);
+
+        //then
+        assertThat(book1.getStatus()).isEqualTo(Status.IMPOSSIBLE);
+    }
 }
