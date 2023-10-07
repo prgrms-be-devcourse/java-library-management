@@ -1,13 +1,15 @@
 package org.example;
 
 import org.example.client.Client;
+import org.example.client.io.ConsoleIn;
+import org.example.client.io.ConsoleOut;
 import org.example.packet.requestPacket.RequestPacket;
 import org.example.packet.responsePacket.ResponsePacket;
 import org.example.server.Server;
 
 public class Application {
     public static void main(String[] args) {
-        Client client = new Client();
+        Client client = new Client(ConsoleOut.getInstance(), ConsoleIn.getInstance());
         Server server = new Server();
         try {
             server.setMode(client.scanMode());

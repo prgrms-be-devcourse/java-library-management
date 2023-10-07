@@ -2,67 +2,73 @@ package org.example.client.console;
 
 import org.example.client.ValidateException;
 import org.example.client.Validator;
-import org.example.client.io.ConsoleOut;
+import org.example.client.io.In;
 import org.example.client.io.Out;
 import org.example.packet.BookDto;
 import org.example.packet.requestPacket.*;
 
-public class MethodRequester { // 입력을 받는 역할 + In
-    private final Out OUT = ConsoleOut.getInstance();
-    private final Validator VALIDATOR = new Validator(); // final이 정말 상수일까!!!!!! static final!!
+public class MethodRequester {
+    private final Out out;
+    private final In in;
+    private final Validator validator = new Validator();
+
+    public MethodRequester(Out out, In in) {
+        this.out = out;
+        this.in = in;
+    }
 
     public RequestPacket scanTypeAndInfo() {
         MethodType methodType;
         try {
-            methodType = scanType();
+            methodType = scanMethodType();
         } catch (ValidateException e) {
-            OUT.println(e.getMessage());
-            methodType = scanType();
+            out.println(e.getMessage());
+            methodType = scanMethodType();
         }
-        OUT.println(methodType.START_MESSAGE);
+        out.println(methodType.START_MESSAGE);
         try {
             return switch (methodType) {
-                case REGISTER -> scanBookInfo(methodType);
+                case REGISTER -> scanForRegister(methodType);
                 case READ_ALL -> new RequestWithNoData(methodType.name());
-                case SEARCH_BY_NAME -> scanBookName(methodType);
-                default -> scanBookId(methodType);
+                case SEARCH_BY_NAME -> scanForSearchName(methodType);
+                default -> scanForFindById(methodType);
             };
         } catch (ValidateException e) {
-            OUT.println(e.getMessage());
+            out.println(e.getMessage());
             return switch (methodType) {
-                case REGISTER -> scanBookInfo(methodType);
+                case REGISTER -> scanForRegister(methodType);
                 case READ_ALL -> new RequestWithNoData(methodType.name());
-                case SEARCH_BY_NAME -> scanBookName(methodType);
-                default -> scanBookId(methodType);
+                case SEARCH_BY_NAME -> scanForSearchName(methodType);
+                default -> scanForFindById(methodType);
             };
         }
     }
 
-    private MethodType scanType() {
-        OUT.print(MethodType.BASIC_QUESTION);
-        int methodNumber = VALIDATOR.scanAndValidateSelection(MethodType.values().length);
+    private MethodType scanMethodType() {
+        out.print(MethodType.BASIC_QUESTION);
+        int methodNumber = validator.scanAndValidateSelection(MethodType.values().length, in.scanLine());
         return MethodType.valueOfNumber(methodNumber);
     }
 
-    private RequestWithBook scanBookInfo(MethodType methodType) {
-        OUT.print(methodType.QUESTIONS.get(0));
-        String name = VALIDATOR.scanAndValidateString();
-        OUT.print(methodType.QUESTIONS.get(1));
-        String author = VALIDATOR.scanAndValidateString();
-        OUT.print(methodType.QUESTIONS.get(2));
-        int pages = VALIDATOR.scanAndValidateNumber();
+    private RequestWithBook scanForRegister(MethodType methodType) {
+        out.print(methodType.QUESTIONS.get(0));
+        String name = validator.scanAndValidateString(in.scanLine());
+        out.print(methodType.QUESTIONS.get(1));
+        String author = validator.scanAndValidateString(in.scanLine());
+        out.print(methodType.QUESTIONS.get(2));
+        int pages = validator.scanAndValidateNumber(in.scanLine());
         return new RequestWithBook(methodType.name(), new BookDto(name, author, pages));
     }
 
-    private RequestWithName scanBookName(MethodType methodType) { // 어떤 요청을 위한 것인지? -> 객체의 행위에 대해서 명시
-        OUT.print(methodType.QUESTIONS.get(0));
-        String name = VALIDATOR.scanAndValidateString();
+    private RequestWithName scanForSearchName(MethodType methodType) {
+        out.print(methodType.QUESTIONS.get(0));
+        String name = validator.scanAndValidateString(in.scanLine());
         return new RequestWithName(methodType.name(), name);
     }
 
-    private RequestWithId scanBookId(MethodType methodType) {
-        OUT.print(methodType.QUESTIONS.get(0));
-        int id = VALIDATOR.scanAndValidateNumber();
+    private RequestWithId scanForFindById(MethodType methodType) {
+        out.print(methodType.QUESTIONS.get(0));
+        int id = validator.scanAndValidateNumber(in.scanLine());
         return new RequestWithId(methodType.name(), id);
     }
 }

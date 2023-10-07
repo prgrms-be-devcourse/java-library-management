@@ -21,7 +21,7 @@ class ValidatorTest {
     @DisplayName("Validator 초기화")
     void initValidator() {
         in = mock(In.class);
-        validator = new Validator(in);
+        validator = new Validator();
         selectNum = 5;
     }
 
@@ -32,7 +32,7 @@ class ValidatorTest {
         String input = "a부터 Z까지 배우는 테스트 코드";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateString(), input);
+        Assertions.assertEquals(validator.scanAndValidateString(in.scanLine()), input);
     }
 
     @Test
@@ -42,7 +42,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateString();
+            validator.scanAndValidateString(in.scanLine());
         });
     }
 
@@ -53,7 +53,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateString();
+            validator.scanAndValidateString(in.scanLine());
         });
     }
 
@@ -67,7 +67,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateString();
+            validator.scanAndValidateString(in.scanLine());
         });
     }
 
@@ -78,7 +78,7 @@ class ValidatorTest {
         String input = "50";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateNumber(), Integer.parseInt(input));
+        Assertions.assertEquals(validator.scanAndValidateNumber(in.scanLine()), Integer.parseInt(input));
     }
 
     @DisplayName("숫자 유효성 검증: 공백 예외")
@@ -88,7 +88,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNumber();
+            validator.scanAndValidateNumber(in.scanLine());
         });
     }
 
@@ -99,7 +99,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNumber();
+            validator.scanAndValidateNumber(in.scanLine());
         });
     }
 
@@ -110,7 +110,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNumber();
+            validator.scanAndValidateNumber(in.scanLine());
         });
     }
 
@@ -121,7 +121,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNumber();
+            validator.scanAndValidateNumber(in.scanLine());
         });
     }
 
@@ -132,7 +132,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNumber();
+            validator.scanAndValidateNumber(in.scanLine());
         });
     }
 
@@ -143,7 +143,7 @@ class ValidatorTest {
         String input = "2";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateSelection(selectNum), Integer.parseInt(input));
+        Assertions.assertEquals(validator.scanAndValidateSelection(selectNum, in.scanLine()), Integer.parseInt(input));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 공백 예외")
@@ -153,7 +153,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelection(selectNum);
+            validator.scanAndValidateSelection(selectNum, in.scanLine());
         });
     }
 
@@ -164,7 +164,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelection(selectNum);
+            validator.scanAndValidateSelection(selectNum, in.scanLine());
         });
     }
 
@@ -175,7 +175,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelection(selectNum);
+            validator.scanAndValidateSelection(selectNum, in.scanLine());
         });
     }
 
@@ -186,7 +186,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelection(selectNum);
+            validator.scanAndValidateSelection(selectNum, in.scanLine());
         });
     }
 
@@ -197,7 +197,7 @@ class ValidatorTest {
         when(in.scanLine()).thenReturn(input);
 
         Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelection(selectNum);
+            validator.scanAndValidateSelection(selectNum, in.scanLine());
         });
     }
 }
