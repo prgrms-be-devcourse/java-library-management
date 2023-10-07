@@ -2,6 +2,7 @@ package view;
 
 import message.ExecuteMessage;
 import message.QuestionMessage;
+import message.SelectMessage;
 import repository.Book;
 
 import java.util.List;
@@ -9,8 +10,21 @@ import java.util.List;
 import static domain.Reader.sc;
 
 public class ConsolePrint {
+    public static int getModeNum() {
+        System.out.println(SelectMessage.MODE_SELECT_MESSAGE.getMessage());
+        int num = sc.nextInt();
+        sc.nextLine();
+        return num;
+    }
 
-    public static  Book getBook() {
+    public static int getMenuNum() {
+        System.out.println(SelectMessage.FUNCTION_SELECT_MESSAGE.getMessage());
+        int num = sc.nextInt();
+        sc.nextLine();
+        return num;
+    }
+
+    public static Book getBook() {
         System.out.println(QuestionMessage.REGISTER_TITLE.getMessage());
         String title = sc.nextLine();
 

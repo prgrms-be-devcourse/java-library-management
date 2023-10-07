@@ -3,6 +3,8 @@ package message;
 public enum ExecuteMessage {
     NORMAL_MODE("[System] 일반 모드로 애플리케이션을 실행합니다."),
     TEST_MODE("[System] 테스트 모드로 애플리케이션을 실행합니다."),
+    MODE_ERROR("[System] 1이나 2를 입력해주세요."),
+    MENU_ERROR("[System] 1~7까지의 숫자를 입력해주세요."),
     REGISTER("[System] 도서 등록 메뉴로 넘어갑니다."),
     LIST("[System] 전체 도서 목록입니다."),
     SEARCH("[System] 제목으로 도서 검색 메뉴로 넘어갑니다."),

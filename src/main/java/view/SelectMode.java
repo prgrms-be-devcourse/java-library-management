@@ -1,5 +1,6 @@
-package domain;
+package view;
 
+import domain.ModeType;
 import message.ExecuteMessage;
 import service.Mode;
 

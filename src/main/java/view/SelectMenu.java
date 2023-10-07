@@ -1,4 +1,4 @@
-package domain;
+package view;
 
 import message.ExecuteMessage;
 import repository.Book;
@@ -73,7 +73,7 @@ public enum SelectMenu {
 
     private static final Map<Integer, SelectMenu> BY_STRING =
             Stream.of(values())
-                    .collect(Collectors.toMap(SelectMenu :: getSelectNum, e -> e));
+                    .collect(Collectors.toMap(SelectMenu :: getSelectNum, menu -> menu));
     private final int selectNum;
 
     SelectMenu(int selectNum) {

@@ -51,11 +51,13 @@ public class FileRepository implements Repository {
                 .findFirst();
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
-            if (book.getState() == BookState.AVAILABLE) {
+            BookState state = book.getState();
+
+            if (state == BookState.AVAILABLE) {
                 book.setState(BookState.RENTING);
                 updateFile();
             }
-            return book.getState();
+            return state;
         }
         return null;
     }
@@ -69,14 +71,15 @@ public class FileRepository implements Repository {
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
             Thread thread = new FileChangeStateThread(book);
+            BookState state = book.getState();
 
-            if (book.getState() == BookState.RENTING || book.getState() == BookState.LOST) {
+            if (state == BookState.RENTING || state == BookState.LOST) {
                 book.setState(BookState.ORGANIZING);
                 updateFile();
                 thread.setDaemon(true);
                 thread.start();
             }
-            return book.getState();
+            return state;
         }
         return null;
     }
@@ -88,11 +91,13 @@ public class FileRepository implements Repository {
                 .findFirst();
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
-            if (book.getState() == BookState.RENTING) {
+            BookState state = book.getState();
+
+            if (state == BookState.RENTING) {
                 book.setState(BookState.LOST);
                 updateFile();
             }
-            return book.getState();
+            return state;
         }
         return null;
     }
