@@ -59,7 +59,7 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 대여: 대여 성공")
+    @DisplayName("도서 대여: 대여 가능")
     void rentalSuccess() {
         List<Book> books = repository.getList();
         repository.rental(1);
@@ -68,14 +68,40 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("도서 대여: 대여 실패")
+    @DisplayName("도서 대여: 대여중")
     void rentalFail() {
         List<Book> books = repository.getList();
-        BookState before = books.get(1).getState();
         repository.rental(2);
-        BookState after = books.get(1).getState();
 
-        assertThat(after).isEqualTo(before);
+        assertThat(books.get(1).getState()).isEqualTo(BookState.RENTING);
+    }
+
+    @Test
+    @DisplayName("도서 대여: 분실됨")
+    void rentalLost() {
+        List<Book> books = repository.getList();
+        repository.rental(3);
+
+        assertThat(books.get(2).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @Test
+    @DisplayName("도서 대여: 도서 정리중")
+    void rentalOrganizing() {
+        List<Book> books = repository.getList();
+        repository.returnBook(2, 5000);
+        repository.rental(2);
+
+        assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
+    }
+
+    @Test
+    @DisplayName("도서 대여: 아이디 없음")
+    void rentalNotExists() {
+        List<Book> books = repository.getList();
+        BookState state = repository.rental(10);
+
+        assertThat(state).isEqualTo(null);
     }
 
     @Test
@@ -120,10 +146,75 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    void lostBook() {
+    @DisplayName("도서 반납: 아이디 없음")
+    void returnBookNotExists() {
+        List<Book> books = repository.getList();
+        BookState state = repository.returnBook(10, 5000);
+
+        assertThat(state).isEqualTo(null);
     }
 
     @Test
-    void deleteBook() {
+    @DisplayName("도서 분실: 대여 가능")
+    void lostBookAvailable() {
+        List<Book> books = repository.getList();
+        repository.lostBook(1);
+
+        assertThat(books.get(0).getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 대여중")
+    void lostBookRenting() {
+        List<Book> books = repository.getList();
+        repository.lostBook(2);
+
+        assertThat(books.get(1).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 분실됨")
+    void lostBookLost() {
+        List<Book> books = repository.getList();
+        repository.lostBook(3);
+
+        assertThat(books.get(2).getState()).isEqualTo(BookState.LOST);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 도서 정리중")
+    void lostBookOrganizing() {
+        List<Book> books = repository.getList();
+        repository.returnBook(2, 5000);
+        repository.lostBook(2);
+
+        assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 아이디 없음")
+    void lostBookNotExists() {
+        List<Book> books = repository.getList();
+        BookState state = repository.lostBook(10);
+
+        assertThat(state).isEqualTo(null);
+    }
+
+    @Test
+    @DisplayName("도서 삭제 : 성공")
+    void deleteBookSuccess() {
+        List<Book> books = repository.getList();
+        repository.deleteBook(3);
+
+        assertThat(2).isEqualTo(books.size());
+    }
+
+    @Test
+    @DisplayName("도서 삭제 : 실패")
+    void deleteBookFail() {
+        List<Book> books = repository.getList();
+        repository.deleteBook(10);
+
+        assertThat(3).isEqualTo(books.size());
     }
 }
