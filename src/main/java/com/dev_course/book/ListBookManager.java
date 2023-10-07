@@ -54,17 +54,17 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
-    public String getInfo() {
+    public String getInfos() {
         return bookList.stream()
-                .map(Book::toString)
+                .map(Book::info)
                 .collect(Collectors.joining(infoDelim));
     }
 
     @Override
-    public String getInfoByTitle(String title) {
+    public String getInfosByTitle(String title) {
         return bookList.stream()
                 .filter(book -> book.getTitle().contains(title))
-                .map(Book::toString)
+                .map(Book::info)
                 .collect(Collectors.joining(infoDelim));
     }
 
@@ -145,7 +145,7 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
-    public List<Book> getBookList() {
+    public List<Book> getBooks() {
         return bookList;
     }
 

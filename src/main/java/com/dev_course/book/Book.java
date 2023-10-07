@@ -63,8 +63,7 @@ public class Book {
         this.updateAt = time;
     }
 
-    @Override
-    public String toString() {
+    public String info() {
         return String.format("""
                 도서번호 : %d
                 제목 : %s

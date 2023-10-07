@@ -85,7 +85,7 @@ public class LibrarySystem {
     }
 
     private void exit() {
-        dataManager.save(bookManager.getBookList());
+        dataManager.save(bookManager.getBooks());
 
         println(EXIT_MESSAGE);
     }
@@ -103,7 +103,7 @@ public class LibrarySystem {
     private void listBooks() {
         println(LIST_BOOK_MESSAGE);
 
-        println(bookManager.getInfo());
+        println(bookManager.getInfos());
         println(END_LIST_BOOK_MESSAGE);
     }
 
@@ -112,7 +112,7 @@ public class LibrarySystem {
 
         String title = printAndReadInput(READ_FIND_BY_TITLE_MESSAGE);
 
-        println(bookManager.getInfoByTitle(title));
+        println(bookManager.getInfosByTitle(title));
         println(END_FIND_BOOK_BY_TITLE_MESSAGE);
     }
 

@@ -10,9 +10,9 @@ public interface BookManager {
 
     String create(String title, String author, int pages);
 
-    String getInfo();
+    String getInfos();
 
-    String getInfoByTitle(String title);
+    String getInfosByTitle(String title);
 
     String rentById(int id);
 
@@ -22,5 +22,5 @@ public interface BookManager {
 
     String deleteById(int id);
 
-    List<Book> getBookList();
+    List<Book> getBooks();
 }

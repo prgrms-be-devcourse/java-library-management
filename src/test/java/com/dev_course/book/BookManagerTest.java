@@ -25,7 +25,7 @@ abstract class BookManagerTest {
             BookManager bookManager = createBookManager();
 
             // when
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
 
             // then
             assertThat(bookList).isEmpty();
@@ -47,7 +47,7 @@ abstract class BookManagerTest {
             bookManager.init(initData);
 
             // then
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
 
             assertThat(bookList).containsAll(initData);
         }
@@ -68,7 +68,7 @@ abstract class BookManagerTest {
             bookManager.create("test2", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
 
             assertThat(bookList).allMatch(book -> book.getState() == BookState.AVAILABLE);
         }
@@ -84,7 +84,7 @@ abstract class BookManagerTest {
             bookManager.create("test2", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
             long idCount = bookList.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(2);
@@ -109,7 +109,7 @@ abstract class BookManagerTest {
             bookManager.create("test5", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
             long idCount = bookList.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(5);
@@ -162,7 +162,7 @@ abstract class BookManagerTest {
 
             // when
             bookManager.init(initData);
-            String info = bookManager.getInfo();
+            String info = bookManager.getInfos();
 
             // then
             String requiredFormat = initData.stream()
@@ -193,7 +193,7 @@ abstract class BookManagerTest {
 
             // when
             bookManager.init(initData);
-            String infoByTitle = bookManager.getInfoByTitle("bana");
+            String infoByTitle = bookManager.getInfosByTitle("bana");
 
             // then
             String requiredData = initData.stream()
@@ -500,7 +500,7 @@ abstract class BookManagerTest {
             bookManager.deleteById(lostBook.getId());
 
             // then
-            List<Book> bookList = bookManager.getBookList();
+            List<Book> bookList = bookManager.getBooks();
 
             assertThat(bookList).doesNotContainAnyElementsOf(initData);
         }
