@@ -88,7 +88,8 @@ class ServiceTest {
     @Test
     @DisplayName("도서 대여 : 도서 정리중")
     void rentalO() {
-        service.returnBook(2);
+        List<Book> books = service.getList();
+        books.get(1).changeStateToOrganizing();
         ExecuteMessage message = service.rental(2);
 
         assertThat(message).isEqualTo(ExecuteMessage.RENTAL_ORGANIZING);
@@ -123,30 +124,84 @@ class ServiceTest {
     void returnBookL() {
         ExecuteMessage message = service.returnBook(3);
 
-        assertThat(message).isEqualTo(ExecuteMessage.RETURN_IMPOSSIBLE);
+        assertThat(message).isEqualTo(ExecuteMessage.RETURN_COMPLETE);
     }
 
     @Test
     @DisplayName("도서 반납 : 도서 정리중")
     void returnBookO() {
-        ExecuteMessage message = service.returnBook(1);
+        List<Book> books = service.getList();
+        books.get(1).changeStateToOrganizing();
 
-        assertThat(message).isEqualTo(ExecuteMessage.RETURN_AVAILABLE);
+        ExecuteMessage message = service.returnBook(2);
+
+        assertThat(message).isEqualTo(ExecuteMessage.RETURN_IMPOSSIBLE);
     }
 
     @Test
-    @DisplayName("도서 반납 : 대여 가능")
+    @DisplayName("도서 반납 : id 없음")
     void returnBookN() {
-        ExecuteMessage message = service.returnBook(1);
+        ExecuteMessage message = service.returnBook(10);
 
-        assertThat(message).isEqualTo(ExecuteMessage.RETURN_AVAILABLE);
+        assertThat(message).isEqualTo(ExecuteMessage.NOT_EXIST);
     }
 
     @Test
-    void lostBook() {
+    @DisplayName("도서 분실: 대여 가능")
+    void lostBookA() {
+        ExecuteMessage message = service.lostBook(1);
+
+        assertThat(message).isEqualTo(ExecuteMessage.LOST_IMPOSSIBLE);
     }
 
     @Test
-    void deleteBook() {
+    @DisplayName("도서 분실: 대여중")
+    void lostBookR() {
+        ExecuteMessage message = service.lostBook(2);
+
+        assertThat(message).isEqualTo(ExecuteMessage.LOST_COMPLETE);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 분실됨")
+    void lostBookL() {
+        ExecuteMessage message = service.lostBook(3);
+
+        assertThat(message).isEqualTo(ExecuteMessage.LOST_ALREADY);
+    }
+
+    @Test
+    @DisplayName("도서 분실: 도서 정리중")
+    void lostBookO() {
+        List<Book> books = service.getList();
+        books.get(1).changeStateToOrganizing();
+
+        ExecuteMessage message = service.lostBook(2);
+
+        assertThat(message).isEqualTo(ExecuteMessage.LOST_IMPOSSIBLE);
+    }
+
+    @Test
+    @DisplayName("도서 분실: id 없음")
+    void lostBookN() {
+        ExecuteMessage message = service.lostBook(10);
+
+        assertThat(message).isEqualTo(ExecuteMessage.NOT_EXIST);
+    }
+
+    @Test
+    @DisplayName("도서 삭제 : 성공")
+    void deleteBookS() {
+        ExecuteMessage message = service.deleteBook(1);
+
+        assertThat(message).isEqualTo(ExecuteMessage.DELETE_COMPLETE);
+    }
+
+    @Test
+    @DisplayName("도서 삭제 : 실패")
+    void deleteBookF() {
+        ExecuteMessage message = service.deleteBook(10);
+
+        assertThat(message).isEqualTo(ExecuteMessage.NOT_EXIST);
     }
 }
