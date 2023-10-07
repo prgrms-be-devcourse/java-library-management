@@ -55,7 +55,7 @@ public class FileRepository implements Repository {
             BookState state = book.getState();
 
             if (state == BookState.AVAILABLE) {
-                book.setState(BookState.RENTING);
+                book.changeStateToRenting();
                 updateFile();
             }
             return state;
@@ -75,7 +75,7 @@ public class FileRepository implements Repository {
             BookState state = book.getState();
 
             if (state == BookState.RENTING || state == BookState.LOST) {
-                book.setState(BookState.ORGANIZING);
+                book.changeStateToOrganizing();
                 updateFile();
                 thread.setDaemon(true);
                 thread.start();
@@ -95,7 +95,7 @@ public class FileRepository implements Repository {
             BookState state = book.getState();
 
             if (state == BookState.RENTING) {
-                book.setState(BookState.LOST);
+                book.changeStateToLost();
                 updateFile();
             }
             return state;

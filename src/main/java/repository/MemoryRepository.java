@@ -39,7 +39,7 @@ public class MemoryRepository implements Repository {
             Book book = selectedBookOptional.get();
             BookState state = book.getState();
 
-            if (state == BookState.AVAILABLE) book.setState(BookState.RENTING);
+            if (state == BookState.AVAILABLE) book.changeStateToRenting();
             return state;
         }
         return null;
@@ -56,7 +56,7 @@ public class MemoryRepository implements Repository {
             BookState state = book.getState();
 
             if (state == BookState.RENTING || state == BookState.LOST) {
-                book.setState(BookState.ORGANIZING);
+                book.changeStateToOrganizing();
                 thread.setDaemon(true);
                 thread.start();
             }
@@ -74,7 +74,7 @@ public class MemoryRepository implements Repository {
             Book book = selectedBookOptional.get();
             BookState state = book.getState();
 
-            if (state == BookState.RENTING) book.setState(BookState.LOST);
+            if (state == BookState.RENTING) book.changeStateToLost();
             return state;
         }
         return null;

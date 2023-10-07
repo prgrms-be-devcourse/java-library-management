@@ -48,8 +48,20 @@ public class Book {
         return state;
     }
 
-    public void setState(BookState state) {
-        this.state = state;
+    public void changeStateToAvailable() {
+        this.state = BookState.AVAILABLE;
+    }
+
+    public void changeStateToRenting() {
+        this.state = BookState.RENTING;
+    }
+
+    public void changeStateToOrganizing() {
+        this.state = BookState.ORGANIZING;
+    }
+
+    public void changeStateToLost() {
+        this.state = BookState.LOST;
     }
 
     public String getTitle() {
