@@ -166,7 +166,7 @@ abstract class BookManagerTest {
 
             // then
             String requiredFormat = initData.stream()
-                    .map(Book::toString)
+                    .map(Book::info)
                     .collect(Collectors.joining("\n------------------------------\n"));
 
             assertThat(info).isEqualTo(requiredFormat);
@@ -198,7 +198,7 @@ abstract class BookManagerTest {
             // then
             String requiredData = initData.stream()
                     .filter(book -> book.getTitle().contains("bana"))
-                    .map(Book::toString)
+                    .map(Book::info)
                     .collect(Collectors.joining("\n------------------------------\n"));
 
             assertThat(infoByTitle).isEqualTo(requiredData);
