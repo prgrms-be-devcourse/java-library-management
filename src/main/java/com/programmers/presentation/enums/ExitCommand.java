@@ -22,7 +22,6 @@ public enum ExitCommand {
         return NOT_EXIT.commands.contains(command.toLowerCase());
     }
 
-    //TODO: 종료 시 메세지를 보내려면? -> 다른 곳에서 보내서 처리
     public static boolean promptForExit(String exitInput) {
         if (isExitCommand(exitInput)) {
             return true;

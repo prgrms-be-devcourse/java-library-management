@@ -1,7 +1,7 @@
 package com.programmers.domain.dto;
 
 import com.programmers.domain.entity.Book;
-import com.programmers.domain.enums.BookStatus;
+import com.programmers.domain.enums.BookStatusType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,10 +12,10 @@ public class BookResponse {
     private final String title;
     private final String author;
     private final Integer pages;
-    private final BookStatus status;
+    private final BookStatusType status;
 
     @Builder
-    public BookResponse(Long id, String title, String author, Integer pages, BookStatus status) {
+    public BookResponse(Long id, String title, String author, Integer pages, BookStatusType status) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -30,9 +30,9 @@ public class BookResponse {
                 "제목: %s%n" +
                 "작가: %s%n" +
                 "페이지 수: %d%n" +
-                "상태: %b%n%n" +
+                "상태: %s%n%n" +
                 "------------------------------%n",
-            id, title, author, pages, status
+            id, title, author, pages, status.getName()
         );
     }
 
@@ -42,7 +42,7 @@ public class BookResponse {
             .title(book.getTitle())
             .author(book.getAuthor())
             .pages(book.getPages())
-            .status(book.getStatus())
+            .status(book.getStatus().getBookStatusName())
             .build();
     }
 }

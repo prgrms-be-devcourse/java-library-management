@@ -14,6 +14,7 @@ public enum ErrorCode {
     FAILED_RENT_BOOK_LOST("failed.rent.book.lost"),
     FAILED_RETURN_BOOK("failed.return.book"),
     FAILED_LOST_BOOK("failed.lost.book"),
+    FAILED_SET_AVAILABLE_BOOK("failed.set.available.book"),
     SYSTEM_ERROR("system.error"),
     FILE_IO_ERROR("file.io.error"),
     ;

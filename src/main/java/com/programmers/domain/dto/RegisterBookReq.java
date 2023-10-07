@@ -1,7 +1,7 @@
 package com.programmers.domain.dto;
 
 import com.programmers.domain.entity.Book;
-import com.programmers.domain.enums.BookStatus;
+import com.programmers.domain.enums.BookStatusType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -34,7 +34,7 @@ public class RegisterBookReq {
             .title(title)
             .author(author)
             .pages(pages)
-            .status(BookStatus.AVAILABLE)
+            .status(BookStatusType.AVAILABLE.makeStatus())
             .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.programmers.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.programmers.adapter.BookControllerAdapter;
 import com.programmers.application.BookService;
 import com.programmers.config.enums.Mode;
@@ -8,9 +9,12 @@ import com.programmers.config.factory.ModeAbstractFactory;
 import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
 import com.programmers.domain.repository.FileProvider;
+import com.programmers.domain.status.BookStatus;
 import com.programmers.exception.AppExceptionHandler;
 import com.programmers.exception.GlobalExceptionHandler;
 import com.programmers.exception.checked.InvalidModeNumberException;
+import com.programmers.infrastructure.BookStatusDeserializer;
+import com.programmers.infrastructure.BookStatusSerializer;
 import com.programmers.infrastructure.IO.Console;
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.infrastructure.IO.provider.JsonFileProvider;
@@ -29,8 +33,8 @@ import com.programmers.infrastructure.IO.responseCommand.ResponseNoBodySender;
 import com.programmers.infrastructure.IO.responseCommand.ResponseSender;
 import com.programmers.infrastructure.IO.responseCommand.ResponseSingleBodySender;
 import com.programmers.infrastructure.IO.validator.InputValidator;
-import com.programmers.infrastructure.MenuRequestProvider;
-import com.programmers.infrastructure.MenuResponseProvider;
+import com.programmers.infrastructure.provider.MenuRequestProvider;
+import com.programmers.infrastructure.provider.MenuResponseProvider;
 import com.programmers.mediator.ConsoleRequestProcessor;
 import com.programmers.mediator.RequestProcessor;
 import com.programmers.presentation.BookController;
@@ -98,6 +102,11 @@ public class DependencyInjector {
 
     private void initializeGeneratorsAndProviders() {
         this.objectMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(BookStatus.class, new BookStatusDeserializer());
+        module.addSerializer(BookStatus.class, new BookStatusSerializer());
+        objectMapper.registerModule(module);
+
         this.fileRepository = new JsonFileProvider(objectMapper);
         this.menuRequestGenerators = List.of(new ExitRequestGenerator(consoleInteractionAggregator),
             new DeleteBookRequestGenerator(consoleInteractionAggregator),

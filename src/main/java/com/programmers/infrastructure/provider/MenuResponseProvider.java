@@ -1,4 +1,4 @@
-package com.programmers.infrastructure;
+package com.programmers.infrastructure.provider;
 
 import com.programmers.infrastructure.IO.responseCommand.ResponseSender;
 import com.programmers.mediator.dto.ConsoleResponse;

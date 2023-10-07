@@ -1,4 +1,4 @@
-package com.programmers.infrastructure;
+package com.programmers.infrastructure.provider;
 
 import com.programmers.exception.checked.InvalidMenuNumberException;
 import com.programmers.infrastructure.IO.requestCommand.MenuRequestGenerator;

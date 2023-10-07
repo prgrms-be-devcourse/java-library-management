@@ -22,7 +22,6 @@ public class BookControllerAdapter {
         String request = (String) params[0];
         boolean result = ExitCommand.promptForExit(request);
 
-        //TODO: 오버로딩
         return ExitResponse.noBodyResponse(result);
     }
 

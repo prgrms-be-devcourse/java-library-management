@@ -19,7 +19,7 @@ public class ReturnBookRequestGenerator implements MenuRequestGenerator {
 
     @Override
     public Request generateRequest() {
-        consoleInteractionAggregator.displayMessage(Messages.SELECT_MENU_RENT.getMessage());
+        consoleInteractionAggregator.displayMessage(Messages.SELECT_MENU_RETURN.getMessage());
         return ConsoleRequest.withBodyRequest(
             consoleInteractionAggregator.collectRentInput(), getMenuNumber());
     }
