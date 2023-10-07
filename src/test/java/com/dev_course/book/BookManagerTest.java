@@ -2,6 +2,7 @@ package com.dev_course.book;
 
 import org.junit.jupiter.api.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,10 +37,11 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
+            LocalDateTime now = LocalDateTime.now();
 
-            initData.add(new Book(1, "test1", "tester", 111, 1L));
-            initData.add(new Book(2, "test2", "tester", 222, 2L));
-            initData.add(new Book(3, "test3", "tester", 333, 3L));
+            initData.add(new Book(1, "test1", "tester", 111, now));
+            initData.add(new Book(2, "test2", "tester", 222, now));
+            initData.add(new Book(3, "test3", "tester", 333, now));
 
             // when
             bookManager.init(initData);
@@ -94,10 +96,11 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
+            LocalDateTime now = LocalDateTime.now();
 
-            initData.add(new Book(1, "test1", "tester", 111, 1L));
-            initData.add(new Book(5, "test2", "tester", 222, 2L));
-            initData.add(new Book(10, "test3", "tester", 333, 3L));
+            initData.add(new Book(1, "test1", "tester", 111, now));
+            initData.add(new Book(5, "test2", "tester", 222, now));
+            initData.add(new Book(10, "test3", "tester", 333, now));
 
             // when
             bookManager.init(initData);
@@ -151,10 +154,11 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
+            LocalDateTime now = LocalDateTime.now();
 
-            initData.add(new Book(1, "test1", "tester", 111, 1L));
-            initData.add(new Book(5, "test2", "tester", 222, 2L));
-            initData.add(new Book(10, "test3", "tester", 333, 3L));
+            initData.add(new Book(1, "test1", "tester", 111, now));
+            initData.add(new Book(5, "test2", "tester", 222, now));
+            initData.add(new Book(10, "test3", "tester", 333, now));
 
             // when
             bookManager.init(initData);
@@ -179,12 +183,13 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
+            LocalDateTime now = LocalDateTime.now();
 
-            initData.add(new Book(1, "banabana", "tester", 111, 1L));
-            initData.add(new Book(2, "bana", "tester", 222, 2L));
-            initData.add(new Book(3, "anab", "tester", 333, 3L));
-            initData.add(new Book(4, "banan", "tester", 444, 4L));
-            initData.add(new Book(5, "banana", "tester", 555, 5L));
+            initData.add(new Book(1, "banabana", "tester", 111, now));
+            initData.add(new Book(2, "bana", "tester", 222, now));
+            initData.add(new Book(3, "anab", "tester", 333, now));
+            initData.add(new Book(4, "banan", "tester", 444, now));
+            initData.add(new Book(5, "banana", "tester", 555, now));
 
             // when
             bookManager.init(initData);
@@ -210,7 +215,7 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
-            Book book = new Book(1, "test1", "tester", 111, 1L);
+            Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
 
             initData.add(book);
             bookManager.init(initData);
@@ -229,7 +234,7 @@ abstract class BookManagerTest {
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
 
-            initData.add(new Book(1, "test1", "tester", 111, 1L));
+            initData.add(new Book(1, "test1", "tester", 111, LocalDateTime.now()));
             bookManager.init(initData);
 
             // when
@@ -244,7 +249,7 @@ abstract class BookManagerTest {
         void testRentByIdFailNotExistId() {
             // given
             BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, 1111L);
+            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
 
             bookManager.init(List.of(book));
 
@@ -261,7 +266,7 @@ abstract class BookManagerTest {
             // given
             BookManager bookManager = createBookManager();
             List<Book> initData = new ArrayList<>();
-            Book book = new Book(1, "test1", "tester", 111, 1L);
+            Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
 
             initData.add(book);
             bookManager.init(initData);
@@ -296,8 +301,9 @@ abstract class BookManagerTest {
         void testReturnByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
-            Book loanBook = new Book(1, "test1", "tester", 111, 1L);
-            Book lostBook = new Book(2, "test2", "tester", 222, 2L);
+            LocalDateTime now = LocalDateTime.now();
+            Book loanBook = new Book(1, "test1", "tester", 111, now);
+            Book lostBook = new Book(2, "test2", "tester", 222, now);
 
             bookManager.init(List.of(loanBook, lostBook));
             loanBook.setState(BookState.LOAN);
@@ -317,8 +323,9 @@ abstract class BookManagerTest {
         void testReturnByIdSuccess() {
             // given
             BookManager bookManager = createBookManager();
-            Book loanBook = new Book(1, "test1", "tester", 111, 1L);
-            Book lostBook = new Book(2, "test2", "tester", 222, 2L);
+            LocalDateTime now = LocalDateTime.now();
+            Book loanBook = new Book(1, "test1", "tester", 111, now);
+            Book lostBook = new Book(2, "test2", "tester", 222, now);
 
             bookManager.init(List.of(loanBook, lostBook));
             loanBook.setState(BookState.LOAN);
@@ -338,7 +345,7 @@ abstract class BookManagerTest {
         void testReturnByIdFailNotExistId() {
             // given
             BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, 1111L);
+            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
 
             bookManager.init(List.of(book));
             book.setState(BookState.LOAN);
@@ -355,7 +362,7 @@ abstract class BookManagerTest {
         void testReturnByIdFailNonReturnable() {
             // given
             BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 111, 1L);
+            Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
 
             bookManager.init(List.of(book));
 
@@ -381,9 +388,10 @@ abstract class BookManagerTest {
         void testLossByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
-            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
-            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
-            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+            LocalDateTime now = LocalDateTime.now();
+            Book availableBook = new Book(1, "test1", "tester", 111, now);
+            Book processingBook = new Book(2, "test2", "tester", 222, now);
+            Book loanBook = new Book(3, "test3", "tester", 333, now);
 
             bookManager.init(List.of(availableBook, processingBook, loanBook));
             availableBook.setState(BookState.AVAILABLE);
@@ -406,9 +414,10 @@ abstract class BookManagerTest {
         void testLossByIdSuccess() {
             // given
             BookManager bookManager = createBookManager();
-            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
-            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
-            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
+            LocalDateTime now = LocalDateTime.now();
+            Book availableBook = new Book(1, "test1", "tester", 111, now);
+            Book processingBook = new Book(2, "test2", "tester", 222, now);
+            Book loanBook = new Book(3, "test3", "tester", 333, now);
 
             bookManager.init(List.of(availableBook, processingBook, loanBook));
             availableBook.setState(BookState.AVAILABLE);
@@ -431,7 +440,7 @@ abstract class BookManagerTest {
         void testLossByIdFailNotExistId() {
             // given
             BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, 1111L);
+            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
 
             bookManager.init(List.of(book));
 
@@ -447,7 +456,7 @@ abstract class BookManagerTest {
         void testLossByIdFailAlreadyLost() {
             // given
             BookManager bookManager = createBookManager();
-            Book lostBook = new Book(1, "test1", "tester", 111, 1L);
+            Book lostBook = new Book(1, "test1", "tester", 111, LocalDateTime.now());
 
             bookManager.init(List.of(lostBook));
             lostBook.setState(BookState.LOST);
@@ -469,10 +478,11 @@ abstract class BookManagerTest {
         void testDeleteByIdChangeState() {
             // given
             BookManager bookManager = createBookManager();
-            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
-            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
-            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
-            Book lostBook = new Book(4, "test4", "tester", 444, 4L);
+            LocalDateTime now = LocalDateTime.now();
+            Book availableBook = new Book(1, "test1", "tester", 111, now);
+            Book processingBook = new Book(2, "test2", "tester", 222, now);
+            Book loanBook = new Book(3, "test3", "tester", 333, now);
+            Book lostBook = new Book(4, "test4", "tester", 444, now);
 
             List<Book> initData = List.of(availableBook, processingBook, loanBook, lostBook);
 
@@ -500,10 +510,11 @@ abstract class BookManagerTest {
         void testDeleteByIdSuccess() {
             // given
             BookManager bookManager = createBookManager();
-            Book availableBook = new Book(1, "test1", "tester", 111, 1L);
-            Book processingBook = new Book(2, "test2", "tester", 222, 2L);
-            Book loanBook = new Book(3, "test3", "tester", 333, 3L);
-            Book lostBook = new Book(4, "test4", "tester", 444, 4L);
+            LocalDateTime now = LocalDateTime.now();
+            Book availableBook = new Book(1, "test1", "tester", 111, now);
+            Book processingBook = new Book(2, "test2", "tester", 222, now);
+            Book loanBook = new Book(3, "test3", "tester", 333, now);
+            Book lostBook = new Book(4, "test4", "tester", 444, now);
 
             List<Book> initData = List.of(availableBook, processingBook, loanBook, lostBook);
 
@@ -528,7 +539,7 @@ abstract class BookManagerTest {
         void testDeleteByIdFailNotExistId() {
             // given
             BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, 1111L);
+            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
 
             bookManager.init(List.of(book));
 
@@ -549,8 +560,7 @@ abstract class BookManagerTest {
         void testUpdateStatesChangeToAvailable() {
             // given
             BookManager bookManager = createBookManager();
-
-            long processAt = System.currentTimeMillis() - 300_000;
+            LocalDateTime processAt = LocalDateTime.now().minusMinutes(5);
             Book processedBook = new Book(1, "test1", "tester", 111, processAt);
 
             bookManager.init(List.of(processedBook));
@@ -568,8 +578,7 @@ abstract class BookManagerTest {
         void testUpdateStatesNotChange() {
             // given
             BookManager bookManager = createBookManager();
-
-            long currentTime = System.currentTimeMillis();
+            LocalDateTime currentTime = LocalDateTime.now();
             Book processingBook = new Book(1, "test1", "tester", 111, currentTime);
 
             bookManager.init(List.of(processingBook));

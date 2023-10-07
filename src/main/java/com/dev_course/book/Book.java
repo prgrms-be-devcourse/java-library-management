@@ -1,19 +1,28 @@
 package com.dev_course.book;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
+import java.time.LocalDateTime;
+
 public class Book {
     private int id;
     private String title;
     private String author;
     private int pages;
     private BookState state;
-    private long updateAt;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime updateAt;
 
     // for deserialize from object value
     public Book() {
     }
 
-    public Book(int id, String title, String author, int pages, long time) {
+    public Book(int id, String title, String author, int pages, LocalDateTime time) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -46,11 +55,11 @@ public class Book {
         this.state = state;
     }
 
-    public long getUpdateAt() {
+    public LocalDateTime getUpdateAt() {
         return updateAt;
     }
 
-    public void setUpdateAt(long time) {
+    public void setUpdateAt(LocalDateTime time) {
         this.updateAt = time;
     }
 

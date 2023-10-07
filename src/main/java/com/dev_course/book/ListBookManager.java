@@ -1,5 +1,7 @@
 package com.dev_course.book;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,9 +11,10 @@ import static com.dev_course.book.BookManagerMessage.*;
 import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
-    private static final int PROCESSING_COST = 300_000;
+    private static final Duration PROCESSING_COST = Duration.ofMinutes(5);
+    private static final String infoDelim = "\n------------------------------\n";
+
     private final List<Book> bookList = new ArrayList<>();
-    private final String infoDelim = "\n------------------------------\n";
     private int id;
 
     @Override
@@ -26,8 +29,8 @@ public class ListBookManager implements BookManager {
 
     @Override
     public void updateStates() {
-        long currentTime = getCurrentTime();
-        long processedTime = currentTime - PROCESSING_COST;
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime processedTime = currentTime.minus(PROCESSING_COST);
 
         bookList.stream()
                 .filter(book -> isProcessed(book, processedTime))
@@ -43,7 +46,7 @@ public class ListBookManager implements BookManager {
             return ALREADY_EXIST_TITLE.msg();
         }
 
-        Book newBook = new Book(++id, title, author, pages, getCurrentTime());
+        Book newBook = new Book(++id, title, author, pages, LocalDateTime.now());
 
         bookList.add(newBook);
 
@@ -81,7 +84,7 @@ public class ListBookManager implements BookManager {
         }
 
         target.setState(LOAN);
-        target.setUpdateAt(getCurrentTime());
+        target.setUpdateAt(LocalDateTime.now());
 
         return SUCCESS_RENT_BOOK.msg();
     }
@@ -104,7 +107,7 @@ public class ListBookManager implements BookManager {
         }
 
         target.setState(PROCESSING);
-        target.setUpdateAt(getCurrentTime());
+        target.setUpdateAt(LocalDateTime.now());
 
         return SUCCESS_RETURN_BOOK.msg();
     }
@@ -125,7 +128,7 @@ public class ListBookManager implements BookManager {
         }
 
         target.setState(LOST);
-        target.setUpdateAt(getCurrentTime());
+        target.setUpdateAt(LocalDateTime.now());
 
         return SUCCESS_LOSS_BOOK.msg();
     }
@@ -146,12 +149,8 @@ public class ListBookManager implements BookManager {
         return bookList;
     }
 
-    private long getCurrentTime() {
-        return System.currentTimeMillis();
-    }
-
-    private boolean isProcessed(Book book, long processedTime) {
-        return book.getState() == PROCESSING && book.getUpdateAt() <= processedTime;
+    private boolean isProcessed(Book book, LocalDateTime processedTime) {
+        return book.getState() == PROCESSING && book.getUpdateAt().isBefore(processedTime);
     }
 
     private boolean hasNotId(int id) {
