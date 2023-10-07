@@ -57,27 +57,9 @@ public class CommunicationAgent {
         return consoleReader.readString();
     }
 
-    public int instructBorrow() {
-        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.");
-        System.out.println("Q. 대여할 도서번호를 입력하세요");
-        return consoleReader.readInt();
-    }
-
-    public int instructReturn() {
-        System.out.println("[System] 도서 대여 메뉴로 넘어갑니다.");
-        System.out.println("Q. 반납할 도서번호를 입력하세요");
-        return consoleReader.readInt();
-    }
-
-    public int instructReportLost() {
-        System.out.println("[System] 도서 분실 처리 메뉴로 넘어갑니다.");
-        System.out.println("Q. 분실 신고할 도서번호를 입력하세요");
-        return consoleReader.readInt();
-    }
-
-    public int instructDelete() {
-        System.out.println("[System] 도서 삭제 처리 메뉴로 넘어갑니다.");
-        System.out.println("Q. 삭제 처리할 도서번호를 입력하세요");
+    public int instructMenuAction(Menu menu) {
+        System.out.println("[System] 도서 " + menu.displayName() + " 메뉴로 넘어갑니다.");
+        System.out.println("Q. " + menu.displayName() + " 처리할 도서번호를 입력하세요.");
         return consoleReader.readInt();
     }
 
