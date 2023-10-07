@@ -38,16 +38,16 @@ public class Service{
 
     public void rentalBook(int bookNumber){
         Book book = getBook((long)bookNumber);
-        repository.rentalBook(book);
+        book.rentalBook();
     }
 
-    public void organizeBook(int bookNumber){
+    public void returnBook(int bookNumber){
         Book book = getBook((long)bookNumber);
-        repository.organizeBook(book);
+        book.organizeBook();
     }
 
     public void lostBook(int bookNumber){
         Book book = getBook((long)bookNumber);
-        repository.lostBook(book);
+        book.lostBook();
     }
 }
