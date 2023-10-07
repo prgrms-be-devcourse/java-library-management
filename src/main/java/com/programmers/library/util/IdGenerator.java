@@ -7,7 +7,6 @@ public class IdGenerator {
 	private final AtomicLong id = new AtomicLong(0L);
 
 	private IdGenerator() {
-		throw new RuntimeException("싱글톤 객체이므로 new 키워드를 사용할 수 없습니다. getInstance() 메소드를 사용하세요.");
 	}
 
 	public static IdGenerator getInstance() {
