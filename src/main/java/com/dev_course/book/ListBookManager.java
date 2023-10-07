@@ -33,7 +33,7 @@ public class ListBookManager implements BookManager {
         LocalDateTime processedTime = currentTime.minus(PROCESSING_COST);
 
         books.stream()
-                .filter(book -> isProcessed(book, processedTime))
+                .filter(book -> book.isProcessed(processedTime))
                 .forEach(book -> {
                     book.setState(AVAILABLE);
                     book.setUpdateAt(currentTime);
@@ -75,12 +75,14 @@ public class ListBookManager implements BookManager {
         }
 
         Book target = books.stream()
-                .filter(book -> book.getId() == id)
+                .filter(book -> book.isSame(id))
                 .findFirst()
                 .orElseThrow();
 
-        if (target.getState() != AVAILABLE) {
-            return "%s (%s)".formatted(FAIL_RENT_BOOK.msg(), target.getState().label());
+        BookState state = target.getState();
+
+        if (!state.isRentable()) {
+            return "%s (%s)".formatted(FAIL_RENT_BOOK.msg(), state.label());
         }
 
         target.setState(LOAN);
@@ -96,7 +98,7 @@ public class ListBookManager implements BookManager {
         }
 
         Book target = books.stream()
-                .filter(book -> book.getId() == id)
+                .filter(book -> book.isSame(id))
                 .findFirst()
                 .orElseThrow();
 
@@ -119,7 +121,7 @@ public class ListBookManager implements BookManager {
         }
 
         Book target = books.stream()
-                .filter(book -> book.getId() == id)
+                .filter(book -> book.isSame(id))
                 .findFirst()
                 .orElseThrow();
 
@@ -139,7 +141,7 @@ public class ListBookManager implements BookManager {
             return NOT_EXIST_ID.msg();
         }
 
-        books.removeIf(book -> book.getId() == id);
+        books.removeIf(book -> book.isSame(id));
 
         return SUCCESS_DELETE_BOOK.msg();
     }
@@ -149,13 +151,9 @@ public class ListBookManager implements BookManager {
         return books;
     }
 
-    private boolean isProcessed(Book book, LocalDateTime processedTime) {
-        return book.getState() == PROCESSING && book.getUpdateAt().isBefore(processedTime);
-    }
-
     private boolean hasNotId(int id) {
         return books.stream()
-                .noneMatch(book -> book.getId() == id);
+                .noneMatch(book -> book.isSame(id));
     }
 
     private boolean hasTitle(String title) {

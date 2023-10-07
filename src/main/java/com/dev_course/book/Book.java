@@ -8,6 +8,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
+import static com.dev_course.book.BookState.PROCESSING;
+
 public class Book {
     private int id;
     private String title;
@@ -70,5 +72,13 @@ public class Book {
                 작가 이름 : %s
                 페이지 수 : %s 페이지
                 상태 : %s""", id, title, author, pages, state.label());
+    }
+
+    public boolean isSame(int id) {
+        return this.id == id;
+    }
+
+    public boolean isProcessed(LocalDateTime processedTime) {
+        return state == PROCESSING && updateAt.isBefore(processedTime);
     }
 }

@@ -16,6 +16,10 @@ public enum BookState {
         return label;
     }
 
+    public boolean isRentable() {
+        return this == AVAILABLE;
+    }
+
     public boolean isReturnable() {
         return this == LOAN || this == LOST;
     }
