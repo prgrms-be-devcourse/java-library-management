@@ -1,29 +1,34 @@
-[ {
-  "id" : 1,
-  "title" : "test1",
-  "author" : "tester",
-  "pages" : 123,
-  "state" : "PROCESSING",
-  "updateAt" : 1696177830911
-}, {
-  "id" : 2,
-  "title" : "test2",
-  "author" : "tester",
-  "pages" : 222,
-  "state" : "LOST",
-  "updateAt" : 1696151734918
-}, {
-  "id" : 3,
-  "title" : "test3",
-  "author" : "tester",
-  "pages" : 3333,
-  "state" : "AVAILABLE",
-  "updateAt" : 1696151728808
-}, {
-  "id" : 4,
-  "title" : "test4",
-  "author" : "tester",
-  "pages" : 12345,
-  "state" : "AVAILABLE",
-  "updateAt" : 1696177791454
-} ]
+[
+  {
+    "id": 1,
+    "title": "test1",
+    "author": "tester",
+    "pages": 123,
+    "state": "PROCESSING",
+    "updateAt": 1696177830911
+  },
+  {
+    "id": 2,
+    "title": "test2",
+    "author": "tester",
+    "pages": 222,
+    "state": "LOST",
+    "updateAt": 1696151734918
+  },
+  {
+    "id": 3,
+    "title": "test3",
+    "author": "tester",
+    "pages": 3333,
+    "state": "AVAILABLE",
+    "updateAt": 1696151728808
+  },
+  {
+    "id": 4,
+    "title": "test4",
+    "author": "tester",
+    "pages": 12345,
+    "state": "AVAILABLE",
+    "updateAt": 1696177791454
+  }
+]
