@@ -45,18 +45,13 @@ public class CsvFileIo {
     public void writeCsv(Book book) {
 
         File csv = new File(PATH);
-        BufferedWriter bw;
 
-        try {
-            bw = new BufferedWriter(new FileWriter(csv, true));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csv, true))) {
 
             String singleData = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getPage();
 
             bw.write(singleData);
             bw.newLine();
-
-            bw.flush();
-            bw.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -66,12 +61,10 @@ public class CsvFileIo {
     public void updateCsv(Map<Long, Book> bookMap) {
 
         File csv = new File(PATH);
-        BufferedWriter bw;
 
         String singleData;
 
-        try {
-            bw = new BufferedWriter(new FileWriter(csv));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csv))) {
 
             for (Book book : bookMap.values()) {
 
@@ -81,12 +74,6 @@ public class CsvFileIo {
                 bw.newLine();
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            bw.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
