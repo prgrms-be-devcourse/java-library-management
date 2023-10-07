@@ -26,14 +26,14 @@ public class LibraryManagementService {
 
     public List<Book> getAllBooks() {
 
-        updateAllStatus();
+        updateArrangeStatus();
 
         return bookRepository.findAll();
     }
 
     public List<Book> getBookByTitle(String title) {
 
-        updateAllStatus();
+        updateArrangeStatus();
 
         return bookRepository.findByTitle(title);
     }
@@ -111,7 +111,7 @@ public class LibraryManagementService {
         bookRepository.deleteBook(book);
     }
 
-    private void updateAllStatus() {
+    private void updateArrangeStatus() {
 
         List<Book> bookList = bookRepository.findAll();
         for (Book book : bookList) {
