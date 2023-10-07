@@ -1,6 +1,7 @@
 package com.programmers.library.entity;
 
 import static com.programmers.library.constants.MessageConstants.*;
+import static com.programmers.library.exception.ErrorCode.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

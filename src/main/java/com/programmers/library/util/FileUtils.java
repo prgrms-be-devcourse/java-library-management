@@ -8,8 +8,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.programmers.library.exception.FileNotExistException;
-import com.programmers.library.exception.FileReadException;
+import com.programmers.library.exception.BookException;
+import com.programmers.library.exception.ErrorCode;
 
 public class FileUtils<T> {
 	private final ObjectMapper objectMapper;
@@ -22,7 +22,7 @@ public class FileUtils<T> {
 
 	public <T> List<T> readFile(Class<T> clazz) {
 		if (!Files.exists(Paths.get(filePath))) {
-			throw new FileNotExistException();
+			throw new BookException(ErrorCode.FILE_NOT_EXIST);
 		}
 
 		List<T> list;
@@ -30,20 +30,20 @@ public class FileUtils<T> {
 			list = objectMapper.readValue(new File(filePath),
 				objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
 		} catch (IOException e) {
-			throw new FileReadException();
+			throw new BookException(ErrorCode.FILE_READ_FAILED);
 		}
 		return list;
 	}
 
 	public void writeFile(List<T> list) {
 		if (!Files.exists(Paths.get(filePath))) {
-			throw new FileNotExistException();
+			throw new BookException(ErrorCode.FILE_NOT_EXIST);
 		}
 
 		try {
 			objectMapper.writeValue(new File(filePath), list);
 		} catch (IOException e) {
-			throw new FileReadException();
+			throw new BookException(ErrorCode.FILE_WRITE_FAILED);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.programmers.library.service;
 
-import static com.programmers.library.constants.MessageConstants.*;
+import static com.programmers.library.exception.ErrorCode.BOOK_NOT_FOUND;
 
 import java.util.List;
 
