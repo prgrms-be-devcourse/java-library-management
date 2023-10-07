@@ -6,7 +6,7 @@ import com.dev_course.data_module.DataManager;
 import com.dev_course.data_module.EmptyDataManager;
 import com.dev_course.data_module.JSONDataManager;
 
-public enum LibraryMode {
+public enum ModeFactory {
     TEST, NORMAL;
 
     public DataManager getDataManager() {

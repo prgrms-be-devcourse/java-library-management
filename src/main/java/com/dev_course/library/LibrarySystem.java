@@ -22,7 +22,7 @@ public class LibrarySystem {
     }
 
     public void run() {
-        LibraryMode mode = selectMode();
+        ModeFactory mode = selectMode();
 
         init(mode);
 
@@ -38,21 +38,21 @@ public class LibrarySystem {
         exit();
     }
 
-    private void init(LibraryMode mode) {
+    private void init(ModeFactory mode) {
         dataManager = mode.getDataManager();
         bookManager = mode.getBookManager();
 
         bookManager.init(dataManager.load());
     }
 
-    private LibraryMode selectMode() {
+    private ModeFactory selectMode() {
         println(MOD_SCREEN_MESSAGE);
 
         String input = readInput();
 
         return switch (input) {
-            case "0" -> LibraryMode.TEST;
-            case "1" -> LibraryMode.NORMAL;
+            case "0" -> ModeFactory.TEST;
+            case "1" -> ModeFactory.NORMAL;
             default -> {
                 println(INVALID_MODE_MESSAGE);
                 yield selectMode();
