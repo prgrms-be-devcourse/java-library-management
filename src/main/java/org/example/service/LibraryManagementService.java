@@ -22,7 +22,7 @@ public class LibraryManagementService {
 
     // 도서 등록
     public void registerBook(String title, String author, Integer pageSize) {
-        repository.saveBook(Book.createWithoutStatus(nextBookId++, title, author, pageSize));
+        repository.save(Book.createWithoutStatus(nextBookId++, title, author, pageSize));
     }
 
     // 전체 도서 목록 조회
@@ -37,11 +37,11 @@ public class LibraryManagementService {
 
     // 도서 대여
     public void borrowBook(Integer bookId) {
-        Book bookToBorrow = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
-        if (bookToBorrow.canBorrow()) {
+        Book book = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        if (book.canBorrow()) {
             repository.updateBookStatus(bookId, BookStatusType.BORROWING);
         } else {
-            throw new IllegalArgumentException(ExceptionCode.getException(bookToBorrow.getStatus()).getMessage());
+            throw new IllegalArgumentException(ExceptionCode.getException(book.getStatus()).getMessage());
         }
     }
 
@@ -62,11 +62,11 @@ public class LibraryManagementService {
 
     // 도서 분실
     public void lostBook(Integer bookId) {
-        Book lostBook = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
-        if (lostBook.canLost()) {
+        Book bookToLost = repository.findBookById(bookId).orElseThrow(() -> new IllegalArgumentException(ExceptionCode.INVALID_BOOK.getMessage()));
+        if (bookToLost.canLost()) {
             repository.updateBookStatus(bookId, BookStatusType.LOST);
         } else {
-            throw new IllegalArgumentException(ExceptionCode.getException(lostBook.getStatus()).getMessage());
+            throw new IllegalArgumentException(ExceptionCode.getException(bookToLost.getStatus()).getMessage());
         }
 
     }

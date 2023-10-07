@@ -18,7 +18,7 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public void saveBook(Book book) {
+    public void save(Book book) {
         books.put(book.getId(), book);
         updateBooksInfoOnCsv();
     }

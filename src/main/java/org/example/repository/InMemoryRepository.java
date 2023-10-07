@@ -10,7 +10,7 @@ public class InMemoryRepository implements Repository {
     private Map<Integer, Book> books = new HashMap<>();
 
     @Override
-    public void saveBook(Book book) {
+    public void save(Book book) {
         books.put(book.getId(), book);
     }
 
