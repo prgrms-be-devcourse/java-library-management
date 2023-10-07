@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.programmers.library.entity.Book;
 import com.programmers.library.entity.BookStatus;
 import com.programmers.library.util.FileUtils;
-import com.programmers.library.util.IdGeneratorUtils;
+import com.programmers.library.util.IdGenerator;
 
 public class FileBookRepository implements BookRepository {
 
@@ -21,7 +21,7 @@ public class FileBookRepository implements BookRepository {
 		bookMap = new ConcurrentHashMap<>();
 		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
-		IdGeneratorUtils.initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0));
+		IdGenerator.getInstance().initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0L));
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import com.programmers.library.entity.Book;
 import com.programmers.library.entity.BookStatus;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.repository.BookRepository;
+import com.programmers.library.util.IdGenerator;
 
 public class LibraryManagerServiceImpl implements LibarayManagerService {
 
@@ -25,7 +26,9 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 
 	@Override
 	public void addBook(AddBookRequestDto request) {
-		bookRepository.save(request.toEntity());
+	    Long id = IdGenerator.getInstance().generateId();
+		Book book = request.toEntity(id);
+		bookRepository.save(book);
 	}
 
 	@Override

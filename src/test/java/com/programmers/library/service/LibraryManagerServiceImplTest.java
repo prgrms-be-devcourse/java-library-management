@@ -41,7 +41,7 @@ public class LibraryManagerServiceImplTest {
 	@DisplayName("도서를 등록합니다")
 	public void testAddBook() {
 		AddBookRequestDto request = new AddBookRequestDto("Test Title", "Test Author", "100");
-		Book book = request.toEntity();
+		Book book = request.toEntity(0L);
 
 		when(mockedBookRepository.save(any(Book.class))).thenReturn(book);
 

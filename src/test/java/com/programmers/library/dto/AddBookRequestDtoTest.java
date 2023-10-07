@@ -19,7 +19,7 @@ class AddBookRequestDtoTest {
 		String validPages = "150";
 
 		AddBookRequestDto request = new AddBookRequestDto(validTitle, validAuthor, validPages);
-		Book book = request.toEntity();
+		Book book = request.toEntity(0L);
 
 		assertEquals(validTitle, book.getTitle());
 		assertEquals(validAuthor, book.getAuthor());

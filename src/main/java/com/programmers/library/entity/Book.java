@@ -1,13 +1,11 @@
 package com.programmers.library.entity;
 
-import static com.programmers.library.constants.MessageConstants.*;
 import static com.programmers.library.exception.ErrorCode.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.programmers.library.exception.BookException;
-import com.programmers.library.util.IdGeneratorUtils;
 
 public class Book {
 	private Long id;
@@ -21,8 +19,8 @@ public class Book {
 	public Book() {
 	}
 
-	public Book(String title, String author, Long pages) {
-		this.id = IdGeneratorUtils.generateId();
+	public Book(Long id, String title, String author, Long pages) {
+		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
@@ -85,7 +83,7 @@ public class Book {
 	}
 
 	public void organize() {
-		if (this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+		if (this.status == BookStatus.ORGANIZING && this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
 			this.status = BookStatus.AVAILABLE;
 		}
 	}
