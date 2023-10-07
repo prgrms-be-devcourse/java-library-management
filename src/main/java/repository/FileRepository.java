@@ -19,7 +19,8 @@ public class FileRepository implements Repository {
 
     public FileRepository() {
         fileToList();
-        countId = books.get(books.size() - 1).getId() + 1;
+        if(books.isEmpty()) countId = 1;
+        else countId = books.get(books.size() - 1).getId() + 1;
         organizeState(books);
         updateFile();
     }
