@@ -1,6 +1,8 @@
 package com.dev_course.book;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,12 +12,10 @@ import java.util.stream.Collectors;
 import static com.dev_course.book.BookManagerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 abstract class BookManagerTest {
     protected abstract BookManager createBookManager();
 
     @Nested
-    @Order(1)
     @DisplayName("초기 생성, 데이터 로드 테스트")
     class TestGetBookList {
         @Test
@@ -54,7 +54,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(2)
     @DisplayName("도서 생성 테스트")
     class TestCreateBook {
         @Test
@@ -145,7 +144,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(3)
     @DisplayName("도서 목록 정보 테스트")
     class TestGetInfo {
         @Test
@@ -174,7 +172,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(4)
     @DisplayName("도서 제목 검색 테스트")
     class TestGetInfoByTitle {
         @Test
@@ -206,7 +203,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(5)
     @DisplayName("도서 대여 테스트")
     class TestRentById {
         @Test
@@ -293,7 +289,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(6)
     @DisplayName("도서 반납 테스트")
     class TestReturnById {
         @Test
@@ -380,7 +375,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(7)
     @DisplayName("도서 분실 테스트")
     class TestLossById {
         @Test
@@ -470,7 +464,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(8)
     @DisplayName("도서 삭제 테스트")
     class TestDeleteById {
         @Test
@@ -552,7 +545,6 @@ abstract class BookManagerTest {
     }
 
     @Nested
-    @Order(9)
     @DisplayName("도서 상태 업데이트 테스트")
     class TestUpdateStates {
         @Test
