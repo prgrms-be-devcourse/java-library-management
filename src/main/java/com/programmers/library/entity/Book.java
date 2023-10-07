@@ -85,7 +85,7 @@ public class Book {
 	}
 
 	public void organize() {
-		if (this.status == BookStatus.ORGANIZING && this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+		if (this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
 			this.status = BookStatus.AVAILABLE;
 		}
 	}
