@@ -123,4 +123,23 @@ class ServiceTest {
         assertThat(book1.getStatus()).isEqualTo(Status.IMPOSSIBLE);
         verify(repository, times(1)).getBook(any());
     }
+
+    @Test
+    void returnBook() {
+        //given
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.IMPOSSIBLE);
+
+        //when
+        when(repository.getBook(0L)).thenReturn(Optional.of(book1));
+        service.returnBook(0, 3000L);
+
+        //then
+        assertThat(book1.getStatus()).isEqualTo(Status.ORGANIZE);
+        try{
+            Thread.sleep(3000L);
+        }catch(Exception e){
+            throw new RuntimeException();
+        }
+        assertThat(book1.getStatus()).isEqualTo(Status.POSSIBLE);
+    }
 }
