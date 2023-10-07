@@ -6,7 +6,7 @@ import com.dev_course.io_module.Reader;
 import com.dev_course.io_module.Writer;
 import com.dev_course.library.LibrarySystem;
 
-public class Main {
+public class Application {
     public static void main(String[] args) {
         Reader reader = new ConsoleBufferedReader();
         Writer writer = new ConsoleSystemWriter();
