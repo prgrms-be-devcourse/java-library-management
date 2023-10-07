@@ -30,6 +30,7 @@ public enum Messages {
     BOOK_RENT_SUCCESS("book.rent.success"),
     BOOK_RETURN_SUCCESS("book.return.success"),
     BOOK_LOST_SUCCESS("book.lost.success"),
+    EXIT_MESSAGE("exitConfirmation.yes"),
 
     ;
 

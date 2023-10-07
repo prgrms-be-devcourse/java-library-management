@@ -2,17 +2,17 @@ package com.programmers.mediator.dto;
 
 import java.util.Optional;
 
-public class ConsoleResponse<T> implements Response<T> {
+public abstract class ConsoleResponse<T> implements Response<T> {
 
     private final String message;
     private final T body;
 
-    private ConsoleResponse(String message, T body) {
+    ConsoleResponse(String message, T body) {
         this.message = message;
         this.body = body;
     }
 
-    private ConsoleResponse(String message) {
+    ConsoleResponse(String message) {
         this.message = message;
         this.body = null;
     }
@@ -25,13 +25,5 @@ public class ConsoleResponse<T> implements Response<T> {
     @Override
     public String getMessage() {
         return message;
-    }
-
-    public static <T> ConsoleResponse<T> noBodyResponse(String message) {
-        return new ConsoleResponse<>(message);
-    }
-
-    public static <T> ConsoleResponse<T> withBodyResponse(String message, T body) {
-        return new ConsoleResponse<>(message, body);
     }
 }

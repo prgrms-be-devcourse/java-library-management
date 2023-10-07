@@ -1,6 +1,5 @@
 package com.programmers.infrastructure.IO;
 
-import com.programmers.domain.entity.Book;
 import com.programmers.domain.dto.RegisterBookReq;
 import com.programmers.util.Messages;
 import java.util.List;
@@ -65,25 +64,26 @@ public class ConsoleInteractionAggregator {
         return console.collectUserLongInput();
     }
 
-    public void displayBooksInfo(List<Book> books) {
-        books.forEach(this::displayBookInfo);
+    /**
+     * @param ListItems
+     * @param <T>
+     * @implNote
+     * 1. ListItems 원소의 타입이 String이 아닌 경우, toString()을 오버라이딩 해야함.
+     * 2. ListItems 원소의 타입이 String인 경우, toString()을 오버라이딩 하지 않아도 됨.
+     */
+    public <T> void displayListInfo(List<T> ListItems) {
+        ListItems.forEach(item -> displayMessage(item.toString()));
     }
 
-    private void displayBookInfo(Book book) {
-        console.displayMessage(
-            String.format("도서 번호: %d" + System.lineSeparator() +
-                    "제목: %s" + System.lineSeparator() +
-                    "작가: %s" + System.lineSeparator() +
-                    "페이지 수: %d" + System.lineSeparator() +
-                    "상태 : %s" + System.lineSeparator() + System.lineSeparator()
-                    + "------------------------------",
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getPages(),
-                book.getStatus().getName())
-        );
-
+    /**
+     * @param item
+     * @param <T>
+     * @implNote
+     * 1. item 의 타입이 String이 아닌 경우, toString()을 오버라이딩 해야함.
+     * 2. item 의 타입이 String인 경우, toString()을 오버라이딩 하지 않아도 됨.
+     */
+    public <T> void displaySingleInfo(T item) {
+        displayMessage(item.toString());
     }
 
     public void displayMessage(String message) {

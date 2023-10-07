@@ -1,7 +1,8 @@
 package com.programmers.config.factory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.programmers.domain.entity.Book;
 import com.programmers.domain.repository.BookRepository;
+import com.programmers.domain.repository.FileProvider;
 import com.programmers.infrastructure.repository.ListBookRepository;
 import com.programmers.util.IdGenerator;
 import com.programmers.util.Messages;
@@ -21,7 +22,7 @@ public class TestModeFactory implements ModeAbstractFactory {
     }
 
     @Override
-    public BookRepository createBookRepository(ObjectMapper objectMapper) {
+    public BookRepository createBookRepository(FileProvider<Book> fileProvider) {
         return new ListBookRepository();
     }
 

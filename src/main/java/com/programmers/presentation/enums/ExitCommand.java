@@ -1,7 +1,6 @@
 package com.programmers.presentation.enums;
 
 import com.programmers.exception.unchecked.InvalidExitCommandException;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,12 +22,11 @@ public enum ExitCommand {
         return NOT_EXIT.commands.contains(command.toLowerCase());
     }
 
-    //TODO: 종료 시 메세지를 보내려면?
-    public static void promptForExit(String exitInput) {
+    public static boolean promptForExit(String exitInput) {
         if (isExitCommand(exitInput)) {
-            System.exit(0);
+            return true;
         } else if (isNotExitCommand(exitInput)) {
-            return;
+            return false;
         }
         throw new InvalidExitCommandException();
     }

@@ -1,7 +1,6 @@
 package com.programmers.util;
 
 import com.programmers.exception.unchecked.SystemErrorException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,8 +14,9 @@ public class MessageProperties {
 
     //TODO: 파일이름 환경변수 설정
     static {
-        try (InputStream input = MessageProperties.class.getResourceAsStream(
-            "/messages.properties")) {
+        try (InputStream input = MessageProperties.class.getClassLoader()
+            .getResourceAsStream(
+                "messages.properties")) {
             if (input != null) {
                 properties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             } else {
@@ -26,8 +26,9 @@ public class MessageProperties {
             throw new SystemErrorException();
         }
 
-        try (InputStream input = MessageProperties.class.getResourceAsStream(
-            "/error_messages.properties")) {
+        try (InputStream input = MessageProperties.class.getClassLoader()
+            .getResourceAsStream(
+                "error_messages.properties")) {
             if (input != null) {
                 errorProperties.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             } else {

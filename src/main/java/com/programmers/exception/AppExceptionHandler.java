@@ -3,7 +3,7 @@ package com.programmers.exception;
 import com.programmers.exception.unchecked.SystemErrorException;
 import com.programmers.exception.unchecked.UncheckedCustomException;
 import com.programmers.mediator.RequestProcessor;
-import com.programmers.mediator.dto.ConsoleResponse;
+import com.programmers.mediator.dto.ConsoleNoBodyResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,14 +16,14 @@ public class AppExceptionHandler {
             runnable.run();
         } catch (SystemErrorException e) {
             requestProcessor.sendResponse(
-                ConsoleResponse.noBodyResponse(e.getErrorCode().getMessage()));
+                ConsoleNoBodyResponse.noBodyResponse(e.getErrorCode().getMessage()));
             System.exit(1);
         } catch (UncheckedCustomException e) {
             requestProcessor.sendResponse(
-                ConsoleResponse.noBodyResponse(e.getErrorCode().getMessage()));
+                ConsoleNoBodyResponse.noBodyResponse(e.getErrorCode().getMessage()));
         } catch (Exception e) {
             requestProcessor.sendResponse(
-                ConsoleResponse.noBodyResponse(e.getMessage()));
+                ConsoleNoBodyResponse.noBodyResponse(e.getMessage()));
         }
     }
 }
