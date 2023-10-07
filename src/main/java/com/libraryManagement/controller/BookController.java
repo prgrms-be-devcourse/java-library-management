@@ -37,24 +37,28 @@ public class BookController {
     }
 
     // service 에서 throw 로 처리하도록
-    public void rentBook() throws IOException {
+    public void rentBook() throws IOException, InterruptedException {
         long id = bookIO.inputRentBookId();
-        bookService.updateBookStatus();
+        bookService.rentBook(id);
+        bookIO.outputUpdateMsg();
     }
 
     public void returnBook() throws IOException {
         long id = bookIO.inputReturnBookId();
-        bookService.updateBookStatus();
+        bookService.returnBook(id);
+        bookIO.outputUpdateMsg();
     }
 
     public void lostBook() throws IOException {
         long id = bookIO.inputLostBookId();
-        bookService.updateBookStatus();
+        bookService.lostBook(id);
+        bookIO.outputUpdateMsg();
     }
 
     public void deleteBook() throws IOException {
         long id = bookIO.inputDeleteBookId();
-        bookService.updateBookStatus();
+        bookService.deleteBook(id);
+        bookIO.outputUpdateMsg();
     }
 
     //    public void updateBookStatus(String updateType) throws IOException, InterruptedException {

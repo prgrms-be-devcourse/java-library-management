@@ -7,14 +7,6 @@ public class Book {
     private final int pages;
     private String status;
 
-    /*
-        Builder pattern의 장점
-
-        - 각 인자의 의미를 알기 쉽다.
-        - setter 메소드가 없으므로 변경 불가능(immutable) 객체를 만들 수 있다.
-        - 한 번에 객체를 생성하므로 객체 일관성(consistency)이 깨지지 않는다.
-        - build() 메소드에서 잘못된 값이 입력되었는지 검증할 수 있다.
-     */
     public static class Builder {
         private long id;
         private String title;
@@ -83,5 +75,24 @@ public class Book {
                 "\n작가 이름 : " + author +
                 "\n페이지 수 : " + pages + " 페이지" +
                 "\n상태 : " + status + "\n";
+    }
+
+    public enum Status {
+
+        AVAILABLE("대여가능"),
+        RENT("대여중"),
+        READY("준비중"),
+        LOST("분실됨"),
+        DELETE("삭제됨");
+
+        final private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        Status(String name) {
+            this.name = name;
+        }
     }
 }

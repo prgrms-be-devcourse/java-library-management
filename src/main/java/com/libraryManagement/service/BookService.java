@@ -46,67 +46,58 @@ public class BookService {
     }
 
     // 상태가 추가될때.. 2가지 변경 필요해짐
-    // bookstatus 가 book의 외부로 노출됨 -> book 에서 캡슐화 , book.rent book.lost
-    // apply 를 update 로
-    public String updateBookStatus(String applyType, long id) throws InterruptedException {
-
-        if(applyType.equals(APPLYRENT.name())){
-            if(isPossibleUpdateBookStatus(applyType, id)){    // 대여할 수 있다면
-                repository.updateBookStatus(id, RENT.getName());
-                return AVAILABLE.getName();
-            }else{
-                return repository.findBookById(id).getStatus();
-            }
-        }else if(applyType.equals(APPLYRETURN.name())) {
-            if(isPossibleUpdateBookStatus(applyType, id)){    // 반납할 수 있다면
-                repository.updateBookStatus(id, READY.getName());
-
-                // 5분 후에 대여 가능 상태로 변경합니다.
-                myScheduler.scheduleTask(() -> {
-                    repository.updateBookStatus(id, AVAILABLE.getName());
-                }, 5, TimeUnit.MINUTES);
-            }
-        }else if(applyType.equals(APPLYLOST.name())) {
-            if(isPossibleUpdateBookStatus(applyType, id)){    // 분실처리할 수 있다면
-                repository.updateBookStatus(id, LOST.getName());
-            }
-        }else if(applyType.equals(APPLYDELETE.name())) {
-            if(isPossibleUpdateBookStatus(applyType, id)){    // 삭제처리할 수 있다면
-                repository.updateBookStatus(id, DELETE.getName());
-            }
-        }
-
-        return null;
+    public void rentBook(long id) throws InterruptedException {
+        if(isPossibleRentBook(id))
+            repository.updateBookStatus(id, RENT.getName());
     }
 
-    private Boolean isPossibleUpdateBookStatus(String applyType, long id) {
-        if(applyType.equals(APPLYRENT.name())){
-            // 대여가능일 때만 대여가능
-            if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
-                return true;
-            }
-            return false;
-        }else if(applyType.equals(APPLYRETURN.name())) {
-            // 대여가능일 때만 반납 불가
-            if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
-                return false;
-            }
-            return true;
-        }else if(applyType.equals(APPLYLOST.name())) {
-            // 분실됨일 때만 분실처리 불가
-            if(repository.findBookById(id).getStatus().equals(LOST.getName())){
-                return false;
-            }
-            return true;
-        }else if(applyType.equals(APPLYDELETE.name())) {
-            // 존재하지 않는 도서일 때만 삭제처리 불가
-            if(repository.findBookById(id).getStatus().equals(DELETE.getName())){
-                return false;
-            }
+    public void returnBook(long id) throws IOException {
+        if(isPossibleReturnBook(id))
+            repository.updateBookStatus(id, RENT.getName());
+
+        // 5분 후에 대여 가능 상태로 변경합니다.
+        myScheduler.scheduleTask(() -> {
+            repository.updateBookStatus(id, AVAILABLE.getName());
+        }, 5, TimeUnit.MINUTES);
+    }
+
+    public void lostBook(long id) throws IOException {
+        if(isPossibleLostBook(id))
+            repository.updateBookStatus(id, RENT.getName());
+    }
+
+    public void deleteBook(long id) throws IOException {
+        if(isPossibleDeleteBook(id))
+            repository.updateBookStatus(id, RENT.getName());
+    }
+
+    private Boolean isPossibleRentBook(long id) {
+        // 대여가능일 때만 대여가능
+        if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
             return true;
         }
-
-        return null;
+        return false;
+    }
+    private Boolean isPossibleReturnBook(long id) {
+        // 대여가능일 때만 반납 불가
+        if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
+            return false;
+        }
+        return true;
+    }
+    private Boolean isPossibleLostBook(long id) {
+        // 분실됨일 때만 분실처리 불가
+        if(repository.findBookById(id).getStatus().equals(LOST.getName())){
+            return false;
+        }
+        return true;
+    }
+    private Boolean isPossibleDeleteBook(long id) {
+        // 존재하지 않는 도서일 때만 삭제처리 불가
+        if(repository.findBookById(id).getStatus().equals(DELETE.getName())){
+            return false;
+        }
+        return true;
     }
 
     public long getNumCreatedBooks() {
