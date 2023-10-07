@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,11 +39,11 @@ class TestRepositoryTest {
     @DisplayName("단일 도서 찾기")
     void getBook() {
         //given
-        Book book = new Book(1L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book = new Book("자바의 정석", "남궁성", 500);
         testRepository.addBook(book);
 
         //when
-        Book getBook = testRepository.getBook(1L)
+        Book getBook = testRepository.getBook(0L)
                 .orElse(null);
         //then
         assertThat(getBook.equals(book)).isEqualTo(true);
@@ -91,5 +90,30 @@ class TestRepositoryTest {
 
         //then
         assertThat(book1.getStatus()).isEqualTo(Status.IMPOSSIBLE);
+    }
+
+    @Test
+    @DisplayName("도서 반납")
+    void returnBook() {
+//        //given
+//        Book book1 = new Book(1L, "자바의 정석", "남궁성", 500, Status.IMPOSSIBLE);
+//
+//        //when
+//        testRepository.organizeBook(book1);
+//
+//        //then
+
+    }
+
+    @Test
+    void lostBook() {
+        //given
+        Book book = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        testRepository.lostBook(book);
+
+        //then
+        assertThat(book.getStatus()).isEqualTo(Status.LOST);
     }
 }
