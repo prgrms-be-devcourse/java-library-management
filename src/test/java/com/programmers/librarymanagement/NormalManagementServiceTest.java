@@ -19,7 +19,7 @@ public class NormalManagementServiceTest {
     static NormalBookRepository normalBookRepository = new NormalBookRepository();
     static LibraryManagementService libraryManagementService = new LibraryManagementService(normalBookRepository);
 
-    @AfterEach
+    @BeforeEach
     void clearRepository() {
         List<Book> bookList = normalBookRepository.findAll();
         for (Book book : bookList) {

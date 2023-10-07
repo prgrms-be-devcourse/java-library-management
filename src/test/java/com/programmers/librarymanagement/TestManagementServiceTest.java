@@ -19,7 +19,7 @@ public class TestManagementServiceTest {
     static TestBookRepository testBookRepository = new TestBookRepository();
     static LibraryManagementService libraryManagementService = new LibraryManagementService(testBookRepository);
 
-    @AfterEach
+    @BeforeEach
     void clearRepository() {
         List<Book> bookList = testBookRepository.findAll();
         while (!bookList.isEmpty()) {
