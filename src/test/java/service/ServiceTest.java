@@ -142,4 +142,25 @@ class ServiceTest {
         }
         assertThat(book1.getStatus()).isEqualTo(Status.POSSIBLE);
     }
+    @Test
+    void lostBook() {
+        //given
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book2 = new Book(1L, "자바의 정석", "남궁성", 500, Status.IMPOSSIBLE);
+        Book book3 = new Book(2L, "자바의 정석", "남궁성", 500, Status.ORGANIZE);
+
+        //when
+        when(repository.getBook(0L)).thenReturn(Optional.of(book1));
+        when(repository.getBook(1L)).thenReturn(Optional.of(book2));
+        when(repository.getBook(2L)).thenReturn(Optional.of(book3));
+
+        service.lostBook(0);
+        service.lostBook(1);
+        service.lostBook(2);
+
+        //then
+        assertThat(book1.getStatus()).isEqualTo(Status.LOST);
+        assertThat(book2.getStatus()).isEqualTo(Status.LOST);
+        assertThat(book3.getStatus()).isEqualTo(Status.LOST);
+    }
 }
