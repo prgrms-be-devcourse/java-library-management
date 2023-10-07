@@ -33,7 +33,9 @@ public class NormalBookRepository implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        return new ArrayList<>(libraryStorage.values());
+        return libraryStorage.values()
+                .stream()
+                .toList();
     }
 
     @Override
