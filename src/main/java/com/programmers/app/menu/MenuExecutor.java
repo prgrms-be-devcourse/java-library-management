@@ -10,32 +10,32 @@ public class MenuExecutor {
         this.bookController = bookController;
     }
 
-    public void execute(Menu menu) {
+    public boolean execute(Menu menu) {
         switch (menu) {
             case EXIT:
                 bookController.exit();
-                break;
+                return false;
             case REGISTER:
                 bookController.register(menu);
-                break;
+                return true;
             case FIND_ALL_BOOKS:
                 bookController.findAllBooks();
-                break;
+                return true;
             case SEARCH_TITLE:
                 bookController.searchBookByTitle();
-                break;
+                return true;
             case BORROW_BOOK:
                 bookController.borrowBook(menu);
-                break;
+                return true;
             case RETURN_BOOK:
                 bookController.returnBook(menu);
-                break;
+                return true;
             case REPORT_LOST:
                 bookController.reportLostBook(menu);
-                break;
+                return true;
             case DELETE_BOOK:
                 bookController.deleteBook(menu);
-                break;
+                return true;
             default:
                 throw new InvalidInputException();
         }

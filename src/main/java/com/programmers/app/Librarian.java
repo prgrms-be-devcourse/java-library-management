@@ -5,19 +5,20 @@ import com.programmers.app.config.AppConfig;
 import com.programmers.app.menu.Menu;
 import com.programmers.app.mode.Mode;
 
-public class App {
+public class Librarian {
 
     private final AppConfig appConfig;
 
-    public App(InitialConfig initialConfig) {
+    public Librarian(InitialConfig initialConfig) {
         Mode mode = initialConfig.getModeSelector().select();
         appConfig = new AppConfig(initialConfig, mode);
     }
 
-    public void run() {
-        while (true) {
+    public void work() {
+        boolean isRunning = true;
+        while (isRunning) {
             Menu menu = appConfig.getMenuSelector().select();
-            appConfig.getMenuExecutor().execute(menu);
+            isRunning = appConfig.getMenuExecutor().execute(menu);
         }
     }
 }
