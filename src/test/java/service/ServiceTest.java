@@ -65,4 +65,36 @@ class ServiceTest {
         //repository.getAll()을 1번 호출했나?
         verify(repository, times(1)).getAll();
     }
+
+    //테스트 불가..!
+//    @Test
+//    void getBook() {
+//        //given
+//        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+//
+//        //when
+//        when(service.getBook(0L)).thenThrow(RuntimeException.class);
+//
+//        //then
+//        assertThat(service.getBook(0L)).isEqualTo(book1);
+//        verify(repository, times(1)).getBook(any(Long.class));
+//    }
+
+    @Test
+    void searchName() {
+        //given
+        List<Book> list = new ArrayList<>();
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book2 = new Book(1L, "자바의 정석1", "남궁성1", 500, Status.POSSIBLE);
+        Book book3 = new Book(2L, "자바의 정석2", "남궁성2", 500, Status.POSSIBLE);
+        list.add(book1);
+        list.add(book2);
+        list.add(book3);
+        //when
+        when(service.searchName("자바")).thenReturn(list);
+
+        //then
+        assertThat(service.searchName("자바")).isEqualTo(list);
+        verify(repository, times(1)).searchBook("자바");
+    }
 }
