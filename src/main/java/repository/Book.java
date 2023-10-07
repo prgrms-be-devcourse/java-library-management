@@ -4,10 +4,10 @@ import domain.BookState;
 
 public class Book {
     static int countId;
-    private int id;
-    private String title;
-    private String writer;
-    private int page;
+    private final int id;
+    private final String title;
+    private final String writer;
+    private final int page;
     private BookState state;
 
     public Book(String title, String writer, int page) {

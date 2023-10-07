@@ -2,8 +2,7 @@ package repository;
 
 import domain.BookState;
 import exception.FileWriteException;
-import message.ExecuteMessage;
-import view.FileConsolePrint;
+import thread.FileChangeStateThread;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,85 +13,104 @@ import static domain.Reader.fc;
 import static repository.Book.countId;
 
 public class FileRepository implements Repository {
-    public static File file = new File("src/main/resources/library.csv");
-    public static List<Book> books = new ArrayList<>();
+    private static File file = new File("src/main/resources/library.csv");
+    private static List<Book> books = new ArrayList<>();
 
     public FileRepository() {
-        fileToList(books, file);
+        fileToList();
         countId = books.get(books.size() - 1).getId() + 1;
         organizeState(books);
-        updateFile(books, file);
+        updateFile();
     }
 
     @Override
     public void register(Book book) {
         books.add(book);
-        updateFile(books, file);
+        updateFile();
     }
 
     @Override
-    public void printList() {
-        FileConsolePrint.printListView();
-    }
+    public List<Book> getList() { return books; }
 
     @Override
-    public void search(String titleWord) {
+    public List<Book> search(String titleWord) {
+        List<Book> selectedBooks = new ArrayList<>();
         books.forEach(book -> {
-            FileConsolePrint.searchView(titleWord, book);
+            if(book.getTitle().contains(titleWord)) {
+                selectedBooks.add(book);
+                updateFile();
+            }
         });
+        return selectedBooks;
     }
 
     @Override
-    public void rental(int id) {
+    public BookState rental(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
+                .findFirst();
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            if (book.getState() == BookState.AVAILABLE) {
+                book.setState(BookState.RENTING);
+                updateFile();
+            }
+            return book.getState();
+        }
+        return null;
+    }
+
+    @Override
+    public BookState returnBook(int id) {
         Optional<Book> selectedBookOptional = books.stream()
                 .filter(book -> book.isSameId(id))
                 .findFirst();
 
-        selectedBookOptional.ifPresentOrElse(
-                FileConsolePrint::rentalView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            Thread thread = new FileChangeStateThread(book);
+
+            if (book.getState() == BookState.RENTING || book.getState() == BookState.LOST) {
+                book.setState(BookState.ORGANIZING);
+                updateFile();
+                thread.setDaemon(true);
+                thread.start();
+            }
+            return book.getState();
+        }
+        return null;
     }
 
     @Override
-    public void returnBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+    public BookState lostBook(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
                 .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                FileConsolePrint::returnView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            if (book.getState() == BookState.RENTING) {
+                book.setState(BookState.LOST);
+                updateFile();
+            }
+            return book.getState();
+        }
+        return null;
     }
 
     @Override
-    public void lostBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+    public boolean deleteBook(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
                 .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                FileConsolePrint::lostView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            books.remove(book);
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public void deleteBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
-                .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                FileConsolePrint::deleteView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
-    }
-
-    public static void updateFile(List<Book> books, File file) {
+    public static void updateFile() {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             books.forEach(book -> {
@@ -108,7 +126,7 @@ public class FileRepository implements Repository {
         }
     }
 
-    private void fileToList(List<Book> books, File file) {
+    private void fileToList() {
         String line = "";
 
         while(fc.hasNextLine()) {

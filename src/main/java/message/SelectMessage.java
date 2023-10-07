@@ -16,7 +16,7 @@ public enum SelectMessage {
             7. 도서 삭제""");
 
 
-    private String message;
+    private final String message;
     SelectMessage(String message) {
         this.message = message;
     }

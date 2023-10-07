@@ -4,7 +4,7 @@ import domain.BookState;
 import repository.Book;
 
 public class MemoryChangeStateThread extends Thread {
-    private Book book;
+    private final Book book;
 
     public MemoryChangeStateThread(Book book) {
         this.book = book;

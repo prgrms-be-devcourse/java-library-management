@@ -1,9 +1,7 @@
 package repository;
 
 import domain.BookState;
-import message.ExecuteMessage;
 import thread.MemoryChangeStateThread;
-import view.MemoryConsolePrint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,7 @@ import java.util.Optional;
 import static repository.Book.countId;
 
 public class MemoryRepository implements Repository {
-    public static List<Book> books = new ArrayList<>();
+    private static List<Book> books = new ArrayList<>();
 
     public MemoryRepository() {
         countId = 1;
@@ -22,63 +20,71 @@ public class MemoryRepository implements Repository {
         books.add(book);
     }
 
-    public void printList() {
-        MemoryConsolePrint.printListView();
-    }
+    public List<Book> getList() { return books; }
 
-    public void search(String titleWord) {
+    public List<Book> search(String titleWord) {
+        List<Book> selectedBooks = new ArrayList<>();
         books.forEach(book -> {
-            MemoryConsolePrint.searchView(titleWord, book);
+            if(book.getTitle().contains(titleWord)) selectedBooks.add(book);
         });
+        return selectedBooks;
     }
 
-    public void rental(int id) {
+    public BookState rental(int id) {
         Optional<Book> selectedBookOptional = books.stream()
                 .filter(book -> book.isSameId(id))
                 .findFirst();
-
-        selectedBookOptional.ifPresentOrElse(
-                MemoryConsolePrint::rentalView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            if (book.getState() == BookState.AVAILABLE) book.setState(BookState.RENTING);
+            return book.getState();
+        }
+        return null;
     }
 
     @Override
-    public void returnBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+    public BookState returnBook(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
                 .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                MemoryConsolePrint::returnView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            Thread thread = new MemoryChangeStateThread(book);
+
+            if (book.getState() == BookState.RENTING || book.getState() == BookState.LOST) {
+                book.setState(BookState.ORGANIZING);
+                thread.setDaemon(true);
+                thread.start();
+            }
+            return book.getState();
+        }
+        return null;
     }
 
     @Override
-    public void lostBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+    public BookState lostBook(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
                 .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                MemoryConsolePrint::lostView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            if (book.getState() == BookState.RENTING) book.setState(BookState.LOST);
+            return book.getState();
+        }
+        return null;
     }
 
     @Override
-    public void deleteBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream().filter(book -> book.isSameId(id))
+    public boolean deleteBook(int id) {
+        Optional<Book> selectedBookOptional = books.stream()
+                .filter(book -> book.isSameId(id))
                 .findFirst();
-        selectedBookOptional.ifPresentOrElse(
-                MemoryConsolePrint::deleteView,
-                () -> {
-                    System.out.println(ExecuteMessage.NOT_EXIST.getMessage());
-                }
-        );
+        if(selectedBookOptional.isPresent()) {
+            Book book = selectedBookOptional.get();
+            books.remove(book);
+            return true;
+        }
+        return false;
     }
 
 }

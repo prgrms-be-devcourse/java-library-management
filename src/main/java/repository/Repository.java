@@ -1,22 +1,20 @@
 package repository;
 
 import domain.BookState;
-
-import java.io.*;
 import java.util.List;
 
 public interface Repository {
 
     public void register(Book book);
 
-    public void printList();
-    public void search(String titleWord);
+    public List<Book> getList();
+    public List<Book> search(String titleWord);
 
-    public void rental(int id);
+    public BookState rental(int id);
 
-    public void returnBook(int id);
-    public void lostBook(int id);
-    public void deleteBook(int id);
+    public BookState returnBook(int id);
+    public BookState lostBook(int id);
+    public boolean deleteBook(int id);
     
     default public void organizeState(List<Book> books) {
         books.forEach(book -> {

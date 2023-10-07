@@ -3,7 +3,6 @@ package domain;
 import message.ExecuteMessage;
 import service.Mode;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

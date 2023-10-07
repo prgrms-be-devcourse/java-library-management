@@ -1,13 +1,11 @@
 package service;
 
+import domain.BookState;
 import message.ExecuteMessage;
-import message.QuestionMessage;
 import repository.Book;
 import repository.Repository;
 
-import java.io.*;
-
-import static domain.Reader.sc;
+import java.util.List;
 
 public class Service {
     private static Repository repository;
@@ -16,62 +14,54 @@ public class Service {
         this.repository = repository;
     }
 
-    public void register() {
-        Book book = getBook();
+    public void register(Book book) {
         repository.register(book);
-        System.out.println(ExecuteMessage.COMPLETE_REGISTER.getMessage());
     }
 
-    private Book getBook() {
-        System.out.println(QuestionMessage.REGISTER_TITLE.getMessage());
-        String title = sc.nextLine();
-
-        System.out.println(QuestionMessage.REGISTER_WRITER.getMessage());
-        String writer = sc.nextLine();
-
-        System.out.println(QuestionMessage.REGISTER_PAGE.getMessage());
-        int page = sc.nextInt();
-        sc.nextLine();
-        return new Book(title, writer, page);
+    public List<Book> getList() {
+        return repository.getList();
     }
 
-    public void list() {
-        repository.printList();
-        System.out.println(ExecuteMessage.LIST_FINISH.getMessage());
+    public List<Book> search(String titleWord) {
+        return repository.search(titleWord);
     }
 
-    public void search() {
-        System.out.println(QuestionMessage.SEARCH_TITLE.getMessage());
-        String titleWord = sc.nextLine();
-        repository.search(titleWord);
-        System.out.println(ExecuteMessage.SEARCH_FINISH.getMessage());
+    public ExecuteMessage rental(int id) {
+        BookState state = repository.rental(id);
+        return switch (state) {
+            case AVAILABLE -> ExecuteMessage.RENTAL_AVAILABLE;
+            case RENTING -> ExecuteMessage.RENTAL_RENTING;
+            case LOST -> ExecuteMessage.RENTAL_LOST;
+            case ORGANIZING -> ExecuteMessage.RENTAL_ORGANIZING;
+            default -> ExecuteMessage.NOT_EXIST;
+        };
     }
 
-    public void rental() {
-        System.out.println(QuestionMessage.RENTAL_ID.getMessage());
-        int id = sc.nextInt();
-        sc.nextLine();
-        repository.rental(id);
+    public ExecuteMessage returnBook(int id) {
+        BookState state = repository.returnBook(id);
+        return switch (state) {
+            case AVAILABLE -> ExecuteMessage.RETURN_AVAILABLE;
+            case RENTING -> ExecuteMessage.RETURN_COMPLETE;
+            case LOST -> ExecuteMessage.RETURN_COMPLETE;
+            case ORGANIZING -> ExecuteMessage.RETURN_IMPOSSIBLE;
+            default -> ExecuteMessage.NOT_EXIST;
+        };
     }
 
-    public void returnBook() {
-        System.out.println(QuestionMessage.RETURN_ID.getMessage());
-        int id = sc.nextInt();
-        sc.nextLine();
-        repository.returnBook(id);
+    public ExecuteMessage lostBook(int id) {
+        BookState state = repository.lostBook(id);
+        return switch (state) {
+            case AVAILABLE -> ExecuteMessage.LOST_IMPOSSIBLE;
+            case RENTING -> ExecuteMessage.LOST_COMPLETE;
+            case LOST -> ExecuteMessage.LOST_ALREADY;
+            case ORGANIZING -> ExecuteMessage.LOST_IMPOSSIBLE;
+            default -> ExecuteMessage.NOT_EXIST;
+        };
     }
 
-    public void lostBook() {
-        System.out.println(QuestionMessage.LOST_ID.getMessage());
-        int id = sc.nextInt();
-        sc.nextLine();
-        repository.lostBook(id);
-    }
-
-    public void deleteBook() {
-        System.out.println(QuestionMessage.DELETE_ID.getMessage());
-        int id = sc.nextInt();
-        sc.nextLine();
-        repository.deleteBook(id);
+    public ExecuteMessage deleteBook(int id) {
+        boolean success = repository.deleteBook(id);
+        if(success) return ExecuteMessage.DELETE_COMPLETE;
+        return ExecuteMessage.NOT_EXIST;
     }
 }

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.sql.SQLOutput;
+
 import static repository.FileRepository.books;
 import static repository.FileRepository.file;
 
@@ -34,7 +36,6 @@ class FileRepositoryTest {
                 "5,gi,skdl,243,대여 가능\n" +
                 "6,신데렐라,ㅇㄴ,23,대여 가능\n");
         bw.close();
-
         System.setOut(standardOut);
     }
 

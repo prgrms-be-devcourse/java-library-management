@@ -16,7 +16,7 @@ import static repository.MemoryRepository.books;
 class MemoryRepositoryTest {
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
-    private Repository repository = new MemoryRepository();
+    private Repository repository = new MemoryRepository();;
 
     MemoryRepositoryTest()  {
     }
