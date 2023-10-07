@@ -5,15 +5,15 @@ import domain.Book;
 
 public class MemoryChangeStateThread extends Thread {
     private final Book book;
-
-    public MemoryChangeStateThread(Book book) {
+    private int time;
+    public MemoryChangeStateThread(Book book, int time) {
         this.book = book;
     }
 
     @Override
     public void run() {
         try {
-            Thread.sleep(300000);
+            Thread.sleep(time);
             book.changeStateToAvailable();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

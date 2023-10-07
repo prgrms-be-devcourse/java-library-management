@@ -64,16 +64,15 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public BookState returnBook(int id) {
+    public BookState returnBook(int id, int time) {
         Optional<Book> selectedBookOptional = books.stream()
                 .filter(book -> book.isSameId(id))
                 .findFirst();
 
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
-            Thread thread = new FileChangeStateThread(book);
             BookState state = book.getState();
-
+            Thread thread = new FileChangeStateThread(book, time);
             if (state == BookState.RENTING || state == BookState.LOST) {
                 book.changeStateToOrganizing();
                 updateFile();

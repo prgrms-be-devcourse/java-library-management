@@ -13,7 +13,7 @@ public interface Repository {
 
     public BookState rental(int id);
 
-    public BookState returnBook(int id);
+    public BookState returnBook(int id, int time);
     public BookState lostBook(int id);
     public boolean deleteBook(int id);
     

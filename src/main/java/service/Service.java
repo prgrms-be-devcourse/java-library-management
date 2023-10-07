@@ -39,7 +39,7 @@ public class Service {
     }
 
     public ExecuteMessage returnBook(int id) {
-        BookState state = repository.returnBook(id);
+        BookState state = repository.returnBook(id, 300000);
 
         if(state == null) return ExecuteMessage.NOT_EXIST;
         return switch (state) {

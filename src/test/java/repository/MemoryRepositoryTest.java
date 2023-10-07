@@ -79,8 +79,44 @@ class MemoryRepositoryTest {
     }
 
     @Test
-    void returnBook() {
+    @DisplayName("도서 반납: 대여중")
+    void returnBookSuccess() throws InterruptedException {
+        List<Book> books = repository.getList();
+        repository.returnBook(2, 5000);
 
+        assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
+        Thread.sleep(5000);
+        assertThat(books.get(1).getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @Test
+    @DisplayName("도서 반납: 대여 가능")
+    void returnBookAvailable() throws InterruptedException {
+        List<Book> books = repository.getList();
+        repository.returnBook(1, 5000);
+
+        assertThat(books.get(0).getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @Test
+    @DisplayName("도서 반납: 분실됨")
+    void returnBookLost() throws InterruptedException {
+        List<Book> books = repository.getList();
+        repository.returnBook(3, 5000);
+
+        assertThat(books.get(2).getState()).isEqualTo(BookState.ORGANIZING);
+        Thread.sleep(5000);
+        assertThat(books.get(2).getState()).isEqualTo(BookState.AVAILABLE);
+    }
+
+    @Test
+    @DisplayName("도서 반납: 도서 정리중")
+    void returnBookOrganizing() throws InterruptedException {
+        List<Book> books = repository.getList();
+        repository.returnBook(2, 5000);
+        repository.returnBook(2, 5000);
+
+        assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
     }
 
     @Test

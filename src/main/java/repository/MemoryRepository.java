@@ -46,13 +46,13 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
-    public BookState returnBook(int id) {
+    public BookState returnBook(int id, int time) {
         Optional<Book> selectedBookOptional = books.stream()
                 .filter(book -> book.isSameId(id))
                 .findFirst();
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
-            Thread thread = new MemoryChangeStateThread(book);
+            Thread thread = new MemoryChangeStateThread(book, time);
             BookState state = book.getState();
 
             if (state == BookState.RENTING || state == BookState.LOST) {
@@ -91,6 +91,10 @@ public class MemoryRepository implements Repository {
             return true;
         }
         return false;
+    }
+
+    public void setThreadForTest() {
+
     }
 
 }
