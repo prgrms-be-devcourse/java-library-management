@@ -41,9 +41,7 @@ public class MethodResponder {
 
     private String booksToString(LinkedList<BookResponseDto> bookDtos) {
         StringBuffer sb = new StringBuffer();
-        bookDtos.forEach(bookDto -> {
-            sb.append(System.lineSeparator()).append("도서번호 : ").append(bookDto.id).append(System.lineSeparator()).append("제목 : ").append(bookDto.name).append(System.lineSeparator()).append("작가 이름 : ").append(bookDto.author).append(System.lineSeparator()).append("페이지 수 : ").append(bookDto.pages).append(" 페이지").append(System.lineSeparator()).append("상태 : ").append(bookDto.status).append(System.lineSeparator()).append(System.lineSeparator()).append("------------------------------").append(System.lineSeparator());
-        });
+        bookDtos.forEach(bookDto -> sb.append(System.lineSeparator()).append("도서번호 : ").append(bookDto.id).append(System.lineSeparator()).append("제목 : ").append(bookDto.name).append(System.lineSeparator()).append("작가 이름 : ").append(bookDto.author).append(System.lineSeparator()).append("페이지 수 : ").append(bookDto.pages).append(" 페이지").append(System.lineSeparator()).append("상태 : ").append(bookDto.status).append(System.lineSeparator()).append(System.lineSeparator()).append("------------------------------").append(System.lineSeparator()));
         return sb.toString();
     }
 }

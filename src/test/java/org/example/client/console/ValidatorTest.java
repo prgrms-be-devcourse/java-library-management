@@ -41,9 +41,7 @@ class ValidatorTest {
         String input = "%";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNameAndAuthor(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
     }
 
     @Test
@@ -52,23 +50,17 @@ class ValidatorTest {
         String input = "";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNameAndAuthor(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
     }
 
     @Test
     @DisplayName("문자열 유효성 검증: 문자열 길이 100자 이상 예외")
     void validateNameAndAuthorLength() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 120; i++) sb.append("a");
-        String input = sb.toString();
+        String input = "a".repeat(120);
 
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateNameAndAuthor(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
     }
 
     /* 숫자 입력 유효성 테스트 */
@@ -87,9 +79,7 @@ class ValidatorTest {
         String input = "";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateIdAndPageNumber(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
     }
 
     @DisplayName("숫자 유효성 검증: 숫자가 아닌 문자열(특수문자) 예외")
@@ -98,9 +88,7 @@ class ValidatorTest {
         String input = "a";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateIdAndPageNumber(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
     }
 
     @DisplayName("숫자 유효성 검증: 숫자가 아닌 문자열(한글/영어) 예외")
@@ -109,9 +97,7 @@ class ValidatorTest {
         String input = "a";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateIdAndPageNumber(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
     }
 
     @DisplayName("숫자 유효성 검증: 0 이하 숫자 범위 예외")
@@ -120,9 +106,7 @@ class ValidatorTest {
         String input = "0";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateIdAndPageNumber(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
     }
 
     @DisplayName("숫자 유효성 검증: 5000 이상 숫자 범위 예외")
@@ -131,9 +115,7 @@ class ValidatorTest {
         String input = "5001";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateIdAndPageNumber(in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
     }
 
     /* 모드/메뉴 번호 입력 유효성 테스트 */
@@ -152,9 +134,7 @@ class ValidatorTest {
         String input = "";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelectionNumber(selectNum, in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 숫자가 아닌 문자열(특수문자) 예외")
@@ -163,9 +143,7 @@ class ValidatorTest {
         String input = "%%";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelectionNumber(selectNum, in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 숫자가 아닌 문자열(한글/영어) 예외")
@@ -174,9 +152,7 @@ class ValidatorTest {
         String input = "a";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelectionNumber(selectNum, in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
     }
 
     @DisplayName("모드/메뉴 번호 입력(5가지라고 가정) 유효성 검증: 0 이하 숫자 범위 예외")
@@ -185,9 +161,7 @@ class ValidatorTest {
         String input = "0";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelectionNumber(selectNum, in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
     }
 
     @DisplayName("모드/메뉴 번호 입력(5가지라고 가정) 유효성 검증: 선택 번호이상 숫자 범위 예외")
@@ -196,8 +170,6 @@ class ValidatorTest {
         String input = "5001";
         when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> {
-            validator.scanAndValidateSelectionNumber(selectNum, in.scanLine());
-        });
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
     }
 }

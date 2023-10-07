@@ -60,9 +60,7 @@ public class LoadBookServiceTest {
     void borrowIfBorrowed() {
         when(repository.getById(1)).thenReturn(book);
 
-        assertThrows(ServerException.class, () -> {
-            service.borrow(1);
-        });
+        assertThrows(ServerException.class, () -> service.borrow(1));
     }
 
     @Test
@@ -70,9 +68,7 @@ public class LoadBookServiceTest {
     void restoreIfBorrowed() {
         when(repository.getById(1)).thenReturn(book);
 
-        assertThrows(ServerException.class, () -> {
-            service.restore(1);
-        });
+        assertThrows(ServerException.class, () -> service.restore(1));
     }
 
     @Test

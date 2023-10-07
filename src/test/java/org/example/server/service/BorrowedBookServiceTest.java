@@ -58,9 +58,7 @@ public class BorrowedBookServiceTest {
     void borrowIfBorrowed() {
         when(repository.getById(1)).thenReturn(book);
 
-        assertThrows(ServerException.class, () -> {
-            service.borrow(1);
-        });
+        assertThrows(ServerException.class, () -> service.borrow(1));
     }
 
     @Test

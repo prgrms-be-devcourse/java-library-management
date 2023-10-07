@@ -27,9 +27,7 @@ public class FileRepository implements Repository {
     @Override
     public LinkedList<Book> findAll() {
         LinkedList<Book> books = new LinkedList<>();
-        fileStorage.data.values().forEach((book) -> {
-            books.add(timeChecker.checkLoadTime(book));
-        });
+        fileStorage.data.values().forEach((book) -> books.add(timeChecker.checkLoadTime(book)));
         saveData();
         return books;
     }

@@ -36,6 +36,6 @@ public class RequestHandler { // 인터페이스로 만들고 각각에 맞는 �
         BORROW,
         RESTORE,
         LOST,
-        DELETE;
+        DELETE
     }
 }

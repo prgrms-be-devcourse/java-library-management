@@ -22,9 +22,7 @@ public class InMemoryRepository implements Repository {
     @Override
     public LinkedList<Book> findAll() {
         LinkedList<Book> books = new LinkedList<>();
-        data.values().forEach((book) -> {
-            books.add(timeChecker.checkLoadTime(book));
-        });
+        data.values().forEach((book) -> books.add(timeChecker.checkLoadTime(book)));
         return books;
     }
 

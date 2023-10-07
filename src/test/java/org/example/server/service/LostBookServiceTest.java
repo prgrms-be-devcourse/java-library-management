@@ -58,9 +58,7 @@ public class LostBookServiceTest {
     void borrowIfBorrowed() {
         when(repository.getById(1)).thenReturn(book);
 
-        assertThrows(ServerException.class, () -> {
-            service.borrow(1);
-        });
+        assertThrows(ServerException.class, () -> service.borrow(1));
     }
 
     @Test
@@ -76,9 +74,7 @@ public class LostBookServiceTest {
     void lostIfBorrowed() {
         when(repository.getById(1)).thenReturn(book);
 
-        assertThrows(ServerException.class, () -> {
-            service.lost(1);
-        });
+        assertThrows(ServerException.class, () -> service.lost(1));
     }
 
     @Test

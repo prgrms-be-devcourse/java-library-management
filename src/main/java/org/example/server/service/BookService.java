@@ -20,17 +20,17 @@ public class BookService implements Service {
 
     public LinkedList<BookResponseDto> readAll() {
         LinkedList<BookResponseDto> bookDtos = new LinkedList<>();
-        repository.findAll().forEach(book -> {
+        for (Book book : repository.findAll()) {
             bookDtos.add(new BookResponseDto(book));
-        });
+        }
         return bookDtos;
     }
 
     public LinkedList<BookResponseDto> searchAllByName(String name) {
         LinkedList<BookResponseDto> bookDtos = new LinkedList<>();
-        repository.findAllByName(name).forEach(book -> {
+        for (Book book : repository.findAllByName(name)) {
             bookDtos.add(new BookResponseDto(book));
-        });
+        }
         return bookDtos;
     }
 
