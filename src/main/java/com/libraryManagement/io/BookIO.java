@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static com.libraryManagement.domain.BookStatus.*;
-
 public class BookIO {
 
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -62,45 +60,57 @@ public class BookIO {
     }
 
     public void outputRentMsg() {
-
+        System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
     }
 
-    public void outputUpdateMsg(String updateType, Boolean isPossible, String bookStatus) {
-
-        if(updateType.equals(APPLYRENT.name())){
-            if(isPossible){
-                System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
-            }else{
-                // 대여실패한 원인에 따라서 다른 출력
-                if(bookStatus.equals(RENT.getName())){
-                    System.out.println("[System] 이미 대여중인 도서입니다.\n");
-                }else if(bookStatus.equals(READY.getName())) {
-                    System.out.println("[System] 아직 준비중인 도서입니다.");
-                    System.out.println("[System] 5분 내로 대여가능합니다.\n");
-                }else if(bookStatus.equals(LOST.getName())) {
-                    System.out.println("[System] 분실된 도서입니다.\n");
-                }else if(bookStatus.equals(DELETE.getName())) {
-                    System.out.println("[System] 삭제된 도서입니다.\n");
-                }
-            }
-        }else if(updateType.equals(APPLYRETURN.name())) {
-            if(isPossible){
-                System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
-            }else{
-                System.out.println("[System] 원래 대여가 가능한 도서입니다.\n");
-            }
-        }else if(updateType.equals(APPLYLOST.name())) {
-            if(isPossible){
-                System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
-            }else{
-                System.out.println("[System] 이미 분실 처리된 도서입니다.\n");
-            }
-        }else if(updateType.equals(APPLYDELETE.name())) {
-            if(isPossible){
-                System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
-            }else{
-                System.out.println("[System] 존재하지 않는 도서번호 입니다.\n");
-            }
-        }
+    public void outputReturnMsg() {
+        System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
     }
+
+    public void outputLostMsg() {
+        System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
+    }
+
+    public void outputDeleteMsg() {
+        System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
+    }
+
+//    public void outputUpdateMsg(String updateType, Boolean isPossible, String bookStatus) {
+//
+//        if(updateType.equals(APPLYRENT.name())){
+//            if(isPossible){
+//                System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
+//            }else{
+//                // 대여실패한 원인에 따라서 다른 출력
+//                if(bookStatus.equals(RENT.getName())){
+//                    System.out.println("[System] 이미 대여중인 도서입니다.\n");
+//                }else if(bookStatus.equals(READY.getName())) {
+//                    System.out.println("[System] 아직 준비중인 도서입니다.");
+//                    System.out.println("[System] 5분 내로 대여가능합니다.\n");
+//                }else if(bookStatus.equals(LOST.getName())) {
+//                    System.out.println("[System] 분실된 도서입니다.\n");
+//                }else if(bookStatus.equals(DELETE.getName())) {
+//                    System.out.println("[System] 삭제된 도서입니다.\n");
+//                }
+//            }
+//        }else if(updateType.equals(APPLYRETURN.name())) {
+//            if(isPossible){
+//                System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
+//            }else{
+//                System.out.println("[System] 원래 대여가 가능한 도서입니다.\n");
+//            }
+//        }else if(updateType.equals(APPLYLOST.name())) {
+//            if(isPossible){
+//                System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
+//            }else{
+//                System.out.println("[System] 이미 분실 처리된 도서입니다.\n");
+//            }
+//        }else if(updateType.equals(APPLYDELETE.name())) {
+//            if(isPossible){
+//                System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
+//            }else{
+//                System.out.println("[System] 존재하지 않는 도서번호 입니다.\n");
+//            }
+//        }
+//    }
 }

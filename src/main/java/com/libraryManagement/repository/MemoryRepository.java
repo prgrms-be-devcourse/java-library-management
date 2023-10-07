@@ -16,13 +16,15 @@ public class MemoryRepository implements Repository {
         bookMap = new HashMap<>();
     }
 
+    // findBooks 가 null 일 때 throw Exception
     @Override
     public List<Book> findAllBooks() {
         List<Book> resBookList = new ArrayList<>();
 
         for (Long id : bookMap.keySet()) {
             Book book = bookMap.get(id);
-            if(book.getStatus().equals(DELETE))
+
+            if(book.getStatus().equals(DELETE.getName()))
                 continue;
 
             resBookList.add(book);
@@ -37,6 +39,7 @@ public class MemoryRepository implements Repository {
 
         for (Long id : bookMap.keySet()) {
             Book book = bookMap.get(id);
+
             if (book.getStatus().equals(DELETE.getName()))
                 continue;
 

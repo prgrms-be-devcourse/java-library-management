@@ -40,25 +40,25 @@ public class BookController {
     public void rentBook() throws IOException, InterruptedException {
         long id = bookIO.inputRentBookId();
         bookService.rentBook(id);
-        bookIO.outputUpdateMsg();
+        bookIO.outputRentMsg();
     }
 
     public void returnBook() throws IOException {
         long id = bookIO.inputReturnBookId();
         bookService.returnBook(id);
-        bookIO.outputUpdateMsg();
+        bookIO.outputReturnMsg();
     }
 
     public void lostBook() throws IOException {
         long id = bookIO.inputLostBookId();
         bookService.lostBook(id);
-        bookIO.outputUpdateMsg();
+        bookIO.outputLostMsg();
     }
 
     public void deleteBook() throws IOException {
         long id = bookIO.inputDeleteBookId();
         bookService.deleteBook(id);
-        bookIO.outputUpdateMsg();
+        bookIO.outputDeleteMsg();
     }
 
     //    public void updateBookStatus(String updateType) throws IOException, InterruptedException {
