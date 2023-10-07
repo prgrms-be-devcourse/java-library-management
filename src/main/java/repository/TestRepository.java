@@ -4,6 +4,7 @@ import domain.Book;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestRepository implements Repository{
@@ -35,41 +36,35 @@ public class TestRepository implements Repository{
     }
 
     @Override
-    public Book getBook(Long bookNumber) {
+    public Optional<Book> getBook(Long bookNumber) {
         return bookRepository.stream()
                 .filter(book -> book.equalsId(bookNumber))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("[System] 존재하지 않는 도서번호 입니다."));
+                .findFirst();
     }
 
     @Override
-    public void deleteBook(Long bookNumber){
-        Book book = getBook(bookNumber);
+    public void deleteBook(Book book){
         bookRepository.remove(book);
     }
 
     @Override
-    public void rentalBook(Long bookNumber) {
-        Book book = getBook(bookNumber);
+    public void rentalBook(Book book) {
         book.rentalBook();
     }
 
     @Override
-    public void organizeBook(Long bookNumber) {
-        Book book = getBook(bookNumber);
+    public void organizeBook(Book book) {
         book.organizeBook();
-        returnBook(bookNumber);
+        returnBook(book);
     }
 
     @Override
-    public void returnBook(Long bookNumber) {
-        Book book = getBook(bookNumber);
+    public void returnBook(Book book) {
         book.returnBook();
     }
 
     @Override
-    public void lostBook(Long bookNumber) {
-        Book book = getBook(bookNumber);
+    public void lostBook(Book book) {
         book.lostBook();
     }
 }

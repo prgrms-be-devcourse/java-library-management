@@ -21,23 +21,33 @@ public class Service{
         return repository.getAll();
     }
 
+    public Book getBook(Long bookNumber){
+
+        return repository.getBook(bookNumber)
+                .orElseThrow(() -> new RuntimeException("[System] 존재하지 않는 도서번호 입니다."));
+    }
+
     public List<Book> searchName(String keyword){
         return repository.searchBook(keyword);
     }
 
+    public void deleteBook(int bookNumber){
+        Book book = getBook((long)bookNumber);
+        repository.deleteBook(book);
+    }
+
     public void rentalBook(int bookNumber){
-        repository.rentalBook((long)bookNumber);
+        Book book = getBook((long)bookNumber);
+        repository.rentalBook(book);
     }
 
     public void organizeBook(int bookNumber){
-        repository.organizeBook((long)bookNumber);
+        Book book = getBook((long)bookNumber);
+        repository.organizeBook(book);
     }
 
     public void lostBook(int bookNumber){
-        repository.lostBook((long)bookNumber);
-    }
-
-    public void deleteBook(int bookNumber){
-        repository.deleteBook((long)bookNumber);
+        Book book = getBook((long)bookNumber);
+        repository.lostBook(book);
     }
 }

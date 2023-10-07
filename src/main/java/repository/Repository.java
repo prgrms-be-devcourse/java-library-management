@@ -3,6 +3,7 @@ package repository;
 import domain.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Repository {
 
@@ -12,15 +13,15 @@ public interface Repository {
 
     List<Book> searchBook(String name);
 
-    Book getBook(Long bookNumber);
+    Optional<Book> getBook(Long bookNumber);
 
-    void deleteBook(Long bookNumber);
+    void deleteBook(Book book);
 
-    void rentalBook(Long bookNumber);
+    void rentalBook(Book book);
 
-    void organizeBook(Long bookNumber);
+    void organizeBook(Book book);
 
-    void returnBook(Long bookNumber);
+    void returnBook(Book book);
 
-    void lostBook(Long bookNumber);
+    void lostBook(Book book);
 }
