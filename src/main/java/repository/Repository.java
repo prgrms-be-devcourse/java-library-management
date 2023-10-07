@@ -19,7 +19,7 @@ public interface Repository {
     
     default public void organizeState(List<Book> books) {
         books.forEach(book -> {
-            if(book.getState() == BookState.ORGANIZING) book.setState(BookState.AVAILABLE);
+            if(book.getState() == BookState.ORGANIZING) book.changeStateToAvailable();
         });
     }
 }
