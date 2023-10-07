@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Repository {
-    void saveBook(Book book);
+    void save(Book book);
 
     List<Book> findAllBooks();
 

@@ -48,7 +48,7 @@ class ServiceWithFileRepositoryTest {
     void searchBooks_Success() {
         //given
         for (int i = 1; i <= 6; i++) {
-            repository.saveBook(createTestBook());
+            repository.save(createTestBook());
         }
 
         //when
@@ -62,10 +62,10 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("제목으로 도서 검색 성공")
     void searchBookByTitle_Success() {
         //given
-        repository.saveBook(createTestBookWithTitle("abc"));
-        repository.saveBook(createTestBookWithTitle("cka"));
-        repository.saveBook(createTestBookWithTitle("def"));
-        repository.saveBook(createTestBookWithTitle("ghi"));
+        repository.save(createTestBookWithTitle("abc"));
+        repository.save(createTestBookWithTitle("cka"));
+        repository.save(createTestBookWithTitle("def"));
+        repository.save(createTestBookWithTitle("ghi"));
 
         //when
         List<Book> books = libraryManagementService.searchBookBy("a");
@@ -78,7 +78,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 대여 성공")
     void borrowBook_Success() {
         //given
-        repository.saveBook(createTestBook());
+        repository.save(createTestBook());
 
         //when
         libraryManagementService.borrowBook(1);
@@ -91,7 +91,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 대여 실패 - 대여중인 도서인 경우")
     void borrowBook_Fail_Borrowing() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.BORROWING));
+        repository.save(createTestBookWithStatus(BookStatusType.BORROWING));
 
         //when, then
         try {
@@ -105,7 +105,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 대여 실패 - 정리중인 도서인 경우")
     void borrowBook_Fail_Organizing() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.ORGANIZING));
+        repository.save(createTestBookWithStatus(BookStatusType.ORGANIZING));
 
         //when, then
         try {
@@ -119,7 +119,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 대여 실패 - 분실된 도서인 경우")
     void borrowBook_Fail_Lost() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.LOST));
+        repository.save(createTestBookWithStatus(BookStatusType.LOST));
 
         //when, then
         try {
@@ -133,7 +133,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 반납 성공")
     void returnBook_Success() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.BORROWING));
+        repository.save(createTestBookWithStatus(BookStatusType.BORROWING));
 
         //when
         libraryManagementService.returnBook(1);
@@ -146,7 +146,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 반납 실패 - 원래 대여가 가능한 도서인 경우")
     void returnBook_Fail_BorrrowAvailable() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.BORROW_AVAILABE));
+        repository.save(createTestBookWithStatus(BookStatusType.BORROW_AVAILABE));
 
         //when, then
         try {
@@ -160,7 +160,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 분실 성공")
     void lostBook_Success() {
         //given
-        repository.saveBook(createTestBook());
+        repository.save(createTestBook());
 
         //when
         libraryManagementService.lostBook(1);
@@ -173,7 +173,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 분실 실패 - 이미 분실 처리된 도서인 경우")
     void lostBook_Fail_Lost() {
         //given
-        repository.saveBook(createTestBookWithStatus(BookStatusType.LOST));
+        repository.save(createTestBookWithStatus(BookStatusType.LOST));
 
         //when, then
         try {
@@ -187,7 +187,7 @@ class ServiceWithFileRepositoryTest {
     @DisplayName("도서 삭제 성공")
     void deleteBook_Success() {
         //given
-        repository.saveBook(createTestBook());
+        repository.save(createTestBook());
 
         //when
         libraryManagementService.deleteBook(1);
