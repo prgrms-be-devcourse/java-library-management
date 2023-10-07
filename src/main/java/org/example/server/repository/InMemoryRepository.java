@@ -8,49 +8,48 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryRepository implements Repository {
-    public final ConcurrentHashMap<Integer, Book> DATA = new ConcurrentHashMap<>();
-    private final TimeChecker TIME_CHECKER = new TimeChecker();
+    public final ConcurrentHashMap<Integer, Book> data = new ConcurrentHashMap<>();
+    private final TimeChecker timeChecker = new TimeChecker();
     public int newId = 1;
 
     @Override
     public void save(Book book) {
         int bookId = newId++;
         book.id = bookId;
-        DATA.put(bookId, book);
+        data.put(bookId, book);
     }
 
     @Override
-    public LinkedList<Book> getAll() {
+    public LinkedList<Book> findAll() {
         LinkedList<Book> books = new LinkedList<>();
-        DATA.values().forEach((book) -> {
-            books.add(TIME_CHECKER.checkLoadTime(book));
+        data.values().forEach((book) -> {
+            books.add(timeChecker.checkLoadTime(book));
         });
         return books;
     }
 
     @Override
-    public LinkedList<Book> getByName(String name) { // 여러개가
+    public LinkedList<Book> findAllByName(String name) {
         LinkedList<Book> books = new LinkedList<>();
-        DATA.values().forEach(
+        data.values().forEach(
                 book -> {
-                    TIME_CHECKER.checkLoadTime(book);
+                    timeChecker.checkLoadTime(book);
                     if (book.name.contains(name)) books.add(book);
                 }
         );
         return books;
     }
-//get : null일 수 없다 예외
-//find : null일 수 있다. Optional로 반환 -> 컨벤션 JPA
+
     @Override
-    public Book findById(int id) {
-        Optional<Book> book = Optional.ofNullable(DATA.get(id));
+    public Book getById(int id) {
+        Optional<Book> book = Optional.ofNullable(data.get(id));
         if (book.isEmpty())
             throw new BookNotFoundException();
-        return TIME_CHECKER.checkLoadTime(book.get());
+        return timeChecker.checkLoadTime(book.get());
     }
 
     @Override
     public void delete(int id) {
-        DATA.remove(id);
+        data.remove(id);
     }
 }

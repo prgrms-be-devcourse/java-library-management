@@ -1,5 +1,5 @@
 {
-  "new_id" : 14,
+  "new_id" : 15,
   "data" : [ {
     "pages" : 123,
     "author" : "123",
@@ -75,6 +75,13 @@
     "author" : "123",
     "name" : "13",
     "id" : 13,
+    "endLoadTime" : "",
+    "status" : "CAN_BORROW"
+  }, {
+    "pages" : 123,
+    "author" : "13",
+    "name" : "124",
+    "id" : 14,
     "endLoadTime" : "",
     "status" : "CAN_BORROW"
   } ]

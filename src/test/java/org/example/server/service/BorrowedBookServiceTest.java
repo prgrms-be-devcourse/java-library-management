@@ -40,23 +40,23 @@ public class BorrowedBookServiceTest {
     @Test
     @DisplayName("대여중일 때 전체 조회")
     void readAllIfExist() {
-        when(repository.getAll()).thenReturn(data);
+        when(repository.findAll()).thenReturn(data);
 
-        assertEquals(service.readAll().get(0).status, type.NAME_KOR);
+        assertEquals(service.readAll().get(0).status, type.nameKor);
     }
 
     @Test
     @DisplayName("대여중일 때 이름으로 검색")
     void searchByNameIfContain() {
-        when(repository.getByName("테스트책")).thenReturn(data);
+        when(repository.findAllByName("테스트책")).thenReturn(data);
 
-        assertEquals(service.searchByName("테스트책").get(0).status, type.NAME_KOR);
+        assertEquals(service.searchAllByName("테스트책").get(0).status, type.nameKor);
     }
 
     @Test
     @DisplayName("대여중인데 대여하기: 실패")
     void borrowIfBorrowed() {
-        when(repository.findById(1)).thenReturn(book);
+        when(repository.getById(1)).thenReturn(book);
 
         assertThrows(ServerException.class, () -> {
             service.borrow(1);
@@ -66,7 +66,7 @@ public class BorrowedBookServiceTest {
     @Test
     @DisplayName("대여중인데 반납: 성공")
     void restoreIfBorrowed() {
-        when(repository.findById(1)).thenReturn(book);
+        when(repository.getById(1)).thenReturn(book);
 
         service.restore(1);
     }
@@ -74,7 +74,7 @@ public class BorrowedBookServiceTest {
     @Test
     @DisplayName("대여중인데 분실: 성공")
     void lostIfBorrowed() {
-        when(repository.findById(1)).thenReturn(book);
+        when(repository.getById(1)).thenReturn(book);
 
         service.lost(1);
     }
@@ -82,7 +82,7 @@ public class BorrowedBookServiceTest {
     @Test
     @DisplayName("대여중인데 삭제: 성공")
     void deleteIfBorrowed() {
-        when(repository.findById(1)).thenReturn(book);
+        when(repository.getById(1)).thenReturn(book);
 
         service.delete(1);
     }

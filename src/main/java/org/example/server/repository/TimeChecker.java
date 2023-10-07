@@ -10,7 +10,7 @@ public class TimeChecker {
     Book checkLoadTime(Book book) {
         if (BookStatusType.valueOf(book.status.getType().name()).equals(BookStatusType.LOAD)) {
             LoadStatus bookStatus = (LoadStatus) book.status;
-            if (bookStatus.END_LOAD_TIME.isBefore(LocalDateTime.now())) {
+            if (bookStatus.endLoadTime.isBefore(LocalDateTime.now())) {
                 book.status = BookStatusType.CAN_BORROW.getBookStatus();
                 return book;
             }

@@ -7,39 +7,39 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 public class FileRepository implements Repository {
-    private final FileStorage FILE_STORAGE;
-    private final TimeChecker TIME_CHECKER = new TimeChecker();
+    private final FileStorage fileStorage;
+    private final TimeChecker timeChecker = new TimeChecker();
     public int newId;
 
     public FileRepository() {
-        FILE_STORAGE = new FileStorage();
-        newId = FILE_STORAGE.loadData();
+        fileStorage = new FileStorage();
+        newId = fileStorage.loadData();
     }
 
     @Override
     public void save(Book book) {
         int bookId = newId++;
         book.id = bookId;
-        FILE_STORAGE.DATA.put(bookId, book);
+        fileStorage.data.put(bookId, book);
         saveData();
     }
 
     @Override
-    public LinkedList<Book> getAll() {
+    public LinkedList<Book> findAll() {
         LinkedList<Book> books = new LinkedList<>();
-        FILE_STORAGE.DATA.values().forEach((book) -> {
-            books.add(TIME_CHECKER.checkLoadTime(book));
+        fileStorage.data.values().forEach((book) -> {
+            books.add(timeChecker.checkLoadTime(book));
         });
         saveData();
         return books;
     }
 
     @Override
-    public LinkedList<Book> getByName(String name) {
+    public LinkedList<Book> findAllByName(String name) {
         LinkedList<Book> books = new LinkedList<>();
-        FILE_STORAGE.DATA.values().forEach(
+        fileStorage.data.values().forEach(
                 book -> {
-                    TIME_CHECKER.checkLoadTime(book);
+                    timeChecker.checkLoadTime(book);
                     if (book.name.contains(name)) books.add(book);
                 }
         );
@@ -48,22 +48,22 @@ public class FileRepository implements Repository {
     }
 
     @Override
-    public Book findById(int id) {
-        Optional<Book> bookOpt = Optional.ofNullable(FILE_STORAGE.DATA.get(id));
+    public Book getById(int id) {
+        Optional<Book> bookOpt = Optional.ofNullable(fileStorage.data.get(id));
         if (bookOpt.isEmpty())
             throw new BookNotFoundException();
-        Book book = TIME_CHECKER.checkLoadTime(bookOpt.get());
+        Book book = timeChecker.checkLoadTime(bookOpt.get());
         saveData();
         return book;
     }
 
     @Override
     public void delete(int id) {
-        FILE_STORAGE.DATA.remove(id);
+        fileStorage.data.remove(id);
         saveData();
     }
 
     private void saveData() {
-        FILE_STORAGE.saveFile(newId);
+        fileStorage.saveFile(newId);
     }
 }

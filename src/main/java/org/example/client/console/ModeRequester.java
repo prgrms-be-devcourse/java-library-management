@@ -20,19 +20,19 @@ public class ModeRequester {
         this.in = in;
     }
 
-    public String scanType() {
+    public String scanModeType() {
         try {
-            out.print(Type.BASIC_QUESToutN);
-            int selectNum = validator.scanAndValidateSelection(Type.values().length, in.scanLine());
+            out.print(Type.BASIC_QUESTION);
+            int selectNum = validator.scanAndValidateSelectionNumber(Type.values().length, in.scanLine());
             Type type = Type.valueOfNumber(selectNum);
-            out.println(type.START_MESSAGE);
+            out.println(type.startMessage);
             return type.name();
         } catch (ValidateException e) {
             out.println(e.getMessage());
-            out.print(Type.BASIC_QUESToutN);
-            int selectNum = validator.scanAndValidateSelection(Type.values().length, in.scanLine());
+            out.print(Type.BASIC_QUESTION);
+            int selectNum = validator.scanAndValidateSelectionNumber(Type.values().length, in.scanLine());
             Type type = Type.valueOfNumber(selectNum);
-            out.println(type.START_MESSAGE);
+            out.println(type.startMessage);
             return type.name();
         }
     }
@@ -40,16 +40,16 @@ public class ModeRequester {
     private enum Type {
         COMMON(1, "일반 모드", System.lineSeparator() + "[System] 일반 모드로 애플리케이션을 실행합니다." + System.lineSeparator()), TEST(2, "테스트 모드", System.lineSeparator() + "[System] 테스트 모드로 애플리케이션을 실행합니다." + System.lineSeparator());
 
-        private static final String BASIC_QUESToutN = "Q. 모드를 선택해주세요." + System.lineSeparator() + String.join(System.lineSeparator(), Stream.of(values()).map(type -> type.NUMBER + ". " + type.NAME).toArray(String[]::new)) + System.lineSeparator() + "> ";
+        private static final String BASIC_QUESTION = "Q. 모드를 선택해주세요." + System.lineSeparator() + String.join(System.lineSeparator(), Stream.of(values()).map(type -> type.number + ". " + type.nameKor).toArray(String[]::new)) + System.lineSeparator() + "> ";
         private static final Map<Integer, Type> BY_NUMBER = Stream.of(values()).collect(Collectors.toMap(Type::getNum, Function.identity()));
-        private final String START_MESSAGE;
-        private final int NUMBER;
-        private final String NAME;
+        private final String startMessage;
+        private final int number;
+        private final String nameKor;
 
-        Type(int num, String name, String startMessage) {
-            this.NUMBER = num;
-            this.NAME = name;
-            this.START_MESSAGE = startMessage;
+        Type(int number, String nameKor, String startMessage) {
+            this.number = number;
+            this.nameKor = nameKor;
+            this.startMessage = startMessage;
         }
 
         private static Type valueOfNumber(int num) {
@@ -57,7 +57,7 @@ public class ModeRequester {
         }
 
         private int getNum() {
-            return NUMBER;
+            return number;
         }
     }
 }

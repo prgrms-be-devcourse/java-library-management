@@ -1,9 +1,9 @@
 package org.example.packet.requestPacket;
 
 public abstract class RequestPacket {
-    public final String METHOD;
+    public final String methodName;
 
     public RequestPacket(String method) {
-        this.METHOD = method;
+        this.methodName = method;
     }
 }

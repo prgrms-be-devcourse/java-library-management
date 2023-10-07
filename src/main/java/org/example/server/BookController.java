@@ -1,6 +1,6 @@
 package org.example.server;
 
-import org.example.packet.BookDto;
+import org.example.packet.BookResponseDto;
 import org.example.packet.requestPacket.RequestWithBook;
 import org.example.packet.requestPacket.RequestWithId;
 import org.example.packet.requestPacket.RequestWithName;
@@ -12,44 +12,44 @@ import org.example.server.service.Service;
 import java.util.LinkedList;
 
 public class BookController {
-    private final Service SERVICE;
+    private final Service service;
 
     public BookController(Service service) {
-        this.SERVICE = service;
+        this.service = service;
     } // 각각 행위에 맞는 네이밍
 
     public ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
-        SERVICE.register(requestWithBook.BOOK_INFO);
+        service.register(requestWithBook.bookInfo);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.REGISTER.name());
     }
 
     public ResponseSuccessWithData readAll(RequestWithNoData requestWithNoData) {
-        LinkedList<BookDto> books = SERVICE.readAll();
+        LinkedList<BookResponseDto> books = service.readAll();
         return new ResponseSuccessWithData(RequestHandler.MethodType.READ_ALL.name(), books);
     }
 
     public ResponseSuccessWithData searchByName(RequestWithName requestWithName) {
-        LinkedList<BookDto> books = SERVICE.searchByName(requestWithName.NAME);
+        LinkedList<BookResponseDto> books = service.searchAllByName(requestWithName.bookName);
         return new ResponseSuccessWithData(RequestHandler.MethodType.SEARCH_BY_NAME.name(), books);
     }
 
     public ResponseSuccessWithNoData borrow(RequestWithId requestWithId) {
-        SERVICE.borrow(requestWithId.ID);
+        service.borrow(requestWithId.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.BORROW.name());
     }
 
     public ResponseSuccessWithNoData restore(RequestWithId requestWithId) {
-        SERVICE.restore(requestWithId.ID);
+        service.restore(requestWithId.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.RESTORE.name());
     }
 
     public ResponseSuccessWithNoData lost(RequestWithId requestWithId) {
-        SERVICE.lost(requestWithId.ID);
+        service.lost(requestWithId.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.LOST.name());
     }
 
     public ResponseSuccessWithNoData delete(RequestWithId requestWithId) {
-        SERVICE.delete(requestWithId.ID);
+        service.delete(requestWithId.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.DELETE.name());
     }
 }

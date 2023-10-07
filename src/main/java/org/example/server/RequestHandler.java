@@ -13,7 +13,7 @@ public class RequestHandler { // 인터페이스로 만들고 각각에 맞는 �
     }
 
     public ResponsePacket handleRequest(RequestPacket requestPacket) { // 인터페이스를 타입 캐스팅 -> 
-        MethodType methodType = MethodType.valueOf(requestPacket.METHOD);
+        MethodType methodType = MethodType.valueOf(requestPacket.methodName);
         try {
             return switch (methodType) {
                 case REGISTER -> bookController.register((RequestWithBook) requestPacket);

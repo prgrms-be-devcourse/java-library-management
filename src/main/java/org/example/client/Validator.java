@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class Validator {
 
-    public String scanAndValidateString(String input) {
+    public String scanAndValidateNameAndAuthor(String input) {
         if (Pattern.matches("[a-zA-Z0-9ㄱ-ㅎ가-힣 ]{1,99}$", input)) {
             return input;
         }
@@ -16,7 +16,7 @@ public class Validator {
         };
     }
 
-    public int scanAndValidateNumber(String inputStr) {
+    public int scanAndValidateIdAndPageNumber(String inputStr) {
         if (Pattern.matches("^[0-9]{1,4}$", inputStr)) {
             int input = Integer.parseInt(inputStr);
             if (0 < input && input < 5000) {
@@ -31,7 +31,7 @@ public class Validator {
         };
     }
 
-    public int scanAndValidateSelection(int selectCount, String inputStr) {
+    public int scanAndValidateSelectionNumber(int selectCount, String inputStr) {
         if (Pattern.matches("[1-9]", inputStr)) {
             int input = Integer.parseInt(inputStr);
             if (input <= selectCount) {

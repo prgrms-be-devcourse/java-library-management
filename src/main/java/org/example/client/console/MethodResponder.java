@@ -1,7 +1,7 @@
 package org.example.client.console;
 
 import org.example.client.io.Out;
-import org.example.packet.BookDto;
+import org.example.packet.BookResponseDto;
 import org.example.packet.responsePacket.ResponseFailWithMessage;
 import org.example.packet.responsePacket.ResponsePacket;
 import org.example.packet.responsePacket.ResponseSuccessWithData;
@@ -18,31 +18,31 @@ public class MethodResponder {
     }
 
     public void printResponse(ResponsePacket responsePacket) {
-        MethodType methodType = MethodType.valueOf(responsePacket.METHOD);
+        MethodType methodType = MethodType.valueOf(responsePacket.method);
         if (responsePacket instanceof ResponseSuccessWithData) {
-            LinkedList<BookDto> bookDtos = ((ResponseSuccessWithData) responsePacket).BOOKS;
+            LinkedList<BookResponseDto> bookDtos = ((ResponseSuccessWithData) responsePacket).books;
             if (bookDtos.isEmpty()) {
                 out.print(System.lineSeparator() + "[System] 존재하는 도서가 없습니다." + System.lineSeparator());
             } else {
                 out.println(booksToString(bookDtos));
-                out.println(methodType.SUCCESS_MESSAGE);
+                out.println(methodType.successMessage);
             }
             return;
         }
         if (responsePacket instanceof ResponseSuccessWithNoData) {
-            out.println(methodType.SUCCESS_MESSAGE);
+            out.println(methodType.successMessage);
             return;
         }
         if (responsePacket instanceof ResponseFailWithMessage) {
-            String failMessage = ((ResponseFailWithMessage) responsePacket).FAIL_MESSAGE;
+            String failMessage = ((ResponseFailWithMessage) responsePacket).failMessage;
             out.println(failMessage);
         }
     }
 
-    private String booksToString(LinkedList<BookDto> bookDtos) {
+    private String booksToString(LinkedList<BookResponseDto> bookDtos) {
         StringBuffer sb = new StringBuffer();
         bookDtos.forEach(bookDto -> {
-            sb.append(System.lineSeparator()).append("도서번호 : ").append(bookDto.id).append(System.lineSeparator()).append("제목 : ").append(bookDto.NAME).append(System.lineSeparator()).append("작가 이름 : ").append(bookDto.AUTHOR).append(System.lineSeparator()).append("페이지 수 : ").append(bookDto.PAGES).append(" 페이지").append(System.lineSeparator()).append("상태 : ").append(bookDto.status).append(System.lineSeparator()).append(System.lineSeparator()).append("------------------------------").append(System.lineSeparator());
+            sb.append(System.lineSeparator()).append("도서번호 : ").append(bookDto.id).append(System.lineSeparator()).append("제목 : ").append(bookDto.name).append(System.lineSeparator()).append("작가 이름 : ").append(bookDto.author).append(System.lineSeparator()).append("페이지 수 : ").append(bookDto.pages).append(" 페이지").append(System.lineSeparator()).append("상태 : ").append(bookDto.status).append(System.lineSeparator()).append(System.lineSeparator()).append("------------------------------").append(System.lineSeparator());
         });
         return sb.toString();
     }

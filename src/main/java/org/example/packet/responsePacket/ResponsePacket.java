@@ -1,9 +1,9 @@
 package org.example.packet.responsePacket;
 
 public abstract class ResponsePacket {
-    public final String METHOD;
+    public final String method;
 
     public ResponsePacket(String method) {
-        this.METHOD = method;
+        this.method = method;
     }
 }

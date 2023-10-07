@@ -3,9 +3,9 @@ package org.example.server.entity.bookStatus;
 public interface BookStatus {
     BookStatusType getType();
 
-    void borrow();
+    void checkCanBorrow();
 
-    void restore();
+    void checkCanRestore();
 
-    void lost();
+    void checkCanLost();
 }

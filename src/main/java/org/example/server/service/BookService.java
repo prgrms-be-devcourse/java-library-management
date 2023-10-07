@@ -1,55 +1,56 @@
 package org.example.server.service;
 
-import org.example.packet.BookDto;
+import org.example.packet.BookRegisterDto;
+import org.example.packet.BookResponseDto;
 import org.example.server.entity.Book;
 import org.example.server.repository.Repository;
 
 import java.util.LinkedList;
 
 public class BookService implements Service {
-    private final Repository REPOSITORY;
+    private final Repository repository;
 
     public BookService(Repository repository) {
-        this.REPOSITORY = repository;
+        this.repository = repository;
     }
 
-    public void register(BookDto bookDto) {
-        REPOSITORY.save(new Book(bookDto));
+    public void register(BookRegisterDto bookDto) {
+        repository.save(new Book(bookDto));
     }
 
-    public LinkedList<BookDto> readAll() {
-        LinkedList<BookDto> bookDtos = new LinkedList<>();
-        REPOSITORY.getAll().forEach(book -> {
-            bookDtos.add(new BookDto(book));
+    public LinkedList<BookResponseDto> readAll() {
+        LinkedList<BookResponseDto> bookDtos = new LinkedList<>();
+        repository.findAll().forEach(book -> {
+            bookDtos.add(new BookResponseDto(book));
         });
         return bookDtos;
     }
 
-    public LinkedList<BookDto> searchByName(String name) {
-        LinkedList<BookDto> bookDtos = new LinkedList<>();
-        REPOSITORY.getByName(name).forEach(book -> {
-            bookDtos.add(new BookDto(book));
+    public LinkedList<BookResponseDto> searchAllByName(String name) {
+        LinkedList<BookResponseDto> bookDtos = new LinkedList<>();
+        repository.findAllByName(name).forEach(book -> {
+            bookDtos.add(new BookResponseDto(book));
         });
         return bookDtos;
     }
 
     public void borrow(int bookId) {
-        Book book = REPOSITORY.findById(bookId);
+        Book book = repository.getById(bookId);
         book.borrow();
     }
 
     public void restore(int bookId) {
-        Book book = REPOSITORY.findById(bookId);
+        Book book = repository.getById(bookId);
         book.restore();
     }
 
     public void lost(int bookId) {
-        Book book = REPOSITORY.findById(bookId);
+        Book book = repository.getById(bookId);
         book.lost();
     }
 
     public void delete(int bookId) {
-        REPOSITORY.findById(bookId);
-        REPOSITORY.delete(bookId);
+        repository.getById(bookId);
+        repository.delete(bookId);
     }
 }

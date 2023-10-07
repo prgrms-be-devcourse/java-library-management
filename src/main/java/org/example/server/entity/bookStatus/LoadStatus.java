@@ -5,34 +5,34 @@ import org.example.server.exception.LoadingException;
 import java.time.LocalDateTime;
 
 public class LoadStatus implements BookStatus {
-    public final LocalDateTime END_LOAD_TIME;
-    private final BookStatusType TYPE = BookStatusType.LOAD;
+    public final LocalDateTime endLoadTime;
+    private final BookStatusType type = BookStatusType.LOAD;
 
     public LoadStatus() {
-        END_LOAD_TIME = LocalDateTime.now().plusMinutes(5);
+        endLoadTime = LocalDateTime.now().plusMinutes(5);
     }
 
     public LoadStatus(String endLoadTime) {
-        this.END_LOAD_TIME = LocalDateTime.parse(endLoadTime);
+        this.endLoadTime = LocalDateTime.parse(endLoadTime);
     }
 
     @Override
     public BookStatusType getType() {
-        return TYPE;
+        return type;
     }
 
     @Override
-    public void borrow() { // (선택) 네이밍 + 검증 역할이 드러나는 것으로
+    public void checkCanBorrow() { // (선택) 네이밍 + 검증 역할이 드러나는 것으로
         throw new LoadingException(System.lineSeparator() + "[System] 해당 도서는 정리중입니다." + System.lineSeparator());
     }
 
     @Override
-    public void restore() {
+    public void checkCanRestore() {
         throw new LoadingException(System.lineSeparator() + "[System] 해당 도서는 이미 반납되어, 도서 정리중입니다." + System.lineSeparator());
     }
 
     @Override
-    public void lost() {
+    public void checkCanLost() {
         // 성공
     }
 }

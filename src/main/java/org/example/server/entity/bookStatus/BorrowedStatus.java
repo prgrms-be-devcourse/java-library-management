@@ -3,25 +3,25 @@ package org.example.server.entity.bookStatus;
 import org.example.server.exception.AlreadyBorrowedException;
 
 public class BorrowedStatus implements BookStatus {
-    private final BookStatusType TYPE = BookStatusType.BORROWED;
+    private final BookStatusType type = BookStatusType.BORROWED;
 
     @Override
     public BookStatusType getType() {
-        return TYPE;
+        return type;
     }
 
     @Override
-    public void borrow() {
+    public void checkCanBorrow() {
         throw new AlreadyBorrowedException();
     }
 
     @Override
-    public void restore() {
+    public void checkCanRestore() {
         // 성공
     }
 
     @Override
-    public void lost() {
+    public void checkCanLost() {
         // 성공
     }
 }

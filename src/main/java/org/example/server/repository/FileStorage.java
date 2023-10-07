@@ -17,17 +17,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FileStorage {
-    private final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    public ConcurrentHashMap<Integer, Book> DATA;
-    private File JSON_FILE;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    public ConcurrentHashMap<Integer, Book> data;
+    private File jsonFile;
 
     public int loadData() {
         try {
             URI path = Paths.get("src", "main", "resources", "book.json").toUri();
-            JSON_FILE = new File(path);
-            Map jsonMap = OBJECT_MAPPER.readValue(JSON_FILE, Map.class);
+            jsonFile = new File(path);
+            Map jsonMap = objectMapper.readValue(jsonFile, Map.class);
             int newId = (int) jsonMap.get("new_id");
-            DATA = new ConcurrentHashMap<>();
+            data = new ConcurrentHashMap<>();
             if (newId != 1) {
                 ArrayList<LinkedHashMap<String, Object>> dataObjects = (ArrayList<LinkedHashMap<String, Object>>) jsonMap.get("data");
                 putObjectsToBookData(dataObjects);
@@ -40,7 +40,7 @@ public class FileStorage {
 
     public void saveFile(int newId) {
         Map<String, Object> jsonMap = new HashMap<>();
-        if (DATA.isEmpty()) {
+        if (data.isEmpty()) {
             jsonMap.put("new_id", 1);
             jsonMap.put("data", new ArrayList<>());
         } else {
@@ -49,8 +49,8 @@ public class FileStorage {
             putBookDataToObjects(dataObjects);
             jsonMap.put("data", dataObjects);
         }
-        try (FileWriter fileWriter = new FileWriter(JSON_FILE)) {
-            String jsonStr = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonMap);
+        try (FileWriter fileWriter = new FileWriter(jsonFile)) {
+            String jsonStr = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonMap);
             fileWriter.write(jsonStr);
             fileWriter.flush();
         } catch (Exception e) {
@@ -67,13 +67,13 @@ public class FileStorage {
                     int pages = (int) bookInfoMap.get("pages");
                     String status = (String) bookInfoMap.get("status");
                     String endLoadTime = (String) bookInfoMap.get("endLoadTime");
-                    DATA.put(id, new Book(id, name, author, pages, status, endLoadTime));
+                    data.put(id, new Book(id, name, author, pages, status, endLoadTime));
                 }
         );
     }
 
     private void putBookDataToObjects(ArrayList<ConcurrentHashMap<String, Object>> objects) {
-        DATA.values().forEach(
+        data.values().forEach(
                 book -> {
                     ConcurrentHashMap<String, Object> bookInfoMap = new ConcurrentHashMap<>();
                     bookInfoMap.put("id", book.id);
@@ -83,7 +83,7 @@ public class FileStorage {
                     bookInfoMap.put("status", book.status.getType().name());
                     if (book.status.getType().equals(BookStatusType.LOAD)) {
                         LoadStatus bookStatus = (LoadStatus) book.status;
-                        bookInfoMap.put("endLoadTime", bookStatus.END_LOAD_TIME.toString());
+                        bookInfoMap.put("endLoadTime", bookStatus.endLoadTime.toString());
                     } else {
                         bookInfoMap.put("endLoadTime", "");
                     }

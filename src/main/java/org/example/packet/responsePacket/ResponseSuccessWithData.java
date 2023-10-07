@@ -1,22 +1,22 @@
 package org.example.packet.responsePacket;
 
-import org.example.packet.BookDto;
+import org.example.packet.BookResponseDto;
 
 import java.util.LinkedList;
 
 public class ResponseSuccessWithData extends ResponsePacket {
 
-    public final LinkedList<BookDto> BOOKS;
+    public final LinkedList<BookResponseDto> books;
 
-    public ResponseSuccessWithData(String method, LinkedList<BookDto> bookDtos) {
+    public ResponseSuccessWithData(String method, LinkedList<BookResponseDto> bookDtos) {
         super(method);
-        this.BOOKS = bookDtos;
+        this.books = bookDtos;
     }
 
     @Override
     public String toString() {
         return "ResponseSuccessWithData{" +
-                "bookDtos=" + BOOKS +
+                "bookDtos=" + books +
                 '}';
     }
 }

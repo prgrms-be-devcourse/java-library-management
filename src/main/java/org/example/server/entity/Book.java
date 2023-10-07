@@ -1,6 +1,6 @@
 package org.example.server.entity;
 
-import org.example.packet.BookDto;
+import org.example.packet.BookRegisterDto;
 import org.example.server.entity.bookStatus.*;
 
 public class Book {
@@ -10,10 +10,10 @@ public class Book {
     public int pages; // 5000 미만
     public BookStatus status;
 
-    public Book(BookDto bookDto) {
-        this.name = bookDto.NAME;
-        this.author = bookDto.AUTHOR;
-        this.pages = bookDto.PAGES;
+    public Book(BookRegisterDto bookDto) {
+        this.name = bookDto.name;
+        this.author = bookDto.author;
+        this.pages = bookDto.pages;
         this.status = new CanBorrowStatus();
     }
 
@@ -26,17 +26,17 @@ public class Book {
     }
 
     public void borrow() {
-        status.borrow();
+        status.checkCanBorrow();
         status = new BorrowedStatus();
     }
 
     public void restore() {
-        status.restore();
+        status.checkCanRestore();
         status = new LoadStatus(); // 5분후 대여 가능
     }
 
     public void lost() {
-        status.lost();
+        status.checkCanLost();
         status = new LostStatus();
     }
 }

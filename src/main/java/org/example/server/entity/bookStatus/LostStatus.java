@@ -3,25 +3,25 @@ package org.example.server.entity.bookStatus;
 import org.example.server.exception.LostException;
 
 public class LostStatus implements BookStatus {
-    private final BookStatusType TYPE = BookStatusType.LOST;
+    private final BookStatusType type = BookStatusType.LOST;
 
     @Override
     public BookStatusType getType() {
-        return TYPE;
+        return type;
     }
 
     @Override
-    public void borrow() {
+    public void checkCanBorrow() {
         throw new LostException();
     }
 
     @Override
-    public void restore() {
+    public void checkCanRestore() {
         // 성공
     }
 
     @Override
-    public void lost() {
+    public void checkCanLost() {
         throw new LostException();
     }
 }

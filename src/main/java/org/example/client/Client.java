@@ -22,11 +22,11 @@ public class Client {
     }
 
     public String scanMode() {
-        return new ModeRequester(out, in).scanType();
+        return new ModeRequester(out, in).scanModeType();
     }
 
     public RequestPacket scanMethod() {
-        return methodRequester.scanTypeAndInfo();
+        return methodRequester.scanMethodTypeAndInfo();
     }
 
     public void printResponse(ResponsePacket responsePacket) {

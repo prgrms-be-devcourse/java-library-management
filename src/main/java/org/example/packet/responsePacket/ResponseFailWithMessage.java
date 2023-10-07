@@ -2,17 +2,17 @@ package org.example.packet.responsePacket;
 
 public class ResponseFailWithMessage extends ResponsePacket {
 
-    public final String FAIL_MESSAGE;
+    public final String failMessage;
 
     public ResponseFailWithMessage(String method, String failMessage) {
         super(method);
-        this.FAIL_MESSAGE = failMessage;
+        this.failMessage = failMessage;
     }
 
     @Override
     public String toString() {
         return "ResponseFailWithMessage{" +
-                "failMessage='" + FAIL_MESSAGE + '\'' +
+                "failMessage='" + failMessage + '\'' +
                 '}';
     }
 }
