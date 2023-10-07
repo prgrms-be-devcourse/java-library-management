@@ -10,8 +10,6 @@ public class Service{
 
     private final Repository repository;
 
-    private final Long sleepTime = 300000L;
-
     public Service(Repository repository) {
         this.repository = repository;
     }
@@ -44,7 +42,7 @@ public class Service{
         book.rentalBook();
     }
 
-    public void returnBook(int bookNumber){
+    public void returnBook(int bookNumber, Long sleepTime){
         Book book = getBook((long)bookNumber);
         book.organizeBook();
         BackGround backGroundTimer = new BackGround(book, sleepTime);

@@ -39,8 +39,9 @@ public enum Function {
     RETURN(5){
         @Override
         public void excute(Service service, ConsoleManager consoleManager) {
+            final Long sleepTime = 300000L;
             int i = consoleManager.returnBook();
-            service.returnBook(i);
+            service.returnBook(i, sleepTime);
             consoleManager.returnResult();
         }
     },
