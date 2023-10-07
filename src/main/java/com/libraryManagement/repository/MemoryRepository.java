@@ -28,6 +28,7 @@ public class MemoryRepository implements Repository {
         return resBookList;
     }
 
+    // map : o(1)
     @Override
     public List<Book> findBooksByTitle(String str) {
         List<Book> resBookList = new ArrayList<>();

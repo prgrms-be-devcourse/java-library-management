@@ -3,34 +3,32 @@ package com.libraryManagement.service;
 import com.libraryManagement.domain.Book;
 import com.libraryManagement.repository.MemoryRepository;
 import com.libraryManagement.repository.Repository;
+import com.libraryManagement.util.MyScheduler;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
+import java.util.concurrent.TimeUnit;
 
 import static com.libraryManagement.domain.BookStatus.*;
 import static com.libraryManagement.domain.ChangeBookStatus.*;
-import static java.time.Duration.ofMinutes;
-import static java.time.Duration.ofSeconds;
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 class BookServiceTest {
     Repository repository = new MemoryRepository();
     BookService bookService = new BookService(repository);
-    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private MyScheduler myScheduler = new MyScheduler();
 
+    // Beforeeach, afterall
+    // 단위테스트와
+    // service 리팩토링
     public void initData() {
         Book book1 = new Book
                 .Builder()
-                .id(1).title("제목1").author("작가1").pages(1).status(POSSIBLERENT.getName())
+                .id(1).title("제목1").author("작가1").pages(1).status(AVAILABLE.getName())
                 .build();
 
         Book book2 = new Book
                 .Builder()
-                .id(2).title("제목2").author("작가2").pages(2).status(NOPOSSIBLERENT.getName())
+                .id(2).title("제목2").author("작가2").pages(2).status(RENT.getName())
                 .build();
 
         Book book3 = new Book
@@ -150,16 +148,16 @@ class BookServiceTest {
         // then
 
         // update 된 도서 상태 검증
-        assertEquals(NOPOSSIBLERENT.getName(), repository.findBookById(1).getStatus());
-        assertEquals(NOPOSSIBLERENT.getName(), repository.findBookById(2).getStatus());
+        assertEquals(RENT.getName(), repository.findBookById(1).getStatus());
+        assertEquals(RENT.getName(), repository.findBookById(2).getStatus());
         assertEquals(READY.getName(), repository.findBookById(3).getStatus());
         assertEquals(LOST.getName(), repository.findBookById(4).getStatus());
         assertEquals(DELETE.getName(), repository.findBookById(5).getStatus());
 
         // updateBookStatus 에서 applyType 이 APPLYRENT 일 때의 반환값 검증
         // 대여할 수 있다면 대여중으로 update 하고, POSSIBLERENT("대여가능") 을 반환
-        assertEquals(POSSIBLERENT.getName(), returnStr1);
-        assertEquals(NOPOSSIBLERENT.getName(), returnStr2);
+        assertEquals(AVAILABLE.getName(), returnStr1);
+        assertEquals(RENT.getName(), returnStr2);
         assertEquals(READY.getName(), returnStr3);
         assertEquals(LOST.getName(), returnStr4);
         assertEquals(DELETE.getName(), returnStr5);
@@ -183,39 +181,15 @@ class BookServiceTest {
         assertEquals(READY.getName(), repository.findBookById(4).getStatus());
         assertEquals(READY.getName(), repository.findBookById(5).getStatus());
 
-        // 5분 후에 작업이 완료될 때까지 대기
-        CompletableFuture<Void> waitForCompletion = CompletableFuture.allOf(
-                CompletableFuture.runAsync(() -> {
-                    assertTimeout(ofSeconds(2), () -> {
-                        while (!POSSIBLERENT.getName().equals(repository.findBookById(2).getStatus())) {
-                            Thread.sleep(1000); // 1초마다 체크
-                        }
-                    });
-                }),
-                CompletableFuture.runAsync(() -> {
-                    assertTimeout(ofSeconds(2), () -> {
-                        while (!POSSIBLERENT.getName().equals(repository.findBookById(3).getStatus())) {
-                            Thread.sleep(1000); // 1초마다 체크
-                        }
-                    });
-                }),
-                CompletableFuture.runAsync(() -> {
-                    assertTimeout(ofSeconds(2), () -> {
-                        while (!POSSIBLERENT.getName().equals(repository.findBookById(4).getStatus())) {
-                            Thread.sleep(1000); // 1초마다 체크
-                        }
-                    });
-                }),
-                CompletableFuture.runAsync(() -> {
-                    assertTimeout(ofSeconds(2), () -> {
-                        while (!POSSIBLERENT.getName().equals(repository.findBookById(5).getStatus())) {
-                            Thread.sleep(1000); // 1초마다 체크
-                        }
-                    });
-                })
-        );
-
-        waitForCompletion.join(); // 모든 작업이 완료될 때까지 대기
+        // 3초 후에 테스트 완료 (준비중에서 대여가능으로 상태 변경됐는지)
+        // 목으로
+        myScheduler.scheduleTask(() -> {
+            System.out.println("!!");
+            assertEquals(AVAILABLE.getName(), repository.findBookById(2).getStatus());
+            assertEquals(AVAILABLE.getName(), repository.findBookById(3).getStatus());
+            assertEquals(AVAILABLE.getName(), repository.findBookById(4).getStatus());
+            assertEquals(AVAILABLE.getName(), repository.findBookById(5).getStatus());
+        }, 3, TimeUnit.SECONDS);
     }
 
     @Test

@@ -15,10 +15,10 @@ import java.io.IOException;
 
 import static java.lang.System.exit;
 
+// 설정만 할수있도록 고려
 public class AppConfig {
 
     public void init() throws IOException, InterruptedException {
-
 
         ModeMenu modeMenu = new ModeMenu();
         modeMenu.displayModeMenu();

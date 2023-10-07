@@ -13,6 +13,7 @@ import static java.lang.System.exit;
 
 public class BookMenu {
 
+    // view 에서 컨트롤러를..
     private final BookController bookController;
     private List<String> menuList;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

@@ -1,7 +1,7 @@
 package com.libraryManagement.io;
 
 import com.libraryManagement.domain.Book;
-import com.libraryManagement.domain.DtoBook;
+import com.libraryManagement.util.BookRequestDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,7 @@ public class BookIO {
 
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    // System.lineSeperator()
     public void outputBookList(List<Book> bookList) {
         for(Book book : bookList) {
             System.out.println(book);
@@ -24,7 +25,8 @@ public class BookIO {
         }
     }
 
-    public DtoBook inputBookInsert() throws IOException {
+    // 메시지들을 enum 상수로 관리하는것을 고려
+    public BookRequestDTO inputBookInsert() throws IOException {
         System.out.println("Q. 등록할 도서 제목을 입력하세요.\n");
         String title = br.readLine();
         System.out.println("Q. 작가 이름을 입력하세요.\n");
@@ -32,7 +34,7 @@ public class BookIO {
         System.out.println("Q. 페이지 수를 입력하세요.\n");
         int pages = Integer.parseInt(br.readLine());
 
-        return new DtoBook(title, author, pages);
+        return new BookRequestDTO(title, author, pages);
     }
 
     public String inputBookTitleFind() throws IOException {
@@ -40,22 +42,24 @@ public class BookIO {
         return br.readLine();
     }
 
-    public long inputApplyBookId(String updateType) throws IOException {
-        if(updateType.equals(APPLYRENT.name())){
-            System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
-        }
-        else if(updateType.equals(APPLYRETURN.name())) {
-            System.out.println("Q. 반납할 도서번호를 입력하세요.\n");
-        }
-        else if(updateType.equals(APPLYLOST.name())) {
-            System.out.println("Q. 분실 처리할 도서번호를 입력하세요.\n");
-        }
-        else if(updateType.equals(APPLYDELETE.name())) {
-            System.out.println("Q. 삭제 처리할 도서번호를 입력하세요.\n");
-        }
-
-        return Long.parseLong(br.readLine());
-    }
+    // NumberFormatException 를 따로 메시지 띄워주는것을 고려
+    // 네이밍이 모호해서 바꾸거나 분리
+//    public long inputApplyBookId(String updateType) throws IOException {
+//        if(updateType.equals(APPLYRENT.name())){
+//            System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
+//        }
+//        else if(updateType.equals(APPLYRETURN.name())) {
+//            System.out.println("Q. 반납할 도서번호를 입력하세요.\n");
+//        }
+//        else if(updateType.equals(APPLYLOST.name())) {
+//            System.out.println("Q. 분실 처리할 도서번호를 입력하세요.\n");
+//        }
+//        else if(updateType.equals(APPLYDELETE.name())) {
+//            System.out.println("Q. 삭제 처리할 도서번호를 입력하세요.\n");
+//        }
+//
+//        return Long.parseLong(br.readLine());
+//    }
 
     public long inputRentBookId() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
@@ -84,7 +88,7 @@ public class BookIO {
                 System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
             }else{
                 // 대여실패한 원인에 따라서 다른 출력
-                if(bookStatus.equals(NOPOSSIBLERENT.getName())){
+                if(bookStatus.equals(RENT.getName())){
                     System.out.println("[System] 이미 대여중인 도서입니다.\n");
                 }else if(bookStatus.equals(READY.getName())) {
                     System.out.println("[System] 아직 준비중인 도서입니다.");

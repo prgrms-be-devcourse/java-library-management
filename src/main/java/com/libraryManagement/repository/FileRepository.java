@@ -15,6 +15,7 @@ import java.util.List;
 import static com.libraryManagement.domain.BookStatus.*;
 
 public class FileRepository implements Repository {
+    // filepath 유연하게!
     private static final String FILEPATH = "/Users/zooputer/Desktop/Repository/Spring/devCourse/libraryManagement/src/main/resources/static/books.json";
     private JSONArray jsonArray;
     private FileReader fileReader;
@@ -64,6 +65,7 @@ public class FileRepository implements Repository {
             }
 
         } catch (IOException e) {
+            // file read 실패시 exception throw
             e.printStackTrace();
         }
 
