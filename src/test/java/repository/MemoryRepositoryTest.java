@@ -89,7 +89,7 @@ class MemoryRepositoryTest {
     @DisplayName("도서 대여: 도서 정리중")
     void rentalOrganizing() {
         List<Book> books = repository.getList();
-        repository.returnBook(2, 5000);
+        books.get(1).changeStateToOrganizing();
         repository.rental(2);
 
         assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
@@ -139,7 +139,7 @@ class MemoryRepositoryTest {
     @DisplayName("도서 반납: 도서 정리중")
     void returnBookOrganizing() throws InterruptedException {
         List<Book> books = repository.getList();
-        repository.returnBook(2, 5000);
+        books.get(1).changeStateToOrganizing();
         repository.returnBook(2, 5000);
 
         assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
@@ -185,7 +185,7 @@ class MemoryRepositoryTest {
     @DisplayName("도서 분실: 도서 정리중")
     void lostBookOrganizing() {
         List<Book> books = repository.getList();
-        repository.returnBook(2, 5000);
+        books.get(1).changeStateToOrganizing();
         repository.lostBook(2);
 
         assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
