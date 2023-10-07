@@ -45,4 +45,24 @@ class ServiceTest {
         //repository.addBook()을 2번 호출했나?
         verify(repository, times(2)).addBook(any(Book.class));
     }
+
+    @Test
+    void getAll() {
+        //given
+        List<Book> list = new ArrayList<>();
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+        Book book2 = new Book(1L, "자바의 정석1", "남궁성1", 500, Status.POSSIBLE);
+        Book book3 = new Book(2L, "자바의 정석2", "남궁성2", 500, Status.POSSIBLE);
+        list.add(book1);
+        list.add(book2);
+        list.add(book3);
+
+        //when
+        when(service.getAll()).thenReturn(list);
+
+        //then
+        assertThat(service.getAll().size()).isEqualTo(3);
+        //repository.getAll()을 1번 호출했나?
+        verify(repository, times(1)).getAll();
+    }
 }
