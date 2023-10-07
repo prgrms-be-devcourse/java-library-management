@@ -40,7 +40,7 @@ public enum Function {
         @Override
         public void excute(Service service, ConsoleManager consoleManager) {
             int i = consoleManager.returnBook();
-            service.organizeBook(i);
+            service.returnBook(i);
             consoleManager.returnResult();
         }
     },
