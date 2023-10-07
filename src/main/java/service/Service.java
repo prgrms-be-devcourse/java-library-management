@@ -28,34 +28,37 @@ public class Service {
 
     public ExecuteMessage rental(int id) {
         BookState state = repository.rental(id);
+
+        if(state == null) return ExecuteMessage.NOT_EXIST;
         return switch (state) {
             case AVAILABLE -> ExecuteMessage.RENTAL_AVAILABLE;
             case RENTING -> ExecuteMessage.RENTAL_RENTING;
             case LOST -> ExecuteMessage.RENTAL_LOST;
             case ORGANIZING -> ExecuteMessage.RENTAL_ORGANIZING;
-            default -> ExecuteMessage.NOT_EXIST;
         };
     }
 
     public ExecuteMessage returnBook(int id) {
         BookState state = repository.returnBook(id);
+
+        if(state == null) return ExecuteMessage.NOT_EXIST;
         return switch (state) {
             case AVAILABLE -> ExecuteMessage.RETURN_AVAILABLE;
             case RENTING -> ExecuteMessage.RETURN_COMPLETE;
             case LOST -> ExecuteMessage.RETURN_COMPLETE;
             case ORGANIZING -> ExecuteMessage.RETURN_IMPOSSIBLE;
-            default -> ExecuteMessage.NOT_EXIST;
         };
     }
 
     public ExecuteMessage lostBook(int id) {
         BookState state = repository.lostBook(id);
+
+        if(state == null) return ExecuteMessage.NOT_EXIST;
         return switch (state) {
             case AVAILABLE -> ExecuteMessage.LOST_IMPOSSIBLE;
             case RENTING -> ExecuteMessage.LOST_COMPLETE;
             case LOST -> ExecuteMessage.LOST_ALREADY;
             case ORGANIZING -> ExecuteMessage.LOST_IMPOSSIBLE;
-            default -> ExecuteMessage.NOT_EXIST;
         };
     }
 
