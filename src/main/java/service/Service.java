@@ -1,5 +1,6 @@
 package service;
 
+import domain.BackGround;
 import domain.Book;
 import repository.Repository;
 
@@ -8,6 +9,8 @@ import java.util.List;
 public class Service{
 
     private final Repository repository;
+
+    private final Long sleepTime = 300000L;
 
     public Service(Repository repository) {
         this.repository = repository;
@@ -44,6 +47,8 @@ public class Service{
     public void returnBook(int bookNumber){
         Book book = getBook((long)bookNumber);
         book.organizeBook();
+        BackGround backGroundTimer = new BackGround(book, sleepTime);
+        backGroundTimer.start();
     }
 
     public void lostBook(int bookNumber){
