@@ -23,7 +23,7 @@ public class ConsoleReader {
     String readString() {
         String input = sc.nextLine();
 
-        while (input.equals("")) {
+        while (input.strip().isBlank()) {
             input = sc.nextLine();
         }
 
