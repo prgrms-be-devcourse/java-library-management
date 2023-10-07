@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FileRepository implements Repository{
@@ -65,17 +66,40 @@ public class FileRepository implements Repository{
     }
 
     @Override
-    public Book getBook(Long bookNumber) {
+    public Optional<Book> getBook(Long bookNumber) {
         return bookList.stream()
                 .filter(book -> book.equalsId(bookNumber))
-                .findAny()
-                .orElseThrow(() -> new RuntimeException("[System] 존재하지 않는 도서번호 입니다."));
+                .findFirst();
     }
 
     @Override
-    public void deleteBook(Long bookNumber) {
-        Book book = getBook(bookNumber);
+    public void deleteBook(Book book) {
         bookList.remove(book);
+        writeFile();
+    }
+
+    @Override
+    public void rentalBook(Book book) {
+        book.rentalBook();
+        writeFile();
+    }
+
+    @Override
+    public void organizeBook(Book book) {
+        book.organizeBook();
+        writeFile();
+        returnBook(book);
+    }
+
+    @Override
+    public void returnBook(Book book) {
+        book.returnBook();
+        writeFile();
+    }
+
+    @Override
+    public void lostBook(Book book) {
+        book.lostBook();
         writeFile();
     }
 }
