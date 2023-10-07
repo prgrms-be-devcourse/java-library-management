@@ -11,6 +11,7 @@ import repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,19 +67,18 @@ class ServiceTest {
         verify(repository, times(1)).getAll();
     }
 
-    //테스트 불가..!
-//    @Test
-//    void getBook() {
-//        //given
-//        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
-//
-//        //when
-//        when(service.getBook(0L)).thenThrow(RuntimeException.class);
-//
-//        //then
-//        assertThat(service.getBook(0L)).isEqualTo(book1);
-//        verify(repository, times(1)).getBook(any(Long.class));
-//    }
+    @Test
+    void getBook() {
+        //given
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        when(repository.getBook(0L)).thenReturn(Optional.of(book1));
+
+        //then
+        assertThat(service.getBook(0L)).isEqualTo(book1);
+        verify(repository, times(1)).getBook(any(Long.class));
+    }
 
     @Test
     void searchName() {
