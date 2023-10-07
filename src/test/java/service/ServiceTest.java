@@ -110,4 +110,17 @@ class ServiceTest {
         service.deleteBook(0);
         verify(repository, times(1)).deleteBook(any(Book.class));
     }
+    @Test
+    void rentalBook() {
+        //given
+        Book book1 = new Book(0L, "자바의 정석", "남궁성", 500, Status.POSSIBLE);
+
+        //when
+        when(repository.getBook(0L)).thenReturn(Optional.of(book1));
+        service.rentalBook(0);
+
+        //then
+        assertThat(book1.getStatus()).isEqualTo(Status.IMPOSSIBLE);
+        verify(repository, times(1)).getBook(any());
+    }
 }
