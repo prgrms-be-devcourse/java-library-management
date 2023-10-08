@@ -12,6 +12,7 @@ import static java.lang.Integer.parseInt;
 public class LibrarySystem {
     private final Reader reader;
     private final Writer writer;
+
     private DataManager dataManager;
     private BookManager bookManager;
 

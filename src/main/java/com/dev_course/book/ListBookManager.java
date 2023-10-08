@@ -11,10 +11,10 @@ import static com.dev_course.book.BookManagerMessage.*;
 import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
-    private static final Duration PROCESSING_COST = Duration.ofMinutes(5);
-    private static final String infoDelim = "\n------------------------------\n";
-
+    private final Duration PROCESSING_COST = Duration.ofMinutes(5);
+    private final String infoDelim = "\n------------------------------\n";
     private final List<Book> books = new ArrayList<>();
+
     private int id;
 
     @Override

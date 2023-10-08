@@ -13,14 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONDataManager implements DataManager {
-    private final String path = "./src/main/resources/library_data.json";
-    private final File file = new File(path);
-    private final TypeReference<List<Book>> valueType;
+    private final File file;
     private final ObjectMapper objectMapper;
+    private final TypeReference<List<Book>> valueType;
+
+    private String path = "./src/main/resources/library_data.json";
 
     public JSONDataManager() {
-        valueType = new TypeReference<>() {};
+        file = new File(path);
         objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        valueType = new TypeReference<>() {};
     }
 
     @Override
