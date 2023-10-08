@@ -11,11 +11,10 @@ import java.util.List;
 
 public class BookService {
     private final BookRepository repository;
-    private final OutputManager outputManager;
+    private final OutputManager outputManager = new OutputManager();
 
-    public BookService(BookRepository repository, OutputManager outputManager) {
+    public BookService(BookRepository repository) {
         this.repository = repository;
-        this.outputManager = outputManager;
     }
 
     // [1] 도서 저장

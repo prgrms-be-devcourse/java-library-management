@@ -21,7 +21,7 @@ public class NormalServiceTest {
     private final OutputManager outputManager = new OutputManager();
     private final FileManager fileManager = new FileManager(PATH);
     private final NormalRepository repository = new NormalRepository(PATH, fileManager.loadData());
-    private final BookService service = new BookService(repository, outputManager);
+    private final BookService service = new BookService(repository);
 
     @AfterEach
     public void afterEach() {

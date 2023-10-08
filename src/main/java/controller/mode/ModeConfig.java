@@ -30,7 +30,6 @@ public class ModeConfig {
         BookService bookService = modeType.getBookService();
         modeType.printModeExecution();
 
-
         MenuConfig menuConfig = new MenuConfig(outputManager, inputManager, bookService);
         menuConfig.selectMenu();
     }

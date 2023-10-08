@@ -38,12 +38,12 @@ public enum ModeType {
 
     private static BookService loadServiceNormal() {
         List<Book> books = loadBooks();
-        return new BookService(new NormalRepository(PATH, books), outputManager);
+        return new BookService(new NormalRepository(PATH, books));
     }
 
     private static BookService loadServiceTest() {
         List<Book> books = new ArrayList<>();
-        return new BookService(new TestRepository(books), outputManager);
+        return new BookService(new TestRepository(books));
     }
 
     private static List<Book> loadBooks() {

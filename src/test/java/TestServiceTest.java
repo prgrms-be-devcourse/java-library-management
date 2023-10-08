@@ -17,9 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestServiceTest {
-    private final OutputManager outputManager = new OutputManager();
     private final TestRepository repository = new TestRepository(new ArrayList<>());
-    private final BookService service = new BookService(repository, outputManager);
+    private final BookService service = new BookService(repository);
 
 
     @Test
