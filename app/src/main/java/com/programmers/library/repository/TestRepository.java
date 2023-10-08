@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestRepository implements Repository {
-
     private static int sequance = 0;
     private List<Book> storage = new ArrayList<>();
 

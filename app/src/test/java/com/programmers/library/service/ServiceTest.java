@@ -9,13 +9,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServiceTest {
     private final Service service;
@@ -38,14 +37,23 @@ public class ServiceTest {
 
         service.createBook(request);
 
-        List<Book> books = repository.findAll();
-        assertEquals(1, books.size());
-        assertEquals(1, books.get(0).getId());
-        assertEquals("제목", books.get(0).getName());
-        assertEquals("작가 이름", books.get(0).getAuthor());
-        assertEquals(10, books.get(0).getPageCount());
-        assertEquals(BookStatus.BORROWABLE, books.get(0).getStatus());
-        assertEquals(null, books.get(0).getReturnedAt());
+        List<Book> books = service.getBooks();
+        assertThat(books).hasSize(1);
+        assertThat(books.get(0)).extracting(
+                Book::getId,
+                Book::getName,
+                Book::getAuthor,
+                Book::getPageCount,
+                Book::getStatus,
+                Book::getReturnedAt
+        ).containsExactly(
+                1,
+                "제목",
+                "작가 이름",
+                10,
+                BookStatus.BORROWABLE,
+                null
+        );
     }
 
     @Test
@@ -70,12 +78,14 @@ public class ServiceTest {
 
         List<Book> books = service.getBooks();
 
-        assertEquals(2, books.size());
+        assertThat(books).hasSize(2);
     }
 
     @Test
     @DisplayName("도서 제목을 기준으로 도서를 검색할 수 있어야합니다")
     public void getBooksByName() {
+        String bookName = "도서 검색";
+        String keyword = "검색";
         CreateBookRequestDto request1 = CreateBookRequestDto.fixture();
         CreateBookRequestDto request2 = CreateBookRequestDto.fixture();
         repository.save(new Book(
@@ -93,11 +103,15 @@ public class ServiceTest {
                 BookStatus.BORROWABLE)
         );
 
-        List<Book> books = service.getBooksByName("도서 검색");
+        List<Book> books = service.getBooksByName(keyword);
 
-        assertEquals(1, books.size());
-        assertEquals(2, books.get(0).getId());
-        assertEquals("도서 검색", books.get(0).getName());
+        assertThat(books)
+                .hasSize(1)
+                .first()
+                .satisfies(book -> {
+                    assertThat(book.getId()).isEqualTo(2);
+                    assertThat(book.getName()).isEqualTo(bookName);
+                });
     }
 
     @Test
@@ -115,7 +129,9 @@ public class ServiceTest {
         service.borrowBook(1);
 
         Optional<Book> book = repository.findOneById(1);
-        assertEquals(BookStatus.BORROWED, book.get().getStatus());
+        assertThat(book)
+                .isPresent()
+                .hasValueSatisfying(b -> assertThat(b.getStatus()).isEqualTo(BookStatus.BORROWED));
     }
 
     @Test
@@ -133,8 +149,12 @@ public class ServiceTest {
         service.returnBook(1);
 
         Optional<Book> book = repository.findOneById(1);
-        assertEquals(BookStatus.ORGANIZING, book.get().getStatus());
-        assertNotNull(book.get().getReturnedAt());
+        assertThat(book)
+                .isPresent()
+                .hasValueSatisfying(b -> {
+                    assertThat(b.getStatus()).isEqualTo(BookStatus.ORGANIZING);
+                    assertThat(b.getReturnedAt()).isNotNull();
+                });
     }
 
     @Test
@@ -152,7 +172,9 @@ public class ServiceTest {
         service.reportLostBook(1);
 
         Optional<Book> book = repository.findOneById(1);
-        assertEquals(BookStatus.LOST, book.get().getStatus());
+        assertThat(book)
+                .isPresent()
+                .hasValueSatisfying(b -> assertThat(b.getStatus()).isEqualTo(BookStatus.LOST));
     }
 
     @Test
@@ -170,7 +192,7 @@ public class ServiceTest {
         service.deleteBook(1);
 
         Optional<Book> book = repository.findOneById(1);
-        assertTrue(book.isEmpty());
+        assertThat(book).isEmpty();
     }
 
     @Test
@@ -199,10 +221,17 @@ public class ServiceTest {
 
         List<Book> books = service.getBooks();
 
-        assertEquals(2, books.size());
-        assertEquals(1, books.get(0).getId());
-        assertEquals(BookStatus.ORGANIZING, books.get(0).getStatus());
-        assertEquals(2, books.get(1).getId());
-        assertEquals(BookStatus.BORROWABLE, books.get(1).getStatus());
+        assertThat(books)
+                .hasSize(2);
+        assertThat(books.get(0))
+                .satisfies(b -> {
+                    assertThat(b.getId()).isEqualTo(1);
+                    assertThat(b.getStatus()).isEqualTo(BookStatus.ORGANIZING);
+                });
+        assertThat(books.get(1))
+                .satisfies(b -> {
+                    assertThat(b.getId()).isEqualTo(2);
+                    assertThat(b.getStatus()).isEqualTo(BookStatus.BORROWABLE);
+                });
     }
 }
