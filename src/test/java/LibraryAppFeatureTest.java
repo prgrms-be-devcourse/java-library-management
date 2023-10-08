@@ -82,7 +82,7 @@ public class LibraryAppFeatureTest {
 
             if (book.equalState(BookState.ARRANGEMENT)) {
 
-                CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 10000);
+                CompletableFuture<Void> completableFuture = runAsyncToWaitArrangement(book, 2000);
 
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (!completableFuture.isDone()) {
@@ -373,7 +373,7 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
     }
 
-    @DisplayName("일반 모드에서 정리중인 도서 대여 10초 뒤 성공 검증")
+    @DisplayName("일반 모드에서 정리중인 도서 대여 2초 뒤 성공 검증")
     @Test
     public void borrowBookBeingArrangingAfter10SecInGeneral() throws FuncFailureException {
 
@@ -390,9 +390,9 @@ public class LibraryAppFeatureTest {
                 .isInstanceOf(FuncFailureException.class)
                 .hasMessageContaining("[System] 정리중인 도서로 대여가 불가합니다.");
 
-        CompletableFuture<Void> future = library.runAsyncToWaitArrangement(book, 10000);
+        CompletableFuture<Void> future = library.runAsyncToWaitArrangement(book, 2000);
 
-        assertTimeout(Duration.ofMillis(11000), () -> future.get());
+        assertTimeout(Duration.ofMillis(3000), () -> future.get());
         assertThat(future.isDone()).isTrue();
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -510,7 +510,7 @@ public class LibraryAppFeatureTest {
                 .isEqualTo(BookState.ARRANGEMENT);
     }
 
-    @DisplayName("테스트 모드에서 정리중인 도서 10초 뒤 도서 대여 성공 검증")
+    @DisplayName("테스트 모드에서 정리중인 도서 2초 뒤 도서 대여 성공 검증")
     @Test
     public void borrowBookBeingArrangingAfter10SecInTest() {
 
@@ -523,8 +523,8 @@ public class LibraryAppFeatureTest {
         Book book = new Book(1L, "토비의 스프링", "이일민", 999, BookState.ARRANGEMENT);
         library.add(book);
 
-        assertTimeout(Duration.ofMillis(11000), () -> {
-            library.runAsyncToWaitArrangement(book, 10000).get();
+        assertTimeout(Duration.ofMillis(3000), () -> {
+            library.runAsyncToWaitArrangement(book, 2000).get();
         });
 
         assertThat(bookRepository.findById(book.getBookId()))
@@ -554,7 +554,7 @@ public class LibraryAppFeatureTest {
         // wait 10 sec because of waiting to complete arrangement
         CompletableFuture.runAsync(() -> {
             try {
-                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.await(3000, TimeUnit.MILLISECONDS);
                 latch.countDown();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -656,7 +656,7 @@ public class LibraryAppFeatureTest {
 
         CompletableFuture.runAsync(() -> {
             try {
-                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.await(3000, TimeUnit.MILLISECONDS);
                 latch.countDown();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -799,7 +799,7 @@ public class LibraryAppFeatureTest {
 
         CompletableFuture.runAsync(() -> {
             try {
-                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.await(3000, TimeUnit.MILLISECONDS);
                 latch.countDown();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -845,7 +845,7 @@ public class LibraryAppFeatureTest {
 
         CompletableFuture.runAsync(() -> {
             try {
-                latch.await(11000, TimeUnit.MILLISECONDS);
+                latch.await(3000, TimeUnit.MILLISECONDS);
                 latch.countDown();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
