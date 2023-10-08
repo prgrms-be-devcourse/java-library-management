@@ -39,7 +39,9 @@ class BookServiceTest {
         String author = "작가1";
         int pageNum = 123;
 
+        doNothing().when(repository).saveBook(any(Book.class));
         bookService.saveBook(title, author, pageNum);
+
         verify(repository, times(1)).saveBook(any(Book.class));
     }
 
@@ -47,8 +49,8 @@ class BookServiceTest {
     @DisplayName("모든 도서 검색 테스트")
     void findAllBooksTest() {
         List<Book> expectedBooks = new ArrayList<>();
-        expectedBooks.add(new Book(1L, "제목1", "작가1", 123, Status.AVAILABLE));
-        expectedBooks.add(new Book(2L, "제목2", "작가2", 123, Status.AVAILABLE));
+        expectedBooks.add(new Book(1L, "제목1", "작가1", 123));
+        expectedBooks.add(new Book(2L, "제목2", "작가2", 123));
 
         when(repository.findAllBook()).thenReturn(expectedBooks);
         List<Book> actualBooks = bookService.findAllBook();
@@ -62,7 +64,7 @@ class BookServiceTest {
     void testFindBooksByTitle() {
         String title = "도서";
         List<Book> expectedBooks = new ArrayList<>();
-        expectedBooks.add(new Book(1L, "제목1", "작가1", 123, Status.AVAILABLE));
+        expectedBooks.add(new Book(1L, "제목1", "작가1", 123));
 
         when(repository.findBookByTitle(title)).thenReturn(expectedBooks);
         List<Book> actualBooks = bookService.findBooksByTitle(title);
@@ -75,7 +77,7 @@ class BookServiceTest {
     @DisplayName("도서 대여 테스트")
     void testBorrowBook() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.AVAILABLE);
+        Book book = new Book(1L, "제목1", "작가1", 123);
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
         bookService.borrowBookByBookNo(bookNo);
@@ -88,7 +90,8 @@ class BookServiceTest {
     @DisplayName("도서 대여 실패 테스트")
     void testBorrowBookFail() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.BORROWED);
+        Book book = new Book(1L, "제목1", "작가1", 123);
+        book.toBorrowed();
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
 
@@ -100,7 +103,8 @@ class BookServiceTest {
     @DisplayName("도서 반납 테스트")
     void testReturnBook() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.BORROWED);
+        Book book = new Book(1L, "제목1", "작가1", 123);
+        book.toBorrowed();
         bookScheduler = new BookTestScheduler();
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
@@ -110,7 +114,7 @@ class BookServiceTest {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             verify(repository, times(2)).saveBook(book);
             assertThat(book.getStatus()).isEqualTo(Status.AVAILABLE);
         }
@@ -120,7 +124,7 @@ class BookServiceTest {
     @DisplayName("도서 반납 실패 테스트")
     void testReturnFail_bookAvailable() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.AVAILABLE);
+        Book book = new Book(1L, "제목1", "작가1", 123);
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
 
@@ -131,7 +135,7 @@ class BookServiceTest {
     @DisplayName("도서 분실 처리 테스트")
     void testLostBook() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.AVAILABLE);
+        Book book = new Book(1L, "제목1", "작가1", 123);
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
         bookService.lostBookByBookNo(bookNo);
@@ -144,7 +148,8 @@ class BookServiceTest {
     @DisplayName("도서 분실 처리 실패 테스트")
     void testLostBookFail_alreadyLost() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.LOST);
+        Book book = new Book(1L, "제목1", "작가1", 123);
+        book.toLost();
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
 
@@ -155,7 +160,8 @@ class BookServiceTest {
     @DisplayName("도서 삭제 테스트")
     void testDeleteBook() {
         Long bookNo = 1L;
-        Book book = new Book(1L, "제목1", "작가1", 123, Status.LOST);
+        Book book = new Book(1L, "제목1", "작가1", 123);
+        book.toLost();
 
         when(repository.findBookByBookNo(bookNo)).thenReturn(Optional.of(book));
 

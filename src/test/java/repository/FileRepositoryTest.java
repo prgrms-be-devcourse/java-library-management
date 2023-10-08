@@ -1,7 +1,7 @@
 package repository;
 
+import constant.ExceptionMsg;
 import model.Book;
-import model.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +20,13 @@ class FileRepositoryTest {
     @BeforeEach
     void setUp() {
         fileRepository = new FileRepository("test.csv");
-        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "대여 가능 책", "작가1", 123, Status.AVAILABLE));
-        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "대여 중인 책", "작가2", 123, Status.BORROWED));
-        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "분실된 책", "작가3", 123, Status.LOST));
+        fileRepository.saveBook(new Book(fileRepository.createBookNo(), "대여 가능 책", "작가1", 123));
+        Book book2 = new Book(fileRepository.createBookNo(), "대여 중인 책", "작가2", 123);
+        book2.toBorrowed();
+        Book book3 = new Book(fileRepository.createBookNo(), "분실된 책", "작가3", 123);
+        book3.toLost();
+        fileRepository.saveBook(book2);
+        fileRepository.saveBook(book3);
     }
 
     @Test
@@ -44,7 +48,7 @@ class FileRepositoryTest {
     @Test
     @DisplayName("도서 등록 테스트")
     void testSave() {
-        Book book = new Book(fileRepository.createBookNo(), "해리포터", "J.K 롤링", 255, Status.AVAILABLE);
+        Book book = new Book(fileRepository.createBookNo(), "해리포터", "J.K 롤링", 255);
         fileRepository.saveBook(book);
 
         assertThat(fileRepository.findAllBook()).hasSize(4);
@@ -53,7 +57,7 @@ class FileRepositoryTest {
     @Test
     @DisplayName("제목으로 도서 검색 테스트")
     void testFindBooksByTitle() {
-        Book expectedBook = new Book(fileRepository.createBookNo(), "해리포터", "J.K 롤링", 255, Status.AVAILABLE);
+        Book expectedBook = new Book(fileRepository.createBookNo(), "해리포터", "J.K 롤링", 255);
         fileRepository.saveBook(expectedBook);
 
         List<Book> actualBooks = fileRepository.findBookByTitle("해리");
@@ -69,6 +73,19 @@ class FileRepositoryTest {
         List<Book> books = fileRepository.findAllBook();
 
         assertThat(books).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("도서 번호로 도서 검색 테스트")
+    void testFindBookByBookNo() {
+        Long bookNo = 4L;
+        Book book = new Book(bookNo, "대여 가능 책", "작가1", 123);
+        fileRepository.saveBook(book);
+
+        Book actualBook = fileRepository.findBookByBookNo(bookNo)
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMsg.NO_TARGET.getMessage()));
+
+        assertThat(book).isEqualTo(actualBook);
     }
 
     @AfterEach
