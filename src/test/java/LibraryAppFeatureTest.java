@@ -34,8 +34,6 @@ public class LibraryAppFeatureTest {
 
     private LibraryConfig libraryConfig;
     private LibraryManagement library;
-    private FileWriter writer;
-    private FileOutputStream fileOutputStream;
     private TestBookRepositoryConfig testBookRepositoryConfig;
     private JSONFileManager jsonFileManager;
 
@@ -122,7 +120,7 @@ public class LibraryAppFeatureTest {
     @BeforeEach
     public void init() {
         try {
-            writer = new FileWriter(AppConstants.TEST_FILEPATH);
+            FileWriter writer = new FileWriter(AppConstants.TEST_FILEPATH);
             testBookRepositoryConfig = new TestBookRepositoryConfig(0);
             jsonFileManager = new JSONFileManager();
         } catch (IOException e) {
@@ -133,7 +131,7 @@ public class LibraryAppFeatureTest {
     @AfterEach
     public void after() {
         try {
-            fileOutputStream = new FileOutputStream(AppConstants.TEST_FILEPATH, false); // 하나의 테스트가 끝나고 테스트할 파일 다 지우기
+            FileOutputStream fileOutputStream = new FileOutputStream(AppConstants.TEST_FILEPATH, false); // 하나의 테스트가 끝나고 테스트할 파일 다 지우기
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
