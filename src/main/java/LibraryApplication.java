@@ -1,8 +1,8 @@
-import controller.BookController;
+import controller.Mode.ModeConfig;
 
 public class LibraryApplication {
     public static void main(String[] args) {
-        BookController bookController = new BookController();
-        bookController.selectMode();
+        ModeConfig modeConfig = new ModeConfig();
+        modeConfig.selectMode();
     }
 }
