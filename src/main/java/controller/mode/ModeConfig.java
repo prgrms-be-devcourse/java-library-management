@@ -1,5 +1,4 @@
-package controller.Mode;
-
+package controller.mode;
 import controller.BookController;
 import manager.console.InputManager;
 import manager.console.OutputManager;

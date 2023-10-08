@@ -1,4 +1,4 @@
-package controller;
+package controller.menu;
 
 import lombok.Getter;
 import manager.console.InputManager;

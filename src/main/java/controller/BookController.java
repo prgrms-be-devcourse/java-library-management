@@ -1,5 +1,6 @@
 package controller;
 
+import controller.menu.MenuType;
 import manager.console.InputManager;
 import manager.console.OutputManager;
 import service.BookService;

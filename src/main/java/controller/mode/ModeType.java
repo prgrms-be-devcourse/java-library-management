@@ -1,4 +1,4 @@
-package controller.Mode;
+package controller.mode;
 
 import domain.Book;
 import lombok.Getter;

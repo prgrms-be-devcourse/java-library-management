@@ -1,4 +1,4 @@
-import controller.Mode.ModeConfig;
+import controller.mode.ModeConfig;
 
 public class LibraryApplication {
     public static void main(String[] args) {

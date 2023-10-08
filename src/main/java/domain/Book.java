@@ -52,6 +52,7 @@ public class Book {
     public boolean isContainsTitle(String title){
         return this.title.contains(title);
     }
+
     //책 상태 관련 함수
     public void borrow() {
         status = BORROWED;
