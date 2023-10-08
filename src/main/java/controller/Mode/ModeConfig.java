@@ -13,7 +13,7 @@ public class ModeConfig {
         outputManager.printSelectMode();
         String mode;
         try {
-            mode = inputManager.getInput();
+            mode = inputManager.getStringInput();
         } catch (Exception e) {
             outputManager.printSystem(e.getMessage());
             return;
