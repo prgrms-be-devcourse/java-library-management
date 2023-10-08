@@ -27,7 +27,7 @@ public class AddBookRequestDto {
 		this.author = author;
 	}
 
-	public Book toEntity() {
-		return new Book(title, author, pages);
+	public Book toEntity(Long id) {
+		return new Book(id, title, author, pages);
 	}
 }

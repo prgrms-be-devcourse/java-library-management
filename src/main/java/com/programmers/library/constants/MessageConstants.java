@@ -23,11 +23,6 @@ public final class MessageConstants {
 	public static final String INVALID_ID = "도서번호는 숫자만 입력 가능합니다.";
 	public static final String START_NORMAL_MODE = "일반 모드로 애플리케이션을 실행합니다.";
 	public static final String START_TEST_MODE = "테스트 모드로 애플리케이션을 실행합니다.";
-	public static final String BOOK_NOT_FOUND = "존재하지 않는 도서번호 입니다.";
-	public static final String BOOK_ALREADY_BORROWED = "이미 대여중인 도서입니다.";
-	public static final String BOOK_LOST = "분실된 도서입니다.";
-	public static final String BOOK_UNDER_ORGANIZING = "정리중인 도서입니다.";
-	public static final String BOOK_ALREADY_AVAILABLE = "원래 대여가 가능한 도서입니다.";
 
 	private MessageConstants() {
 	}

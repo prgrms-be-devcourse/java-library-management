@@ -7,8 +7,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
+import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.util.FileUtils;
-import com.programmers.library.util.IdGeneratorUtils;
+import com.programmers.library.util.IdGenerator;
 
 public class FileBookRepository implements BookRepository {
 
@@ -18,9 +19,9 @@ public class FileBookRepository implements BookRepository {
 	public FileBookRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
 		bookMap = new ConcurrentHashMap<>();
-		List<Book> bookList = fileUtils.readFile(Book.class);
+		List<Book> bookList = fileUtils.readFile();
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
-		IdGeneratorUtils.initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0));
+		IdGenerator.getInstance().initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0L));
 	}
 
 	@Override
@@ -48,6 +49,13 @@ public class FileBookRepository implements BookRepository {
 	public List<Book> findByTitle(String title) {
 		List<Book> bookList = new ArrayList<>();
 		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(bookList::add);
+		return bookList;
+	}
+
+	@Override
+	public List<Book> findByStatus(BookStateType status) {
+		List<Book> bookList = new ArrayList<>();
+		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
 		return bookList;
 	}
 

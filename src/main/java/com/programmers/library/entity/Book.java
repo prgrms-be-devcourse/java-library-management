@@ -1,48 +1,37 @@
 package com.programmers.library.entity;
 
-import static com.programmers.library.constants.MessageConstants.*;
-
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-import com.programmers.library.exception.BookException;
-import com.programmers.library.util.IdGeneratorUtils;
+import com.programmers.library.entity.state.AvailableState;
+import com.programmers.library.entity.state.BookStateType;
+import com.programmers.library.entity.state.BorrowedState;
+import com.programmers.library.entity.state.LostState;
+import com.programmers.library.entity.state.OrganizingState;
+import com.programmers.library.entity.state.State;
 
 public class Book {
 	private Long id;
 	private String title;
 	private String author;
 	private Long pages;
-	private BookStatus status;
-
+	private State state;
 	private LocalDateTime returnedAt;
 
-	public Book() {
-	}
-
-	public Book(String title, String author, Long pages) {
-		this.id = IdGeneratorUtils.generateId();
+	public Book(Long id, String title, String author, Long pages) {
+		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
-		this.status = BookStatus.AVAILABLE;
+		this.state = new AvailableState();
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Book book = (Book)o;
-		return Objects.equals(id, book.id) && Objects.equals(title, book.title)
-			&& Objects.equals(author, book.author) && Objects.equals(pages, book.pages)
-			&& status == book.status && Objects.equals(returnedAt, book.returnedAt);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, title, author, pages, status, returnedAt);
+	public Book(Long id, String title, String author, Long pages, State state, LocalDateTime returnedAt) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.pages = pages;
+		this.state = state;
+		this.returnedAt = returnedAt;
 	}
 
 	@Override
@@ -53,40 +42,24 @@ public class Book {
 				"작가 이름 : %s%n" +
 				"페이지 수 : %d 페이지%n" +
 				"상태 : %s%n",
-			id, title, author, pages, status.getValue());
+			id, title, author, pages, state.getType().getValue());
 	}
 
 	public void borrow() {
-		if (this.status == BookStatus.BORROWED)
-			throw new BookException(BOOK_ALREADY_BORROWED);
-		else if (this.status == BookStatus.LOST)
-			throw new BookException(BOOK_LOST);
-		else if (this.status == BookStatus.ORGANIZING)
-			throw new BookException(BOOK_UNDER_ORGANIZING);
-		this.status = BookStatus.BORROWED;
+		state = state.borrow();
 	}
 
 	public void returned() {
-		if (this.status == BookStatus.AVAILABLE) {
-			throw new BookException(BOOK_ALREADY_AVAILABLE);
-		} else if (this.status == BookStatus.ORGANIZING) {
-			throw new BookException(BOOK_UNDER_ORGANIZING);
-		}
-		status = BookStatus.ORGANIZING;
+		state = state.returned();
 		returnedAt = LocalDateTime.now();
 	}
 
 	public void lost() {
-		if (this.status == BookStatus.LOST) {
-			throw new BookException(BOOK_LOST);
-		}
-		status = BookStatus.LOST;
+		state = state.lost();
 	}
 
 	public void organize() {
-		if (this.status == BookStatus.ORGANIZING && this.returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
-			this.status = BookStatus.AVAILABLE;
-		}
+		this.state = state.organize(returnedAt);
 	}
 
 	public String getTitle() {
@@ -105,8 +78,8 @@ public class Book {
 		return pages;
 	}
 
-	public BookStatus getStatus() {
-		return status;
+	public BookStateType getState() {
+		return this.state.getType();
 	}
 
 	public LocalDateTime getReturnedAt() {

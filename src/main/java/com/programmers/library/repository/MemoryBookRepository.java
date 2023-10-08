@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
+import com.programmers.library.entity.state.BookStateType;
 
 public class MemoryBookRepository implements BookRepository {
 	private final Map<Long, Book> bookMap;
@@ -37,6 +38,13 @@ public class MemoryBookRepository implements BookRepository {
 	public List<Book> findByTitle(String title) {
 		List<Book> bookList = new ArrayList<>();
 		bookMap.values().stream().filter(book -> book.getTitle().contains(title)).forEach(bookList::add);
+		return bookList;
+	}
+
+	@Override
+	public List<Book> findByStatus(BookStateType status) {
+		List<Book> bookList = new ArrayList<>();
+		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
 		return bookList;
 	}
 

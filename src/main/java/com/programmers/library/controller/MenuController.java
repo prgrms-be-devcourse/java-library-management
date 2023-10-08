@@ -9,7 +9,8 @@ import java.util.function.Supplier;
 
 import com.programmers.library.entity.Book;
 import com.programmers.library.enums.Menu;
-import com.programmers.library.exception.InvalidMenuException;
+import com.programmers.library.exception.BookException;
+import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
 import com.programmers.library.service.LibarayManagerService;
@@ -71,7 +72,7 @@ public class MenuController implements Runnable {
 						() -> service.deleteBook(input.inputDeleteBookRequest()),
 						DELETE_BOOK_END
 					);
-					default -> throw new InvalidMenuException();
+					default -> throw new BookException(ErrorCode.INVALID_MENU);
 				}
 			} catch (Exception e) {
 				output.printSystemMessage(e.getMessage());

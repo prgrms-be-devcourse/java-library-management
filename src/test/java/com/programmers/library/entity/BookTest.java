@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.exception.BookException;
 
 class BookTest {
@@ -22,7 +23,7 @@ class BookTest {
 	public void testBorrowValidBook() {
 		book.borrow();
 
-		assertEquals(BookStatus.BORROWED, book.getStatus());
+		assertEquals(BookStateType.BORROWED, book.getState());
 	}
 
 	@Test
@@ -39,7 +40,7 @@ class BookTest {
 		book.borrow();
 		book.returned();
 
-		assertEquals(BookStatus.ORGANIZING, book.getStatus());
+		assertEquals(BookStateType.ORGANIZING, book.getState());
 	}
 
 	@Test
@@ -53,7 +54,7 @@ class BookTest {
 	public void testLostValidBook() {
 		book.lost();
 
-		assertEquals(BookStatus.LOST, book.getStatus());
+		assertEquals(BookStateType.LOST, book.getState());
 	}
 
 	@Test
@@ -69,7 +70,7 @@ class BookTest {
 	public void testOrganizeAvailableBook() {
 		book.organize();
 
-		assertEquals(BookStatus.AVAILABLE, book.getStatus());
+		assertEquals(BookStateType.AVAILABLE, book.getState());
 	}
 
 }

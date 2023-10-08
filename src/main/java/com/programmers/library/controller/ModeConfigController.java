@@ -3,7 +3,8 @@ package com.programmers.library.controller;
 import static com.programmers.library.constants.MessageConstants.*;
 
 import com.programmers.library.enums.Mode;
-import com.programmers.library.exception.InvalidModeException;
+import com.programmers.library.exception.BookException;
+import com.programmers.library.exception.ErrorCode;
 import com.programmers.library.io.Input;
 import com.programmers.library.io.Output;
 import com.programmers.library.repository.BookRepository;
@@ -46,7 +47,7 @@ public class ModeConfigController implements Runnable {
 				output.printSystemMessage(START_TEST_MODE);
 				return new MemoryBookRepository();
 			default:
-				throw new InvalidModeException();
+				throw new BookException(ErrorCode.INVALID_MODE);
 		}
 	}
 
