@@ -1,10 +1,10 @@
 package org.example.packet.responsePacket;
 
-public class ResponseFailWithMessage extends ResponsePacket {
+public class ResponseFail extends ResponsePacket {
 
     public final String failMessage;
 
-    public ResponseFailWithMessage(String method, String failMessage) {
+    public ResponseFail(String method, String failMessage) {
         super(method);
         this.failMessage = failMessage;
     }

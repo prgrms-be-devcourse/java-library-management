@@ -1,10 +1,7 @@
 package org.example.server;
 
 import org.example.packet.BookResponseDto;
-import org.example.packet.requestPacket.RequestWithBook;
-import org.example.packet.requestPacket.RequestWithId;
-import org.example.packet.requestPacket.RequestWithName;
-import org.example.packet.requestPacket.RequestWithNoData;
+import org.example.packet.requestPacket.*;
 import org.example.packet.responsePacket.ResponseSuccessWithData;
 import org.example.packet.responsePacket.ResponseSuccessWithNoData;
 import org.example.server.service.Service;
@@ -18,38 +15,38 @@ public class BookController {
         this.service = service;
     } // 각각 행위에 맞는 네이밍
 
-    public ResponseSuccessWithNoData register(RequestWithBook requestWithBook) {
-        service.register(requestWithBook.bookInfo);
+    public ResponseSuccessWithNoData register(RequestForRegister RequestForRegister) {
+        service.register(RequestForRegister.bookInfo);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.REGISTER.name());
     }
 
-    public ResponseSuccessWithData readAll(RequestWithNoData requestWithNoData) {
+    public ResponseSuccessWithData readAll(RequestForReadAll requestForReadAll) {
         LinkedList<BookResponseDto> books = service.readAll();
         return new ResponseSuccessWithData(RequestHandler.MethodType.READ_ALL.name(), books);
     }
 
-    public ResponseSuccessWithData searchByName(RequestWithName requestWithName) {
-        LinkedList<BookResponseDto> books = service.searchAllByName(requestWithName.bookName);
+    public ResponseSuccessWithData searchByName(RequestForSearch requestForSearch) {
+        LinkedList<BookResponseDto> books = service.searchAllByName(requestForSearch.bookName);
         return new ResponseSuccessWithData(RequestHandler.MethodType.SEARCH_BY_NAME.name(), books);
     }
 
-    public ResponseSuccessWithNoData borrow(RequestWithId requestWithId) {
-        service.borrow(requestWithId.bookId);
+    public ResponseSuccessWithNoData borrow(RequestForChange requestForChange) {
+        service.borrow(requestForChange.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.BORROW.name());
     }
 
-    public ResponseSuccessWithNoData restore(RequestWithId requestWithId) {
-        service.restore(requestWithId.bookId);
+    public ResponseSuccessWithNoData restore(RequestForChange requestForChange) {
+        service.restore(requestForChange.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.RESTORE.name());
     }
 
-    public ResponseSuccessWithNoData lost(RequestWithId requestWithId) {
-        service.lost(requestWithId.bookId);
+    public ResponseSuccessWithNoData lost(RequestForChange requestForChange) {
+        service.lost(requestForChange.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.LOST.name());
     }
 
-    public ResponseSuccessWithNoData delete(RequestWithId requestWithId) {
-        service.delete(requestWithId.bookId);
+    public ResponseSuccessWithNoData delete(RequestForChange requestForChange) {
+        service.delete(requestForChange.bookId);
         return new ResponseSuccessWithNoData(RequestHandler.MethodType.DELETE.name());
     }
 }

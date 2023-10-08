@@ -1,10 +1,10 @@
 package org.example.packet.requestPacket;
 
 
-public class RequestWithId extends RequestPacket {
+public class RequestForChange extends RequestPacket {
     public final int bookId;
 
-    public RequestWithId(String method, int id) {
+    public RequestForChange(String method, int id) {
         super(method);
         this.bookId = id;
     }

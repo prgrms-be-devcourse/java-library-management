@@ -1,7 +1,7 @@
 package org.example.packet.requestPacket;
 
-public class RequestWithNoData extends RequestPacket {
-    public RequestWithNoData(String method) {
+public class RequestForReadAll extends RequestPacket {
+    public RequestForReadAll(String method) {
         super(method);
     }
 

@@ -2,10 +2,10 @@ package org.example.packet.requestPacket;
 
 import org.example.packet.BookRegisterDto;
 
-public class RequestWithBook extends RequestPacket {
+public class RequestForRegister extends RequestPacket {
     public final BookRegisterDto bookInfo;
 
-    public RequestWithBook(String method, BookRegisterDto bookDto) {
+    public RequestForRegister(String method, BookRegisterDto bookDto) {
         super(method);
         this.bookInfo = bookDto;
     }

@@ -2,7 +2,7 @@ package org.example.client.console;
 
 import org.example.client.io.Out;
 import org.example.packet.BookResponseDto;
-import org.example.packet.responsePacket.ResponseFailWithMessage;
+import org.example.packet.responsePacket.ResponseFail;
 import org.example.packet.responsePacket.ResponsePacket;
 import org.example.packet.responsePacket.ResponseSuccessWithData;
 import org.example.packet.responsePacket.ResponseSuccessWithNoData;
@@ -33,8 +33,8 @@ public class MethodResponder {
             out.println(methodType.successMessage);
             return;
         }
-        if (responsePacket instanceof ResponseFailWithMessage) {
-            String failMessage = ((ResponseFailWithMessage) responsePacket).failMessage;
+        if (responsePacket instanceof ResponseFail) {
+            String failMessage = ((ResponseFail) responsePacket).failMessage;
             out.println(failMessage);
         }
     }
