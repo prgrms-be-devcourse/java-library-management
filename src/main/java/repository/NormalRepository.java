@@ -3,7 +3,6 @@ package repository;
 import domain.Book;
 import manager.FileManager;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,9 +12,9 @@ public class NormalRepository implements BookRepository {
     private final List<Book> books;
     private final Integer START_ID = 1;
 
-    public NormalRepository(String path, List<Book> books) {
+    public NormalRepository(String path) {
         fileManager = new FileManager(path);
-        this.books = books;
+        books = fileManager.loadData();
     }
 
     // [1] 도서 등록

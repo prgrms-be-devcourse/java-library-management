@@ -1,16 +1,12 @@
 package controller.mode;
 
-import domain.Book;
 import lombok.Getter;
-import manager.FileManager;
 import manager.console.OutputManager;
 import repository.NormalRepository;
 import repository.TestRepository;
 import service.BookService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Getter
 public enum ModeType {
@@ -37,18 +33,11 @@ public enum ModeType {
     }
 
     private static BookService loadServiceNormal() {
-        List<Book> books = loadBooks();
-        return new BookService(new NormalRepository(PATH, books));
+        return new BookService(new NormalRepository(PATH));
     }
 
     private static BookService loadServiceTest() {
-        List<Book> books = new ArrayList<>();
-        return new BookService(new TestRepository(books));
-    }
-
-    private static List<Book> loadBooks() {
-        FileManager fileManager = new FileManager(PATH);
-        return fileManager.loadData();
+        return new BookService(new TestRepository());
     }
 
     public void printModeExecution() {

@@ -2,17 +2,14 @@ package repository;
 
 import domain.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestRepository implements BookRepository {
-    private final List<Book> books;
-
-    public TestRepository(List<Book> books) {
-        this.books = books;
-    }
+    private final List<Book> books = new ArrayList<>();
 
     @Override
     public void register(Book book) {

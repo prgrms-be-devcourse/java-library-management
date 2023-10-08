@@ -1,14 +1,11 @@
 import domain.Book;
-import domain.BookStatus;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.console.OutputManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import repository.TestRepository;
 import service.BookService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static domain.BookStatus.*;
@@ -17,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class TestServiceTest {
-    private final TestRepository repository = new TestRepository(new ArrayList<>());
+    private final TestRepository repository = new TestRepository();
     private final BookService service = new BookService(repository);
 
 

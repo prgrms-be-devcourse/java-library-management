@@ -1,8 +1,6 @@
 import domain.Book;
 import exception.NotExistBookIdException;
 import exception.UnchangeableStatusException;
-import manager.FileManager;
-import manager.console.OutputManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NormalServiceTest {
     private final String PATH = "/src/test/resources/test_book_data.csv";
-    private final OutputManager outputManager = new OutputManager();
-    private final FileManager fileManager = new FileManager(PATH);
-    private final NormalRepository repository = new NormalRepository(PATH, fileManager.loadData());
+    private final NormalRepository repository = new NormalRepository(PATH);
     private final BookService service = new BookService(repository);
 
     @AfterEach
@@ -37,7 +33,7 @@ public class NormalServiceTest {
         Integer page = 111;
 
         //when
-        service.saveBook(title, author , page);
+        service.saveBook(title, author, page);
         Book book = repository.getBooks().get(0);
 
         //then
