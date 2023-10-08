@@ -22,17 +22,19 @@ public class LibrarySystem {
     }
 
     public void run() {
-        ModeFactory mode = selectMode();
-
-        init(mode);
-
         try {
+            ModeFactory mode = selectMode();
+
+            init(mode);
+
             selectFunction();
-        } catch (EmptyInputException ei) {
+
+            libraryService.close();
+        } catch (EmptyInputException | NullPointerException e) {
             println(EMPTY_INPUT.msg());
         }
 
-        exit();
+        println(EXIT.msg());
     }
 
     private void init(ModeFactory mode) {
@@ -82,12 +84,6 @@ public class LibrarySystem {
         }
 
         selectFunction();
-    }
-
-    private void exit() {
-        libraryService.close();
-
-        println(EXIT.msg());
     }
 
     private void createBook() {
