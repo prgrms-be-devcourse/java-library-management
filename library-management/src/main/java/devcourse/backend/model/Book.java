@@ -22,9 +22,9 @@ public class Book {
         private int totalPages;
 
         public Builder(String title, String author, int totalPages) {
-            this.title = Objects.requireNonNull(title);
-            this.author = Objects.requireNonNull(author);
-            this.totalPages = Objects.requireNonNull(totalPages);
+            this.title = title;
+            this.author = author;
+            this.totalPages = totalPages;
         }
 
         public Builder id(long id) {
@@ -38,8 +38,8 @@ public class Book {
             return this;
         }
 
-        public Builder bookStatus(String status) {
-            this.status = BookStatus.getByDescription(status);
+        public Builder bookStatus(BookStatus status) {
+            this.status = status;
             return this;
         }
 
