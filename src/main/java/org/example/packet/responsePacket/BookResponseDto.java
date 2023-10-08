@@ -1,8 +1,8 @@
-package org.example.packet;
+package org.example.packet.responsePacket;
 
 import org.example.server.entity.Book;
 
-public class BookResponseDto { // ++ 주고받는 형식, 프로토콜이 변경되더라도 유연하게 할 수 있도록(선택, 한번만 고민)
+public class BookResponseDto {
     public final int id;
     public final String name;
     public final String author;

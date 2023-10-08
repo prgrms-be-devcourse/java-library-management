@@ -1,7 +1,5 @@
 package org.example.packet.requestPacket;
 
-import org.example.packet.BookRegisterDto;
-
 public class RequestForRegister extends RequestPacket {
     public final BookRegisterDto bookInfo;
 

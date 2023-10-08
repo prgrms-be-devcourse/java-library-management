@@ -1,7 +1,7 @@
 package org.example.server.repository;
 
 import org.assertj.core.api.Assertions;
-import org.example.packet.BookRegisterDto;
+import org.example.packet.requestPacket.BookRegisterDto;
 import org.example.server.entity.Book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

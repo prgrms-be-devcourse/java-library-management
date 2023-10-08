@@ -1,7 +1,7 @@
 package org.example.client.console;
 
 import org.example.client.io.Out;
-import org.example.packet.BookResponseDto;
+import org.example.packet.responsePacket.BookResponseDto;
 import org.example.packet.responsePacket.ResponseFail;
 import org.example.packet.responsePacket.ResponsePacket;
 import org.example.packet.responsePacket.ResponseSuccessWithData;

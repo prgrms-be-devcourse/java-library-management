@@ -4,7 +4,7 @@ import org.example.client.ValidateException;
 import org.example.client.Validator;
 import org.example.client.io.In;
 import org.example.client.io.Out;
-import org.example.packet.BookRegisterDto;
+import org.example.packet.requestPacket.BookRegisterDto;
 import org.example.packet.requestPacket.*;
 
 public class MethodRequester {

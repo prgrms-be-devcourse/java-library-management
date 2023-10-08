@@ -1,6 +1,6 @@
-package org.example.packet;
+package org.example.packet.requestPacket;
 
-public class BookRegisterDto { // ++ 주고받는 형식, 프로토콜이 변경되더라도 유연하게 할 수 있도록(선택, 한번만 고민)
+public class BookRegisterDto {
     public final String name;
     public final String author;
     public final int pages;

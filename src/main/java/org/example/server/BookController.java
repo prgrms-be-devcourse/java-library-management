@@ -1,6 +1,6 @@
 package org.example.server;
 
-import org.example.packet.BookResponseDto;
+import org.example.packet.responsePacket.BookResponseDto;
 import org.example.packet.requestPacket.*;
 import org.example.packet.responsePacket.ResponseSuccessWithData;
 import org.example.packet.responsePacket.ResponseSuccessWithNoData;
@@ -13,7 +13,7 @@ public class BookController {
 
     public BookController(Service service) {
         this.service = service;
-    } // 각각 행위에 맞는 네이밍
+    }
 
     public ResponseSuccessWithNoData register(RequestForRegister RequestForRegister) {
         service.register(RequestForRegister.bookInfo);

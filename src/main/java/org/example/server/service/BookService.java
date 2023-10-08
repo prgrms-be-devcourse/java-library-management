@@ -1,7 +1,7 @@
 package org.example.server.service;
 
-import org.example.packet.BookRegisterDto;
-import org.example.packet.BookResponseDto;
+import org.example.packet.requestPacket.BookRegisterDto;
+import org.example.packet.responsePacket.BookResponseDto;
 import org.example.server.entity.Book;
 import org.example.server.repository.Repository;
 

@@ -1,7 +1,5 @@
 package org.example.packet.responsePacket;
 
-import org.example.packet.BookResponseDto;
-
 import java.util.LinkedList;
 
 public class ResponseSuccessWithData extends ResponsePacket {
