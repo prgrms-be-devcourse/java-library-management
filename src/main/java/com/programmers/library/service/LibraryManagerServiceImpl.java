@@ -11,7 +11,7 @@ import com.programmers.library.dto.FindBookRequestDto;
 import com.programmers.library.dto.LostBookRequestDto;
 import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.BookStatus;
+import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.repository.BookRepository;
 import com.programmers.library.util.IdGenerator;
@@ -70,7 +70,7 @@ public class LibraryManagerServiceImpl implements LibarayManagerService {
 
 	@Override
 	public void organizeBooks() {
-		List<Book> books = bookRepository.findByStatus(BookStatus.ORGANIZING);
+		List<Book> books = bookRepository.findByStatus(BookStateType.ORGANIZING);
 		books.forEach(book -> {
 			book.organize();
 			bookRepository.save(book);

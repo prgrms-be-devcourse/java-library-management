@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.BookStatus;
+import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.util.FileUtils;
 import com.programmers.library.util.IdGenerator;
 
@@ -19,7 +19,7 @@ public class FileBookRepository implements BookRepository {
 	public FileBookRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
 		bookMap = new ConcurrentHashMap<>();
-		List<Book> bookList = fileUtils.readFile(Book.class);
+		List<Book> bookList = fileUtils.readFile();
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		IdGenerator.getInstance().initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0L));
 	}
@@ -53,9 +53,9 @@ public class FileBookRepository implements BookRepository {
 	}
 
 	@Override
-	public List<Book> findByStatus(BookStatus status) {
+	public List<Book> findByStatus(BookStateType status) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getStatus() == status).forEach(bookList::add);
+		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
 		return bookList;
 	}
 

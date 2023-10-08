@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.BookStatus;
+import com.programmers.library.entity.state.BookStateType;
 
 public class MemoryBookRepository implements BookRepository {
 	private final Map<Long, Book> bookMap;
@@ -42,9 +42,9 @@ public class MemoryBookRepository implements BookRepository {
 	}
 
 	@Override
-	public List<Book> findByStatus(BookStatus status) {
+	public List<Book> findByStatus(BookStateType status) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getStatus() == status).forEach(bookList::add);
+		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
 		return bookList;
 	}
 
