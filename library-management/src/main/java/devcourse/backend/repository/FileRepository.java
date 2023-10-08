@@ -1,6 +1,7 @@
 package devcourse.backend.repository;
 
 import devcourse.backend.model.Book;
+import devcourse.backend.model.BookStatus;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -118,7 +119,7 @@ public class FileRepository implements Repository {
                     .forEach(data -> {
                         Book.Builder builder = new Book.Builder(data[1], data[2], Integer.parseInt(data[3]));
                         if(!data[0].equals("")) builder.id(Long.valueOf(data[0]));
-                        if(data.length > 4 && !data[4].equals("")) builder.bookStatus(data[4]);
+                        if(data.length > 4 && !data[4].equals("")) builder.bookStatus(BookStatus.getByDescription(data[4]));
                         if(data.length > 5 && data[4].equals("도서 정리 중")) builder.updateAt(data[5]);
                         Book book = builder.build();
                         books.put(book.getId(), book);
