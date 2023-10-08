@@ -1,13 +1,11 @@
 package com.programmers.library.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.programmers.library.domain.Book;
 import com.programmers.library.dto.JsonBookDto;
+import com.programmers.library.util.JsonMapper;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,39 +16,29 @@ public class FileRepository implements Repository {
     private static int sequance;
     private List<Book> storage = new ArrayList<>();
 
-    private final File DB = new File(System.getProperty("user.dir") + "/books.json");
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final File file = new File(System.getProperty("user.dir") + "/books.json");
+    private final JsonMapper jsonMapper = new JsonMapper();
 
     public FileRepository() {
-        mapper.registerModule(new JavaTimeModule());
+        List<JsonBookDto> books = jsonMapper.readValue(file, new TypeReference<List<JsonBookDto>>() {
+        });
 
-        try {
-            List<JsonBookDto> books = mapper.readValue(DB, new TypeReference<List<JsonBookDto>>() {
-            });
-
-            for (JsonBookDto book : books) {
-                storage.add(new Book(
-                        book.getId(),
-                        book.getName(),
-                        book.getAuthor(),
-                        book.getPageCount(),
-                        book.getStatus(),
-                        book.getReturnedAt()
-                ));
-            }
-
-            sequance = books.size();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        for (JsonBookDto book : books) {
+            storage.add(new Book(
+                    book.getId(),
+                    book.getName(),
+                    book.getAuthor(),
+                    book.getPageCount(),
+                    book.getStatus(),
+                    book.getReturnedAt()
+            ));
         }
+
+        sequance = books.size();
     }
 
     private void saveToFile() {
-        try {
-            mapper.writeValue(DB, storage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jsonMapper.writeValue(file, storage);
     }
 
     @Override
