@@ -27,6 +27,7 @@ public class LibraryService {
         if (successToCreate) {
             return SUCCESS_CREATE_BOOK.msg();
         }
+
         return ALREADY_EXIST_TITLE.msg();
     }
 

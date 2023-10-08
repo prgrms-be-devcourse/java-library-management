@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class JSONDataManager<T> implements DataManager<T> {
@@ -27,7 +27,7 @@ public class JSONDataManager<T> implements DataManager<T> {
     @Override
     public List<T> load() {
         if (!file.exists()) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         try {
