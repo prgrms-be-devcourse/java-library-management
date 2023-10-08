@@ -22,13 +22,14 @@ public class BookController {
     }
 
     public void applyMode(String mode) {
-        ModeType modeType = ModeType.findMode(mode);
+        ModeType modeType = ModeType.findModeTypeByMode(mode);
         if (modeType == null) {
             outputManager.printSystem("잘못된 입력입니다.");
             return;
         }
         bookService = ModeType.findService(modeType, outputManager);
-        outputManager.printSystem(modeType.getMessage());
+        ModeType.printModeExecution(modeType, outputManager);
+
         selectMenu();
     }
 

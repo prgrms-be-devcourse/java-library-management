@@ -22,36 +22,38 @@ public enum ModeType {
     private final List<Book> books;
     private static final String PATH = "/src/main/resources/book_data.csv";
 
-    private static List<Book> loadBooks() {
-        FileManager fileManager = new FileManager(PATH);
-        return fileManager.loadData();
-    }
-
-    private static BookService loadServiceNormal(OutputManager ioManager) {
-        return new BookService(new NormalRepository(PATH, NORMAL.getBooks()), ioManager);
-    }
-
-    private static BookService loadServiceTest(OutputManager ioManager) {
-        return new BookService(new TestRepository(TEST.getBooks()), ioManager);
-    }
-
     ModeType(String number, String message, List<Book> books) {
         this.number = number;
         this.message = message;
         this.books = books;
     }
 
-    public static ModeType findMode(String mode) {
+    public static ModeType findModeTypeByMode(String mode) {
         return Arrays.stream(ModeType.values())
                 .filter(modeType -> modeType.getNumber().equals(mode))
                 .findFirst()
                 .orElse(null);
     }
 
-    public static BookService findService(ModeType modeType, OutputManager ioManager) {
-        if (modeType == NORMAL) return loadServiceNormal(ioManager);
-        return loadServiceTest(ioManager);
+    public static BookService findService(ModeType modeType, OutputManager outputManager) {
+        if (modeType == NORMAL) return loadServiceNormal(outputManager);
+        return loadServiceTest(outputManager);
     }
 
+    private static BookService loadServiceNormal(OutputManager outputManager) {
+        return new BookService(new NormalRepository(PATH, NORMAL.getBooks()), outputManager);
+    }
 
+    private static BookService loadServiceTest(OutputManager outputManager) {
+        return new BookService(new TestRepository(TEST.getBooks()), outputManager);
+    }
+
+    private static List<Book> loadBooks() {
+        FileManager fileManager = new FileManager(PATH);
+        return fileManager.loadData();
+    }
+
+    public static void printModeExecution(ModeType modeType, OutputManager outputManager) {
+        outputManager.printSystem(modeType.getMessage());
+    }
 }
