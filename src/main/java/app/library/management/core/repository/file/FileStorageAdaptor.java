@@ -21,7 +21,7 @@ public class FileStorageAdaptor implements BookRepository {
     public Book save(Book book) {
         long nextId = idGenerator.incrementAndGet();
         book.setId(nextId);
-        fileStorage.saveFile(new BookVO(nextId, book.getTitle(), book.getAuthor(), book.getPages()));
+        fileStorage.saveFile(new BookVO(nextId, book.getTitle(), book.getAuthor(), book.getPages(), book.getStatus()));
         return book;
     }
 

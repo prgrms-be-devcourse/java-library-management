@@ -3,6 +3,8 @@ package app.library.management.core.service;
 import app.library.management.core.domain.Book;
 import app.library.management.core.domain.util.BookStatusManager;
 import app.library.management.core.repository.BookRepository;
+import app.library.management.core.repository.file.FileStorage;
+import app.library.management.core.repository.file.FileStorageAdaptor;
 import app.library.management.core.repository.memory.BookMemoryRepository;
 import app.library.management.core.service.response.dto.BookServiceResponse;
 import app.library.management.core.service.response.dto.status.ResponseState;

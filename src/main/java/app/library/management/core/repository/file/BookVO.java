@@ -23,6 +23,10 @@ public class BookVO {
         this(id, title, author, pages, BookStatus.AVAILABLE, LocalDateTime.now());
     }
 
+    public BookVO(long id, String title, String author, int pages, BookStatus status) {
+        this(id, title, author, pages, status, LocalDateTime.now());
+    }
+
     public BookVO(long id, String title, String author, int pages, BookStatus status, LocalDateTime lastModifiedTime) {
         this.id = id;
         this.title = title;
