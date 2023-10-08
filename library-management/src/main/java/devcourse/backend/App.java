@@ -19,14 +19,14 @@ public class App {
         ModeType mode = getByNumber(Console.selectMode());
         if(mode == TEST_MODE) {
             Repository repository = new MemoryRepository();
-            BookService service = new BookService(repository, Clock.system(ZoneId.of("Asia/Seoul")));
+            BookService service = new BookService(repository);
             Console view = new Console(service);
             view.run();
         }
 
         if(mode == NORMAL_MODE) {
             Repository repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
-            BookService service = new BookService(repository, Clock.system(ZoneId.of("Asia/Seoul")));
+            BookService service = new BookService(repository);
             Console view = new Console(service);
             view.run();
         }

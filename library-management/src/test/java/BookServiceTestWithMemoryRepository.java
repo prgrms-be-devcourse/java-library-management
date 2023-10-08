@@ -21,14 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BookServiceTestWithMemoryRepository {
     private BookService bookService;
     private Repository repository;
-    private Clock clock;
 
     @BeforeEach
     @DisplayName("각 테스트는 빈 저장소를 가지고 테스트를 시작합니다.")
     void BookService_초기화() {
-        clock = Clock.system(ZoneId.of("Asia/Seoul"));
         repository = new MemoryRepository();
-        bookService = new BookService(repository, clock);
+        bookService = new BookService(repository);
     }
 
     @DisplayName("테스트에서 사용할 도서 DTO 리스트를 반환하는 메서드입니다.")
@@ -200,20 +198,6 @@ public class BookServiceTestWithMemoryRepository {
 
         // 도서 상태 [대여 중] -> [도서 정리 중]으로 변경
         assertEquals(ARRANGING, savedBook.getStatus());
-
-        /**
-         * TODO: 5분 뒤 [도서 정리 중] -> [대여 가능]으로 변경
-         */
-//        Clock fixedClock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
-//
-//        // 현재 시간을 5분 뒤로 조작
-//        Instant futureTime = fixedClock.instant().plusSeconds(6 * 60);
-//        Clock mockClock = Mockito.mock(Clock.class);
-//        Mockito.when(mockClock.instant()).thenReturn(futureTime);
-//        Mockito.when(mockClock.getZone()).thenReturn(ZoneId.systemDefault());
-//
-//        clock = mockClock;
-//        assertEquals(AVAILABLE, savedBook.getStatus());
     }
 
     @Test
@@ -232,10 +216,6 @@ public class BookServiceTestWithMemoryRepository {
 
         // 도서 상태 [분실됨] -> [도서 정리 중]으로 변경
         assertEquals(ARRANGING, savedBook.getStatus());
-
-        /**
-         * TODO: 5분 뒤 [도서 정리 중] -> [대여 가능]으로 변경
-         */
     }
 
     @Test
