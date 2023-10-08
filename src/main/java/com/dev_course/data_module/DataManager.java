@@ -4,8 +4,8 @@ import com.dev_course.book.Book;
 
 import java.util.List;
 
-public interface DataManager {
-    List<Book> load();
+public interface DataManager<T> {
+    List<T> load();
 
-    void save(List<Book> books);
+    void save(List<T> books);
 }

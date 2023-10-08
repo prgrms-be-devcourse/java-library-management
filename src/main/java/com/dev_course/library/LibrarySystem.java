@@ -1,5 +1,6 @@
 package com.dev_course.library;
 
+import com.dev_course.book.Book;
 import com.dev_course.book.BookManager;
 import com.dev_course.data_module.DataManager;
 import com.dev_course.io_module.EmptyInputException;
@@ -13,7 +14,7 @@ public class LibrarySystem {
     private final Reader reader;
     private final Writer writer;
 
-    private DataManager dataManager;
+    private DataManager<Book> dataManager;
     private BookManager bookManager;
 
 

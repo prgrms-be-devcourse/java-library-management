@@ -1,8 +1,7 @@
 package com.dev_course.data_module;
 
-import com.dev_course.book.Book;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
@@ -12,27 +11,27 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONDataManager implements DataManager {
+public class JSONDataManager<T> implements DataManager<T> {
     private final File file;
     private final ObjectMapper objectMapper;
-    private final TypeReference<List<Book>> valueType;
+    private final ObjectReader objectReader;
 
     private String path = "./src/main/resources/library_data.json";
 
-    public JSONDataManager() {
+    public JSONDataManager(Class<T> type) {
         file = new File(path);
         objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-        valueType = new TypeReference<>() {};
+        objectReader = objectMapper.readerForListOf(type);
     }
 
     @Override
-    public List<Book> load() {
+    public List<T> load() {
         if (!file.exists()) {
             return new ArrayList<>();
         }
 
         try {
-            return objectMapper.readValue(Files.readString(Paths.get(path)), valueType);
+            return objectReader.readValue(Files.readString(Paths.get(path)));
         } catch (IOException e) {
             throw new RuntimeException("파일을 불러오는 과정에서 오류가 발생했습니다.");
         }
@@ -40,13 +39,13 @@ public class JSONDataManager implements DataManager {
     }
 
     @Override
-    public void save(List<Book> books) {
+    public void save(List<T> data) {
         if (!file.exists()) {
             file.getParentFile().mkdirs();
         }
 
         try {
-            objectMapper.writeValue(file, books);
+            objectMapper.writeValue(file, data);
         } catch (IOException e) {
             throw new RuntimeException("파일을 생성할 수 없습니다. (%s)".formatted(path));
         }

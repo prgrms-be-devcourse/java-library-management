@@ -1,19 +1,16 @@
 package com.dev_course.data_module;
 
-import com.dev_course.book.Book;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EmptyDataManager implements DataManager {
+public class EmptyDataManager<T> implements DataManager<T> {
     @Override
-    public List<Book> load() {
+    public List<T> load() {
         return Collections.emptyList();
     }
 
     @Override
-    public void save(List<Book> ignored) {
+    public void save(List<T> ignored) {
 
     }
 }
