@@ -14,18 +14,19 @@ import java.util.List;
 
 @Getter
 public enum ModeType {
-    NORMAL("1", "일반 모드로 애플리케이션을 실행합니다.", loadBooks()),
-    TEST("2", "테스트 모드로 애플리케이션을 실행합니다.", new ArrayList<>());
+    NORMAL("1", "일반 모드로 애플리케이션을 실행합니다.", loadServiceNormal()),
+    TEST("2", "테스트 모드로 애플리케이션을 실행합니다.", loadServiceTest());
 
     private final String number;
     private final String message;
-    private final List<Book> books;
+    private final BookService bookService;
     private static final String PATH = "/src/main/resources/book_data.csv";
+    private static final OutputManager outputManager = new OutputManager();
 
-    ModeType(String number, String message, List<Book> books) {
+    ModeType(String number, String message, BookService bookService) {
         this.number = number;
         this.message = message;
-        this.books = books;
+        this.bookService = bookService;
     }
 
     public static ModeType findModeTypeByMode(String mode) {
@@ -35,17 +36,14 @@ public enum ModeType {
                 .orElse(null);
     }
 
-    public static BookService findService(ModeType modeType, OutputManager outputManager) {
-        if (modeType == NORMAL) return loadServiceNormal(outputManager);
-        return loadServiceTest(outputManager);
+    private static BookService loadServiceNormal() {
+        List<Book> books = loadBooks();
+        return new BookService(new NormalRepository(PATH, books), outputManager);
     }
 
-    private static BookService loadServiceNormal(OutputManager outputManager) {
-        return new BookService(new NormalRepository(PATH, NORMAL.getBooks()), outputManager);
-    }
-
-    private static BookService loadServiceTest(OutputManager outputManager) {
-        return new BookService(new TestRepository(TEST.getBooks()), outputManager);
+    private static BookService loadServiceTest() {
+        List<Book> books = new ArrayList<>();
+        return new BookService(new TestRepository(books), outputManager);
     }
 
     private static List<Book> loadBooks() {
@@ -53,7 +51,7 @@ public enum ModeType {
         return fileManager.loadData();
     }
 
-    public static void printModeExecution(ModeType modeType, OutputManager outputManager) {
-        outputManager.printSystem(modeType.getMessage());
+    public void printModeExecution() {
+        outputManager.printSystem(getMessage());
     }
 }

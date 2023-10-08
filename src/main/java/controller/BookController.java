@@ -25,6 +25,7 @@ public class BookController {
             try {
                 function = inputManager.getStringInput();
                 menuType = MenuType.findMenuTypeByMenu(function);
+
                 switch (menuType) {
                     case SAVE -> saveBook();
                     case SHOW -> showBookList();
@@ -78,7 +79,7 @@ public class BookController {
         menuType.printEndMsg();
     }
 
-    protected void reportLostBook() throws Exception{
+    protected void reportLostBook() throws Exception {
         menuType.printEntryMsg();
         bookService.reportLostBook(MenuType.getIdInput("분실 처리할 도서번호를 입력하세요."));
         menuType.printEndMsg();

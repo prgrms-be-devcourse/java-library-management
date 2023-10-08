@@ -27,8 +27,8 @@ public class ModeConfig {
             outputManager.printSystem("잘못된 입력입니다.");
             return;
         }
-        BookService bookService = ModeType.findService(modeType, outputManager);
-        ModeType.printModeExecution(modeType, outputManager);
+        BookService bookService = modeType.getBookService();
+        modeType.printModeExecution();
 
         BookController bookController = new BookController(bookService, inputManager, outputManager);
         bookController.selectMenu();
