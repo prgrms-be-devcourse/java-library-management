@@ -27,10 +27,11 @@ public class BookTest {
         assertEquals(book2.getId() + 1, book3.getId());
 
         // sequence보다 큰 값을 설정하면, sequence를 해당 값 + 1로 업데이트
-        Book book4 = new Book.Builder("이펙티브 자바4", "조슈아 블로크", 520).id(100L).build();
+        long biggerId = book3.getId() + 10;
+        Book book4 = new Book.Builder("이펙티브 자바4", "조슈아 블로크", 520).id(biggerId).build();
         Book book5 = new Book.Builder("이펙티브 자바5", "조슈아 블로크", 520).build();
-        assertEquals(100L, book4.getId());
-        assertEquals(101L, book5.getId());
+        assertEquals(biggerId, book4.getId());
+        assertEquals(biggerId + 1, book5.getId());
     }
 
     @Test
