@@ -28,12 +28,6 @@ public class LibrarySystem {
 
         try {
             selectFunction();
-        } catch (NumberFormatException nf) {
-            println(INVALID_INPUT.msg());
-            selectFunction();
-        } catch (NoSuchElementException nse) {
-            println(NOT_EXIST_ID.msg());
-            selectFunction();
         } catch (EmptyInputException ei) {
             println(EMPTY_INPUT.msg());
         }
@@ -67,18 +61,24 @@ public class LibrarySystem {
 
         libraryService.updateBooks();
 
-        switch (input) {
-            case "0" -> {
-                return;
+        try {
+            switch (input) {
+                case "0" -> {
+                    return;
+                }
+                case "1" -> createBook();
+                case "2" -> listBooks();
+                case "3" -> findBookByTitle();
+                case "4" -> rentBookById();
+                case "5" -> returnBookById();
+                case "6" -> lossBookById();
+                case "7" -> deleteBookById();
+                default -> println(INVALID_FUNCTION.msg());
             }
-            case "1" -> createBook();
-            case "2" -> listBooks();
-            case "3" -> findBookByTitle();
-            case "4" -> rentBookById();
-            case "5" -> returnBookById();
-            case "6" -> lossBookById();
-            case "7" -> deleteBookById();
-            default -> println(INVALID_FUNCTION.msg());
+        } catch (NumberFormatException nf) {
+            println(INVALID_INPUT.msg());
+        } catch (NoSuchElementException nse) {
+            println(NOT_EXIST_ID.msg());
         }
 
         selectFunction();
