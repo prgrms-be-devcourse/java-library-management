@@ -10,8 +10,8 @@ public enum BookStatus {
     ARRANGING("도서 정리 중", (after) -> after == "AVAILABLE" || after == "LOST"),
     LOST("분실됨", (after) -> after == "ARRANGING");
 
-    private final String description;
-    private final Predicate<String> canSwitchTo;
+    private String description;
+    private Predicate<String> canSwitchTo;
 
     BookStatus(String description, Predicate<String> canSwitchTo) {
         this.description = description;
