@@ -31,10 +31,10 @@ public class LibrarySystem {
         try {
             selectFunction();
         } catch (NumberFormatException ne) {
-            println(INVALID_INPUT_MESSAGE);
+            println(INVALID_INPUT.msg());
             selectFunction();
         } catch (EmptyInputException e) {
-            println(EMPTY_INPUT_MESSAGE);
+            println(EMPTY_INPUT.msg());
         }
 
         exit();
@@ -48,7 +48,7 @@ public class LibrarySystem {
     }
 
     private ModeFactory selectMode() {
-        println(MOD_SCREEN_MESSAGE);
+        println(MOD_SCREEN.msg());
 
         String input = readInput();
 
@@ -56,14 +56,14 @@ public class LibrarySystem {
             case "0" -> ModeFactory.TEST;
             case "1" -> ModeFactory.NORMAL;
             default -> {
-                println(INVALID_MODE_MESSAGE);
+                println(INVALID_MODE.msg());
                 yield selectMode();
             }
         };
     }
 
     private void selectFunction() {
-        println(FUNCTION_SCREEN_MESSAGE);
+        println(FUNCTION_SCREEN.msg());
 
         String input = readInput();
 
@@ -80,7 +80,7 @@ public class LibrarySystem {
             case "5" -> returnBookById();
             case "6" -> lossBookById();
             case "7" -> deleteBookById();
-            default -> println(INVALID_FUNCTION_MESSAGE);
+            default -> println(INVALID_FUNCTION.msg());
         }
 
         selectFunction();
@@ -89,66 +89,66 @@ public class LibrarySystem {
     private void exit() {
         dataManager.save(bookManager.getBooks());
 
-        println(EXIT_MESSAGE);
+        println(EXIT);
     }
 
     private void createBook() {
-        println(CREATE_BOOK_MESSAGE);
+        println(CREATE_BOOK);
 
-        String title = printAndReadInput(READ_CREATE_BOOK_TITLE_MESSAGE);
-        String author = printAndReadInput(READ_CREATE_BOOK_AUTHOR_MESSAGE);
-        int pages = parseInt(printAndReadInput(READ_CREATE_BOOK_PAGES_MESSAGE));
+        String title = printAndReadInput(READ_CREATE_BOOK_TITLE.msg());
+        String author = printAndReadInput(READ_CREATE_BOOK_AUTHOR.msg());
+        int pages = parseInt(printAndReadInput(READ_CREATE_BOOK_PAGES.msg()));
 
         println(bookManager.create(title, author, pages));
     }
 
     private void listBooks() {
-        println(LIST_BOOK_MESSAGE);
+        println(LIST_BOOK.msg());
 
         println(bookManager.getInfos());
-        println(END_LIST_BOOK_MESSAGE);
+        println(END_LIST_BOOK.msg());
     }
 
     private void findBookByTitle() {
-        println(FIND_BOOK_BY_TITLE_MESSAGE);
+        println(FIND_BOOK_BY_TITLE.msg());
 
-        String title = printAndReadInput(READ_FIND_BY_TITLE_MESSAGE);
+        String title = printAndReadInput(READ_FIND_BY_TITLE.msg());
 
         println(bookManager.getInfosByTitle(title));
-        println(END_FIND_BOOK_BY_TITLE_MESSAGE);
+        println(END_FIND_BOOK_BY_TITLE.msg());
     }
 
     private void rentBookById() {
-        println(RENT_BOOK_BY_ID_MESSAGE);
+        println(RENT_BOOK_BY_ID);
 
-        String input = printAndReadInput(READ_RENT_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_RENT_BOOK_BY_ID.msg());
         int id = parseInt(input);
 
         println(bookManager.rentById(id));
     }
 
     private void returnBookById() {
-        println(RETURN_BOOK_BY_ID_MESSAGE);
+        println(RETURN_BOOK_BY_ID);
 
-        String input = printAndReadInput(READ_RETURN_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_RETURN_BOOK_BY_ID.msg());
         int id = parseInt(input);
 
         println(bookManager.returnById(id));
     }
 
     private void lossBookById() {
-        println(LOSS_BOOK_BY_ID_MESSAGE);
+        println(LOSS_BOOK_BY_ID);
 
-        String input = printAndReadInput(READ_LOSS_BOOK_BY_ID_MESSAGE);
+        String input = printAndReadInput(READ_LOSS_BOOK_BY_ID.msg());
         int id = parseInt(input);
 
         println(bookManager.lossById(id));
     }
 
     private void deleteBookById() {
-        println(DELETE_BOOK_MESSAGE);
+        println(DELETE_BOOK);
 
-        String input = printAndReadInput(READ_DELETE_BOOK_ID_MESSAGE);
+        String input = printAndReadInput(READ_DELETE_BOOK_ID.msg());
         int id = parseInt(input);
 
         println(bookManager.deleteById(id));
@@ -169,7 +169,7 @@ public class LibrarySystem {
         return input;
     }
 
-    private String printAndReadInput(LibraryMessage msg) {
+    private String printAndReadInput(String msg) {
         println(msg);
         return readInput();
     }
