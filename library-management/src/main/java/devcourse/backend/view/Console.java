@@ -30,11 +30,8 @@ public class Console implements Runnable {
         printSystemMessage("도서 등록 메뉴로 넘어갑니다.");
         try {
             String title = getStringInput("등록할 도서 제목을 입력하세요.");
-            if (title.equals("")) throw new IllegalArgumentException("제목은 빈칸일 수 없습니다.");
             String author = getStringInput("작가 이름을 입력하세요.");
-            if (author.equals("")) throw new IllegalArgumentException("작가 이름은 빈칸일 수 없습니다.");
             int totalPages = getIntInput("페이지 수를 입력하세요.");
-            if (totalPages <= 0) throw new IllegalArgumentException("페이지 수는 0보다 커야 합니다.");
 
             CreateBookDto data = new CreateBookDto(title, author, totalPages);
 

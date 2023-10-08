@@ -22,8 +22,11 @@ public class Book {
         private int totalPages;
 
         public Builder(String title, String author, int totalPages) {
+            if (title.equals("")) throw new IllegalArgumentException("제목은 빈칸일 수 없습니다.");
             this.title = title;
+            if (author.equals("")) throw new IllegalArgumentException("작가 이름은 빈칸일 수 없습니다.");
             this.author = author;
+            if (totalPages <= 0) throw new IllegalArgumentException("페이지 수는 0보다 커야 합니다.");
             this.totalPages = totalPages;
         }
 
