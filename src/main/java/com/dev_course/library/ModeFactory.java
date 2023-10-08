@@ -10,14 +10,20 @@ import com.dev_course.data_module.JSONDataManager;
 public enum ModeFactory {
     TEST, NORMAL;
 
-    public DataManager<Book> getDataManager() {
+    public LibraryService getBookService() {
+        return switch (this) {
+            case TEST, NORMAL -> new LibraryService(getDataManager(), getBookManager());
+        };
+    }
+
+    private DataManager<Book> getDataManager() {
         return switch (this) {
             case TEST -> new EmptyDataManager<>();
             case NORMAL -> new JSONDataManager<>(Book.class);
         };
     }
 
-    public BookManager getBookManager() {
+    private BookManager getBookManager() {
         return switch (this) {
             case TEST, NORMAL -> new ListBookManager();
         };

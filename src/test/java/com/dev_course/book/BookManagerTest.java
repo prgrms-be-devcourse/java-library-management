@@ -7,35 +7,33 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.dev_course.book.BookManagerMessage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class BookManagerTest {
-    protected abstract BookManager createBookManager();
+    protected abstract BookManager getBookManager();
 
     @Nested
     @DisplayName("초기 생성, 데이터 로드 테스트")
-    class TestGetBookList {
+    class TestGetBooks {
         @Test
         @DisplayName("초기 생성 시 도서 리스트는 비어 있어야 한다.")
-        void testGetBookListBeforeInit() {
+        void testGetBooksBeforeInit() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
 
             // when
-            List<Book> bookList = bookManager.getBooks();
+            List<Book> books = bookManager.getBooks();
 
             // then
-            assertThat(bookList).isEmpty();
+            assertThat(books).isEmpty();
         }
 
         @Test
         @DisplayName("init() 메서드 호출 시 도서 리스트는 init 데이터가 반영돼야 한다.")
-        void testGetBookListAfterInit() {
+        void testGetBooksAfterInit() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             List<Book> initData = new ArrayList<>();
             LocalDateTime now = LocalDateTime.now();
 
@@ -47,44 +45,44 @@ abstract class BookManagerTest {
             bookManager.init(initData);
 
             // then
-            List<Book> bookList = bookManager.getBooks();
+            List<Book> books = bookManager.getBooks();
 
-            assertThat(bookList).containsAll(initData);
+            assertThat(books).containsAll(initData);
         }
     }
 
     @Nested
     @DisplayName("도서 생성 테스트")
-    class TestCreateBook {
+    class TestCreate {
         @Test
         @DisplayName("생성된 도서는 대여 가능 상태여야 한다")
         void testCreateAvailableState() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
 
             // when
             bookManager.create("test1", "tester", 11);
             bookManager.create("test2", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBooks();
+            List<Book> books = bookManager.getBooks();
 
-            assertThat(bookList).allMatch(book -> book.getState() == BookState.AVAILABLE);
+            assertThat(books).allMatch(book -> book.getState().isRentable());
         }
 
         @Test
         @DisplayName("도서 생성 시 유일한 id의 도서가 추가돼야 한다")
         void testCreateWithUniqueId() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
 
             // when
             bookManager.create("test1", "tester", 11);
             bookManager.create("test2", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBooks();
-            long idCount = bookList.stream().mapToInt(Book::getId).count();
+            List<Book> books = bookManager.getBooks();
+            long idCount = books.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(2);
         }
@@ -93,7 +91,7 @@ abstract class BookManagerTest {
         @DisplayName("데이터 로드 후 도서 생성 시 모든 도서는 유일한 id를 갖고 있어야 한다.")
         void testCreateWitUniqueIdAfterInit() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             List<Book> initData = new ArrayList<>();
             LocalDateTime now = LocalDateTime.now();
 
@@ -108,77 +106,21 @@ abstract class BookManagerTest {
             bookManager.create("test5", "tester", 22);
 
             // then
-            List<Book> bookList = bookManager.getBooks();
-            long idCount = bookList.stream().mapToInt(Book::getId).count();
+            List<Book> books = bookManager.getBooks();
+            long idCount = books.stream().mapToInt(Book::getId).count();
 
             assertThat(idCount).isEqualTo(5);
-        }
-
-        @Test
-        @DisplayName("도서 생성에 성공하면 성공 메시지를 반환해야 한다.")
-        void testCreateSuccess() {
-            // given
-            BookManager bookManager = createBookManager();
-
-            // when
-            String msg = bookManager.create("test1", "tester", 11);
-
-            // then
-            assertThat(msg).isEqualTo(SUCCESS_CREATE_BOOK.msg());
-        }
-
-        @Test
-        @DisplayName("이미 추가된 제목의 도서 생성 시 실패 메시지를 반환해야 한다.")
-        void testCreateFailExistTitle() {
-            // given
-            BookManager bookManager = createBookManager();
-
-            bookManager.create("test1", "tester", 11);
-
-            // when
-            String msg = bookManager.create("test1", "tester", 22);
-
-            // then
-            assertThat(msg).isEqualTo(ALREADY_EXIST_TITLE.msg());
-        }
-    }
-
-    @Nested
-    @DisplayName("도서 목록 정보 테스트")
-    class TestGetInfo {
-        @Test
-        @DisplayName("도서 목록 조회 시 요구된 형식을 동일해야 한다.")
-        void testGetInfo() {
-            // given
-            BookManager bookManager = createBookManager();
-            List<Book> initData = new ArrayList<>();
-            LocalDateTime now = LocalDateTime.now();
-
-            initData.add(new Book(1, "test1", "tester", 111, now));
-            initData.add(new Book(5, "test2", "tester", 222, now));
-            initData.add(new Book(10, "test3", "tester", 333, now));
-
-            // when
-            bookManager.init(initData);
-            String info = bookManager.getInfos();
-
-            // then
-            String requiredFormat = initData.stream()
-                    .map(Book::info)
-                    .collect(Collectors.joining("\n------------------------------\n"));
-
-            assertThat(info).isEqualTo(requiredFormat);
         }
     }
 
     @Nested
     @DisplayName("도서 제목 검색 테스트")
-    class TestGetInfoByTitle {
+    class TestFindBookByTitle {
         @Test
         @DisplayName("검색 시 주어진 단어를 포함하는 모든 도서를 반환해야 한다.")
         void testGetInfoByTitle() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             List<Book> initData = new ArrayList<>();
             LocalDateTime now = LocalDateTime.now();
 
@@ -190,15 +132,14 @@ abstract class BookManagerTest {
 
             // when
             bookManager.init(initData);
-            String infoByTitle = bookManager.getInfosByTitle("bana");
+            List<Book> books = bookManager.getBooksByTitle("bana");
 
             // then
-            String requiredData = initData.stream()
+            List<Book> requiredData = initData.stream()
                     .filter(book -> book.getTitle().contains("bana"))
-                    .map(Book::info)
-                    .collect(Collectors.joining("\n------------------------------\n"));
+                    .toList();
 
-            assertThat(infoByTitle).isEqualTo(requiredData);
+            assertThat(books).isEqualTo(requiredData);
         }
     }
 
@@ -209,7 +150,7 @@ abstract class BookManagerTest {
         @DisplayName("도서 대여 시 해당 도서는 대여 중으로 상태가 변경돼야 한다.")
         void testRentByIdChangeState() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             List<Book> initData = new ArrayList<>();
             Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
 
@@ -222,70 +163,6 @@ abstract class BookManagerTest {
             // then
             assertThat(book.getState()).isEqualTo(BookState.LOAN);
         }
-
-        @Test
-        @DisplayName("도서 대여 시 성공 메시지를 반환해야 한다.")
-        void testRentByIdSuccess() {
-            // given
-            BookManager bookManager = createBookManager();
-            List<Book> initData = new ArrayList<>();
-
-            initData.add(new Book(1, "test1", "tester", 111, LocalDateTime.now()));
-            bookManager.init(initData);
-
-            // when
-            String msg = bookManager.rentById(1);
-
-            // then
-            assertThat(msg).isEqualTo(SUCCESS_RENT_BOOK.msg());
-        }
-
-        @Test
-        @DisplayName("등록되지 않은 id의 도서 대여 시 실패 메시지를 반환해야 한다.")
-        void testRentByIdFailNotExistId() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
-
-            bookManager.init(List.of(book));
-
-            // when
-            String msg = bookManager.rentById(book.getId() + 1);
-
-            // then
-            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
-        }
-
-        @Test
-        @DisplayName("대여할 수 없는 도서를 대여할 때 상태에 맞는 실패 메시지를 반환해야 한다.")
-        void testRentByIdFailNonAvailable() {
-            // given
-            BookManager bookManager = createBookManager();
-            List<Book> initData = new ArrayList<>();
-            Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
-
-            initData.add(book);
-            bookManager.init(initData);
-
-            // when
-            List<String> msgList = new ArrayList<>();
-            List<String> requiredMsgList = new ArrayList<>();
-
-            book.setState(BookState.LOAN);
-            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
-            msgList.add(bookManager.rentById(1));
-
-            book.setState(BookState.LOST);
-            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
-            msgList.add(bookManager.rentById(1));
-
-            book.setState(BookState.PROCESSING);
-            requiredMsgList.add("%s (%s)".formatted(FAIL_RENT_BOOK.msg(), book.getState().label()));
-            msgList.add(bookManager.rentById(1));
-
-            // then
-            assertThat(msgList).isEqualTo(requiredMsgList);
-        }
     }
 
     @Nested
@@ -295,7 +172,7 @@ abstract class BookManagerTest {
         @DisplayName("도서 반납 시 해당 도서는 도서 정리 중으로 상태가 변경돼야 한다.")
         void testReturnByIdChangeState() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             LocalDateTime now = LocalDateTime.now();
             Book loanBook = new Book(1, "test1", "tester", 111, now);
             Book lostBook = new Book(2, "test2", "tester", 222, now);
@@ -312,66 +189,6 @@ abstract class BookManagerTest {
             assertThat(loanBook.getState()).isEqualTo(BookState.PROCESSING);
             assertThat(lostBook.getState()).isEqualTo(BookState.PROCESSING);
         }
-
-        @Test
-        @DisplayName("도서 반납 시 성공 메시지를 반환해야 한다.")
-        void testReturnByIdSuccess() {
-            // given
-            BookManager bookManager = createBookManager();
-            LocalDateTime now = LocalDateTime.now();
-            Book loanBook = new Book(1, "test1", "tester", 111, now);
-            Book lostBook = new Book(2, "test2", "tester", 222, now);
-
-            bookManager.init(List.of(loanBook, lostBook));
-            loanBook.setState(BookState.LOAN);
-            lostBook.setState(BookState.LOST);
-
-            // when
-            String loanReturnMsg = bookManager.returnById(loanBook.getId());
-            String lostReturnMsg = bookManager.returnById(lostBook.getId());
-
-            // then
-            assertThat(loanReturnMsg).isEqualTo(SUCCESS_RETURN_BOOK.msg());
-            assertThat(lostReturnMsg).isEqualTo(SUCCESS_RETURN_BOOK.msg());
-        }
-
-        @Test
-        @DisplayName("등록되지 않은 id의 도서 반납 시 실패 메시지를 반환해야 한다.")
-        void testReturnByIdFailNotExistId() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
-
-            bookManager.init(List.of(book));
-            book.setState(BookState.LOAN);
-
-            // when
-            String msg = bookManager.returnById(book.getId() + 1);
-
-            // then
-            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
-        }
-
-        @Test
-        @DisplayName("반납할 수 없는 도서를 반납할 때 실패 메시지를 반환해야 한다.")
-        void testReturnByIdFailNonReturnable() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 111, LocalDateTime.now());
-
-            bookManager.init(List.of(book));
-
-            // when
-            book.setState(BookState.AVAILABLE);
-            String availableReturnMsg = bookManager.returnById(book.getId());
-
-            book.setState(BookState.PROCESSING);
-            String processingReturnMsg = bookManager.returnById(book.getId());
-
-            // then
-            assertThat(availableReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
-            assertThat(processingReturnMsg).isEqualTo(FAIL_RETURN_BOOK.msg());
-        }
     }
 
     @Nested
@@ -381,7 +198,7 @@ abstract class BookManagerTest {
         @DisplayName("도서 분실 시 해당 도서는 분실로 상태가 변경돼야 한다.")
         void testLossByIdChangeState() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             LocalDateTime now = LocalDateTime.now();
             Book availableBook = new Book(1, "test1", "tester", 111, now);
             Book processingBook = new Book(2, "test2", "tester", 222, now);
@@ -402,65 +219,6 @@ abstract class BookManagerTest {
             assertThat(processingBook.getState()).isEqualTo(BookState.LOST);
             assertThat(loanBook.getState()).isEqualTo(BookState.LOST);
         }
-
-        @Test
-        @DisplayName("도서 분실 시 성공 메시지를 반환해야 한다.")
-        void testLossByIdSuccess() {
-            // given
-            BookManager bookManager = createBookManager();
-            LocalDateTime now = LocalDateTime.now();
-            Book availableBook = new Book(1, "test1", "tester", 111, now);
-            Book processingBook = new Book(2, "test2", "tester", 222, now);
-            Book loanBook = new Book(3, "test3", "tester", 333, now);
-
-            bookManager.init(List.of(availableBook, processingBook, loanBook));
-            availableBook.setState(BookState.AVAILABLE);
-            processingBook.setState(BookState.PROCESSING);
-            loanBook.setState(BookState.LOAN);
-
-            // when
-            String availableLossMsg = bookManager.lossById(availableBook.getId());
-            String processingLossMsg = bookManager.lossById(processingBook.getId());
-            String loanLossMsg = bookManager.lossById(loanBook.getId());
-
-            // then
-            assertThat(availableLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
-            assertThat(processingLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
-            assertThat(loanLossMsg).isEqualTo(SUCCESS_LOSS_BOOK.msg());
-        }
-
-        @Test
-        @DisplayName("등록되지 않은 id의 도서 분실 시 실패 메시지를 반환해야 한다.")
-        void testLossByIdFailNotExistId() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
-
-            bookManager.init(List.of(book));
-
-            // when
-            String msg = bookManager.lossById(book.getId() + 1);
-
-            // then
-            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
-        }
-
-        @Test
-        @DisplayName("이미 분실된 도서를 분실할 때 실패 메시지를 반환해야 한다.")
-        void testLossByIdFailAlreadyLost() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book lostBook = new Book(1, "test1", "tester", 111, LocalDateTime.now());
-
-            bookManager.init(List.of(lostBook));
-            lostBook.setState(BookState.LOST);
-
-            // when
-            String msg = bookManager.lossById(lostBook.getId());
-
-            // then
-            assertThat(msg).isEqualTo(ALREADY_LOST_BOOK.msg());
-        }
     }
 
     @Nested
@@ -470,7 +228,7 @@ abstract class BookManagerTest {
         @DisplayName("상태에 상관없이 삭제 시 도서 리스트에서 삭제돼야 한다.")
         void testDeleteByIdChangeState() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             LocalDateTime now = LocalDateTime.now();
             Book availableBook = new Book(1, "test1", "tester", 111, now);
             Book processingBook = new Book(2, "test2", "tester", 222, now);
@@ -493,54 +251,9 @@ abstract class BookManagerTest {
             bookManager.deleteById(lostBook.getId());
 
             // then
-            List<Book> bookList = bookManager.getBooks();
+            List<Book> books = bookManager.getBooks();
 
-            assertThat(bookList).doesNotContainAnyElementsOf(initData);
-        }
-
-        @Test
-        @DisplayName("도서 삭제 시 성공 메시지를 반환해야 한다.")
-        void testDeleteByIdSuccess() {
-            // given
-            BookManager bookManager = createBookManager();
-            LocalDateTime now = LocalDateTime.now();
-            Book availableBook = new Book(1, "test1", "tester", 111, now);
-            Book processingBook = new Book(2, "test2", "tester", 222, now);
-            Book loanBook = new Book(3, "test3", "tester", 333, now);
-            Book lostBook = new Book(4, "test4", "tester", 444, now);
-
-            List<Book> initData = List.of(availableBook, processingBook, loanBook, lostBook);
-
-            bookManager.init(initData);
-
-            availableBook.setState(BookState.AVAILABLE);
-            processingBook.setState(BookState.PROCESSING);
-            loanBook.setState(BookState.LOAN);
-            lostBook.setState(BookState.LOST);
-
-            // when
-            List<String> msgList = initData.stream()
-                    .map(book -> bookManager.deleteById(book.getId()))
-                    .toList();
-
-            // then
-            assertThat(msgList).allMatch(SUCCESS_DELETE_BOOK.msg()::equals);
-        }
-
-        @Test
-        @DisplayName("등록되지 않은 id의 도서 삭제 시 실패 메시지를 반환해야 한다.")
-        void testDeleteByIdFailNotExistId() {
-            // given
-            BookManager bookManager = createBookManager();
-            Book book = new Book(1, "test1", "tester", 11, LocalDateTime.now());
-
-            bookManager.init(List.of(book));
-
-            // when
-            String msg = bookManager.deleteById(book.getId() + 1);
-
-            // then
-            assertThat(msg).isEqualTo(NOT_EXIST_ID.msg());
+            assertThat(books).doesNotContainAnyElementsOf(initData);
         }
     }
 
@@ -551,7 +264,7 @@ abstract class BookManagerTest {
         @DisplayName("5분 이상 정리 중인 도서는 대여 가능으로 상태가 변경돼야 한다.")
         void testUpdateStatesChangeToAvailable() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             LocalDateTime processAt = LocalDateTime.now().minusMinutes(5);
             Book processedBook = new Book(1, "test1", "tester", 111, processAt);
 
@@ -569,7 +282,7 @@ abstract class BookManagerTest {
         @DisplayName("5분 이상 정리한 도서가 아니면 상태가 변경되면 안된다.")
         void testUpdateStatesNotChange() {
             // given
-            BookManager bookManager = createBookManager();
+            BookManager bookManager = getBookManager();
             LocalDateTime currentTime = LocalDateTime.now();
             Book processingBook = new Book(1, "test1", "tester", 111, currentTime);
 

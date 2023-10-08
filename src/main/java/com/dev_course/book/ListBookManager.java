@@ -5,17 +5,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.dev_course.book.BookManagerMessage.*;
 import static com.dev_course.book.BookState.*;
 
 public class ListBookManager implements BookManager {
     private final Duration PROCESSING_COST = Duration.ofMinutes(5);
-    private final String infoDelim = "\n------------------------------\n";
     private final List<Book> books = new ArrayList<>();
 
-    private int id;
+    private int id = 0;
 
     @Override
     public void init(Collection<Book> data) {
@@ -41,39 +38,27 @@ public class ListBookManager implements BookManager {
     }
 
     @Override
-    public String create(String title, String author, int pages) {
+    public boolean create(String title, String author, int pages) {
         if (hasTitle(title)) {
-            return ALREADY_EXIST_TITLE.msg();
+            return false;
         }
 
         Book newBook = new Book(++id, title, author, pages, LocalDateTime.now());
 
         books.add(newBook);
 
-        return SUCCESS_CREATE_BOOK.msg();
+        return true;
     }
 
     @Override
-    public String getInfos() {
-        return books.stream()
-                .map(Book::info)
-                .collect(Collectors.joining(infoDelim));
-    }
-
-    @Override
-    public String getInfosByTitle(String title) {
+    public List<Book> getBooksByTitle(String title) {
         return books.stream()
                 .filter(book -> book.getTitle().contains(title))
-                .map(Book::info)
-                .collect(Collectors.joining(infoDelim));
+                .toList();
     }
 
     @Override
-    public String rentById(int id) {
-        if (hasNotId(id)) {
-            return NOT_EXIST_ID.msg();
-        }
-
+    public boolean rentById(int id) {
         Book target = books.stream()
                 .filter(book -> book.isSame(id))
                 .findFirst()
@@ -82,21 +67,17 @@ public class ListBookManager implements BookManager {
         BookState state = target.getState();
 
         if (!state.isRentable()) {
-            return "%s (%s)".formatted(FAIL_RENT_BOOK.msg(), state.label());
+            return false;
         }
 
         target.setState(LOAN);
         target.setUpdateAt(LocalDateTime.now());
 
-        return SUCCESS_RENT_BOOK.msg();
+        return true;
     }
 
     @Override
-    public String returnById(int id) {
-        if (hasNotId(id)) {
-            return NOT_EXIST_ID.msg();
-        }
-
+    public boolean returnById(int id) {
         Book target = books.stream()
                 .filter(book -> book.isSame(id))
                 .findFirst()
@@ -105,55 +86,40 @@ public class ListBookManager implements BookManager {
         BookState state = target.getState();
 
         if (!state.isReturnable()) {
-            return FAIL_RETURN_BOOK.msg();
+            return false;
         }
 
         target.setState(PROCESSING);
         target.setUpdateAt(LocalDateTime.now());
 
-        return SUCCESS_RETURN_BOOK.msg();
+        return true;
     }
 
     @Override
-    public String lossById(int id) {
-        if (hasNotId(id)) {
-            return NOT_EXIST_ID.msg();
-        }
-
+    public boolean lossById(int id) {
         Book target = books.stream()
                 .filter(book -> book.isSame(id))
                 .findFirst()
                 .orElseThrow();
 
         if (target.getState() == LOST) {
-            return ALREADY_LOST_BOOK.msg();
+            return false;
         }
 
         target.setState(LOST);
         target.setUpdateAt(LocalDateTime.now());
 
-        return SUCCESS_LOSS_BOOK.msg();
+        return true;
     }
 
     @Override
-    public String deleteById(int id) {
-        if (hasNotId(id)) {
-            return NOT_EXIST_ID.msg();
-        }
-
-        books.removeIf(book -> book.isSame(id));
-
-        return SUCCESS_DELETE_BOOK.msg();
+    public boolean deleteById(int id) {
+        return books.removeIf(book -> book.isSame(id));
     }
 
     @Override
     public List<Book> getBooks() {
         return books;
-    }
-
-    private boolean hasNotId(int id) {
-        return books.stream()
-                .noneMatch(book -> book.isSame(id));
     }
 
     private boolean hasTitle(String title) {

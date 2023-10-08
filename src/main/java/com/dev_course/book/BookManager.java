@@ -8,19 +8,17 @@ public interface BookManager {
 
     void updateStates();
 
-    String create(String title, String author, int pages);
+    boolean create(String title, String author, int pages);
 
-    String getInfos();
+    List<Book> getBooksByTitle(String title);
 
-    String getInfosByTitle(String title);
+    boolean rentById(int id);
 
-    String rentById(int id);
+    boolean returnById(int id);
 
-    String returnById(int id);
+    boolean lossById(int id);
 
-    String lossById(int id);
-
-    String deleteById(int id);
+    boolean deleteById(int id);
 
     List<Book> getBooks();
 }
