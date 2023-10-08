@@ -3,14 +3,11 @@ package app.library.management.core.service;
 import app.library.management.core.domain.Book;
 import app.library.management.core.domain.util.BookStatusManager;
 import app.library.management.core.repository.BookRepository;
-import app.library.management.core.repository.file.FileStorage;
-import app.library.management.core.repository.file.FileStorageAdaptor;
 import app.library.management.core.repository.memory.BookMemoryRepository;
 import app.library.management.core.service.response.dto.BookServiceResponse;
 import app.library.management.core.service.response.dto.status.ResponseState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -22,7 +19,7 @@ import static app.library.management.core.domain.BookStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-class BookServiceConcurrencyTest {
+class BookServiceMemoryConcurrencyTest {
 
     private BookRepository bookRepository;
     private BookService bookService;
