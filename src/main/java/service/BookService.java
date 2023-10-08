@@ -2,7 +2,6 @@ package service;
 
 import constant.ExceptionMsg;
 import model.Book;
-import model.Status;
 import repository.Repository;
 import util.BookScheduler;
 
@@ -16,7 +15,7 @@ public class BookService {
     }
 
     public void saveBook(String title, String author, int pageNum) {
-        Book book = new Book(repository.createBookNo(), title, author, pageNum, Status.AVAILABLE);
+        Book book = new Book(repository.createBookNo(), title, author, pageNum);
         repository.saveBook(book);
     }
 

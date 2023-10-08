@@ -10,6 +10,7 @@ public enum ExceptionMsg {
     WRONG_MODE("[System] 모드를 정확히 선택해주세요."),
     WRONG_SELECTION("[System] 존재하지 않는 선택지 입니다."),
     FOUNT_NOTHING("[System] 도서 목록이 존재하지 않습니다" + System.lineSeparator());
+
     private final String message;
 
     ExceptionMsg(String message) {

@@ -11,7 +11,7 @@ public class Book {
     private final int pageNum;
     private Status status;
 
-    public Book(Long bookNo, String title, String author, int pageNum, Status status) {
+    public Book(Long bookNo, String title, String author, int pageNum) {
         if (title == null || title.isEmpty() || author == null || author.isEmpty() || pageNum < 1) {
             throw new IllegalArgumentException("제목, 작가, 페이지 수를 빈 값 없이 입력해주세요");
         }
@@ -19,6 +19,10 @@ public class Book {
         this.title = title;
         this.author = author;
         this.pageNum = pageNum;
+        this.status = Status.AVAILABLE;
+    }
+
+    public void changeStatus(Status status) {
         this.status = status;
     }
 

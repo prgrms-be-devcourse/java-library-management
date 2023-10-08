@@ -7,7 +7,7 @@ import java.util.*;
 
 public class FileRepository implements Repository {
     private final CsvFileUtil csvFileUtil;
-    private Map<Long, Book> bookMap = new HashMap<>();
+    private static Map<Long, Book> bookMap = new HashMap<>();
 
     public FileRepository(String file_path) {
         csvFileUtil = new CsvFileUtil(file_path);
