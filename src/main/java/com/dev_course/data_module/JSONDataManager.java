@@ -35,7 +35,6 @@ public class JSONDataManager<T> implements DataManager<T> {
         } catch (IOException e) {
             throw new RuntimeException("파일을 불러오는 과정에서 오류가 발생했습니다.");
         }
-
     }
 
     @Override
