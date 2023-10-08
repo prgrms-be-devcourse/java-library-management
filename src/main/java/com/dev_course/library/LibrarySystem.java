@@ -38,7 +38,7 @@ public class LibrarySystem {
     }
 
     private void init(ModeFactory mode) {
-        libraryService = mode.getBookService();
+        libraryService = mode.getLibraryService();
     }
 
     private ModeFactory selectMode() {

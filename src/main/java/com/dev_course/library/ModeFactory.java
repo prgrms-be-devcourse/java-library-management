@@ -10,7 +10,7 @@ import com.dev_course.data_module.JSONDataManager;
 public enum ModeFactory {
     TEST, NORMAL;
 
-    public LibraryService getBookService() {
+    public LibraryService getLibraryService() {
         return switch (this) {
             case TEST, NORMAL -> new LibraryService(getDataManager(), getBookManager());
         };
