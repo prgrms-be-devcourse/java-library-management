@@ -61,7 +61,7 @@ public class BookService {
     public void returnBook(Integer id) {
         Book book = repository.findById(id).orElseThrow(NotExistBookIdException::new);
         switch (book.getStatus()) {
-            case AVAILABLE -> throw new UnchangeableStatusException("원래 대여가 가능한 도서입니다.");
+            case BORROW_AVAILABLE -> throw new UnchangeableStatusException("원래 대여가 가능한 도서입니다.");
             case CLEANING -> {
                 if (book.isStillCleaning())
                     throw new UnchangeableStatusException("이미 반납되어 정리 중인 도서입니다.");
@@ -75,7 +75,7 @@ public class BookService {
     public void reportLostBook(Integer id) {
         Book book = repository.findById(id).orElseThrow(NotExistBookIdException::new);
         switch (book.getStatus()) {
-            case AVAILABLE, CLEANING -> throw new UnchangeableStatusException("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.");
+            case BORROW_AVAILABLE, CLEANING -> throw new UnchangeableStatusException("도서관에서 보관중으로, 분실처리 대상 도서가 아닙니다.");
             case LOST -> throw new UnchangeableStatusException("이미 분실처리된 도서입니다.");
         }
         repository.report(book);

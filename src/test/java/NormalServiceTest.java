@@ -44,7 +44,7 @@ public class NormalServiceTest {
         assertEquals(book.getTitle(), title);
         assertEquals(book.getAuthor(), author);
         assertEquals(book.getPage(), page);
-        assertEquals(book.getStatus(), AVAILABLE);
+        assertEquals(book.getStatus(), BORROW_AVAILABLE);
     }
 
     @Test

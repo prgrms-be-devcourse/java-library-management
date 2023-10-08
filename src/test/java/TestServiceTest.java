@@ -37,7 +37,7 @@ public class TestServiceTest {
         assertEquals(book.getTitle(), title);
         assertEquals(book.getAuthor(), author);
         assertEquals(book.getPage(), page);
-        assertEquals(book.getStatus(), BookStatus.AVAILABLE);
+        assertEquals(book.getStatus(), BookStatus.BORROW_AVAILABLE);
     }
 
     @Test

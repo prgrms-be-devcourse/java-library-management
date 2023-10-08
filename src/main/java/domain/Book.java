@@ -33,7 +33,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.page = page;
-        this.status = AVAILABLE;
+        this.status = BORROW_AVAILABLE;
         this.returnTime = null;
     }
 
@@ -72,7 +72,7 @@ public class Book {
     }
 
     public void cleaningToAvailable() {
-        status = AVAILABLE;
+        status = BORROW_AVAILABLE;
     }
 
     public void report() {
