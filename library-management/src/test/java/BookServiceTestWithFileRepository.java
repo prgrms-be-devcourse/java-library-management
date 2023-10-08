@@ -1,5 +1,4 @@
 import devcourse.backend.business.BookService;
-import devcourse.backend.business.ModeType;
 import devcourse.backend.model.Book;
 import devcourse.backend.model.BookStatus;
 import devcourse.backend.repository.FileRepository;
@@ -12,12 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.Clock;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,20 +29,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BookServiceTestWithFileRepository {
     private BookService bookService;
     private Repository repository;
-    private Clock clock;
 
     @BeforeEach
     @DisplayName("각 테스트는 빈 저장소를 가지고 테스트를 시작합니다.")
     void BookService_초기화() {
-        truncate();
-        clock = Clock.system(ZoneId.of("Asia/Seoul"));
         repository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
-        bookService = new BookService(repository, clock);
+        bookService = new BookService(repository);
+    }
+
+    @AfterEach
+    void 테스트_데이터_지우기() {
+        truncate();
     }
 
     private void truncate() {
         Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
-        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
         } catch (IOException e) {
             throw new RuntimeException(e);

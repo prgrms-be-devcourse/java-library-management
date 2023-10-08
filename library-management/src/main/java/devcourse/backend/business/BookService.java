@@ -13,12 +13,13 @@ import static devcourse.backend.FileSetting.*;
 import static devcourse.backend.model.BookStatus.*;
 
 public class BookService {
+    private final int BOOK_ORGANIZATION_TIME = 5 * 60 * 10000;
     private final BookOrganizingScheduler scheduler;
     private final Repository repository;
 
-    public BookService(Repository repository, Clock clock) {
+    public BookService(Repository repository) {
         this.repository = repository;
-        scheduler = new BookOrganizingScheduler(repository, clock);
+        scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME);
         scheduler.startScheduler();
     }
 
