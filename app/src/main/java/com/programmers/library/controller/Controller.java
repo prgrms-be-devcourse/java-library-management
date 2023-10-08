@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Controller {
 
-    private final ScannerUtil scannerUtil = ScannerUtil.getInstance();
+    private final ScannerUtil scannerUtil = new ScannerUtil();
     private final Service service;
 
     public Controller(Service service) {

@@ -9,7 +9,7 @@ public class App {
     public static void run() {
         Mode.showModes();
 
-        int modeId = ScannerUtil.getInstance().inputInt();
+        int modeId = new ScannerUtil().inputInt();
 
         Mode mode = Mode.selectMode(modeId);
         mode.run();
