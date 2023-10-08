@@ -21,7 +21,7 @@ public class Book {
     private LocalDateTime updateAt;
 
     // for deserialize from object value
-    public Book() {
+    private Book() {
     }
 
     public Book(int id, String title, String author, int pages, LocalDateTime time) {
