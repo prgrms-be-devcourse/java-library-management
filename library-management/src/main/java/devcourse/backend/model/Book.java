@@ -10,13 +10,13 @@ public class Book {
     private String author;
     private int totalPages;
     private BookStatus status;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     public static class Builder {
         private static long sequence = 1;
         private long id = sequence;
         private BookStatus status = BookStatus.AVAILABLE;
-        private LocalDateTime updateAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        private LocalDateTime updatedAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         private String title;
         private String author;
         private int totalPages;
@@ -33,8 +33,8 @@ public class Book {
             return this;
         }
 
-        public Builder updateAt(String updateAt) {
-            this.updateAt = LocalDateTime.parse(updateAt);
+        public Builder updatedAt(String updateAt) {
+            this.updatedAt = LocalDateTime.parse(updateAt);
             return this;
         }
 
@@ -45,21 +45,21 @@ public class Book {
 
         public Book build() {
             sequence++;
-            return new Book(id, title, author, totalPages, status, updateAt);
+            return new Book(id, title, author, totalPages, status, updatedAt);
         }
     }
 
-    private Book(long id, String title, String author, int totalPages, BookStatus status, LocalDateTime updateAt) {
+    private Book(long id, String title, String author, int totalPages, BookStatus status, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.totalPages = totalPages;
         this.status = status;
-        this.updateAt = updateAt;
+        this.updatedAt = updatedAt;
     }
 
     public String toRecord() {
-        return id + ";" + title + ";" + author + ";" + totalPages + ";" + status + ';' + updateAt;
+        return id + ";" + title + ";" + author + ";" + totalPages + ";" + status + ';' + updatedAt;
     }
 
     public boolean like(String keyword) {
@@ -68,7 +68,7 @@ public class Book {
 
     public void changeStatus(BookStatus status) {
         this.status = status;
-        this.updateAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        this.updatedAt = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 
     public long getId() {
@@ -89,6 +89,6 @@ public class Book {
     }
 
     public LocalDateTime getUpdateAt() {
-        return updateAt;
+        return updatedAt;
     }
 }
