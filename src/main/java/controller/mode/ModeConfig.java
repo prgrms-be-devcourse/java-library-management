@@ -1,5 +1,6 @@
 package controller.mode;
 import controller.BookController;
+import controller.menu.MenuConfig;
 import manager.console.InputManager;
 import manager.console.OutputManager;
 import service.BookService;
@@ -29,7 +30,8 @@ public class ModeConfig {
         BookService bookService = modeType.getBookService();
         modeType.printModeExecution();
 
-        BookController bookController = new BookController(bookService, inputManager, outputManager);
-        bookController.selectMenu();
+
+        MenuConfig menuConfig = new MenuConfig(outputManager, inputManager, bookService);
+        menuConfig.selectMenu();
     }
 }
