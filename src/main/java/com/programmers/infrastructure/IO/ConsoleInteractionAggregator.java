@@ -65,14 +65,14 @@ public class ConsoleInteractionAggregator {
     }
 
     /**
-     * @param ListItems
+     * @param listItems
      * @param <T>
      * @implNote
      * 1. ListItems 원소의 타입이 String이 아닌 경우, toString()을 오버라이딩 해야함.
      * 2. ListItems 원소의 타입이 String인 경우, toString()을 오버라이딩 하지 않아도 됨.
      */
-    public <T> void displayListInfo(List<T> ListItems) {
-        ListItems.forEach(item -> displayMessage(item.toString()));
+    public <T> void displayListInfo(List<T> listItems) {
+        listItems.forEach(item -> displayMessage(item.toString()));
     }
 
     /**
