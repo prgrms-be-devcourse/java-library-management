@@ -1,5 +1,6 @@
 package org.example.server.repository;
 
+import org.example.packet.requestPacket.BookRegisterDto;
 import org.example.server.entity.Book;
 import org.example.server.exception.BookNotFoundException;
 
@@ -14,10 +15,13 @@ public class InMemoryRepository implements Repository {
 
     @Override
     public void save(Book book) {
-        int bookId = newId++;
-        book.id = bookId;
-        data.put(bookId, book);
+        if (!data.containsValue(book)) {
+            int bookId = newId++;
+            book.id = bookId;
+            data.put(bookId, book);
+        }
     }
+
 
     @Override
     public LinkedList<Book> findAll() {

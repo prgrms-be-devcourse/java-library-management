@@ -37,16 +37,19 @@ public class BookService implements Service {
     public void borrow(int bookId) {
         Book book = repository.getById(bookId);
         book.borrow();
+        repository.save(book);
     }
 
     public void restore(int bookId) {
         Book book = repository.getById(bookId);
         book.restore();
+        repository.save(book);
     }
 
     public void lost(int bookId) {
         Book book = repository.getById(bookId);
         book.lost();
+        repository.save(book);
     }
 
     public void delete(int bookId) {

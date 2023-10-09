@@ -18,9 +18,11 @@ public class FileRepository implements Repository {
 
     @Override
     public void save(Book book) {
-        int bookId = newId++;
-        book.id = bookId;
-        fileStorage.data.put(bookId, book);
+        if (!fileStorage.data.containsValue(book)) {
+            int bookId = newId++;
+            book.id = bookId;
+            fileStorage.data.put(bookId, book);
+        }
         saveData();
     }
 
