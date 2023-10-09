@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static devcourse.backend.model.BookStatus.*;
 
 public class BookOrganizingScheduler {
-    private ScheduledExecutorService scheduler;
+    private ScheduledExecutorService executorService;
     private final Repository repository;
     private boolean isRunning;
     private int period;
@@ -29,13 +29,13 @@ public class BookOrganizingScheduler {
     public void startScheduler() {
         if(!isRunning) {
             isRunning = true;
-            scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> {
+            executorService = Executors.newSingleThreadScheduledExecutor(runnable -> {
                 Thread thread = new Thread(runnable);
                 thread.setDaemon(true);
                 return thread;
             });
 
-            scheduler.scheduleAtFixedRate(new BookOrganizingTask(), 0, period, TimeUnit.MILLISECONDS);
+            executorService.scheduleAtFixedRate(new BookOrganizingTask(), 0, period, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -54,7 +54,7 @@ public class BookOrganizingScheduler {
             long count = booksToBeAvailable.size();
             if (count == 0) {
                 isRunning = false;
-                scheduler.shutdown();
+                executorService.shutdown();
             }
 
             LocalDateTime now = LocalDateTime.now();
