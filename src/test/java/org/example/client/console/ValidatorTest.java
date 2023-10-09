@@ -2,17 +2,12 @@ package org.example.client.console;
 
 import org.example.client.ValidateException;
 import org.example.client.Validator;
-import org.example.client.io.In;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 class ValidatorTest {
-    In in;
     Validator validator;
 
     int selectNum;
@@ -20,37 +15,32 @@ class ValidatorTest {
     @BeforeEach
     @DisplayName("Validator 초기화")
     void initValidator() {
-        in = mock(In.class);
         validator = new Validator();
         selectNum = 5;
     }
 
     /* 문자 입력 유효성 테스트 */
-    @Test
     @DisplayName("문자열 유효성 검증: 성공")
     void validateNameAndAuthor() {
         String input = "a부터 Z까지 배우는 테스트 코드";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateNameAndAuthor(in.scanLine()), input);
+        Assertions.assertEquals(validator.scanAndValidateNameAndAuthor(input), input);
     }
 
     @Test
     @DisplayName("문자열 유효성 검증: 특수 문자 예외")
     void validateNameAndAuthorSpecial() {
         String input = "%";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(input));
     }
 
     @Test
     @DisplayName("문자열 유효성 검증: 공백 예외")
     void validateNameAndAuthorEmpty() {
         String input = "";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(input));
     }
 
     @Test
@@ -58,9 +48,7 @@ class ValidatorTest {
     void validateNameAndAuthorLength() {
         String input = "a".repeat(120);
 
-        when(in.scanLine()).thenReturn(input);
-
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateNameAndAuthor(input));
     }
 
     /* 숫자 입력 유효성 테스트 */
@@ -68,54 +56,48 @@ class ValidatorTest {
     @Test
     void validateIdAndPages() {
         String input = "50";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateIdAndPageNumber(in.scanLine()), Integer.parseInt(input));
+        Assertions.assertEquals(validator.scanAndValidateIdAndPageNumber(input), Integer.parseInt(input));
     }
 
     @DisplayName("숫자 유효성 검증: 공백 예외")
     @Test
     void validateIdAndPagesEmpty() {
         String input = "";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(input));
     }
 
     @DisplayName("숫자 유효성 검증: 숫자가 아닌 문자열(특수문자) 예외")
     @Test
     void validateIdAndPagesSpecial() {
         String input = "a";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(input));
     }
 
     @DisplayName("숫자 유효성 검증: 숫자가 아닌 문자열(한글/영어) 예외")
     @Test
     void validateIdAndPagesAlpha() {
         String input = "a";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(input));
     }
 
     @DisplayName("숫자 유효성 검증: 0 이하 숫자 범위 예외")
     @Test
     void validateIdAndPagesDown1() {
         String input = "0";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(input));
     }
 
     @DisplayName("숫자 유효성 검증: 5000 이상 숫자 범위 예외")
     @Test
     void validateIdAndPagesUP5000() {
         String input = "5001";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateIdAndPageNumber(input));
     }
 
     /* 모드/메뉴 번호 입력 유효성 테스트 */
@@ -123,53 +105,47 @@ class ValidatorTest {
     @Test
     void validateSelectNum() {
         String input = "2";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertEquals(validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()), Integer.parseInt(input));
+        Assertions.assertEquals(validator.scanAndValidateSelectionNumber(selectNum, input), Integer.parseInt(input));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 공백 예외")
     @Test
     void validateSelectNumEmpty() {
         String input = "";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, input));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 숫자가 아닌 문자열(특수문자) 예외")
     @Test
     void validateSelectNumSpecial() {
         String input = "%%";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, input));
     }
 
     @DisplayName("모드/메뉴 번호(5가지라고 가정) 입력 유효성 검증: 숫자가 아닌 문자열(한글/영어) 예외")
     @Test
     void validateSelectNumAlpha() {
         String input = "a";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, input));
     }
 
     @DisplayName("모드/메뉴 번호 입력(5가지라고 가정) 유효성 검증: 0 이하 숫자 범위 예외")
     @Test
     void validateSelectNumDown1() {
         String input = "0";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, input));
     }
 
     @DisplayName("모드/메뉴 번호 입력(5가지라고 가정) 유효성 검증: 선택 번호이상 숫자 범위 예외")
     @Test
     void validateSelectNumUP5000() {
         String input = "5001";
-        when(in.scanLine()).thenReturn(input);
 
-        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, in.scanLine()));
+        Assertions.assertThrows(ValidateException.class, () -> validator.scanAndValidateSelectionNumber(selectNum, input));
     }
 }
