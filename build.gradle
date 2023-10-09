@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group 'group.name'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'LibraryApplication'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
