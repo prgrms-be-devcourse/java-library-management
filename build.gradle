@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.16'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+group = 'hello'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '11'
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // JUnit5 의존성
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    // Mockito 의존성
+    testImplementation 'org.mockito:mockito-core:4.5.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.5.1'
+    // assertJ 의존성
+    testImplementation 'org.assertj:assertj-core:3.22.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
