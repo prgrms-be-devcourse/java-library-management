@@ -14,8 +14,8 @@ public class ResponseExitSender implements ResponseSender {
         ExitResponse.class);
 
     @Override
-    public boolean supports(ConsoleResponse consoleResponse) {
-        return supportedResponses.contains(consoleResponse.getClass());
+    public <T extends ConsoleResponse> boolean supports(Class<T> responseClass) {
+        return supportedResponses.contains(responseClass);
     }
 
     @Override

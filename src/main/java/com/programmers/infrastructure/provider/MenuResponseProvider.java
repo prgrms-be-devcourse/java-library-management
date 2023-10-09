@@ -14,7 +14,7 @@ public class MenuResponseProvider {
 
     public void sendMenuResponse(ConsoleResponse<?> response) {
         responseSenders.stream()
-                .filter(sender -> sender.supports(response))
+                .filter(sender -> sender.supports(response.getClass()))
                 .findFirst()
                 .ifPresent(sender -> sender.sendResponse(response));
     }

@@ -14,9 +14,10 @@ public class ResponseNoBodySender implements ResponseSender {
         ConsoleNoBodyResponse.class);
 
     @Override
-    public boolean supports(ConsoleResponse consoleResponse) {
-        return supportedResponses.contains(consoleResponse.getClass());
+    public <T extends ConsoleResponse> boolean supports(Class<T> responseClass) {
+        return supportedResponses.contains(responseClass);
     }
+
     @Override
     public void sendResponse(ConsoleResponse response) {
         interactionAggregator.displayMessage(response.getMessage());
