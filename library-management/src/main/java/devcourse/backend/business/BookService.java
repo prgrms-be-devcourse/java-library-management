@@ -13,13 +13,16 @@ import static devcourse.backend.FileSetting.*;
 import static devcourse.backend.model.BookStatus.*;
 
 public class BookService {
-    private final int BOOK_ORGANIZATION_TIME = 5 * 60 * 10000; // 5분
+    private final int SCHEDULER_EXECUTION_PERIOD = 1; // 1분
+    private final int BOOK_ORGANIZATION_TIME = 5; // 5분
     private final BookOrganizingScheduler scheduler;
+    private final BookStatusHandler bookStatusHandler;
     private final Repository repository;
 
     public BookService(Repository repository) {
         this.repository = repository;
-        scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME);
+        bookStatusHandler = new BookStatusHandler(repository);
+        scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME, SCHEDULER_EXECUTION_PERIOD);
         scheduler.startScheduler();
     }
 
@@ -41,30 +44,18 @@ public class BookService {
 
     public void rentBook(long bookId) {
         Book book = repository.findById(bookId).orElseThrow();
-
-        if(book.getStatus().canSwitch(BORROWED)) {
-            book.changeStatus(BORROWED);
-            repository.save();
-        } else throw new IllegalArgumentException(book.getStatus().toString());
+        bookStatusHandler.switchTo(book, BORROWED);
     }
 
     public void returnBook(long bookId) {
         Book book = repository.findById(bookId).orElseThrow();
-
-        if(book.getStatus().canSwitch(ARRANGING)) {
-            book.changeStatus(ARRANGING);
-            repository.save();
-        } else throw new IllegalArgumentException(book.getStatus().toString());
-
+        bookStatusHandler.switchTo(book, ARRANGING);
         if(!scheduler.isRunning()) scheduler.startScheduler();
     }
 
     public void reportLoss(long bookId) {
         Book book = repository.findById(bookId).orElseThrow();
-        if(book.getStatus().canSwitch(LOST)) {
-            book.changeStatus(LOST);
-            repository.save();
-        } else throw new IllegalArgumentException(book.getStatus().toString());
+        bookStatusHandler.switchTo(book, LOST);
     }
 
     public void deleteBook(long bookId) {

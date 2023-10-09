@@ -5,17 +5,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public enum BookStatus {
-    AVAILABLE("대여 가능", (after) -> after == "BORROWED" || after == "LOST"),
-    BORROWED("대여 중", (after) -> after == "ARRANGING" || after == "LOST"),
-    ARRANGING("도서 정리 중", (after) -> after == "AVAILABLE" || after == "LOST"),
-    LOST("분실됨", (after) -> after == "ARRANGING");
+    AVAILABLE("대여 가능"),
+    BORROWED("대여 중"),
+    ARRANGING("도서 정리 중"),
+    LOST("분실됨");
 
     private String description;
-    private Predicate<String> canSwitchTo;
 
-    BookStatus(String description, Predicate<String> canSwitchTo) {
+    BookStatus(String description) {
         this.description = description;
-        this.canSwitchTo = canSwitchTo;
     }
 
     @Override
@@ -27,9 +25,5 @@ public enum BookStatus {
         return Arrays.stream(BookStatus.values())
                 .filter(e -> e.description.equals(description))
                 .findAny().orElseThrow(() -> new IllegalArgumentException(description + "은 존재하지 않은 도서 상태입니다."));
-    }
-
-    public boolean canSwitch(BookStatus after) {
-        return this.canSwitchTo.test(after.name());
     }
 }
