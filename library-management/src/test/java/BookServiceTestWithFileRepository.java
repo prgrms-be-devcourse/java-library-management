@@ -33,7 +33,8 @@ public class BookServiceTestWithFileRepository {
     @BeforeEach
     @DisplayName("각 테스트는 빈 저장소를 가지고 테스트를 시작합니다.")
     void BookService_초기화() {
-        repository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        truncate();
+        repository = new FileRepository(TEST_FILE_PATH, TEST_FILE_NAME);
         bookService = new BookService(repository);
     }
 
@@ -43,7 +44,7 @@ public class BookServiceTestWithFileRepository {
     }
 
     private void truncate() {
-        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
         try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
         } catch (IOException e) {
@@ -168,7 +169,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(BORROWED.toString(), exception.getMessage());
+        assertEquals("이미 대여 중인 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -186,7 +187,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(ARRANGING.toString(), exception.getMessage());
+        assertEquals("정리 중인 도서입니다. 잠시 후 다시 대여해 주세요.", exception.getMessage());
     }
 
     @Test
@@ -204,7 +205,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(LOST.toString(), exception.getMessage());
+        assertEquals("현재 분실 처리된 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -263,7 +264,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.returnBook(savedBook.getId()));
 
-        assertEquals(AVAILABLE.toString(), exception.getMessage());
+        assertEquals("원래 대여가 가능한 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -281,7 +282,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.returnBook(savedBook.getId()));
 
-        assertEquals(ARRANGING.toString(), exception.getMessage());
+        assertEquals("정리 중인 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -350,7 +351,7 @@ public class BookServiceTestWithFileRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.reportLoss(savedBook.getId()));
 
-        assertEquals(LOST.toString(), exception.getMessage());
+        assertEquals("이미 분실 처리된 도서입니다.", exception.getMessage());
     }
 
     @Test
