@@ -20,7 +20,7 @@ public class FileRepository implements Repository {
         this.FILE_PATH = Paths.get(path.concat(fileName));
         createFileIfNotExist(Objects.requireNonNull(path), Objects.requireNonNull(fileName));
         this.books = loadBooks();
-        flush();
+        save();
     }
 
     @Override
@@ -57,17 +57,17 @@ public class FileRepository implements Repository {
     @Override
     public void deleteById(long bookId) {
         books.remove(bookId);
-        flush();
+        save();
     }
 
     @Override
     public void addBook(Book book) {
         books.put(book.getId(), book);
-        flush();
+        save();
     }
 
     @Override
-    public void flush() {
+    public void save() {
         try (BufferedWriter writer = getWriter()) {
             writer.write(COLUMNS);
             writer.newLine();

@@ -17,5 +17,5 @@ public interface Repository {
 
     void deleteById(long bookId);
 
-    void flush();
+    void save();
 }

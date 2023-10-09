@@ -59,7 +59,7 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
-    public void flush() {
-        // Memory Repository는 데이터를 스토리지에 저장하지 않습니다(휘발성)
+    public void save() {
+        // Memory Repository는 데이터를 스토리지에 저장하지 않습니다 (휘발성)
     }
 }
