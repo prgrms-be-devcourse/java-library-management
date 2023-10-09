@@ -8,9 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.libraryManagement.domain.BookStatus.*;
-import static com.libraryManagement.domain.ChangeBookStatus.*;
 import static org.junit.Assert.*;
+
+/*
+java google style guide
+
+@BeforeEach
+단위테스트와 목
+ */
 
 class BookServiceTest {
     Repository repository = new MemoryRepository();

@@ -12,7 +12,7 @@ public class BookIO {
 
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    // System.lineSeperator()
+    // System.lineSeperator() 고려
     public void outputBookList(List<Book> bookList) {
         for(Book book : bookList) {
             System.out.println(book);

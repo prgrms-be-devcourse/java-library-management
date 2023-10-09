@@ -1,13 +1,14 @@
 package com.libraryManagement.repository;
 
 import com.libraryManagement.domain.Book;
+import com.libraryManagement.exception.BookException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.libraryManagement.domain.BookStatus.DELETE;
+import static com.libraryManagement.domain.Book.BookStatus.DELETE;
 
 public class MemoryRepository implements Repository {
     private Map<Long, Book> bookMap;
@@ -28,6 +29,10 @@ public class MemoryRepository implements Repository {
                 continue;
 
             resBookList.add(book);
+        }
+
+        if(resBookList.isEmpty()){
+            throw new Exception(new BookException())
         }
 
         return resBookList;

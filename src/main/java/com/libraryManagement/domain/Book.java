@@ -1,5 +1,7 @@
 package com.libraryManagement.domain;
 
+import static com.libraryManagement.domain.Book.BookStatus.*;
+
 public class Book {
     private final long id;
     private final String title;
@@ -48,6 +50,38 @@ public class Book {
         this.status = builder.status;
     }
 
+    public Boolean isPossibleRent() {
+        // 대여가능일 때만 대여가능
+        if(this.status.equals(AVAILABLE.getName())){
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean isPossibleReturn() {
+        // 대여가능일 때만 반납 불가
+        if(this.status.equals(AVAILABLE.getName())){
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean isPossibleLost() {
+        // 분실됨일 때만 분실처리 불가
+        if(this.status.equals(LOST.getName())){
+            return false;
+        }
+        return true;
+    }
+
+    public Boolean isPossibleDelete() {
+        // 존재하지 않는 도서일 때만 삭제처리 불가
+        if(this.status.equals(DELETE.getName())){
+            return false;
+        }
+        return true;
+    }
+
     public long getId() {
         return id;
     }
@@ -77,11 +111,11 @@ public class Book {
                 "\n상태 : " + status + "\n";
     }
 
-    public enum Status {
+    public enum BookStatus {
 
         AVAILABLE("대여가능"),
         RENT("대여중"),
-        READY("준비중"),
+        ORGANIZING("정리중"),
         LOST("분실됨"),
         DELETE("삭제됨");
 
@@ -91,7 +125,7 @@ public class Book {
             return name;
         }
 
-        Status(String name) {
+        BookStatus(String name) {
             this.name = name;
         }
     }

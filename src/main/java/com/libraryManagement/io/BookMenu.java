@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.libraryManagement.domain.ChangeBookStatus.*;
 import static java.lang.System.exit;
 
 public class BookMenu {
@@ -35,7 +34,7 @@ public class BookMenu {
         menuList.add("도서 삭제");
     }
 
-    public void displayBookMenu() throws IOException, InterruptedException {
+    public void displayBookMenu() throws IOException {
         while(true) {
             for(int i = 0; i < menuList.size(); i++){
                 System.out.println(i + ". " + menuList.get(i));
@@ -84,7 +83,7 @@ public class BookMenu {
                     break;
                 default :
                     System.out.println("번호를 다시 입력해주세요.");
-                    System.out.println("종료하려면 -1을 입력해주세요.\n");
+                    System.out.println("종료하려면 0을 입력해주세요.\n");
             }
 
         }

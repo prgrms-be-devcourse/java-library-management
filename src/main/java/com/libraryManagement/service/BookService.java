@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.libraryManagement.domain.BookStatus.*;
+import static com.libraryManagement.domain.Book.BookStatus.*;
 
 public class BookService {
     private final Repository repository;
@@ -43,15 +43,14 @@ public class BookService {
         return repository.findBooksByTitle(str);
     }
 
-    // 상태가 추가될때.. 2가지 변경 필요해짐
     public void rentBook(long id) {
-        if(isPossibleRentBook(id))
+        if(repository.findBookById(id).isPossibleRent())
             repository.updateBookStatus(id, RENT.getName());
     }
 
     public void returnBook(long id) {
-        if(isPossibleReturnBook(id))
-            repository.updateBookStatus(id, RENT.getName());
+        if(repository.findBookById(id).isPossibleReturn())
+            repository.updateBookStatus(id, ORGANIZING.getName());
 
         // 5분 후에 대여 가능 상태로 변경합니다.
         myScheduler.scheduleTask(() -> {
@@ -60,45 +59,13 @@ public class BookService {
     }
 
     public void lostBook(long id) {
-        if(isPossibleLostBook(id))
-            repository.updateBookStatus(id, RENT.getName());
+        if(repository.findBookById(id).isPossibleLost())
+            repository.updateBookStatus(id, LOST.getName());
     }
 
     public void deleteBook(long id) {
-        if(isPossibleDeleteBook(id))
-            repository.updateBookStatus(id, RENT.getName());
-    }
-
-    private Boolean isPossibleRentBook(long id) {
-        // 대여가능일 때만 대여가능
-        if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean isPossibleReturnBook(long id) {
-        // 대여가능일 때만 반납 불가
-        if(repository.findBookById(id).getStatus().equals(AVAILABLE.getName())){
-            return false;
-        }
-        return true;
-    }
-
-    private Boolean isPossibleLostBook(long id) {
-        // 분실됨일 때만 분실처리 불가
-        if(repository.findBookById(id).getStatus().equals(LOST.getName())){
-            return false;
-        }
-        return true;
-    }
-
-    private Boolean isPossibleDeleteBook(long id) {
-        // 존재하지 않는 도서일 때만 삭제처리 불가
-        if(repository.findBookById(id).getStatus().equals(DELETE.getName())){
-            return false;
-        }
-        return true;
+        if(repository.findBookById(id).isPossibleDelete())
+            repository.updateBookStatus(id, DELETE.getName());
     }
 
     public long getNumCreatedBooks() {
