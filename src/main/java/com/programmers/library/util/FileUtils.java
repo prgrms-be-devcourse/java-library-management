@@ -22,18 +22,23 @@ public class FileUtils<T> {
 		objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 	}
 
-	public List<Book> readFile() {
+	public <T> List<T> readFile(Class<T> clazz) {
 		if (!Files.exists(Paths.get(filePath))) {
 			throw new BookException(ErrorCode.FILE_NOT_EXIST);
 		}
 
-		List<Book> list = new ArrayList<>();
+		List<T> list = new ArrayList<>();
 		try {
-			List objectList = objectMapper.readValue(new File(filePath), List.class);
-			for(Object obj : objectList) {
-				String stringValue = objectMapper.writeValueAsString(obj);
-				FileReadBookDto fileReadBookDto = objectMapper.readValue(stringValue, FileReadBookDto.class);
-				list.add(fileReadBookDto.toEntity());
+			if (clazz == Book.class) {
+				List<?> objectList = objectMapper.readValue(new File(filePath), List.class);
+				for (Object obj : objectList) {
+					String stringValue = objectMapper.writeValueAsString(obj);
+					FileReadBookDto fileReadBookDto = objectMapper.readValue(stringValue, FileReadBookDto.class);
+					list.add((T)fileReadBookDto.toEntity());
+				}
+			} else {
+				list = objectMapper.readValue(new File(filePath),
+					objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
 			}
 		} catch (IOException e) {
 			throw new BookException(ErrorCode.FILE_READ_FAILED);

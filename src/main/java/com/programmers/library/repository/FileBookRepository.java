@@ -19,7 +19,7 @@ public class FileBookRepository implements BookRepository {
 	public FileBookRepository(String filePath) {
 		fileUtils = new FileUtils<>(filePath);
 		bookMap = new ConcurrentHashMap<>();
-		List<Book> bookList = fileUtils.readFile();
+		List<Book> bookList = fileUtils.readFile(Book.class);
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		IdGenerator.getInstance().initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0L));
 	}
