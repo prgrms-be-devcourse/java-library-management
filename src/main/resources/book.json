@@ -83,7 +83,7 @@
     "name" : "124",
     "id" : 14,
     "endLoadTime" : "",
-    "status" : "CAN_BORROW"
+    "status" : "BORROWED"
   }, {
     "pages" : 123,
     "author" : "123",
