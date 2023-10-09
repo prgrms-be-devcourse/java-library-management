@@ -74,13 +74,8 @@ public class Console implements Runnable {
         try {
             service.rentBook(getLongInput("대여할 도서번호를 입력하세요"));
             printSystemMessage("도서가 대여 처리 되었습니다.");
-        } catch (NumberFormatException e) {
-            printSystemMessage(NUMBER_REQUIRED);
         } catch (IllegalArgumentException e) {
-            BookStatus status = BookStatus.getByDescription(e.getMessage());
-            if (status == BORROWED) printSystemMessage("이미 대여 중인 도서입니다.");
-            else if (status == ARRANGING) printSystemMessage("정리 중인 도서입니다. 5분 후 다시 대여해 주세요.");
-            else if (status == LOST) printSystemMessage("현재 분실 처리된 도서입니다.");
+            printSystemMessage(e.getMessage());
         }
     }
 
@@ -90,12 +85,8 @@ public class Console implements Runnable {
         try {
             service.returnBook(getLongInput("반납할 도서번호를 입력하세요"));
             printSystemMessage("도서가 반납 처리 되었습니다.");
-        } catch (NumberFormatException e) {
-            printSystemMessage(NUMBER_REQUIRED);
         } catch (IllegalArgumentException e) {
-            BookStatus status = BookStatus.getByDescription(e.getMessage());
-            if (status == AVAILABLE) printSystemMessage("원래 대여가 가능한 도서입니다.");
-            else if (status == ARRANGING) printSystemMessage("정리 중인 도서입니다.");
+            printSystemMessage(e.getMessage());
         }
     }
 
@@ -105,10 +96,8 @@ public class Console implements Runnable {
         try {
             service.reportLoss(getLongInput("분실 처리할 도서번호를 입력하세요"));
             printSystemMessage("도서가 분실 처리 되었습니다.");
-        } catch (NumberFormatException e) {
-            printSystemMessage("숫자를 입력해주세요.");
         } catch (IllegalArgumentException e) {
-            printSystemMessage("이미 분실 처리된 도서입니다.");
+            printSystemMessage(e.getMessage());
         }
     }
 

@@ -12,29 +12,33 @@ import static devcourse.backend.FileSetting.TEST_FILE_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BookOrganizingSchedulerTest {
-    private final int BOOK_ORGANIZATION_TIME = 5000; // 0.5초
+    private final int SCHEDULER_EXECUTION_PERIOD = 1; // 1분
+    private final int BOOK_ORGANIZATION_TIME = 0; // 0분
     private BookOrganizingScheduler scheduler;
     private Repository repository;
 
-    public BookOrganizingSchedulerTest() {
-        repository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
-        scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME);
+    @BeforeEach
+    void BookOrganizingSchedulerTest_초기화() {
+        repository = new FileRepository(TEST_FILE_PATH, TEST_FILE_NAME);
+        scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME, SCHEDULER_EXECUTION_PERIOD);
     }
 
     @Test
     @DisplayName("테스트에서는 0.5초 뒤에 [대여 가능] 상태로 변경됩니다.")
-    void 도서_정리_중에서_대여_가능_상태로_변경() {
+    void 도서_정리_중에서_대여_가능_상태로_변경() throws InterruptedException {
         // 도서 도서 정리 중인 도서 생성
-        repository.addBook(
-                new Book.Builder("이펙티브 자바", "조슈아 블로크", 520)
-                        .bookStatus(BookStatus.ARRANGING)
-                        .build());
+        Book book = new Book.Builder("이펙티브 자바", "조슈아 블로크", 520)
+                .bookStatus(BookStatus.ARRANGING)
+                .build();
+        repository.addBook(book);
 
-        // 도서 반납
+        // 스케쥴러 시작
         scheduler.startScheduler();
 
+        // scheduler.startScheduler()를 기다려주지 않고 바로 assertEquals()을 하기 때문에..
+        Thread.sleep(1);
+
         // 도서 반납 시 일정 시간 후 [대여 가능] 상태로 바뀜
-        Book returnedBook = repository.findByTitleAndAuthor("이펙티브 자바", "조슈아 블로크").get();
-        assertEquals(BookStatus.AVAILABLE, returnedBook.getStatus());
+        assertEquals(BookStatus.AVAILABLE, book.getStatus());
     }
 }
