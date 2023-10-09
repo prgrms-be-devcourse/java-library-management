@@ -2,7 +2,6 @@ package com.dev_course.library;
 
 import com.dev_course.book.Book;
 import com.dev_course.book.BookManager;
-import com.dev_course.book.ListBookManager;
 import com.dev_course.data_module.DataManager;
 import com.dev_course.data_module.EmptyDataManager;
 import com.dev_course.data_module.JSONDataManager;
@@ -25,7 +24,7 @@ public enum ModeFactory {
 
     private BookManager getBookManager() {
         return switch (this) {
-            case TEST, NORMAL -> new ListBookManager();
+            case TEST, NORMAL -> new BookManager();
         };
     }
 }

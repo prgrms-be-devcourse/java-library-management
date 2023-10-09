@@ -10,8 +10,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-abstract class BookManagerTest {
-    protected abstract BookManager getBookManager();
+class BookManagerTest {
+    private BookManager getBookManager() {
+        return new BookManager();
+    }
 
     @Nested
     @DisplayName("초기 생성, 데이터 로드 테스트")

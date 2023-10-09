@@ -1,24 +1,120 @@
 package com.dev_course.book;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public interface BookManager {
-    void init(Collection<Book> data);
+import static com.dev_course.book.BookState.*;
 
-    void updateStates();
+public class BookManager {
+    private final Duration PROCESSING_COST = Duration.ofMinutes(5);
+    private final List<Book> books = new ArrayList<>();
 
-    boolean create(String title, String author, int pages);
+    private int id = 0;
 
-    List<Book> getBooksByTitle(String title);
+    public void init(Collection<Book> data) {
+        books.addAll(data);
 
-    boolean rentById(int id);
+        id = books.stream()
+                .mapToInt(Book::getId)
+                .max()
+                .orElse(0);
+    }
 
-    boolean returnById(int id);
+    public void updateStates() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime processedTime = currentTime.minus(PROCESSING_COST);
 
-    boolean lossById(int id);
+        books.stream()
+                .filter(book -> book.isProcessed(processedTime))
+                .forEach(book -> {
+                    book.setState(AVAILABLE);
+                    book.setUpdateAt(currentTime);
+                });
+    }
 
-    boolean deleteById(int id);
+    public boolean create(String title, String author, int pages) {
+        if (hasTitle(title)) {
+            return false;
+        }
 
-    List<Book> getBooks();
+        Book newBook = new Book(++id, title, author, pages, LocalDateTime.now());
+
+        books.add(newBook);
+
+        return true;
+    }
+
+    public List<Book> getBooksByTitle(String title) {
+        return books.stream()
+                .filter(book -> book.getTitle().contains(title))
+                .toList();
+    }
+
+    public boolean rentById(int id) {
+        Book target = books.stream()
+                .filter(book -> book.isSame(id))
+                .findFirst()
+                .orElseThrow();
+
+        BookState state = target.getState();
+
+        if (!state.isRentable()) {
+            return false;
+        }
+
+        target.setState(LOAN);
+        target.setUpdateAt(LocalDateTime.now());
+
+        return true;
+    }
+
+    public boolean returnById(int id) {
+        Book target = books.stream()
+                .filter(book -> book.isSame(id))
+                .findFirst()
+                .orElseThrow();
+
+        BookState state = target.getState();
+
+        if (!state.isReturnable()) {
+            return false;
+        }
+
+        target.setState(PROCESSING);
+        target.setUpdateAt(LocalDateTime.now());
+
+        return true;
+    }
+
+    public boolean lossById(int id) {
+        Book target = books.stream()
+                .filter(book -> book.isSame(id))
+                .findFirst()
+                .orElseThrow();
+
+        if (target.getState() == LOST) {
+            return false;
+        }
+
+        target.setState(LOST);
+        target.setUpdateAt(LocalDateTime.now());
+
+        return true;
+    }
+
+    public boolean deleteById(int id) {
+        return books.removeIf(book -> book.isSame(id));
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    private boolean hasTitle(String title) {
+        return books.stream()
+                .anyMatch(book -> book.getTitle().equals(title));
+    }
 }

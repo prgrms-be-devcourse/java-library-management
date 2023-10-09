@@ -1,9 +1,8 @@
 package com.dev_course.library;
 
 import com.dev_course.book.Book;
-import com.dev_course.book.BookManager;
 import com.dev_course.book.BookState;
-import com.dev_course.book.ListBookManager;
+import com.dev_course.book.BookManager;
 import com.dev_course.data_module.DataManager;
 import com.dev_course.data_module.EmptyDataManager;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +33,7 @@ class LibraryServiceTest {
     }
 
     private BookManager getBookManager() {
-        return new ListBookManager();
+        return new BookManager();
     }
 
     @Nested
