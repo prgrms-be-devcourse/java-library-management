@@ -146,7 +146,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(BORROWED.toString(), exception.getMessage());
+        assertEquals("이미 대여 중인 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(ARRANGING.toString(), exception.getMessage());
+        assertEquals("정리 중인 도서입니다. 잠시 후 다시 대여해 주세요.", exception.getMessage());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.rentBook(savedBook.getId()));
 
-        assertEquals(LOST.toString(), exception.getMessage());
+        assertEquals("현재 분실 처리된 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -233,7 +233,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.returnBook(savedBook.getId()));
 
-        assertEquals(AVAILABLE.toString(), exception.getMessage());
+        assertEquals("원래 대여가 가능한 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -251,7 +251,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.returnBook(savedBook.getId()));
 
-        assertEquals(ARRANGING.toString(), exception.getMessage());
+        assertEquals("정리 중인 도서입니다.", exception.getMessage());
     }
 
     @Test
@@ -320,7 +320,7 @@ public class BookServiceTestWithMemoryRepository {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> bookService.reportLoss(savedBook.getId()));
 
-        assertEquals(LOST.toString(), exception.getMessage());
+        assertEquals("이미 분실 처리된 도서입니다.", exception.getMessage());
     }
 
     @Test

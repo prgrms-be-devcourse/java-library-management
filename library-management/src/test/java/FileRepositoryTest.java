@@ -23,11 +23,11 @@ public class FileRepositoryTest { ;
         truncate();
 
         // 각 테스트 전에 FileRepository 초기화
-        fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        fileRepository = new FileRepository(TEST_FILE_PATH, TEST_FILE_NAME);
     }
 
     private void truncate() {
-        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
         try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
         } catch (IOException e) {
@@ -41,7 +41,7 @@ public class FileRepositoryTest { ;
         addDataToTestFile();
 
         // repository 초기화 시 파일에서 자동으로 데이터 로딩
-        fileRepository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        fileRepository = new FileRepository(TEST_FILE_PATH, TEST_FILE_NAME);
 
         // 파일에 있던 도서가 로딩됨
         List<Book> books = fileRepository.findAll();
@@ -52,7 +52,7 @@ public class FileRepositoryTest { ;
 
     private void addDataToTestFile() {
         // 파일에 테스트 데이터 추가
-        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
         try (BufferedWriter writer = Files.newBufferedWriter(filePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             writer.write("도서 번호;도서명;작가;총 페이지 수;상태;상태 변경 시간");
             writer.newLine();
@@ -68,10 +68,10 @@ public class FileRepositoryTest { ;
         // flush() 메서드 테스트
         Book bookToAdd = new Book.Builder("친절한 SQL 튜닝", "조시형", 560).build();
         fileRepository.addBook(bookToAdd);
-        fileRepository.flush();
+        fileRepository.save();
 
         // 파일에서 저장한 데이터 찾기
-        Path filePath = Paths.get(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
+        Path filePath = Paths.get(TEST_FILE_PATH, TEST_FILE_NAME);
         try (BufferedReader reader = Files.newBufferedReader(filePath)) {
             String line;
             boolean found = false;
