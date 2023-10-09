@@ -10,11 +10,12 @@ import lombok.RequiredArgsConstructor;
 public class ResponseListBodySender implements ResponseSender {
 
     private final ConsoleInteractionAggregator interactionAggregator;
-
+    private final List<Class<? extends ConsoleResponse>> supportedResponses = List.of(
+        ConsoleListBodyResponse.class);
 
     @Override
-    public Class<? extends ConsoleResponse> getProcessClass() {
-        return ConsoleListBodyResponse.class;
+    public boolean supports(ConsoleResponse consoleResponse) {
+        return supportedResponses.contains(consoleResponse.getClass());
     }
 
     @Override

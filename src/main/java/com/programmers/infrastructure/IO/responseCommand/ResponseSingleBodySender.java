@@ -3,16 +3,19 @@ package com.programmers.infrastructure.IO.responseCommand;
 import com.programmers.infrastructure.IO.ConsoleInteractionAggregator;
 import com.programmers.mediator.dto.ConsoleResponse;
 import com.programmers.mediator.dto.ConsoleSingleBodyResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ResponseSingleBodySender implements ResponseSender{
 
     private final ConsoleInteractionAggregator interactionAggregator;
+    private final List<Class<? extends ConsoleResponse>> supportedResponses = List.of(
+        ConsoleSingleBodyResponse.class);
 
     @Override
-    public Class<? extends ConsoleResponse> getProcessClass() {
-        return ConsoleSingleBodyResponse.class;
+    public boolean supports(ConsoleResponse consoleResponse) {
+        return supportedResponses.contains(consoleResponse.getClass());
     }
 
     @Override
