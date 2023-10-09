@@ -1,5 +1,6 @@
 package com.programmers.library.entity.state;
 
+import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
 public enum BookStateType {
@@ -20,7 +21,10 @@ public enum BookStateType {
 		return value;
 	}
 
-	public State getState() {
+	public State getState(LocalDateTime returnedAt) {
+		if(this == ORGANIZING) {
+			return new OrganizingState(returnedAt);
+		}
 		return stateSupplier.get();
 	}
 

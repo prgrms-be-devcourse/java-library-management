@@ -11,5 +11,5 @@ public interface State {
 
 	State lost();
 
-	State organize(LocalDateTime returnedAt);
+	State organize();
 }

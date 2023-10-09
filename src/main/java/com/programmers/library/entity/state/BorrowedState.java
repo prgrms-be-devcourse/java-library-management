@@ -18,7 +18,7 @@ public class BorrowedState implements State {
 
 	@Override
 	public State returned() {
-		return new OrganizingState();
+		return new OrganizingState(LocalDateTime.now());
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class BorrowedState implements State {
 	}
 
 	@Override
-	public State organize(LocalDateTime returnedAt) {
+	public State organize() {
 		return this;
 	}
 }

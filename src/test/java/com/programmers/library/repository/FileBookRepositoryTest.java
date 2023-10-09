@@ -26,7 +26,7 @@ public class FileBookRepositoryTest {
 
 	@AfterEach
 	public void tearDown() {
-		FileUtils<Book> fileUtils = new FileUtils<>(TEST_FILE_PATH);
+		FileUtils fileUtils = new FileUtils(TEST_FILE_PATH);
 		fileUtils.writeFile(List.of());
 	}
 

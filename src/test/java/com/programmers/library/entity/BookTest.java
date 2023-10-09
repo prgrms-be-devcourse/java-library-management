@@ -23,7 +23,7 @@ class BookTest {
 	public void testBorrowValidBook() {
 		book.borrow();
 
-		assertEquals(BookStateType.BORROWED, book.getState());
+		assertEquals(BookStateType.BORROWED, book.getStateType());
 	}
 
 	@Test
@@ -40,7 +40,7 @@ class BookTest {
 		book.borrow();
 		book.returned();
 
-		assertEquals(BookStateType.ORGANIZING, book.getState());
+		assertEquals(BookStateType.ORGANIZING, book.getStateType());
 	}
 
 	@Test
@@ -54,7 +54,7 @@ class BookTest {
 	public void testLostValidBook() {
 		book.lost();
 
-		assertEquals(BookStateType.LOST, book.getState());
+		assertEquals(BookStateType.LOST, book.getStateType());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class BookTest {
 	public void testOrganizeAvailableBook() {
 		book.organize();
 
-		assertEquals(BookStateType.AVAILABLE, book.getState());
+		assertEquals(BookStateType.AVAILABLE, book.getStateType());
 	}
 
 }

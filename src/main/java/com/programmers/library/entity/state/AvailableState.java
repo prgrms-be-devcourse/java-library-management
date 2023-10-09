@@ -1,7 +1,5 @@
 package com.programmers.library.entity.state;
 
-import java.time.LocalDateTime;
-
 import com.programmers.library.exception.BookException;
 import com.programmers.library.exception.ErrorCode;
 
@@ -28,7 +26,7 @@ public class AvailableState implements State {
 	}
 
 	@Override
-	public State organize(LocalDateTime returnedAt) {
+	public State organize() {
 		return this;
 	}
 }

@@ -6,6 +6,20 @@ import com.programmers.library.exception.BookException;
 import com.programmers.library.exception.ErrorCode;
 
 public class OrganizingState implements State {
+
+	private LocalDateTime returnedAt;
+
+	public OrganizingState() {
+	}
+
+	public OrganizingState(LocalDateTime returnedAt) {
+		this.returnedAt = returnedAt;
+	}
+
+	public LocalDateTime getReturnedAt() {
+		return returnedAt;
+	}
+
 	@Override
 	public BookStateType getType() {
 		return BookStateType.ORGANIZING;
@@ -27,8 +41,8 @@ public class OrganizingState implements State {
 	}
 
 	@Override
-	public State organize(LocalDateTime returnedAt) {
-		if(returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
+	public State organize() {
+		if (returnedAt.plusMinutes(5).isBefore(LocalDateTime.now())) {
 			return new AvailableState();
 		} else {
 			return this;

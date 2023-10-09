@@ -1,12 +1,7 @@
 package com.programmers.library.entity;
 
-import java.time.LocalDateTime;
-
 import com.programmers.library.entity.state.AvailableState;
 import com.programmers.library.entity.state.BookStateType;
-import com.programmers.library.entity.state.BorrowedState;
-import com.programmers.library.entity.state.LostState;
-import com.programmers.library.entity.state.OrganizingState;
 import com.programmers.library.entity.state.State;
 
 public class Book {
@@ -15,7 +10,6 @@ public class Book {
 	private String author;
 	private Long pages;
 	private State state;
-	private LocalDateTime returnedAt;
 
 	public Book(Long id, String title, String author, Long pages) {
 		this.id = id;
@@ -25,13 +19,12 @@ public class Book {
 		this.state = new AvailableState();
 	}
 
-	public Book(Long id, String title, String author, Long pages, State state, LocalDateTime returnedAt) {
+	public Book(Long id, String title, String author, Long pages, State state) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.pages = pages;
 		this.state = state;
-		this.returnedAt = returnedAt;
 	}
 
 	@Override
@@ -51,7 +44,6 @@ public class Book {
 
 	public void returned() {
 		state = state.returned();
-		returnedAt = LocalDateTime.now();
 	}
 
 	public void lost() {
@@ -59,7 +51,7 @@ public class Book {
 	}
 
 	public void organize() {
-		this.state = state.organize(returnedAt);
+		this.state = state.organize();
 	}
 
 	public String getTitle() {
@@ -78,12 +70,12 @@ public class Book {
 		return pages;
 	}
 
-	public BookStateType getState() {
-		return this.state.getType();
+	public State getState() {
+		return state;
 	}
 
-	public LocalDateTime getReturnedAt() {
-		return returnedAt;
+	public BookStateType getStateType() {
+		return this.state.getType();
 	}
 
 }

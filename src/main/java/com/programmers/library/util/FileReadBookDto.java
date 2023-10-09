@@ -16,7 +16,7 @@ public record FileReadBookDto(
 ) {
 	public Book toEntity() {
 		BookStateType bookState = BookStateType.valueOf(this.state);
-		State state = bookState.getState();
-		return new Book(id, title, author, pages, state, returnedAt);
+		State state = bookState.getState(returnedAt);
+		return new Book(id, title, author, pages, state);
 	}
 }

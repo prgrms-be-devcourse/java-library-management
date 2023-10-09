@@ -44,7 +44,7 @@ public class MemoryBookRepository implements BookRepository {
 	@Override
 	public List<Book> findByStatus(BookStateType status) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
+		bookMap.values().stream().filter(book -> book.getStateType() == status).forEach(bookList::add);
 		return bookList;
 	}
 

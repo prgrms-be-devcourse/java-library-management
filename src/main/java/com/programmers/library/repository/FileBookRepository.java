@@ -14,12 +14,12 @@ import com.programmers.library.util.IdGenerator;
 public class FileBookRepository implements BookRepository {
 
 	private final Map<Long, Book> bookMap;
-	private final FileUtils<Book> fileUtils;
+	private final FileUtils fileUtils;
 
 	public FileBookRepository(String filePath) {
-		fileUtils = new FileUtils<>(filePath);
+		fileUtils = new FileUtils(filePath);
 		bookMap = new ConcurrentHashMap<>();
-		List<Book> bookList = fileUtils.readFile(Book.class);
+		List<Book> bookList = fileUtils.readFile();
 		bookList.forEach(book -> bookMap.put(book.getId(), book));
 		IdGenerator.getInstance().initialize(bookList.stream().mapToLong(Book::getId).max().orElse(0L));
 	}
@@ -55,7 +55,7 @@ public class FileBookRepository implements BookRepository {
 	@Override
 	public List<Book> findByStatus(BookStateType status) {
 		List<Book> bookList = new ArrayList<>();
-		bookMap.values().stream().filter(book -> book.getState() == status).forEach(bookList::add);
+		bookMap.values().stream().filter(book -> book.getStateType() == status).forEach(bookList::add);
 		return bookList;
 	}
 
