@@ -16,8 +16,7 @@ public class BookOrganizingSchedulerTest {
     private BookOrganizingScheduler scheduler;
     private Repository repository;
 
-    @BeforeEach
-    void BookOrganizingScheduler_초기화() {
+    public BookOrganizingSchedulerTest() {
         repository = new FileRepository(TEST_FILE_PATH.getValue(), TEST_FILE_NAME.getValue());
         scheduler = new BookOrganizingScheduler(repository, BOOK_ORGANIZATION_TIME);
     }
