@@ -101,11 +101,10 @@ public class DependencyInjector {
     }
 
     private void initializeGeneratorsAndProviders() {
-        this.objectMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(BookStatus.class, new BookStatusDeserializer());
-        module.addSerializer(BookStatus.class, new BookStatusSerializer());
-        objectMapper.registerModule(module);
+        SimpleModule module = new SimpleModule()
+            .addDeserializer(BookStatus.class, new BookStatusDeserializer())
+            .addSerializer(BookStatus.class, new BookStatusSerializer());
+        this.objectMapper = new ObjectMapper().registerModule(module);
 
         this.fileRepository = new JsonFileProvider(objectMapper);
         this.menuRequestGenerators = List.of(new ExitRequestGenerator(consoleInteractionAggregator),
