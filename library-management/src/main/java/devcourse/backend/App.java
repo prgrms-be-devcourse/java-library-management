@@ -7,9 +7,6 @@ import devcourse.backend.repository.MemoryRepository;
 import devcourse.backend.repository.Repository;
 import devcourse.backend.view.Console;
 
-import java.time.Clock;
-import java.time.ZoneId;
-
 import static devcourse.backend.FileSetting.FILE_NAME;
 import static devcourse.backend.FileSetting.FILE_PATH;
 import static devcourse.backend.business.ModeType.*;
@@ -25,7 +22,7 @@ public class App {
         }
 
         if(mode == NORMAL_MODE) {
-            Repository repository = new FileRepository(FILE_PATH.getValue(), FILE_NAME.getValue());
+            Repository repository = new FileRepository(FILE_PATH, FILE_NAME);
             BookService service = new BookService(repository);
             Console view = new Console(service);
             view.run();
