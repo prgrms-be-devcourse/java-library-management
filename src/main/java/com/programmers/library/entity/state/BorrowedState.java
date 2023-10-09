@@ -1,7 +1,5 @@
 package com.programmers.library.entity.state;
 
-import java.time.LocalDateTime;
-
 import com.programmers.library.entity.BookStateType;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.exception.ErrorCode;
@@ -13,18 +11,18 @@ public class BorrowedState implements State {
 	}
 
 	@Override
-	public State borrow() {
+	public void borrow() {
 		throw new BookException(ErrorCode.BOOK_ALREADY_BORROWED);
 	}
 
 	@Override
-	public State returned() {
-		return new OrganizingState(LocalDateTime.now());
+	public void returned() {
+		// success
 	}
 
 	@Override
-	public State lost() {
-		return new LostState();
+	public void lost() {
+		// success
 	}
 
 	@Override

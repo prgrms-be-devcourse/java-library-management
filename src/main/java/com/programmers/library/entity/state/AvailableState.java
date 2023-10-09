@@ -12,18 +12,18 @@ public class AvailableState implements State {
 	}
 
 	@Override
-	public State borrow() {
-		return new BorrowedState();
+	public void borrow() {
+		// success
 	}
 
 	@Override
-	public State returned() {
+	public void returned() {
 		throw new BookException(ErrorCode.BOOK_ALREADY_AVAILABLE);
 	}
 
 	@Override
-	public State lost() {
-		return new LostState();
+	public void lost() {
+		// success
 	}
 
 	@Override

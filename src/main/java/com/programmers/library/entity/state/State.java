@@ -5,11 +5,11 @@ import com.programmers.library.entity.BookStateType;
 public interface State {
 	BookStateType getType();
 
-	State borrow();
+	void borrow();
 
-	State returned();
+	void returned();
 
-	State lost();
+	void lost();
 
 	State organize();
 }

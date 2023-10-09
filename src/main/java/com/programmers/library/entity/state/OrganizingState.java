@@ -27,18 +27,18 @@ public class OrganizingState implements State {
 	}
 
 	@Override
-	public State borrow() {
+	public void borrow() {
 		throw new BookException(ErrorCode.BOOK_UNDER_ORGANIZING);
 	}
 
 	@Override
-	public State returned() {
+	public void returned() {
 		throw new BookException(ErrorCode.BOOK_UNDER_ORGANIZING);
 	}
 
 	@Override
-	public State lost() {
-		return new LostState();
+	public void lost() {
+		// success
 	}
 
 	@Override

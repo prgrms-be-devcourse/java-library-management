@@ -1,6 +1,11 @@
 package com.programmers.library.entity;
 
+import java.time.LocalDateTime;
+
 import com.programmers.library.entity.state.AvailableState;
+import com.programmers.library.entity.state.BorrowedState;
+import com.programmers.library.entity.state.LostState;
+import com.programmers.library.entity.state.OrganizingState;
 import com.programmers.library.entity.state.State;
 
 public class Book {
@@ -38,15 +43,18 @@ public class Book {
 	}
 
 	public void borrow() {
-		state = state.borrow();
+		state.borrow();
+		state = new BorrowedState();
 	}
 
 	public void returned() {
-		state = state.returned();
+		state.returned();
+		state = new OrganizingState(LocalDateTime.now());
 	}
 
 	public void lost() {
-		state = state.lost();
+		state.lost();
+		state = new LostState();
 	}
 
 	public void organize() {
