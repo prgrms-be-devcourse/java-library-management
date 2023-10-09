@@ -1,0 +1,18 @@
+[
+  {
+    "bookNumber": 1,
+    "title": "오픈 인 더 게임",
+    "author": "나심 탈레브",
+    "totalPages": 444,
+    "status": "ON_ARRANGEMENT",
+    "arrangementBegunAt": "2023-10-04T12:48:15.335948700"
+  },
+  {
+    "bookNumber": 2,
+    "title": "위기의 역사",
+    "author": "오범영",
+    "totalPages": 480,
+    "status": "IN_PLACE",
+    "arrangementBegunAt": null
+  }
+]
