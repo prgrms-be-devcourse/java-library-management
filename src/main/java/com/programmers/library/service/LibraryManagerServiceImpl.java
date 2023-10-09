@@ -11,7 +11,7 @@ import com.programmers.library.dto.FindBookRequestDto;
 import com.programmers.library.dto.LostBookRequestDto;
 import com.programmers.library.dto.ReturnBookRequestDto;
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.state.BookStateType;
+import com.programmers.library.entity.BookStateType;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.repository.BookRepository;
 import com.programmers.library.util.IdGenerator;

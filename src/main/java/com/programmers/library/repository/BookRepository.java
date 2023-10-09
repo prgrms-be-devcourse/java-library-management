@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.state.BookStateType;
+import com.programmers.library.entity.BookStateType;
 
 public interface BookRepository {
 	Book save(Book entity);

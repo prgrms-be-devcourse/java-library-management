@@ -1,6 +1,6 @@
 package com.programmers.library.entity.state;
 
-import java.time.LocalDateTime;
+import com.programmers.library.entity.BookStateType;
 
 public interface State {
 	BookStateType getType();

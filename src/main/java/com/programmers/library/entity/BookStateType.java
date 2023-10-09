@@ -1,7 +1,13 @@
-package com.programmers.library.entity.state;
+package com.programmers.library.entity;
 
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
+
+import com.programmers.library.entity.state.AvailableState;
+import com.programmers.library.entity.state.BorrowedState;
+import com.programmers.library.entity.state.LostState;
+import com.programmers.library.entity.state.OrganizingState;
+import com.programmers.library.entity.state.State;
 
 public enum BookStateType {
 	AVAILABLE("대여 가능", AvailableState::new),

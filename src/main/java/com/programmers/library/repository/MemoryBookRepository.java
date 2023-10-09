@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.state.BookStateType;
+import com.programmers.library.entity.BookStateType;
 
 public class MemoryBookRepository implements BookRepository {
 	private final Map<Long, Book> bookMap;

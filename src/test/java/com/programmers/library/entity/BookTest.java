@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.exception.BookException;
 
 class BookTest {

@@ -1,5 +1,6 @@
 package com.programmers.library.entity.state;
 
+import com.programmers.library.entity.BookStateType;
 import com.programmers.library.exception.BookException;
 import com.programmers.library.exception.ErrorCode;
 

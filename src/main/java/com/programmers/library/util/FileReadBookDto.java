@@ -3,7 +3,7 @@ package com.programmers.library.util;
 import java.time.LocalDateTime;
 
 import com.programmers.library.entity.Book;
-import com.programmers.library.entity.state.BookStateType;
+import com.programmers.library.entity.BookStateType;
 import com.programmers.library.entity.state.State;
 
 public record FileReadBookDto(

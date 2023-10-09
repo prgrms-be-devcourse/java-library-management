@@ -1,7 +1,6 @@
 package com.programmers.library.entity;
 
 import com.programmers.library.entity.state.AvailableState;
-import com.programmers.library.entity.state.BookStateType;
 import com.programmers.library.entity.state.State;
 
 public class Book {
