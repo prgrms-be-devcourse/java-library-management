@@ -18,10 +18,12 @@ public class BookOrganizingScheduler {
     private ScheduledExecutorService executorService;
     private final Repository repository;
     private boolean isRunning;
+    private int organizationTime;
     private int period;
 
-    public BookOrganizingScheduler(Repository repository, int period) {
+    public BookOrganizingScheduler(Repository repository, int organizationTime, int period) {
         this.repository = repository;
+        this.organizationTime = organizationTime;
         this.period = period;
         isRunning = false;
     }
@@ -35,7 +37,8 @@ public class BookOrganizingScheduler {
                 return thread;
             });
 
-            executorService.scheduleAtFixedRate(new BookOrganizingTask(), 0, period, TimeUnit.MILLISECONDS);
+            executorService.scheduleAtFixedRate(new BookOrganizingTask(), 0, period, TimeUnit.MINUTES);
+
         }
     }
 
@@ -59,7 +62,7 @@ public class BookOrganizingScheduler {
 
             LocalDateTime now = LocalDateTime.now();
             for (Book book : booksToBeAvailable) {
-                if (now.isAfter(book.getUpdateAt().plusMinutes(1L))) {
+                if (now.isAfter(book.getUpdateAt().plusMinutes(organizationTime))) {
                     book.changeStatus(AVAILABLE);
                 }
             }
