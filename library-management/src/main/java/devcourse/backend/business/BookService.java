@@ -13,7 +13,7 @@ import static devcourse.backend.FileSetting.*;
 import static devcourse.backend.model.BookStatus.*;
 
 public class BookService {
-    private final int BOOK_ORGANIZATION_TIME = 5 * 60 * 10000;
+    private final int BOOK_ORGANIZATION_TIME = 5 * 60 * 10000; // 5분
     private final BookOrganizingScheduler scheduler;
     private final Repository repository;
 
@@ -44,7 +44,7 @@ public class BookService {
 
         if(book.getStatus().canSwitch(BORROWED)) {
             book.changeStatus(BORROWED);
-            repository.flush();
+            repository.save();
         } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 
@@ -53,7 +53,7 @@ public class BookService {
 
         if(book.getStatus().canSwitch(ARRANGING)) {
             book.changeStatus(ARRANGING);
-            repository.flush();
+            repository.save();
         } else throw new IllegalArgumentException(book.getStatus().toString());
 
         if(!scheduler.isRunning()) scheduler.startScheduler();
@@ -63,7 +63,7 @@ public class BookService {
         Book book = repository.findById(bookId).orElseThrow();
         if(book.getStatus().canSwitch(LOST)) {
             book.changeStatus(LOST);
-            repository.flush();
+            repository.save();
         } else throw new IllegalArgumentException(book.getStatus().toString());
     }
 
