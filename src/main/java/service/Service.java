@@ -8,7 +8,7 @@ import repository.Repository;
 import java.util.List;
 
 public class Service {
-    private static Repository repository;
+    private Repository repository;
 
     public Service(Repository repository) {
         this.repository = repository;
