@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static domain.Book.countId;
-import static domain.Reader.fc;
+import static view.Reader.fc;
 
 public class FileRepository implements Repository {
     private static File file = new File("src/main/resources/library.csv");

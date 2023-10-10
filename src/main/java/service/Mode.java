@@ -1,7 +1,7 @@
 package service;
 
 import domain.ModeType;
-import exception.NotAppropriateScope;
+import exception.NotAppropriateScopeException;
 import message.ExecuteMessage;
 import repository.FileRepository;
 import repository.MemoryRepository;
@@ -25,8 +25,8 @@ public class Mode {
             if(selectNum <= 7 && selectNum >= 1) {
                 SelectMenu.valueOfSelectNum(selectNum).run(service);
                 return true;
-            } else throw new NotAppropriateScope();
-        } catch (InputMismatchException | NotAppropriateScope e) {
+            } else throw new NotAppropriateScopeException();
+        } catch (InputMismatchException | NotAppropriateScopeException e) {
             System.out.println(ExecuteMessage.MENU_ERROR);
             return false;
         }

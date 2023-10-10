@@ -1,4 +1,4 @@
-import exception.NotAppropriateScope;
+import exception.NotAppropriateScopeException;
 import message.ExecuteMessage;
 import service.Mode;
 import view.SelectMode;
@@ -13,8 +13,8 @@ public class Main {
         try {
             int selectNum = getModeNum();
             if(selectNum == 1 || selectNum == 2) mode = SelectMode.valueOfSelectNum(selectNum).run();
-            else throw new NotAppropriateScope();
-        } catch (NotAppropriateScope | InputMismatchException e) {
+            else throw new NotAppropriateScopeException();
+        } catch (NotAppropriateScopeException | InputMismatchException e) {
             System.out.println(ExecuteMessage.MODE_ERROR);
             return;
         }

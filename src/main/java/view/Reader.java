@@ -1,4 +1,4 @@
-package domain;
+package view;
 
 import exception.FileReadException;
 
@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Reader {
-    public static Scanner sc = new Scanner(System.in);
+    public static final Scanner sc = new Scanner(System.in);
     public static Scanner fc;
 
     static {

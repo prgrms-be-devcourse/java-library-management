@@ -6,7 +6,7 @@ import message.SelectMessage;
 
 import java.util.List;
 
-import static domain.Reader.sc;
+import static view.Reader.sc;
 
 public class ConsolePrint {
     public static int getModeNum() {
