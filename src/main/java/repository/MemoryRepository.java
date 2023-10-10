@@ -92,9 +92,4 @@ public class MemoryRepository implements Repository {
         }
         return false;
     }
-
-    public void setThreadForTest() {
-
-    }
-
 }
