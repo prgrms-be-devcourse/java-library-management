@@ -1,6 +1,5 @@
 package thread;
 
-import domain.BookState;
 import domain.Book;
 
 public class MemoryChangeStateThread extends Thread {

@@ -1,11 +1,12 @@
 package service;
 
-import message.ExecuteMessage;
-import view.SelectMenu;
 import domain.ModeType;
 import exception.NotAppropriateScope;
+import message.ExecuteMessage;
 import repository.FileRepository;
 import repository.MemoryRepository;
+import view.SelectMenu;
+
 import java.util.InputMismatchException;
 
 import static domain.ConsolePrint.getMenuNum;

@@ -5,13 +5,16 @@ import domain.BookState;
 import exception.FileWriteException;
 import thread.FileChangeStateThread;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static domain.Reader.fc;
 import static domain.Book.countId;
+import static domain.Reader.fc;
 
 public class FileRepository implements Repository {
     private static File file = new File("src/main/resources/library.csv");

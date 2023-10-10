@@ -1,7 +1,7 @@
-import view.SelectMode;
 import exception.NotAppropriateScope;
 import message.ExecuteMessage;
 import service.Mode;
+import view.SelectMode;
 
 import java.util.InputMismatchException;
 

@@ -1,8 +1,7 @@
 package thread;
 
-import domain.BookState;
-import exception.ThreadInterruptException;
 import domain.Book;
+import exception.ThreadInterruptException;
 
 import static repository.FileRepository.updateFile;
 

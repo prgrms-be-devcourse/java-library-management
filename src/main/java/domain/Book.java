@@ -1,7 +1,5 @@
 package domain;
 
-import domain.BookState;
-
 public class Book {
     public static int countId;
     private final int id;
