@@ -22,7 +22,7 @@ public class BookIO {
     }
 
     // 메시지들을 enum 상수로 관리하는것을 고려
-    public BookRequestDTO inputBookInsert() throws IOException {
+    public BookRequestDTO inputToInsertBook() throws IOException {
         System.out.println("Q. 등록할 도서 제목을 입력하세요.\n");
         String title = br.readLine();
         System.out.println("Q. 작가 이름을 입력하세요.\n");
@@ -33,7 +33,7 @@ public class BookIO {
         return new BookRequestDTO(title, author, pages);
     }
 
-    public String inputBookTitleFind() throws IOException {
+    public String inputBookTitleToFind() throws IOException {
         System.out.println("Q. 검색할 도서 제목 일부를 입력하세요.\n");
         return br.readLine();
     }
@@ -41,7 +41,13 @@ public class BookIO {
     // NumberFormatException 를 따로 메시지 띄워주는 것을 고려
     public long inputRentBookId() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
-        return Long.parseLong(br.readLine());
+
+        long id = Long.parseLong(br.readLine());
+
+        if(id < 0)
+            throw new NumberFormatException("0 이상의 도서번호를 입력하세요.");
+
+        return id;
     }
 
     public long inputReturnBookId() throws IOException {
@@ -59,6 +65,18 @@ public class BookIO {
         return Long.parseLong(br.readLine());
     }
 
+    public void outputInsertMsg() {
+        System.out.println("[System] 도서 등록이 완료되었습니다.\n");
+    }
+
+    public void outputFindBooksMsg() {
+        System.out.println("[System] 도서 목록 끝\n");
+    }
+
+    public void outputFindBookByTitleMsg() {
+        System.out.println("[System] 검색된 도서 끝\n");
+    }
+
     public void outputRentMsg() {
         System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
     }
@@ -74,43 +92,4 @@ public class BookIO {
     public void outputDeleteMsg() {
         System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
     }
-
-//    public void outputUpdateMsg(String updateType, Boolean isPossible, String bookStatus) {
-//
-//        if(updateType.equals(APPLYRENT.name())){
-//            if(isPossible){
-//                System.out.println("[System] 도서가 대여 처리 되었습니다.\n");
-//            }else{
-//                // 대여실패한 원인에 따라서 다른 출력
-//                if(bookStatus.equals(RENT.getName())){
-//                    System.out.println("[System] 이미 대여중인 도서입니다.\n");
-//                }else if(bookStatus.equals(READY.getName())) {
-//                    System.out.println("[System] 아직 준비중인 도서입니다.");
-//                    System.out.println("[System] 5분 내로 대여가능합니다.\n");
-//                }else if(bookStatus.equals(LOST.getName())) {
-//                    System.out.println("[System] 분실된 도서입니다.\n");
-//                }else if(bookStatus.equals(DELETE.getName())) {
-//                    System.out.println("[System] 삭제된 도서입니다.\n");
-//                }
-//            }
-//        }else if(updateType.equals(APPLYRETURN.name())) {
-//            if(isPossible){
-//                System.out.println("[System] 도서가 반납 처리 되었습니다.\n");
-//            }else{
-//                System.out.println("[System] 원래 대여가 가능한 도서입니다.\n");
-//            }
-//        }else if(updateType.equals(APPLYLOST.name())) {
-//            if(isPossible){
-//                System.out.println("[System] 도서가 분실 처리 되었습니다.\n");
-//            }else{
-//                System.out.println("[System] 이미 분실 처리된 도서입니다.\n");
-//            }
-//        }else if(updateType.equals(APPLYDELETE.name())) {
-//            if(isPossible){
-//                System.out.println("[System] 도서가 삭제 처리 되었습니다.\n");
-//            }else{
-//                System.out.println("[System] 존재하지 않는 도서번호 입니다.\n");
-//            }
-//        }
-//    }
 }

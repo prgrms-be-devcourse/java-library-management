@@ -1,7 +1,6 @@
 package com.libraryManagement.repository;
 
 import com.libraryManagement.domain.Book;
-import com.libraryManagement.exception.BookException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.libraryManagement.domain.Book.BookStatus.DELETE;
+import static com.libraryManagement.exception.ExceptionMessage.*;
 
 public class MemoryRepository implements Repository {
     private Map<Long, Book> bookMap;
@@ -32,7 +32,7 @@ public class MemoryRepository implements Repository {
         }
 
         if(resBookList.isEmpty()){
-            throw new Exception(new BookException())
+            throw new RuntimeException(BOOK_NOT_FOUND_ID.getMessage());
         }
 
         return resBookList;
@@ -58,7 +58,7 @@ public class MemoryRepository implements Repository {
     @Override
     public Book findBookById(long id) {
         if(!bookMap.containsKey(id - 1)){
-            // throw Exception
+            throw new RuntimeException(BOOK_NOT_FOUND_ID.getMessage());
         }
         return bookMap.get(id - 1);
     }
@@ -71,7 +71,7 @@ public class MemoryRepository implements Repository {
     @Override
     public void updateBookStatus(long id, String bookStatus) {
         if(!bookMap.containsKey(id - 1)){
-            // throw Exception
+            throw new RuntimeException(BOOK_NOT_FOUND_ID.getMessage());
         }
         bookMap.get(id - 1).setStatus(bookStatus);
     }

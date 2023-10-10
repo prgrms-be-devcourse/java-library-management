@@ -33,5 +33,12 @@
         "id": 5,
         "title": "5",
         "status": "대여가능"
+    },
+    {
+        "pages": 6,
+        "author": "6",
+        "id": 6,
+        "title": "6",
+        "status": "대여가능"
     }
 ]

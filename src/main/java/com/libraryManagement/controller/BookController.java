@@ -1,6 +1,7 @@
 package com.libraryManagement.controller;
 
 import com.libraryManagement.domain.Book;
+import com.libraryManagement.io.BookMenu;
 import com.libraryManagement.util.BookRequestDTO;
 import com.libraryManagement.util.BookResponseDTO;
 import com.libraryManagement.service.BookService;
@@ -12,32 +13,67 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
     private final BookIO bookIO;
+    private final BookMenu bookMenu;
 
-    public BookController(BookService bookService, BookIO bookIO) {
+    public BookController(BookService bookService, BookIO bookIO, BookMenu bookMenu) {
         this.bookService = bookService;
         this.bookIO = bookIO;
+        this.bookMenu = bookMenu;
     }
 
-    // service 로 create 를 위임, dto 의 패키지 이동 고려
+    public void startBookMenu() throws IOException {
+
+        while(true) {
+            int selectedBookMenuNum = bookMenu.startBookMenu();
+
+            switch (selectedBookMenuNum) {
+                case 1 :
+                    insertBook();
+                    break;
+                case 2 :
+                    findBooks();
+                    break;
+                case 3 :
+                    findBookByTitle();
+                    break;
+                case 4 :
+                    rentBook();
+                    break;
+                case 5 :
+                    returnBook();
+                    break;
+                case 6 :
+                    lostBook();
+                    break;
+                case 7 :
+                    deleteBook();
+                    break;
+            }
+        }
+    }
+
     public void insertBook() throws IOException {
-        BookRequestDTO bookRequestDTO = bookIO.inputBookInsert();
+        BookRequestDTO bookRequestDTO = bookIO.inputToInsertBook();
         BookResponseDTO bookResponseDTO = new BookResponseDTO(bookRequestDTO);
         bookService.insertBook(bookResponseDTO);
+        bookIO.outputInsertMsg();
     }
 
     public void findBooks() {
         List<Book> bookList = bookService.findBooks();
         bookIO.outputBookList(bookList);
+        bookIO.outputFindBooksMsg();
     }
 
     public void findBookByTitle() throws IOException {
-        String str = bookIO.inputBookTitleFind();
+        String str = bookIO.inputBookTitleToFind();
         List<Book> bookList = bookService.findBooksByTitle(str);
         bookIO.outputBookList(bookList);
+        bookIO.outputFindBookByTitleMsg();
     }
 
     // service 에서 throw 로 처리하도록
-    public void rentBook() throws IOException, InterruptedException {
+    public void rentBook() throws IOException {
         long id = bookIO.inputRentBookId();
         bookService.rentBook(id);
         bookIO.outputRentMsg();
@@ -60,13 +96,4 @@ public class BookController {
         bookService.deleteBook(id);
         bookIO.outputDeleteMsg();
     }
-
-    //    public void updateBookStatus(String updateType) throws IOException, InterruptedException {
-//
-//        long id = bookIO.inputApplyBookId(updateType);
-//        Boolean isPossible = bookService.isPossibleUpdateBookStatus(updateType, id);
-//        String bookStatus = bookService.updateBookStatus(updateType, id);
-//
-//        bookIO.outputUpdateMsg(updateType, isPossible, bookStatus);
-//    }
 }

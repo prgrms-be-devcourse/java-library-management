@@ -1,8 +1,6 @@
 package com.libraryManagement.util;
 
 import com.libraryManagement.controller.BookController;
-import com.libraryManagement.domain.BookStatus;
-import com.libraryManagement.domain.ChangeBookStatus;
 import com.libraryManagement.io.BookIO;
 import com.libraryManagement.io.BookMenu;
 import com.libraryManagement.io.ModeMenu;
@@ -32,15 +30,16 @@ public class AppConfig {
         }
 
         if(repository == null){
-            System.out.println("모드 선택에 실패했습니다. 프로그램을 종료합니다.");
+            System.out.println("[System] 모드 선택에 실패했습니다. 프로그램을 종료합니다.");
             exit(0);
         }
 
         BookService bookService = new BookService(repository);
         BookIO bookIO = new BookIO();
-        BookController bookController = new BookController(bookService, bookIO);
+        BookMenu bookMenu = new BookMenu();
 
-        BookMenu bookMenu = new BookMenu(bookController);
-        bookMenu.displayBookMenu();
+        BookController bookController = new BookController(bookService, bookIO, bookMenu);
+
+        bookController.startBookMenu();
     }
 }

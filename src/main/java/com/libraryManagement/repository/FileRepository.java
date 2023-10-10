@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.libraryManagement.domain.BookStatus.*;
+import static com.libraryManagement.domain.Book.BookStatus.DELETE;
 
 public class FileRepository implements Repository {
     // filepath 유연하게!

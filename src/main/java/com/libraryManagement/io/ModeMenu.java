@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.libraryManagement.exception.ExceptionMessage.*;
+
 public class ModeMenu {
     private List<String> modeList;
     private String selectMode;
@@ -29,8 +31,8 @@ public class ModeMenu {
             int selectModeNum = Integer.parseInt(br.readLine());
 
             if(selectModeNum > modeList.size() || selectModeNum == 0){
-                System.out.println("숫자를 다시 입력해주세요.\n");
-                continue;
+                throw new RuntimeException(INVALID_MODE_MENU.getMessage());
+//                continue;
             }
 
             String selectMode = modeList.get(selectModeNum);
