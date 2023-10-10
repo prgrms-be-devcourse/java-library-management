@@ -1,5 +1,9 @@
 package com.libraryManagement;
 
+import com.libraryManagement.io.ModeMenu;
+import com.libraryManagement.repository.FileRepository;
+import com.libraryManagement.repository.MemoryRepository;
+import com.libraryManagement.repository.Repository;
 import com.libraryManagement.util.AppConfig;
 
 public class LibraryManagementApplication {
@@ -7,6 +11,18 @@ public class LibraryManagementApplication {
 
 	public static void main(String[] args) throws Exception {
 
-		appConfig.init();
+		ModeMenu modeMenu = new ModeMenu();
+		modeMenu.displayModeMenu();
+
+		Repository repository = null;
+		if(modeMenu.getSelectMode().equals("일반 모드")){
+			repository = new FileRepository();
+		}else if(modeMenu.getSelectMode().equals("테스트 모드")) {
+			repository = new MemoryRepository();
+		}
+
+		appConfig.init(repository);
+
+		appConfig.getBookController().startBookMenu();
 	}
 }
