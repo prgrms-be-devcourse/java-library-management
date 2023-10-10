@@ -30,9 +30,9 @@ public class ModeMenu {
 
             int selectModeNum = Integer.parseInt(br.readLine());
 
-            if(selectModeNum > modeList.size() || selectModeNum == 0){
-                throw new RuntimeException(INVALID_MODE_MENU.getMessage());
-//                continue;
+            if(selectModeNum >= modeList.size() || selectModeNum == 0){
+                System.out.println(INVALID_MODE_MENU.getMessage() + "\n");
+                continue;
             }
 
             String selectMode = modeList.get(selectModeNum);

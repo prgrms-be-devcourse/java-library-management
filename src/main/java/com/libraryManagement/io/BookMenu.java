@@ -11,7 +11,7 @@ import static java.lang.System.exit;
 
 public class BookMenu {
 
-    private List<String> menuList;
+    private final List<String> menuList;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public BookMenu() {

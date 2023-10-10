@@ -16,7 +16,7 @@ import static java.lang.System.exit;
 // 설정만 할수있도록 고려
 public class AppConfig {
 
-    public void init() throws IOException, InterruptedException {
+    public void init() throws Exception {
 
         ModeMenu modeMenu = new ModeMenu();
         modeMenu.displayModeMenu();

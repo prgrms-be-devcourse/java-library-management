@@ -21,7 +21,7 @@ public class BookController {
         this.bookMenu = bookMenu;
     }
 
-    public void startBookMenu() throws IOException {
+    public void startBookMenu() throws Exception {
 
         while(true) {
             int selectedBookMenuNum = bookMenu.startBookMenu();
@@ -59,13 +59,13 @@ public class BookController {
         bookIO.outputInsertMsg();
     }
 
-    public void findBooks() {
+    public void findBooks() throws Exception {
         List<Book> bookList = bookService.findBooks();
         bookIO.outputBookList(bookList);
         bookIO.outputFindBooksMsg();
     }
 
-    public void findBookByTitle() throws IOException {
+    public void findBookByTitle() throws Exception {
         String str = bookIO.inputBookTitleToFind();
         List<Book> bookList = bookService.findBooksByTitle(str);
         bookIO.outputBookList(bookList);
@@ -73,25 +73,25 @@ public class BookController {
     }
 
     // service 에서 throw 로 처리하도록
-    public void rentBook() throws IOException {
+    public void rentBook() throws Exception {
         long id = bookIO.inputRentBookId();
         bookService.rentBook(id);
         bookIO.outputRentMsg();
     }
 
-    public void returnBook() throws IOException {
+    public void returnBook() throws Exception {
         long id = bookIO.inputReturnBookId();
         bookService.returnBook(id);
         bookIO.outputReturnMsg();
     }
 
-    public void lostBook() throws IOException {
+    public void lostBook() throws Exception {
         long id = bookIO.inputLostBookId();
         bookService.lostBook(id);
         bookIO.outputLostMsg();
     }
 
-    public void deleteBook() throws IOException {
+    public void deleteBook() throws Exception {
         long id = bookIO.inputDeleteBookId();
         bookService.deleteBook(id);
         bookIO.outputDeleteMsg();

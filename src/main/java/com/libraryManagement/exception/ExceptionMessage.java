@@ -12,7 +12,6 @@ public enum ExceptionMessage {
                             "[System] 5분 내로 대여가능합니다."),
 
     FILE_NOT_EXIST("[System] 파일이 존재하지 않습니다."),
-    FILE_READ_FAILED("[System] 파일 읽기에 실패했습니다."),
     FILE_WRITE_FAILED("[System] 파일 쓰기에 실패했습니다.");
 
     private final String message;
