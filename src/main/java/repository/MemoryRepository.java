@@ -26,7 +26,7 @@ public class MemoryRepository implements Repository {
     public List<Book> search(String titleWord) {
         List<Book> selectedBooks = new ArrayList<>();
         books.forEach(book -> {
-            if(book.getTitle().contains(titleWord)) selectedBooks.add(book);
+            if(book.containsTitleWord(titleWord)) selectedBooks.add(book);
         });
         return selectedBooks;
     }

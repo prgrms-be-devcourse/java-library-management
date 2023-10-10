@@ -69,4 +69,8 @@ public class Book {
     public boolean isSameId(int id) {
         return id == this.id;
     }
+
+    public boolean containsTitleWord(String titleWord) {
+        return title.contains(titleWord);
+    }
 }

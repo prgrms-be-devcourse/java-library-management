@@ -41,7 +41,7 @@ public class FileRepository implements Repository {
     public List<Book> search(String titleWord) {
         List<Book> selectedBooks = new ArrayList<>();
         books.forEach(book -> {
-            if(book.getTitle().contains(titleWord)) {
+            if(book.containsTitleWord(titleWord)) {
                 selectedBooks.add(book);
                 updateFile();
             }
