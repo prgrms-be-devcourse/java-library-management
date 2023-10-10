@@ -106,10 +106,10 @@ class MemoryRepositoryTest {
     @DisplayName("도서 반납: 대여중")
     void returnBookSuccess() throws InterruptedException {
         List<Book> books = repository.getList();
-        repository.returnBook(2, 5000);
+        repository.returnBook(2, 1000);
 
         assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         assertThat(books.get(1).getState()).isEqualTo(BookState.AVAILABLE);
     }
 
@@ -117,7 +117,7 @@ class MemoryRepositoryTest {
     @DisplayName("도서 반납: 대여 가능")
     void returnBookAvailable() throws InterruptedException {
         List<Book> books = repository.getList();
-        repository.returnBook(1, 5000);
+        repository.returnBook(1, 1000);
 
         assertThat(books.get(0).getState()).isEqualTo(BookState.AVAILABLE);
     }
@@ -126,10 +126,10 @@ class MemoryRepositoryTest {
     @DisplayName("도서 반납: 분실됨")
     void returnBookLost() throws InterruptedException {
         List<Book> books = repository.getList();
-        repository.returnBook(3, 5000);
+        repository.returnBook(3, 1000);
 
         assertThat(books.get(2).getState()).isEqualTo(BookState.ORGANIZING);
-        Thread.sleep(5000);
+        Thread.sleep(1000);
         assertThat(books.get(2).getState()).isEqualTo(BookState.AVAILABLE);
     }
 
@@ -138,7 +138,7 @@ class MemoryRepositoryTest {
     void returnBookOrganizing() throws InterruptedException {
         List<Book> books = repository.getList();
         books.get(1).changeStateToOrganizing();
-        repository.returnBook(2, 5000);
+        repository.returnBook(2, 1000);
 
         assertThat(books.get(1).getState()).isEqualTo(BookState.ORGANIZING);
     }
@@ -147,7 +147,7 @@ class MemoryRepositoryTest {
     @DisplayName("도서 반납: 아이디 없음")
     void returnBookNotExists() {
         List<Book> books = repository.getList();
-        BookState state = repository.returnBook(10, 5000);
+        BookState state = repository.returnBook(10, 1000);
 
         assertThat(state).isEqualTo(null);
     }
