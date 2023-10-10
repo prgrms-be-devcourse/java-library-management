@@ -7,6 +7,7 @@ public class MemoryChangeStateThread extends Thread {
     private int time;
     public MemoryChangeStateThread(Book book, int time) {
         this.book = book;
+        this.time = time;
     }
 
     @Override
