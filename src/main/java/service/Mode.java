@@ -18,7 +18,6 @@ public class Mode {
         else if(mode == ModeType.TEST_MODE) service = new Service(new MemoryRepository());
     }
 
-
     public boolean run() {
         try {
             int selectNum = getMenuNum();

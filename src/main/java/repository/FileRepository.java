@@ -51,9 +51,7 @@ public class FileRepository implements Repository {
 
     @Override
     public BookState rental(int id) {
-        Optional<Book> selectedBookOptional = books.stream()
-                .filter(book -> book.isSameId(id))
-                .findFirst();
+        Optional<Book> selectedBookOptional = findById(id);
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
             BookState state = book.getState();
@@ -69,9 +67,7 @@ public class FileRepository implements Repository {
 
     @Override
     public BookState returnBook(int id, int time) {
-        Optional<Book> selectedBookOptional = books.stream()
-                .filter(book -> book.isSameId(id))
-                .findFirst();
+        Optional<Book> selectedBookOptional = findById(id);
 
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
@@ -90,9 +86,7 @@ public class FileRepository implements Repository {
 
     @Override
     public BookState lostBook(int id) {
-        Optional<Book> selectedBookOptional = books.stream()
-                .filter(book -> book.isSameId(id))
-                .findFirst();
+        Optional<Book> selectedBookOptional = findById(id);
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
             BookState state = book.getState();
@@ -106,11 +100,16 @@ public class FileRepository implements Repository {
         return null;
     }
 
-    @Override
-    public boolean deleteBook(int id) {
+    private static Optional<Book> findById(int id) {
         Optional<Book> selectedBookOptional = books.stream()
                 .filter(book -> book.isSameId(id))
                 .findFirst();
+        return selectedBookOptional;
+    }
+
+    @Override
+    public boolean deleteBook(int id) {
+        Optional<Book> selectedBookOptional = findById(id);
         if(selectedBookOptional.isPresent()) {
             Book book = selectedBookOptional.get();
             books.remove(book);
