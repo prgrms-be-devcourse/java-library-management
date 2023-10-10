@@ -1,7 +1,6 @@
 package thread;
 
 import domain.Book;
-import exception.ThreadInterruptException;
 
 import static repository.FileRepository.updateFile;
 
@@ -19,7 +18,7 @@ public class FileChangeStateThread extends Thread {
             book.changeStateToAvailable();
             updateFile();
         } catch (InterruptedException e) {
-            throw new ThreadInterruptException();
+            Thread.currentThread().interrupt();
         }
     }
 }

@@ -16,7 +16,7 @@ public class MemoryChangeStateThread extends Thread {
             Thread.sleep(time);
             book.changeStateToAvailable();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
     }
 }
