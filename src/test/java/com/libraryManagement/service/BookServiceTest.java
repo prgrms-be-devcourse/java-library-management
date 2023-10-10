@@ -5,7 +5,10 @@ import com.libraryManagement.repository.MemoryRepository;
 import com.libraryManagement.repository.Repository;
 import com.libraryManagement.util.MyScheduler;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,17 +16,20 @@ import static org.junit.Assert.*;
 
 /*
 java google style guide
-
-@BeforeEach
-단위테스트와 목
  */
 
+@ExtendWith(MockitoExtension.class)
 class BookServiceTest {
-    Repository repository = new MemoryRepository();
-    BookService bookService = new BookService(repository);
+    Repository repository;
+    BookService bookService;
     private MyScheduler myScheduler = new MyScheduler();
 
-    public void initData() {
+    @BeforeEach
+    void setUp() {
+        repository = new MemoryRepository();
+        bookService = new BookService(repository);
+        myScheduler = new MyScheduler();
+
         Book book1 = new Book
                 .Builder()
                 .id(1).title("제목1").author("작가1").pages(1).status(AVAILABLE.getName())
@@ -55,11 +61,11 @@ class BookServiceTest {
         repository.insertBook(book4);
         repository.insertBook(book5);
     }
-    
+
     @Test
-    void 분실신청() {
+    @DisplayName("")
+    void insertBook() {3
         // given
-        this.initData();
 
         // when
 
@@ -67,48 +73,47 @@ class BookServiceTest {
     }
 
     @Test
-    void 삭제신청() {
-        // given
-        this.initData();
-
-        // when
-
-        // then
-    }
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @Test
-    void insertBook() {
-    }
-
-    @Test
+    @DisplayName("")
     void findBooks() {
+        // given
+
+        // when
+
+        // then
     }
 
     @Test
+    @DisplayName("")
     void findBooksByTitle() {
+        // given
+
+        // when
+
+        // then
     }
 
     @Test
+    @DisplayName("")
     void rentBook() {
     }
 
     @Test
+    @DisplayName("")
     void returnBook() {
     }
 
     @Test
+    @DisplayName("")
     void lostBook() {
     }
 
     @Test
+    @DisplayName("")
     void deleteBook() {
     }
 
     @Test
+    @DisplayName("")
     void getNumCreatedBooks() {
     }
 }
