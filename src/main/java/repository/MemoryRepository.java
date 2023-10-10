@@ -24,11 +24,9 @@ public class MemoryRepository implements Repository {
     public List<Book> getList() { return books; }
 
     public List<Book> search(String titleWord) {
-        List<Book> selectedBooks = new ArrayList<>();
-        books.forEach(book -> {
-            if(book.containsTitleWord(titleWord)) selectedBooks.add(book);
-        });
-        return selectedBooks;
+        return books.stream().filter(book -> {
+            return book.containsTitleWord(titleWord);
+        }).toList();
     }
 
     public BookState rental(int id) {

@@ -39,14 +39,9 @@ public class FileRepository implements Repository {
 
     @Override
     public List<Book> search(String titleWord) {
-        List<Book> selectedBooks = new ArrayList<>();
-        books.forEach(book -> {
-            if(book.containsTitleWord(titleWord)) {
-                selectedBooks.add(book);
-                updateFile();
-            }
-        });
-        return selectedBooks;
+        return books.stream().filter(book -> {
+            return book.containsTitleWord(titleWord);
+        }).toList();
     }
 
     @Override

@@ -44,8 +44,7 @@ public class Service {
         if(state == null) return ExecuteMessage.NOT_EXIST;
         return switch (state) {
             case AVAILABLE -> ExecuteMessage.RETURN_AVAILABLE;
-            case RENTING -> ExecuteMessage.RETURN_COMPLETE;
-            case LOST -> ExecuteMessage.RETURN_COMPLETE;
+            case RENTING, LOST -> ExecuteMessage.RETURN_COMPLETE;
             case ORGANIZING -> ExecuteMessage.RETURN_IMPOSSIBLE;
         };
     }
