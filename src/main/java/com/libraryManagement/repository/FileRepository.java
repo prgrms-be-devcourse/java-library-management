@@ -1,6 +1,7 @@
 package com.libraryManagement.repository;
 
 import com.libraryManagement.domain.Book;
+import com.libraryManagement.domain.BookStatus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.libraryManagement.domain.Book.BookStatus.DELETE;
+import static com.libraryManagement.domain.BookStatus.DELETE;
 import static com.libraryManagement.exception.ExceptionMessage.*;
 
 public class FileRepository implements Repository {

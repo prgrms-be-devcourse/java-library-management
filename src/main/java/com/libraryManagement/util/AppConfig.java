@@ -6,7 +6,6 @@ import com.libraryManagement.io.BookMenu;
 import com.libraryManagement.repository.Repository;
 import com.libraryManagement.service.BookService;
 
-// 설정만 할수있도록 고려
 public class AppConfig {
     private BookController bookController;
 

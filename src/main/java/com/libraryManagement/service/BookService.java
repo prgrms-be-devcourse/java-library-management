@@ -1,7 +1,7 @@
 package com.libraryManagement.service;
 
+import com.libraryManagement.DTO.BookResponseDTO;
 import com.libraryManagement.domain.Book;
-import com.libraryManagement.util.BookResponseDTO;
 import com.libraryManagement.repository.Repository;
 import com.libraryManagement.util.MyScheduler;
 
@@ -9,7 +9,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.libraryManagement.domain.Book.BookStatus.*;
+import static com.libraryManagement.domain.BookStatus.AVAILABLE;
+import static com.libraryManagement.domain.BookStatus.DELETE;
+import static com.libraryManagement.domain.BookStatus.LOST;
+import static com.libraryManagement.domain.BookStatus.ORGANIZING;
+import static com.libraryManagement.domain.BookStatus.RENT;
 import static com.libraryManagement.exception.ExceptionMessage.*;
 
 public class BookService {

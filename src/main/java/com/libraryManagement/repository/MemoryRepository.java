@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.libraryManagement.domain.Book.BookStatus.DELETE;
+import static com.libraryManagement.domain.BookStatus.DELETE;
 import static com.libraryManagement.exception.ExceptionMessage.*;
 
 public class MemoryRepository implements Repository {

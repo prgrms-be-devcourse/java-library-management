@@ -1,7 +1,7 @@
 package com.libraryManagement.io;
 
 import com.libraryManagement.domain.Book;
-import com.libraryManagement.util.BookRequestDTO;
+import com.libraryManagement.DTO.BookRequestDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;

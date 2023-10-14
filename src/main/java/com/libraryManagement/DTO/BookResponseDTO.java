@@ -1,4 +1,4 @@
-package com.libraryManagement.util;
+package com.libraryManagement.DTO;
 
 public class BookResponseDTO {
     private final String title;

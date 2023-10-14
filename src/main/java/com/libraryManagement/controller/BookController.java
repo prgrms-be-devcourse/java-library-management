@@ -2,8 +2,8 @@ package com.libraryManagement.controller;
 
 import com.libraryManagement.domain.Book;
 import com.libraryManagement.io.BookMenu;
-import com.libraryManagement.util.BookRequestDTO;
-import com.libraryManagement.util.BookResponseDTO;
+import com.libraryManagement.DTO.BookRequestDTO;
+import com.libraryManagement.DTO.BookResponseDTO;
 import com.libraryManagement.service.BookService;
 import com.libraryManagement.io.BookIO;
 
@@ -72,7 +72,6 @@ public class BookController {
         bookIO.outputFindBookByTitleMsg();
     }
 
-    // service 에서 throw 로 처리하도록
     private void rentBook() throws Exception {
         long id = bookIO.inputRentBookId();
         bookService.rentBook(id);
@@ -96,4 +95,5 @@ public class BookController {
         bookService.deleteBook(id);
         bookIO.outputDeleteMsg();
     }
+
 }
