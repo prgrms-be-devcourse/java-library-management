@@ -64,7 +64,7 @@ class BookServiceTest {
 
     @Test
     @DisplayName("")
-    void insertBook() {3
+    void insertBook() {
         // given
 
         // when

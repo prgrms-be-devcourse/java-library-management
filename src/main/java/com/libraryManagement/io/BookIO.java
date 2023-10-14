@@ -38,7 +38,6 @@ public class BookIO {
         return br.readLine();
     }
 
-    // NumberFormatException 를 따로 메시지 띄워주는 것을 고려
     public long inputRentBookId() throws IOException {
         System.out.println("Q. 대여할 도서번호를 입력하세요.\n");
 
